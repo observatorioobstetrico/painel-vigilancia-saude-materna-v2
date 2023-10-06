@@ -1,0 +1,40 @@
+Package: pagedreport
+Title: Simplify the use of pagedown through templates
+Version: 0.1
+Authors@R: 
+    c(person(given = "Thomas",
+             family = "Vroylandt",
+             role = c("aut", "cre"),
+             email = "thomas@tillac-data.com"),
+      person(given = "David",
+             family = "Keyes",
+             role = "aut",
+             email = "david@rfortherestofus.com"))
+Description: This package allow people to use pre-formatted
+    template for pagedown.  It helps generating nice and well-design PDF
+    using Rmarkdown without diving into CSS.
+License: MIT + file LICENSE
+Imports: magick, rsvg, pagedown
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: knitr, rmarkdown, testthat
+VignetteBuilder: knitr
+URL: https://github.com/rfortherestofus/pagedreport
+BugReports: https://github.com/rfortherestofus/pagedreport/issues
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: pagedreport
+RemoteUsername: rfortherestofus
+RemoteRef: main
+RemoteSha: ace07abe531009a3d675bfbb36c63adc20e3482f
+GithubRepo: pagedreport
+GithubUsername: rfortherestofus
+GithubRef: main
+GithubSHA1: ace07abe531009a3d675bfbb36c63adc20e3482f
+NeedsCompilation: no
+Packaged: 2023-05-30 17:32:29 UTC; Pichau
+Author: Thomas Vroylandt [aut, cre],
+  David Keyes [aut]
+Maintainer: Thomas Vroylandt <thomas@tillac-data.com>
+Built: R 4.3.0; ; 2023-05-30 17:32:30 UTC; windows

@@ -1,0 +1,14 @@
+name: painel-oobr-rosa
+title: painel-oobr-rosa
+username:
+account: observatorioobstetrico
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7578124
+bundleId: 6495500
+url: https://observatorioobstetrico.shinyapps.io/painel-oobr-rosa/
+when: 1668024258.69342
+lastSyncTime: 1668024258.69343
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: man/run_app.Rd|data-raw

@@ -1,0 +1,1493 @@
+---
+title: "Resumo dos indicadores"
+subtitle: "Subtitle of the report"
+params:
+  nivel : NA
+  localidade: NA
+  ano: NA
+  data1: NA
+  data1_comp: NA
+  idhm: NA
+  classificacao_idhm: NA
+  comparacao_idhm: NA
+  posicao_idhm: NA
+  data2: NA
+  data2_comp: NA
+  data3: NA
+  data3_comp: NA
+  data4: NA
+  data4_comp: NA
+  data4_deslocamento: NA
+  data4_comp_deslocamento: NA
+  data5: NA
+  data5_comp: NA
+  data5_comp_baixo_peso: NA
+  data6: NA
+  data6_rmm_corrigida: NA
+  data6_comp: NA   
+  data_incompletude: NA
+output: 
+  painel.indicadores:::minha_paged_windmill:
+    logo: "inst/app/www/report/blank.svg"
+    front_img: "inst/app/www/report/capa.jpg"
+    back_img: "inst/app/www/report/fundo.jpg"
+    img_to_dark: FALSE
+    logo_to_white: TRUE
+    other_css: "inst/app/www/report/teste.css"
+knit: pagedown::chrome_print
+main-color: "#32A0FF"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r echo = FALSE}
+#Funções globais 
+cria_textos <- function(infos_comp) {
+  textos_aux <- apply(infos_comp, 1, function(linha) {
+    if (linha[2] == TRUE) {
+      icone_comp <- dplyr::case_when(
+        linha[1] > 0 ~ glue::glue("{fontawesome::fa('caret-down', fill = '#800000')}"),  #vermelho
+        linha[1] < 0 ~ glue::glue("{fontawesome::fa('caret-up', fill = '#008000')}"),  #verde
+        linha[1] == 0 | is.nan(linha[1]) ~ ""
+      )
+    } else {
+      icone_comp <- dplyr::case_when(
+        linha[1] < 0 ~ glue::glue("{fontawesome::fa('caret-up', fill = '#800000')}"),  #vermelho
+        linha[1] > 0 ~ glue::glue("{fontawesome::fa('caret-down', fill = '#008000')}"),  #verde
+        linha[1] == 0 | is.nan(linha[1]) ~ ""
+      )
+    }
+    valor_comp_formatado <- formatC(abs(linha[1]), big.mark = '.', decimal.mark = ',')
+    
+    if (isTruthy(linha[1])) {
+      razao <- round((100 - linha[1])/100, 1)
+    } else {
+      razao <- 0
+    }
+    
+    if (razao >= 2) {
+        texto_comp <- glue::glue("{icone_comp} {formatC(razao, big.mark = '.', decimal.mark = ',')} vezes maior que o valor de referência")
+    } else {
+      texto_comp <- dplyr::case_when(
+        linha[1] < 0 ~ glue::glue("{icone_comp} {valor_comp_formatado}% maior que o valor de referência"),
+        linha[1] > 0 ~ glue::glue("{icone_comp} {valor_comp_formatado}% menor que o valor de referência"),
+        linha[1] == 0 & linha[3] == TRUE ~ glue::glue("Igual ao valor de referência"),
+        linha[1] == 0 & linha[3] == FALSE & params$nivel != "Nacional" ~ glue::glue("Igual ao valor de referência"),
+        linha[1] == 0 & linha[3] == FALSE & params$nivel == "Nacional" ~ glue::glue("Comparação não aplicável (a média nacional é o valor de referência)"),
+        is.nan(linha[1]) ~ "Comparação não aplicável"
+      )
+    }
+    
+    return(texto = texto_comp)
+    }
+  )
+  return(texto = textos_aux)
+}
+```
+
+---
+subtitle: "`r params$localidade`, `r params$ano`"
+---
+
+# <font size="6"> Bloco 1: Condições socioeconômicas e de acesso ao serviço de saúde </font> {-}
+
+```{r echo = FALSE}
+#Criando o dataframe com as informações dos indicadores para a criação dos textos da tabela
+infos_comp_bloco1 <- data.frame(
+  #Coluna "valores_comp": aplicar esse mesmo formato de cálculo para todos os indicadores, alterando o objeto de origem dos dados da localidade escolhida (data1, data2, ..., data6) e dos valores nacionais/de referência (data1_comp, data2_comp, ..., data6_comp) de acordo com o bloco que você está fazendo. O nome das variáveis você pode olhar nos outputs das caixinhas do respectivo bloco no módulo do nível 1
+  valores_comp = c(
+    round(100 - 100 * params$data1$porc_dependentes_sus / params$data1_comp$porc_dependentes_sus, 1),
+    round(100 - 100 * params$data1$porc_cobertura_esf / params$data1_comp$porc_cobertura_esf, 1),
+    round(100 - 100 * params$data1$porc_nvm_com_escolaridade_ate_7 / params$data1_comp$porc_nvm_com_escolaridade_ate_7, 1),
+    round(100 - 100 * params$data1$porc_nvm_menor_que_20_anos / params$data1_comp$porc_nvm_menor_que_20_anos, 1),
+    round(100 - 100 * params$data1$porc_nvm_maior_que_34_anos / params$data1_comp$porc_nvm_maior_que_34_anos, 1), 
+    round(100 - 100 * params$data1$porc_nvm_com_cor_da_pele_preta / params$data1_comp$porc_nvm_com_cor_da_pele_preta, 1),
+    round(100 - 100 * params$data1$porc_nvm_indigenas / params$data1_comp$porc_nvm_indigenas, 1)
+  ),
+  #Colunas "invertido" e "tem_meta": as duas informações também estão nos outputs das caixinhas do respectivo bloco no módulo do nível 1
+  invertido = c(
+    FALSE,
+    TRUE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE
+  ),
+  tem_meta = c(
+    FALSE,
+    TRUE,
+    rep(FALSE, 5)
+  )
+)
+
+#Criando o objeto com os textos que irão aparecer na coluna "Comparação" da tabela
+html_comp_bloco1 <- cria_textos(infos_comp_bloco1)
+
+#Trocando os separadores de casas decimais para vírgulas
+data1_formatado <- lapply(params$data1, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data1_comp_formatado <- lapply(params$data1_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+#Montando o dataframe com as informações necessárias para a criação da tabela
+max_min <- ifelse(infos_comp_bloco1$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "IDHM",
+    "Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS",
+    "Cobertura populacional com equipes de Saúde da Família",
+    "Porcentagem de nascidos vivos de mulheres com menos de 8 anos de estudo",
+    "Porcentagem de nascidos vivos de mulheres com idade menor que 20 anos",
+    "Porcentagem de nascidos vivos de mulheres com idade maior ou igual a 35 anos",
+    "Porcentagem de nascidos vivos de mulheres pretas",
+    "Porcentagem de nascidos vivos de mulheres indígenas"
+  ),
+  "valor_observado" = c(
+    formatC(params$idhm, big.mark = '.', decimal.mark = ','),
+    paste0(data1_formatado$porc_dependentes_sus, "%"),
+    paste0(data1_formatado$porc_cobertura_esf, "%"),
+    paste0(data1_formatado$porc_nvm_com_escolaridade_ate_7, "%"),
+    paste0(data1_formatado$porc_nvm_menor_que_20_anos, "%"),
+    paste0(data1_formatado$porc_nvm_maior_que_34_anos, "%"),
+    paste0(data1_formatado$porc_nvm_com_cor_da_pele_preta, "%"),
+    paste0(data1_formatado$porc_nvm_indigenas, "%")
+  ),
+  "valor_de_referencia" = c(
+    "---",
+    paste0(max_min[1], data1_comp_formatado$porc_dependentes_sus, "% (média nacional)"),
+    paste0(max_min[2], data1_comp_formatado$porc_cobertura_esf, "% (meta OMS)"),
+    paste0(max_min[3], data1_comp_formatado$porc_nvm_com_escolaridade_ate_7, "% (média nacional)"),
+    paste0(max_min[4], data1_comp_formatado$porc_nvm_menor_que_20_anos, "% (média nacional)"),
+    paste0(max_min[5], data1_comp_formatado$porc_nvm_maior_que_34_anos, "% (média nacional)"),
+    paste0(max_min[6], data1_comp_formatado$porc_nvm_com_cor_da_pele_preta, "% (média nacional)"),
+    paste0(max_min[7], data1_comp_formatado$porc_nvm_indigenas, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    params$comparacao_idhm,
+    html_comp_bloco1[1],
+    html_comp_bloco1[2],
+    html_comp_bloco1[3],
+    html_comp_bloco1[4],
+    html_comp_bloco1[5],
+    html_comp_bloco1[6],
+    html_comp_bloco1[7]
+  )
+) |>
+  #Criando a tabela
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        minWidth = 160,
+        name = "Indicador",
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+\newpage
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> IDHM </div>
+<ul align='justify'>
+<li> O Índice de Desenvolvimento Humano Municipal (IDHM) é uma medida composta que segue as mesmas três dimensões do IDH Global (longevidade, educação e renda), com adequação da metodologia ao contexto brasileiro e à disponibilidade de indicadores nacionais. Valores baixos indicam menor nível de desenvolvimento humano e maior vulnerabilidade das mulheres à morte materna. Sendo um valor global do município, o IDHM não reflete desigualdades socioeconômicas que podem existir dentro do município e para as quais o gestor deve estar atento.  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos por escolaridade da mãe </div>
+<ul align='justify'>
+<li> A escolaridade materna também é um indicador de vulnerabilidade: quanto menor a escolaridade da mulher, maior sua vulnerabilidade ao óbito materno. No Brasil, o aumento da razão de mortalidade materna é observada a partir de um nível de escolaridade inferior a 8 anos, alcançando o maior valor em mulheres sem escolaridade;  </li>
+<li> Esses dois indicadores – IDHM e escolaridade materna - indicam a necessidade de políticas intersetoriais que melhorem a condição da mulher na sociedade e reduzam desigualdades em saúde. </li>
+</ul>
+
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos por faixa etária da mãe </div>
+<ul align='justify'>
+  <li> Mulheres nos extremos etários apresentam risco aumentado de morte materna. Uma elevada porcentagem de mães de nascidos vivos com menos de 20 anos de idade e/ou com 35 anos ou mais deve alertar o gestor para a necessidade de ampliação de ações de planejamento reprodutivo que reduzam a ocorrência de gestações não planejadas. Essas ações devem ser oferecidas a todas as mulheres, com ênfase para as mulheres de maior risco reprodutivo.  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos por raça/cor da mãe </div>
+<ul align='justify'>
+  <li> Mulheres pretas e indígenas apresentam maior risco de morte materna no Brasil. Localidades com maior proporção de mulheres pretas e indígenas apresentam maior vulnerabilidade ao óbito materno. Ações que reduzam o racismo estrutural, permitindo o acesso a ações de saúde oportunas e de qualidade são necessárias em todo o país. Ações que favoreçam o acesso das indígenas aos serviços de saúde e que considerem a distinção de etnia são também necessárias.
+ </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS </div>
+<ul align='justify'>
+  <li> A porcentagem de mulheres que depende exclusivamente dos serviços públicos é um importante elemento para o planejamento em saúde, ao indicar o número de mulheres para as quais deverá ser garantido acesso às ações de saúde. Além disso, é também um indicador de vulnerabilidade social, já que, no Brasil, o acesso a planos de saúde está associado à melhor condição econômica. Quanto maior a porcentagem de mulheres dependentes exclusivamente do SUS, maior a vulnerabilidade social e econômica desta população. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Cobertura populacional com equipes de Saúde da Família </div>
+<ul align='justify'>
+  <li> A cobertura populacional com equipes de saúde da família é importante para a prevenção e controle da mortalidade materna, ao propiciar acesso à assistência pré-natal, acesso a serviços de planejamento reprodutivo, e controle de doenças crônicas; </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> Os Objetivos do Desenvolvimento Sustentável (ODS) recomendam a cobertura universal da população com atenção básica. Sendo assim, a meta deve ser alcançar 100% da população, mas utilizamos como referência o valor de 95% devido à possibilidade de erro nas estimativas populacionais. Em municípios com elevada cobertura de planos de saúde, a cobertura com equipes de saúde da família deve contemplar pelo menos a porcentagem da população que depende exclusivamente do SUS. </li>
+</ul>
+
+
+</div>
+
+# <font size="6"> Bloco 2: Planejamento reprodutivo </font> {-}
+
+```{r echo = FALSE}
+infos_comp_bloco2 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data2$porc_menor20 / params$data2_comp$porc_menor20, 1),
+    round(100 - 100 * params$data2$porc_mais_3pt / params$data2_comp$porc_mais_3pt, 1),
+    round(100 - 100 * params$data2$tx_abortos_mil_mulheres_valor_medio / params$data2_comp$tx_abortos_mil_mulheres_valor_medio, 1),
+    round(100 - 100 * params$data2$tx_abortos_cem_nascidos_vivos_valor_medio / params$data2_comp$tx_abortos_cem_nascidos_vivos_valor_medio, 1)),
+  
+  invertido = c(
+    rep(FALSE, 4)
+  ),
+  
+  tem_meta = c(
+    TRUE,
+    FALSE,
+    FALSE,
+    FALSE
+  )
+  
+)
+
+html_comp_bloco2 <- cria_textos(infos_comp_bloco2)
+
+data2_formatado <- lapply(params$data2, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data2_comp_formatado <- lapply(params$data2_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco2$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil)",
+    "Porcentagem de nascidos vivos de mulheres com mais de 3 partos anteriores",
+    "Valor médio da taxa de abortos inseguros por mil MIF",
+    "Valor médio da razão de abortos inseguros por 100 nascidos vivos"
+  ),
+  
+  "valor_observado" = c(
+    paste0(data2_formatado$porc_menor20),
+    paste0(data2_formatado$porc_mais_3pt, "%"),
+    paste0(data2_formatado$tx_abortos_mil_mulheres_valor_medio),
+    paste0(data2_formatado$tx_abortos_cem_nascidos_vivos_valor_medio)
+  ),
+  
+  "valor_de_referencia" = c(
+    paste0(max_min[1], data2_comp_formatado$porc_menor20, " (países desenvolvidos)"),
+    paste0(max_min[2], data2_comp_formatado$porc_mais_3pt, "% (média nacional)"),
+    paste0(max_min[3], data2_comp_formatado$tx_abortos_mil_mulheres_valor_medio, " (média nacional)"),
+    paste0(max_min[4], data2_comp_formatado$tx_abortos_cem_nascidos_vivos_valor_medio, " (média nacional)")
+  ),
+  
+  "comparacao" = c(
+    html_comp_bloco2[1],
+    html_comp_bloco2[2],
+    html_comp_bloco2[3],
+    html_comp_bloco2[4]
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+```
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) </div>
+<ul align='justify'>
+  <li> A elevada taxa de fecundidade em menores de 20 anos indica a necessidade de ampliação de ações de planejamento reprodutivo para essas jovens, seja em unidade de saúde, escolas ou na comunidade. A redução da taxa de fecundidade em menores de 20 anos é uma meta da Organização Pan-Americana de Saúde, mas não há definição de um valor a ser alcançado. O valor de referência utilizado é a taxa de fecundidade em adolescentes observada em países desenvolvidos. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos de mulheres com mais de 3 partos anteriores </div>
+<ul align='justify'>
+  <li> O Brasil tem uma taxa de fecundidade em declínio. Embora nacionalmente a porcentagem de mulheres com mais de 3 partos anteriores seja baixa, a identificação de locais com proporção desse indicador superior à média nacional aponta para a necessidade de ampliação da oferta de serviços de planejamento reprodutivo.   </li>
+</ul>
+
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Taxa e razão de abortos inseguros </div>
+<ul align='justify'>
+  <li> A taxa de abortos inseguros por mil MIF expressa a ocorrência de abortos inseguros em uma população feminina em idade fértil (10 a 49 anos), enquanto a razão de abortos inseguros por 100 nascidos vivos expressa a probabilidade de uma gestação terminar em aborto inseguro ao invés de um nascimento vivo. A estimativa do número de abortos inseguros se baseia no número de internações por abortamento em serviços públicos e privados, com aplicação de fator de correção para internações por abortos espontâneos e para abortos inseguros que não necessitaram de internação; </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> Para ambos os indicadores, utilizamos como referência a média nacional. Valores elevados, acima da média nacional, indicam a ocorrência frequente de abortos inseguros e a necessidade de ampliação de serviços de planejamento reprodutivo e de atenção qualificada aos casos de abortamento.
+</ul>
+</div>
+
+# <font size="6"> Bloco 3: Assistência pré-natal </font> {-}
+
+
+```{r echo = FALSE}
+infos_comp_bloco3 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data3$cobertura_pre_natal / params$data3_comp$cobertura_pre_natal, 1),
+    round(100 - 100 * params$data3$porc_inicio_prec / params$data3_comp$porc_inicio_prec, 1),
+    round(100 - 100 * params$data3$porc_7 / params$data3_comp$porc_7, 1),
+    round(100 - 100 * params$data3$porc_sc / params$data3_comp$porc_sc, 1)),
+  
+  invertido = c(
+    rep(TRUE, 3),
+    FALSE
+  ),
+  
+  tem_meta = c(
+    rep(TRUE, 4)
+  )
+  
+)
+
+html_comp_bloco3 <- cria_textos(infos_comp_bloco3)
+
+data3_formatado <- lapply(params$data3, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data3_comp_formatado <- lapply(params$data3_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco3$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Cobertura de assistência pré-natal",
+    "Porcentagem de mulheres com início precoce do pré-natal (até 12 semanas de gestação)",
+    "Porcentagem de mulheres com mais de sete consultas de pré-natal",
+    "Incidência de sífilis congênita por mil nascidos vivos"
+  ),
+  
+  "valor_observado" = c(
+    paste0(data3_formatado$cobertura_pre_natal, "%"),
+    paste0(data3_formatado$porc_inicio_prec, "%"),
+    paste0(data3_formatado$porc_7, "%"),
+    paste0(data3_formatado$porc_sc)
+  ),
+  
+  "valor_de_referencia" = c(
+    paste0(max_min[1], data3_comp_formatado$cobertura_pre_natal, "% (recomendações OMS)"),
+    paste0(max_min[2], data3_comp_formatado$porc_inicio_prec, "% (recomendações OMS)"),
+    paste0(max_min[3], data3_comp_formatado$porc_7, "% (recomendações OMS)"),
+    paste0(max_min[4], data3_comp_formatado$porc_sc, " (meta OMS)")
+  ),
+  
+  "comparacao" = c(
+    html_comp_bloco3[1],
+    html_comp_bloco3[2],
+    html_comp_bloco3[3],
+    html_comp_bloco3[4]
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+```
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Cobertura de assistência pré-natal </div>
+<ul align='justify'>
+  <li> A cobertura universal de assistência pré-natal, com início do acompanhamento nas primeiras 12 semanas gestacionais e com o número mínimo de 8 consultas recomendado pela Organização Mundial de Saúde, é uma meta a ser perseguida por todos os gestores de serviços de saúde; </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> No Brasil, quase 100% das mulheres têm assistência pré-natal. Portanto, a existência de mulheres sem ao menos uma consulta de pré-natal durante toda a gestação revela a não inclusão dessas mulheres pelo sistema de saúde. </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> Exemplos de ações visando a ampliação da cobertura pré-natal incluem a facilitação do diagnóstico da gravidez por meio de testes de resultado imediato (TIG), o aumento da cobertura da atenção básica e oferta de serviços de pré-natal, a redução das barreiras de acesso, e a realização de ações educativas que tratem sobre a importância do pré-natal. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de mulheres com início precoce do pré-natal (até 12 semanas de gestação) </div>
+<ul align='justify'>
+  <li> O início tardio do acompanhamento pré-natal pode refletir barreiras para o diagnóstico precoce da gestação, para o agendamento oportuno da primeira consulta, ou mesmo, atrasos na busca do serviço por se tratar de uma gestação não desejada. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de mulheres com mais de sete consultas de pré-natal </div>
+<ul align='justify'>
+  <li> O número insuficiente de consultas pode indicar baixa oferta de consultas de pré-natal, dificuldades de comparecimento da mulher ao serviço, barreiras de acesso, não valorização do pré-natal, entre outros. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Incidência de sífilis congênita por mil nascidos vivos </div>
+<ul align='justify'>
+  <li> A sífilis congênita é um evento sentinela da qualidade da assistência pré-natal e existe uma meta mundial para sua eliminação traduzida pelo valor de 0,5 casos por 1.000 nascidos vivos. Valores acima da meta de eliminação indicam falhas no manejo da sífilis durante a gestação. Valores abaixo da meta podem indicar um bom acompanhamento pré-natal, mas também podem indicar falhas no sistema de vigilância epidemiológica, com a aparente ausência de casos sendo decorrente de falhas na notificação; </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> Para a redução da incidência de sífilis congênita são necessárias ações que facilitem o acesso precoce ao pré-natal; realização dos testes para diagnóstico da infecção pela sífilis na gestante, preferencialmente por meio de testes rápidos; e tratamento oportuno da mulher e parceiro(s), com a dose adequada para o estágio da doença. </li>
+</ul>
+
+</div>
+
+
+# <font size="6"> Bloco 4: Assistência ao parto </font> {-}
+
+Para os indicadores relacionados aos grupos de Robson:
+
+```{r}
+
+grupo_robson <-  c(
+  "Geral",
+  "Grupo de Robson 1",
+  "Grupo de Robson 2",
+  "Grupo de Robson 3",
+  "Grupo de Robson 4",
+  "Grupo de Robson 5",
+  "Grupos de Robson 6 a 9",
+  "Grupo de Robson 10"
+)
+
+porc_nascidos <-  c(
+  paste0("---"),
+  paste0(formatC(params$data4$prop_nasc_robson1, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson2, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson3, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson4, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson5, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson6_a_9, big.mark = ".", decimal.mark = ","), "%"),
+  paste0(formatC(params$data4$prop_nasc_robson10, big.mark = ".", decimal.mark = ","), "%")
+)
+
+porc_cesareas <- c(
+  params$data4$prop_tx_cesariana_geral,
+  params$data4$prop_robson1_tx_cesariana,
+  params$data4$prop_robson2_tx_cesariana,
+  params$data4$prop_robson3_tx_cesariana,
+  params$data4$prop_robson4_tx_cesariana,
+  params$data4$prop_robson5_tx_cesariana,
+  params$data4$prop_robson6_a_9_tx_cesariana,
+  params$data4$prop_robson10_tx_cesariana
+)
+
+referencia_porc_cesareas <- c(
+  "Máximo de 15% (meta OMS)",
+  "Máximo de 10% (meta OMS)",
+  "Entre 20 a 35% (meta OMS)",
+  "Máximo de 3% (meta OMS)",
+  "Máximo de 15% (meta OMS)",
+  "Entre 50 a 60% (meta OMS)",
+  "---",
+  "Máximo de 30% (meta OMS)"
+)
+
+data.frame(grupo_robson, porc_nascidos, porc_cesareas, referencia_porc_cesareas) |>
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center",
+      format = reactable::colFormat(separators = TRUE, suffix = "%")
+    ),
+    columns = list(
+      grupo_robson = reactable::colDef(
+        name = "Categoria",
+        minWidth = 72,
+        format = reactable::colFormat(separators = FALSE)
+      ),
+      porc_nascidos = reactable::colDef(
+        name = "% de nascidos vivos",
+        minWidth = 56,
+        format = reactable::colFormat(separators = FALSE)
+      ),
+      porc_cesareas = reactable::colDef(
+        name = "% de cesarianas",
+        minWidth = 56
+      ),
+      referencia_porc_cesareas = reactable::colDef(
+        name = "Valor de referência para a % de cesarianas (OMS)",
+        minWidth = 56,
+        format = reactable::colFormat(separators = FALSE)
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+    
+
+
+```
+
+<div>
+
+```{r}
+if (params$nivel %in%  c("Municipal", "Estadual")) {
+  HTML('<div class="pagebreak"> </div>')
+}
+```
+
+Para os indicadores relacionados ao deslocamento para o parto:
+
+```{r}
+  
+ if (params$nivel != "Municipal" & params$nivel != "Estadual") {
+  #Fazer igual você fez para os outros blocos, mas o único indicador aqui é o prop_partos_fora_macro_rsaude_res. Os de mediana não entram pra quando o nível não é municipal ou estadual
+
+  infos_comp_bloco4 <- data.frame(
+    valores_comp = c(
+      # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
+      round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1)
+    ),
+
+    invertido = c(
+      # FALSE,
+      FALSE
+    ),
+
+    tem_meta = c(
+      #FALSE,
+      FALSE
+    )
+
+  )
+
+  html_comp_bloco4 <- cria_textos(infos_comp_bloco4)
+
+  data4_formatado <- lapply(params$data4_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+  data4_comp_formatado <- lapply(params$data4_comp_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+  max_min <- ifelse(infos_comp_bloco4$invertido == FALSE, "Máximo de ", "Mínimo de ")
+  
+  data.frame(
+    "indicador" = c(
+      # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
+      "Porcentagem do total de partos ocorridos fora do município de residência da mulher"
+    ),
+
+    "valor_observado" = c(
+      # paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
+      paste0(data4_formatado$prop_partos_fora_mun_res, "%")
+    ),
+
+    "valor_de_referencia" = c(
+      # paste0(data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
+      paste0(max_min[1], data4_comp_formatado$prop_partos_fora_mun_res, "% (média nacional)")
+    ),
+
+    "comparacao" = c(
+      # html_comp_bloco4[1],
+      html_comp_bloco4[1]
+    )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ),
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+} else {
+  
+
+  infos_comp_bloco4 <- data.frame(
+  valores_comp = c(
+    # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
+    round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1)
+  ),
+
+  invertido = c(
+    # FALSE,
+    FALSE
+  ),
+
+  tem_meta = c(
+    # FALSE,
+    FALSE
+  )
+
+)
+
+html_comp_bloco4 <- cria_textos(infos_comp_bloco4)
+
+data4_formatado <- lapply(params$data4_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data4_comp_formatado <- lapply(params$data4_comp_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco4$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
+    "Proporção do total de partos ocorridos fora do município de residência da mulher",
+    # "Mediana de deslocamento do total de partos ocorridos na UF, mas fora da macrorregião de saúde de residência mulher",
+    # "Mediana de deslocamento do total de partos ocorridos em serviços de alta complexidade na UF, mas fora da macrorregião de saúde de residência da mulher",
+    # "Mediana de deslocamento do total de partos ocorridos em serviços de baixa complexidade na UF, mas fora da macrorregião de saúde de residência da mulher",
+    "Mediana de deslocamento do total de partos ocorridos fora do municipio de residência da mulher",
+    "Mediana de deslocamento para serviços de baixa complexidade do total de partos ocorridos fora do municipio de residência da mulher",
+    "Mediana de deslocamento para serviços de alta complexidade do total de partos ocorridos fora do municipio de residência da mulher"
+  ),
+
+  "valor_observado" = c(
+    # paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
+    paste0(data4_formatado$prop_partos_fora_mun_res, "%"),
+    # paste0(data4_formatado$km_partos_na_macrorregiao),
+    # paste0(data4_formatado$km_partos_na_macrorregiao_alta_complexidade),
+    # paste0(data4_formatado$km_partos_na_macrorregiao_baixa_complexidade),
+    paste0(data4_formatado$km_partos_fora_municipio, " km"),
+    paste0(data4_formatado$km_partos_fora_municipio_alta_complexidade, " km"),
+    paste0(data4_formatado$km_partos_fora_municipio_baixa_complexidade, " km")
+  ),
+
+  "valor_de_referencia" = c(
+    # paste0(data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
+    paste0(max_min[1], data4_comp_formatado$prop_partos_fora_mun_res, "% (média nacional)"),
+    # paste0("---"),
+    # paste0("---"),
+    # paste0("---"),
+    paste0("---"),
+    paste0("---"),
+    paste0("---")
+  ),
+
+  "comparacao" = c(
+    # html_comp_bloco4[1],
+    html_comp_bloco4[1],
+    #rep("Comparação não aplicável", 3),
+    rep("Comparação não aplicável", 3)
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ),
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+}
+
+
+
+```
+
+</div>
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascimentos por cesariana </div>
+<ul align='justify'>
+  <li> A Organização Mundial de Saúde (OMS) recomenda que a taxa de cesariana a nível populacional não seja superior a 15%. No Brasil, considerando-se as características obstétricas das mulheres, estima-se que a taxa máxima seria de 25%. Locais com taxa superior a 25% devem buscar estratégias para redução das cesarianas desnecessárias, uma vez que aumentam o risco de morbidade e de mortalidade materna e perinatal. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos, porcentagem de cesarianas e contribuição relativa para a taxa global de cesariana de cada grupo de Robson</div>
+<ul align='justify'>
+  <li> A classificação de grupo de Robson é a estratégia recomendada pela OMS para a análise das taxas de cesariana. A análise da distribuição dos nascidos vivos segundo os grupos de Robson permite verificar quais são os principais grupos em cada localidade. Já a taxa de cesariana em cada grupo permite verificar onde estão os maiores excessos de cesariana, considerando a taxa estimada pela OMS para cada grupo. Grupos de maior tamanho e com maior taxa de cesariana terão a maior contribuição para a taxa de cesariana global, sendo eles os grupos prioritários para ações visando a redução de cesarianas desnecessárias;  </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> No Brasil, os grupos de Robson mais importantes para a taxa global de cesariana são o grupo 2 (mulheres que estão tendo seu primeiro parto por cesariana), grupo 5 (mulheres que tem uma cesariana anterior e que estão tendo uma cesariana novamente) e grupo 10 (gestações prematuras). Além desses, os grupos 1 e 3 são formados por gestantes que entraram em trabalho de parto espontaneamente e que muitas vezes tem uma cesariana por causa de um modelo de atenção ao parto que não segue as evidências científicas. Esses dados mostram que, no Brasil, as principais estratégias para reduzir as cesarianas desnecessárias são a prevenção da primeira cesariana, a redução de cesarianas de repetição e a melhoria do manejo das gestações prematuras. As estratégias incluem 1) preparação para o parto durante o pré-natal - com informações sobre vantagens e desvantagens dos tipos de parto, participação em grupos de gestante, estímulo a elaboração de um plano de parto, entre outras; 2) melhorias na atenção ao parto, com uso de boas práticas, abandono de práticas prejudiciais e maior envolvimento da mulher e sua família; 3) manejo adequado das gestações prematuras e das interrupções eletivas, evitando prematuridade induzida pelo profissional. </li>
+
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Indicadores relacionados ao deslocamento para o parto </div>
+<ul align='justify'>
+  <li> Demoras no recebimento do cuidado em saúde aumentam o risco de morte materna. A barreira no acesso a serviços de saúde de atenção ao parto é uma causa de demora. Utilizamos dois indicadores para medir possíveis barreiras de acesso: 1) a proporção de nascimentos que ocorreram fora do município de residência da mulher (seja na microrregião, na macrorregião, em outra macrorregião do estado ou fora do estado), e 2) a mediana de deslocamento para serviços localizados fora do município de residência, considerando a mediana total e a mediana segundo complexidade do serviço onde ocorreu o parto, sendo considerado de alto risco o serviço que dispõe de leitos em Unidade de Terapia Intensiva (UTI); </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+    <li> Localidades com proporção elevada de partos fora do município e com mediana elevada de deslocamento devem reforçar medidas como regulação dos leitos e vinculação da gestante a uma maternidade de referência, evitando a peregrinação na busca pelo serviço de atenção ao parto, bem como o transporte seguro das gestantes, principalmente as de alto risco. As medianas segundo complexidade do serviço de destino (baixa ou alta) podem também auxiliar no planejamento do acesso a esses diferentes tipos de serviço; </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li> O valor de referência utilizado foi a média nacional de partos ocorridos fora do município de residência da mulher. Para as medianas de deslocamento, um valor de referência nacional não foi utilizado, devido à grande diversidade brasileira. De um modo geral, quanto maior a mediana de deslocamento, maior a probabilidade de demora para a atenção ao parto. Para mais informações sobre deslocamento sobre assistência ao parto, sugerimos uma visita ao painel <a href = https://www.gcedist.site/ target = _blank> https://www.gcedist.site/</a>. </li>
+</ul>
+
+
+ 
+</div>
+
+# <font size="6"> Bloco 5: Condições de nascimento </font> {-}
+
+
+```{r echo = FALSE}
+infos_comp_bloco5 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data5$porc_baixo_peso / params$data5_comp_baixo_peso$porc_baixo_peso, 1),
+    round(100 - 100 * params$data5$porc_premat / params$data5_comp$porc_premat, 1),
+    round(100 - 100 * params$data5$porc_termo_precoce / params$data5_comp$porc_termo_precoce, 1)),
+  
+  invertido = c(
+    rep(FALSE, 3)
+  ),
+  
+  tem_meta = c(
+    FALSE,
+    rep(TRUE, 2)
+  )
+  
+)
+
+html_comp_bloco5 <- cria_textos(infos_comp_bloco5)
+
+data5_formatado <- lapply(params$data5, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data5_comp_formatado <- lapply(params$data5_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data5_comp_baixo_peso_formatado <- lapply(params$data5_comp_baixo_peso, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco5$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Porcentagem de baixo peso ao nascer",
+    "Porcentagem de nascimentos prematuros",
+    "Porcentagem de nascimentos termo precoce"
+  ),
+  
+  "valor_observado" = c(
+    paste0(data5_formatado$porc_baixo_peso, "%"),
+    paste0(data5_formatado$porc_premat, "%"),
+    paste0(data5_formatado$porc_termo_precoce, "%")
+  ),
+  
+  "valor_de_referencia" = c(
+    paste0(max_min[1], data5_comp_baixo_peso_formatado$porc_baixo_peso, "% (meta de redução global)"),
+    paste0(max_min[2], data5_comp_formatado$porc_premat, "% (países desenvolvidos)"),
+    paste0(max_min[3], data5_comp_formatado$porc_termo_precoce, "% (países desenvolvidos)")
+  ),
+  
+  "comparacao" = c(
+    html_comp_bloco5[1],
+    html_comp_bloco5[2],
+    html_comp_bloco5[3]
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+```
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+ 
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de baixo peso ao nascer (menos que 2500g) </div>
+<ul align='justify'>
+  <li> O baixo peso ao nascer é um importante fator de risco para a mortalidade infantil e é determinado por várias causas. Algumas dessas causas são fatores modificáveis como, por exemplo, a redução do fumo na gestação. Existe uma meta mundial de redução de 30% da porcentagem de baixo peso ao nascer até o ano 2025, em relação aos valores observados no período de 2006 a 2010, que foi utilizada como referência neste painel. Um adequado acompanhamento pré-natal, com melhoria nutricional da gestante; redução de fatores de risco, como fumo, álcool e outras drogas; e tratamento de intercorrências na gestação, tais como a sífilis na gestação, são medidas que podem contribuir para o alcance dessa meta.
+  </li>
+</ul>
+
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascimentos prematuros (com menos de 37 semanas gestacionais) e porcentagem de nascimentos termo precoce (com 37 e 38 semanas gestacionais) </div>
+<ul align='justify'>
+  <li>
+  A prematuridade é o principal fator de risco para a mortalidade infantil. Nascimentos termo precoce também estão associados a maior ocorrência de complicações de saúde do bebê.  Não existe uma meta para partos prematuros e termo precoce, sendo desejável uma redução desses valores. Ou seja, quanto menor a porcentagem de partos prematuros e termos precoce, melhor;
+  </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
+O valor de referência utilizado foi aquele observado em países desenvolvidos e que apresentam baixa taxa de cesariana, já que nascimentos termo precoce são mais comuns em locais com taxa de cesariana elevada. Melhorias da assistência pré-natal e ao parto e redução de cesarianas desnecessárias são medidas que podem contribuir para a redução desses desfechos.
+  </li>
+</ul>
+
+
+
+</div>
+
+# <font size="6"> Bloco 6: Mortalidade e morbidade materna </font> {-}
+
+Para os indicadores relacionados à mortalidade materna:
+
+```{r echo = FALSE}
+infos_comp_bloco6 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data6_rmm_corrigida$rmm / params$data6_comp$rmm, 1),
+    round(100 - 100 * params$data6$prop_obitos_diretos / params$data6_comp$prop_obitos_diretos, 1),
+    round(100 - 100 * params$data6$prop_obitos_aborto / params$data6_comp$prop_obitos_aborto, 1),
+    round(100 - 100 * params$data6$prop_obitos_hipertens / params$data6_comp$prop_obitos_hipertens, 1),
+    round(100 - 100 * params$data6$prop_obitos_hemo / params$data6_comp$prop_obitos_hemo, 1),
+    round(100 - 100 * params$data6$prop_obitos_infec / params$data6_comp$prop_obitos_infec, 1)
+  ),
+  invertido = c(
+    rep(FALSE, 6)
+  ),
+  tem_meta = c(
+    TRUE,
+    rep(FALSE, 5)
+  )
+)
+
+html_comp_bloco6 <- cria_textos(infos_comp_bloco6)
+
+data6_formatado <- lapply(params$data6, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data6_rmm_corrigida_formatado <- lapply(params$data6_rmm_corrigida, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data6_comp_formatado <- lapply(params$data6_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco6$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = tabela_indicadores$indicador[which(tabela_indicadores$bloco %in% c("bloco6"))],
+  "valor_observado" = c(
+    data6_formatado$obitos_mat_totais,
+    paste0(data6_rmm_corrigida_formatado$rmm),
+    dplyr::if_else(is.nan(params$data6$prop_obitos_diretos), "---", paste0(data6_formatado$prop_obitos_diretos, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_obitos_aborto), "---", paste0(data6_formatado$prop_obitos_aborto, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_obitos_hipertens), "---", paste0(data6_formatado$prop_obitos_hipertens, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_obitos_hemo), "---", paste0(data6_formatado$prop_obitos_hemo, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_obitos_infec), "---", paste0(data6_formatado$prop_obitos_infec, "%"))
+  ),
+  "valor_de_referencia" = c(
+    "---",
+    paste0(max_min[1], data6_comp_formatado$rmm, " (meta ODS)"),
+    paste0(max_min[2], data6_comp_formatado$prop_obitos_diretos, "% (média nacional)"),
+    paste0(max_min[3], data6_comp_formatado$prop_obitos_aborto, "% (média nacional)"),
+    paste0(max_min[4], data6_comp_formatado$prop_obitos_hipertens, "% (média nacional)"),
+    paste0(max_min[5], data6_comp_formatado$prop_obitos_hemo, "% (média nacional)"),
+    paste0(max_min[6], data6_comp_formatado$prop_obitos_infec, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    "---",
+    html_comp_bloco6[1],
+    html_comp_bloco6[2],
+    html_comp_bloco6[3],
+    html_comp_bloco6[4],
+    html_comp_bloco6[5],
+    html_comp_bloco6[6]
+  )
+) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+```
+\newpage
+
+Para os indicadores relacionados à morbidade materna grave:
+
+```{r echo = FALSE}
+infos_comp_bloco6 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data6$prop_mmg_int_publicas / params$data6_comp$prop_mmg_int_publicas, 1),
+    round(100 - 100 * params$data6$prop_mmg_hipertensao / params$data6_comp$prop_mmg_hipertensao, 1),
+    round(100 - 100 * params$data6$prop_mmg_hemorragia / params$data6_comp$prop_mmg_hemorragia, 1),
+    round(100 - 100 * params$data6$prop_mmg_infeccao / params$data6_comp$prop_mmg_infeccao, 1),
+    round(100 - 100 * params$data6$prop_mmg_uti / params$data6_comp$prop_mmg_uti, 1),
+    round(100 - 100 * params$data6$prop_mmg_tmp / params$data6_comp$prop_mmg_tmp, 1),
+    round(100 - 100 * params$data6$prop_mmg_transfusao / params$data6_comp$prop_mmg_transfusao, 1),
+    round(100 - 100 * params$data6$prop_mmg_cirurgia / params$data6_comp$prop_mmg_cirurgia, 1)
+  ),
+  invertido = c(
+    rep(FALSE, 8)
+  ),
+  tem_meta = c(
+    rep(FALSE, 8)
+  )
+)
+
+html_comp_bloco6 <- cria_textos(infos_comp_bloco6)
+
+data6_formatado <- lapply(params$data6, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data6_rmm_corrigida_formatado <- lapply(params$data6_rmm_corrigida, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data6_comp_formatado <- lapply(params$data6_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco6$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = tabela_indicadores$indicador[which(tabela_indicadores$bloco %in% c("bloco6_morbidade"))],
+  "valor_observado" = c(
+    dplyr::if_else(is.nan(params$data6$prop_mmg_int_publicas), "---", paste0(data6_formatado$prop_mmg_int_publicas, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_hipertensao), "---", paste0(data6_formatado$prop_mmg_hipertensao, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_hemorragia), "---", paste0(data6_formatado$prop_mmg_hemorragia, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_infeccao), "---", paste0(data6_formatado$prop_mmg_infeccao, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_uti), "---", paste0(data6_formatado$prop_mmg_uti, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_tmp), "---", paste0(data6_formatado$prop_mmg_tmp, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_transfusao), "---", paste0(data6_formatado$prop_mmg_transfusao, "%")),
+    dplyr::if_else(is.nan(params$data6$prop_mmg_cirurgia), "---", paste0(data6_formatado$prop_mmg_cirurgia, "%"))
+  ),
+  "valor_de_referencia" = c(
+    paste0(max_min[1], data6_comp_formatado$prop_mmg_int_publicas, "% (média nacional)"),
+    paste0(max_min[2], data6_comp_formatado$prop_mmg_hipertensao, "% (média nacional)"),
+    paste0(max_min[3], data6_comp_formatado$prop_mmg_hemorragia, "% (média nacional)"),
+    paste0(max_min[4], data6_comp_formatado$prop_mmg_infeccao, "% (média nacional)"),
+    paste0(max_min[5], data6_comp_formatado$prop_mmg_uti, "% (média nacional)"),
+    paste0(max_min[6], data6_comp_formatado$prop_mmg_tmp, "% (média nacional)"),
+    paste0(max_min[7], data6_comp_formatado$prop_mmg_transfusao, "% (média nacional)"),
+    paste0(max_min[8], data6_comp_formatado$prop_mmg_cirurgia, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    html_comp_bloco6[1],
+    html_comp_bloco6[2],
+    html_comp_bloco6[3],
+    html_comp_bloco6[4],
+    html_comp_bloco6[5],
+    html_comp_bloco6[6],
+    html_comp_bloco6[7],
+    html_comp_bloco6[8]
+  )
+) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Número de óbitos maternos e Razão de Mortalidade Materna por cem mil nascidos vivos</div>
+<ul align='justify'>
+  <li> A meta brasileira para os Objetivos do Desenvolvimento Sustentável é alcançar uma Razão de Mortalidade Materna inferior a 30 por 100 mil nascidos vivos no ano 2030. Municípios com RMM acima desse valor devem investir em ações para a redução da morte materna, principalmente na prevenção de gestações de alto risco e na adequada assistência pré-natal e ao parto;
+  </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
+   Muitos municípios brasileiros têm um baixo número de nascidos vivos, sendo possível a não ocorrência de óbitos maternos em anos específicos. Dessa forma, a ocorrência de apenas um óbito materno resultará em uma RMM muito elevada. Esse óbito materno, entretanto, não deve ser encarado como uma fatalidade. Como visto neste painel, o óbito materno é resultante de uma série de determinantes que ocorrem ao longo da vida da mulher, sendo eles, em sua maioria, evitáveis.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de óbitos maternos por causas obstétricas diretas e por causas diretas específicas </div>
+<ul align='justify'>
+  <li> Os óbitos maternos por causas obstétricas diretas são aqueles que podem ser evitados por uma adequada assistência pré-natal, ao parto e ao puerpério. Uma porcentagem elevada de óbitos por causas obstétricas diretas indica a necessidade de melhorias nessa assistência. A análise das principais causas do óbito pode ajudar o gestor a elaborar suas estratégias de melhoria.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Indicadores relacionados à Morbidade Materna Grave </div>
+<ul align='justify'>
+  <li> A Organização Mundial de Saúde recomenda a análise da morbidade materna grave (MMG) como estratégia complementar para a elaboração das estratégias de melhoria do cuidado obstétrico. Os três indicadores de morbidade apresentados - proporção de internações obstétricas com MMG, proporção de casos de MMG por causa (hipertensão, hemorragias e infecção) e proporção dos principais indicadores de manejo de gravidade - podem auxiliar no planejamento das ações de saúde. A média nacional foi utilizada como valor de referência para comparação, mas é importante ressaltar que esses indicadores foram calculados apenas para internações pagas pelo Sistema Único de Saúde (SUS). Em localidades com elevada proporção de mulheres beneficiárias de planos de saúde, os resultados desses indicadores não refletem a morbidade materna grave de todas as mulheres residentes, mas apenas das usuárias do SUS.
+  </li>
+</ul>
+
+</div>
+
+# <font size="6"> Qualidade da informação </font> {-}
+
+```{r echo = FALSE}
+#Os indicadores estão em params$data_incompletude. Os nomes das variáveis são "ano", "idademae", "escmae", "racacor", "qtdpartnor", "qtdpartces", "consprenat", "mesprenat", "parto", "tprobson", "peso", "gestacao", "semagestac", "localidade", "cobertura_sinasc" e "cobertura_sim". Os do SIM, que tem lá no resumo pra impressão, não tem ainda (só o da cobertura). Escrever o nome da variável na coluna "indicador" do data.frame. Por exemplo, ao invés de "Porcentagem de idade materna não preenchida ou ignorada", colocar "Porcentagem da variável IDADEMAE não preenchida ou ignorada". Lembrar que os valores de referência para todos os indicadores de incompletude são 5%, e que pros de cobertura são 90%.
+
+if (params$nivel %in% c("Macrorregião de saúde", "Microrregião de saúde")) {
+  #não colocar os indicadores de cobertura, porque pra esses níveis de análise não tem
+  infos_comp_imcompletude <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data_incompletude$idademae / 5, 1),
+    round(100 - 100 * params$data_incompletude$escmae / 5, 1),
+    round(100 - 100 * params$data_incompletude$racacor / 5, 1),
+    round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
+    round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
+    round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
+    round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
+    round(100 - 100 * params$data_incompletude$parto / 5, 1),
+    round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
+    round(100 - 100 * params$data_incompletude$peso / 5, 1),
+    round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
+    
+    ),
+  
+  invertido = c(
+    rep(FALSE, 11)
+  ),
+  
+  tem_meta = c(
+    rep(TRUE, 11)
+  )
+  
+)
+
+html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
+
+data_imcompletude_formatado <- lapply(params$data_incompletude, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+data.frame(
+  "indicador" = c(
+    "Porcentagem de IDADEMAE não preenchida ou ignorada",
+    "Porcentagem de ESCMAE não preenchida ou ignorada",
+    "Porcentagem de RACACOR não preenchida ou ignorada",
+    "Porcentagem de QTDPARTNOR não preenchida ou ignorada",
+    "Porcentagem de QTDPARTCES não preenchida ou ignorada",
+    "Porcentagem de CONSPRENAT não preenchida ou ignorada",
+    "Porcentagem de MESPRENAT não preenchida ou ignorada",
+    "Porcentagem de PARTO não preenchida ou ignorada",
+    "Porcentagem de TPROBSON não preenchida ou ignorada",
+    "Porcentagem de PESO não preenchida ou ignorada",
+    "Porcentagem de GESTACAO não preenchida ou ignorada"
+    
+  ),
+  
+  "valor_observado" = c(
+    paste0(data_imcompletude_formatado$idademae, "%"),
+    paste0(data_imcompletude_formatado$escmae, "%"),
+    paste0(data_imcompletude_formatado$racacor, "%"),
+    paste0(data_imcompletude_formatado$qtdpartnor, "%"),
+    paste0(data_imcompletude_formatado$qtdpartces, "%"),
+    paste0(data_imcompletude_formatado$consprenat, "%"),
+    paste0(data_imcompletude_formatado$mesprenat, "%"),
+    paste0(data_imcompletude_formatado$parto, "%"),
+    paste0(data_imcompletude_formatado$tprobson, "%"),
+    paste0(data_imcompletude_formatado$peso, "%"),
+    paste0(data_imcompletude_formatado$gestacao, "%")
+  
+  ),
+  
+  "valor_de_referencia" = c(
+    rep(paste0("Máximo de 5%"), 11)
+  ),
+  
+  "comparacao" = c(
+    html_comp_imcompletude[1],
+    html_comp_imcompletude[2],
+    html_comp_imcompletude[3],
+    html_comp_imcompletude[4],
+    html_comp_imcompletude[5],
+    html_comp_imcompletude[6],
+    html_comp_imcompletude[7],
+    html_comp_imcompletude[8],
+    html_comp_imcompletude[9],
+    html_comp_imcompletude[10],
+    html_comp_imcompletude[11]
+    
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+     )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+  
+} else  {
+  #colocar todos os indicadores
+  infos_comp_imcompletude <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data_incompletude$cobertura_sinasc / 90, 1),
+    round(100 - 100 * params$data_incompletude$cobertura_sim / 90, 1),
+    round(100 - 100 * params$data_incompletude$idademae / 5, 1),
+    round(100 - 100 * params$data_incompletude$escmae / 5, 1),
+    round(100 - 100 * params$data_incompletude$racacor / 5, 1),
+    round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
+    round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
+    round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
+    round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
+    round(100 - 100 * params$data_incompletude$parto / 5, 1),
+    round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
+    round(100 - 100 * params$data_incompletude$peso / 5, 1),
+    round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
+    
+    ),
+  
+  invertido = c(
+    rep(TRUE, 2),
+    rep(FALSE, 11)
+  ),
+  
+  tem_meta = c(
+    rep(TRUE, 13)
+  )
+  
+)
+
+html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
+
+data_imcompletude_formatado <- lapply(params$data_incompletude, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+data.frame(
+  "indicador" = c(
+    "Cobertura do SINASC",
+    "Cobertura do SIM",
+    "Porcentagem da variável IDADEMAE não preenchida ou ignorada",
+    "Porcentagem da variável ESCMAE não preenchida ou ignorada",
+    "Porcentagem da variável RACACOR não preenchida ou ignorada",
+    "Porcentagem da variável QTDPARTNOR não preenchida ou ignorada",
+    "Porcentagem da variável QTDPARTCES não preenchida ou ignorada",
+    "Porcentagem da variável CONSPRENAT não preenchida ou ignorada",
+    "Porcentagem da variável MESPRENAT não preenchida ou ignorada",
+    "Porcentagem da variável PARTO não preenchida ou ignorada"
+    # "Porcentagem da variável TPROBSON não preenchida ou ignorada",
+    # "Porcentagem da variável PESO não preenchida ou ignorada",
+    # "Porcentagem da variável GESTACAO não preenchida ou ignorada"
+    
+  ),
+  
+  "valor_observado" = c(
+    paste0(data_imcompletude_formatado$cobertura_sinasc, "%"),
+    paste0(data_imcompletude_formatado$cobertura_sim, "%"),
+    paste0(data_imcompletude_formatado$idademae, "%"),
+    paste0(data_imcompletude_formatado$escmae, "%"),
+    paste0(data_imcompletude_formatado$racacor, "%"),
+    paste0(data_imcompletude_formatado$qtdpartnor, "%"),
+    paste0(data_imcompletude_formatado$qtdpartces, "%"),
+    paste0(data_imcompletude_formatado$consprenat, "%"),
+    paste0(data_imcompletude_formatado$mesprenat, "%"),
+    paste0(data_imcompletude_formatado$parto, "%")
+    # paste0(data_imcompletude_formatado$tprobson, "%"),
+    # paste0(data_imcompletude_formatado$peso, "%"),
+    # paste0(data_imcompletude_formatado$gestacao, "%")
+  
+  ),
+  
+  "valor_de_referencia" = c(
+    rep(paste0("Mínimo de 90%"), 2),
+    rep(paste0("Máximo de 5%"), 8)
+    # rep(paste0("5%"), 3)
+  ),
+  
+  "comparacao" = c(
+    html_comp_imcompletude[1],
+    html_comp_imcompletude[2],
+    html_comp_imcompletude[3],
+    html_comp_imcompletude[4],
+    html_comp_imcompletude[5],
+    html_comp_imcompletude[6],
+    html_comp_imcompletude[7],
+    html_comp_imcompletude[8],
+    html_comp_imcompletude[9],
+    html_comp_imcompletude[10]
+    # html_comp_imcompletude[11],
+    # html_comp_imcompletude[12],
+    # html_comp_imcompletude[13]
+    
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+     )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+
+}
+
+```
+
+```{r}
+if (params$nivel != "Microrregião de saúde" & params$nivel != "Macrorregião de saúde") {
+  data.frame(
+  "indicador" = c(
+    "Porcentagem da variável TPROBSON não preenchida ou ignorada",
+    "Porcentagem da variável PESO não preenchida ou ignorada",
+    "Porcentagem da variável GESTACAO não preenchida ou ignorada"
+    
+  ),
+  
+  "valor_observado" = c(
+    paste0(data_imcompletude_formatado$tprobson, "%"),
+    paste0(data_imcompletude_formatado$peso, "%"),
+    paste0(data_imcompletude_formatado$gestacao, "%")
+  
+  ),
+  
+  "valor_de_referencia" = c(
+    rep(paste0("Máximo de 5%"), 3)
+  ),
+  
+  "comparacao" = c(
+    html_comp_imcompletude[11],
+    html_comp_imcompletude[12],
+    html_comp_imcompletude[13]
+    
+  )
+  ) |> reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        name = "Indicador",
+        minWidth = 160,
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+     )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    highlight = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+}
+
+
+```
+
+
+
+### Interpretação {-}
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+Todos os indicadores utilizados neste painel dependem da qualidade dos dados dos Sistemas de Informação. Para este painel, muitos indicadores utilizaram dados do Sistema de Informação de Nascido Vivo (SINASC) e do Sistema de Informação de Mortalidade (SIM), razão pela qual destacamos dados de cobertura e completitude de preenchimento das variáveis desses sistemas. Os parâmetros de referência utilizados são do Ministério da Saúde, para cobertura, e de Romero & Cunha (2006) para completude. Localidades com cobertura do sistema abaixo do ideal e com porcentagem elevada de incompletude devem avaliar os dados com cautela e investir na melhoria dos sistemas de informação. Para mais informações sobre qualidade do preenchimento dos sistemas de informação, visite o painel <a href = https://observatorioobstetrico.shinyapps.io/oobr_qualidados2/ target = _blank>OOBr Qualidados.</a>
+
+
+
+</div>
+
+
+
+
+
+
+<div style = "display: none;"> 
+$$
+1
+$$
+</div>

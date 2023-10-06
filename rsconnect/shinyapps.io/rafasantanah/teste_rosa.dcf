@@ -1,0 +1,14 @@
+name: teste_rosa
+title: teste_rosa
+username:
+account: rafasantanah
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8060780
+bundleId: 6998252
+url: https://rafasantanah.shinyapps.io/teste_rosa/
+when: 1679584225.03017
+lastSyncTime: 1679584225.03018
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data-raw

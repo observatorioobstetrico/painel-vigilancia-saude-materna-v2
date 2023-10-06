@@ -1,0 +1,47 @@
+Package: painel.indicadores
+Title: An Amazing Shiny App
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "firstname",
+           family = "lastname",
+           role = c("aut", "cre"),
+           email = "your@email.com")
+Description: What the package does (one paragraph).
+License: What license is it under?
+Imports: 
+    bs4Dash,
+    config (>= 0.3.1),
+    data.table,
+    dplyr,
+    flexdashboard,
+    glue,
+    golem (>= 0.3.3),
+    highcharter,
+    janitor,
+    pagedown,
+    pagedreport,
+    pkgload,
+    purrr,
+    reactable,
+    rmarkdown,
+    shiny (>= 1.7.2),
+    shinyalert,
+    shinycssloaders,
+    shinyjs,
+    shinyWidgets,
+    spelling,
+    stringr,
+    tibble,
+    tidyr,
+    viridis
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.1
+Depends: 
+    R (>= 2.10)
+URL: https://github.com/observatorioobstetrico/painel-vigilancia-saude-materna
+BugReports: https://github.com/observatorioobstetrico/painel-vigilancia-saude-materna/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Language: en-US

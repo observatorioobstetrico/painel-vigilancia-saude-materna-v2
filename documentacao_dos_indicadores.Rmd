@@ -1,0 +1,680 @@
+---
+title: "Documentação dos indicadores"
+subtitle: "24/07/2023"
+output: 
+  painel.indicadores:::minha_paged_windmill:
+    logo: "inst/app/www/report/blank.svg"
+    front_img: "inst/app/www/report/capa.jpg"
+    back_img: "inst/app/www/report/fundo.jpg"
+    img_to_dark: FALSE
+    logo_to_white: TRUE
+    other_css: "inst/app/www/report/teste.css"
+knit: pagedown::chrome_print
+main-color: "#32A0FF"
+---
+
+# Sobre este arquivo
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+O arquivo disponível abaixo contém toda a documentação dos indicadores existentes neste painel, atualizada em 24/07/2023. Nele, estão disponíveis
+as definições, métodos de cálculo, fontes, informações sobre a qualidade da informação e as referências utilizadas
+para a construção de cada indicador. Até o momento, os indicadores foram calculados para o período de 2012 a 2020. O painel
+será atualizado anualmente, após a consolidação das bases de dados utilizadas em sua construção.
+</div>
+
+
+
+# <font size="7"> Condições socioeconômicas e de acesso ao serviço de saúde </font>
+
+## <font size="6"> IDHM </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** O Índice de Desenvolvimento Humano Municipal (IDHM) é uma medida composta de indicadores de três dimensões do desenvolvimento humano: longevidade, educação e renda.
+
+**Método de cálculo:** O IDHM brasileiro segue as mesmas três dimensões do IDH Global - longevidade, educação e renda, adequando a metodologia global ao contexto brasileiro e à disponibilidade de indicadores nacionais.
+
+O IDHM longevidade é medido pela expectativa de vida ao nascer, calculada por método indireto a partir dos dados dos Censos Demográficos do IBGE. Esse indicador mostra o número médio de anos que as pessoas viveriam a partir do nascimento, mantidos os mesmos padrões de mortalidade observados no ano de referência.
+
+O IDHM Educação é medido por dois indicadores: escolaridade da população adulta (percentual de pessoas de 18 anos ou mais de idade com ensino fundamental completo - peso 1) e o fluxo escolar da população jovem (média aritmética do percentual de crianças de 5 a 6 anos frequentando a escola, do percentual de jovens de 11 a 13 anos frequentando os anos finais do ensino fundamental, do percentual de jovens de 15 a 17 anos com ensino fundamental completo e do percentual de jovens de 18 a 20 anos com ensino médio completo - peso 2). A média geométrica desses dois componentes resulta no IDHM Educação. <br> <br> O IDHM Renda (padrão de vida) é medido pela renda municipal per capita, ou seja, a renda média de cada residente de determinado município. É a soma da renda de todos os residentes, dividida pelo número de pessoas que moram no município - inclusive crianças e pessoas sem registro de renda. <br> <br> Os três componentes acima são agrupados por meio da média geométrica, resultando no IDHM.
+
+O IDHM é um número que varia entre 0,000 e 1. Quanto mais próximo de 1, maior o desenvolvimento humano da localidade. <br> <br> Classificações do IDHM: <br> 0,00-0,499 = Muito baixo <br> 0,500-0,599 = Baixo <br> 0,600-0,699 = Médio <br> 0,700-0,799 = Alto <br> 0,800-1 = Muito alto
+
+**Fonte:** [Atlas Brasil](http://www.atlasbrasil.org.br/ranking).
+
+**Qualidade da informação:** O IDH-M é calculado com dados do Censo Demográfico e PNAD contínuado IBGE. Nos anos intercensitários, o IDHM pode não refletir o padrão de desenvolvimento corrente, por estar baseado em tendências passadas.
+
+**Referências:** <br> Programa das Nações Unidas para o Desenvolvimento (PNUD), Instituto de Pesquisa Econômica Aplicada (IPEA), Fundação João Pinheiro (FJP). Atlas Brasil. Disponível em: <http://www.atlasbrasil.org.br/acervo/atlas>.
+
+</div>
+
+## <font size="6"> Porcentagem de nascidos vivos segundo idade materna </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de nascidos vivos segundo idade materna (idade materna inferior a 20 anos, idade materna 20 a 34 anos e idade materna 35 ou mais anos) por 100 nascidos vivos. <br> <br> **Método de cálculo:** Porcentagem de nascidos vivos segundo idade materna (\< 20 anos, 20 a 34 anos, ≥ 35 anos) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) (variável IDADEMAE).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável IDADEMAE. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascidos vivos segundo cor da pele materna </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de nascidos vivos segundo cor da pele materna (branca, preta, parda, amarela, indígena) por 100 nascidos vivos.
+
+**Método de cálculo:** Porcentagem de nascidos vivos segundo cor da pele materna (branca, preta, parda, amarela, indígena) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) (variável RACACORMAE).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável RACACORMAE. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascidos vivos segundo escolaridade materna </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de nascidos vivos segundo escolaridade materna (\< 4 anos, 4 a 7 anos, 8 a 11 anos, \> 11 anos) por 100 nascidos vivos.
+
+**Método de cálculo:** Porcentagem de nascidos vivos segundo escolaridade materna (\< 4 anos, 4 a 7 anos, 8 a 11 anos, \> 11 anos) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) (variável ESCMAE).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável ESCMAE. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de mulheres residentes em determinada localidade que não possui qualquer tipo de plano de saúde médico.
+
+**Método de cálculo:** (População feminina de 10-49 anos -- população feminina de 10 a 49 anos beneficiária de algum plano de saúde médico) dividido pela População feminina de 10-49 anos e multiplicado por 100.
+
+Foi feita imputação em 3% dos registros, que foram classificados como valores outliers. Para identificação de valores outliers foi utilizada a média de cobertura de planos de saúde médico em cada município no período 2014-2019. Os anos 2012, 2013 e 2020 não foram utilizados para cálculo da média por apresentarem porcentagem elevada de valores inconsistentes nesses anos. Foram considerados valores outliers aqueles que se encontravam acima ou abaixo do terceiro intervalo interquartil, sendo a imputação feita pela média dos valores vizinhos.
+
+**Fonte:** Beneficiárias de planos de saúde: [Tabnet ANS](www.ans.gov.br/anstabnet/cgi-bin/dh?dados/tabnet_02.def). Estimativas populacionais: [Tabnet DataSUS](http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/cnv/popsvsbr.def).
+
+**Qualidade da informação:** Este indicador depende da qualidade dos dados de beneficiárias de plano de saúde e das estimativas populacionais, que se tornam mais imprecisas quando o período intercensitário é maior.
+
+Sete municípios não apresentaram informação de beneficiárias em todo o período 2012-2020.
+
+Municípios com porcentagem de beneficiárias de plano de saúde médico superior a 100% não foram apresentados no painel, pela possibilidade de erro na informação.
+
+Alguns municípios apresentaram cobertura superior a 70% no período, o que é um resultado possível, mas pouco plausível, e devem ser avaliados com cautela.
+
+</div>
+
+## <font size="6"> Cobertura populacional com equipes de saúde da família </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem da população residente em determinado município atendida por equipes de saúde da família. <br> <br> **Método de cálculo:** Média anual da população coberta por equipes de saúde da família dividido pela população total do município e multiplicado por 100.
+
+**Fonte:** Este indicador é calculado pelo Ministério da Saúde$^{1,2}$ a partir de informações registradas no Sistema do Cadastro Nacional de Estabelecimentos de Saúde (SCNES) e do Instituto Brasileiro de Geografia e Estatística (IBGE). Considera o parâmetro de 3.450 indivíduos cobertos por equipe. [e-Gestor-Informação e Gestão da Atenção Básica](https://egestorab.saude.gov.br/paginas/acessoPublico/relatorios/relHistoricoCoberturaAB.xhtml).
+
+**Qualidade da informação:** Este indicador depende da qualidade da informação registrada no SCNES e das estimativas populacionais do IBGE, que se tornam mais imprecisa quando o período intercensitário é maior.
+
+**Referências:** <br> $^1$ Ministério da Saúde. Nota técnica - relatório de Cobertura da Atenção Básica. Disponível em <https://egestorab.saude.gov.br/paginas/acessoPublico/relatorios/nota_tecnica/nota_tecnica_relatorio_de_cobertura_AB.pdf>.
+
+$^2$ Ministério da Saúde. Nota Metodológica. Novo método de cálculo do indicador Cobertura populacional estimada na Atenção Básica. Disponível em <https://egestorab.saude.gov.br/paginas/acessoPublico/relatorios/nota_tecnica/nota_metodologica_AB.pdf>.
+
+</div>
+
+# <font size="7"> Planejamento Reprodutivo </font>
+
+## <font size="6"> Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de nascidos vivos em mulheres com menos de 20 anos.
+
+**Método de cálculo:** Número de nascidos vivos de mulheres com menos de 20 anos (IDADEMAE \< 20 anos) dividido pela população feminina de 10 a 19 anos e multiplicado por 1000.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) e [Tabnet DataSUS](http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/cnv/popsvsbr.def).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável IDADEMAE. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela. Também depende do cálculo das estimativas populacionais, que se tornam mais imprecisas conforme aumento o período intercensitário.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de grande multípara </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos de mulheres com mais de 3 partos anteriores.
+
+**Método de cálculo:** Número de mulheres com mais de três partos anteriores (QTDPARTNOR + QTDPARTCES \> 3) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento das variáveis QTDPARTNOR e QTDPARTCES. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^1$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^1$Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Taxa de aborto inseguro por 1000 mulheres em idade fértil </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número total de abortos inseguros por 1000 mulheres de 10-49 anos.
+
+**Método de cálculo:** Estimativa indireta do número de abortos inseguros calculada a partir do número de internações por complicações do aborto. É uma metodologia proposta pelo Instituto Guttmacher (*"The Abortion Incidence Complications Method"*) e que tem sido utilizada em estudos nacionais. Nesta metodologia, o número de abortos inseguros é estimado a partir da identificação de internações por complicações do aborto (CID O03 a O08), excluindo-se CID relativas a gestações ectópicas, gestações molares e produtos anormais da concepção (CID O00, O01 e O02). A este número aplicam-se dois fatores de correção: para exclusão de complicações por abortos espontâneos, e para complicações de abortamento que não resultaram em internação hospitalar. O número total de abortos inseguros é então dividido pela população feminina de 10-49 anos e multiplicado por 1000.
+
+Neste painel, utilizamos fatores de correção para exclusão de internações por complicações de aborto espontâneo diferenciado segundo faixa etária da mulher, devido a maior probabilidade de ocorrência de abortos espontâneos em mulheres com idade superior a 30 anos. Hospitalizações em serviços privados foram identificadas nos dados disponibilizados pela Agência Nacional de Saúde Suplementar, não sendo utilizado fator de correção para internações ocorridas em serviços privados. Para correção de complicações que não resultaram em internação, utilizamos fatores diferenciados para mulheres atendidas na saúde suplementar (fator de correção 2) e em serviços públicos (fator de correção 3), devido à maior facilidade de acesso a internações hospitalares em mulheres com planos de saúde.
+
+**Fórmula:** (Número de internações por complicações de aborto em serviços públicos e privados multiplicado pelo fator de correção para exclusão de abortos espontâneos$^1$ e pelo fator de correção para complicações que não resultaram em internação hospitalar$^2$ dividido pela população feminina de 10-49 anos e multiplicado por 1000.
+
+$^1$ Fator de correção para exclusão de abortos espontâneos: = 0,90 em mulheres \< 30 anos = 0,85 em mulheres de 30 a 39 anos = 0,75 em mulheres com 40 anos ou mais
+
+$^2$ Seguindo a metodologia recomendada pelo Instituto Guttmacher, são geradas três estimativas do número de abortos inseguros: uma utilizando a "melhor estimativa" média da incidência de aborto e duas representando o limite superior e inferior. Para obter os limites superior e inferior, o valor do fator de correção para complicações que não resultaram em internação é aumentado e diminuído em uma unidade para produzir as estimativas baixa e alta e espera-se que a incidência real de aborto esteja dentro dessa faixa.
+
+Fator de correção para complicações de aborto que não resultaram em internação hospitalar: Para internações em serviços privados: fator de correção = 2 (variação de 1 a 3) Para internações em serviços púbicos: fator de correção = 3 (variação de 2 a 4)
+
+**Fonte:** SIH/SUS; internações hospitalares: [ANS](https://dados.gov.br/dados/conjuntos-dados/procedimentos-hospitalares-por-uf); estimativas populacionais: [Tabnet DataSUS](http://tabnet.datasus.gov.br/cgi/deftohtm.exe?ibge/cnv/popsvsbr.def).
+
+**Qualidade da informação:** Esse indicador depende da cobertura e da qualidade do preenchimento do SIH/SUS e das internações hospitalares em serviços do sistema de saúde suplementar, bem como do cálculo das estimativas populacionais, que se tornam mais imprecisas conforme aumento do período intercensitário.
+
+A escolha dos fatores de correção, principalmente do fator utilizado para correção das internações que não resultaram em internação, é motivo de muito debate, pois depende da segurança dos métodos utilizados para interrupção da gestação e do acesso aos serviços de saúde. Quanto mais inseguros os métodos, maior a porcentagem de mulheres que necessitarão de internação e menor será esse fator de correção.
+
+Diferentes valores do fator de correção resultarão em estimativas diferentes do número de abortos inseguros, limitando a comparação dos resultados.
+
+**Referências:** <br> Singh S, Prada E, Juarez F. The Abortion Incidence Complications Method: A Quantitative Technique. In: Methodologies for Estimating Abortion Incidence and Abortion-Related Morbidity: A Review. Disponível em <https://www.guttmacher.org/sites/default/files/pdfs/pubs/compilations/IUSSP/IUSSP-Chapter6.pdf>
+
+</div>
+
+## <font size="6"> Razão de aborto inseguro por 100 nascidos vivos </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número total de abortos inseguros por 100 nascidos vivos.
+
+**Método de cálculo:** Estimativa indireta do número de abortos inseguros calculada a partir do número de internações por complicações do aborto. É uma metodologia proposta pelo Instituto Guttmacher (*"The Abortion Incidence Complications Method"*) e que tem sido utilizada em estudos nacionais. Nesta metodologia, o número de abortos inseguros é estimado a partir da identificação de internações por complicações do aborto (CID O03 a O08), excluindo-se CID relativas a gestações ectópicas, gestações molares e produtos anormais da concepção (CID O00, O01 e O02). A este número aplicam-se dois fatores de correção: para exclusão de complicações por abortos espontâneos, e para complicações de abortamento que não resultaram em internação hospitalar. O número total de abortos inseguros é então dividido pelo número de nascidos vivos e multiplicado por 100.
+
+Neste painel, utilizamos fatores de correção para exclusão de internações por complicações de aborto espontâneo diferenciado segundo faixa etária da mulher, devido a maior probabilidade de ocorrência de abortos espontâneos em mulheres com idade superior a 30 anos. Hospitalizações em serviços privados foram identificadas nos dados disponibilizados pela Agência Nacional de Saúde Suplementar, não sendo utilizado fator de correção para internações ocorridas em serviços privados. Para correção de complicações que não resultaram em internação, utilizamos fatores diferenciados para mulheres atendidas na saúde suplementar (fator de correção 2) e em serviços públicos (fator de correção 3) devido à maior facilidade de acesso a internações hospitalares em mulheres com planos de saúde.
+
+**Fórmula:** (Número de internações por complicações de aborto em serviços públicos e privados multiplicado pelo fator de correção para exclusão de abortos espontâneos$^1$ e pelo fator de correção para complicações que não resultaram em internação hospitalar$^2$) dividido pelo total de nascidos vivos e multiplicado por 100
+
+$^1$ Fator de correção para exclusão de abortos espontâneos:
+
+= 0,90 em mulheres \< 30 anos
+
+= 0,85 em mulheres de 30 a 39 anos
+
+= 0,75 em mulheres com 40 anos ou mais
+
+$^2$ Seguindo a metodologia recomendada pelo Instituto Guttmacher, são geradas três estimativas do número de abortos inseguros: uma utilizando a "melhor estimativa" média da incidência de aborto e duas representando o limite superior e inferior. Para obter os limites superior e inferior, o valor do fator de correção para complicações que não resultaram em internação é aumentado e diminuído em uma unidade para produzir as estimativas baixa e alta e espera-se que a incidência real de aborto esteja dentro dessa faixa.
+
+Fator de correção para complicações de aborto que não resultaram em internação hospitalar:
+
+Para internações em serviços privados: fator de correção = 2 (variação de 1 a 3)
+
+Para internações em serviços púbicos: fator de correção = 3 (variação de 2 a 4)
+
+**Fonte:** SIH/SUS; internações hospitalares: [ANS](https://dados.gov.br/dados/conjuntos-dados/procedimentos-hospitalares-por-uf); [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Esse indicador depende da cobertura e da qualidade do preenchimento do SIH/SUS e das internações hospitalares em serviços do sistema de saúde suplementar.
+
+A escolha dos fatores de correção, principalmente do fator utilizado para correção das internações que não resultaram em internação, é motivo de muito debate, pois depende da segurança dos métodos utilizados para interrupção da gestação e do acesso aos serviços de saúde. Quanto mais inseguros os métodos, maior a porcentagem de mulheres que necessitarão de internação e menor será esse fator de correção. Diferentes valores do fator de correção resultarão em estimativas diferentes do número de abortos inseguros, limitando a comparação dos resultados.
+
+**Referências:** <br> Singh S, Prada E, Juarez F. The Abortion Incidence Complications Method: A Quantitative Technique. In: Methodologies for Estimating Abortion Incidence and Abortion-Related Morbidity: A Review. Disponível em \<<https://www.guttmacher.org/sites/default/files/pdfs/pubs/compilations/IUSSP/IUSSP-Chapter6.pdf>
+
+</div>
+
+# <font size="7"> Assistência Pré-Natal </font>
+
+## <font size="6"> Cobertura da assistência pré-natal </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de mães de nascido vivo que receberam alguma consulta de pré- natal.
+
+**Método de cálculo:** Número de nascidos vivos de mães com alguma consulta de pré-natal (CONSPRENAT \>= 1) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável CONSPRENAT. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de mulheres com início precoce do pré-natal </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de mães de nascido vivo que iniciaram o acompanhamento pré- natal até o terceiro mês de gestação.
+
+**Método de cálculo:** Número de nascidos vivos de mães com início do pré- natal nos três primeiros meses de gestação (MESPRENAT=1, 2 OU 3) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da Informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável MESPRENAT. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de mulheres com mais de sete consultas de pré-natal </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de mães de nascido vivo que receberam mais de sete consultas de pré-natal na gestação atual.
+
+**Método de cálculo:** Número de nascidos vivos de mães com mais de sete consultas de pré-natal (CONSPRENAT \> 7) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável CONSPRENAT. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Taxa de incidência de sífilis congênita </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de casos de sífilis congênita por 1000 nascidos vivos.
+
+**Método de cálculo:** Número de casos de sífilis congênita em menores de um ano dividido pelo total de nascidos vivos e multiplicado por 1000.
+
+**Fontes:** Casos de sífilis: [Ministério da Saúde](http://indicadoressifilis.aids.gov.br). [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade da vigilância epidemiológica do município e estado. Locais com cobertura SINASC inferior a 90%$^2$ ou com suspeita de subnotificação de casos devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+</div>
+
+# <font size="7"> Assistência ao parto </font>
+
+## <font size="6"> Porcentagem de nascimentos por cesariana </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos por cesariana.
+
+**Método de cálculo:** Número de nascidos vivos por cesariana (PARTO=2) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável PARTO. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascimentos segundo grupo de Robson </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos segundo grupo de Robson (1, 2, 3, 4, 5, 6 a 9, 10).
+
+**Método de cálculo:** Número de nascidos vivos por grupo de Robson (TPROBSON = 1, 2, 3, 4, 5, 6 a 9, 10) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e daqualidade do preenchimento das variáveis que resultam na variável TPROBSON (número de partos anteriores, tipo de gestação, apresentação do feto, idade gestacional, tipo de trabalho de parto, cesariana prévia). Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascimentos por cesariana em cada grupo de Robson </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos por cesariana em cada grupo de Robson (1, 2, 3,4,5,6 a 9, 10).
+
+**Método de cálculo:** Número de nascidos vivos por cesariana em cada grupo de Robson (1, 2, 3, 4, 5, 6 a 9, 10) dividido pelo total de nascidos vivos em cada grupo de Robson (1, 2, 3, 4, 5, 6 a 9, 10) e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento das variáveis PARTO e das variáveis que dão origem à variável TPROBSON (número de partos anteriores, tipo de gestação, apresentação do feto, idade gestacional, tipo de trabalho de parto, cesariana prévia). Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Contribuição relativa de cada grupo de Robson para a taxa total de cesariana </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem do total de nascimentos por cesariana ocorridos em cada grupo de Robson (1, 2, 3, 4, 5, 6 a 9, 10).
+
+**Método de cálculo:** Número de nascidos vivos por cesariana em cada grupo de Robson (1, 2, 3, 4, 5, 6 a 9, 10) dividido pelo total de nascidos vivos por cesarianae multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento das variáveis PARTO e das variáveis que dão origem à variável TPROBSON (número de partos anteriores, tipo de gestação, apresentação do feto, idade gestacional, tipo de trabalho de parto, cesariana prévia). Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascimentos segundo local de ocorrência </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos segundo local de ocorrência do parto (no município de residência da mãe; fora do município de residência da mãe, mas na microrregião estadual; fora da microrregião estadual, mas na macrorregião estadual; fora da macrorregião estadual, mas na unidade da federação; fora da unidade de federação de residência da mãe).
+
+**Método de cálculo:** Número de nascidos vivos segundo local de ocorrência do parto (no município de residência da mãe; fora do município de residência da mãe, mas na microrregião de saúde; fora da microrregião de saúde, mas na macrorregião de saúde; fora da macrorregião de saúde, mas na unidade da federação; fora da unidade de federação de residência da mãe) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) e [CNES](https://cnes.datasus.gov.br/).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável CNES. Locais com cobertura SINASC inferior a 90%$^2$ ou com porcentagem elevada de CNES não preenchido ou com CNES inválido devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+</div>
+
+## <font size="6"> Medianas de deslocamento para o parto segundo local de ocorrência </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Mediana de deslocamento em quilômetros para partos de nascidos vivos segundo local de ocorrência (fora do município de residência da mãe, mas na microrregião de saúde; fora da microrregião de saúde, mas na macrorregião de saúde; fora da macrorregião de saúde, mas na unidade da federação; fora da unidade de federação de residência da mãe) para o total de nascidos vivos e para serviços de baixa e alta complexidade.
+
+**Método de cálculo:** A mediana de deslocamento em quilômetros é calculada considerando a coordenada geográfica do perímetro urbano do município de residência da mãe e as do município de ocorrência do parto$^1$. A identificação do local de ocorrência do parto é obtida por meio do número do CNES (Cadastro Nacional de Estabelecimentos de Saúde) registrada na Declaração de Nascido Vivo. A partir de dados disponíveis no CNES, o estabelecimento é classificado como de baixa ou alta complexidade, conforme a disponibilidade de leitos de Unidade de Terapia Intensiva do tipo adulto. A mediana é calculada para partos ocorridos fora do município de residência da mãe, mas na microrregião estadual; fora da microrregião estadual, mas na macrorregião estadual; fora da macrorregião estadual, mas na unidade da federação; fora da unidade de federação de residência da mãe. Todas as medianas são calculadas para o total de nascidos vivos e segundo grau de complexidade da unidade hospitalar onde ocorreu o parto (baixa ou alta complexidade).
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994), [CNES](https://cnes.datasus.gov.br/) e [CEDEPLAR/UFMG](https://www.dropbox.com/sh/1gx8xwdddrwz2gt/AADzJoAeDD7KXTKZoqPLWiJza?dl=0).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^2$ e da qualidade do preenchimento da variável CNES. Locais com cobertura SINASC inferior a 90%$^3$ ou com porcentagem elevada de CNES não preenchido ou com CNES inválido devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ Carvalho L, Amaral P, Mendes P. Matrizes de distância e tempo de deslocamento rodoviários entre os municípios brasileiros: uma atualização metodológica para 2020. Disponível em <https://econpapers.repec.org/paper/cdptexdis/td630.htm>.
+
+$^2$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^3$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+</div>
+
+# <font size="7"> Condições de nascimento </font>
+
+## <font size="6"> Porcentagem de baixo peso ao nascer </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos com peso ao nascer inferior a 2500g.
+
+**Método de cálculo:** Número de nascidos vivos com peso ao nascer \< 2500g (PESO \< 2500g) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento das variável PESO. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascimentos prematuros </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos com idade gestacional inferior a 37 semanas.
+
+**Método de cálculo:** Número de nascidos vivos com idade gestacional inferior a 37 semanas (GESTACAO \< 5) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável GESTAÇÃO. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+## <font size="6"> Porcentagem de nascimentos termo precoce </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de nascidos vivos com idade gestacional de 37 ou 38 semanas.
+
+**Método de cálculo:** Número de nascidos vivos com idade gestacional de 37 ou 38 semanas (SEMAGESTAC = 37 ou SEMAGESTAC = 38) dividido pelo total de nascidos vivos e multiplicado por 100.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^1$ e da qualidade do preenchimento da variável SEMAGESTAC. Locais com cobertura SINASC inferior a 90%$^2$ ou com incompletude superior a 5%$^3$, devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^2$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^3$ Romero DE, Cunha CB. Avaliação da qualidade das variáveis sócio-econômicas e demográficas dos óbitos de crianças menores de um ano registrados no Sistema de Informações sobre Mortalidade do Brasil (1996/2001). CadSaude Publica 2006; 22(3):673-681.
+
+</div>
+
+# <font size="7"> Mortalidade e morbidade materna </font>
+
+## <font size="6"> Número de óbitos maternos </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número total de óbitos maternos, incluindo os óbitos maternos declarados e os identificados após investigação.
+
+O número total de óbitos maternos é imprescindível para o cálculo da razão de morte materna, o que pode não ser possível em municípios pequenos (menos de 100.000 habitantes). Para esses municípios, as taxas podem flutuar muito, devido ao pequeno número de ocorrências de óbitos e nascimentos. Recomenda-se, nestes casos, analisá-las agregando-se vários anos e/ou segundo o número absoluto de óbitos 1.
+
+**Método de cálculo:** Número total de óbitos maternos após investigação.
+
+**Fonte:** [SIM-DOMAT](https://github.com/rfsaldanha/microdatasus).
+
+**Qualidade da informação:** Este indicador depende da vigilância do óbito materno. Locais com cobertura de investigação de óbitos de Mulher em Idade Fértil (MIF) abaixo de 90% ou com investigação de óbitos maternos abaixo de 100%$^2$ devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ <http://tabnet.datasus.gov.br/cgi/sim/Ob_Mu_Id_Fertil_Mat_1996_2012.pdf>.
+
+$^2$ <http://www.saude.pa.gov.br/wp-content/uploads/2021/06/Pactuacao-Interfederativa-2020-2023.pdf>.
+
+</div>
+
+## <font size="6"> Razão de Mortalidade Materna (RMM) </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Número de óbitos maternos por 100 mil nascidos vivos.
+
+**Método de cálculo:** Número de óbitos maternos dividido pelo total de nascidos vivos multiplicado por 100.000.
+
+Para a RMM das unidades da federação (UFs), macrorregiões do país e Brasil foram usados valores disponibilizados pelo Ministério da Saúde após aplicação de fator de correção (RMM vigilância)$^1$.
+
+Embora não seja recomendado o cálculo da RMM para locais com menos de 100.000 habitantes$^2$, neste painel apresentamos a RMM de todos os municípios, além do número absoluto de óbitos maternos. Esta estratégia visa evidenciar o valor elevado da RMM em municípios de menor porte, mesmo quando o número de óbitos é muito pequeno, indicando a necessidade de ações de melhoria de cuidado da saúde materna.
+
+**Fonte:** [SINASC](https://datasus.saude.gov.br/nascidos-vivos-desde-1994) e [SIM-DOMAT](https://github.com/rfsaldanha/microdatasus).
+
+**Qualidade da informação:** Este indicador depende da cobertura do SINASC$^3$ e da vigilância do óbito materno. Locais com cobertura SINASC inferior a 90%$^4$, ou com investigação de óbitos de Mulher em Idade Fértil (MIF) abaixo de 90% ou com investigação de óbitos maternos abaixo de 100%$^5$ devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ Brasil. Ministério da Saúde. Mortalidade materna nas unidades da Federação, regiões e no Brasil: uma análise de 2000 a 2015. Brasília: Ministério da Saúde; 2017. Capítulo 2, Saúde Brasil 2017. Disponível emhttps://bit.ly/3fSfjI3.
+
+$^2$ <http://tabnet.datasus.gov.br/cgi/sim/Ob_Mu_Id_Fertil_Mat_1996_2012.pdf>.
+
+$^3$ IBGE. <https://www.ibge.gov.br/estatisticas/sociais/populacao/26176-estimativa-do-sub-registro.html?edicao=32265&t=resultados>.
+
+$^4$ Szwarcwald CL, Leal MDC, Esteves-Pereira AP, Almeida WDS, Frias PG, Damacena GN et al. Avaliação das informações do Sistema de Informações sobre Nascidos Vivos (SINASC), Brasil. CadSaude Publica. 2019;35(10):e00214918.
+
+$^5$ <http://www.saude.pa.gov.br/wp-content/uploads/2021/06/Pactuacao-Interfederativa-2020-2023.pdf>.
+
+</div>
+
+## <font size="6"> Porcentagem de óbitos maternos por causas obstétricas diretas </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem do total de óbitos maternos determinado por causas obstétricas diretas.
+
+**Método de cálculo:** Número de óbitos maternos por causas obstétricas diretas dividido pelo número total de óbitos maternos multiplicado por 100.
+
+Seguindo a classificação adotada pelo Ministério da Saúde$^1$, foram consideradas causas obstétricas diretasas causas básicas com CID O00.0 a O08.9, O11 a O23.9, O24.4, O26.0 a O92.7; as causas básicas com CID A34, F53 e M83.0 se ocorridas até 42 dias após o término da gestação; e as causas D39.2 e E23.0 se ocorridas durante a gestação, parto ou até 42 dias após o término da gestação.
+
+**Fonte:** [SIM-DOMAT](https://github.com/rfsaldanha/microdatasus).
+
+**Qualidade da informação:** este indicador depende da vigilância do óbito materno. Locais com investigação de óbitos de Mulher em Idade Fértil (MIF) abaixo de 90% ou com investigação de óbitos maternos abaixo de 100%$^2$ devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ Brasil. Ministério da Saúde. Secretaria de Vigilância em Saúde. Departamento de Análise da Situação de Saúde. Guia de Vigilância Epidemiológica do Óbito Materno. Série A. Normas e Manuais Técnicos. Brasília: Ministério da Saúde; 2009. Disponível em <https://bvsms.saude.gov.br/bvs/publicacoes/guia_vigilancia_epidem_obito_materno.pdf>.
+
+$^2$ <http://www.saude.pa.gov.br/wp-content/uploads/2021/06/Pactuacao-Interfederativa-2020-2023.pdf>.
+
+</div>
+
+## <font size="6"> Porcentagem de óbitos maternos diretos segundo causas específicas (aborto, hipertensão, hemorragia, infecções) </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem do total de óbitos maternos diretos pelas causas aborto, hipertensão, hemorragia e infecções.
+
+**Método de cálculo:** Número de óbitos maternos por causas obstétricas diretas específicas (aborto, hipertensão, hemorragia e infecções) dividido pelo número total de óbitos maternos por causas obstétricas diretas multiplicado por 100.
+
+Seguindo a classificação adotada pelo Ministério da Saúde$^1$, foram consideradas causas obstétricas diretas as causas básicas com CID O00.0 a O08.9, O11 a O23.9, O24.4, O26.0 a O92.7; as causas básicas com CID A34, F53 e M83.0 se ocorridas até 42 dias após o término da gestação; e as causas D39.2 e E23.0 se ocorridas durante a gestação, parto ou até 42 dias após o término da gestação.
+
+Para as causas específicas, foram consideradas as seguintes causas básicas:
+
+Aborto: causas básicas O03 a O07.
+
+Hipertensão: causas básicas O11,O13,O14,O15,O16
+
+Hemorragias: causas básicas O20,O44,O45,O46,O67,O71.0,O71.1 e O72.
+
+Infecção Puerperal: causas básicas O85 e O86.
+
+**Fonte:** [SIM-DOMAT](https://github.com/rfsaldanha/microdatasus).
+
+**Qualidade da informação:** Este indicador depende da vigilância do óbito materno. Locais com investigação de óbitos de Mulher em Idade Fértil (MIF) abaixo de 90% ou com investigação de óbitos maternos abaixo de 100%$^2$ devem analisar os resultados desse indicador com cautela.
+
+**Referências:** <br> $^1$ Brasil. Ministério da Saúde. Secretaria de Vigilância em Saúde. Departamento de Análise da Situação de Saúde. Guia de Vigilância Epidemiológica do Óbito Materno. Série A. Normas e Manuais Técnicos. Brasília: Ministério da Saúde; 2009. Disponível em <https://bvsms.saude.gov.br/bvs/publicacoes/guia_vigilancia_epidem_obito_materno.pdf>.
+
+$^2$ <http://www.saude.pa.gov.br/wp-content/uploads/2021/06/Pactuacao-Interfederativa-2020-2023.pdf>.
+
+</div>
+
+## <font size="6"> Porcentagem de casos de Morbidade Materna Grave em internações obstétricas públicas </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de casos de morbidade materna grave, classificados segundo definição da Organização Mundial de Saúde, dentre o total de internações obstétricas públicas.
+
+**Método de cálculo:** Número de casos de morbidade materna grave dividido pelo número total de internações obstétricas públicas multiplicado por 100.
+
+Para identificação das internações obstétricas públicas, foram selecionadas no Sistema de Informação Hospitalar do SUS (SIH/SUS) internações em mulheres de 10-49 anos que apresentassem alguma CID do grupo "O" como diagnóstico de internação (diagnóstico principal ou secundário) ou procedimento obstétrico realizado. Foram identificados os episódios de cuidado, com análise conjunta de todas as internações relativas à mesma mulher.
+
+Para classificação dos casos de Morbidade Materna Grave (MMG) foi utilizada a definição da Organização Mundial de Saúde de "Condições Potencialmente Ameaçadoras à Vida (CPAV)"$^1$. Segundo essa classificação, qualquer mulher que atenda a um dos 26 critérios de diagnóstico clínico ou de gravidade de manejo é classificada como caso de CPAV (nomeada como MMG neste painel).
+
+Esses critérios foram operacionalizados utilizando CID registradas durante a internação hospitalar (diagnóstico principal, secundário, CID associado, CID notificação ou CID do óbito), procedimentos realizados (identificados na base reduzida e/ou na base de serviços profissionais), tempo de internação e internação em Unidade de Terapia Intensiva. Dos 26 critérios, 18 foram operacionalizados com informações disponíveis no SIH/SUS, 5 foram operacionalizados com informações aproximadas também disponíveis no SIH/SUS e 3 não puderam ser operacionalizados, pois a informação não consta no SIH/SUS (retorno à sala cirúrgica, trombocitopenia \< 100 mil e placenta acreta/increta/percreta).
+
+**Fonte:** [SIH-SUS](https://datasus.saude.gov.br/acesso-a-informacao/morbidade-hospitalar-do-sus-sih-sus/) (base reduzida e base serviços profissionais).
+
+**Qualidade da informação:** Este indicador depende da qualidade do preenchimento da Autorização de Internação Hospitalar. A não utilização de CID do capítulo "O" nos diagnósticos de internação principal ou secundário ou a ausência de registro de procedimentos obstétricos pode resultar em subestimação das internações obstétricas por não identificação das mesmas. O uso apenas da base reduzida pode subestimar o número de casos de MMG, já que transfusão sanguínea e acesso venoso central, que são critérios de classificação da OMS, são identificadas apenas na base de serviços profissionais. Além disso, alguns procedimentos cirúrgicos, que também são critério de classificação, podem estar registrados apenas na base de serviços profissionais. A classificação dos casos de MMG sem considerar o episódio de cuidado também pode subestimar o número de casos de MMG, se o critério preconizado pela OMS estiver registrado em AIH que não contém critério de internação obstétrica. Além disso, internações com tempo de internação prolongado podem não ser identificadas, caso não se considere a data de internação e alta do episódio de cuidado inteiro. Por outro lado, a classificação dos casos de MMG sem considerar o episódio de cuidado pode superestimar a frequência de MMG, caso a mulher tenha apresentado critério de classificação de MMG em mais de uma AIH durante o período de internação.
+
+**Referências:** <br> $^1$ Say L, Souza JP, Pattinson RC et al. Maternal near miss -- towards a standard tool for monitoring quality of maternal health care. Best Pract Res ClinObstetGynaecol 2009; 23: 287-96.
+
+</div>
+
+## <font size="6"> Porcentagem de casos de Morbidade Materna Grave em internações obstétricas públicas segundo diagnósticos ou indicadores de gravidade de manejo </font>
+
+<div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
+
+**Definição:** Porcentagem de casos de Morbidade Materna Grave em internações obstétricas públicas segundo diagnósticos específicos (hipertensão, hemorragia, infecção) ou indicadores de gravidade de manejo (transfusão sanguínea, internação em unidade de terapia intensiva, tempo de permanência maior que 7 dias, intervenção cirúrgica).
+
+**Método de cálculo:** Número de casos de morbidade materna grave por diagnóstico específico (hipertensão, hemorragia, infecção) ou indicadores de gravidade de manejo (transfusão sanguínea, internação em unidade de terapia intensiva, tempo de permanência maior que 7 dias, intervenção cirúrgica) dividido pelo número total de casos de morbidade materna grave multiplicado por 100.
+
+Para identificação das internações obstétricas públicas, foram selecionadas no Sistema de Informação Hospitalar do SUS (SIH/SUS) internações em mulheres de 10-49 anos que apresentassem alguma CID do grupo "O" como diagnóstico de internação (diagnóstico principal ou secundário) ou procedimento obstétrico realizado. Foram identificados os episódios de cuidado, com análise conjunta de todas as internações relativas à mesma mulher.
+
+Para classificação dos casos de Morbidade Materna Grave (MMG) foi utilizada a definição da Organização Mundial de Saúde de "Condições Potencialmente Ameaçadoras à Vida (CPAV)"$^1$. Segundo essa classificação, qualquer mulher que atenda a um dos 26 critérios de diagnóstico clínico ou de gravidade de manejo é classificada como caso de CPAV (nomeada como MMG neste painel).
+
+Esses critérios foram operacionalizados utilizando CID registradas durante a internaçãohospitalar (diagnóstico principal, secundário, CID associado, CID notificação ou CID do óbito), procedimentos realizados (identificados na base reduzida e/ou na base de serviços profissionais), tempo de internação e internação em Unidade de Terapia Intensiva. Dos 26 critérios, 18 foram operacionalizados com informações disponíveis no SIH/SUS, 5 foram operacionalizados com informações aproximadas também disponíveis no SIH/SUS e 3 não puderam ser operacionalizados, pois a informação não consta no SIH/SUS (retorno à sala cirúrgica, trombocitopenia \< 100 mil, e placenta acreta/increta/percreta).
+
+Para os diagnósticos específicos foram considerados:
+
+Hipertensão: pré-eclâmpsia grave (CID O141), eclampsia (CID O15.0, O15.1, O15.2, O159 ou procedimento 0303100028), tratamento de crise hipertensiva (procedimento 0303060107), encefalopatia hipertensiva (CID I674 ou procedimento 0303040211), síndrome HELLP (CID O14.2),hipertensão pré-existente complicando a gravidez (CID O10.0, O10.1, O10.2, O10.3, O10.4, O10.9, O11); diagnósticos de hipertensão gestacional (CID O13, O149),tratamento de edema, proteinúria e transtornos específicos da gravidez (procedimento 0303100036), hipertensão materna não especificada (CID O16); diagnósticos de hipertensão crônica (CID I10, I11, I12, I13 e I15);
+
+Hemorragias: descolamento prematuro de placenta (O45.0, O45.8, O45.9), gravidez ectópica (CID O00 ou procedimento 411020048); hemorragia pós-parto (O72.0, O72.1, O72.2), rotura uterina (CID O71.0, O711 ou procedimento Histerorrafia 0409060160), recebimento de transfusão (procedimentos "0306020068","0306020076", "0306020084", "0306020092", "306020106", "0306020114", "0306020122", "0306020130", "0306020149"); Infecção: infecção puerperal (CID O85), sepses (CID A40, A41, A02.1, A22.7, A26.7, A32.7, A42.7, B37.7, O08.0, O75.3, R57.2).
+
+Para os indicadores de gravidade de manejo foram considerados: Transfusão: CID Z51.3 ou procedimentos "0306020068","0306020076", "0306020084", "0306020092", "306020106", "0306020114", "0306020122", "0306020130", "0306020149", Internação em unidade de terapia intensiva: AIH com a variável UTI_MES_TO \> 0 ou procedimentos"0802010105", "0802010083", "0802010091", "0802010296", "0802010318"; Tempo de permanência \> 7dias: tempo entre data da internação e data da alta superior a 7 dias em mulheres com internação para parto (procedimento realizado na primeira AIH referente a parto). No caso de mais de uma AIH, foi considerado o tempo de internação de todo o episódio de cuidado (diferença entre a data de internação na primeira AIH e a data da alta da última AIH do episódio de cuidado). Mulheres sem outro critério de morbidade internadas para acompanhamento do recém-nato (procedimento 08.02.01.002-4) foram excluídas deste critério.
+
+Intervenção cirúrgica: histerorrafia(procedimento 0409060160), histerectomia (procedimentos 0411020030 ou 0409060100 ou 0409060119 ou 0409060127 ou 0409060135), outras intervenções cirúrgicas ("0407040161", "0407040250", "415010012", "0415020034", "0407040030", "0407040021", "0407040013", "0411010085", "0411010050", "0407040200", "0407040242", "0415040027", "0411010077", "0401010031","0401010104"), realização de curetagem (procedimentos 0409060070 - Esvaziamento de útero pós-aborto por aspiração manual intra-uterina (AMIU) ou 0411020013 - Curetagem pós-abortamento/puerperal) em mulheres internadas para assistência ao parto ou por intercorrências no puerpério.
+
+**Fonte:** [SIH-SUS](https://datasus.saude.gov.br/acesso-a-informacao/morbidade-hospitalar-do-sus-sih-sus/) (base reduzida e base serviços profissionais)
+
+**Qualidade da informação:** Este indicador depende da qualidade do preenchimento da Autorização de Internação Hospitalar. A não utilização de CID do capítulo "O" nos diagnósticos de internação principal ou secundário ou a ausência de registro de procedimentos obstétricos pode resultar em subestimação das internações obstétricas por não identificação das mesmas. O uso apenas da base reduzida pode subestimar o número de casos de MMG, já que transfusão sanguínea e acesso venoso central, que são critérios de classificação da OMS, são identificadas apenas na base de serviços profissionais. Além disso, alguns procedimentos cirúrgicos, que também são critério de classificação, podem estar registrados apenas na base de serviços profissionais. A classificação dos casos de MMG sem considerar o episódio de cuidado também pode subestimar o número de casos de MMG, se o critério preconizado pela OMS estiver registrado em AIH que não contém critério de internação obstétrica. Além disso, internações com tempo de internação prolongado podem não ser identificadas, caso não se considere a data de internação e alta do episódio de cuidado inteiro. Por outro lado, a classificação dos casos de MMG sem considerar o episódio de cuidado pode superestimar a frequência de MMG, caso a mulher tenha apresentado critério de classificação de MMG em mais de uma AIH durante o período de internação.
+
+**Referências:** <br> $^1$ Say L, Souza JP, Pattinson RC et al. Maternal near miss -- towards a standard tool for monitoring quality of maternal health care. Best Pract Res ClinObstetGynaecol 2009; 23: 287-96.
+
+</div>
+
+
+<div style="display: none;">
+
+$$
+1
+$$
+
+</div>

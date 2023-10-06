@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Lato:wght@300&display=swap');
+
+/* Remove extra left and right margins, due to padding in columns */
+.row2 {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row2:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the counter cards */
+.card2 {
+  border-radius: 5px;
+  box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);
+  padding: 20px;
+  margin: 20px;
+  height: 270px;
+  overflow-y: auto;
+  transition: all 0.3s ease-out;
+  background-color: white;
+}
+
+.card2:hover {
+  transform: translateY(-5px);
+  cursor: auto;
+}
+
+.card2 p {
+  color: #515257;
+  font-size: 16px;
+}
+
+.blue2 {
+  border-left: 3px solid #4895ff;
+}
+
+
+/* Float four columns side by side */
+.column2 {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+.titulo {
+  font-size:19px;
+}
+
+.tamanho_branco {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Responsive columns - one column layout (vertical) on small screens */
+@media screen and (max-width: 1800px) {
+  .card2 {
+  border-radius: 5px;
+  box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);
+  padding: 20px;
+  margin: 20px;
+  height: 300px;
+  overflow-y: auto;
+  transition: all 0.3s ease-out;
+}
+}
+
+@media screen and (max-width: 1400px) {
+  .column2 {
+    width: 50%;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .card2 {
+  border-radius: 5px;
+  box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);
+  padding: 20px;
+  margin: 20px;
+  height: 200px;
+  overflow-y: auto;
+  transition: all 0.3s ease-out;
+}
+}

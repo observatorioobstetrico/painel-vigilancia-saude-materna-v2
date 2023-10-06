@@ -1,0 +1,14 @@
+name: painel-vigilancia-saude-materna
+title: painel-vigilancia-saude-materna
+username:
+account: observatorioobstetrico
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8048421
+bundleId: 7721728
+url: https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna/
+when: 1695583324.09438
+lastSyncTime: 1695583324.09439
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: documentacao_dos_indicadores.Rmd|data-raw

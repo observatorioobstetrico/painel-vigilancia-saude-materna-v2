@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Lato:wght@300&display=swap');
+
+.negrito {
+  font-weight: 500;
+}
+
+.tt {
+    font-family: 'Courier Prime';
+}
+
+.normal {
+    font-weight: normal;
+}
+
+.navbar-primary {
+    background-color: #0A1E3C;
+
+}
+
+.bg-primary {
+  background-color: #0A1E3C!important;
+}
+
+.radio-inline {
+    margin-right: 42px;
+}
+
+.inner {
+  width: 100%;
+  display: inline-block;
+}
+
+.outer {
+  width: 100%;
+  text-align: center;
+}
+
+
+
