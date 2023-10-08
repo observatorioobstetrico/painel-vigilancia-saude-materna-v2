@@ -122,7 +122,7 @@ mod_bloco_3_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com mais de sete consultas de pré-natal &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de mulheres com número adequado de consultas de pré-natal &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -314,9 +314,10 @@ mod_bloco_3_server <- function(id, filtros){
             }
           }
         ) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1)
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -371,29 +372,27 @@ mod_bloco_3_server <- function(id, filtros){
             }
           }
         ) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1)
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas)/total_de_nascidos_vivos*100, 1)
         ) |>
         dplyr::ungroup()
     })
 
-    output$texto3 <- renderUI({
-      HTML(
-        paste(
-          "<b> % de mulheres com assistência pré-natal </b>", data_resumo2()$porc_1con,
-          "<b> % de mulheres com início precoce do pré-natal </b>", data_resumo1()$porc_inicio_prec,
-          "<b> % de mulheres com 7 ou mais consultas pré-natal </b>", data_resumo2()$porc_7,
-          "<b> Incidência de sífilis congênita por mil nascidos vivos </b>", data_resumo1()$porc_sc,
-          sep = '<br/>'
-        )
-      )
+    data_brasil_resumo <- reactive({
+      bloco3 |>
+        dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas)/total_de_nascidos_vivos*100, 1)
+        ) |>
+        dplyr::ungroup()
     })
-
 
     #cores pros graficos
     cols <- c("#2c115f", "#b73779", "#fc8961")
-
 
     #dados com filtro e calculos
     data3 <- reactive({
@@ -415,19 +414,18 @@ mod_bloco_3_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1),
-                         class = dplyr::case_when(
-                           filtros()$nivel == "Nacional" ~ "Brasil",
-                           filtros()$nivel == "Regional" ~ filtros()$regiao,
-                           filtros()$nivel == "Estadual" ~ filtros()$estado,
-                           filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-                           filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-                           filtros()$nivel == "Municipal" ~ filtros()$municipio
-                         )) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )) |>
         dplyr::ungroup()
     })
 
@@ -450,17 +448,20 @@ mod_bloco_3_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
-                         class = dplyr::case_when(
-                           filtros()$nivel == "Nacional" ~ "Brasil",
-                           filtros()$nivel == "Regional" ~ filtros()$regiao,
-                           filtros()$nivel == "Estadual" ~ filtros()$estado,
-                           filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-                           filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-                           filtros()$nivel == "Municipal" ~ filtros()$municipio
-                         )) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas, na.rm = TRUE)/total_de_nascidos_vivos*100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
         dplyr::ungroup()
     })
 
@@ -618,8 +619,10 @@ mod_bloco_3_server <- function(id, filtros){
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_1con = 95,
           porc_7 = 95,
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas, na.rm = TRUE)/total_de_nascidos_vivos*100, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -646,20 +649,19 @@ mod_bloco_3_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1),
-                         class = dplyr::case_when(
-                           filtros()$nivel2 == "Nacional" ~ "Brasil",
-                           filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-                           filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-                           filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-                           filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-                           filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-                           filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-                         )) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos*1000, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )) |>
         dplyr::ungroup()
     })
 
@@ -683,32 +685,21 @@ mod_bloco_3_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise(total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-                         porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
-                         porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
-                         class = dplyr::case_when(
-                           filtros()$nivel2 == "Nacional" ~ "Brasil",
-                           filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-                           filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-                           filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-                           filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-                           filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-                           filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-                         )) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_1con = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos*100, 1),
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas, na.rm = TRUE)/total_de_nascidos_vivos*100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )) |>
         dplyr::ungroup()
-    })
-
-
-    #nome da localidade para os gráficos sem comparações
-    local <- reactive({
-      dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
-      )
     })
 
     #gráfico porcentagem cobertura pré-natal
@@ -824,7 +815,8 @@ mod_bloco_3_server <- function(id, filtros){
 
     })
 
-    #gráficos porcentagem mais de 7 consultas
+
+    ##### Criando o gráfico de linhas para a porcentagem de mulheres com consultas de pré-natal adequadas #####
     output$plot3 <- highcharter::renderHighchart({
       validate(
         need(
@@ -833,51 +825,60 @@ mod_bloco_3_server <- function(id, filtros){
         )
       )
       if (filtros()$comparar == "Não") {
-        highcharter::highchart() |>
+        grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data3_2(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data3_2()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_7, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data_referencia2(),
-            type = "line",
-            name = "Referência (recomendações OMS)",
-            highcharter::hcaes(x = ano, y = porc_7, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
+            highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
           highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data_referencia2(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data3_2(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data3_2()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_7, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data3_2_comp(),
+            name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil (valor de referência)", unique(data3_2_comp()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_7, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
-          grafico_base |> highcharter::hc_add_series(
-            data = data_referencia2(),
-            type = "line",
-            name = "Referência (recomendações OMS)",
-            highcharter::hcaes(x = ano, y = porc_7, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.7
-          )
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data_referencia2(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
         }
       }
     })
@@ -986,15 +987,15 @@ mod_bloco_3_server <- function(id, filtros){
     output$b3_i3 <- renderUI({
       cria_caixa_server(
         dados = data_resumo2(),
-        indicador = "porc_7",
-        titulo = "Porcentagem de mulheres com mais de sete consultas de pré-natal",
+        indicador = "porc_consultas_adequadas",
+        titulo = "Porcentagem de mulheres com número adequado de consultas de pré-natal",
         tem_meta = TRUE,
-        valor_de_referencia = 95,
+        valor_de_referencia = data_brasil_resumo()$porc_consultas_adequadas,
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = "300px",
         pagina = "bloco_3",
-        tipo_referencia = "recomendações OMS",
+        tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,

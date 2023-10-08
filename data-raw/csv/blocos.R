@@ -159,7 +159,7 @@ bloco2 <- dplyr::left_join(bloco2_aux, aux_municipios, by = "codmunres") |>
   dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:13)
 
 bloco3 <- dplyr::left_join(bloco3_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:7)
+  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:8)
 
 bloco4 <- dplyr::left_join(bloco4_aux, aux_municipios, by = "codmunres") |>
   dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:18)
@@ -802,11 +802,5 @@ usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 
 
-bloco6_morbidade <- dplyr::left_join(bloco6_morbidade_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, uf, regiao, 3:11) |>
-  dplyr::group_by(ano, uf, regiao) |>
-  dplyr::summarise_at(dplyr::vars(total_internacoes:casos_mmg_cirurgia), sum)
 
-##Exportando os dados
-write.table(bloco6_morbidade, 'indicadores_bloco6_morbidade_materna_ufs_2012-2020.csv', sep = ",", dec = ".", row.names = FALSE)
 

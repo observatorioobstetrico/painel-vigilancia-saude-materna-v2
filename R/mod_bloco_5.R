@@ -140,39 +140,7 @@ mod_bloco_5_ui <- function(id) {
             )
           )
         )
-      )#,
-      # fluidRow(
-      #   column(
-      #     width = 6,
-      #     bs4Dash::bs4Card(
-      #       width = 12,
-      #       status = "primary",
-      #       height = "150px",
-      #       headerBorder = FALSE,
-      #       collapsible = FALSE,
-      #       HTML(
-      #         "As condições de nascimento do recém-nato também dependem da saúde materna.
-      #       <br>
-      #       <br>
-      #       Embora sejam indicadores relacionados ao bebê, devem ser monitorados por também refletirem a qualidade dos cuidados recebidos pela gestante durante a assistência pré-natal e ao parto."
-      #       )
-      #     )
-      #   ),
-      #   column(
-      #     width = 6,
-      #     bs4Dash::bs4Card(
-      #       width = 12,
-      #       status = "primary",
-      #       headerBorder = FALSE,
-      #       collapsible = FALSE,
-      #       height = "150px",
-      #       HTML(
-      #         "Neste bloco apresentamos a porcentagem de nascimentos prematuros (com menos de 37 semanas gestacionais) e com baixo peso ao nascer (<2500g), principais determinantes da mortalidade infantil.
-      #       Apresentamos também os nascimentos termo precoce (bebês nascidos com 37 e 38 semanas gestacionais), que apresentam maior risco de complicações e que são mais frequentes em locais com taxa elevada de cesariana."
-      #       )
-      #     )
-      #   )
-      # )
+      )
     )
   )
 }
