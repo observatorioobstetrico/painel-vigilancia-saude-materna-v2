@@ -1555,6 +1555,7 @@ mod_nivel_1_server <- function(id, filtros){
           porc_inicio_prec = round(sum(mulheres_com_inicio_precoce_do_prenatal)/total_de_nascidos_vivos * 100, 1),
           cobertura_pre_natal = round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal)/total_de_nascidos_vivos * 100, 1),
           porc_7 = round(sum(mulheres_com_mais_de_sete_consultas_prenatal)/total_de_nascidos_vivos * 100, 1),
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas)/total_de_nascidos_vivos*100, 1),
           porc_sc = round(sum(casos_sc)/total_de_nascidos_vivos * 1000, 1)
         ) |>
         dplyr::ungroup()
@@ -1571,6 +1572,7 @@ mod_nivel_1_server <- function(id, filtros){
           cobertura_pre_natal = 95,
           porc_inicio_prec = 95,
           porc_7 = 95,
+          porc_consultas_adequadas = round(sum(mulheres_com_consultas_prenatal_adequadas)/total_de_nascidos_vivos*100, 1),
           porc_sc = 0.5
         ) |>
         dplyr::ungroup()
@@ -1608,17 +1610,32 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
+    # output$caixa_b3_i3 <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data3() |> dplyr::filter(ano >= 2014),
+    #     indicador = "porc_7",
+    #     titulo = "Porcentagem de mulheres com mais de sete consultas de pré-natal",
+    #     tem_meta = TRUE,
+    #     valor_de_referencia = 95,
+    #     tipo = "porcentagem",
+    #     invertido = TRUE,
+    #     pagina = "nivel_1",
+    #     tipo_referencia = "recomendações OMS",
+    #     nivel_de_analise = filtros()$nivel
+    #   )
+    # })
+
     output$caixa_b3_i3 <- renderUI({
       cria_caixa_server(
         dados = data3() |> dplyr::filter(ano >= 2014),
-        indicador = "porc_7",
-        titulo = "Porcentagem de mulheres com mais de sete consultas de pré-natal",
-        tem_meta = TRUE,
-        valor_de_referencia = 95,
+        indicador = "porc_consultas_adequadas",
+        titulo = "Porcentagem de mulheres com número adequado de consultas de pré-natal",
+        tem_meta = FALSE,
+        valor_de_referencia = data3_comp()$porc_consultas_adequadas,
         tipo = "porcentagem",
         invertido = TRUE,
         pagina = "nivel_1",
-        tipo_referencia = "recomendações OMS",
+        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
