@@ -89,6 +89,36 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
+                  "<b style='font-size:19px'> Distribuição proporcional do baixo peso ao nascer &nbsp;</b>"
+                ),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao1.1"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao1_1"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_1"), height = 410))
+            )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 530px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML(
                   "<b style='font-size:19px'> Porcentagem de nascimentos prematuros &nbsp;</b>"
                 ),
                 shinyjs::hidden(
@@ -106,6 +136,36 @@ mod_bloco_5_ui <- function(id) {
               ),
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 410))
+            )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 530px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML(
+                  "<b style='font-size:19px'> Distribuição proporcional da prematuridade &nbsp;</b>"
+                ),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao2.1"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao2_1"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_1"), height = 410))
             )
           ),
           column(
@@ -220,6 +280,17 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                               nascidos_vivos_28_a_32_semanas,
+                                                                                               nascidos_vivos_33_a_34_semanas,
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
           porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
           porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
           class = dplyr::case_when(
@@ -324,7 +395,18 @@ mod_bloco_5_server <- function(id, filtros){
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
           porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1)
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                               nascidos_vivos_28_a_32_semanas,
+                                                                                               nascidos_vivos_33_a_34_semanas,
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -550,6 +632,18 @@ mod_bloco_5_server <- function(id, filtros){
           porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
           porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
           porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                               nascidos_vivos_28_a_32_semanas,
+                                                                                               nascidos_vivos_33_a_34_semanas,
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
+
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
             filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
@@ -642,6 +736,61 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
+    data5_referencia <- reactive({
+      bloco5 |>
+        dplyr::filter(ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "Nacional")
+            ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          br_porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          br_porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                               nascidos_vivos_28_a_32_semanas,
+                                                                                               nascidos_vivos_33_a_34_semanas,
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
+
+          br_porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
+          br_porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          localidade_comparacao = dplyr::if_else(
+            filtros()$comparar == "Não",
+            "Média nacional",
+            dplyr::case_when(
+              filtros()$nivel2 == "Nacional" ~ "Média nacional",
+              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
+            )
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data5_juncao_aux <-  reactive({dplyr::full_join(data5(), data5_referencia(), by = "ano")})
 
     #nome da localidade para os gráficos sem comparações
     local <- reactive({
@@ -889,7 +1038,106 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
+  #grafico distribuicao do baixo peso
+    output$plot1_1 <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Peso menor que 1500 ao nascer",
+          highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Peso entre 1500 a 1999 ao nascer",
+          highcharter::hcaes(x = ano , y = porc_peso_1500_a_1999),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Peso entre 2000 e 2499 ao nascer",
+          highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
+
+    })
+    #grafico distribuicao da prematuridade
+    output$plot2_1 <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Sem informação",
+          highcharter::hcaes(x = ano, y = porc_premat_faltantes),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_faltantes:,f}% </b>"
+          )
+        )  |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Nascidos com menos de 28 semanas",
+          highcharter::hcaes(x = ano, y = porc_menos_de_28_semanas),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_menos_de_28_semanas:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Nascidos de 28 a 32 semanas",
+          highcharter::hcaes(x = ano , y = porc_28_a_32_semanas),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_28_a_32_semanas:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Nascidos de 33 a 34 semanas",
+          highcharter::hcaes(x = ano, y = porc_33_a_34_semanas),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_33_a_34_semanas:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Nascidos de 35 a 36 semanas",
+          highcharter::hcaes(x = ano, y = porc_35_a_36_semanas ),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_35_a_36_semanas:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+
+
+    })
 
   })
 }

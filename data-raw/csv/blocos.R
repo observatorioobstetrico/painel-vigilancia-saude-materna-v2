@@ -121,9 +121,10 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao <- as.numeric(bloco4_desl
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade)
 
-bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>
+# bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>
+#   janitor::clean_names()
+bloco5_aux <- read.csv("data-raw/csv/dados_bloco5.csv") |>
   janitor::clean_names()
-
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2020.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
@@ -170,7 +171,7 @@ bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, aux_m
 bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
 
 bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:6)
+  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:17)
 
 bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres") |>
   dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:18)
