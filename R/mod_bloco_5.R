@@ -1073,7 +1073,7 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
 
@@ -1133,7 +1133,7 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
 
