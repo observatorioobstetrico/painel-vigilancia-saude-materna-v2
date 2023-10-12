@@ -95,7 +95,7 @@ bloco2_aux <- readr::read_delim("data-raw/csv/indicadores_bloco2_planejamento_re
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
-bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2020.csv") |>
+bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2021.csv") |>
   janitor::clean_names()
 
 bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2020.csv") |>
