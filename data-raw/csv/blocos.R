@@ -87,7 +87,7 @@ aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv"
 tabela_aux_municipios <- dplyr::left_join(dplyr::left_join(aux_municipios, aux_idhm, by = "idhm"), aux_idh_estados, by = "uf")
 
 #Lendo os arquivos originais
-bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
+bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2021.csv") |>
   janitor::clean_names()
 
 bloco2_aux <- readr::read_delim("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2020.csv",
@@ -121,10 +121,15 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao <- as.numeric(bloco4_desl
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade)
 
-# bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>
-#   janitor::clean_names()
-bloco5_aux <- read.csv("data-raw/csv/dados_bloco5.csv") |>
-  janitor::clean_names()
+bloco5_aux <- read.csv2("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2021.csv") |>
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
+
+# bloco5_aux <- read.csv2("data-raw/csv/dados_bloco5.csv") |>
+#   janitor::clean_names() |>
+#   dplyr::select(!x) |>
+#   dplyr::filter(codmunres %in% aux_municipios$codmunres)
+
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2020.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
@@ -135,15 +140,15 @@ bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by 
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>
-  dplyr::filter(!stringr::str_detect(codmunres, "0000$"))
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>
-  dplyr::filter(!stringr::str_detect(codmunres, "0000$"))
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
 base_incompletude_sim_mif_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_mif.csv") |>
   janitor::clean_names() |>
-  dplyr::filter(!stringr::str_detect(codmunres, "0000$"))
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
 base_incompletude_sim_aux <- dplyr::full_join(base_incompletude_sim_maternos_aux, base_incompletude_sim_mif_aux, by = c("codmunres", "ano"))
 
@@ -153,37 +158,78 @@ base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indi
 
 
 #Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde
-bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres") |>
-   dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:19)
+bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
+bloco1 <- bloco1 |>
+   dplyr::select(
+     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+     (which(names(bloco1) == "ano") + 1):(which(names(bloco1) == "municipio") - 1)
+    )
 
-bloco2 <- dplyr::left_join(bloco2_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:13)
+bloco2 <- dplyr::left_join(bloco2_aux, aux_municipios, by = "codmunres")
+bloco2 <- bloco2 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco2) == "ano") + 1):(which(names(bloco2) == "municipio") - 1)
+  )
 
-bloco3 <- dplyr::left_join(bloco3_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:8)
+bloco3 <- dplyr::left_join(bloco3_aux, aux_municipios, by = "codmunres")
+bloco3 <- bloco3 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco3) == "ano") + 1):(which(names(bloco3) == "municipio") - 1)
+  )
 
-bloco4 <- dplyr::left_join(bloco4_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:18)
 
-bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 2:36)
+bloco4 <- dplyr::left_join(bloco4_aux, aux_municipios, by = "codmunres")
+bloco4 <- bloco4 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4) == "ano") + 1):(which(names(bloco4) == "municipio") - 1)
+  )
+
+bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, aux_municipios, by = "codmunres")
+bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_deslocamento_muni) == "ano") + 1):(which(names(bloco4_deslocamento_muni) == "municipio") - 1)
+  )
 
 bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
 
-bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:17)
+bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres")
+bloco5 <- bloco5 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco5) == "ano") + 1):(which(names(bloco5) == "municipio") - 1)
+  )
 
-bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:18)
+bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres")
+bloco6 <- bloco6 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco6) == "ano") + 1):(which(names(bloco6) == "municipio") - 1)
+  )
 
-base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:28)
+base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
+base_incompletude_sinasc <- base_incompletude_sinasc |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_incompletude_sinasc) == "ano") + 1):(which(names(base_incompletude_sinasc) == "municipio") - 1)
+  )
 
-base_incompletude_sim <- dplyr::left_join(base_incompletude_sim_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:8)
+base_incompletude_sim <- dplyr::left_join(base_incompletude_sim_aux, aux_municipios, by = "codmunres")
+base_incompletude_sim <- base_incompletude_sim |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_incompletude_sim) == "ano") + 1):(which(names(base_incompletude_sim) == "municipio") - 1)
+  )
 
-base_incompletude_deslocamento <- dplyr::left_join(base_incompletude_deslocamento_aux, aux_municipios, by = "codmunres") |>
-  dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude, 3:5)
+base_incompletude_deslocamento <- dplyr::left_join(base_incompletude_deslocamento_aux, aux_municipios, by = "codmunres")
+base_incompletude_deslocamento <- base_incompletude_deslocamento |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_incompletude_deslocamento) == "ano") + 1):(which(names(base_incompletude_deslocamento) == "municipio") - 1)
+  )
 
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
