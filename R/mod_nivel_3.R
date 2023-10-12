@@ -1944,7 +1944,7 @@ mod_nivel_3_server <- function(id, filtros){
             #tooltip = list(valuePrefix = "<")
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> {infos_indicador()$nome_incompletude1} </b>"))) |>
           highcharter::hc_colors(cols)
@@ -1978,7 +1978,7 @@ mod_nivel_3_server <- function(id, filtros){
               #tooltip = list(valuePrefix = "<")
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
             highcharter::hc_title(
               text = HTML(
@@ -2003,7 +2003,7 @@ mod_nivel_3_server <- function(id, filtros){
                 #tooltip = list(valuePrefix = "<")
               ) |>
               highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-              highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+              highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
               highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
               highcharter::hc_title(
                 text = HTML(
@@ -2027,7 +2027,7 @@ mod_nivel_3_server <- function(id, filtros){
                 #tooltip = list(valuePrefix = "<")
               ) |>
               highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-              highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+              highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
               highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
               highcharter::hc_title(
                 text = HTML(
@@ -2074,7 +2074,7 @@ mod_nivel_3_server <- function(id, filtros){
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> Cobertura do {base} </b>"))) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
         highcharter::hc_colors(cols)
     })
@@ -2149,7 +2149,7 @@ mod_nivel_3_server <- function(id, filtros){
           )
         ) |>
           highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", "")) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(
             # text = dplyr::case_when(
             #   infos_indicador()$tipo_do_indicador == "porcentagem" ~ "%",
@@ -2173,7 +2173,7 @@ mod_nivel_3_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
             ) |>
             highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", ""), shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(
               title = list(
                 text = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%")
@@ -2189,7 +2189,7 @@ mod_nivel_3_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = proporcao, group = class, colour = class)
             ) |>
             highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", ""), shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(
               title = list(
                 text = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%")
@@ -2211,7 +2211,7 @@ mod_nivel_3_server <- function(id, filtros){
               color = '#2c115f'
             ) |>
             highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0)
         } else if (infos_indicador()$nome_abreviado == "tx_abortos_cem_nascidos_vivos_valor_medio") {
           grafico_base <- highcharter::highchart() |>
@@ -2225,7 +2225,7 @@ mod_nivel_3_server <- function(id, filtros){
               )
             ) |>
             highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0)
         } else if (base::startsWith(infos_indicador()$indicador, "Medianas")) {
           grafico_base <- highcharter::highchart() |>
@@ -2254,7 +2254,7 @@ mod_nivel_3_server <- function(id, filtros){
               index = 3
             ) |>
             highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
             highcharter::hc_colors(cols)
         }

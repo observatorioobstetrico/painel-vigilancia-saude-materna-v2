@@ -126,9 +126,9 @@ app_ui <- function(request) {
                   numericInput(
                     inputId = "ano",
                     label = HTML("<span style = 'font-size: 17'> Ano </span>"),
-                    value = 2020,
+                    value = 2021,
                     min = 2012,
-                    max = 2020,
+                    max = 2021,
                     width = "95%"
                   ),
                   style = "display: none;"
@@ -139,8 +139,8 @@ app_ui <- function(request) {
                     inputId = "ano2",
                     label = HTML("<span style = 'font-size: 17'> Intervalo de anos </span>"),
                     min = 2012,
-                    max = 2020,
-                    value = c(2012, 2020),
+                    max = 2021,
+                    value = c(2012, 2021),
                     sep = '',
                     width = "90%"
                   ),

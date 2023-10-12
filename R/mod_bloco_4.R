@@ -2074,7 +2074,7 @@ mod_bloco_4_server <- function(id, filtros){
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
             highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
 
         } else if (filtros()$comparar == "Sim") {
@@ -2094,7 +2094,7 @@ mod_bloco_4_server <- function(id, filtros){
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
             highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
-            highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
         }
 
@@ -2314,7 +2314,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
 
@@ -2406,7 +2406,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "Contribuição % para a taxa global de cesarianas"), min = 0, max = 100)
 
 
@@ -2462,7 +2462,7 @@ mod_bloco_4_server <- function(id, filtros){
           ) |>
           highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
           highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) #|>
         #highcharter::hc_legend(width = 400, itemWidth = 200, align = "center", itemStyle = list(width = 250))
       },
@@ -2520,7 +2520,7 @@ mod_bloco_4_server <- function(id, filtros){
           ) |>
           highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
           highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "Contribuição % para a taxa global de cesarianas"), min = 0, max = 100)
       },
       error = function(e) {}
@@ -2555,7 +2555,7 @@ mod_bloco_4_server <- function(id, filtros){
             index = 3
           ) |>
           highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
           #highcharter::hc_add_theme(highcharter::hc_theme_elementary()) |>
           highcharter::hc_colors(cols)
@@ -2592,7 +2592,7 @@ mod_bloco_4_server <- function(id, filtros){
             index = 3
           ) |>
           highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
           #highcharter::hc_add_theme(highcharter::hc_theme_elementary()) |>
           highcharter::hc_colors(cols)
@@ -2629,7 +2629,7 @@ mod_bloco_4_server <- function(id, filtros){
             index = 3
           ) |>
           highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-          highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
           #highcharter::hc_add_theme(highcharter::hc_theme_elementary()) |>
           highcharter::hc_colors(cols)
