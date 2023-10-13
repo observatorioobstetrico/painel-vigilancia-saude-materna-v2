@@ -129,7 +129,7 @@ bloco5_aux <- read.csv2("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_
 #   dplyr::select(!x) |>
 #   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
-bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2020.csv") |>
+bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2021.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2020.csv", sep = ";") |>
