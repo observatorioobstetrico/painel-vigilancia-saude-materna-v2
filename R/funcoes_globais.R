@@ -319,10 +319,10 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
       )
 
       if (length(anos_cobertura_aux) > 1) {
-        texto_cobertura <- glue::glue("Além disso, a localidade apresenta <span style = 'font-weight: 700'> problemas na cobertura do {base} </span> nos anos de <span style = 'font-weight: 700'> {anos_cobertura}. </span> Nesses anos, a cobertura dessa base de dados foi,
+        texto_cobertura <- glue::glue("{ifelse(length(anos1_aux) > 0, 'Além disso, a', 'A')} localidade apresenta <span style = 'font-weight: 700'> problemas na cobertura do {base} </span> nos anos de <span style = 'font-weight: 700'> {anos_cobertura}. </span> Nesses anos, a cobertura dessa base de dados foi,
            respectivamente, de <span style = 'font-weight: 700'> {valores_cobertura}. </span> São considerados como valores ideais aqueles acima de 90%.")
       } else {
-        texto_cobertura <- glue::glue("Além disso, a localidade apresenta <span style = 'font-weight: 700'> problemas na cobertura do {base} </span> no ano de <span style = 'font-weight: 700'> {anos_cobertura_aux}. </span> Nesse ano, a cobertura dessa base de dados foi
+        texto_cobertura <- glue::glue("{ifelse(length(anos1_aux) > 0, 'Além disso, a', 'A')} localidade apresenta <span style = 'font-weight: 700'> problemas na cobertura do {base} </span> no ano de <span style = 'font-weight: 700'> {anos_cobertura_aux}. </span> Nesse ano, a cobertura dessa base de dados foi
            de <span style = 'font-weight: 700'> {val_cobertura_aux}%. </span> São considerados como valores ideais aqueles acima de 90%.")
       }
 
