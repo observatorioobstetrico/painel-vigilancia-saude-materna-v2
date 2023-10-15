@@ -41,9 +41,36 @@ mod_bloco_5_ui <- function(id) {
           ),
           fluidRow(column(
             width = 6,
-            offset = 3,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i3")), proxy.height = "325px")
-          ))
+          ),
+          column(
+            width = 6,
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i4")), proxy.height = "325px")
+          )),
+        fluidRow(column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i5")), proxy.height = "325px")
+        ),
+        column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
+        )),
+        fluidRow(column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
+        ),
+        column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i8")), proxy.height = "325px")
+        )),
+        fluidRow(column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i9")), proxy.height = "325px")
+        ),
+        column(
+          width = 6,
+          shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
+        ))
       ),
       column(
         width = 8,
@@ -411,7 +438,7 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::ungroup()
     })
 
-    data_resumo_referencia_baixo_peso <- reactive({
+    data_resumo_referencia <- reactive({
       base_referencia_baixo_peso |>
         dplyr::filter(
           if (filtros()$comparar == "Não") {
@@ -665,6 +692,13 @@ mod_bloco_5_server <- function(id, filtros){
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos, na.rm = TRUE),
           porc_premat = 10,
           porc_termo_precoce = 20,
+          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -810,7 +844,7 @@ mod_bloco_5_server <- function(id, filtros){
         indicador = "porc_baixo_peso",
         titulo = "Porcentagem de baixo peso ao nascer",
         tem_meta = TRUE,
-        valor_de_referencia = data_resumo_referencia_baixo_peso()$porc_baixo_peso,
+        valor_de_referencia = data_resumo_referencia()$porc_baixo_peso,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "300px",
@@ -876,6 +910,169 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
+
+    output$b5_i4 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_peso_menor_1500",
+        titulo = "Porcentagem de nascimentos com peso menor que 1500g",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+    output$b5_i5 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_peso_1500_a_1999",
+        titulo = "Porcentagem de nascimentos com peso entre 1500g e 1999g",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+    output$b5_i6 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_peso_2000_a_2499",
+        titulo = "Porcentagem de nascimentos com peso entre 2000g e 2499g",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+    output$b5_i7 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_menos_de_28_semanas",
+        titulo = "Porcentagem de nascimentos com menos de 28 semanas",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+    output$b5_i8 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_28_a_32_semanas",
+        titulo = "Porcentagem de nascimentos com 28 a 32 semanas",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+    output$b5_i9 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_33_a_34_semanas",
+        titulo = "Porcentagem de nascimentos com 32 a 34 semanas",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+    output$b5_i10 <- renderUI({
+      cria_caixa_server(
+        dados = data_resumo(),
+        indicador = "porc_35_a_36_semanas",
+        titulo = "Porcentagem de nascimentos com 35 a 36 semanas",
+        tem_meta = TRUE,
+        valor_de_referencia = 20,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "300px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
 
     #gráfico porcentagem baixo peso
     output$plot1 <- highcharter::renderHighchart({
