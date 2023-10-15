@@ -865,13 +865,79 @@ mod_bloco_1_server <- function(id, filtros){
       )
     })
 
+    data_resumo_sus <- reactive({
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] & ano < 2021) |>
+        dplyr::filter(
+          if (filtros()$comparar == "Não") {
+            if (filtros()$nivel == "Nacional")
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] & ano < 2021
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          } else {
+            req(input$localidade_resumo)
+            if (input$localidade_resumo == "escolha1") {
+              if (filtros()$nivel == "Nacional")
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] & ano < 2021
+              else if (filtros()$nivel == "Regional")
+                regiao == filtros()$regiao
+              else if (filtros()$nivel == "Estadual")
+                uf == filtros()$estado
+              else if (filtros()$nivel == "Macrorregião de saúde")
+                macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+              else if(filtros()$nivel == "Microrregião de saúde")
+                r_saude == filtros()$micro & uf == filtros()$estado_micro
+              else if(filtros()$nivel == "Municipal")
+                municipio == filtros()$municipio & uf == filtros()$estado_municipio
+            } else {
+              if (filtros()$nivel2 == "Nacional")
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] & ano < 2021
+              else if (filtros()$nivel2 == "Regional")
+                regiao == filtros()$regiao2
+              else if (filtros()$nivel2 == "Estadual")
+                uf == filtros()$estado2
+              else if (filtros()$nivel2 == "Macrorregião de saúde")
+                macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+              else if(filtros()$nivel2 == "Microrregião de saúde")
+                r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+              else if(filtros()$nivel2 == "Municipal")
+                municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+              else if (filtros()$nivel2 == "Municípios semelhantes")
+                grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+            }
+          }
+        ) |>
+        dplyr::summarise(
+          populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
+          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_brasil_resumo_sus <- reactive({
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] & ano < 2021) |>
+        dplyr::summarise(
+          populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
+          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1)
+        ) |>
+        dplyr::ungroup()
+    })
     output$caixa_b1_i7 <- renderUI({
       cria_caixa_server(
-        dados = data_resumo(),
+        dados = data_resumo_sus(),
         indicador = "porc_dependentes_sus",
         titulo = "Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS",
         tem_meta = FALSE,
-        valor_de_referencia = data_brasil_resumo()$porc_dependentes_sus,
+        valor_de_referencia = data_brasil_resumo_sus()$porc_dependentes_sus,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "303px",
@@ -1334,7 +1400,7 @@ mod_bloco_1_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data1(),
+            data = data1() |> dplyr::filter(ano < 2021),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class)
           ) |>
@@ -1347,7 +1413,7 @@ mod_bloco_1_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia(),
+              data = data_referencia() |> dplyr::filter(ano < 2021),
               type = "line",
               name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class),
@@ -1358,12 +1424,12 @@ mod_bloco_1_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data1(),
+            data = data1() |> dplyr::filter(ano < 2021),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data1_comp(),
+            data = data1_comp() |> dplyr::filter(ano < 2021),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class)
           ) |>
@@ -1376,7 +1442,7 @@ mod_bloco_1_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia(),
+              data = data_referencia() |> dplyr::filter(ano < 2021),
               type = "line",
               name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class),

@@ -1,0 +1,13 @@
+name: painel-vigilancia-saude-materna-v2
+title: painel-vigilancia-saude-materna-v2
+username:
+account: observatorioobstetrico
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10197235
+bundleId: 7805854
+url: https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/
+when: 1697405714.05824
+lastSyncTime: 1697405714.05825
+asMultiple: FALSE
+asStatic: FALSE

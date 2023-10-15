@@ -1031,7 +1031,11 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
-          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
+          porc_dependentes_sus = ifelse(
+            filtros()$ano != 2021,
+            round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
+            NaN
+          ),
           porc_cobertura_esf = round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1),
           porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
@@ -1067,7 +1071,11 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
-          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
+          porc_dependentes_sus = ifelse(
+            filtros()$ano != 2021,
+            round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
+            NaN
+          ),
           porc_cobertura_esf = 95,
           porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
