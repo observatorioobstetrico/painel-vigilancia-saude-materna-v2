@@ -90,6 +90,11 @@ app_ui <- function(request) {
               text = "- Mortalidade e morbidade materna",
               tabName = "bloco_6",
               icon = icon("6")
+            ),
+            bs4Dash::bs4SidebarMenuSubItem(
+              text = "- Mortalidade neonatal e fetal",
+              tabName = "bloco_7",
+              icon = icon("7")
             )
           ),
           bs4Dash::bs4SidebarMenuItem(
@@ -450,7 +455,8 @@ app_ui <- function(request) {
                       "3 - Assistência pré-natal" = "bloco3",
                       "4 - Assistência ao parto" = "bloco4",
                       "5 - Condições de nascimento" = "bloco5",
-                      "6 - Mortalidade e morbidade materna" = "bloco6"
+                      "6 - Mortalidade e morbidade materna" = "bloco6",
+                      "7 - Mortalidade neonatal e fetal" = "bloco7"
                     ),
                     width = "98%"
                   )
@@ -558,6 +564,10 @@ app_ui <- function(request) {
           bs4Dash::bs4TabItem(
             tabName = "bloco_6",
             mod_bloco_6_ui("bloco_6_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "bloco_7",
+            mod_bloco_7_ui("bloco_7_1")
           ),
           bs4Dash::bs4TabItem(
             tabName = "nivel_3",

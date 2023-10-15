@@ -14,6 +14,7 @@ app_server <- function(input, output, session) {
   mod_bloco_4_server("bloco_4_1", filtros = filtros)
   mod_bloco_5_server("bloco_5_1", filtros = filtros)
   mod_bloco_6_server("bloco_6_1", filtros = filtros)
+  mod_bloco_7_server("bloco_7_1", filtros = filtros)
   mod_nivel_3_server("nivel_3_1", filtros = filtros)
 
   output$label_nivel_comp <- renderUI({
@@ -142,6 +143,15 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
           "Relacionados à morbidade materna" = "morbidade"
         )
       )
+    } else if (input$bloco == "bloco7") {
+      updateSelectizeInput(
+        session,
+        inputId = "tipo_do_indicador_blocos4_6",
+        choices = c(
+          "Relacionados à mortalidade neonatal" = "neonatal",
+          "Relacionados à morbidade fetal" = "fetal"
+        )
+      )
     }
   })
 
@@ -185,6 +195,20 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "indicador_blocos4_6",
         choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6_morbidade")],
+        server = FALSE
+      )
+    } else if (input$tipo_do_indicador_blocos4_6 == "neonatal") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")],
+        server = FALSE
+      )
+    } else if (input$tipo_do_indicador_blocos4_6 == "fetal") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_fetal")],
         server = FALSE
       )
     }
