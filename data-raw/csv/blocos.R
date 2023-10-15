@@ -137,6 +137,23 @@ bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_mate
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2021.csv", sep=";") |>
+  dplyr::select(!c(uf, municipio, regiao))
+
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2021.csv") |>
+  dplyr::select(
+    codmunres,
+    municipio,
+    uf,
+    regiao,
+    ano,
+    obitos_fetais_totais,
+    obitos_fetais_mais_22sem
+  ) |>
+  dplyr::select(!c(uf, municipio, regiao))
+
+bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
+
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
@@ -208,6 +225,14 @@ bloco6 <- bloco6 |>
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(bloco6) == "ano") + 1):(which(names(bloco6) == "municipio") - 1)
   )
+
+bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
+bloco7 <- bloco7 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
+  )
+
 
 base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
 base_incompletude_sinasc <- base_incompletude_sinasc |>
@@ -325,7 +350,7 @@ tabela_indicadores <- data.frame(
     "prop_obitos_aborto",
     "prop_obitos_hipertens",
     "prop_obitos_hemo",
-    "prop_obitos_infec",  #Fim do bloco 6
+    "prop_obitos_infec",  #Fim do bloco 6 (mortalidade)
     "prop_mmg_int_publicas",
     "prop_mmg_hipertensao",
     "prop_mmg_hemorragia",
@@ -333,7 +358,24 @@ tabela_indicadores <- data.frame(
     "prop_mmg_uti",
     "prop_mmg_tmp",
     "prop_mmg_transfusao",
-    "prop_mmg_cirurgia"
+    "prop_mmg_cirurgia", #Fim do bloco 6 (morbidade)
+    "mort_neonat",
+    "mort_neonat_precoc",
+    "mort_neonat_tardia",
+    "mort_neonat_menos1500",
+    "mort_neonat_precoc_menos1500",
+    "mort_neonat_tardia_menos1500",
+    "mort_neonat_1500_1999",
+    "mort_neonat_precoc_1500_1999",
+    "mort_neonat_tardia_1500_1999",
+    "mort_neonat_2000_2499",
+    "mort_neonat_precoc_2000_2499",
+    "mort_neonat_tardia_2000_2499",
+    "mort_neonat_mais2500",
+    "mort_neonat_precoc_mais2500",
+    "mort_neonat_tardia_mais2500", #Fim do bloco 7 (neonatal)
+    "obitos_fetais_mais22sem",
+    "mort_fetal" # Fim do bloco 7 (fetal)
   ),
   indicador = c(
     "Porcentagem de nascidos vivos de mães com idade inferior a 20 anos",
@@ -408,7 +450,25 @@ tabela_indicadores <- data.frame(
     "Porcentagem de casos de morbidade materna grave com internação em UTI",
     "Porcentagem de casos de morbidade materna grave com Tempo de Permanência Prolongada",
     "Porcentagem de casos de morbidade materna grave com transfusão sanguínea",
-    "Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas"
+    "Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas",
+    "Mortalidade neonatal",
+    "Mortalidade neonatal precoce",
+    "Mortalidade neonatal tardia",
+    "Mortalidade neonatal para peso ao nascer menor que 1500g",
+    "Mortalidade neonatal precoce para peso ao nascer menor que 1500g",
+    "Mortalidade neonatal tardia para peso ao nascer menor que 1500g",
+    "Mortalidade neonatal para peso ao nascer de 1500g a 1999g",
+    "Mortalidade neonatal precoce para peso ao nascer de 1500g a 1999g",
+    "Mortalidade neonatal tardia para peso ao nascer de 1500g a 1999g",
+    "Mortalidade neonatal para peso ao nascer de 2000g a 2499g",
+    "Mortalidade neonatal precoce para peso ao nascer de 2000g a 2499g",
+    "Mortalidade neonatal tardia para peso ao nascer de 2000g a 2499g",
+    "Mortalidade neonatal para peso ao nascer maior ou igual a 2500g",
+    "Mortalidade neonatal precoce para peso ao nascer maior ou igual a 2500g",
+    "Mortalidade neonatal tardia para peso ao nascer maior ou igual a 2500g",
+    "Número de óbitos fetais",
+    "Taxa de mortalidade fetal"
+
   ),
   bloco = c(
     rep("bloco1", times = 14),
@@ -418,7 +478,9 @@ tabela_indicadores <- data.frame(
     rep("bloco4_deslocamento", times = 11),
     rep("bloco5", times = 3),
     rep("bloco6", times = 7),
-    rep("bloco6_morbidade", times = 8)
+    rep("bloco6_morbidade", times = 8),
+    rep("bloco7_neonatal", times = 15),
+    rep("bloco7_fetal", times = 2)
   ),
   numerador = c(
     "nvm_menor_que_20_anos",
@@ -481,7 +543,7 @@ tabela_indicadores <- data.frame(
     "obitos_mat_aborto",
     "obitos_mat_hipertensao",
     "obitos_mat_hemorragia",
-    "obitos_mat_infec_puerperal",  #Fim do bloco 6
+    "obitos_mat_infec_puerperal",  #Fim do bloco 6 (mortalidade)
     "casos_mmg",
     "casos_mmg_hipertensao",
     "casos_mmg_hemorragia",
@@ -489,7 +551,24 @@ tabela_indicadores <- data.frame(
     "casos_mmg_uti",
     "casos_mmg_tmp",
     "casos_mmg_transfusao",
-    "casos_mmg_cirurgia"
+    "casos_mmg_cirurgia", #fim do bloco 6 (morbidade)
+    "obitos_27dias",
+    "obitos_6dias",
+    "obitos_7_27dias",
+    "obitos_27dias_menos1500",
+    "obitos_6dias_menos1500",
+    "obitos_7_27dias_menos1500",
+    "obitos_27dias_1500-1999",
+    "obitos_6dias_1500_1999",
+    "obitos_7_27dias_1500_1999",
+    "obitos_27dias_2000_2499",
+    "obitos_6dias_2000_2499",
+    "obitos_7_27dias_2000_2499",
+    "obitos_27dias_mais2500",
+    "obitos_6dias_mais2500",
+    "obitos_7_27dias_mais2500",
+    "obitos_fetais_mais22sem",
+    "obitos_fetais_mais22sem" #fim do bloco 7
   ),
   denominador = c(
     rep("total_de_nascidos_vivos", times = 12),
@@ -515,9 +594,12 @@ tabela_indicadores <- data.frame(
     "exceção",
     "nascidos",
     "obitos_mat_totais",
-    rep("obitos_mat_diretos", times = 4),  #Fim do bloco 6
+    rep("obitos_mat_diretos", times = 4),  #Fim do bloco 6 (mortalidade)
     "total_internacoes",
-    rep("casos_mmg", times = 7)
+    rep("casos_mmg", times = 7), #Fim do bloco 6 (morbidade)
+    rep("nascidos", times=15), #Fim do bloco 7 (neonatal)
+    "exceção",
+    "nascidos + obitos_fetais_mais22sem"
   ),
   fator = c(
     rep(100, times = 12),
@@ -534,8 +616,11 @@ tabela_indicadores <- data.frame(
     rep(100, times = 3),  #Fim do bloco 5
     1,
     100000,
-    rep(100, times = 5),  #Fim do bloco 6
-    rep(100, times = 8)
+    rep(100, times = 5),  #Fim do bloco 6 (mortalidade)
+    rep(100, times = 8),  #Fim do bloco 6 (morbidade),
+    rep(1000, times=15), #Fim do bloco 7 (neonatal)
+    1,
+    1000 #Fim do bloco 7 (fetal)
   ),
   tipo_do_indicador = c(
     rep("porcentagem", times = 12),
@@ -552,8 +637,11 @@ tabela_indicadores <- data.frame(
     rep("porcentagem", times = 3),  #Fim do bloco 5
     "absoluto",
     "taxa",
-    rep("porcentagem", times = 5),  #Fim do bloco 6
-    rep("porcentagem", times = 8)
+    rep("porcentagem", times = 5),  #Fim do bloco 6 (mortalidade)
+    rep("porcentagem", times = 8), #Fim do bloco 6 (morbidade)
+    rep("taxa", times=15), #Fim do bloco 7 (neonatal)
+    "absoluto",
+    "taxa"  #Fim do bloco 7 (fetal)
   ),
   referencia = c(
     rep("Nacional", times = 13),
@@ -580,8 +668,9 @@ tabela_indicadores <- data.frame(
     "20",  #Fim do bloco 5
     "sem referência",
     30,
-    rep("Nacional", times = 5),  #Fim do bloco 6
-    rep("Nacional", times = 8)
+    rep("Nacional", times = 5),
+    rep("Nacional", times = 8), #Fim do bloco 6
+    rep("Nacional", times=17) #Fim do bloco 7
   ),
   descricao_referencia = c(
     rep("média nacional", times = 13),
@@ -601,7 +690,8 @@ tabela_indicadores <- data.frame(
     "sem referência",
     "Meta ODS",
     rep("média nacional", times = 5), #Fim do bloco 6
-    rep("média nacional", times = 8)
+    rep("média nacional", times = 8),
+    rep("média nacional", times = 17) #Fim do bloco 7
   ),
   nome_numerador = c(
     "Nascidos vivos de mães com menos de 20 anos",
@@ -667,7 +757,7 @@ tabela_indicadores <- data.frame(
     "Óbitos maternos por aborto",
     "Óbitos maternos por hipertensão",
     "Óbitos maternos por hemorragia",
-    "Óbitos maternos por infecção puerperal",  #Fim do bloco 6
+    "Óbitos maternos por infecção puerperal",  #Fim do bloco 6 (mortalidade)
     "Casos de morbidade materna grave",
     "Casos de morbidade materna grave por hipertensão",
     "Casos de morbidade materna grave por hemorragia",
@@ -675,7 +765,24 @@ tabela_indicadores <- data.frame(
     "Casos de morbidade materna grave com internação em UTI",
     "Casos de morbidade materna grave com Tempo de Permanência Prolongada",
     "Casos de morbidade materna grave com transfusão sanguínea",
-    "Casos de morbidade materna grave com intervenções cirúrgicas"
+    "Casos de morbidade materna grave com intervenções cirúrgicas", #Fim do bloco 6 (morbidade)
+    "Número de óbitos até 27 dias de vida",
+    "Número de óbitos até 6 dias de vida",
+    "Número de óbitos de 7 a 27 dias de vida",
+    "Número de óbitos até 27 dias de vida com peso menor que 1500g",
+    "Número de óbitos até 6 dias de vida com peso menor que 1500g",
+    "Número de óbitos de 7 a 27 dias de vida com peso menor que 1500g",
+    "Número de óbitos até 27 dias de vida com peso de 1500g a 1999g",
+    "Número de óbitos até 6 dias de vida com peso de 1500g a 1999g",
+    "Número de óbitos de 7 a 27 dias de vida com peso de 1500g a 1999g",
+    "Número de óbitos até 27 dias de vida com peso de 2000g a 2499g",
+    "Número de óbitos até 6 dias de vida com peso de 2000g a 2499g",
+    "Número de óbitos de 7 a 27 dias de vida com peso de 2000g a 2499g",
+    "Número de óbitos até 27 dias de vida com peso maior ou igual a 2500g",
+    "Número de óbitos até 6 dias de vida com peso maior ou igual a 2500g",
+    "Número de óbitos de 7 a 27 dias de vida com peso maior ou igual a 2500g",
+    "Número total de óbitos fetais",
+    "Número total de óbitos fetais"
   ),
   nome_denominador = c(
     rep("Total de nascidos vivos", times = 12),
@@ -700,10 +807,13 @@ tabela_indicadores <- data.frame(
     "sem denominador",
     "Total de nascidos vivos",
     "Óbitos maternos",
-    rep("Óbitos maternos diretos", times = 4),  #Fim do bloco 6
+    rep("Óbitos maternos diretos", times = 4),  #Fim do bloco 6 (mortalidade)
     "Total de internações obstétricas",
-    rep("Total de casos de morbidade materna grave", times = 7)
-  ),
+    rep("Total de casos de morbidade materna grave", times = 7), #fim do bloco 6 (morbidade)
+    rep("Total de nascidos vivos", times=15),
+    "sem denominador",
+    "Total de nascidos vivos + total de óbits fetais" # Fim do bloco 7
+    ),
   num_indicadores_incompletude = c(
     rep(1, times = 12),
     rep(0, times = 2),   #Fim do bloco 1
@@ -716,7 +826,8 @@ tabela_indicadores <- data.frame(
     rep(2, times = 11),  #Fim do bloco 4 (deslocamento)
     rep(1, times = 3),  #Fim do bloco 5
     rep(2, times = 7),  #Fim do bloco 6
-    rep(0, times = 8)
+    rep(0, times = 8),
+    rep(0, times=17) #Bloco 7
   ),
   nome_incompletude1 = c(
     rep("Porcentagem da variável IDADEMAE, do SINASC, não preenchida, ignorada ou >55", times = 3),
@@ -738,7 +849,8 @@ tabela_indicadores <- data.frame(
     "Porcentagem da variável GESTACAO, do SINASC, em branco, ignorada ou igual a 9",
     "Porcentagem da variável SEMAGESTAC, do SINASC, em branco ou sem informação", #Fim do bloco 5
     rep("Porcentagem de óbitos de mulheres em idade fértil investigados", times = 7), #Fim do bloco 6
-    rep("Sem incompletude", times = 8)
+    rep("Sem incompletude", times = 8),
+    rep("-", times=17) #bloco 7
   ),
   nome_incompletude2 = c(
     rep("-", times = 12),
@@ -751,7 +863,8 @@ tabela_indicadores <- data.frame(
     rep("Porcentagem de Declaração de Nascido Vivo com CNES inválido", times = 11),  #Fim do bloco 4 (deslocamento)
     rep("-", times = 3),  #Fim do bloco 5
     rep("Porcentagem de óbitos maternos investigados", times = 7),  #Fim do bloco 6
-    rep("-", times = 8)
+    rep("-", times = 8),
+    rep("-", times=17) #bloco 7
   ),
   numerador_incompletude1 = c(
     rep("idademae_incompletos", times = 3),
@@ -773,7 +886,8 @@ tabela_indicadores <- data.frame(
     "gestacao_incompletos",
     "semagestac_incompletos", #Fim do bloco 5
     rep("exceção", times = 7),  #Fim do bloco 6
-    rep("Sem incompletude", times = 8)
+    rep("Sem incompletude", times = 8),
+    rep("-", times=17) #bloco 7
   ),
   numerador_incompletude2 = c(
     rep("-", times = 12),
@@ -786,7 +900,8 @@ tabela_indicadores <- data.frame(
     rep("exceção", times = 11),  #Fim do bloco 4 (deslocamento)
     rep("-", times = 3),  #Fim do bloco 5
     rep("exceção", times = 7),  #Fim do bloco 6
-    rep("-", times = 8)
+    rep("-", times = 8),
+    rep("-", times=17) #bloco 7
   ),
   denominador_incompletude1 = c(
     rep("idademae_totais", times = 3),
@@ -808,7 +923,8 @@ tabela_indicadores <- data.frame(
     "gestacao_totais",
     "semagestac_totais", #Fim do bloco 5
     rep("total_obitos_mulher_idade_fertil", times = 7),  #Fim do bloco 6
-    rep("Sem incompletude", times = 8)
+    rep("Sem incompletude", times = 8) ,
+    rep("-", times=17) #bloco 7
   ),
   denominador_incompletude2 = c(
     rep("-", times = 12),
@@ -821,10 +937,12 @@ tabela_indicadores <- data.frame(
     rep("dn_hospital_id_fertil", times = 11),  #Fim do bloco 4 (deslocamento)
     rep("-", times = 3),  #Fim do bloco 5
     rep("total_obitos_maternos", times = 7),
-    rep("-", times = 8)
+    rep("-", times = 8) ,
+    rep("-", times=17) #bloco 7
   ),
   fator_incompletude = c(
-    rep(100, times = 73)
+    rep(100, times = 73),
+    rep(100, times=17) # bloco 7
   )
 )
 
@@ -837,6 +955,7 @@ usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
+usethis::use_data(bloco7, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
 usethis::use_data(municipios_choices, overwrite = TRUE)
