@@ -2307,19 +2307,31 @@ mod_nivel_1_server <- function(id, filtros){
           rmm_fator_de_correcao |>
             dplyr::filter(
               localidade == filtros()$estado,
-              ano == filtros()$ano
+              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+            ) |>
+            #Tapa buraco enquanto não tem os fatores de correção de 2021
+            dplyr::mutate(
+              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
             )
         } else if (filtros()$nivel == "Regional") {
           rmm_fator_de_correcao |>
             dplyr::filter(
               localidade == filtros()$regiao,
-              ano == filtros()$ano
+              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+            ) |>
+            #Tapa buraco enquanto não tem os fatores de correção de 2021
+            dplyr::mutate(
+              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
             )
         } else {
           rmm_fator_de_correcao |>
             dplyr::filter(
               localidade == "Brasil",
-              ano == filtros()$ano
+              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+            ) |>
+            #Tapa buraco enquanto não tem os fatores de correção de 2021
+            dplyr::mutate(
+              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
             )
         }
       } else {
