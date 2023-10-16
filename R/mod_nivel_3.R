@@ -1342,6 +1342,7 @@ mod_nivel_3_server <- function(id, filtros){
       if (infos_indicador()$nome_abreviado == "rmm") {
         data_rmm_corrigida_aux() |>
           dplyr::mutate(
+            fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data_rmm_corrigida_aux()$fator_de_correcao[which(data_rmm_corrigida_aux()$ano == 2020)]),
             rmm = round(proporcao*fator_de_correcao, 1)
           )
       }

@@ -1138,6 +1138,7 @@ mod_bloco_6_server <- function(id, filtros){
     data6_rmm_corrigida <- reactive({
       dplyr::full_join(data6(), data6_fator_de_correcao(), by = "ano") |>
         dplyr::mutate(
+          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao()$fator_de_correcao[which(data6_fator_de_correcao()$ano == 2020)]),
           rmm = round(rmm*fator_de_correcao, 1)
         )
     })
@@ -1145,6 +1146,7 @@ mod_bloco_6_server <- function(id, filtros){
     data6_comp_rmm_corrigida <- reactive({
       dplyr::full_join(data6_comp(), data6_fator_de_correcao_comp(), by = "ano") |>
         dplyr::mutate(
+          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao_comp()$fator_de_correcao[which(data6_fator_de_correcao_comp()$ano == 2020)]),
           rmm = round(rmm*fator_de_correcao, 1)
         )
     })
