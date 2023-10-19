@@ -10,6 +10,15 @@
 #'
 #' @import highcharter
 
+# mytheme <- fresh::create_theme(
+#   fresh::bs4dash_status(
+#     primary = "#0A1E3C"
+#   ),
+#   fresh::adminlte_sidebar(
+#     light_bg = "#0A1E3C"
+#   )
+# )
+
 app_ui <- function(request) {
   tagList(
     tags$style(HTML("
@@ -34,13 +43,13 @@ app_ui <- function(request) {
         title = bs4Dash::bs4DashBrand(
           title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
           color = "primary",
-          href = "https://observatorioobstetricobr.org/",
           image = "www/logo-oobr2.png"
         ),
-        status = "primary"
+        status = "primary",
+        skin = "light"
       ),
       bs4Dash::bs4DashSidebar(
-        style = "z-index: 9999;",
+        #style = "z-index: 9999;",
         width = "470px",
         status = "navy",
         skin = "light",
@@ -115,6 +124,7 @@ app_ui <- function(request) {
         )
       ),
       bs4Dash::bs4DashBody(
+        tags$head(tags$style(".navbar-nav .nav-link {visibility: hidden;}")),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
           div(style = "margin-top: 71px;"),

@@ -504,6 +504,3 @@ minha_paged_windmill <- function(logo = "0",
   )
 }
 
-
-
-
