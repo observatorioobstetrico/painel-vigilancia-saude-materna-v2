@@ -7,11 +7,17 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#'
+
 mod_sobre_ui <- function(id){
   ns <- NS(id)
   tagList(
-    HTML("<h2><b>Painel de Vigilância da Saúde Materna</b></h2>"),
+    tags$head(tags$style(".row {padding: 0 0.6em}")),
+    div(
+      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      h2(tags$b("Painel de Vigilância da Saúde Materna"), style = "padding-left: 0.4em"),
+      hr(style = "margin-bottom: 0px;"),
+      style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
+    ),
     fluidRow(
       HTML(
         "

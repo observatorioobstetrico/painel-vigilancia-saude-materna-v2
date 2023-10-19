@@ -11,7 +11,12 @@
 mod_documentacao_ui <- function(id){
   ns <- NS(id)
   tagList(
-    HTML("<h2><b>Documentação dos indicadores</b></h2>"),
+    div(
+      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      h2(tags$b("Documentação dos indicadores"), style = "padding-left: 0.4em"),
+      hr(style = "margin-bottom: 0px;"),
+      style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
+    ),
     # fluidRow(
     #   column(
     #     width = 12,
@@ -41,7 +46,7 @@ mod_documentacao_ui <- function(id){
       style = "display: block;       /* iframes are inline by default */
     background: #000;
     margin: auto;
-    height: 85vh;        /* Viewport-relative units */
+    height: 83vh;        /* Viewport-relative units */
     width: 90vw;",
       src = "www/Documentação dos indicadores.pdf",
       align = "center"
@@ -59,42 +64,42 @@ mod_documentacao_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    output$report <- downloadHandler(
-      filename = "documentacao_indicadores.pdf",
-      content = function(file) {
-
-        tempReport <- file.path(tempdir(), "documentacao_dos_indicadores.Rmd")
-        file.copy("documentacao_dos_indicadores.Rmd", tempReport, overwrite = TRUE)
-
-        arquivo_html <- tempfile(
-          fileext = ".html"
-        )
-
-        withProgress(message = "Renderizando o HTML...", {
-
-          incProgress(0.2)
-
-          rmarkdown::render(
-            input = "documentacao_dos_indicadores.Rmd",
-            output_file = arquivo_html
-          )
-
-          incProgress(0.5, message = "Renderizando o PDF...")
-
-          pagedown::chrome_print(
-            input = arquivo_html,
-            output = file,
-            extra_args = c("--no-sandbox")
-          )
-
-          incProgress(0.3)
-
-        })
-
-
-
-      }
-    )
+    # output$report <- downloadHandler(
+    #   filename = "documentacao_indicadores.pdf",
+    #   content = function(file) {
+    #
+    #     tempReport <- file.path(tempdir(), "documentacao_dos_indicadores.Rmd")
+    #     file.copy("documentacao_dos_indicadores.Rmd", tempReport, overwrite = TRUE)
+    #
+    #     arquivo_html <- tempfile(
+    #       fileext = ".html"
+    #     )
+    #
+    #     withProgress(message = "Renderizando o HTML...", {
+    #
+    #       incProgress(0.2)
+    #
+    #       rmarkdown::render(
+    #         input = "documentacao_dos_indicadores.Rmd",
+    #         output_file = arquivo_html
+    #       )
+    #
+    #       incProgress(0.5, message = "Renderizando o PDF...")
+    #
+    #       pagedown::chrome_print(
+    #         input = arquivo_html,
+    #         output = file,
+    #         extra_args = c("--no-sandbox")
+    #       )
+    #
+    #       incProgress(0.3)
+    #
+    #     })
+    #
+    #
+    #
+    #   }
+    # )
 
   })
 }

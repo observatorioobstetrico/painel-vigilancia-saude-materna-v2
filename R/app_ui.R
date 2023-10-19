@@ -10,14 +10,23 @@
 #'
 #' @import highcharter
 
-# mytheme <- fresh::create_theme(
-#   fresh::bs4dash_status(
-#     primary = "#0A1E3C"
-#   ),
-#   fresh::adminlte_sidebar(
-#     light_bg = "#0A1E3C"
-#   )
-# )
+
+
+css_navbar <- "
+  .navbar {
+    position: fixed;
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: .5rem .5rem;
+  }
+"
 
 app_ui <- function(request) {
   tagList(
@@ -39,7 +48,7 @@ app_ui <- function(request) {
       dark = NULL,
       title = "Painel de Vigilância da Saúde Materna",
       bs4Dash::bs4DashNavbar(
-        fixed = TRUE,
+        #fixed = TRUE,
         title = bs4Dash::bs4DashBrand(
           title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
           color = "primary",
@@ -124,10 +133,11 @@ app_ui <- function(request) {
         )
       ),
       bs4Dash::bs4DashBody(
-        tags$head(tags$style(".navbar-nav .nav-link {visibility: hidden;}")),
+        tags$head(tags$style(HTML(css_navbar))),
+        div(style = "margin-top: 8em;"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
-          div(style = "margin-top: 71px;"),
+          div(style = "margin-top: 8em;"),
           bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b style='font-size:22px'> Filtros </b>"),
@@ -589,13 +599,18 @@ app_ui <- function(request) {
           ),
           bs4Dash::bs4TabItem(
             tabName = "aparecida",
-            h2(tags$b("A história de Aparecida")),
+            div(
+              HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+              h2(tags$b("A história de Aparecida"), style = "padding-left: 0.3em"),
+              hr(style = "margin-bottom: 0px;"),
+              style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
+            ),
             HTML(
               "
-              <p align='justify'; style='font-size:18px'>
+              <p align='justify'; style='font-size:18px; padding: 0 0.5em'>
               Para melhor entender os resultados dos indicadores apresentados neste painel em diferentes contextos e em como eles
               refletem as situações de vulnerabilidade da mulher ao óbito materno, acesse, clicando na imagem abaixo ou
-              <a href = 'https://observatorioobstetricobr.org/a-historia-de-aparecida/' target = _blank>neste link</a>, a história de Aparecida,
+              <a href = 'https://observatorioobstetricobr.org/a-historia-de-aparecida/' target = _blank>neste link</a>, a história de Aparecida -
               uma mulher preta, que mora num município pequeno, localizado no interior de um estado brasileiro. A história de Aparecida,
               apesar de não ser uma história real, retrata as condições de vida e saúde de muitas brasileiras, evidenciando a grande
               vulnerabilidade à morte materna a qual essas mulheres estão submetidas.
