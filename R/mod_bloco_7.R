@@ -12,7 +12,7 @@ mod_bloco_7_ui <- function(id) {
   tagList(
     div(
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Mortalidade neonatal e fetal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(tags$b(HTML("Mortalidade fetal e neonatal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;"),
       style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
     ),

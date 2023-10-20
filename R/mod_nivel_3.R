@@ -270,6 +270,25 @@ mod_nivel_3_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    output$titulo_pagina <- renderUI({
+      if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
+        ano <- glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")
+      } else {
+        ano <- filtros()$ano2[1]
+      }
+
+      local1 <- dplyr::case_when(
+        filtros()$nivel == "Nacional" ~ "Brasil",
+        filtros()$nivel == "Regional" ~ filtros()$regiao,
+        filtros()$nivel == "Estadual" ~ filtros()$estado,
+        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+        filtros()$nivel == "Municipal" ~ filtros()$municipio
+      )
+
+      tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
+    })
+
     ##### Criando o vetor que recebe os indicadores que precisam ser criados um a um #####
     indicadores_sem_incompletude <- tabela_indicadores$nome_abreviado[which(tabela_indicadores$num_indicadores_incompletude == 0)]
 
@@ -966,8 +985,8 @@ mod_nivel_3_server <- function(id, filtros){
           ) |>
           dplyr::group_by(regiao) |>
           dplyr::summarise(
-            numerador := ((((sum(abortos_sus_menor_30, na.rm = TRUE)*0.90) + (sum(abortos_sus_30_a_39, na.rm = TRUE)*0.85) + (sum(abortos_sus_40_a_49, na.rm = TRUE)*0.75)) * 3) + (((sum(abortos_ans_menor_30, na.rm = TRUE)*0.90) + (sum(abortos_ans_30_a_39, na.rm = TRUE)*0.85) + (sum(abortos_ans_40_a_49, na.rm = TRUE)*0.75)) * 2)),
-            denominador := sum(pop_fem_10_49, na.rm = TRUE),
+            numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 8)),
+            denominador := sum(pop_fem_10_49),
             proporcao = round(numerador/denominador * 1000, 1)
           ) |>
           dplyr::ungroup()
@@ -978,8 +997,8 @@ mod_nivel_3_server <- function(id, filtros){
             ) |>
             dplyr::group_by(regiao) |>
             dplyr::summarise(
-              numerador := ((((sum(abortos_sus_menor_30, na.rm = TRUE)*0.9)+(sum(abortos_sus_30_a_39, na.rm = TRUE)*0.85)+(sum(abortos_sus_40_a_49, na.rm = TRUE)*0.75))*3)+(((sum(abortos_ans_menor_30, na.rm = TRUE)*0.9)+(sum(abortos_ans_30_a_39, na.rm = TRUE)*0.85)+(sum(abortos_ans_40_a_49, na.rm = TRUE)*0.75))*2)),
-              denominador := sum(total_de_nascidos_vivos, na.rm = TRUE),
+              numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 8)),
+              denominador := sum(total_de_nascidos_vivos),
               proporcao = round(numerador/denominador * 100, 1)
             ) |>
             dplyr::ungroup()
@@ -2207,7 +2226,7 @@ mod_nivel_3_server <- function(id, filtros){
               type = "line",
               highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
               tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} ({point.tx_abortos_mil_mulheres_lim_inf:,f} - {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
+                pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
               ),
               color = '#2c115f'
             ) |>
@@ -2222,7 +2241,7 @@ mod_nivel_3_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
               color = '#2c115f',
               tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} ({point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} - {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
+                pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
               )
             ) |>
             highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
@@ -2294,7 +2313,7 @@ mod_nivel_3_server <- function(id, filtros){
                 type = "line",
                 highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio),
                 tooltip = list(
-                  pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} ({point.tx_abortos_mil_mulheres_lim_inf:,f} - {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
+                  pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
                 ),
                 dashStyle = "ShortDot",
                 color = "#721F81FF",
@@ -2308,7 +2327,7 @@ mod_nivel_3_server <- function(id, filtros){
                 type = "line",
                 highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio),
                 tooltip = list(
-                  pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} ({point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} - {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
+                  pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
                 ),
                 dashStyle = "ShortDot",
                 color = "#721F81FF",

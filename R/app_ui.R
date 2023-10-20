@@ -52,6 +52,7 @@ app_ui <- function(request) {
         title = bs4Dash::bs4DashBrand(
           title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
           color = "primary",
+          href = "https://observatorioobstetricobr.org/",
           image = "www/logo-oobr2.png"
         ),
         status = "primary",

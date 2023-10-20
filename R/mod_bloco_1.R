@@ -277,7 +277,7 @@ mod_bloco_1_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    ##### Criando o output que recebe a localidade e o ano escolhidos ####
+    ##### Criando o output que recebe a localidade e o ano escolhidos #####
     output$titulo_localidade <- renderUI({
 
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -320,10 +320,8 @@ mod_bloco_1_server <- function(id, filtros){
       tags$b(texto, style = "font-size: 33px")
     })
 
-
     ##### Definindo as cores para os gráficos #####
     cols <- c("#2c115f", "#b73779", "#fc8961")
-
 
     ##### Dados do primeiro bloco de indicadores para a localidade escolhida #####
     data1 <- reactive({

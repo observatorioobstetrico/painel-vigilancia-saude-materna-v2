@@ -248,7 +248,7 @@ mod_bloco_5_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    ##### Criando o output que recebe a localidade e o ano escolhidos ####
+    ##### Criando o output que recebe a localidade e o ano escolhidos #####
     output$titulo_localidade <- renderUI({
 
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {

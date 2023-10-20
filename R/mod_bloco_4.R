@@ -27,7 +27,7 @@ mod_bloco_4_ui <- function(id){
             width = 5,
             selectizeInput(
               inputId = ns("indicador_robson"),
-              label = "Indicador",
+              label = HTML("<p style='font-size:19px'>Indicador</p>"),
               options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
               choices = c(
                 "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
@@ -694,13 +694,7 @@ mod_bloco_4_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
-    output$comparar <- renderText({filtros()$comparar})
-    output$nivel <- renderText({filtros()$nivel})
-
-    outputOptions(output, "comparar", suspendWhenHidden = FALSE)
-    outputOptions(output, "nivel", suspendWhenHidden = FALSE)
-
-    ##### Criando o output que recebe a localidade e o ano escolhidos ####
+    ##### Criando o output que recebe a localidade e o ano escolhidos #####
     output$titulo_localidade <- renderUI({
 
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -742,6 +736,12 @@ mod_bloco_4_server <- function(id, filtros){
 
       tags$b(texto, style = "font-size: 33px")
     })
+
+    output$comparar <- renderText({filtros()$comparar})
+    output$nivel <- renderText({filtros()$nivel})
+
+    outputOptions(output, "comparar", suspendWhenHidden = FALSE)
+    outputOptions(output, "nivel", suspendWhenHidden = FALSE)
 
     ##### Dados para o resumo do período para a localidade escolhida #####
     output$input_localidade_resumo1 <- renderUI({

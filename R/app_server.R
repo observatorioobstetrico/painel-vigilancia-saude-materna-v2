@@ -17,6 +17,7 @@ app_server <- function(input, output, session) {
   mod_bloco_7_server("bloco_7_1", filtros = filtros)
   mod_nivel_3_server("nivel_3_1", filtros = filtros)
 
+
   output$label_nivel_comp <- renderUI({
     div(
       tags$b(HTML("Nível de análise &nbsp;")),
@@ -50,71 +51,91 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     )
   })
 
+  rv <- reactiveValues(input_nivel_anterior = NULL)
   observeEvent(input$nivel, {
-    if (input$nivel != "Municipal") {
-      updateSelectizeInput(
-        inputId = "nivel2",
-        choices = c("Nacional", "Regional", "Macrorregião de saúde", "Microrregião de saúde", "Estadual", "Municipal")
-      )
+    if (length(rv$input_nivel_anterior) == 1) {
+      rv$input_nivel_anterior <- c(rv$input_nivel_anterior, input$nivel)
     } else {
-      updateSelectizeInput(
-        inputId = "nivel2",
-        choices = c("Nacional", "Regional", "Macrorregião de saúde", "Microrregião de saúde", "Estadual", "Municipal", "Municípios semelhantes")
-      )
+      rv$input_nivel_anterior <- c(rv$input_nivel_anterior[length(rv$input_nivel_anterior)], input$nivel)
     }
   })
 
   observe({
+    if (input$nivel == "Municipal") {
+      if (rv$input_nivel_anterior[length(rv$input_nivel_anterior) - 1] != "Municipal") {
+        updateSelectizeInput(
+          inputId = "nivel2",
+          choices = c("Nacional", "Regional", "Macrorregião de saúde", "Microrregião de saúde", "Estadual", "Municipal", "Municípios semelhantes")
+        )
+      }
+    }
+    if (input$nivel != "Municipal") {
+      if (length(rv$input_nivel_anterior) > 1) {
+        if (rv$input_nivel_anterior[length(rv$input_nivel_anterior) - 1] == "Municipal") {
+          updateSelectizeInput(
+            inputId = "nivel2",
+            choices = c("Nacional", "Regional", "Macrorregião de saúde", "Microrregião de saúde", "Estadual", "Municipal")
+          )
+        }
+      }
+    }
+  })
 
+  observeEvent(input$estado_municipio, {
     updateSelectizeInput(
       session,
       inputId = "municipio",
       choices = sort(municipios_choices$municipio[which(municipios_choices$uf == input$estado_municipio)]),
       server = FALSE
     )
+  })
 
-    updateSelectizeInput(
-      session,
-      inputId = "macro",
-      choices = sort(macro_r_saude_choices$macro_r_saude[which(macro_r_saude_choices$uf == input$estado_macro)]),
-      server = FALSE
-    )
-
+  observeEvent(input$estado_micro,{
     updateSelectizeInput(
       session,
       inputId = "micro",
       choices = sort(micro_r_saude_choices$r_saude[which(micro_r_saude_choices$uf == input$estado_micro)]),
       server = FALSE
     )
+  })
 
+  observeEvent(input$estado_macro, {
+    updateSelectizeInput(
+      session,
+      inputId = "macro",
+      choices = sort(macro_r_saude_choices$macro_r_saude[which(macro_r_saude_choices$uf == input$estado_macro)]),
+      server = FALSE
+    )
+  })
+
+  observeEvent(input$estado_municipio2, {
     updateSelectizeInput(
       session,
       inputId = "municipio2",
       choices = sort(municipios_choices$municipio[which(municipios_choices$uf == input$estado_municipio2)]),
       server = FALSE
     )
+  })
 
+  observeEvent(input$estado_micro2, {
+    updateSelectizeInput(
+      session,
+      inputId = "micro2",
+      choices = sort(micro_r_saude_choices$r_saude[which(micro_r_saude_choices$uf == input$estado_micro2)]),
+      server = FALSE
+    )
+  })
+
+  observeEvent(input$estado_macro2, {
     updateSelectizeInput(
       session,
       inputId = "macro2",
       choices = sort(macro_r_saude_choices$macro_r_saude[which(macro_r_saude_choices$uf == input$estado_macro2)]),
       server = FALSE
     )
+  })
 
-    updateSelectizeInput(
-      session,
-      inputId = "micro2",
-      choices = sort(micro_r_saude_choices$r_saude[which(micro_r_saude_choices$uf == input$estado_micro2)]),
-      server = FALSE
-    )
-
-    updateSelectizeInput(
-      session,
-      inputId = "micro2",
-      choices = sort(micro_r_saude_choices$r_saude[which(micro_r_saude_choices$uf == input$estado_micro2)]),
-      server = FALSE
-    )
-
+  observeEvent(input$bloco, {
     updateSelectizeInput(
       session,
       inputId = "indicador",
@@ -122,9 +143,6 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       server = FALSE
     )
 
-  })
-
-  observeEvent(input$bloco, {
     if (input$bloco == "bloco4") {
       updateSelectizeInput(
         session,
@@ -148,12 +166,13 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "tipo_do_indicador_blocos4_6",
         choices = c(
-          "Relacionados à mortalidade neonatal" = "neonatal",
-          "Relacionados à morbidade fetal" = "fetal"
+          "Relacionados à morbidade fetal" = "fetal",
+          "Relacionados à mortalidade neonatal" = "neonatal"
         )
       )
     }
   })
+
 
   observeEvent(c(input$tipo_do_indicador_blocos4_6, input$nivel), {
     if (input$tipo_do_indicador_blocos4_6 == "robson") {
