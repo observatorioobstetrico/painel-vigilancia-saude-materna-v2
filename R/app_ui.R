@@ -10,26 +10,10 @@
 #'
 #' @import highcharter
 
-
-
-css_navbar <- "
-  .navbar {
-    position: fixed;
-    width: 100%;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: .5rem .5rem;
-  }
-"
-
 app_ui <- function(request) {
   tagList(
+    includeCSS("inst/app/www/custom.css"),
+    tags$head(tags$script(src="altura.js")),
     tags$style(HTML("
       .shiny-output-error-validation {
         color: black;
@@ -48,7 +32,7 @@ app_ui <- function(request) {
       dark = NULL,
       title = "Painel de Vigilância da Saúde Materna",
       bs4Dash::bs4DashNavbar(
-        #fixed = TRUE,
+        fixed = TRUE,
         title = bs4Dash::bs4DashBrand(
           title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
           color = "primary",
@@ -134,11 +118,10 @@ app_ui <- function(request) {
         )
       ),
       bs4Dash::bs4DashBody(
-        tags$head(tags$style(HTML(css_navbar))),
-        div(style = "margin-top: 8em;"),
+        div(class = "div-dependente"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
-          div(style = "margin-top: 8em;"),
+          #div(class = "div-dependente"),
           bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b style='font-size:22px'> Filtros </b>"),
@@ -601,10 +584,10 @@ app_ui <- function(request) {
           bs4Dash::bs4TabItem(
             tabName = "aparecida",
             div(
+              class = "div-titulo",
               HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
               h2(tags$b("A história de Aparecida"), style = "padding-left: 0.3em"),
-              hr(style = "margin-bottom: 0px;"),
-              style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
+              hr(style = "margin-bottom: 0px;")
             ),
             HTML(
               "
@@ -621,11 +604,11 @@ app_ui <- function(request) {
             HTML(
               '
               <div style = "display: flex; justify-content: center; align-items: center;">
-                <div class="card2 blue2" style = "width: 55vw; height: 67vh;">
-                <a href = "https://observatorioobstetricobr.org/a-historia-de-aparecida/" target = "_blank">
-                  <image src = "www/aparecida.png" style = "width: 100%; margin: auto; display: block;">
-                </a>
-              </div>
+                <div class="card2 blue2" style = "display: flex; justify-content: center; align-items: center; width: 55vw; height: 67vh;">
+                  <a href = "https://observatorioobstetricobr.org/a-historia-de-aparecida/" target = "_blank">
+                    <image src = "www/aparecida.png" style = "max-width: 100%; max-height: 100%;">
+                  </a>
+                </div>
               </div>
               '
             )

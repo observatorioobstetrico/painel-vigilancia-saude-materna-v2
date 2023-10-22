@@ -83,3 +83,12 @@
   transition: all 0.3s ease-out;
 }
 }
+
+.div-titulo {
+  position: fixed;
+  top: 56px;
+  width: 93.75%;
+  background-color: white;
+  z-index: 100;
+}
+

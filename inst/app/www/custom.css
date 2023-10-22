@@ -35,5 +35,41 @@
   text-align: center;
 }
 
+.div-titulo {
+  position: fixed;
+  top: 56px;
+  width: 93.75%;
+  background-color: white;
+  z-index: 100;
+  height: fit-content;
+}
+
+.div-dependente {
+  top: 56px;
+}
+
+.layout-navbar-fixed .wrapper .main-sidebar:hover .brand-link {
+  transition: width .3s ease-in-out;
+  width: 470px!important;
+}
+
+.layout-navbar-fixed .wrapper .brand-link {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  transition: width .3s ease-in-out;
+  width: 470px;
+  z-index: 1035;
+}
+
+.brand-link .brand-image {
+  float: left;
+  line-height: .8;
+  margin-left: 0.1em;
+  margin-right: 0.5rem;
+  margin-top: -3px;
+  max-height: 33px;
+  width: auto;
+}
 
 

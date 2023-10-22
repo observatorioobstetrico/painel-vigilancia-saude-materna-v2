@@ -13,10 +13,10 @@ mod_sobre_ui <- function(id){
   tagList(
     tags$head(tags$style(".row {padding: 0 0.6em}")),
     div(
+      class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
       h2(tags$b("Painel de Vigilância da Saúde Materna"), style = "padding-left: 0.4em"),
-      hr(style = "margin-bottom: 0px;"),
-      style = "position: fixed; top: 56px; width: 93.75%; background-color: white; z-index: 100;"
+      hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
       HTML(
