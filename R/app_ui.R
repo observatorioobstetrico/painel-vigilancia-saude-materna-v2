@@ -13,7 +13,7 @@
 app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/custom.css"),
-    tags$head(tags$script(src="altura.js")),
+    tags$head(tags$script(src = "funcoes_javascript.js")),
     tags$style(HTML("
       .shiny-output-error-validation {
         color: black;
@@ -37,7 +37,7 @@ app_ui <- function(request) {
           title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
           color = "primary",
           href = "https://observatorioobstetricobr.org/",
-          image = "www/logo-oobr2.png"
+          image = "www/logos/logo-oobr-curto.png"
         ),
         status = "primary",
         skin = "light"
@@ -121,7 +121,6 @@ app_ui <- function(request) {
         div(class = "div-dependente"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
-          #div(class = "div-dependente"),
           bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b style='font-size:22px'> Filtros </b>"),
@@ -635,10 +634,10 @@ golem_add_external_resources <- function() {
   )
 
   tags$head(
-    favicon(),
+    favicon(ext = "png"),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "Painel de vigilância da saúde materna"
+      app_title = "Painel de Vigilância da Saúde Materna"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
