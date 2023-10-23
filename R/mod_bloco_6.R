@@ -1181,13 +1181,13 @@ mod_bloco_6_server <- function(id, filtros){
 
      data6_rmm_corrigida <- reactive({
        if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
-         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") %>%
-           mutate(
+         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
+           dplyr::mutate(
              rmm_c=RMM
            )
        } else{
-         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") %>%
-           mutate(
+         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
+           dplyr::mutate(
              rmm_c=rmm
            )
        }
@@ -1222,13 +1222,13 @@ mod_bloco_6_server <- function(id, filtros){
 
      data6_comp_rmm_corrigida <- reactive({
        if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
-         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") %>%
-           mutate(
+         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
+           dplyr::mutate(
              rmm_c=RMM
            )
        } else{
-         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") %>%
-           mutate(
+         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
+           dplyr::mutate(
              rmm_c=rmm
            )
        }
@@ -1304,11 +1304,11 @@ mod_bloco_6_server <- function(id, filtros){
 
      data6_resumo_rmm_corrigida <- reactive({
        if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") %>%
-           mutate(rmm_c = RMM_C)
+         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
+           dplyr::mutate(rmm_c = RMM_C)
        } else {
-         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") %>%
-           mutate(rmm_c = rmm)
+         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
+           dplyr::mutate(rmm_c = rmm)
        }
 
        return(result)

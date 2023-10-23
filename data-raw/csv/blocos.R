@@ -24,7 +24,9 @@ rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep 
   )
 
 #Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
-rmm_corrigida <- read_csv("data-raw/csv/rmm_corrigida_2012-2021.csv")
+rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2021.csv") |>
+  dplyr::select(ano, localidade, RMM) |>
+  dplyr::mutate(RMM = round(RMM, 1))
 
 #Carregando a base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
 municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
