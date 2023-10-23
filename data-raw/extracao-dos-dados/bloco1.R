@@ -1204,5 +1204,5 @@ df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo) |>
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2021.csv")
+write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2021.csv", row.names = FALSE)
 
