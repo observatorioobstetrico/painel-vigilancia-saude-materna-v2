@@ -998,158 +998,321 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
+  # ##### Calculando a RMM corrigida para o resumo do período #####
+  #    data6_resumo_fator_de_correcao <- reactive({
+  #      if (filtros()$comparar == "Não") {
+  #        sufixo_inputs <- ""
+  #      } else {
+  #        if (input$tabset1 == "tabpanel_mortalidade") {
+  #          req(input$localidade_resumo_mort)
+  #          if (input$localidade_resumo_mort == "escolha1") {
+  #            sufixo_inputs <- ""
+  #          } else {
+  #            sufixo_inputs <- "2"
+  #          }
+  #        } else {
+  #          req(input$localidade_resumo_morb)
+  #          if (input$localidade_resumo_morb == "escolha1") {
+  #            sufixo_inputs <- ""
+  #          } else {
+  #            sufixo_inputs <- "2"
+  #          }
+  #        }
+  #      }
+  #      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
+  #        if (nivel_selecionado() == "Estadual") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()[[paste0("estado", sufixo_inputs)]],
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            ) |>
+  #            dplyr::group_by(localidade) |>
+  #            dplyr::summarise(
+  #              fator_de_correcao = mean(fator_de_correcao)
+  #            )
+  #        } else if (nivel_selecionado() == "Regional") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()[[paste0("regiao", sufixo_inputs)]],
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            ) |>
+  #            dplyr::group_by(localidade) |>
+  #            dplyr::summarise(
+  #              fator_de_correcao = mean(fator_de_correcao)
+  #            )
+  #        } else {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == "Brasil",
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            ) |>
+  #            dplyr::group_by(localidade) |>
+  #            dplyr::summarise(
+  #              fator_de_correcao = mean(fator_de_correcao)
+  #            )
+  #        }
+  #      } else {
+  #        data.frame(
+  #          fator_de_correcao = 1,
+  #          localidade = dplyr::case_when(
+  #            nivel_selecionado() == "Nacional" ~ "Brasil",
+  #            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
+  #            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
+  #            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
+  #            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
+  #            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
+  #         )
+  #        )
+  #      }
+  #
+  #    })
+  #
+  #    data6_resumo_rmm_corrigida <- reactive({
+  #      dplyr::left_join(data6_resumo(), rmm_corrigida, by = c("localidade")) |>
+  #        dplyr::mutate(
+  #          rmm = round(rmm*fator_de_correcao, 1)
+  #        )
+  #    })
+  #
+  #
+  #    ##### Calculando a RMM corrigida para os gráficos #####
+  #    data6_fator_de_correcao <- reactive({
+  #      if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
+  #        if (filtros()$nivel == "Estadual") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()$estado,
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        } else if (filtros()$nivel == "Regional") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()$regiao,
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        } else {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == "Brasil",
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        }
+  #      } else {
+  #        data.frame(
+  #          ano = filtros()$ano2[1]:filtros()$ano2[2],
+  #          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
+  #        )
+  #      }
+  #    })
+  #
+  #    data6_fator_de_correcao_comp <- reactive({
+  #      if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
+  #        if (filtros()$nivel2 == "Estadual") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()$estado,
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        } else if (filtros()$nivel2 == "Regional") {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == filtros()$regiao,
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        } else {
+  #          rmm_fator_de_correcao |>
+  #            dplyr::filter(
+  #              localidade == "Brasil",
+  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+  #            )
+  #        }
+  #      } else {
+  #        data.frame(
+  #          ano = filtros()$ano2[1]:filtros()$ano2[2],
+  #          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
+  #        )
+  #      }
+  #    })
+  #
+  #    data6_rmm_corrigida <- reactive({
+  #      dplyr::full_join(data6(), data6_fator_de_correcao(), by = "ano") |>
+  #        dplyr::mutate(
+  #          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao()$fator_de_correcao[which(data6_fator_de_correcao()$ano == 2020)]),
+  #          rmm = round(rmm*fator_de_correcao, 1)
+  #        )
+  #    })
+  #
+  #    data6_comp_rmm_corrigida <- reactive({
+  #      dplyr::full_join(data6_comp(), data6_fator_de_correcao_comp(), by = "ano") |>
+  #        dplyr::mutate(
+  #          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao_comp()$fator_de_correcao[which(data6_fator_de_correcao_comp()$ano == 2020)]),
+  #          rmm = round(rmm*fator_de_correcao, 1)
+  #        )
+  #    })
 
-    ##### Calculando a RMM corrigida para o resumo do período #####
-    data6_resumo_fator_de_correcao <- reactive({
-      if (filtros()$comparar == "Não") {
-        sufixo_inputs <- ""
-      } else {
-        if (input$tabset1 == "tabpanel_mortalidade") {
-          req(input$localidade_resumo_mort)
-          if (input$localidade_resumo_mort == "escolha1") {
-            sufixo_inputs <- ""
-          } else {
-            sufixo_inputs <- "2"
-          }
-        } else {
-          req(input$localidade_resumo_morb)
-          if (input$localidade_resumo_morb == "escolha1") {
-            sufixo_inputs <- ""
-          } else {
-            sufixo_inputs <- "2"
-          }
-        }
-      }
-      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
-        if (nivel_selecionado() == "Estadual") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()[[paste0("estado", sufixo_inputs)]],
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            ) |>
-            dplyr::group_by(localidade) |>
-            dplyr::summarise(
-              fator_de_correcao = mean(fator_de_correcao)
-            )
-        } else if (nivel_selecionado() == "Regional") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()[[paste0("regiao", sufixo_inputs)]],
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            ) |>
-            dplyr::group_by(localidade) |>
-            dplyr::summarise(
-              fator_de_correcao = mean(fator_de_correcao)
-            )
-        } else {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == "Brasil",
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            ) |>
-            dplyr::group_by(localidade) |>
-            dplyr::summarise(
-              fator_de_correcao = mean(fator_de_correcao)
-            )
-        }
-      } else {
-        data.frame(
-          fator_de_correcao = 1,
-          localidade = dplyr::case_when(
-            nivel_selecionado() == "Nacional" ~ "Brasil",
-            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
-          )
-        )
-      }
+     ########## Calculando as RMM com correção
 
-    })
+     data6_correcao_rmm <- reactive({
+       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+         if(filtros()$nivel == "Estadual"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$estado,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         } else if(filtros()$nivel == "Regional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$regiao,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         } else if(filtros()$nivel=="Nacional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == "Brasil",
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         }
+       }
+       else{
+         data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
+       }
+     })
 
-    data6_resumo_rmm_corrigida <- reactive({
-      dplyr::full_join(data6_resumo(), data6_resumo_fator_de_correcao(), by = "localidade") |>
-        dplyr::mutate(
-          rmm = round(rmm*fator_de_correcao, 1)
-        )
-    })
+     data6_rmm_corrigida <- reactive({
+       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") %>%
+           mutate(
+             rmm_c=RMM
+           )
+       } else{
+         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") %>%
+           mutate(
+             rmm_c=rmm
+           )
+       }
+     })
 
+     data6_comp_correcao_rmm <- reactive({
+       if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+         if(filtros()$nivel2 == "Estadual"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$estado,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         } else if(filtros()$nivel2 == "Regional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$regiao,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         } else if(filtros()$nivel2=="Nacional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == "Brasil",
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             )
+         }
+       }
+       else{
+         data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
+       }
+     })
 
-    ##### Calculando a RMM corrigida para os gráficos #####
-    data6_fator_de_correcao <- reactive({
-      if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-        if (filtros()$nivel == "Estadual") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()$estado,
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        } else if (filtros()$nivel == "Regional") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()$regiao,
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        } else {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == "Brasil",
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        }
-      } else {
-        data.frame(
-          ano = filtros()$ano2[1]:filtros()$ano2[2],
-          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-        )
-      }
-    })
+     data6_comp_rmm_corrigida <- reactive({
+       if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") %>%
+           mutate(
+             rmm_c=RMM
+           )
+       } else{
+         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") %>%
+           mutate(
+             rmm_c=rmm
+           )
+       }
+     })
 
-    data6_fator_de_correcao_comp <- reactive({
-      if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
-        if (filtros()$nivel2 == "Estadual") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()$estado,
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        } else if (filtros()$nivel2 == "Regional") {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == filtros()$regiao,
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        } else {
-          rmm_fator_de_correcao |>
-            dplyr::filter(
-              localidade == "Brasil",
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-            )
-        }
-      } else {
-        data.frame(
-          ano = filtros()$ano2[1]:filtros()$ano2[2],
-          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-        )
-      }
-    })
+     data6_resumo_correcao_rmm <- reactive({
+       if (filtros()$comparar == "Não") {
+         sufixo_inputs <- ""
+       } else {
+         if (input$tabset1 == "tabpanel_mortalidade") {
+           req(input$localidade_resumo_mort)
+           if (input$localidade_resumo_mort == "escolha1") {
+             sufixo_inputs <- ""
+           } else {
+             sufixo_inputs <- "2"
+           }
+         } else {
+           req(input$localidade_resumo_morb)
+           if (input$localidade_resumo_morb == "escolha1") {
+             sufixo_inputs <- ""
+           } else {
+             sufixo_inputs <- "2"
+           }
+         }
+       }
 
-    data6_rmm_corrigida <- reactive({
-      dplyr::full_join(data6(), data6_fator_de_correcao(), by = "ano") |>
-        dplyr::mutate(
-          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao()$fator_de_correcao[which(data6_fator_de_correcao()$ano == 2020)]),
-          rmm = round(rmm*fator_de_correcao, 1)
-        )
-    })
+       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+         if(filtros()$nivel == "Estadual"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$estado,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             ) |>
+             dplyr::group_by(localidade) |>
+             dplyr::summarise(
+               RMM_C = mean(RMM)
+             )
+         } else if(filtros()$nivel == "Regional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == filtros()$regiao,
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             ) |>
+             dplyr::group_by(localidade) |>
+             dplyr::summarise(
+               RMM_C = mean(RMM)
+             )
+         } else if(filtros()$nivel=="Nacional"){
+           rmm_corrigida |>
+             dplyr::filter(
+               localidade == "Brasil",
+               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+             ) |>
+             dplyr::group_by(localidade) |>
+             dplyr::summarise(
+               RMM_C = mean(RMM)
+             )
+         }
+       }
+       else{
+         data.frame(
+           localidade = dplyr::case_when(
+             nivel_selecionado() == "Nacional" ~ "Brasil",
+             nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
+             nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
+             nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
+             nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
+             nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
+           )
+         )
+       }
+     })
 
-    data6_comp_rmm_corrigida <- reactive({
-      dplyr::full_join(data6_comp(), data6_fator_de_correcao_comp(), by = "ano") |>
-        dplyr::mutate(
-          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao_comp()$fator_de_correcao[which(data6_fator_de_correcao_comp()$ano == 2020)]),
-          rmm = round(rmm*fator_de_correcao, 1)
-        )
-    })
+     data6_resumo_rmm_corrigida <- reactive({
+       if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
+         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") %>%
+           mutate(rmm_c = RMM_C)
+       } else {
+         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") %>%
+           mutate(rmm_c = rmm)
+       }
+
+       return(result)
+     })
 
 
     ##### Criando as caixinhas do resumo do período #####
@@ -1178,7 +1341,7 @@ mod_bloco_6_server <- function(id, filtros){
     output$caixa_b6_mort_i2 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo_rmm_corrigida(),
-        indicador = "rmm",
+        indicador = "rmm_c",
         titulo = "Razão de mortalidade materna por 100.000 nascidos vivos",
         tem_meta = TRUE,
         valor_de_referencia = data6_resumo_referencia()$rmm,
@@ -1335,7 +1498,8 @@ mod_bloco_6_server <- function(id, filtros){
             data = data6_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
-            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm_c,
+                               group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_referencia(),
@@ -1355,13 +1519,13 @@ mod_bloco_6_server <- function(id, filtros){
             data = data6_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
-            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_comp_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil", unique(data6_comp()$class)),
-            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
