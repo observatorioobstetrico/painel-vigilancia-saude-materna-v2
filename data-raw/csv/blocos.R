@@ -23,6 +23,9 @@ rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep 
     )
   )
 
+#Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
+rmm_corrigida <- read_csv("data-raw/csv/rmm_corrigida_2012-2021.csv")
+
 #Carregando a base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
 municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
   janitor::clean_names() |>
@@ -964,6 +967,7 @@ usethis::use_data(macro_r_saude_choices, overwrite = TRUE)
 usethis::use_data(base_referencia_baixo_peso, overwrite = TRUE)
 usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
+usethis::use_data(rmm_corrigida, overwrite = TRUE)
 
 
 
