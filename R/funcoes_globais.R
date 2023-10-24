@@ -216,6 +216,117 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 }
 
 
+cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa = "300px", fonte_titulo = "16px", width_caixa = 12) {
+
+  if (indicador == "baixo peso") {
+    valor_indicador1 <- dados[["porc_peso_menor_1500"]]
+    valor_indicador2 <- dados[["porc_peso_1500_a_1999"]]
+    valor_indicador3 <- dados[["porc_peso_2000_a_2499"]]
+  }
+
+  if (indicador == "prematuridade") {
+    valor_indicador1 <- dados[["porc_menos_de_28_semanas"]]
+    valor_indicador2 <- dados[["porc_28_a_32_semanas"]]
+    valor_indicador3 <- dados[["porc_33_a_34_semanas"]]
+    valor_indicador4 <- dados[["porc_35_a_36_semanas"]]
+    valor_indicador5 <- dados[["porc_premat_faltantes"]]
+  }
+
+  if (is.nan(valor_indicador1)) {
+    texto1 <- "---"
+  } else {
+    texto1 <- "{formatC(valor_indicador1, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (is.nan(valor_indicador2)) {
+    texto2 <- "---"
+  } else {
+    texto2 <- "{formatC(valor_indicador2, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (is.nan(valor_indicador3)) {
+    texto3 <- "---"
+  } else {
+    texto3 <- "{formatC(valor_indicador3, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (indicador == "prematuridade") {
+    if (is.nan(valor_indicador4)) {
+      texto4 <- "---"
+    } else {
+      texto4 <- "{formatC(valor_indicador4, big.mark = '.', decimal.mark = ',')}%"
+    }
+
+    if (is.nan(valor_indicador5)) {
+      texto5 <- "---"
+    } else {
+      texto5 <- "{formatC(valor_indicador5, big.mark = '.', decimal.mark = ',')}%"
+    }
+  }
+
+  style_texto <- "font-size: 32px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+  style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
+
+  if (indicador == "baixo peso") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "possuem peso < 1500 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+        )
+      )
+    )
+  } else if (indicador == "prematuridade") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "nasceram com menos de 28 semanas")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "nasceram de 28 a 32 semanas")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "nasceram de 33 a 34 semanas")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+          p(style = style_descricao, "nasceram de 35 a 36 semanas")
+        ),        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+          p(style = style_descricao, "não possuem informação")
+        )
+      )
+    )
+
+  }
+
+}
+
+
+
 cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
 
   if (bloco == "bloco6") {
