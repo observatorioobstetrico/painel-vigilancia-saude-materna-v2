@@ -1278,12 +1278,12 @@ mod_bloco_5_server <- function(id, filtros){
       highcharter::highchart() |>
         highcharter::hc_add_series(
           data = data5_juncao_aux(),
-          name = "< 1500 g",
-          highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
+          name = "Entre 2000 e 2499 g",
+          highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
           type = "column",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -1298,12 +1298,12 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         highcharter::hc_add_series(
           data = data5_juncao_aux(),
-          name = "Entre 2000 e 2499 g",
-          highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
+          name = "< 1500 g",
+          highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
           type = "column",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
           )
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
@@ -1327,22 +1327,12 @@ mod_bloco_5_server <- function(id, filtros){
         )  |>
         highcharter::hc_add_series(
           data = data5_juncao_aux(),
-          name = "Menos de 28 semanas",
-          highcharter::hcaes(x = ano, y = porc_menos_de_28_semanas),
+          name = "De 35 a 36 semanas",
+          highcharter::hcaes(x = ano, y = porc_35_a_36_semanas ),
           type = "column",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_menos_de_28_semanas:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data5_juncao_aux(),
-          name = "De 28 a 32 semanas",
-          highcharter::hcaes(x = ano , y = porc_28_a_32_semanas),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_28_a_32_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_35_a_36_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -1357,12 +1347,22 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         highcharter::hc_add_series(
           data = data5_juncao_aux(),
-          name = "De 35 a 36 semanas",
-          highcharter::hcaes(x = ano, y = porc_35_a_36_semanas ),
+          name = "De 28 a 32 semanas",
+          highcharter::hcaes(x = ano , y = porc_28_a_32_semanas),
           type = "column",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_35_a_36_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_28_a_32_semanas:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          data = data5_juncao_aux(),
+          name = "Menos de 28 semanas",
+          highcharter::hcaes(x = ano, y = porc_menos_de_28_semanas),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_menos_de_28_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
