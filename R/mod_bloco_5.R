@@ -16,6 +16,22 @@ mod_bloco_5_ui <- function(id) {
       h2(tags$b(HTML("Condições de nascimento: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
+    conditionalPanel(
+      ns = ns,
+      condition = "output.comparar == 'Sim'",
+      column(
+        width = 12,
+        HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+        HTML(
+          "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição proporcional,
+                passe o cursor do mouse sobre a barra que contém a categoria de interesse.
+                </b> </div>"
+        ),
+        hr(),
+        HTML("<span style='display: block; margin-bottom: 25px;'> </span>"),
+      )
+    ),
     fluidRow(
       column(
         width = 4,
@@ -846,6 +862,8 @@ mod_bloco_5_server <- function(id, filtros){
         filtros()$nivel == "Municipal" ~ filtros()$municipio
       )
     })
+    output$comparar <- renderText({filtros()$comparar})
+    outputOptions(output, "comparar", suspendWhenHidden = FALSE)
 
     output$b5_i1 <- renderUI({
       cria_caixa_server(
@@ -1206,7 +1224,8 @@ mod_bloco_5_server <- function(id, filtros){
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
         highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) |>
+        highcharter::hc_legend(reversed = TRUE)
     })
 
     #grafico distribuicao da prematuridade
@@ -1265,7 +1284,8 @@ mod_bloco_5_server <- function(id, filtros){
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
         highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) |>
+        highcharter::hc_legend(reversed = TRUE)
 
 
     })
