@@ -52,32 +52,9 @@ mod_bloco_5_ui <- function(id) {
         ),
         fluidRow(
           column(
+            offset = 3,
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i5")), proxy.height = "325px")
-          ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
-          ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i8")), proxy.height = "325px")
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i9")), proxy.height = "325px")
-          ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
           )
         )
       ),
@@ -895,78 +872,14 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     output$b5_i2 <- renderUI({
-      cria_caixa_server(
+      cria_caixa_conjunta_bloco5(
         dados = data_resumo(),
-        indicador = "porc_peso_menor_1500",
-        titulo = "Porcentagem de nascimentos com baixo peso com peso menor que 1500g",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
+        indicador = "baixo peso",
+        titulo = "Dentre os nascidos vivos com baixo peso,"
       )
     })
 
     output$b5_i3 <- renderUI({
-      cria_caixa_server(
-        dados = data_resumo(),
-        indicador = "porc_peso_1500_a_1999",
-        titulo = "Porcentagem de nascimentos com baixo peso com peso entre 1500g e 1999g",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
-
-    output$b5_i4 <- renderUI({
-      cria_caixa_server(
-        dados = data_resumo(),
-        indicador = "porc_peso_2000_a_2499",
-        titulo = "Porcentagem de nascimentos com baixo peso com peso entre 2000g e 2499g",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
-
-    output$b5_i5 <- renderUI({
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_premat",
@@ -990,31 +903,15 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
-    output$b5_i6 <- renderUI({
-      cria_caixa_server(
+    output$b5_i4 <- renderUI({
+      cria_caixa_conjunta_bloco5(
         dados = data_resumo(),
-        indicador = "porc_menos_de_28_semanas",
-        titulo = "Porcentagem de nascimentos prematuros com menos de 28 semanas",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
+        indicador = "prematuridade",
+        titulo = "Dentre os nascimentos prematuros,"
       )
     })
 
-    output$b5_i7 <- renderUI({
+    output$b5_i5 <- renderUI({
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_28_a_32_semanas",
