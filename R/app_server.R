@@ -6,6 +6,7 @@
 #' @noRd
 app_server <- function(input, output, session) {
 
+
   mod_documentacao_server("documentacao_1")
   mod_nivel_1_server("nivel_1_1", filtros = filtros)
   mod_bloco_1_server("bloco_1_1", filtros = filtros)
