@@ -15,6 +15,7 @@ app_server <- function(input, output, session) {
   mod_bloco_5_server("bloco_5_1", filtros = filtros)
   mod_bloco_6_server("bloco_6_1", filtros = filtros)
   mod_bloco_7_server("bloco_7_1", filtros = filtros)
+  mod_bloco_8_server("bloco_8_1", filtros = filtros)
   mod_nivel_3_server("nivel_3_1", filtros = filtros)
 
 

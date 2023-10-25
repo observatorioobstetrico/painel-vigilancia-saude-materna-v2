@@ -98,6 +98,11 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal e neonatal",
               tabName = "bloco_7",
               icon = icon("7")
+            ),
+            bs4Dash::bs4SidebarMenuSubItem(
+              text = "- Asfixia e malformação",
+              tabName = "bloco_8",
+              icon = icon("8")
             )
           ),
           bs4Dash::bs4SidebarMenuItem(
@@ -459,7 +464,8 @@ app_ui <- function(request) {
                       "4 - Assistência ao parto" = "bloco4",
                       "5 - Condições de nascimento" = "bloco5",
                       "6 - Mortalidade e morbidade materna" = "bloco6",
-                      "7 - Mortalidade neonatal e fetal" = "bloco7"
+                      "7 - Mortalidade neonatal e fetal" = "bloco7",
+                      "8 - Asfixia e malformação" = "bloco8"
                     ),
                     width = "98%"
                   )
@@ -571,6 +577,10 @@ app_ui <- function(request) {
           bs4Dash::bs4TabItem(
             tabName = "bloco_7",
             mod_bloco_7_ui("bloco_7_1")
+          ),
+          bs4Dash::bs4TabItem(
+            tabName = "bloco_8",
+            mod_bloco_8_ui("bloco_8_1")
           ),
           bs4Dash::bs4TabItem(
             tabName = "nivel_3",
