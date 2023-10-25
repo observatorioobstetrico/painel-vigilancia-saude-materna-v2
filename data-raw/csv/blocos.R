@@ -158,6 +158,14 @@ bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_
 
 bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 
+# bloco 8
+asfixia_aux <- read.csv("data-raw/csv/asfixia_2015_2021.csv", sep = ';') |>
+  janitor::clean_names()
+
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2015_2021.csv", sep = ';') |>
+  janitor::clean_names() |>
+  dplyr::rename(codmunres = codigo)
+
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
@@ -237,6 +245,15 @@ bloco7 <- bloco7 |>
     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
   )
 
+asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
+
+asfixia <- asfixia |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
+  )
+
+malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
 
 base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
 base_incompletude_sinasc <- base_incompletude_sinasc |>
@@ -960,6 +977,8 @@ usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
 usethis::use_data(bloco7, overwrite = TRUE)
+usethis::use_data(asfixia, overwrite = TRUE)
+usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
 usethis::use_data(municipios_choices, overwrite = TRUE)
