@@ -1192,36 +1192,39 @@ mod_bloco_5_server <- function(id, filtros){
     output$plot1_1 <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "2000 a 2499",
-          data =  data5_juncao_aux()$porc_peso_2000_a_2499,
+          name = "De 2000 a 2499 g",
+          data =  data5_juncao_aux(),
+          highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
           )
-          ) |>
+        ) |>
         highcharter::hc_add_series(
-          name = "1500 a 1999",
-          data =  data5_juncao_aux()$porc_peso_1500_a_1999,
+          name = "De 1500 a 1999 g",
+          data =  data5_juncao_aux(),
+          highcharter::hcaes(x = ano, y = porc_peso_1500_a_1999),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
           )
-          ) |>
+        ) |>
         highcharter::hc_add_series(
-          name = "Menor que 1500",
-          data =  data5_juncao_aux()$porc_peso_menor_1500,
+          name = "Menor que 1500 g",
+          data =  data5_juncao_aux(),
+          highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
           )
-          ) |>
+        ) |>
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
-        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
     })
