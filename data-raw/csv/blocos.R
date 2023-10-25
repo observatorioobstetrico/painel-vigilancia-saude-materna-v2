@@ -1,5 +1,5 @@
 #Carregando a base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
-municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv") |>
+municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -10,7 +10,7 @@ municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmea
     grupo_kmeans
   )
 
-municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv") |>
+municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv", sep = ";") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -105,7 +105,7 @@ bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_mate
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2021.csv", sep = ";") |>
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2021.csv", sep=";") |>
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2021.csv") |>
@@ -144,10 +144,10 @@ base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indi
 #Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde
 bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
 bloco1 <- bloco1 |>
-   dplyr::select(
-     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-     (which(names(bloco1) == "ano") + 1):(which(names(bloco1) == "municipio") - 1)
-    )
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco1) == "ano") + 1):(which(names(bloco1) == "municipio") - 1)
+  )
 
 bloco2 <- dplyr::left_join(bloco2_aux, aux_municipios, by = "codmunres")
 bloco2 <- bloco2 |>
@@ -235,7 +235,6 @@ base_incompletude <- dplyr::full_join(
 
 base_incompletude <- dplyr::inner_join(base_incompletude, base_incompletude_deslocamento)
 
-
 #Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
 base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
 
@@ -265,7 +264,6 @@ rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep 
 rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2021.csv") |>
   dplyr::select(ano, localidade, RMM) |>
   dplyr::mutate(RMM = round(RMM, 1))
-
 
 #Criando os dataframes/vetores contendo as escolhas de municípios, estados e micro e macrorregões de saúde
 municipios_choices <- tabela_aux_municipios |>
@@ -813,7 +811,7 @@ tabela_indicadores <- data.frame(
     rep("Total de nascidos vivos", times=15),
     "sem denominador",
     "Total de nascidos vivos + total de óbits fetais" # Fim do bloco 7
-    ),
+  ),
   num_indicadores_incompletude = c(
     rep(1, times = 12),
     rep(0, times = 2),   #Fim do bloco 1
@@ -966,6 +964,7 @@ usethis::use_data(base_referencia_baixo_peso, overwrite = TRUE)
 usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
+
 
 
 
