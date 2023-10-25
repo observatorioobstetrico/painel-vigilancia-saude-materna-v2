@@ -2312,39 +2312,35 @@ mod_nivel_1_server <- function(id, filtros){
     data6_fator_de_correcao <- reactive({
       if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
         if (filtros()$nivel == "Estadual") {
-          rmm_fator_de_correcao |>
+          rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$estado,
-              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+              ano == filtros()$ano
             ) |>
-            #Tapa buraco enquanto não tem os fatores de correção de 2021
             dplyr::mutate(
-              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
+              ano = filtros()$ano
             )
         } else if (filtros()$nivel == "Regional") {
-          rmm_fator_de_correcao |>
+          rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$regiao,
-              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+              ano == filtros()$ano
             ) |>
-            #Tapa buraco enquanto não tem os fatores de correção de 2021
             dplyr::mutate(
-              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
+              ano = filtros()$ano
             )
         } else {
-          rmm_fator_de_correcao |>
+          rmm_corrigida |>
             dplyr::filter(
               localidade == "Brasil",
-              ano == ifelse(filtros()$ano == 2021, 2020, filtros()$ano) #Tapa buraco enquanto não tem os fatores de correção de 2021
+              ano == filtros()$ano
             ) |>
-            #Tapa buraco enquanto não tem os fatores de correção de 2021
             dplyr::mutate(
-              ano = ifelse(filtros()$ano == 2021, 2021, filtros()$ano)
+              ano = filtros()$ano
             )
         }
       } else {
         data.frame(
-          fator_de_correcao = 1,
           ano = filtros()$ano,
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
@@ -2363,10 +2359,18 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     data6_rmm_corrigida <- reactive({
-      data6_rmm_corrigida_aux() |>
-        dplyr::mutate(
-          rmm = round(rmm*fator_de_correcao, 1)
-        )
+      if(filtros()$nivel %in% c("Nacional", "Regional", "Estadual")){
+        data6_rmm_corrigida_aux() |>
+          dplyr::mutate(
+            rmm_c = RMM
+          )
+      } else {
+        data6_rmm_corrigida_aux() |>
+          dplyr::mutate(
+            rmm_c = rmm
+          )
+      }
+
     })
 
 
@@ -2423,7 +2427,7 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b6_mort_i2 <- renderUI({
       cria_caixa_server(
         dados = data6_rmm_corrigida(),
-        indicador = "rmm",
+        indicador = "rmm_c",
         titulo = "Razão de mortalidade materna por 100.000 nascidos vivos",
         tem_meta = TRUE,
         valor_de_referencia = 30,
