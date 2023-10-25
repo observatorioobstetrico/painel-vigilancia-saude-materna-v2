@@ -1,35 +1,5 @@
-#Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
-base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
-
-#Carregando a base que contém os fatores de correção para a RMM
-rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep = ";", dec = ",", fileEncoding = "utf-8")[, -c(2, 3, 4)] |>
-  janitor::clean_names() |>
-  tidyr::pivot_longer(
-    cols = !localidade,
-    names_to = "ano",
-    values_to = "fator_de_correcao"
-  ) |>
-  dplyr::mutate(
-    ano = dplyr::case_when(
-      ano == "x2012" ~ 2012,
-      ano == "x2013" ~ 2013,
-      ano == "x2014" ~ 2014,
-      ano == "x2015" ~ 2015,
-      ano == "x2016" ~ 2016,
-      ano == "x2017" ~ 2017,
-      ano == "x2018" ~ 2018,
-      ano == "x2019" ~ 2019,
-      ano == "x2020" ~ 2020,
-    )
-  )
-
-#Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
-rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2021.csv") |>
-  dplyr::select(ano, localidade, RMM) |>
-  dplyr::mutate(RMM = round(RMM, 1))
-
 #Carregando a base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
-municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
+municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -40,7 +10,7 @@ municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmea
     grupo_kmeans
   )
 
-municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv", sep = ";") |>
+municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -124,14 +94,8 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao <- as.numeric(bloco4_desl
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade)
 
-bloco5_aux <- read.csv2("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2021.csv") |>
-  janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
-
-# bloco5_aux <- read.csv2("data-raw/csv/dados_bloco5.csv") |>
-#   janitor::clean_names() |>
-#   dplyr::select(!x) |>
-#   dplyr::filter(codmunres %in% aux_municipios$codmunres)
+bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2021.csv") |>
+  janitor::clean_names()
 
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2021.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
@@ -141,7 +105,7 @@ bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_mate
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2021.csv", sep=";") |>
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2021.csv", sep = ";") |>
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2021.csv") |>
@@ -270,6 +234,38 @@ base_incompletude <- dplyr::full_join(
 )
 
 base_incompletude <- dplyr::inner_join(base_incompletude, base_incompletude_deslocamento)
+
+
+#Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
+base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
+
+#Carregando a base que contém os fatores de correção para a RMM
+rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep = ";", dec = ",", fileEncoding = "utf-8")[, -c(2, 3, 4)] |>
+  janitor::clean_names() |>
+  tidyr::pivot_longer(
+    cols = !localidade,
+    names_to = "ano",
+    values_to = "fator_de_correcao"
+  ) |>
+  dplyr::mutate(
+    ano = dplyr::case_when(
+      ano == "x2012" ~ 2012,
+      ano == "x2013" ~ 2013,
+      ano == "x2014" ~ 2014,
+      ano == "x2015" ~ 2015,
+      ano == "x2016" ~ 2016,
+      ano == "x2017" ~ 2017,
+      ano == "x2018" ~ 2018,
+      ano == "x2019" ~ 2019,
+      ano == "x2020" ~ 2020,
+    )
+  )
+
+#Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
+rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2021.csv") |>
+  dplyr::select(ano, localidade, RMM) |>
+  dplyr::mutate(RMM = round(RMM, 1))
+
 
 #Criando os dataframes/vetores contendo as escolhas de municípios, estados e micro e macrorregões de saúde
 municipios_choices <- tabela_aux_municipios |>
