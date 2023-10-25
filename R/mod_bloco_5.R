@@ -1190,42 +1190,43 @@ mod_bloco_5_server <- function(id, filtros){
 
   #grafico distribuicao do baixo peso
     output$plot1_1 <- highcharter::renderHighchart({
-      highcharter::highchart() |>
+      highcharter::highchart()|>
         highcharter::hc_add_series(
-          data = data5_juncao_aux(),
-          name = "Entre 2000 e 2499 g",
+          name = "De 2000 a 2499 g",
+          data =  data5_juncao_aux(),
           highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
-          type = "column",
+          type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
-          data = data5_juncao_aux(),
-          name = "Entre 1500 a 1999 g",
-          highcharter::hcaes(x = ano , y = porc_peso_1500_a_1999),
-          type = "column",
+          name = "De 1500 a 1999 g",
+          data =  data5_juncao_aux(),
+          highcharter::hcaes(x = ano, y = porc_peso_1500_a_1999),
+          type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
-          data = data5_juncao_aux(),
-          name = "< 1500 g",
+          name = "Menor que 1500 g",
+          data =  data5_juncao_aux(),
           highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
-          type = "column",
+          type = "bar",
           showInLegend = TRUE,
           tooltip = list(
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
           )
         ) |>
-        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
-        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) |>
-        highcharter::hc_legend(reversed = TRUE)
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+
     })
 
     #grafico distribuicao da prematuridade
