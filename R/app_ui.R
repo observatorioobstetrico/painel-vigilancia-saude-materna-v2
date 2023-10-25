@@ -10,7 +10,6 @@
 #'
 #' @import highcharter
 
-
 app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/custom.css"),
