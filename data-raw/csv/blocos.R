@@ -123,10 +123,10 @@ bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_
 bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 
 # bloco 8
-asfixia_aux <- read.csv("data-raw/csv/asfixia_2015_2021.csv", sep = ';') |>
+asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2021.csv", sep = ';') |>
   janitor::clean_names()
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2015_2021.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::rename(codmunres = codigo)
 
