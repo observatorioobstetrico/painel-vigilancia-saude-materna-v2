@@ -99,35 +99,35 @@ mod_bloco_8_ui <- function(id){
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 400))
             )
-          ),
-          column(
-            width = 12,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Tabela de frequência dos grupos de malformações prioritárias para vigilância &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao3"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao3"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes"), height = 400))
-            )
           )
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência dos grupos de malformações prioritárias para vigilância &nbsp;</b>"),
+            shinyjs::hidden(
+              span(
+                id = ns("mostrar_botao3"),
+                shinyWidgets::actionBttn(
+                  inputId = ns("botao3"),
+                  icon = icon("triangle-exclamation", style = "color: red"),
+                  color = "warning",
+                  style = "material-circle",
+                  size = "xs"
+                )
+              )
+            )
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
         )
       )
     )
@@ -774,29 +774,36 @@ mod_bloco_8_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(valor, ano) |>
-        dplyr::summarize(frequencia = sum(total_de_nascidos_vivos)) |>
+        dplyr::summarize(
+          frequencia = sum(total_de_nascidos_vivos)
+        ) |>
         dplyr::ungroup()
     })
 
     output$tabela_malformacoes <- reactable::renderReactable({
       data8_malformacao() |>
           reactable::reactable(
+            groupBy = c("valor"),
             defaultColDef = reactable::colDef(
               footerStyle = list(fontWeight = "bold"),
               align = "center"
             ),
             columns = list(
-              ano = reactable::colDef(
-                name = "Ano",
-                minWidth = 60
-              ),
               valor = reactable::colDef(
                 name = "Código CID-10",
-                minWidth = 60
+                minWidth = 60,
+                aggregate = "unique"
+              ),
+              ano = reactable::colDef(
+                name = "Período",
+                minWidth = 60,
+                aggregate = htmlwidgets::JS("function() { return ''}"),
+                format = list(aggregated = reactable::colFormat(prefix = "Todo o período"))
               ),
               frequencia = reactable::colDef(
                 name = "Frequência",
-                minWidth = 60
+                minWidth = 60,
+                aggregate = "sum"
               )
             ),
             sortable = TRUE,
@@ -804,7 +811,15 @@ mod_bloco_8_server <- function(id, filtros){
             highlight = TRUE,
             striped = TRUE,
             borderless = TRUE,
-            pagination = FALSE
+            pagination = FALSE,
+            height = 500,
+            rowStyle = htmlwidgets::JS(
+              "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+            )
           )
 
     })

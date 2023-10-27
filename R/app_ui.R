@@ -100,7 +100,7 @@ app_ui <- function(request) {
               icon = icon("7")
             ),
             bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Asfixia e malformação",
+              text = "- Asfixia e malformações",
               tabName = "bloco_8",
               icon = icon("8")
             )
