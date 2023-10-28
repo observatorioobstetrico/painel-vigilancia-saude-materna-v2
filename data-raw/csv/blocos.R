@@ -128,7 +128,8 @@ asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2021.csv", sep = ';') |>
 
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';') |>
   janitor::clean_names() |>
-  dplyr::rename(codmunres = codigo)
+  dplyr::arrange(codmunres, ano) |>
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>
@@ -210,7 +211,6 @@ bloco7 <- bloco7 |>
   )
 
 asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
-
 asfixia <- asfixia |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
@@ -218,6 +218,12 @@ asfixia <- asfixia |>
   )
 
 malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
+
+malformacao <- malformacao |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
+  )
 
 base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
 base_incompletude_sinasc <- base_incompletude_sinasc |>

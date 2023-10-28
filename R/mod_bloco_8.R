@@ -13,7 +13,7 @@ mod_bloco_8_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Asfixia e malformações"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(tags$b(HTML("Asfixia e malformações: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
@@ -54,7 +54,7 @@ mod_bloco_8_ui <- function(id){
               style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (grupo 1) &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (pela primeira filtragem) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao1"),
@@ -82,7 +82,7 @@ mod_bloco_8_ui <- function(id){
               style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (grupo 2) &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (pela segunda filtragem) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao2"),
@@ -543,7 +543,7 @@ mod_bloco_8_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia (grupo 1)",
+        titulo = "Porcentagem de nascidos vivos com asfixia (pela primeira filtragem)",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
@@ -568,7 +568,7 @@ mod_bloco_8_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_nascidos_vivos_asfixia2",
-        titulo = "Porcentagem de nascidos vivos com asfixia (grupo 2)",
+        titulo = "Porcentagem de nascidos vivos com asfixia (pela segunda filtragem)",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil()$porc_nascidos_vivos_asfixia2,
         tipo = "porcentagem",
@@ -753,12 +753,9 @@ mod_bloco_8_server <- function(id, filtros){
 
 
     ##### Criando tabela #####
-
-
-     data8_malformacao <- reactive({
-      malformacao |>
+    data8_nascidos_vivos <- reactive({
+      asfixia |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -773,37 +770,112 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(valor, ano) |>
+        dplyr::group_by(ano) |>
         dplyr::summarize(
-          frequencia = sum(total_de_nascidos_vivos)
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos)
         ) |>
         dplyr::ungroup()
     })
 
+    data8_malformacao <- reactive({
+      malformacao |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(grupo_de_anomalias_congenitas, anomalia, descricao, ano) |>
+        dplyr::summarize(
+          frequencia = sum(nascidos_vivos_anomalia)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::right_join(data8_nascidos_vivos()) |>
+        dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 1)) |>
+        dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
     output$tabela_malformacoes <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
       data8_malformacao() |>
           reactable::reactable(
-            groupBy = c("valor"),
+            groupBy = c("grupo_de_anomalias_congenitas", "ano"),
             defaultColDef = reactable::colDef(
               footerStyle = list(fontWeight = "bold"),
               align = "center"
             ),
             columns = list(
-              valor = reactable::colDef(
-                name = "Código CID-10",
+              grupo_de_anomalias_congenitas = reactable::colDef(
+                name = "Grupo de anomalias congênitas",
                 minWidth = 60,
-                aggregate = "unique"
+                aggregate = "unique",
+                align = "left"
               ),
               ano = reactable::colDef(
                 name = "Período",
                 minWidth = 60,
                 aggregate = htmlwidgets::JS("function() { return ''}"),
-                format = list(aggregated = reactable::colFormat(prefix = "Todo o período"))
+                format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+              ),
+              anomalia_descricao = reactable::colDef(
+                name = "Código CID-10",
+                minWidth = 60,
+                aggregate = htmlwidgets::JS("function() { return ''}"),
+                format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+                align = "left"
               ),
               frequencia = reactable::colDef(
                 name = "Frequência",
                 minWidth = 60,
                 aggregate = "sum"
+              ),
+              total_de_nascidos_vivos = reactable::colDef(show = FALSE),
+              prevalencia = reactable::colDef(
+                name = "Prevalência",
+                minWidth = 60,
+                aggregate = proporcao_geral("frequencia", "total_de_nascidos_vivos", 10000),
+                format = reactable::colFormat(
+                  digits = 2
+                )
               )
             ),
             sortable = TRUE,
