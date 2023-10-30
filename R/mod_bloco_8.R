@@ -794,14 +794,14 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(grupo_de_anomalias_congenitas, anomalia, descricao, ano) |>
+        dplyr::group_by(grupo_de_anomalias_congenitas, codigo_cid, descricao, ano) |>
         dplyr::summarize(
           frequencia = sum(nascidos_vivos_anomalia)
         ) |>
         dplyr::ungroup() |>
         dplyr::right_join(data8_nascidos_vivos()) |>
         dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 1)) |>
-        dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+        dplyr::mutate(anomalia_descricao = paste(codigo_cid, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
     })
 
     output$tabela_malformacoes <- reactable::renderReactable({
@@ -838,7 +838,7 @@ mod_bloco_8_server <- function(id, filtros){
 
       data8_malformacao() |>
           reactable::reactable(
-            groupBy = c("grupo_de_anomalias_congenitas", "ano"),
+            groupBy = c("grupo_de_anomalias_congenitas", "anomalia_descricao"),
             defaultColDef = reactable::colDef(
               footerStyle = list(fontWeight = "bold"),
               align = "center"
@@ -850,18 +850,18 @@ mod_bloco_8_server <- function(id, filtros){
                 aggregate = "unique",
                 align = "left"
               ),
-              ano = reactable::colDef(
-                name = "Período",
-                minWidth = 60,
-                aggregate = htmlwidgets::JS("function() { return ''}"),
-                format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
-              ),
               anomalia_descricao = reactable::colDef(
                 name = "Código CID-10",
                 minWidth = 60,
                 aggregate = htmlwidgets::JS("function() { return ''}"),
                 format = list(aggregated = reactable::colFormat(prefix = "Todos")),
                 align = "left"
+              ),
+              ano = reactable::colDef(
+                name = "Período",
+                minWidth = 60,
+                aggregate = htmlwidgets::JS("function() { return ''}"),
+                format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
               ),
               frequencia = reactable::colDef(
                 name = "Frequência",
