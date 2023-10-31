@@ -7,6 +7,7 @@ library(questionr)
 
 token = getPass()
 
+
 url_base = "https://bigdata-api.fiocruz.br"
 
 endpoint = paste0(url_base,"/","show_tables")
@@ -44,9 +45,9 @@ df_municipio <- data.frame()
 endpoint <- paste0(url_base, "/", "sql_query")
 
 for (estado in estados) {
-  
+
   print(estado)
-  
+
   params = paste0('{
           "token": {
             "token": "',token,'"
@@ -58,16 +59,16 @@ for (estado in estados) {
                   ' GROUP BY res_SIGLA_UF, res_MUNNOMEX, res_codigo_adotado,  CODESTAB, ano_nasc, PESO, APGAR5, IDANOMAL, CODANOMAL", "fetch_size": 65000}
           }
     }')
-  
+
   request <- POST(url = endpoint, body = params, encode = "json")
   df_mun <- convertRequestToDF(request)
   names(df_mun) <- c('UF', 'Municipio', 'Codigo', 'CNES', 'Ano', 'Peso', 'APGAR5', 'IDANOMAL', 'CODANOMAL', 'Nascimentos')
   df_municipio <- rbind(df_municipio, df_mun)
-  
+
   repeat {
-    
+
     cursor <- content(request)$cursor
-    
+
     params = paste0('{
             "token": {
               "token": "',token,'"
@@ -76,16 +77,16 @@ for (estado in estados) {
               "sql": {"cursor": "',cursor,'"}
             }
           }')
-    
+
     request <- POST(url = endpoint, body = params, encode = "json")
-    
+
     if (length(content(request)$rows) == 0)
       break
-    
+
     df_mun <- convertRequestToDF(request)
     names(df_mun) <- c('UF', 'Municipio', 'Codigo', 'CNES', 'Ano', 'Peso', 'APGAR5', 'IDANOMAL', 'CODANOMAL','Nascimentos')
     df_municipio <- rbind(df_municipio, df_mun)
-    
+
   }
 }
 
@@ -119,7 +120,7 @@ df_bloco8 <- data.frame()
 df <- dataframe <- data.frame()
 
 for (estado in estados){
-  
+
   params = paste0('{
       "token": {
         "token": "',token,'"
@@ -132,16 +133,16 @@ for (estado in estados){
                         "fetch_size": 65000}
       }
     }')
-  
+
   request <- POST(url = endpoint, body = params, encode = "form")
   dataframe <- convertRequestToDF(request)
   names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
   df <- rbind(df, dataframe)
-  
+
   repeat {
-    
+
     cursor <- content(request)$cursor
-    
+
     params = paste0('{
           "token": {
             "token": "',token,'"
@@ -154,14 +155,14 @@ for (estado in estados){
                            "fetch_size": 65000, "cursor": "',cursor,'"}
           }
         }')
-    
-    
+
+
     request <- POST(url = endpoint, body = params, encode = "form")
-    
+
     if (length(content(request)$rows) == 0)
       break
     else print("oi")
-    
+
     dataframe <- convertRequestToDF(request)
     names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
     df <- rbind(df, dataframe)
@@ -191,12 +192,12 @@ dados <- read.csv('res_df_asfixia_2012_2021.csv', sep = ";")
 ########## asfixia 1 ##########
 # IDANOMAL = Anomalia congênita: 9:Ignorado 1:Sim 2:Não
 
-asfixia_1 <- dados |> 
-    filter(Peso >= 2500 & (IDANOMAL == 2) | (IDANOMAL == '' | is.na(IDANOMAL)) & 
-           (CODANOMAL == '' | is.na(CODANOMAL))) 
+asfixia_1 <- dados |>
+    filter(Peso >= 2500 & (IDANOMAL == 2) | (IDANOMAL == '' | is.na(IDANOMAL)) &
+           (CODANOMAL == '' | is.na(CODANOMAL)))
 
 
-asfixia_1.1 <- asfixia_1 |> 
+asfixia_1.1 <- asfixia_1 |>
   filter(APGAR5 < 7)
 
 sum(asfixia_1.1$Nascimentos) # temos 156960 nascimentos com essas condições
@@ -219,30 +220,30 @@ for (i in 1:max_codigos) {
 
 
 
-codigos_indesejados  <- c('Q000', 'Q001', 'Q002', 
-                          'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019', 
-                          'Q050', 'Q051', 'Q052', 'Q053', 'Q054', 'Q055', 'Q056', 'Q057', 'Q058', 'Q059', 
-                          'Q020', 'Q021', 'Q022', 'Q023', 'Q024', 'Q025', 'Q026', 'Q027', 'Q028', 'Q029', 
-                          'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209', 
-                          'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219', 
-                          'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229', 
-                          'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239', 
-                          'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249', 
-                          'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259', 
-                          'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269', 
-                          'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279', 
-                          'Q280', 'Q281', 'Q282', 'Q283', 'Q284', 'Q285', 'Q286', 'Q287', 'Q288', 'Q289', 
-                          'Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359', 
-                          'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369', 
-                          'Q370', 'Q371', 'Q372', 'Q373', 'Q374', 'Q375', 'Q376', 'Q377', 'Q378', 'Q379', 
+codigos_indesejados  <- c('Q000', 'Q001', 'Q002',
+                          'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019',
+                          'Q050', 'Q051', 'Q052', 'Q053', 'Q054', 'Q055', 'Q056', 'Q057', 'Q058', 'Q059',
+                          'Q020', 'Q021', 'Q022', 'Q023', 'Q024', 'Q025', 'Q026', 'Q027', 'Q028', 'Q029',
+                          'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209',
+                          'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219',
+                          'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229',
+                          'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239',
+                          'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249',
+                          'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259',
+                          'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269',
+                          'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279',
+                          'Q280', 'Q281', 'Q282', 'Q283', 'Q284', 'Q285', 'Q286', 'Q287', 'Q288', 'Q289',
+                          'Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359',
+                          'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369',
+                          'Q370', 'Q371', 'Q372', 'Q373', 'Q374', 'Q375', 'Q376', 'Q377', 'Q378', 'Q379',
                           'Q540', 'Q541', 'Q542', 'Q543', 'Q544', 'Q545', 'Q546', 'Q547', 'Q548', 'Q549',
-                          'Q560', 'Q561', 'Q562', 'Q563', 'Q564', 'Q565', 'Q566', 'Q567', 'Q568', 'Q569', 
-                          'Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669', 
-                          'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699', 
-                          'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719', 
-                          'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729', 
-                          'Q730', 'Q731', 'Q732', 'Q733', 'Q734', 'Q735', 'Q736', 'Q737', 'Q738', 'Q739', 
-                          'Q743', 'Q792', 'Q793', 
+                          'Q560', 'Q561', 'Q562', 'Q563', 'Q564', 'Q565', 'Q566', 'Q567', 'Q568', 'Q569',
+                          'Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669',
+                          'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699',
+                          'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719',
+                          'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729',
+                          'Q730', 'Q731', 'Q732', 'Q733', 'Q734', 'Q735', 'Q736', 'Q737', 'Q738', 'Q739',
+                          'Q743', 'Q792', 'Q793',
                           'Q900', 'Q901', 'Q902', 'Q903', 'Q904', 'Q905', 'Q906', 'Q907', 'Q908', 'Q909')
 
 
@@ -250,7 +251,7 @@ codigos_indesejados  <- c('Q000', 'Q001', 'Q002',
 # Filtrar o banco de dados
 
 asfixia_2 <- asfixia_2 |>
-  filter((Peso >= 2500 & (IDANOMAL == 2) | (IDANOMAL == '' | is.na(IDANOMAL)) & 
+  filter((Peso >= 2500 & (IDANOMAL == 2) | (IDANOMAL == '' | is.na(IDANOMAL)) &
             (CODANOMAL == '' | is.na(CODANOMAL))) | (
               !str_detect(codigo_1, paste0("^(", paste(codigos_indesejados, collapse = "|"), ")")) &
                 !str_detect(codigo_2, paste0("^(", paste(codigos_indesejados, collapse = "|"), ")")) &
@@ -261,7 +262,7 @@ asfixia_2 <- asfixia_2 |>
   )
 
 
-asfixia_2.1 <- asfixia_2 |> 
+asfixia_2.1 <- asfixia_2 |>
   filter(APGAR5 < 7)
 
 sum(asfixia_2.1$Nascimentos) # 157096
@@ -269,10 +270,10 @@ sum(asfixia_2.1$Nascimentos) # 157096
 write.table(asfixia_2.1, 'asfixia2_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
-###################### malformação 
+###################### malformação
 
 
-malformacao <- dados 
+malformacao <- dados
 
 codigos_anomalia <- str_extract_all(malformacao$CODANOMAL, "\\D\\d{3}")
 
@@ -287,30 +288,30 @@ for (i in 1:max_codigos) {
 
 
 
-codigos <- c('Q000', 'Q001', 'Q002', 
-             'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019', 
-             'Q050', 'Q051', 'Q052', 'Q053', 'Q054', 'Q055', 'Q056', 'Q057', 'Q058', 'Q059', 
-             'Q020', 'Q021', 'Q022', 'Q023', 'Q024', 'Q025', 'Q026', 'Q027', 'Q028', 'Q029', 
-             'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209', 
-             'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219', 
-             'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229', 
-             'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239', 
-             'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249', 
-             'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259', 
-             'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269', 
-             'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279', 
-             'Q280', 'Q281', 'Q282', 'Q283', 'Q284', 'Q285', 'Q286', 'Q287', 'Q288', 'Q289', 
-             'Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359', 
-             'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369', 
-             'Q370', 'Q371', 'Q372', 'Q373', 'Q374', 'Q375', 'Q376', 'Q377', 'Q378', 'Q379', 
+codigos <- c('Q000', 'Q001', 'Q002',
+             'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019',
+             'Q050', 'Q051', 'Q052', 'Q053', 'Q054', 'Q055', 'Q056', 'Q057', 'Q058', 'Q059',
+             'Q020', 'Q021', 'Q022', 'Q023', 'Q024', 'Q025', 'Q026', 'Q027', 'Q028', 'Q029',
+             'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209',
+             'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219',
+             'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229',
+             'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239',
+             'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249',
+             'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259',
+             'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269',
+             'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279',
+             'Q280', 'Q281', 'Q282', 'Q283', 'Q284', 'Q285', 'Q286', 'Q287', 'Q288', 'Q289',
+             'Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359',
+             'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369',
+             'Q370', 'Q371', 'Q372', 'Q373', 'Q374', 'Q375', 'Q376', 'Q377', 'Q378', 'Q379',
              'Q540', 'Q541', 'Q542', 'Q543', 'Q544', 'Q545', 'Q546', 'Q547', 'Q548', 'Q549',
-             'Q560', 'Q561', 'Q562', 'Q563', 'Q564', 'Q565', 'Q566', 'Q567', 'Q568', 'Q569', 
-             'Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669', 
-             'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699', 
-             'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719', 
-             'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729', 
-             'Q730', 'Q731', 'Q732', 'Q733', 'Q734', 'Q735', 'Q736', 'Q737', 'Q738', 'Q739', 
-             'Q743', 'Q792', 'Q793', 
+             'Q560', 'Q561', 'Q562', 'Q563', 'Q564', 'Q565', 'Q566', 'Q567', 'Q568', 'Q569',
+             'Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669',
+             'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699',
+             'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719',
+             'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729',
+             'Q730', 'Q731', 'Q732', 'Q733', 'Q734', 'Q735', 'Q736', 'Q737', 'Q738', 'Q739',
+             'Q743', 'Q792', 'Q793',
              'Q900', 'Q901', 'Q902', 'Q903', 'Q904', 'Q905', 'Q906', 'Q907', 'Q908', 'Q909')
 
 
@@ -325,8 +326,8 @@ filtro_malformacao <- malformacao %>%
            str_detect(codigo_4, paste(codigos, collapse = "|")) |
            str_detect(codigo_5, paste(codigos, collapse = "|")))
 
-filtro_malformacao <- filtro_malformacao |> 
-  gather(codigo, valor, codigo_1:codigo_5) |> 
+filtro_malformacao <- filtro_malformacao |>
+  gather(codigo, valor, codigo_1:codigo_5) |>
   filter(str_detect(valor, paste0("^(", paste(codigos, collapse = "|"), ")")))
 
 codigos <- c("Q01", "Q05", "Q02", "Q20", "Q21", "Q22", "Q23", "Q24", "Q25", "Q26", "Q27", "Q28", "Q35", "Q36", "Q37", "Q54", "Q56", "Q66", "Q69", "Q71", "Q72", "Q73", "Q90")
@@ -335,35 +336,35 @@ filtro_malformacao$codigo_cid <- ifelse(substr(filtro_malformacao$valor, 1, 3) %
 
 
 # Vetores com os códigos para cada grupo de anomalias congênitas
-defeitos_de_tubo_neural <- c('Q000', 'Q001', 'Q002', 
-                             'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019', 
+defeitos_de_tubo_neural <- c('Q000', 'Q001', 'Q002',
+                             'Q010', 'Q011', 'Q012', 'Q013', 'Q014', 'Q015', 'Q016', 'Q017', 'Q018', 'Q019',
                              'Q050', 'Q051', 'Q052', 'Q053', 'Q054', 'Q055', 'Q056', 'Q057', 'Q058', 'Q059')
 
 
 microcefalia <- c('Q020', 'Q021', 'Q022', 'Q023', 'Q024', 'Q025', 'Q026', 'Q027', 'Q028', 'Q029')
 
-cardiopatias_congenitas <- c(  'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209', 
-                               'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219', 
-                               'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229', 
-                               'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239', 
-                               'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249', 
-                               'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259', 
-                               'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269', 
-                               'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279', 
+cardiopatias_congenitas <- c(  'Q200', 'Q201', 'Q202', 'Q203', 'Q204', 'Q205', 'Q206', 'Q207', 'Q208', 'Q209',
+                               'Q210', 'Q211', 'Q212', 'Q213', 'Q214', 'Q215', 'Q216', 'Q217', 'Q218', 'Q219',
+                               'Q220', 'Q221', 'Q222', 'Q223', 'Q224', 'Q225', 'Q226', 'Q227', 'Q228', 'Q229',
+                               'Q230', 'Q231', 'Q232', 'Q233', 'Q234', 'Q235', 'Q236', 'Q237', 'Q238', 'Q239',
+                               'Q240', 'Q241', 'Q242', 'Q243', 'Q244', 'Q245', 'Q246', 'Q247', 'Q248', 'Q249',
+                               'Q250', 'Q251', 'Q252', 'Q253', 'Q254', 'Q255', 'Q256', 'Q257', 'Q258', 'Q259',
+                               'Q260', 'Q261', 'Q262', 'Q263', 'Q264', 'Q265', 'Q266', 'Q267', 'Q268', 'Q269',
+                               'Q270', 'Q271', 'Q272', 'Q273', 'Q274', 'Q275', 'Q276', 'Q277', 'Q278', 'Q279',
                                'Q280', 'Q281', 'Q282', 'Q283', 'Q284', 'Q285', 'Q286', 'Q287', 'Q288', 'Q289')
 
 
-fendas_orais <- c('Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359', 
-                  'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369', 
+fendas_orais <- c('Q350', 'Q351', 'Q352', 'Q353', 'Q354', 'Q355', 'Q356', 'Q357', 'Q358', 'Q359',
+                  'Q360', 'Q361', 'Q362', 'Q363', 'Q364', 'Q365', 'Q366', 'Q367', 'Q368', 'Q369',
                   'Q370', 'Q371', 'Q372', 'Q373', 'Q374', 'Q375', 'Q376', 'Q377', 'Q378', 'Q379')
 
 defeitos_de_orgaos_genitais <- c('Q540', 'Q541', 'Q542', 'Q543', 'Q544', 'Q545', 'Q546', 'Q547', 'Q548', 'Q549',
                                  'Q560', 'Q561', 'Q562', 'Q563', 'Q564', 'Q565', 'Q566', 'Q567', 'Q568', 'Q569')
 
-defeitos_de_membros <- c('Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669', 
-                         'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699', 
-                         'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719', 
-                         'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729', 
+defeitos_de_membros <- c('Q660', 'Q661', 'Q662', 'Q663', 'Q664', 'Q665', 'Q666', 'Q667', 'Q668', 'Q669',
+                         'Q690', 'Q691', 'Q692', 'Q693', 'Q694', 'Q695', 'Q696', 'Q697', 'Q698', 'Q699',
+                         'Q710', 'Q711', 'Q712', 'Q713', 'Q714', 'Q715', 'Q716', 'Q717', 'Q718', 'Q719',
+                         'Q720', 'Q721', 'Q722', 'Q723', 'Q724', 'Q725', 'Q726', 'Q727', 'Q728', 'Q729',
                          'Q730', 'Q731', 'Q732', 'Q733', 'Q734', 'Q735', 'Q736', 'Q737', 'Q738', 'Q739',
                          'Q743')
 
@@ -512,7 +513,7 @@ asfixia_1 <- read.csv('asfixia1_2012_2021.csv', sep = ";")
 
 asfixia_1 <- asfixia_1[,c(3:10)]
 
-asfixia_1 <- asfixia_1 |> 
+asfixia_1 <- asfixia_1 |>
   rename(total_de_nascidos_vivos = Nascimentos)
 
 #write.table(asfixia_1, 'asfixia1_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
@@ -525,7 +526,7 @@ asfixia_2 <- read.csv('asfixia2_2012_2021.csv', sep = ";")
 
 asfixia_2 <- asfixia_2[,c(3:10)]
 
-asfixia_2 <- asfixia_2 |> 
+asfixia_2 <- asfixia_2 |>
   rename(total_de_nascidos_vivos = Nascimentos)
 
 #write.table(asfixia_2, 'asfixia2_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
@@ -537,16 +538,16 @@ malformacao <- read.csv('malformacao1_2012_2021.csv', sep = ";")
 
 malformacao <- malformacao[,c(3:15)]
 
-malformacao <- malformacao |> 
+malformacao <- malformacao |>
   rename(nascidos_vivos_anomalia = Nascimentos,
          codmunres = Codigo,
          ano = Ano,
          anomalia = valor)
 
-malformacao <- malformacao |> 
+malformacao <- malformacao |>
   select(codmunres,
          ano,
-         anomalia, 
+         anomalia,
          grupo_de_anomalias_congenitas,
          descricao,
          codigo_cid,
@@ -555,10 +556,10 @@ malformacao <- malformacao |>
 write.table(malformacao, 'malformacao_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
-asfixia_1 <- asfixia_1 |> 
-  group_by(Codigo, Ano) |> 
-  summarise(nascidos_vivos_asfixia1 = sum(total_de_nascidos_vivos)) |> 
-  ungroup() |> 
+asfixia_1 <- asfixia_1 |>
+  group_by(Codigo, Ano) |>
+  summarise(nascidos_vivos_asfixia1 = sum(total_de_nascidos_vivos)) |>
+  ungroup() |>
   rename(codmunres = Codigo,
          ano = Ano)
 
@@ -567,10 +568,10 @@ df_bloco8 <- left_join(df_bloco8, asfixia_1)
 df_bloco8$nascidos_vivos_asfixia1[is.na(df_bloco8$nascidos_vivos_asfixia1)] <- 0
 
 
-asfixia_2 <- asfixia_2 |> 
-  group_by(Codigo, Ano) |> 
-  summarise(nascidos_vivos_asfixia2 = sum(total_de_nascidos_vivos)) |> 
-  ungroup() |> 
+asfixia_2 <- asfixia_2 |>
+  group_by(Codigo, Ano) |>
+  summarise(nascidos_vivos_asfixia2 = sum(total_de_nascidos_vivos)) |>
+  ungroup() |>
   rename(codmunres = Codigo,
          ano = Ano)
 
