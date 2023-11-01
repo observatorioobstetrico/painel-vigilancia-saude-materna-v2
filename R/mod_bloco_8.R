@@ -800,7 +800,7 @@ mod_bloco_8_server <- function(id, filtros){
         ) |>
         dplyr::ungroup() |>
         dplyr::right_join(data8_nascidos_vivos()) |>
-        dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 1)) |>
+        dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
         dplyr::mutate(anomalia_descricao = paste(codigo_cid, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
     })
 
