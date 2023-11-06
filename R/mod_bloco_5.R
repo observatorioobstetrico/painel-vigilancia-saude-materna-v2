@@ -1196,8 +1196,6 @@ mod_bloco_5_server <- function(id, filtros){
         )
     })
 
-    observe(print(data5_juncao_aux_invertido()))
-
     #grafico distribuicao do baixo peso
     output$plot1_1 <- highcharter::renderHighchart({
       highcharter::highchart()|>
