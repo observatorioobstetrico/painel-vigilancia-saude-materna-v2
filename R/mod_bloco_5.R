@@ -24,7 +24,7 @@ mod_bloco_5_ui <- function(id) {
         HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
         HTML(
           "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição proporcional,
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição percentual,
                 passe o cursor do mouse sobre a barra que contém a categoria de interesse.
                 </b> </div>"
         ),
@@ -118,7 +118,7 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Distribuição proporcional do baixo peso ao nascer &nbsp;</b>"
+                  "<b style='font-size:19px'> Distribuição percentual do baixo peso ao nascer &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -178,7 +178,7 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Distribuição proporcional da prematuridade &nbsp;</b>"
+                  "<b style='font-size:19px'> Distribuição percentual da prematuridade &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -932,78 +932,6 @@ mod_bloco_5_server <- function(id, filtros){
     output$b5_i5 <- renderUI({
       cria_caixa_server(
         dados = data_resumo(),
-        indicador = "porc_28_a_32_semanas",
-        titulo = "Porcentagem de nascimentos prematuros com 28 a 32 semanas",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
-
-    output$b5_i8 <- renderUI({
-      cria_caixa_server(
-        dados = data_resumo(),
-        indicador = "porc_33_a_34_semanas",
-        titulo = "Porcentagem de nascimentos prematuros com 32 a 34 semanas",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
-
-    output$b5_i9 <- renderUI({
-      cria_caixa_server(
-        dados = data_resumo(),
-        indicador = "porc_35_a_36_semanas",
-        titulo = "Porcentagem de nascimentos prematuros com 35 a 36 semanas",
-        tem_meta = TRUE,
-        valor_de_referencia = 20,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
-
-    output$b5_i10 <- renderUI({
-      cria_caixa_server(
-        dados = data_resumo(),
         indicador = "porc_termo_precoce",
         titulo = "Porcentagem de nascimentos termo precoce",
         tem_meta = TRUE,
@@ -1024,7 +952,6 @@ mod_bloco_5_server <- function(id, filtros){
         )
       )
     })
-
 
 
     #gráfico porcentagem baixo peso

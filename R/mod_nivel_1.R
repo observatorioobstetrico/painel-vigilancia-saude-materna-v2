@@ -479,6 +479,15 @@ mod_nivel_1_ui <- function(id) {
                 column(
                   width = 4,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i3")), proxy.height = "270px")
+                ),
+                column(
+                  offset = 2,
+                  width = 4,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i4")), proxy.height = "270px")
+                ),
+                column(
+                  width = 4,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i5")), proxy.height = "270px")
                 )
               )
             )
@@ -2178,7 +2187,18 @@ mod_nivel_1_server <- function(id, filtros){
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
           porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1)
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
+          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
+          porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                               nascidos_vivos_28_a_32_semanas,
+                                                                                               nascidos_vivos_33_a_34_semanas,
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2266,6 +2286,21 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
+    output$caixa_b5_i4 <- renderUI({
+      cria_caixa_conjunta_bloco5(
+        dados = data5(),
+        indicador = "baixo peso",
+        titulo = "Dentre os nascidos vivos com baixo peso,"
+      )
+    })
+
+    output$caixa_b5_i5 <- renderUI({
+      cria_caixa_conjunta_bloco5(
+        dados = data5(),
+        indicador = "prematuridade",
+        titulo = "Dentre os nascimentos prematuros,"
+      )
+    })
 
     ##### Dados do sexto bloco para a localidade escolhida #####
     data6 <- reactive({
