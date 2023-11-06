@@ -131,7 +131,7 @@ malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';')
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
-base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -c(1, 2)] |>
+base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
