@@ -463,9 +463,7 @@ app_ui <- function(request) {
                       "3 - Assistência pré-natal" = "bloco3",
                       "4 - Assistência ao parto" = "bloco4",
                       "5 - Condições de nascimento" = "bloco5",
-                      "6 - Mortalidade e morbidade materna" = "bloco6",
-                      "7 - Mortalidade neonatal e fetal" = "bloco7",
-                      "8 - Asfixia e malformação" = "bloco8"
+                      "6 - Mortalidade e morbidade materna" = "bloco6"
                     ),
                     width = "98%"
                   )
