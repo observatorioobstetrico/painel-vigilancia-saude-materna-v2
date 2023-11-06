@@ -901,6 +901,7 @@ mod_bloco_8_server <- function(id, filtros){
   })
 }
 
+
 ## To be copied in the UI
 # mod_bloco_8_ui("bloco_8_1")
 
