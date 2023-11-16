@@ -54,7 +54,7 @@ mod_bloco_8_ui <- function(id){
               style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (pela primeira filtragem) &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela primeira filtragem) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao1"),
@@ -82,7 +82,7 @@ mod_bloco_8_ui <- function(id){
               style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia (pela segunda filtragem) &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela segunda filtragem) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao2"),
@@ -273,8 +273,8 @@ mod_bloco_8_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
         dplyr::ungroup()
     })
 
@@ -331,8 +331,8 @@ mod_bloco_8_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
         dplyr::ungroup()
     })
 
@@ -343,8 +343,8 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
         dplyr::ungroup()
     })
 
@@ -371,8 +371,9 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1),           class = dplyr::case_when(
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
+          class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
               "Brasil (valor de referência)",
@@ -416,8 +417,9 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1),          class = dplyr::case_when(
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
+          class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
               "Brasil (valor de referência)",
@@ -446,8 +448,8 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -543,10 +545,10 @@ mod_bloco_8_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia (pela primeira filtragem)",
+        titulo = "Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela primeira filtragem)",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil()$porc_nascidos_vivos_asfixia1,
-        tipo = "porcentagem",
+        tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "300px",
         fonte_titulo = "16px",
@@ -568,10 +570,10 @@ mod_bloco_8_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_nascidos_vivos_asfixia2",
-        titulo = "Porcentagem de nascidos vivos com asfixia (pela segunda filtragem)",
+        titulo = "Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela segunda filtragem)",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil()$porc_nascidos_vivos_asfixia2,
-        tipo = "porcentagem",
+        tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "300px",
         fonte_titulo = "16px",
@@ -643,9 +645,9 @@ mod_bloco_8_server <- function(id, filtros){
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
@@ -672,9 +674,9 @@ mod_bloco_8_server <- function(id, filtros){
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
@@ -702,9 +704,9 @@ mod_bloco_8_server <- function(id, filtros){
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
@@ -731,9 +733,9 @@ mod_bloco_8_server <- function(id, filtros){
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
