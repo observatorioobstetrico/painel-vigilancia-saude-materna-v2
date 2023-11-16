@@ -34,10 +34,6 @@ mod_bloco_8_ui <- function(id){
           column(
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("caixa_b8_i1")), proxy.height = "300px")
-          ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("caixa_b8_i2")), proxy.height = "300px")
           )
         )
       ),
@@ -273,8 +269,7 @@ mod_bloco_8_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1)) |>
         dplyr::ungroup()
     })
 
@@ -331,8 +326,7 @@ mod_bloco_8_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1)) |>
         dplyr::ungroup()
     })
 
@@ -343,8 +337,7 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1)) |>
         dplyr::ungroup()
     })
 
@@ -371,8 +364,7 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -417,8 +409,7 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -448,8 +439,7 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*10000, 1),
-          porc_nascidos_vivos_asfixia2 = round(sum(nascidos_vivos_asfixia2)/total_de_nascidos_vivos*10000, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -636,7 +626,7 @@ mod_bloco_8_server <- function(id, filtros){
     cols <- c("#2c115f", "#b73779", "#fc8961")
 
 
-    ##### Criando o gráfico da taxa específica de fecundidade #####
+    ##### Criando o gráfico de asfixia #####
     output$plot1 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -752,6 +742,64 @@ mod_bloco_8_server <- function(id, filtros){
         }
       }
     })
+
+    # ##### Criando o gráfico da porcentagem de mulheres com mais de 3 partos anteriores #####
+    # output$plot2 <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data8(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data8_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data8(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data8_comp(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data8_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia2, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
 
     ##### Criando tabela #####

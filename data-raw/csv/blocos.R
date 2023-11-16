@@ -97,6 +97,14 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2021.csv") |>
   janitor::clean_names()
 
+asfixia_aux <- read.csv("data-raw/csv/asfixia_bloco8.csv", sep = ',') |>
+  janitor::clean_names()
+
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';') |>
+  janitor::clean_names() |>
+  dplyr::arrange(codmunres, ano) |>
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
+
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2021.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
@@ -122,14 +130,7 @@ bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_
 
 bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 
-# bloco 8
-asfixia_aux <- read.csv("data-raw/csv/asfixia_bloco8.csv", sep = ',') |>
-  janitor::clean_names()
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';') |>
-  janitor::clean_names() |>
-  dplyr::arrange(codmunres, ano) |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -c(1, 2)] |>
   janitor::clean_names() |>

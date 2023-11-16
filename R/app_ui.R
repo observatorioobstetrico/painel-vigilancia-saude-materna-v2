@@ -98,11 +98,6 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal e neonatal",
               tabName = "bloco_7",
               icon = icon("7")
-            ),
-            bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Asfixia e malformações",
-              tabName = "bloco_8",
-              icon = icon("8")
             )
           ),
           bs4Dash::bs4SidebarMenuItem(
