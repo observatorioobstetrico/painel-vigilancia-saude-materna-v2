@@ -313,7 +313,7 @@ mod_bloco_5_ui <- function(id) {
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela de frequência dos grupos de malformações prioritárias para vigilância &nbsp;</b>"),
+            HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritários para vigilância &nbsp;</b>"),
             shinyjs::hidden(
               span(
                 id = ns("mostrar_botao3"),
