@@ -1793,7 +1793,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     ##### Criando tabela #####
     data5_nascidos_vivos <- reactive({
-      asfixia |>
+      bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
