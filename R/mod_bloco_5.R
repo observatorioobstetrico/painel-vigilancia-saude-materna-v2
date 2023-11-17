@@ -68,15 +68,10 @@ mod_bloco_5_ui <- function(id) {
         ),
         fluidRow(
           column(
-            offset = 3,
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i5")), proxy.height = "325px")
           ),
-
-        ),
-        fluidRow(
           column(
-            offset = 3,
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
           )
@@ -159,7 +154,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_1"), height = 410))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_1"), height = 430))
             )
           ),
           column(
@@ -238,7 +233,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_1"), height = 410))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_1"), height = 430))
             )
           ),
           column(
@@ -268,7 +263,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 410))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 430))
             )
           ),
           column(
@@ -299,7 +294,7 @@ mod_bloco_5_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 400))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 430))
                 )
               )
             )

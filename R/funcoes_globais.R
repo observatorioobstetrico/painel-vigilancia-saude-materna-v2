@@ -264,7 +264,7 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
     }
   }
 
-  style_texto <- "font-size: 32px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+  style_texto <- "font-size: 30px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
   style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
 
   if (indicador == "baixo peso") {
@@ -275,7 +275,7 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       headerBorder = FALSE,
       div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
       div(
-        style = "height: 75%; overflow: auto",
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso < 1500 g")
@@ -298,7 +298,7 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       headerBorder = FALSE,
       div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
       div(
-        style = "height: 75%; overflow: auto",
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "nasceram com menos de 28 semanas")
