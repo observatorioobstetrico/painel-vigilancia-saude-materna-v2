@@ -279,7 +279,7 @@ mod_bloco_5_ui <- function(id) {
                   style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao1"),
@@ -1347,7 +1347,7 @@ mod_bloco_5_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo_asfixia(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia",
+        titulo = "porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil_asfixia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
