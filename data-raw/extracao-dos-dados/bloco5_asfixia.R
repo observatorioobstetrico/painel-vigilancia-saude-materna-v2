@@ -1,125 +1,91 @@
-library(dplyr)
-library(httr)
-library(ggplot2)
-library(getPass)
-library(repr)
-library(questionr)
+################################
+#################### microdatasus
+################################
 
-token = getPass()
+library(tidyverse)
+library(microdatasus)
 
-url_base = "https://bigdata-api.fiocruz.br"
+sinasc12 <- microdatasus::fetch_datasus(year_start = 2012, year_end = 2012, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-endpoint = paste0(url_base,"/","show_tables")
+sinasc13 <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2013, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-request <- POST(url = endpoint, body = list("token" = token), encode = "json")
+sinasc14 <- microdatasus::fetch_datasus(year_start = 2014, year_end = 2014, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-as_tibble(content(request))
+sinasc15 <- microdatasus::fetch_datasus(year_start = 2015, year_end = 2015, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-convertRequestToDF <- function(request){
-  variables = unlist(content(request)$columns)
-  variables = variables[names(variables) == "name"]
-  column_names <- unname(variables)
-  values = content(request)$rows
-  df <- as.data.frame(do.call(rbind, lapply(values, function(r) {
-    row <- r
-    row[sapply(row,is.null)] <- NA
-    rbind(unlist(row))
-  })))
-  names(df) <- column_names
-  return(df)
-}
+sinasc16 <- microdatasus::fetch_datasus(year_start = 2016, year_end = 2016, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
+sinasc17 <- microdatasus::fetch_datasus(year_start = 2017, year_end = 2017, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
+sinasc18 <- microdatasus::fetch_datasus(year_start = 2018, year_end = 2018, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-# #########################################
-# # Número de nascimentos total 2012 AND 2021 RESIDENCIA
-# #########################################
+sinasc19 <- microdatasus::fetch_datasus(year_start = 2019, year_end = 2019, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-estados <- c('RO', 'AC', 'AM', 'RR', 'PA', 'AP', 'TO', 'MA', 'PI', 'CE', 'RN',
-             'PB', 'PE', 'AL', 'SE', 'BA', 'MG', 'ES', 'RJ', 'SP', 'PR', 'SC',
-             'RS', 'MS', 'MT', 'GO', 'DF')
+sinasc20 <- microdatasus::fetch_datasus(year_start = 2020, year_end = 2020, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-df_municipio <- data.frame()
+sinasc21 <- microdatasus::fetch_datasus(year_start = 2021, year_end = 2021, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-endpoint <- paste0(url_base, "/", "sql_query")
+## criando coluna de anos 
+sinasc12$Ano <- 2012
+sinasc13$Ano <- 2013
+sinasc14$Ano <- 2014
+sinasc15$Ano <- 2015
+sinasc16$Ano <- 2016
+sinasc17$Ano <- 2017
+sinasc18$Ano <- 2018
+sinasc18$Ano <- 2018
+sinasc19$Ano <- 2019
+sinasc20$Ano <- 2020
+sinasc21$Ano <- 2021
 
-for (estado in estados) {
-  
-  print(estado)
-  
-  params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query": "SELECT res_SIGLA_UF, res_MUNNOMEX, res_codigo_adotado, CODESTAB, ano_nasc, PESO, APGAR5, IDANOMAL, CODANOMAL, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (nasc_SIGLA_UF = \'',estado,'\') AND ano_nasc BETWEEN 2012 AND 2021',
-                  ' GROUP BY res_SIGLA_UF, res_MUNNOMEX, res_codigo_adotado,  CODESTAB, ano_nasc, PESO, APGAR5, IDANOMAL, CODANOMAL", "fetch_size": 65000}
-          }
-    }')
-  
-  request <- POST(url = endpoint, body = params, encode = "json")
-  df_mun <- convertRequestToDF(request)
-  names(df_mun) <- c('UF', 'Municipio', 'Codigo', 'CNES', 'Ano', 'Peso', 'APGAR5', 'IDANOMAL', 'CODANOMAL', 'Nascimentos')
-  df_municipio <- rbind(df_municipio, df_mun)
-  
-  repeat {
-    
-    cursor <- content(request)$cursor
-    
-    params = paste0('{
-            "token": {
-              "token": "',token,'"
-            },
-            "sql": {
-              "sql": {"cursor": "',cursor,'"}
-            }
-          }')
-    
-    request <- POST(url = endpoint, body = params, encode = "json")
-    
-    if (length(content(request)$rows) == 0)
-      break
-    
-    df_mun <- convertRequestToDF(request)
-    names(df_mun) <- c('UF', 'Municipio', 'Codigo', 'CNES', 'Ano', 'Peso', 'APGAR5', 'IDANOMAL', 'CODANOMAL','Nascimentos')
-    df_municipio <- rbind(df_municipio, df_mun)
-    
-  }
-}
+sinasc_microdatasus <- dplyr::bind_rows(sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21)
 
+write.table(sinasc_microdatasus, 'bruto_sinasc_microdatasus_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
 
+#### agrupando 
 
+sinasc_microdatasus <- read.csv('bruto_sinasc_microdatasus_2012_2021.csv', sep = ";")
 
-######## salvar base em .csv
+sinasc_microdatasus <- sinasc_microdatasus |> 
+  group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |> 
+  summarise(Nascimentos = n())
 
-write.table(df_municipio, 'res_df_asfixia_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
+#### salvar base agrupada
+write.table(sinasc_microdatasus, 'sinasc_microdatasus_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 ###################
 # TRATAMENTO DOS DADOS PARA CRIAÇÃO DAS TABELAS
 ##################
 
+dados <- read.csv('sinasc_microdatasus_2012_2021.csv', sep = ";")
+tabela_aux_municipios <- read_csv("tabela_municipios.csv")
 
-library(tidyverse)
+#### adicionando uf e municipio os dados 
 
-dados <- read.csv('res_df_asfixia_2012_2021.csv', sep = ";")
+tabela_aux_municipios <- tabela_aux_municipios[,c(2:4)]
+tabela_aux_municipios <- tabela_aux_municipios |> 
+  rename(CODMUNRES = codmunres)
+
+dados <- dados |> 
+  filter(CODMUNRES %in% tabela_aux_municipios$CODMUNRES)
+
+dados <- left_join(dados, tabela_aux_municipios) 
 
 
 ########## asfixia 1 ##########
 ## Asfixia 1
 
 asfixia1 <- dados |> 
-  filter(Peso >= 2500 & ((IDANOMAL == 2) | ((IDANOMAL == '' | is.na(IDANOMAL)) & 
+  filter(PESO >= 2500 & ((IDANOMAL == 2) | ((IDANOMAL == '' | is.na(IDANOMAL)) & 
                                               (CODANOMAL == '' | is.na(CODANOMAL))))) 
 
 #uma dúvida: será que tem dados faltantes para peso?
-unique(asfixia1$Peso)
+unique(asfixia1$PESO)
 #Tem sim: 9999 é peso ignorado
 
 asfixia12 <- asfixia1 %>% 
-  filter(Peso < 9999) 
+  filter(PESO < 9999) 
 
 
 asfixia12$APGAR5 <- as.numeric(asfixia12$APGAR5)
@@ -132,23 +98,21 @@ asfixia13 <- asfixia12 %>%
 # View(asfixia13)
 
 asfixia14 <- asfixia13 %>% 
-  group_by(UF, Municipio, Codigo, Ano) %>% 
+  group_by(uf, municipio, CODMUNRES, Ano) %>% 
   summarise(total_de_nascidos_vivos = n()) # total_de_nascidos_vivos = peso <2500 & sem anomalia
 
 #filtrar apgar menor 7
 asfixia14_1 <- asfixia13 %>% 
-  group_by(UF, Municipio, Codigo, Ano) %>% 
+  group_by(uf, municipio, CODMUNRES, Ano) %>% 
   summarise(nascidos_vivos_asfixia1 = sum(apgar5_menor7 == 1))  
 asfixia1_final <- left_join(asfixia14, asfixia14_1, 
-                            by = c("UF", "Municipio", 
-                                   "Codigo", "Ano"))
+                            by = c("uf", "municipio", 
+                                   "CODMUNRES", "Ano"))
 
 asfixia1_final <- asfixia1_final %>% 
   mutate(nascidos_vivos_asfixia1  = ifelse(is.na(nascidos_vivos_asfixia1), 0, nascidos_vivos_asfixia1)) 
 
 write.csv(asfixia1_final, "asfixia1_2012_2021.csv")
-
-
 
 ###################### malformação 
 
@@ -368,11 +332,11 @@ asfixia_1 <- read.csv('asfixia1_2012_2021.csv', sep = ",")
 asfixia_1 <- asfixia_1[,c(4:7)]
 
 df_bloco8 <- asfixia_1 |> 
-  group_by(Codigo, Ano) |> 
+  group_by(CODMUNRES, Ano) |> 
   summarise(nascidos_vivos_asfixia1 = sum(nascidos_vivos_asfixia1),
             total_de_nascidos_vivos = sum(total_de_nascidos_vivos)) |> 
   ungroup() |> 
-  rename(codmunres = Codigo,
+  rename(codmunres = CODMUNRES,
          ano = Ano)
 
 write.table(df_bloco8, 'asfixia_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
@@ -381,16 +345,14 @@ write.table(df_bloco8, 'asfixia_2012_2021.csv', sep = ";", dec = ".", row.names 
 ####
 
 malformacao <- read.csv('malformacao_2012_2021.csv', sep = ";")
-
-malformacao <- malformacao[,c(3:14)]
+#malformacao <- malformacao[,c(3:12)]
 
 malformacao <- malformacao |> 
   rename(nascidos_vivos_anomalia = Nascimentos,
-         codmunres = Codigo,
+         codmunres = CODMUNRES,
          ano = Ano,
          anomalia = valor)
 
-malformacao <- left_join(malformacao, df_bloco8)
 
 malformacao <- malformacao |> 
   select(codmunres,
@@ -398,8 +360,7 @@ malformacao <- malformacao |>
          anomalia, 
          grupo_de_anomalias_congenitas,
          descricao,
-         nascidos_vivos_anomalia,
-         total_de_nascidos_vivos)
+         nascidos_vivos_anomalia)
 
 write.table(malformacao, 'malformacao_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
 
