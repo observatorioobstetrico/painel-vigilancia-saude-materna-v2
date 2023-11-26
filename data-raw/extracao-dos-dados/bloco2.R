@@ -533,4 +533,4 @@ sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_40_a_49)) - sum(df_bloco
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2021", row.names = FALSE)
+write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2021.csv", row.names = FALSE)
