@@ -91,7 +91,7 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de baixo peso ao nascer (< 2500 g) &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de baixo peso ao nascer &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -189,14 +189,14 @@ mod_bloco_5_ui <- function(id) {
                   width = 12,
                   selectizeInput(
                     inputId = ns("faixa_prematuridade"),
-                    label = "Idade Gestacional",
+                    label = "Idade gestacional",
                     options = list(placeholder = "Selecione a idade gestacional"),
                     choices = c(
-                      "Menos que 28 semanas" = "porc_menos_de_28_semanas",
+                      "Menor que 28 semanas" = "porc_menos_de_28_semanas",
                       "De 28 a 32 semanas" = "porc_28_a_32_semanas",
                       "De 33 a 34 semanas" = "porc_33_a_34_semanas",
                       "De 35 a 36 semanas" = "porc_35_a_36_semanas",
-                      "Menos que 36 semanas" = "porc_premat"
+                      "Menor que 36 semanas" = "porc_premat"
 
                     ),
                     width = "100%", selected = "porc_premat"
@@ -279,7 +279,7 @@ mod_bloco_5_ui <- function(id) {
                   style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao1"),
@@ -1347,7 +1347,7 @@ mod_bloco_5_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo_asfixia(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil_asfixia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
