@@ -29,888 +29,8 @@ convertRequestToDF <- function(request){
 estados <- c('RO','AC','AM','RR','PA','AP','TO','MA','PI','CE','RN','PB','PE','AL','SE','BA','MG','ES','RJ','SP','PR','SC','RS','MS','MT','GO','DF')
 endpoint <- paste0(url_base,"/","sql_query")
 
-#Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
-  clean_names()
-
-#Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
-  pull(codmunres)
-
-#Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2021)), ano = 2012:2021)
-
-#Criando o data.frame que irá receber todos os dados do bloco 1
-df_bloco1 <- data.frame()
-
-# Total de nascidos vivos -------------------------------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
-df_bloco1 <- left_join(df_aux_municipios, df)
-
-##Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
-df_bloco1$total_de_nascidos_vivos[is.na(df_bloco1$total_de_nascidos_vivos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (IDADEMAE>=10 AND IDADEMAE<=19) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_menor_que_20_anos')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (IDADEMAE>=10 AND IDADEMAE<=19) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_menor_que_20_anos')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_menor_que_20_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_menor_que_20_anos[is.na(df_bloco1$nvm_menor_que_20_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade de 20 a 34 anos -------------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (IDADEMAE>=20 AND IDADEMAE<35) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_entre_20_e_34_anos')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (IDADEMAE>=20 AND IDADEMAE<35) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_entre_20_e_34_anos')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_entre_20_e_34_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_entre_20_e_34_anos[is.na(df_bloco1$nvm_entre_20_e_34_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade de 35 ou mais anos -------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (IDADEMAE>=35 AND IDADEMAE<=55) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_maior_que_34_anos')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (IDADEMAE>=35 AND IDADEMAE<55) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_maior_que_34_anos')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_maior_que_34_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_maior_que_34_anos[is.na(df_bloco1$nvm_maior_que_34_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres brancas -------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (RACACORMAE=1) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_branca')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (RACACORMAE=1) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_branca')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_cor_da_pele_branca' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_branca[is.na(df_bloco1$nvm_com_cor_da_pele_branca)] <- 0
-
-
-#Proporção de nascidos vivos de mulheres pretas ------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (RACACORMAE=2) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_preta')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (RACACORMAE=2) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_preta')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_cor_da_pele_preta' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_preta[is.na(df_bloco1$nvm_com_cor_da_pele_preta)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres pardas ------------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (RACACORMAE=4) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_parda')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (RACACORMAE=4) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_parda')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_cor_da_pele_parda' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_parda[is.na(df_bloco1$nvm_com_cor_da_pele_parda)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres amarelas ------------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (RACACORMAE=3) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_amarela')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (RACACORMAE=3) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_amarela')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_cor_da_pele_amarela' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_amarela[is.na(df_bloco1$nvm_com_cor_da_pele_amarela)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres indígenas -------------------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (RACACORMAE=5) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_indigenas')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (RACACORMAE=5) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_indigenas')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_indigenas' por 0 (gerados após o left_join)
-df_bloco1$nvm_indigenas[is.na(df_bloco1$nvm_indigenas)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com menos de 4 anos de estudo -------------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (ESCMAE=1 OR ESCMAE=2) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_ate_3')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (ESCMAE=1 OR ESCMAE=2) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_ate_3')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_escolaridade_ate_3' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_ate_3[is.na(df_bloco1$nvm_com_escolaridade_ate_3)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com 4 a 7 anos de estudo -----------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (ESCMAE=3) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_4_a_7')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (ESCMAE=3) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_4_a_7')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_escolaridade_de_4_a_7' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_de_4_a_7[is.na(df_bloco1$nvm_com_escolaridade_de_4_a_7)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com 8 a 11 anos de estudo -----------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (ESCMAE=4) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_8_a_11')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (ESCMAE=4) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_8_a_11')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_escolaridade_de_8_a_11' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_de_8_a_11[is.na(df_bloco1$nvm_com_escolaridade_de_8_a_11)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com mais de 11 anos de estudo  ------------
-df <- dataframe <- data.frame()
-
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (ESCMAE=5) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_acima_de_11')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (ESCMAE=5) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_acima_de_11')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df)
-
-##Substituindo os NA's da coluna 'nvm_com_escolaridade_acima_de_11' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_acima_de_11[is.na(df_bloco1$nvm_com_escolaridade_acima_de_11)] <- 0
-
-
-# Cobertura populacional com equipes de saúde da família ------------------
-##Ainda não disponíveis para o ano de 2021
-df_cobertura_esf <- df_bloco1_antigo |>
-  select(codmunres, ano, media_cobertura_esf)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_cobertura_esf)
-
-
-# População total ---------------------------------------------------------
-##Criando a função que utiliza web scrapping para pegar dados de estimativas populacionais do Tabnet DATASUS
-est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteudo = 1, periodo = 2021, regiao = "Todas as categorias",
+# Criando a função que utiliza web scrapping para baixar dados de estimativas populacionais do Tabnet DATASUS
+est_pop_tabnet <- function (linha = "Município", coluna = "Ano", conteudo = 1, periodo = 2012:2021, regiao = "Todas as categorias",
                             unidade_da_federacao = "Todas as categorias", sexo = "Feminino", faixa_etaria = c("10 a 14 anos", "15 a 19 anos", "20 a 29 anos", "30 a 39 anos", "40 a 49 anos"),
                             faixa_etaria_reajuste = "Todas as categorias")
 {
@@ -1052,6 +172,7 @@ est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteud
   } else {
     form_conteudo <- paste0("Incremento=", form_conteudo)
   }
+
   form_periodo <- dplyr::filter(periodo.df, periodo.df$id %in%
                                   periodo)
   form_periodo <- paste0("Arquivos=", form_periodo$value, collapse = "&")
@@ -1096,31 +217,1211 @@ est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteud
   tabela_final[-1] <- lapply(tabela_final[-1], f1)
   tabela_final[-1] <- suppressWarnings(lapply(tabela_final[-1],
                                               f2))
-  tabela_final
+
+  if (linha == "Município") {
+    tabela_final <- tabela_final[-1, ] |>
+      dplyr::mutate(
+        codmunres = as.numeric(stringr::str_extract(Município, "\\d+")),
+        municipio = stringr::str_replace(Município, "\\d+ ", ""),
+        .before = "Município",
+        .keep = "unused"
+      )
+  } else {
+    tabela_final <- tabela_final[-1, ]
+  }
+
 }
 
-df_est_pop_total <- est_pop_tabnet(
+# Criando a função que utiliza web scrapping para baixar dados de usuárias de planos de saúde do Tabnet ANS
+pop_com_plano_saude_tabnet <- function (linha = "Município",
+                                        coluna = "Competência",
+                                        conteudo = "Assistência Médica",
+                                        periodo = 2012:2021,
+                                        sexo = "Feminino",
+                                        faixa_etaria = c(
+                                          "10 a 14 anos",
+                                          "15 a 19 anos",
+                                          "20 a 24 anos",
+                                          "25 a 29 anos",
+                                          "30 a 34 anos",
+                                          "35 a 39 anos",
+                                          "40 a 44 anos",
+                                          "45 a 49 anos"
+                                        ),
+                                        faixa_etaria_reajuste = "Todas as categorias",
+                                        tipo_de_contratacao = "Todas as categorias",
+                                        epoca_de_contratacao = "Todas as categorias",
+                                        segmentacao = "Todas as categorias",
+                                        segmentacao_grupo = c(
+                                          "Ambulatorial", "Hospitalar", "Hospitalar e Ambulatorial",
+                                          "Referência", "Informado incorretamente", "Não Informado"
+                                        ),
+                                        uf = "Todas as categorias",
+                                        regiao = "Todas as categorias",
+                                        capital = "Todas as categorias",
+                                        reg_metropolitana = "Todas as categorias",
+                                        microrregiao = "Todas as categorias",
+                                        municipio = "Todas as categorias"
+)
+
+{
+
+  page <- xml2::read_html("http://www.ans.gov.br/anstabnet/cgi-bin/dh?dados/tabnet_02.def")
+
+  linha.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#L option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#L option") |>
+      rvest::html_attr("value")
+  )
+
+  coluna.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#C option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#C option") |>
+      rvest::html_attr("value")
+  )
+
+  conteudo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#I option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#I option") |>
+      rvest::html_attr("value")
+  )
+
+  periodo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#A option") |>
+      rvest::html_text() |>
+      substr(start = 1, stop = 8),
+    value = page |>
+      rvest::html_elements("#A option") |>
+      rvest::html_attr("value")
+  )
+
+  sexo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S1 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S1 option") |>
+      rvest::html_attr("value")
+  )
+
+  faixa_etaria.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S2 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S2 option") |>
+      rvest::html_attr("value")
+  )
+
+  faixa_etaria_reajuste.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S3 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S3 option") |>
+      rvest::html_attr("value")
+  )
+
+  tipo_de_contratacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S4 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S4 option") |>
+      rvest::html_attr("value")
+  )
+
+  epoca_de_contratacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S5 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S5 option") |>
+      rvest::html_attr("value")
+  )
+
+  segmentacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S6 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S6 option") |>
+      rvest::html_attr("value")
+  )
+
+  segmentacao_grupo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S7 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S7 option") |>
+      rvest::html_attr("value")
+  )
+
+  uf.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S8 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S8 option") |>
+      rvest::html_attr("value")
+  )
+
+  regiao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S9 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S9 option") |>
+      rvest::html_attr("value")
+  )
+
+  capital.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S10 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S10 option") |>
+      rvest::html_attr("value")
+  )
+
+  reg_metropolitana.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S11 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S11 option") |>
+      rvest::html_attr("value")
+  )
+
+  microrregiao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S12 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S12 option") |>
+      rvest::html_attr("value")
+  )
+
+  municipio.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S13 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S13 option") |>
+      rvest::html_attr("value")
+  )
+
+  if (is.numeric(periodo)) {
+    periodo <- periodo.df |>
+      dplyr::filter(
+        substr(id, start = 5, stop = 8) %in% as.character(periodo)
+      ) |>
+      dplyr::pull(id)
+  }
+
+  argumentos <- c(
+    "linha",
+    "coluna",
+    "conteudo",
+    "periodo",
+    "sexo",
+    "faixa_etaria",
+    "faixa_etaria_reajuste",
+    "tipo_de_contratacao",
+    "epoca_de_contratacao",
+    "segmentacao",
+    "segmentacao_grupo",
+    "uf",
+    "regiao",
+    "capital",
+    "reg_metropolitana",
+    "microrregiao",
+    "municipio"
+  )
+
+  invisible(lapply(argumentos, function(argumento) {
+    if (!(all(get(argumento) %in% get(glue::glue("{argumento}.df"))$id))) {
+      stop(glue::glue("Some element in the '{argumento}' argument is wrong"))
+    }
+    if (argumento == "periodo") {
+      if (length(periodo) > 1 & !(linha == "Competência" | coluna == "Competência")) {
+        stop("When more than one period is specified, either the 'linha' or the 'coluna' argument must be equal to 'Competência'")
+      }
+    }
+  }))
+
+  argumentos.df <- data.frame(
+    argumento = argumentos,
+    name =   page |>
+      rvest::html_elements("select") |>
+      rvest::html_attr("name") |>
+      stringi::stri_escape_unicode()
+  )
+
+  for(argumento in argumentos.df$argumento) {
+    assign(
+      glue::glue("{argumento}.value"),
+      get(glue::glue("{argumento}.df")) |>
+        dplyr::filter(id %in% get(argumento)) |>
+        dplyr::pull(value)
+    )
+
+    name <- argumentos.df$name[argumentos.df$argumento == argumento]
+
+    assign(
+      glue::glue("form_{argumento}"),
+      paste0(name, "=",  stringi::stri_escape_unicode(get(glue::glue("{argumento}.value"))), collapse = "&")
+    )
+  }
+
+  form_data <- paste(
+    form_linha,
+    form_coluna,
+    form_conteudo,
+    form_periodo,
+    form_sexo,
+    form_faixa_etaria,
+    form_faixa_etaria_reajuste,
+    form_tipo_de_contratacao,
+    form_epoca_de_contratacao,
+    form_segmentacao,
+    form_segmentacao_grupo,
+    form_uf,
+    form_regiao,
+    form_capital,
+    form_reg_metropolitana,
+    form_microrregiao,
+    form_municipio,
+    "formato=table&mostre=Mostra",
+    sep = "&"
+  )
+
+  form_data <- gsub("\\\\u00", "%", form_data)
+
+  #form_data <- "Linha=Munic%edpio&Coluna=--N%E3o-Ativa--&Incremento=Assist%EAncia_M%E9dica&Arquivos=tb_bb_2306.dbf&SSexo=TODAS_AS_CATEGORIAS__&SFaixa_et%E1ria=TODAS_AS_CATEGORIAS__&SFaixa_et%E1ria-Reajuste=TODAS_AS_CATEGORIAS__&STipo_de_contrata%E7%E3o=TODAS_AS_CATEGORIAS__&S%C9poca_de_Contrata%E7%E3o=TODAS_AS_CATEGORIAS__&SSegmenta%E7%E3o=TODAS_AS_CATEGORIAS__&SSegmenta%E7%E3o_grupo=TODAS_AS_CATEGORIAS__&SUF=TODAS_AS_CATEGORIAS__&SGrande_Regi%E3o=TODAS_AS_CATEGORIAS__&SCapital=TODAS_AS_CATEGORIAS__&SReg._Metropolitana=TODAS_AS_CATEGORIAS__&SMicrorregi%E3o=TODAS_AS_CATEGORIAS__&SMunic%EDpio=TODAS_AS_CATEGORIAS__&formato=table&mostre=Mostra"
+
+  site <- httr::POST(url = "http://www.ans.gov.br/anstabnet/cgi-bin/tabnet?dados/tabnet_02.def",
+                     body = form_data)
+
+  tabdados_col1 <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("tr th") |> rvest::html_text() |>
+    trimws()
+  tabdados_col1 <- tabdados_col1[-c(1:(which(tabdados_col1 == "TOTAL") - 1))]
+
+  tabdados_outras_cols <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("center td") |> rvest::html_text() |>
+    trimws()
+
+  col_tabdados <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("tr:nth-child(1) th") |> rvest::html_text() |> trimws()
+
+  f1 <- function(x) x <- gsub("\\.", "", x)
+  f2 <- function(x) x <- as.numeric(as.character(x))
+
+  tabela_final <- as.data.frame(
+    cbind(
+      tabdados_col1,
+      matrix(tabdados_outras_cols, ncol = length(tabdados_outras_cols)/length(tabdados_col1), byrow = TRUE)
+    )
+  )
+
+  names(tabela_final) <- col_tabdados
+  tabela_final[-1] <- lapply(tabela_final[-1], f1)
+  tabela_final[-1] <- suppressWarnings(lapply(tabela_final[-1], f2))
+
+  if (linha == "Município") {
+    tabela_final <- tabela_final[-1, ] |>
+      dplyr::mutate(
+        codmunres = as.numeric(stringr::str_extract(Município, "\\d+")),
+        municipio = stringr::str_replace(Município, "\\d+ ", ""),
+        .before = "Município",
+        .keep = "unused"
+      )
+  } else {
+    tabela_final <- tabela_final[-1, ]
+  }
+
+}
+
+# Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
+df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
+  clean_names()
+
+# Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+  pull(codmunres)
+
+# Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2021)), ano = 2012:2021)
+
+# Criando o data.frame que irá receber todos os dados do bloco 1
+df_bloco1 <- data.frame()
+
+# Total de nascidos vivos -------------------------------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'total_de_nascidos_vivos')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
+df_bloco1 <- left_join(df_aux_municipios, df)
+
+## Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
+df_bloco1$total_de_nascidos_vivos[is.na(df_bloco1$total_de_nascidos_vivos)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
+## Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
+df_microdatasus_aux <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2021,
+  vars = c("CODMUNRES", "DTNASC", "IDADEMAE"),
+  information_system = "SINASC"
+) |>
+  clean_names()
+
+df_microdatasus <- df_microdatasus_aux |>
+  filter(codmunres %in% codigos_municipios) |>
+  mutate(
+    ano = as.numeric(substr(dtnasc, 5, 8)),
+    nvm_menor_que_20_anos = 1,
+    .keep = "unused"
+  ) |>
+  filter(idademae < 20) |>
+  group_by(codmunres, ano) |>
+  summarise(nvm_menor_que_20_anos = sum(nvm_menor_que_20_anos))
+
+## Juntando com o restante da base do bloco 2
+df_bloco1 <- left_join(df_bloco1, df_microdatasus)
+
+## Substituindo os NA's da coluna 'nvm_menor_que_20_anos' por 0 (gerados após o left_join)
+df_bloco1$nvm_menor_que_20_anos[is.na(df_bloco1$nvm_menor_que_20_anos)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com idade de 20 a 34 anos -------------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (IDADEMAE>=20 AND IDADEMAE<35) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_entre_20_e_34_anos')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (IDADEMAE>=20 AND IDADEMAE<35) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_entre_20_e_34_anos')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_entre_20_e_34_anos' por 0 (gerados após o left_join)
+df_bloco1$nvm_entre_20_e_34_anos[is.na(df_bloco1$nvm_entre_20_e_34_anos)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com idade de 35 ou mais anos -------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (IDADEMAE>=35 AND IDADEMAE<=55) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_maior_que_34_anos')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (IDADEMAE>=35 AND IDADEMAE<55) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_maior_que_34_anos')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_maior_que_34_anos' por 0 (gerados após o left_join)
+df_bloco1$nvm_maior_que_34_anos[is.na(df_bloco1$nvm_maior_que_34_anos)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres brancas -------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (RACACORMAE=1) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_branca')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (RACACORMAE=1) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_branca')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_branca' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_cor_da_pele_branca[is.na(df_bloco1$nvm_com_cor_da_pele_branca)] <- 0
+
+
+#Proporção de nascidos vivos de mulheres pretas ------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (RACACORMAE=2) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_preta')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (RACACORMAE=2) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_preta')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_preta' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_cor_da_pele_preta[is.na(df_bloco1$nvm_com_cor_da_pele_preta)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres pardas ------------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (RACACORMAE=4) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_parda')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (RACACORMAE=4) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_parda')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_parda' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_cor_da_pele_parda[is.na(df_bloco1$nvm_com_cor_da_pele_parda)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres amarelas ------------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (RACACORMAE=3) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_amarela')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (RACACORMAE=3) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_cor_da_pele_amarela')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_amarela' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_cor_da_pele_amarela[is.na(df_bloco1$nvm_com_cor_da_pele_amarela)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres indígenas -------------------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (RACACORMAE=5) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_indigenas')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (RACACORMAE=5) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_indigenas')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_indigenas' por 0 (gerados após o left_join)
+df_bloco1$nvm_indigenas[is.na(df_bloco1$nvm_indigenas)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com menos de 4 anos de estudo -------------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (ESCMAE=1 OR ESCMAE=2) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_ate_3')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (ESCMAE=1 OR ESCMAE=2) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_ate_3')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_escolaridade_ate_3' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_escolaridade_ate_3[is.na(df_bloco1$nvm_com_escolaridade_ate_3)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com 4 a 7 anos de estudo -----------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (ESCMAE=3) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_4_a_7')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (ESCMAE=3) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_4_a_7')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_escolaridade_de_4_a_7' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_escolaridade_de_4_a_7[is.na(df_bloco1$nvm_com_escolaridade_de_4_a_7)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com 8 a 11 anos de estudo -----------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (ESCMAE=4) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_8_a_11')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (ESCMAE=4) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_de_8_a_11')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_escolaridade_de_8_a_11' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_escolaridade_de_8_a_11[is.na(df_bloco1$nvm_com_escolaridade_de_8_a_11)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com mais de 11 anos de estudo  ------------
+df <- dataframe <- data.frame()
+
+for (estado in estados){
+
+  params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                  ' FROM \\"datasus-sinasc\\"',
+                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                  ' AND (ESCMAE=5) ',
+                  ' GROUP BY CODMUNRES, ano_nasc",
+                        "fetch_size": 65000}
+      }
+    }')
+
+  request <- POST(url = endpoint, body = params, encode = "form")
+  dataframe <- convertRequestToDF(request)
+  names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_acima_de_11')
+  df <- rbind(df, dataframe)
+
+  repeat {
+
+    cursor <- content(request)$cursor
+
+    params = paste0('{
+          "token": {
+            "token": "',token,'"
+          },
+          "sql": {
+            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
+                    ' FROM \\"datasus-sinasc\\"',
+                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
+                    ' AND (ESCMAE=5) ',
+                    ' GROUP BY CODMUNRES, ano_nasc",
+                           "fetch_size": 65000, "cursor": "',cursor,'"}
+          }
+        }')
+
+
+    request <- POST(url = endpoint, body = params, encode = "form")
+
+    if (length(content(request)$rows) == 0)
+      break
+    else print("oi")
+
+    dataframe <- convertRequestToDF(request)
+    names(dataframe) <- c('codmunres', 'ano', 'nvm_com_escolaridade_acima_de_11')
+    df <- rbind(df, dataframe)
+  }
+}
+head(df)
+
+## Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df)
+
+## Substituindo os NA's da coluna 'nvm_com_escolaridade_acima_de_11' por 0 (gerados após o left_join)
+df_bloco1$nvm_com_escolaridade_acima_de_11[is.na(df_bloco1$nvm_com_escolaridade_acima_de_11)] <- 0
+
+
+# Cobertura populacional com equipes de saúde da família ------------------
+##Ainda não disponíveis para o ano de 2021
+df_cobertura_esf <- df_bloco1_antigo |>
+  select(codmunres, ano, media_cobertura_esf)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df_cobertura_esf)
+
+
+# População total ---------------------------------------------------------
+df_est_pop_total_aux <- est_pop_tabnet(
   coluna = "Ano",
   periodo = as.character(2012:2021),
   sexo = "Todas as categorias",
   faixa_etaria = "Todas as categorias"
-)
-head(df_est_pop_total)
-
-##Retirando a linha de "TOTAL"
-df_est_pop_total <- df_est_pop_total[-1, ]
-head(df_est_pop_total)
+) |>
+  select(!municipio)
 
 ##Passando os dados para o formato long
-df_est_pop_total_long <- df_est_pop_total |>
-  rename(
-    municipio = Município
-  ) |>
-  mutate(
-    codmunres = substr(municipio, start = 1, stop = 6),
-    .before = municipio
-  ) |>
-  select(!municipio) |>
+df_est_pop_total <- df_est_pop_total_aux |>
   pivot_longer(
     cols = !c(codmunres),
     names_to = "ano",
@@ -1128,53 +1429,91 @@ df_est_pop_total_long <- df_est_pop_total |>
   ) |>
   mutate_if(is.character, as.numeric)
 
-head(df_est_pop_total_long)
-
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_est_pop_total_long)
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df_est_pop_total)
 
 
 # População feminina de 10 a 49 anos com plano de saúde -------------------
-##Ainda não disponíveis para o ano de 2021
-df_pop_fem_plano_saude <- df_bloco1_antigo |>
-  select(codmunres, ano, pop_fem_10_49_com_plano_saude)
+## Estimativas da população feminina de 10 a 49 anos -----------------------
+### Baixando os dados de estimativas populacionais de mulheres de 10 a 49 anos (as seleções utilizadas são os argumentos padrão da função)
+df_est_pop_aux <- est_pop_tabnet() |>
+  select(!municipio)
 
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_pop_fem_plano_saude)
+### Verificando se existem NAs
+if (any(is.na(df_est_pop_aux))) {
+  print("existem NAs")
+} else {
+  print("não existem NAs")
+}
 
-
-# População feminina de 10 a 49 anos --------------------------------------
-df_est_pop_fem_10_49 <- est_pop_tabnet(coluna = "Ano", periodo = as.character(2012:2021))
-head(df_est_pop_fem_10_49)
-
-##Retirando a linha de "TOTAL"
-df_est_pop_fem_10_49 <- df_est_pop_fem_10_49[-1, ]
-head(df_est_pop_fem_10_49)
-
-##Passando os dados para o formato long
-df_est_pop_fem_10_49_long <- df_est_pop_fem_10_49 |>
-  rename(
-    municipio = Município
+### Passando o data.frame para o formato long
+df_est_pop <- df_est_pop_aux |>
+  pivot_longer(
+    "2012":"2021",
+    names_to = "ano",
+    values_to = paste0("populacao_feminina_10_a_49")
   ) |>
   mutate(
-    codmunres = substr(municipio, start = 1, stop = 6),
-    .before = municipio
+    ano = as.numeric(ano),
   ) |>
-  select(!municipio) |>
+  arrange(codmunres, ano)
+
+### Transformando as colunas que estão em caracter para numéricas
+df_est_pop <- df_est_pop |> mutate_if(is.character, as.numeric)
+
+### Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df_est_pop)
+
+### Substituindo os NA's da coluna 'populacao_feminina_10_a_49' por 0 (gerados após o left_join)
+df_bloco1$populacao_feminina_10_a_49[is.na(df_bloco1$populacao_feminina_10_a_49)] <- 0
+
+
+## Beneficiárias de planos de saúde entre 10 a 49 anos ---------------------
+### Baixando os dados de mulheres de 10 a 49 anos beneficíarias de planos de saúde (as seleções utilizadas são os argumentos padrão da função)
+df_beneficiarias_aux <- pop_com_plano_saude_tabnet() |>
+  select(!municipio)
+
+### Verificando se existem NAs
+if (any(is.na(df_beneficiarias_aux))) {
+  print("existem NAs")
+} else {
+  print("não existem NAs")
+}
+
+### Passando o data.frame para o formato long
+df_beneficiarias <- df_beneficiarias_aux |>
   pivot_longer(
-    cols = !c(codmunres),
-    names_to = "ano",
-    values_to = "populacao_feminina_10_a_49"
+    3:ncol(df_beneficiarias_aux),
+    names_to = "mes_ano",
+    values_to = paste0("beneficiarias_10_a_49")
   ) |>
-  mutate_if(is.character, as.numeric)
+  mutate(
+    ano = as.numeric(paste0("20", substr(mes_ano, start = 5, stop = 6))),
+    .after = mes_ano
+  ) |>
+  arrange(codmunres, ano) |>
+  filter(codmunres %in% codigos_municipios)
 
-##Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_est_pop_fem_10_49_long)
+### Juntando com os dados de estimativas populacionais
+df_beneficiarias_pop <- left_join(df_beneficiarias, df_est_pop)
 
+### Retirando as ocorrências em que o número de beneficíarias é maior que a população estimada e calculando a mediana do número de beneficiárias
+df_beneficiarias_final <- df_beneficiarias_pop |>
+  filter(beneficiarias_10_a_49 <= populacao_feminina_10_a_49) |>
+  group_by(codmunres, ano, populacao_feminina_10_a_49) |>
+  summarise(pop_fem_10_49_com_plano_saude = round(median(beneficiarias_10_a_49))) |>
+  ungroup() |>
+  select(!populacao_feminina_10_a_49)
+
+### Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df_beneficiarias_final)
+
+### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
+df_bloco1$pop_fem_10_49_com_plano_saude[is.na(df_bloco1$pop_fem_10_49_com_plano_saude)] <- 0
 
 # Verificando se os dados novos e antigos estão batendo -------------------
 sum(df_bloco1 |> filter(ano < 2021) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos) #Não está batendo
 sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
 sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
 sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
@@ -1191,16 +1530,29 @@ sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_total)) - sum(df_bloco1_an
 sum(df_bloco1 |> filter(ano < 2021) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE)
 sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49)
 
-##Para a população total, utilizaremos os dados antigos por enquanto
+## Para os nascidos vivos de mães com menos de 20 anos, utilizaremos os dados do microdatasus (batem com os que estavam
+## no bloco 2 mas não batem com os que estavam no bloco 1)
+
+## Para a população total, utilizaremos os dados antigos por enquanto (essa variável só entra no indicador de cobertura com ESF)
 df_bloco1 <- df_bloco1 |>
   select(!populacao_total)
 
 df_est_pop_total_antigo <- df_bloco1_antigo |>
   select(codmunres, ano, populacao_total)
 
-##Juntando com o restante da base do bloco 1
+## Juntando com o restante da base do bloco 1
 df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo) |>
   select(1:16, populacao_total, 17:18)
+
+## Para o número de beneficiárias, considerar os dados antigos por enquanto
+df_bloco1 <- df_bloco1 |>
+  select(!pop_fem_10_49_com_plano_saude)
+
+df_befeciarias_antigo <- df_bloco1_antigo |>
+  select(codmunres, ano, pop_fem_10_49_com_plano_saude)
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- left_join(df_bloco1, df_befeciarias_antigo)
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
