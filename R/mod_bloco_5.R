@@ -279,7 +279,7 @@ mod_bloco_5_ui <- function(id) {
                   style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao1"),
@@ -1098,8 +1098,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
+          total_nascidos = sum(total_nascidos),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -1125,8 +1125,8 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
+          total_nascidos = sum(total_nascidos),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -1136,8 +1136,8 @@ mod_bloco_5_server <- function(id, filtros){
       asfixia |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1)) |>
+          total_nascidos = sum(total_nascidos),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1)) |>
         dplyr::ungroup()
     })
 
@@ -1162,8 +1162,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1),
+          total_nascidos = sum(total_nascidos),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -1236,8 +1236,8 @@ mod_bloco_5_server <- function(id, filtros){
           }
         ) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_de_nascidos_vivos*100, 1)) |>
+          total_nascidos = sum(total_nascidos),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1)) |>
         dplyr::ungroup()
     })
 
@@ -1347,7 +1347,7 @@ mod_bloco_5_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo_asfixia(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia",
+        titulo = "porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data_resumo_brasil_asfixia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
@@ -1828,14 +1828,14 @@ mod_bloco_5_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(grupo_de_anomalias_congenitas, codigo_cid, descricao, ano) |>
+        dplyr::group_by(grupo_de_anomalias_congenitas, anomalia, descricao, ano) |>
         dplyr::summarize(
           frequencia = sum(nascidos_vivos_anomalia)
         ) |>
         dplyr::ungroup() |>
         dplyr::right_join(data5_nascidos_vivos()) |>
         dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
-        dplyr::mutate(anomalia_descricao = paste(codigo_cid, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+        dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
     })
 
     output$tabela_malformacoes <- reactable::renderReactable({

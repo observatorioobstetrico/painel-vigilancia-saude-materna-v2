@@ -97,7 +97,7 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2021.csv") |>
   janitor::clean_names()
 
-asfixia_aux <- read.csv("data-raw/csv/asfixia_bloco8.csv", sep = ',') |>
+asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2021.csv", sep = ';') |>
   janitor::clean_names()
 
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2021.csv", sep = ';') |>
@@ -117,19 +117,16 @@ bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neo
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2021.csv") |>
-  dplyr::select(
-    codmunres,
-    municipio,
-    uf,
-    regiao,
-    ano,
-    obitos_fetais_totais,
-    obitos_fetais_mais_22sem
+  dplyr::select(!(nascidos)
   ) |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2021.csv") |>
+  dplyr::select(!c(uf, municipio, regiao))
+bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 
+juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
+bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -c(1, 2)] |>
@@ -205,14 +202,15 @@ bloco6 <- bloco6 |>
   )
 
 bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
-bloco7 <- bloco7 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
-  )
+# bloco7 <- bloco7 |>
+#   dplyr::select(
+#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+#     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
+#   )
 
 asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
 asfixia <- asfixia |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
