@@ -58,15 +58,15 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
+                      width = 6,
                       selectizeInput(
                         inputId = ns("parto_fetal"),
                         label = "Momento do óbito",
@@ -78,23 +78,26 @@ mod_bloco_7_ui <- function(id) {
                           "Depois do trabalho de parto" = "depois"
                         ),
                         width = "100%"
-                      ),
+                      )
+                    ),
+                    column(
+                      width = 6,
                       selectizeInput(
                         inputId = ns("faixa_peso_fetal"),
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "peso_fetal",
-                          "Menor que 1500g" = "fetal_menos1500",
-                          "De 1500g a 1999g" = "fetal_1500_1999",
-                          "De 2000g a 2499g" = "fetal_2000_2499",
-                          "Maior ou igual a 2500g" = "fetal_mais2500"
+                          "Menor que 1500 g" = "fetal_menos1500",
+                          "De 1500 g a 1999 g" = "fetal_1500_1999",
+                          "De 2000 g a 2499 g" = "fetal_2000_2499",
+                          "Maior ou igual a 2500 g" = "fetal_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 410))
                 )
               ),
               column(
@@ -104,15 +107,15 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
+                      width = 6,
                       selectizeInput(
                         inputId = ns("parto_fetal2"),
                         label = "Momento do óbito",
@@ -124,23 +127,26 @@ mod_bloco_7_ui <- function(id) {
                           "Depois do trabalho de parto" = "depois"
                         ),
                         width = "100%"
-                      ),
+                      )
+                    ),
+                    column(
+                      width = 6,
                       selectizeInput(
                         inputId = ns("faixa_peso_fetal2"),
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "peso_fetal",
-                          "Menor que 1500g" = "fetal_menos1500",
-                          "De 1500g a 1999g" = "fetal_1500_1999",
-                          "De 2000g a 2499g" = "fetal_2000_2499",
-                          "Maior ou igual a 2500g" = "fetal_mais2500"
+                          "Menor que 1500 g" = "fetal_menos1500",
+                          "De 1500 g a 1999 g" = "fetal_1500_1999",
+                          "De 2000 g a 2499 g" = "fetal_2000_2499",
+                          "Maior ou igual a 2500 g" = "fetal_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 410))
                 )
               )
             )
@@ -186,9 +192,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos perinatais totais &nbsp;</b>")
                   ),
                   hr(),
@@ -201,16 +207,16 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "obitos_perinatal_total",
-                          "Menor que 1500g" = "perinatal_total_menos1500",
-                          "De 1500g a 1999g" = "perinatal_total_1500_1999",
-                          "De 2000g a 2499g" = "perinatal_total_2000_2499",
-                          "Maior ou igual a 2500g" = "perinatal_total_mais2500"
+                          "Menor que 1500 g" = "perinatal_total_menos1500",
+                          "De 1500 g a 1999 g" = "perinatal_total_1500_1999",
+                          "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
+                          "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
                 )
               ),
               column(
@@ -220,9 +226,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos perinatais segundo a OMS  &nbsp;</b>")
                   ),
                   hr(),
@@ -235,16 +241,16 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "obitos_perinatal_oms",
-                          "Menor que 1500g" = "perinatal_oms_menos1500",
-                          "De 1500g a 1999g" = "perinatal_oms_1500_1999",
-                          "De 2000g a 2499g" = "perinatal_oms_2000_2499",
-                          "Maior ou igual a 2500g" = "perinatal_oms_mais2500"
+                          "Menor que 1500 g" = "perinatal_oms_menos1500",
+                          "De 1500 g a 1999 g" = "perinatal_oms_1500_1999",
+                          "De 2000 g a 2499 g" = "perinatal_oms_2000_2499",
+                          "Maior ou igual a 2500 g" = "perinatal_oms_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 410))
                 )
               )
             )
@@ -291,6 +297,7 @@ mod_bloco_7_ui <- function(id) {
             ),
             fluidRow(
               column(
+                offset = 3,
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonat_i3")), proxy.height = "325px")
               )
@@ -306,10 +313,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -321,16 +328,16 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat",
-                          "Menor que 1500g" = "mort_neonat_menos1500",
-                          "De 1500g a 1999g" = "mort_neonat_1500_1999",
-                          "De 2000g a 2499g" = "mort_neonat_2000_2499",
-                          "Maior ou igual a 2500g" = "mort_neonat_mais2500"
+                          "Menor que 1500 g" = "mort_neonat_menos1500",
+                          "De 1500 g a 1999 g" = "mort_neonat_1500_1999",
+                          "De 2000 g a 2499 g" = "mort_neonat_2000_2499",
+                          "Maior ou igual a 2500 g" = "mort_neonat_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 345))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 410))
                 )
               ),
               column(
@@ -340,10 +347,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Mortalidade neonatal precoce por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal precoce por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -355,29 +362,30 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat_precoc",
-                          "Menor que 1500g" = "mort_neonat_precoc_menos1500",
-                          "De 1500g a 1999g" = "mort_neonat_precoc_1500_1999",
-                          "De 2000g a 2499g" = "mort_neonat_precoc_2000_2499",
-                          "Maior ou igual a 2500g" = "mort_neonat_precoc_mais2500"
+                          "Menor que 1500 g" = "mort_neonat_precoc_menos1500",
+                          "De 1500 g a 1999 g" = "mort_neonat_precoc_1500_1999",
+                          "De 2000 g a 2499 g" = "mort_neonat_precoc_2000_2499",
+                          "Maior ou igual a 2500 g" = "mort_neonat_precoc_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 345))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 410))
                 )
               ),
               column(
+                offset = 3,
                 width = 6,
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Mortalidade neonatal tardia por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal tardia por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -389,16 +397,16 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat_tardia",
-                          "Menor que 1500g" = "mort_neonat_tardia_menos1500",
-                          "De 1500g a 1999g" = "mort_neonat_tardia_1500_1999",
-                          "De 2000g a 2499g" = "mort_neonat_tardia_2000_2499",
-                          "Maior ou igual a 2500g" = "mort_neonat_tardia_mais2500"
+                          "Menor que 1500 g" = "mort_neonat_tardia_menos1500",
+                          "De 1500 g a 1999 g" = "mort_neonat_tardia_1500_1999",
+                          "De 2000 g a 2499 g" = "mort_neonat_tardia_2000_2499",
+                          "Maior ou igual a 2500 g" = "mort_neonat_tardia_mais2500"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 345))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 410))
                 )
               )
             )
@@ -1340,11 +1348,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_neonat <- reactive({
       dplyr::case_when(
-        input$faixa_peso == "mort_neonat" ~ "Mortalidade neonatal por 1000 nascidos vivos",
-        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatatl por 1000 nascidos vivos para peso ao nascer menor que 1500g",
-        input$faixa_peso == "mort_neonat_1500_1999" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1500 a 1999g",
-        input$faixa_peso == "mort_neonat_2000_2499" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 2000 a 2499g",
-        input$faixa_peso == "mort_neonat_mais2500" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500g"
+        input$faixa_peso == "mort_neonat" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos",
+        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatatl por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
+        input$faixa_peso == "mort_neonat_1500_1999" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1500 a 1999 g",
+        input$faixa_peso == "mort_neonat_2000_2499" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 2000 a 2499 g",
+        input$faixa_peso == "mort_neonat_mais2500" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
       )
     })
 
@@ -1365,11 +1373,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_neonat_precoc <- reactive({
       dplyr::case_when(
-        input$faixa_peso_precoc == "mort_neonat_precoc" ~ "Mortalidade neonatal precoce por 1000 nascidos vivos",
-        input$faixa_peso_precoc == "mort_neonat_precoc_menos1500" ~ "Mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer menor que 1500g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_1500_1999" ~ "Mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 1500 a 1999g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_2000_2499" ~ "Mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 2000 a 2499g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_mais2500" ~ "Mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500g"
+        input$faixa_peso_precoc == "mort_neonat_precoc" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos",
+        input$faixa_peso_precoc == "mort_neonat_precoc_menos1500" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_1500_1999" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 1500 a 1999 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_2000_2499" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 2000 a 2499 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_mais2500" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
       )
     })
 
@@ -1390,11 +1398,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_neonat_tardia <- reactive({
       dplyr::case_when(
-        input$faixa_peso_tardia == "mort_neonat_tardia" ~ "Mortalidade neonatal tardia por 1000 nascidos vivos",
-        input$faixa_peso_tardia == "mort_neonat_tardia_menos1500" ~ "Mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer menor que 1500g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_1500_1999" ~ "Mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 1500 a 1999g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_2000_2499" ~ "Mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 2000 a 2499g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_mais2500" ~ "Mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500g"
+        input$faixa_peso_tardia == "mort_neonat_tardia" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos",
+        input$faixa_peso_tardia == "mort_neonat_tardia_menos1500" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_1500_1999" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 1500 a 1999 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_2000_2499" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 2000 a 2499 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_mais2500" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
       )
     })
 
@@ -1417,7 +1425,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_menos1500",
-    #     titulo = "Mortalidade neonatal para peso ao nascer menor que 1500g",
+    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer menor que 1500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_menos1500,
     #     tipo = "taxa",
@@ -1432,7 +1440,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_precoc_menos1500",
-    #     titulo = "Mortalidade neonatal precoce para peso ao nascer menor que 1500g",
+    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer menor que 1500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_menos1500,
     #     tipo = "taxa",
@@ -1447,7 +1455,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_tardia_menos1500",
-    #     titulo = "Mortalidade neonatal tardia para peso ao nascer menor que 1500g",
+    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer menor que 1500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_menos1500,
     #     tipo = "taxa",
@@ -1462,7 +1470,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_1500_1999",
-    #     titulo = "Mortalidade neonatal para peso ao nascer de 1500g a 1999g",
+    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer de 1500 g a 1999 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_1500_1999,
     #     tipo = "taxa",
@@ -1477,7 +1485,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_precoc_1500_1999",
-    #     titulo = "Mortalidade neonatal precoce para peso ao nascer de 1500g a 1999g",
+    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer de 1500 g a 1999 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_1500_1999,
     #     tipo = "taxa",
@@ -1492,7 +1500,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_tardia_1500_1999",
-    #     titulo = "Mortalidade neonatal tardia para peso ao nascer de 1500g a 1999g",
+    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer de 1500 g a 1999 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_1500_1999,
     #     tipo = "taxa",
@@ -1507,7 +1515,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_2000_2499",
-    #     titulo = "Mortalidade neonatal para peso ao nascer de 2000g a 2499g",
+    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer de 2000 g a 2499 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_2000_2499,
     #     tipo = "taxa",
@@ -1522,7 +1530,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_precoc_2000_2499",
-    #     titulo = "Mortalidade neonatal precoce para peso ao nascer de 2000g a 2499g",
+    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer de 2000 g a 2499 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_2000_2499,
     #     tipo = "taxa",
@@ -1537,7 +1545,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_tardia_2000_2499",
-    #     titulo = "Mortalidade neonatal tardia para peso ao nascer de 2000g a 2499g",
+    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer de 2000 g a 2499 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_2000_2499,
     #     tipo = "taxa",
@@ -1552,7 +1560,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_mais2500",
-    #     titulo = "Mortalidade neonatal para peso ao nascer maior ou igual a 2500g",
+    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer maior ou igual a 2500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_mais2500,
     #     tipo = "taxa",
@@ -1567,7 +1575,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_precoc_mais2500",
-    #     titulo = "Mortalidade neonatal precoce para peso ao nascer maior ou igual a 2500g",
+    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer maior ou igual a 2500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_mais2500,
     #     tipo = "taxa",
@@ -1582,7 +1590,7 @@ mod_bloco_7_server <- function(id, filtros){
     #   cria_caixa_server(
     #     dados = data7_resumo(),
     #     indicador = "mort_neonat_tardia_mais2500",
-    #     titulo = "Mortalidade neonatal tardia para peso ao nascer maior ou igual a 2500g",
+    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer maior ou igual a 2500 g",
     #     tem_meta = FALSE,
     #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_mais2500,
     #     tipo = "taxa",
@@ -1962,51 +1970,51 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_obitos_fetais <- reactive({
       dplyr::case_when(
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais",
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais com peso menor que 1500g",
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais com peso de 1500 a 1999g",
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais com peso de 2000 a 2499g",
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais com peso maior ou igual a 2500g",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais (geral)",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais com peso menor que 1500 g",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais com peso de 1500 a 1999 g",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais com peso de 2000 a 2499 g",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais com peso maior ou igual a 2500 g",
         (input$parto_fetal == "antes" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais antes do trabalho de parto",
-        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais antes do trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais antes do trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais antes do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal == "antes" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais antes do trabalho de parto com peso maior ou igual a 2500 g",
         (input$parto_fetal == "durante" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais durante o trabalho de parto",
-        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais durante o trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais durante o trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais durante o trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal == "durante" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais durante o trabalho de parto com peso maior ou igual a 2500 g",
         (input$parto_fetal == "depois" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais depois do trabalho de parto",
-        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais depois do trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais depois do trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais depois do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais depois do trabalho de parto com peso maior ou igual a 2500 g",
       )
     })
 
     titulo_taxa_mortalidade_fetal <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
-        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso maior ou igual a 2500 g",
         (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal durante o trabalho de parto",
-        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "durante" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso maior ou igual a 2500 g",
         (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal depois do trabalho de parto",
-        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso menor que 1500g",
-        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 1500 a 1999g",
-        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 2000 a 2499g",
-        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso maior ou igual a 2500g",
+        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso maior ou igual a 2500 g",
       )
     })
 
@@ -2308,7 +2316,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_referencia_aux,
               type = "line",
-              name = "Referência (total nacional)",
+              name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -2343,7 +2351,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_referencia_aux,
               type = "line",
-              name = "Referência (total nacional)",
+              name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -2461,11 +2469,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_total == "obitos_perinatal_total" ~ "Número de óbitos perinatais",
-        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais de peso menor que 1500g",
-        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais de peso de 1500 a 1999g",
-        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais de peso de 2000 a 2499g",
-        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais de peso maior ou igual a 2500g",
+        input$faixa_peso_perinatal_total == "obitos_perinatal_total" ~ "Número de óbitos perinatais (geral)",
+        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais com pesomenor que 1500 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais com pesode 1500 a 1999 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais com pesode 2000 a 2499 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais com pesomaior ou igual a 2500 g",
       )
     })
 
@@ -2492,11 +2500,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_perinatal_oms <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_oms == "obitos_perinatal_oms" ~ "Número de óbitos perinatais segundo a OMS",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais segundo a OMS de peso menor que 1500g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais segundo a OMS de peso de 1500 a 1999g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais segundo a OMS de peso de 2000 a 2499g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais segundo a OMS de peso maior ou igual a 2500g",
+        input$faixa_peso_perinatal_oms == "obitos_perinatal_oms" ~ "Número de óbitos perinatais segundo a OMS (geral)",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais segundo a OMS com pesomenor que 1500 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais segundo a OMS com pesode 1500 a 1999 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais segundo a OMS com pesode 2000 a 2499 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais segundo a OMS com pesomaior ou igual a 2500 g",
       )
     })
 
