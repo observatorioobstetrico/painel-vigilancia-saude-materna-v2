@@ -196,7 +196,7 @@ mod_bloco_5_ui <- function(id) {
                       "De 28 a 32 semanas" = "porc_28_a_32_semanas",
                       "De 33 a 34 semanas" = "porc_33_a_34_semanas",
                       "De 35 a 36 semanas" = "porc_35_a_36_semanas",
-                      "Menos que 36 semanas" = "porc_premat"
+                      "Menos que 37 semanas" = "porc_premat"
 
                     ),
                     width = "100%", selected = "porc_premat"
@@ -1514,24 +1514,29 @@ mod_bloco_5_server <- function(id, filtros){
     output$plot2 <- highcharter::renderHighchart({
 
       if (filtros()$comparar == "Não") {
-        highcharter::highchart() |>
+        grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data5_prematuridade(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data_referencia(),
-            type = "line",
-            name = "Referência (países desenvolvidos)",
-            highcharter::hcaes(x = ano, y = porc_premat, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-          ) |>
+          )  |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
+        if(input$faixa_prematuridade == "porc_premat") {
+          grafico_base <- grafico_base  |>
+            highcharter::hc_add_series(
+              data = data_referencia(),
+              type = "line",
+              name = "Referência (países desenvolvidos)",
+              highcharter::hcaes(x = ano, y = porc_premat, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        } else {
+          grafico_base
+        }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
