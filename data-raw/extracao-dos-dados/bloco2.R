@@ -6,6 +6,7 @@ library(repr)
 library(data.table)
 library(readr)
 library(openxlsx)
+library(microdatasus)
 
 token = getPass()  #Token de acesso à API da PCDaS (todos os arquivos gerados se encontram na pasta "Databases", no Google Drive)
 
@@ -110,66 +111,28 @@ df_bloco2$total_de_nascidos_vivos[is.na(df_bloco2$total_de_nascidos_vivos)] <- 0
 
 
 # Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
-df <- dataframe <- data.frame()
+##Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
+df_microdatasus_aux <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2021,
+  vars = c("CODMUNRES", "DTNASC", "IDADEMAE"),
+  information_system = "SINASC"
+) |>
+  clean_names()
 
-for (estado in estados){
-
-  params = paste0('{
-      "token": {
-        "token": "',token,'"
-      },
-      "sql": {
-        "sql": {"query": "SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                  ' FROM \\"datasus-sinasc\\"',
-                  ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                  ' AND (IDADEMAE>=10 AND IDADEMAE<=19) ',
-                  ' GROUP BY CODMUNRES, ano_nasc",
-                        "fetch_size": 65000}
-      }
-    }')
-
-  request <- POST(url = endpoint, body = params, encode = "form")
-  dataframe <- convertRequestToDF(request)
-  names(dataframe) <- c('codmunres', 'ano', 'nvm_menor_que_20')
-  df <- rbind(df, dataframe)
-
-  repeat {
-
-    cursor <- content(request)$cursor
-
-    params = paste0('{
-          "token": {
-            "token": "',token,'"
-          },
-          "sql": {
-            "sql": {"query":"SELECT CODMUNRES, ano_nasc, COUNT(1)',
-                    ' FROM \\"datasus-sinasc\\"',
-                    ' WHERE (res_SIGLA_UF = \'',estado,'\' AND ano_nasc >= 2012)',
-                    ' AND (IDADEMAE>=10 AND IDADEMAE<=19) ',
-                    ' GROUP BY CODMUNRES, ano_nasc",
-                           "fetch_size": 65000, "cursor": "',cursor,'"}
-          }
-        }')
-
-
-    request <- POST(url = endpoint, body = params, encode = "form")
-
-    if (length(content(request)$rows) == 0)
-      break
-    else print("oi")
-
-    dataframe <- convertRequestToDF(request)
-    names(dataframe) <- c('codmunres', 'ano', 'nvm_menor_que_20')
-    df <- rbind(df, dataframe)
-  }
-}
-head(df)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
+df_microdatasus <- df_microdatasus_aux |>
+  filter(codmunres %in% df_municipios_aux$codmunres) |>
+  mutate(
+    ano = as.numeric(substr(dtnasc, 5, 8)),
+    nvm_menor_que_20 = 1,
+    .keep = "unused"
+  ) |>
+  filter(idademae < 20) |>
+  group_by(codmunres, ano) |>
+  summarise(nvm_menor_que_20 = sum(nvm_menor_que_20))
 
 ##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df)
+df_bloco2 <- left_join(df_bloco2, df_microdatasus)
 
 ##Substituindo os NA's da coluna 'nvm_menor_que_20' por 0 (gerados após o left_join)
 df_bloco2$nvm_menor_que_20[is.na(df_bloco2$nvm_menor_que_20)] <- 0
@@ -557,7 +520,7 @@ df_bloco2 <- left_join(df_bloco2, df_abortos_ans_40_a_49)
 
 # Verificando se os dados novos e antigos estão batendo -------------------
 sum(df_bloco2 |> filter(ano < 2021) |> pull(total_de_nascidos_vivos)) - sum(df_bloco2_antigo$total_de_nascidos_vivos)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(nvm_menor_que_20)) - sum(df_bloco2_antigo$nvm_menor_que_20)  #Não está batendo
+sum(df_bloco2 |> filter(ano < 2021) |> pull(nvm_menor_que_20)) - sum(df_bloco2_antigo$nvm_menor_que_20)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(pop_feminina_10_a_19)) - sum(df_bloco2_antigo$pop_feminina_10_a_19)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(mulheres_com_mais_de_tres_partos_anteriores)) - sum(df_bloco2_antigo$mulheres_com_mais_de_tres_partos_anteriores)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(pop_fem_10_49)) - sum(df_bloco2_antigo$pop_fem_10_49)
@@ -567,7 +530,7 @@ sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_40_a_49)) - sum(df_bloco
 sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_menor_30)) - sum(df_bloco2_antigo$abortos_ans_menor_30)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_30_a_39)) - sum(df_bloco2_antigo$abortos_ans_30_a_39)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_40_a_49)) - sum(df_bloco2_antigo$abortos_ans_40_a_49)
-##Os dados de 'nvm_menor_que_20' não estão batendo, mas utilizaremos os dados que baixamos aqui (eles batem com os do bloco 1)
+
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2021", row.names = FALSE)
+write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2021.csv", row.names = FALSE)
