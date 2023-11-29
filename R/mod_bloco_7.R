@@ -288,24 +288,59 @@ mod_bloco_7_ui <- function(id) {
             fluidRow(
               column(
                 width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonat_i4")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonat_i1")), proxy.height = "300px")
               ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonat_i2")), proxy.height = "300px")
-              )
-            ),
-            fluidRow(
+              ),
               column(
-                offset = 3,
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonat_i3")), proxy.height = "325px")
               )
-            )
+            ),
           ),
           column(
             width = 8,
             fluidRow(
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Número de óbitos neonatais &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("obitos_faixa_peso"),
+                        label = "Faixa de peso ao nascer",
+                        options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
+                        choices = c(
+                          "Geral" = "obitos_neonat",
+                          "Menor que 1500 g" = "obitos_neonat_menos1500",
+                          "De 1500 g a 1999 g" = "obitos_neonat_1500_1999",
+                          "De 2000 g a 2499 g" = "obitos_neonat_2000_2499",
+                          "Maior ou igual a 2500 g" = "obitos_neonat_mais2500"
+                        ),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 410))
+                )
+              ),
               column(
                 width = 6,
                 bs4Dash::bs4Card(
@@ -375,7 +410,6 @@ mod_bloco_7_ui <- function(id) {
                 )
               ),
               column(
-                offset = 3,
                 width = 6,
                 bs4Dash::bs4Card(
                   width = 12,
@@ -552,6 +586,11 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::summarise(
+          obitos_neonat = sum(obitos_27dias),
+          obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
+          obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
+          obitos_neonat_2000_2499 = sum(obitos_27dias_2000_2499),
+          obitos_neonat_mais2500 = sum(obitos_27dias_mais2500),
           mort_neonat = round(sum(obitos_27dias)/sum(nascidos) *1000, 2),
           mort_neonat_precoc = round(sum(obitos_6dias)/sum(nascidos) *1000, 2),
           mort_neonat_tardia = round(sum(obitos_7_27dias)/sum(nascidos) *1000, 2),
@@ -635,6 +674,11 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
+          obitos_neonat = sum(obitos_27dias),
+          obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
+          obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
+          obitos_neonat_2000_2499 = sum(obitos_27dias_2000_2499),
+          obitos_neonat_mais2500 = sum(obitos_27dias_mais2500),
           mort_neonat = round(sum(obitos_27dias)/sum(nascidos) *1000, 2),
           mort_neonat_precoc = round(sum(obitos_6dias)/sum(nascidos) *1000, 2),
           mort_neonat_tardia = round(sum(obitos_7_27dias)/sum(nascidos) *1000, 2),
@@ -725,6 +769,11 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
+          obitos_neonat = sum(obitos_27dias),
+          obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
+          obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
+          obitos_neonat_2000_2499 = sum(obitos_27dias_2000_2499),
+          obitos_neonat_mais2500 = sum(obitos_27dias_mais2500),
           mort_neonat = round(sum(obitos_27dias)/sum(nascidos) *1000, 2),
           mort_neonat_precoc = round(sum(obitos_6dias)/sum(nascidos) *1000, 2),
           mort_neonat_tardia = round(sum(obitos_7_27dias)/sum(nascidos) *1000, 2),
@@ -833,6 +882,11 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
+          obitos_neonat = sum(obitos_27dias),
+          obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
+          obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
+          obitos_neonat_2000_2499 = sum(obitos_27dias_2000_2499),
+          obitos_neonat_mais2500 = sum(obitos_27dias_mais2500),
           mort_neonat = round(sum(obitos_27dias)/sum(nascidos) *1000, 2),
           mort_neonat_precoc = round(sum(obitos_6dias)/sum(nascidos) *1000, 2),
           mort_neonat_tardia = round(sum(obitos_7_27dias)/sum(nascidos) *1000, 2),
@@ -926,6 +980,11 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
+          obitos_neonat = sum(obitos_27dias),
+          obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
+          obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
+          obitos_neonat_2000_2499 = sum(obitos_27dias_2000_2499),
+          obitos_neonat_mais2500 = sum(obitos_27dias_mais2500),
           mort_neonat = round(sum(obitos_27dias)/sum(nascidos) *1000, 2),
           mort_neonat_precoc = round(sum(obitos_6dias)/sum(nascidos) *1000, 2),
           mort_neonat_tardia = round(sum(obitos_7_27dias)/sum(nascidos) *1000, 2),
@@ -1421,6 +1480,39 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
+    titulo_caixa_obitos_neonat <- reactive({
+      dplyr::case_when(
+        input$obitos_faixa_peso == "obitos_neonat" ~ "Número de óbitos neonatais",
+        input$obitos_faixa_peso == "obitos_neonat_menos1500" ~ "Número de óbitos neonatais para peso ao nascer menor que 1500 g",
+        input$obitos_faixa_peso == "obitos_neonat_1500_1999" ~ "Número de óbitos neonatais para peso ao nascer de 1500 a 1999 g",
+        input$obitos_faixa_peso == "obitos_neonat_2000_2499" ~ "Número de óbitos neonatais para peso ao nascer de 2000 a 2499 g",
+        input$obitos_faixa_peso == "obitos_neonat_mais2500" ~ "Número de óbitos neonatais para peso ao nascer maior ou igual a 2500 g"
+      )
+    })
+
+    output$caixa_b7_neonat_i4 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = input$obitos_faixa_peso,
+        titulo = titulo_caixa_obitos_neonat(),
+        tem_meta = FALSE,
+        valor_de_referencia = data7_resumo_referencia()[[input$obitos_faixa_peso]],
+        tipo = "número",
+        invertido = FALSE,
+        cor = "lightgrey",
+        #cor = dplyr::if_else(filtros()$nivel == "Nacional", "lightgrey", "#cbd6ff"),
+        texto_footer = dplyr::if_else(
+          filtros()$nivel == "Nacional",
+          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+        ),
+        tamanho_caixa = "303px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+
     # output$caixa_b7_neonat_i4 <- renderUI({
     #   cria_caixa_server(
     #     dados = data7_resumo(),
@@ -1870,6 +1962,96 @@ mod_bloco_7_server <- function(id, filtros){
               data = data7_referencia_aux,
               type = "line",
               name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
+    output$plot4_neonat <- highcharter::renderHighchart({
+      data7_aux <- data7() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$obitos_faixa_peso),
+          class
+        )
+
+      data7_comp_aux <- data7_comp() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$obitos_faixa_peso),
+          class
+        )
+
+      data7_referencia_aux <- data7_referencia() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$obitos_faixa_peso),
+          class
+        )
+
+      if (filtros()$comparar == "Não") {
+        # validate(
+        #   need(
+        #     sum(data7()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_referencia_aux,
+              type = "line",
+              name = "Referência (total nacional)",
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        # validate(
+        #   need(
+        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_comp_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_referencia_aux,
+              type = "line",
+              name = "Referência (total nacional)",
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
