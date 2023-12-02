@@ -7,6 +7,7 @@ library(data.table)
 library(readr)
 library(openxlsx)
 library(tidyr)
+library(readxl)
 
 token = getPass()  #Token de acesso à API da PCDaS (todos os arquivos gerados se encontram na pasta "Databases", no Google Drive)
 
@@ -173,8 +174,8 @@ df_bloco3 <- left_join(df_bloco3, df)
 ##Substituindo os NA's da coluna 'mulheres_com_pelo_menos_uma_consulta_prenatal' por 0 (gerados após o left_join)
 df_bloco3$mulheres_com_pelo_menos_uma_consulta_prenatal[is.na(df_bloco3$mulheres_com_pelo_menos_uma_consulta_prenatal)] <- 0
 
-# Proporção de mulheres com início precoce do pré-natal (até o 3 mês de gestação) ---------------
 
+# Proporção de mulheres com início precoce do pré-natal (até o 3 mês de gestação) ---------------
 df <- dataframe <- data.frame()
 
 for (estado in estados){
@@ -229,7 +230,6 @@ for (estado in estados){
   }
 }
 
-
 head(df)
 
 ##Transformando as colunas que estão em caracter para numéricas
@@ -241,8 +241,8 @@ df_bloco3 <- left_join(df_bloco3, df)
 ##Substituindo os NA's da coluna 'mulheres_com_inicio_precoce_do_prenatal' por 0 (gerados após o left_join)
 df_bloco3$mulheres_com_inicio_precoce_do_prenatal[is.na(df_bloco3$mulheres_com_inicio_precoce_do_prenatal)] <- 0
 
-# Proporção de mulheres com mais de sete consultas de pré-natal ------------------
 
+# Proporção de mulheres com mais de sete consultas de pré-natal ------------------
 df <- dataframe <- data.frame()
 
 for (estado in estados){
@@ -309,7 +309,7 @@ df_bloco3 <- left_join(df_bloco3, df)
 df_bloco3$mulheres_com_mais_de_sete_consultas_prenatal[is.na(df_bloco3$mulheres_com_mais_de_sete_consultas_prenatal)] <- 0
 
 
-# mulheres com número de consultas de pré-natal adequado ---------------------------
+# Porcentagem de mulheres com número de consultas de pré-natal adequado ---------------------------
 df <- dataframe <- data.frame()
 
 for (estado in estados){
@@ -364,7 +364,8 @@ for (estado in estados){
 }
 
 head(df)
-##Transformando as colunas que estão em caracter para numéricas
+
+##Transformando as colunas que estão em caracter para numéricas e criando a variável de consultas adequadas
 df <- df |>
   mutate_if(is.character, as.numeric) |>
   mutate(
@@ -391,13 +392,44 @@ df_bloco3 <- left_join(df_bloco3, df)
 ##Substituindo os NA's da coluna 'mulheres_com_consultas_prenatal_adequadas' por 0 (gerados após o left_join)
 df_bloco3$mulheres_com_consultas_prenatal_adequadas[is.na(df_bloco3$mulheres_com_consultas_prenatal_adequadas)] <- 0
 
-# Incidência de sífilis congênita ------------------
-##Ainda não disponíveis para o ano de 2021
-df_casos_sc <- df_bloco3_antigo |>
-  select(codmunres, ano, casos_sc)
+
+# Incidência de sífilis congênita por mil nascidos vivos ------------------
+##Lendo a base de dados obtida pelo site http://indicadoressifilis.aids.gov.br/
+df_sifilis_excel <- read_excel(
+  "data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2022.xlsx",
+  sheet = "DADOS CONTINUAÇÃO 2"
+)
+
+#Corrigindo os nomes das colunas e filtrando pelos municípios que utilizamos no painel
+names(df_sifilis_excel) <- as.character(df_sifilis_excel[1,])
+
+df_sifilis <- df_sifilis_excel[-1, ] |>
+  clean_names() |>
+  select(
+    codmunres = codigo,
+    starts_with("sifilis_congenita_em_menores_de_um_ano_2")
+  ) |>
+  rename_with(
+    str_sub, start = -4, starts_with("sifilis_congenita_em_menores_de_um_ano_2")
+  ) |>
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
+  mutate_if(is.character, as.numeric)
+
+#Passando para o formato long
+df_sifilis_long <- df_sifilis |>
+  pivot_longer(
+    cols = !codmunres,
+    names_to = "ano",
+    values_to = "casos_sc"
+  ) |>
+  filter(ano <= 2021) |>
+  mutate_if(is.character, as.numeric)
 
 ##Juntando com o restante da base do bloco 3
-df_bloco3 <- left_join(df_bloco3, df_casos_sc)
+df_bloco3 <- left_join(df_bloco3, df_sifilis_long)
+
+##Substituindo os NA's da coluna 'casos_sc' por 0 (gerados após o left_join)
+df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
 
 
 # Verificando se os dados novos e antigos estão batendo -------------------
@@ -405,19 +437,10 @@ sum(df_bloco3 |> filter(ano < 2021) |> pull(total_de_nascidos_vivos)) - sum(df_b
 sum(df_bloco3 |> filter(ano < 2021) |> pull(mulheres_com_pelo_menos_uma_consulta_prenatal )) - sum(df_bloco3_antigo$mulheres_com_pelo_menos_uma_consulta_prenatal )
 sum(df_bloco3 |> filter(ano < 2021) |> pull(mulheres_com_inicio_precoce_do_prenatal)) - sum(df_bloco3_antigo$mulheres_com_inicio_precoce_do_prenatal)
 sum(df_bloco3 |> filter(ano < 2021) |> pull(mulheres_com_mais_de_sete_consultas_prenatal )) - sum(df_bloco3_antigo$mulheres_com_mais_de_sete_consultas_prenatal )
+sum(df_bloco3 |> filter(ano < 2021) |> pull(casos_sc)) - sum(df_bloco3_antigo$casos_sc)
+##Os dados de sífilis não batem, mas acreditamos que seja porque a base foi atualizada após o cálculo desse
+##indicador na versão v1 do painel
 
 
-##Para a Incidência de sífilis congênita , utilizaremos os dados antigos por enquanto
-df_bloco3 <- df_bloco3 |>
-  select(!casos_sc)
-
-df_casos_sc_antigo <- df_bloco3_antigo |>
-  select(codmunres, ano, casos_sc)
-
-##Juntando com o restante da base do bloco 3
-df_bloco3 <- left_join(df_bloco3, df_casos_sc_antigo)
-
-##Substituindo os NA's da coluna 'casos_sc' por 0 (gerados após o left_join)
-df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 write.csv(df_bloco3, "data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2021.csv", row.names = FALSE)
