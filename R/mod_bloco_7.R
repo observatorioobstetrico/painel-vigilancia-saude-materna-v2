@@ -179,6 +179,14 @@ mod_bloco_7_ui <- function(id) {
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "300px")
               )
             )
           ),
@@ -251,6 +259,74 @@ mod_bloco_7_ui <- function(id) {
                     )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 410))
+                )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais totais  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("faixa_peso_perinatal_taxa_total"),
+                        label = "Faixa de peso",
+                        options = list(placeholder = "Selecione o intervalo de peso"),
+                        choices = c(
+                          "Geral" = "taxa_perinatal_total",
+                          "Menor que 1500 g" = "taxa_perinatal_total_menos1500",
+                          "De 1500 g a 1999 g" = "taxa_perinatal_total_1500_1999",
+                          "De 2000 g a 2499 g" = "taxa_perinatal_total_2000_2499",
+                          "Maior ou igual a 2500 g" = "taxa_perinatal_total_mais2500"
+                        ),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
+                )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais segundo a OMS  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("faixa_peso_perinatal_taxa_oms"),
+                        label = "Faixa de peso",
+                        options = list(placeholder = "Selecione o intervalo de peso"),
+                        choices = c(
+                          "Geral" = "taxa_perinatal_oms",
+                          "Menor que 1500 g" = "taxa_perinatal_oms_menos1500",
+                          "De 1500 g a 1999 g" = "taxa_perinatal_oms_1500_1999",
+                          "De 2000 g a 2499 g" = "taxa_perinatal_oms_2000_2499",
+                          "Maior ou igual a 2500 g" = "taxa_perinatal_oms_mais2500"
+                        ),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_perinatal"), height = 410))
                 )
               )
             )
@@ -656,6 +732,16 @@ mod_bloco_7_server <- function(id, filtros){
           perinatal_oms_1500_1999 = sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999),
           perinatal_oms_2000_2499 = sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499),
           perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500),
+          taxa_perinatal_total = round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_total_menos1500 = round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_total_1500_1999 = round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_total_2000_2499 = round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_total_mais2500 = round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2),
+          taxa_perinatal_oms = round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
           localidade = dplyr::case_when(
             nivel_selecionado() == "Nacional" ~ "Brasil",
             nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
@@ -743,7 +829,18 @@ mod_bloco_7_server <- function(id, filtros){
           perinatal_oms_menos1500 = sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500),
           perinatal_oms_1500_1999 = sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999),
           perinatal_oms_2000_2499 = sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499),
-          perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500)
+          perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500),
+
+          taxa_perinatal_total = round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_total_menos1500 = round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_total_1500_1999 = round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_total_2000_2499 = round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_total_mais2500 = round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2),
+          taxa_perinatal_oms = round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2)
         ) |>
         dplyr::ungroup()
     })
@@ -839,6 +936,16 @@ mod_bloco_7_server <- function(id, filtros){
           perinatal_oms_1500_1999 = sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999),
           perinatal_oms_2000_2499 = sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499),
           perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500),
+          taxa_perinatal_total = round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_total_menos1500 = round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_total_1500_1999 = round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_total_2000_2499 = round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_total_mais2500 = round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2),
+          taxa_perinatal_oms = round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -952,6 +1059,16 @@ mod_bloco_7_server <- function(id, filtros){
           perinatal_oms_1500_1999 = sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999),
           perinatal_oms_2000_2499 = sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499),
           perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500),
+          taxa_perinatal_total = round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_total_menos1500 = round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_total_1500_1999 = round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_total_2000_2499 = round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_total_mais2500 = round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2),
+          taxa_perinatal_oms = round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -1050,6 +1167,16 @@ mod_bloco_7_server <- function(id, filtros){
           perinatal_oms_1500_1999 = sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999),
           perinatal_oms_2000_2499 = sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499),
           perinatal_oms_mais2500 = sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500),
+          taxa_perinatal_total = round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_total_menos1500 = round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_total_1500_1999 = round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_total_2000_2499 = round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_total_mais2500 = round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2),
+          taxa_perinatal_oms = round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2),
+          taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
+          taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
+          taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -2009,19 +2136,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
+        # if (filtros()$nivel == "Nacional") {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.8
+        #     )
+        # }
       } else {
         # validate(
         #   need(
@@ -2044,19 +2171,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
+        # if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.7
+        #     )
+        # }
       }
     })
 
@@ -2399,19 +2526,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
+        # if (filtros()$nivel == "Nacional") {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.8
+        #     )
+        # }
       } else {
         # validate(
         #   need(
@@ -2434,19 +2561,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
+        # if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.7
+        #     )
+        # }
       }
     })
 
@@ -2543,75 +2670,75 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
-    output$plot2_fetal_antigo <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        # validate(
-        #   need(
-        #     data6()$casos_mmg != 0,
-        #     "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data7(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
-      } else {
-        # need(
-        #   data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
-        #   "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-        # )
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data7(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data7_comp(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
-      }
-    })
+    # output$plot2_fetal_antigo <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     # validate(
+    #     #   need(
+    #     #     data6()$casos_mmg != 0,
+    #     #     "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+    #     #   )
+    #     # )
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data7(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data7_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     # need(
+    #     #   data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+    #     #   "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+    #     # )
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data7(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data7_comp(),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data7_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
 
-############ Para a aba de mortalidade perinatal
+    ############ Para a aba de mortalidade perinatal
 
     ##### Criando o input para selecionar a localidade do resumo quando há comparação #####
     output$input_localidade_resumo_perinatal <- renderUI({
@@ -2652,10 +2779,10 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_caixa_perinatal_total <- reactive({
       dplyr::case_when(
         input$faixa_peso_perinatal_total == "obitos_perinatal_total" ~ "Número de óbitos perinatais (geral)",
-        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais com pesomenor que 1500 g",
-        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais com pesode 1500 a 1999 g",
-        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais com pesode 2000 a 2499 g",
-        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais com pesomaior ou igual a 2500 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais com peso menor que 1500 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais com peso de 1500 a 1999 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais com peso de 2000 a 2499 g",
+        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g",
       )
     })
 
@@ -2683,10 +2810,10 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_caixa_perinatal_oms <- reactive({
       dplyr::case_when(
         input$faixa_peso_perinatal_oms == "obitos_perinatal_oms" ~ "Número de óbitos perinatais segundo a OMS (geral)",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais segundo a OMS com pesomenor que 1500 g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais segundo a OMS com pesode 1500 a 1999 g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais segundo a OMS com pesode 2000 a 2499 g",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais segundo a OMS com pesomaior ou igual a 2500 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais segundo a OMS com peso menor que 1500 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais segundo a OMS com peso de 1500 a 1999 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais segundo a OMS com peso de 2000 a 2499 g",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais segundo a OMS com peso maior ou igual a 2500 g",
       )
     })
 
@@ -2705,6 +2832,58 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
+        tamanho_caixa = "303px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    titulo_caixa_taxa_perinatal_total <- reactive({
+      dplyr::case_when(
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g",
+      )
+    })
+
+    output$caixa_b7_perinatal_i3 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = input$faixa_peso_perinatal_taxa_total,
+        titulo = titulo_caixa_taxa_perinatal_total(),
+        tem_meta = FALSE,
+        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]] >0 ,
+                                             data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]], NaN),
+        tipo = "taxa",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    titulo_caixa_taxa_perinatal_oms <- reactive({
+      dplyr::case_when(
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal segundo a OMS",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g segundo a OMS",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g segundo a OMS",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g segundo a OMS",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g segundo a OMS",
+      )
+    })
+
+    output$caixa_b7_perinatal_i4 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = input$faixa_peso_perinatal_taxa_oms,
+        titulo = titulo_caixa_taxa_perinatal_oms(),
+        tem_meta = FALSE,
+        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]] >0 ,
+                                             data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]], NaN),
+        tipo = "taxa",
+        invertido = FALSE,
         tamanho_caixa = "303px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
@@ -2752,19 +2931,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
+        # if (filtros()$nivel == "Nacional") {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.8
+        #     )
+        # }
       } else {
         # validate(
         #   need(
@@ -2787,19 +2966,19 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_referencia_aux,
-              type = "line",
-              name = "Referência (total nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
+        # if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.7
+        #     )
+        # }
       }
     })
 
@@ -2843,6 +3022,99 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
+        # if (filtros()$nivel == "Nacional") {
+        #   grafico_base
+        # } else {
+        #   grafico_base |>
+        #     highcharter::hc_add_series(
+        #       data = data7_referencia_aux,
+        #       type = "line",
+        #       name = "Referência (total nacional)",
+        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #       dashStyle = "ShortDot",
+        #       opacity = 0.8
+        #     )
+        # }
+      } else {
+        # validate(
+        #   need(
+        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_comp_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        #   if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        #     grafico_base
+        #   } else {
+        #     grafico_base |>
+        #       highcharter::hc_add_series(
+        #         data = data7_referencia_aux,
+        #         type = "line",
+        #         name = "Referência (total nacional)",
+        #         highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #         dashStyle = "ShortDot",
+        #         opacity = 0.7
+        #       )
+        #   }
+      }
+    })
+
+
+    #### Gráfico de linhas para a taxa de mortalidade perinatal "total" ######
+
+    output$plot3_perinatal <- highcharter::renderHighchart({
+      data7_aux <- data7() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_total),
+          class
+        )
+
+      data7_comp_aux <- data7_comp() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_total),
+          class
+        )
+
+      data7_referencia_aux <- data7_referencia() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_total),
+          class
+        )
+
+      if (filtros()$comparar == "Não") {
+        # validate(
+        #   need(
+        #     sum(data7()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
         } else {
@@ -2850,7 +3122,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_referencia_aux,
               type = "line",
-              name = "Referência (total nacional)",
+              name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -2885,7 +3157,99 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_referencia_aux,
               type = "line",
-              name = "Referência (total nacional)",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
+    #### Gráfico de linhas para a taxa de mortalidade perinatal segundo a OMS ######
+
+    output$plot4_perinatal <- highcharter::renderHighchart({
+      data7_aux <- data7() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_oms),
+          class
+        )
+
+      data7_comp_aux <- data7_comp() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_oms),
+          class
+        )
+
+      data7_referencia_aux <- data7_referencia() |>
+        dplyr::select(
+          ano,
+          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_oms),
+          class
+        )
+
+      if (filtros()$comparar == "Não") {
+        # validate(
+        #   need(
+        #     sum(data7()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_referencia_aux,
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        # validate(
+        #   need(
+        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
+        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
+        #   )
+        # )
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_comp_aux,
+            type = "line",
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_referencia_aux,
+              type = "line",
+              name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
