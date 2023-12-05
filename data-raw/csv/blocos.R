@@ -133,6 +133,7 @@ bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
+
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
@@ -247,15 +248,17 @@ base_incompletude_deslocamento <- base_incompletude_deslocamento |>
 
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
-    base_incompletude_sinasc,
-    base_incompletude_deslocamento,
+    dplyr::full_join(
+      base_incompletude_sinasc,
+      base_incompletude_deslocamento,
+      by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+    ),
+    base_incompletude_sim,
     by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
   ),
-  base_incompletude_sim,
-  by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+  base_incompletude_deslocamento
 )
 
-base_incompletude <- dplyr::inner_join(base_incompletude, base_incompletude_deslocamento)
 
 #Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
 base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
