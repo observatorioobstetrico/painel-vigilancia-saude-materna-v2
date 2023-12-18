@@ -314,7 +314,7 @@ mod_bloco_5_ui <- function(id) {
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritários para vigilância &nbsp;</b>"),
+            HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritários para vigilância  definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>) &nbsp;</b>"),
             shinyjs::hidden(
               span(
                 id = ns("mostrar_botao3"),
