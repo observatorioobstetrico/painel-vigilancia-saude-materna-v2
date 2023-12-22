@@ -148,6 +148,74 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 410))
                 )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição do momento do óbito por faixa de peso  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("faixa_peso_dist_moment_obit_fetal"),
+                        label = "Selecione a faixa de peso",
+                        choices = c(
+                          "Menor que 1500 g" = "dist_moment_obito_fetal_menos1500",
+                          "De 1500 g a 1999 g" = "dist_moment_obito_fetal_1500_1999",
+                          "De 2000 g a 2499 g" = "dist_moment_obito_fetal_2000_2499",
+                          "Maior ou igual a 2500 g" = "dist_moment_obito_fetal_mais2500"
+                        ),
+                        selected=c("dist_moment_obito_fetal_menos1500", "dist_moment_obito_fetal_1500_1999",
+                                   "dist_moment_obito_fetal_2000_2499", "dist_moment_obito_fetal_mais2500"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 410))
+                )
+              ), column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição das faixas de peso por idade gestacional  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("idade_gestac_dist_moment_obit_fetal"),
+                        label = "Selecione a idade gestacional",
+                        choices = c(
+                          "Menor que 28 semanas" = "dist_peso_fetal_menos_28sem",
+                          "De 28 a 32 semanas" = "dist_peso_fetal_menos_28_32sem",
+                          "De 33 a 34 semanas" = "dist_peso_fetal_33_34sem",
+                          "De 35 a 36 semanas" = "dist_peso_fetal_35_36sem",
+                          "Maior que 37 semanas" = "dist_peso_fetal_mais_37sem"
+                        ),
+                        selected = c("dist_peso_fetal_menos_28sem", "dist_peso_fetal_menos_28_32sem",
+                                     "dist_peso_fetal_33_34sem", "dist_peso_fetal_35_36sem", "dist_peso_fetal_mais_37sem"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 410))
+                )
               )
             )
           )
@@ -220,6 +288,8 @@ mod_bloco_7_ui <- function(id) {
                           "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
                           "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
                         ),
+                        selected = c("obitos_perinatal_total", "perinatal_total_menos1500", "perinatal_total_1500_1999",
+                                     "perinatal_total_2000_2499", "perinatal_total_mais2500"),
                         width = "100%"
                       )
                     )
@@ -328,7 +398,78 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_perinatal"), height = 410))
                 )
-              )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição do momento do óbito por faixa de peso  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("faixa_peso_dist_moment_obit_perinat"),
+                        label = "Selecione a faixa de peso",
+                        # multiple = TRUE,
+                        # options = list(placeholder = "Selecione a faixa de peso"),
+                        choices = c(
+                          "Menor que 1500 g" = "dist_moment_obito_perinat_menos1500",
+                          "De 1500 g a 1999 g" = "dist_moment_obito_perinat_1500_1999",
+                          "De 2000 g a 2499 g" = "dist_moment_obito_perinat_2000_2499",
+                          "Maior ou igual a 2500 g" = "dist_moment_obito_perinat_mais2500"
+                        ),
+                        selected = c("dist_moment_obito_perinat_menos1500", "dist_moment_obito_perinat_1500_1999",
+                                     "dist_moment_obito_perinat_2000_2499", "dist_moment_obito_perinat_mais2500"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 410))
+                )
+              ), column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição do peso por momento de óbito  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("momento_obito_dist_peso_perinat"),
+                        label = "Selecione o momento do óbito",
+                        # multiple = TRUE,
+                        # options = list(placeholder = "Selecione a faixa de peso"),
+                        choices = c(
+                          "Antes do parto" = "dist_peso_perinat_antes_parto",
+                          "Durante o parto" = "dist_peso_perinat_durante_parto",
+                          "Dia 0 de vida" = "dist_peso_perinat_dia_0",
+                          "De 1 a 6 dias de vida" = "dist_peso_perinat_dia_1_6"
+                        ),
+                        selected = c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto",
+                                     "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 410))
+                )
+              ),
             )
           )
         )
@@ -518,6 +659,77 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 410))
                 )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição do momento do óbito por faixa de peso &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("faixa_peso_dist_moment_obit_neonat"),
+                        label = "Selecione a faixa de peso",
+                        # multiple = TRUE,
+                        # options = list(placeholder = "Selecione a faixa de peso"),
+                        choices = c(
+                          "Menor que 1500 g" = "dist_moment_obito_neonat_menos1500",
+                          "De 1500 g a 1999 g" = "dist_moment_obito_neonat_1500_1999",
+                          "De 2000 g a 2499 g" = "dist_moment_obito_neonat_2000_2499",
+                          "Maior ou igual a 2500 g" = "dist_moment_obito_neonat_mais2500"
+                        ),
+                        selected = c("dist_moment_obito_neonat_menos1500", "dist_moment_obito_neonat_1500_1999",
+                                     "dist_moment_obito_neonat_2000_2499", "dist_moment_obito_neonat_mais2500"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 410))
+                )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição do peso pelo momento do óbito &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      checkboxGroupInput(
+                        inputId = ns("momento_obito_dist_peso_neonat"),
+                        label = "Selecione o momento do óbito",
+                        # multiple = TRUE,
+                        # options = list(placeholder = "Selecione a faixa de peso"),
+                        choices = c(
+                          "Dia 0 de vida" = "dist_peso_neonat_dia_0",
+                          "De 1 a 6 dias de vida" = "dist_peso_perinat_dia_1_6",
+                          "De 7 a 28 dias de vida" = "dist_peso_perinat_dia_7_28"
+                        ),
+                        selected = c("dist_peso_neonat_dia_0", "dist_peso_perinat_dia_1_6",
+                                     "dist_peso_perinat_dia_7_28"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 410))
+                )
               )
             )
           )
@@ -581,6 +793,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
+
     ##### Definindo as cores para os gráficos #####
     cols <- c("#2c115f", "#b73779", "#fc8961")
 
@@ -613,8 +826,6 @@ mod_bloco_7_server <- function(id, filtros){
           }
         } }
     })
-
-
 
     data7_resumo <- reactive({
       if (filtros()$comparar == "Não") {
@@ -660,8 +871,10 @@ mod_bloco_7_server <- function(id, filtros){
             municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
           else if (nivel_selecionado() == "Municípios semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
+        )|>
+
         dplyr::summarise(
+
           obitos_neonat = sum(obitos_27dias),
           obitos_neonat_menos1500 = sum(obitos_27dias_menos1500),
           obitos_neonat_1500_1999 = sum(obitos_27dias_1500_1999),
@@ -742,6 +955,532 @@ mod_bloco_7_server <- function(id, filtros){
           taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
           taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
           taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
+
+          antes_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_fetal = round(
+            ((sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            )) -
+              sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+              )) / (sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+              ))
+
+            *100, 2),
+
+          menos_1500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_1500_1999_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_2000_2499_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          mais_2500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          faltante_dist_peso_fetal = round(
+            (
+              sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ) -
+                sum(
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+                )
+            ) / sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+            )
+
+            *100, 2),
+
+          antes_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_0_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_1_6_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ) - sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )
+            )/ (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+
+            *100, 2),
+
+          menos_1500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+          de_1500_1999_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+
+          de_2000_2499_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          mais_2500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          faltante_dist_peso_perinat = round(
+            (
+              sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+              ) - sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+              )
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            ) *100, 2),
+
+          dia_0_dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_1_6dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_7_27dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          faltante_moment_obito_neonat = round(
+            (sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) - sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+
+            ))/ sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) *100, 2),
+
+          menos_1500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_1500_1999_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_2000_2499_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          mais_2500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          faltante_dist_peso_neonat = round(
+            ( sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            ) - sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            ))/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+
+
           localidade = dplyr::case_when(
             nivel_selecionado() == "Nacional" ~ "Brasil",
             nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
@@ -753,6 +1492,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()
     })
+
+
 
 
     ##### Calculando os valores de referência para as caixinhas #####
@@ -840,10 +1581,535 @@ mod_bloco_7_server <- function(id, filtros){
           taxa_perinatal_oms_menos1500 = round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(obitos_6dias_menos1500))*1000, 2),
           taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
           taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
-          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2)
+          taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
+
+          antes_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_fetal = round(
+            ((sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            )) -
+              sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+              )) / (sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+              ))
+
+            *100, 2),
+
+          menos_1500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_1500_1999_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_2000_2499_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          mais_2500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          faltante_dist_peso_fetal = round(
+            (
+              sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ) -
+                sum(
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+                )
+            ) / sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+            )
+
+            *100, 2),
+
+          antes_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_0_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_1_6_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ) - sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )
+            )/ (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+
+            *100, 2),
+
+          menos_1500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+          de_1500_1999_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+
+          de_2000_2499_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          mais_2500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          faltante_dist_peso_perinat = round(
+            (
+              sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+              ) - sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+              )
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            ) *100, 2),
+
+          dia_0_dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_1_6dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_7_27dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          faltante_moment_obito_neonat = round(
+            (sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) - sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+
+            ))/ sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) *100, 2),
+
+          menos_1500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_1500_1999_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_2000_2499_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          mais_2500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          faltante_dist_peso_neonat = round(
+            ( sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            ) - sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            ))/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2)
         ) |>
         dplyr::ungroup()
     })
+
+
 
 
     ##### Calculando todos os indicadores para a localidade escolhida #####
@@ -946,6 +2212,530 @@ mod_bloco_7_server <- function(id, filtros){
           taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
           taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
           taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
+
+          antes_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_fetal = round(
+            ((sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            )) -
+              sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+              )) / (sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+              ))
+
+          *100, 2),
+
+          menos_1500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+          *100, 2),
+
+          de_1500_1999_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_2000_2499_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          mais_2500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          faltante_dist_peso_fetal = round(
+            (
+              sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ) -
+                sum(
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+                )
+            ) / sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+            )
+
+          *100, 2),
+
+          antes_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_0_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_1_6_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ) - sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )
+              )/ (sum(
+                ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+                ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+                ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+                ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+              ))
+
+
+          *100, 2),
+
+          menos_1500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+          de_1500_1999_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+
+          de_2000_2499_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          *100, 2),
+
+          mais_2500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          faltante_dist_peso_perinat = round(
+            (
+              sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+              ) - sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+              )
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            ) *100, 2),
+
+          dia_0_dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+          *100, 2),
+
+          dia_1_6dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_7_27dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          faltante_moment_obito_neonat = round(
+            (sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) - sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+
+            ))/ sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) *100, 2),
+
+          menos_1500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+          *100, 2),
+
+          de_1500_1999_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_2000_2499_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          mais_2500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          faltante_dist_peso_neonat = round(
+            ( sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            ) - sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            ))/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -1069,6 +2859,530 @@ mod_bloco_7_server <- function(id, filtros){
           taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
           taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
           taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
+
+          antes_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_fetal = round(
+            ((sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            )) -
+              sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+              )) / (sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+              ))
+
+            *100, 2),
+
+          menos_1500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_1500_1999_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_2000_2499_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          mais_2500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          faltante_dist_peso_fetal = round(
+            (
+              sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ) -
+                sum(
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+                )
+            ) / sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+            )
+
+            *100, 2),
+
+          antes_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_0_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_1_6_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ) - sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )
+            )/ (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+
+            *100, 2),
+
+          menos_1500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+          de_1500_1999_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+
+          de_2000_2499_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          mais_2500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          faltante_dist_peso_perinat = round(
+            (
+              sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+              ) - sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+              )
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            ) *100, 2),
+
+          dia_0_dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_1_6dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_7_27dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          faltante_moment_obito_neonat = round(
+            (sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) - sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+
+            ))/ sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) *100, 2),
+
+          menos_1500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_1500_1999_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_2000_2499_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          mais_2500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          faltante_dist_peso_neonat = round(
+            ( sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            ) - sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            ))/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
               filtros()$comparar == "Não",
@@ -1177,166 +3491,534 @@ mod_bloco_7_server <- function(id, filtros){
           taxa_perinatal_oms_1500_1999 = round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2),
           taxa_perinatal_oms_2000_2499 = round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2),
           taxa_perinatal_oms_mais2500 = round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2),
+
+          antes_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_fetal = round(
+            (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_fetal = round(
+            ((sum(
+              ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+            )) -
+              sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_durante_peso_mais_2500, 0)
+              )) / (sum(
+                ifelse("dist_moment_obito_fetal_menos1500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_menos_1500, 0),
+                ifelse("dist_moment_obito_fetal_1500_1999" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_1500_1999, 0),
+                ifelse("dist_moment_obito_fetal_2000_2499" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_2000_2499, 0),
+                ifelse("dist_moment_obito_fetal_mais2500" %in% input$faixa_peso_dist_moment_obit_fetal, fetal_peso_mais_2500, 0)
+              ))
+
+            *100, 2),
+
+          menos_1500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_1500_1999_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          de_2000_2499_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          mais_2500_dist_peso_fetal = round(
+
+            (sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+            ))/
+              (sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ))
+
+            *100, 2),
+
+          faltante_dist_peso_fetal = round(
+            (
+              sum(
+                ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+                ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+                ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+                ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+              ) -
+                sum(
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_menos28, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_28_32, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_33_34, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_menos_1500_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_1500_1999_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_2000_2499_sem_35_36, 0),
+                  ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_peso_mais_2500_sem_35_36, 0)
+                )
+            ) / sum(
+              ifelse("dist_peso_fetal_menos_28sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_menos28, 0),
+              ifelse("dist_peso_fetal_menos_28_32sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_28_32, 0),
+              ifelse("dist_peso_fetal_33_34sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_33_34, 0),
+              ifelse("dist_peso_fetal_35_36sem" %in% input$idade_gestac_dist_moment_obit_fetal, fetal_sem_35_36, 0)
+            )
+
+            *100, 2),
+
+          antes_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          durante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_0_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          dia_1_6_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0)
+            )) / (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+            *100, 2),
+
+          faltante_dist_moment_obito_perinat = round(
+            (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ) - sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_antes_peso_mais_2500, 0)
+            )
+            )/ (sum(
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_menos_1500, 0),
+              ifelse("dist_moment_obito_perinat_menos1500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_1500_1999" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_2000_2499" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, fetal_peso_mais_2500, 0),
+              ifelse("dist_moment_obito_perinat_mais2500" %in% input$faixa_peso_dist_moment_obit_perinat, obitos_6dias_mais2500, 0)
+            ))
+
+
+            *100, 2),
+
+          menos_1500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+          de_1500_1999_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+          ),
+
+
+          de_2000_2499_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          mais_2500_dist_peso_perinat = round(
+
+            sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            )
+
+            *100, 2),
+
+          faltante_dist_peso_perinat = round(
+            (
+              sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+              ) - sum(
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_mais_2500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_mais2500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_mais2500, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_2000_2499, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_1500_1999, 0),
+                ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante_peso_menos_1500, 0),
+                ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias_menos1500, 0),
+                ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias_menos1500, 0)
+              )
+            )/ sum(
+              ifelse("dist_peso_perinat_antes_parto" %in% input$momento_obito_dist_peso_perinat, fetal_antes, 0),
+              ifelse("dist_peso_perinat_durante_parto" %in% input$momento_obito_dist_peso_perinat, fetal_durante, 0),
+              ifelse("dist_peso_perinat_dia_0" %in% input$momento_obito_dist_peso_perinat, obitos_0dias, 0),
+              ifelse("dist_peso_perinat_dia_1_6" %in% input$momento_obito_dist_peso_perinat, obitos_1_6dias, 0)
+            ) *100, 2),
+
+          dia_0_dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_1_6dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          dia_7_27dist_moment_obito_neonat = round(
+
+            sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0)
+            )/sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+            )
+
+            *100, 2),
+
+          faltante_moment_obito_neonat = round(
+            (sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) - sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_7_27dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_0dias_mais2500, 0)
+
+            ))/ sum(
+              ifelse("dist_moment_obito_neonat_menos1500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_menos1500, 0),
+              ifelse("dist_moment_obito_neonat_1500_1999" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_1500_1999, 0),
+              ifelse("dist_moment_obito_neonat_2000_2499" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_2000_2499, 0),
+              ifelse("dist_moment_obito_neonat_mais2500" %in% input$faixa_peso_dist_moment_obit_neonat, obitos_27dias_mais2500, 0)
+
+            ) *100, 2),
+
+          menos_1500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_1500_1999_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          de_2000_2499_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          mais_2500_dist_peso_neonat = round(
+            sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            )/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
+          faltante_dist_peso_neonat = round(
+            ( sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            ) - sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_menos1500, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_1500_1999, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_2000_2499, 0),
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias_mais2500, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias_mais2500, 0)
+            ))/ sum(
+              ifelse("dist_peso_neonat_dia_0" %in% input$momento_obito_dist_peso_neonat, obitos_0dias, 0),
+              ifelse("dist_peso_neonat_dia_1_6" %in% input$momento_obito_dist_peso_neonat, obitos_1_6dias, 0),
+              ifelse("dist_peso_neonat_dia_7_27" %in% input$momento_obito_dist_peso_neonat, obitos_7_27dias, 0)
+            )
+            *100, 2),
+
           class = "Referência"
         ) |>
         dplyr::ungroup()
     })
-
-
-    ##### Calculando os indicadores de incompletude e cobertura para todos os indicadores #####
-    # data_incompletude_aux <- reactive({
-    #   base_incompletude |>
-    #     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-    #     dplyr::filter(
-    #       if (filtros()$nivel == "Nacional")
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #       else if (filtros()$nivel == "Regional")
-    #         regiao == filtros()$regiao
-    #       else if (filtros()$nivel == "Estadual")
-    #         uf == filtros()$estado
-    #       else if (filtros()$nivel == "Macrorregião de saúde")
-    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-    #       else if(filtros()$nivel == "Microrregião de saúde")
-    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
-    #       else if(filtros()$nivel == "Municipal")
-    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
-    #     ) |>
-    #     dplyr::group_by(ano) |>
-    #     dplyr::summarise(
-    #       prop_mif_investigado = round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 2),
-    #       prop_obito_materno_investigado = round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 2),
-    #       localidade = dplyr::case_when(
-    #         filtros()$nivel == "Nacional" ~ "Brasil",
-    #         filtros()$nivel == "Regional" ~ filtros()$regiao,
-    #         filtros()$nivel == "Estadual" ~ filtros()$estado,
-    #         filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-    #         filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-    #         filtros()$nivel == "Municipal" ~ filtros()$municipio
-    #       )
-    #     ) |>
-    #     dplyr::ungroup()
-    # })
-
-    # data_cobertura <- reactive({
-    #   if (filtros()$nivel == "Municipal") {
-    #     sub_registro_sim_muni_2015_2020 |>
-    #       dplyr::filter(
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-    #         municipio == filtros()$municipio,
-    #         uf == filtros()$estado_municipio
-    #       ) |>
-    #       dplyr::rename(
-    #         localidade = municipio
-    #       )
-    #   } else if (filtros()$nivel == "Estadual") {
-    #     sub_registro_sim_uf_regioes_2015_2020 |>
-    #       dplyr::filter(
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-    #         localidade == filtros()$estado
-    #       )
-    #   } else if (filtros()$nivel == "Regional") {
-    #     sub_registro_sim_uf_regioes_2015_2020 |>
-    #       dplyr::filter(
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-    #         localidade == filtros()$regiao
-    #       )
-    #   } else if (filtros()$nivel == "Nacional") {
-    #     sub_registro_sim_uf_regioes_2015_2020 |>
-    #       dplyr::filter(
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-    #         localidade == "Brasil"
-    #       )
-    #   } else {
-    #     data.frame(
-    #       ano = filtros()$ano2[1]:filtros()$ano2[2],
-    #       localidade = dplyr::case_when(
-    #         filtros()$nivel == "Nacional" ~ "Brasil",
-    #         filtros()$nivel == "Regional" ~ filtros()$regiao,
-    #         filtros()$nivel == "Estadual" ~ filtros()$estado,
-    #         filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-    #         filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-    #         filtros()$nivel == "Municipal" ~ filtros()$municipio
-    #       ),
-    #       cobertura = 100
-    #     )
-    #   }
-    # })
-    #
-    # data_incompletude <- reactive({dplyr::full_join(data_incompletude_aux(), data_cobertura(), by = c("ano", "localidade"))})
-
-
-    ##### Definindo os modais de incompletude e quando os botões de aviso devem aparecer #####
-    # observeEvent(input$botao1, {
-    #   cria_modal_incompletude(
-    #     incompletude1 = data_incompletude()$prop_mif_investigado,
-    #     incompletude2 = data_incompletude()$prop_obito_materno_investigado,
-    #     df = data_incompletude(),
-    #     cobertura = data_incompletude()$cobertura,
-    #     bloco = "bloco6"
-    #   )
-    # })
-    #
-    # observeEvent(filtros()$pesquisar, {
-    #   shinyjs::hide(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-    #   req(any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-    #   shinyjs::show(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-    # },
-    # ignoreNULL = FALSE
-    # )
-    #
-    # observeEvent(input$botao2, {
-    #   cria_modal_incompletude(
-    #     incompletude1 = data_incompletude()$prop_mif_investigado,
-    #     incompletude2 = data_incompletude()$prop_obito_materno_investigado,
-    #     df = data_incompletude(),
-    #     cobertura = data_incompletude()$cobertura,
-    #     bloco = "bloco6"
-    #   )
-    # })
-    #
-    # observeEvent(filtros()$pesquisar, {
-    #   shinyjs::hide(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-    #   req(any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-    #   shinyjs::show(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-    # },
-    # ignoreNULL = FALSE
-    # )
-    #
-    # observeEvent(input$botao3, {
-    #   cria_modal_incompletude(
-    #     incompletude1 = data_incompletude()$prop_mif_investigado,
-    #     incompletude2 = data_incompletude()$prop_obito_materno_investigado,
-    #     df = data_incompletude(),
-    #     cobertura = data_incompletude()$cobertura,
-    #     bloco = "bloco6"
-    #   )
-    # })
-    #
-    # observeEvent(filtros()$pesquisar, {
-    #   shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-    #   req((sum(data6()$obitos_mat_totais) != 0) & (any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE)))
-    #   shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-    # },
-    # ignoreNULL = FALSE
-    # )
-    #
-    # observeEvent(input$botao4, {
-    #   cria_modal_incompletude(
-    #     incompletude1 = data_incompletude()$prop_mif_investigado,
-    #     incompletude2 = data_incompletude()$prop_obito_materno_investigado,
-    #     df = data_incompletude(),
-    #     cobertura = data_incompletude()$cobertura,
-    #     bloco = "bloco6"
-    #   )
-    # })
-    #
-    # observeEvent(filtros()$pesquisar, {
-    #   shinyjs::hide(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
-    #   req((sum(data6()$obitos_mat_totais) != 0) & (any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE)))
-    #   shinyjs::show(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
-    # },
-    # ignoreNULL = FALSE
-    # )
 
 
 
@@ -1378,156 +4060,6 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-
-    ##### Calculando a RMM corrigida para o resumo do período #####
-    # data7_resumo_fator_de_correcao <- reactive({
-    #   if (filtros()$comparar == "Não") {
-    #     sufixo_inputs <- ""
-    #   } else {
-    #     if (input$tabset1 == "tabpanel_mortalidade") {
-    #       req(input$localidade_resumo_mort)
-    #       if (input$localidade_resumo_mort == "escolha1") {
-    #         sufixo_inputs <- ""
-    #       } else {
-    #         sufixo_inputs <- "2"
-    #       }
-    #     } else {
-    #       req(input$localidade_resumo_morb)
-    #       if (input$localidade_resumo_morb == "escolha1") {
-    #         sufixo_inputs <- ""
-    #       } else {
-    #         sufixo_inputs <- "2"
-    #       }
-    #     }
-    #   }
-    #   if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
-    #     if (nivel_selecionado() == "Estadual") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()[[paste0("estado", sufixo_inputs)]],
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         ) |>
-    #         dplyr::group_by(localidade) |>
-    #         dplyr::summarise(
-    #           fator_de_correcao = mean(fator_de_correcao)
-    #         )
-    #     } else if (nivel_selecionado() == "Regional") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()[[paste0("regiao", sufixo_inputs)]],
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         ) |>
-    #         dplyr::group_by(localidade) |>
-    #         dplyr::summarise(
-    #           fator_de_correcao = mean(fator_de_correcao)
-    #         )
-    #     } else {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == "Brasil",
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         ) |>
-    #         dplyr::group_by(localidade) |>
-    #         dplyr::summarise(
-    #           fator_de_correcao = mean(fator_de_correcao)
-    #         )
-    #     }
-    #   } else {
-    #     data.frame(
-    #       fator_de_correcao = 1,
-    #       localidade = dplyr::case_when(
-    #         nivel_selecionado() == "Nacional" ~ "Brasil",
-    #         nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-    #         nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-    #         nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-    #         nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-    #         nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
-    #       )
-    #     )
-    #   }
-    #
-    # })
-    #
-    # data6_resumo_rmm_corrigida <- reactive({
-    #   dplyr::full_join(data6_resumo(), data6_resumo_fator_de_correcao(), by = "localidade") |>
-    #     dplyr::mutate(
-    #       rmm = round(rmm*fator_de_correcao, 1)
-    #     )
-    # })
-    #
-    #
-    # ##### Calculando a RMM corrigida para os gráficos #####
-    # data6_fator_de_correcao <- reactive({
-    #   if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-    #     if (filtros()$nivel == "Estadual") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()$estado,
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     } else if (filtros()$nivel == "Regional") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()$regiao,
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     } else {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == "Brasil",
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     }
-    #   } else {
-    #     data.frame(
-    #       ano = filtros()$ano2[1]:filtros()$ano2[2],
-    #       fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-    #     )
-    #   }
-    # })
-    #
-    # data6_fator_de_correcao_comp <- reactive({
-    #   if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
-    #     if (filtros()$nivel2 == "Estadual") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()$estado,
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     } else if (filtros()$nivel2 == "Regional") {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == filtros()$regiao,
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     } else {
-    #       rmm_fator_de_correcao |>
-    #         dplyr::filter(
-    #           localidade == "Brasil",
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         )
-    #     }
-    #   } else {
-    #     data.frame(
-    #       ano = filtros()$ano2[1]:filtros()$ano2[2],
-    #       fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-    #     )
-    #   }
-    # })
-    #
-    # data6_rmm_corrigida <- reactive({
-    #   dplyr::full_join(data6(), data6_fator_de_correcao(), by = "ano") |>
-    #     dplyr::mutate(
-    #       rmm = round(rmm*fator_de_correcao, 1)
-    #     )
-    # })
-    #
-    # data6_comp_rmm_corrigida <- reactive({
-    #   dplyr::full_join(data6_comp(), data6_fator_de_correcao_comp(), by = "ano") |>
-    #     dplyr::mutate(
-    #       rmm = round(rmm*fator_de_correcao, 1)
-    #     )
-    # })
 
 
     ##### Criando as caixinhas do resumo do período #####
@@ -1640,187 +4172,6 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
-    # output$caixa_b7_neonat_i4 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_menos1500",
-    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer menor que 1500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_menos1500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i5 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_precoc_menos1500",
-    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer menor que 1500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_menos1500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i6 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_tardia_menos1500",
-    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer menor que 1500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_menos1500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i7 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_1500_1999",
-    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer de 1500 g a 1999 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_1500_1999,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i8 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_precoc_1500_1999",
-    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer de 1500 g a 1999 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_1500_1999,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i9 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_tardia_1500_1999",
-    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer de 1500 g a 1999 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_1500_1999,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i10 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_2000_2499",
-    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer de 2000 g a 2499 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_2000_2499,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i11 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_precoc_2000_2499",
-    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer de 2000 g a 2499 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_2000_2499,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i12 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_tardia_2000_2499",
-    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer de 2000 g a 2499 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_2000_2499,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i13 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_mais2500",
-    #     titulo = "Taxa de mortalidade neonatal para peso ao nascer maior ou igual a 2500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_mais2500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i14 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_precoc_mais2500",
-    #     titulo = "Taxa de mortalidade neonatal precoce para peso ao nascer maior ou igual a 2500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_precoc_mais2500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-    #
-    # output$caixa_b7_neonat_i15 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = data7_resumo(),
-    #     indicador = "mort_neonat_tardia_mais2500",
-    #     titulo = "Taxa de mortalidade neonatal tardia para peso ao nascer maior ou igual a 2500 g",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = data7_resumo_referencia()$mort_neonat_tardia_mais2500,
-    #     tipo = "taxa",
-    #     invertido = FALSE,
-    #     tamanho_caixa = "303px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = nivel_selecionado()
-    #   )
-    # })
-
-
     ##### Criando o gráfico de linhas para a mortalidade neonatal, incluido faixas de peso #####
 
     output$plot1_neonat <- highcharter::renderHighchart({
@@ -1846,12 +4197,6 @@ mod_bloco_7_server <- function(id, filtros){
         )
 
       if (filtros()$comparar == "Não") {
-        # validate(
-        #   need(
-        #     sum(data7()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -1876,12 +4221,6 @@ mod_bloco_7_server <- function(id, filtros){
             )
         }
       } else {
-        # validate(
-        #   need(
-        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -1938,12 +4277,6 @@ mod_bloco_7_server <- function(id, filtros){
         )
 
       if (filtros()$comparar == "Não") {
-        # validate(
-        #   need(
-        #     sum(data7()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -1968,12 +4301,6 @@ mod_bloco_7_server <- function(id, filtros){
             )
         }
       } else {
-        # validate(
-        #   need(
-        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -2030,12 +4357,6 @@ mod_bloco_7_server <- function(id, filtros){
         )
 
       if (filtros()$comparar == "Não") {
-        # validate(
-        #   need(
-        #     sum(data7()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -2060,12 +4381,6 @@ mod_bloco_7_server <- function(id, filtros){
             )
         }
       } else {
-        # validate(
-        #   need(
-        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -2120,12 +4435,6 @@ mod_bloco_7_server <- function(id, filtros){
         )
 
       if (filtros()$comparar == "Não") {
-        # validate(
-        #   need(
-        #     sum(data7()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -2136,26 +4445,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        # if (filtros()$nivel == "Nacional") {
-        #   grafico_base
-        # } else {
-        #   grafico_base |>
-        #     highcharter::hc_add_series(
-        #       data = data7_referencia_aux,
-        #       type = "line",
-        #       name = "Referência (total nacional)",
-        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-        #       dashStyle = "ShortDot",
-        #       opacity = 0.8
-        #     )
-        # }
-      } else {
-        # validate(
-        #   need(
-        #     sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
-        #     "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
-        #   )
-        # )
+
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_aux,
@@ -2171,20 +4461,107 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        # if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-        #   grafico_base
-        # } else {
-        #   grafico_base |>
-        #     highcharter::hc_add_series(
-        #       data = data7_referencia_aux,
-        #       type = "line",
-        #       name = "Referência (total nacional)",
-        #       highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-        #       dashStyle = "ShortDot",
-        #       opacity = 0.7
-        #     )
-        # }
       }
+    })
+
+    output$plot5_neonat <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Dia 0 de vida",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = dia_0_dist_moment_obito_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "1 a 6 dias de vida",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = dia_1_6dist_moment_obito_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_moment_obito_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
+
+    })
+
+    output$plot6_neonat <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Menor que 1500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = menos_1500_dist_peso_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 1500g a 1999g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_1500_1999_dist_peso_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 2000g a 2499g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_2000_2499_dist_peso_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Maior ou igual a 2500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = mais_2500_dist_peso_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_dist_peso_neonat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
+
     })
 
 
@@ -2419,73 +4796,6 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Gráfico de linhas para o número de óbitos fetais ######
 
-    # output$plot1_fetal_antigo <- highcharter::renderHighchart({
-    #   if (filtros()$comparar == "Não") {
-    #     # validate(
-    #     #   need(
-    #     #     data6()$casos_mmg != 0,
-    #     #     "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-    #     #   )
-    #     # )
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data7(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = dados_obitos_fetais(), group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-    #       highcharter::hc_colors(cols)
-    #     if (filtros()$nivel == "Nacional") {
-    #       grafico_base
-    #     } else {
-    #       grafico_base |>
-    #         highcharter::hc_add_series(
-    #           data = data7_referencia(),
-    #           type = "line",
-    #           name = "Referência (média nacional)",
-    #           highcharter::hcaes(x = ano, y = dados_obitos_fetais(), group = class, colour = class),
-    #           dashStyle = "ShortDot",
-    #           opacity = 0.8
-    #         )
-    #     }
-    #   } else {
-    #     # need(
-    #     #   data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
-    #     #   "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-    #     # )
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data7(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = numero_obitos_fetais(), group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_add_series(
-    #         data = data7_comp(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = numero_obitos_fetais(), group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-    #       highcharter::hc_colors(cols)
-    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-    #       grafico_base
-    #     } else {
-    #       grafico_base |>
-    #         highcharter::hc_add_series(
-    #           data = data7_referencia(),
-    #           type = "line",
-    #           name = "Referência (média nacional)",
-    #           highcharter::hcaes(x = ano, y = numero_obitos_fetais(), group = class, colour = class),
-    #           dashStyle = "ShortDot",
-    #           opacity = 0.7
-    #         )
-    #     }
-    #   }
-    # })
-
 
     output$plot1_fetal <- highcharter::renderHighchart({
       data7_aux <- data7() |>
@@ -2670,72 +4980,107 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
-    # output$plot2_fetal_antigo <- highcharter::renderHighchart({
-    #   if (filtros()$comparar == "Não") {
-    #     # validate(
-    #     #   need(
-    #     #     data6()$casos_mmg != 0,
-    #     #     "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-    #     #   )
-    #     # )
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data7(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-    #       highcharter::hc_colors(cols)
-    #     if (filtros()$nivel == "Nacional") {
-    #       grafico_base
-    #     } else {
-    #       grafico_base |>
-    #         highcharter::hc_add_series(
-    #           data = data7_referencia(),
-    #           type = "line",
-    #           name = "Referência (média nacional)",
-    #           highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
-    #           dashStyle = "ShortDot",
-    #           opacity = 0.8
-    #         )
-    #     }
-    #   } else {
-    #     # need(
-    #     #   data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
-    #     #   "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
-    #     # )
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data7(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_add_series(
-    #         data = data7_comp(),
-    #         type = "line",
-    #         highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class)
-    #       ) |>
-    #       highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-    #       highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-    #       highcharter::hc_colors(cols)
-    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-    #       grafico_base
-    #     } else {
-    #       grafico_base |>
-    #         highcharter::hc_add_series(
-    #           data = data7_referencia(),
-    #           type = "line",
-    #           name = "Referência (média nacional)",
-    #           highcharter::hcaes(x = ano, y = taxa_mort_fetal, group = class, colour = class),
-    #           dashStyle = "ShortDot",
-    #           opacity = 0.7
-    #         )
-    #     }
-    #   }
-    # })
+
+    output$plot3_fetal <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Antes do parto",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = antes_dist_moment_obito_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Durante o parto",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = durante_dist_moment_obito_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_dist_moment_obito_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
+
+    })
+
+
+    output$plot4_fetal <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Menos que 1500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = menos_1500_dist_peso_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 1500g a 1999g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_1500_1999_dist_peso_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 2000g 2499g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_2000_2499_dist_peso_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Maior ou igual a 2500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = mais_2500_dist_peso_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_dist_peso_fetal),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
+
+    })
 
 
     ############ Para a aba de mortalidade perinatal
@@ -3256,6 +5601,126 @@ mod_bloco_7_server <- function(id, filtros){
             )
         }
       }
+    })
+
+    output$plot5_perinatal <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Antes do parto",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = antes_dist_moment_obito_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Durante o parto",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = durante_dist_moment_obito_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Dia 0 de vida",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = dia_0_dist_moment_obito_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "1 a 6 dias de vida",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = dia_1_6_dist_moment_obito_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_dist_moment_obito_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
+
+    })
+
+    output$plot6_perinatal <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "Menor que 1500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = menos_1500_dist_peso_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 1500g a 1999g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_1500_1999_dist_peso_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 2000g a 2499g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = de_2000_2499_dist_peso_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Maior ou igual a 2500g",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = mais_2500_dist_peso_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Faltante",
+          data =  data7(),
+          highcharter::hcaes(x = ano, y = faltante_dist_peso_perinat),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
+
     })
 
 
