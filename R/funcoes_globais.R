@@ -325,6 +325,241 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
 
 }
 
+cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = "400px", fonte_titulo = "16px", width_caixa = 12) {
+
+  if (indicador == "fetal peso por idade gestacional") {
+    valor_indicador1 <- dados[["menos_1500_dist_peso_fetal"]]
+    valor_indicador2 <- dados[["de_1500_1999_dist_peso_fetal"]]
+    valor_indicador3 <- dados[["de_2000_2499_dist_peso_fetal"]]
+    valor_indicador4 <- dados[["mais_2500_dist_peso_fetal"]]
+  }
+
+  if (indicador == "fetal momento do obito por peso") {
+    valor_indicador1 <- dados[["antes_dist_moment_obito_fetal"]]
+    valor_indicador2 <- dados[["durante_dist_moment_obito_fetal"]]
+    valor_indicador3 <- dados[["faltante_dist_moment_obito_fetal"]]
+  }
+
+  if (indicador == "perinatal momento do obito por peso") {
+    valor_indicador1 <- dados[["antes_dist_moment_obito_perinat"]]
+    valor_indicador2 <- dados[["durante_dist_moment_obito_perinat"]]
+    valor_indicador3 <- dados[["dia_0_dist_moment_obito_perinat"]]
+    valor_indicador4 <- dados[["dia_1_6_dist_moment_obito_perinat"]]
+  }
+
+  if (indicador == "perinatal peso por momento do obito") {
+    valor_indicador1 <- dados[["menos_1500_dist_peso_perinat"]]
+    valor_indicador2 <- dados[["de_1500_1999_dist_peso_perinat"]]
+    valor_indicador3 <- dados[["de_2000_2499_dist_peso_perinat"]]
+    valor_indicador4 <- dados[["mais_2500_dist_peso_perinat"]]
+  }
+
+  if (indicador == "neonatal momento do obito por peso") {
+    valor_indicador1 <- dados[["dia_0_dist_moment_obito_neonat"]]
+    valor_indicador2 <- dados[["dia_1_6dist_moment_obito_neonat"]]
+    valor_indicador3 <- dados[["dia_7_27dist_moment_obito_neonat"]]
+  }
+
+  if (indicador == "neonatal peso por momento do obito") {
+    valor_indicador1 <- dados[["menos_1500_dist_peso_neonat"]]
+    valor_indicador2 <- dados[["de_1500_1999_dist_peso_neonat"]]
+    valor_indicador3 <- dados[["de_2000_2499_dist_peso_neonat"]]
+    valor_indicador4 <- dados[["mais_2500_dist_peso_neonat"]]
+  }
+
+  if (is.nan(valor_indicador1)) {
+    texto1 <- "---"
+  } else {
+    texto1 <- "{formatC(valor_indicador1, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (is.nan(valor_indicador2)) {
+    texto2 <- "---"
+  } else {
+    texto2 <- "{formatC(valor_indicador2, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (is.nan(valor_indicador3)) {
+    texto3 <- "---"
+  } else {
+    texto3 <- "{formatC(valor_indicador3, big.mark = '.', decimal.mark = ',')}%"
+  }
+
+  if (indicador == "fetal peso por idade gestacional" | indicador == "perinatal momento do obito por peso"|
+      indicador == "perinatal peso por momento do obito" | indicador == "neonatal peso por momento do obito"){
+
+    if (is.nan(valor_indicador4)) {
+      texto4 <- "---"
+    } else {
+      texto4 <- "{formatC(valor_indicador4, big.mark = '.', decimal.mark = ',')}%"
+    }
+
+  }
+
+  style_texto <- "font-size: 30px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+  style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
+
+  if (indicador == "fetal peso por idade gestacional") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "possuem peso menor que 1500 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+          p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+        )
+      )
+    )
+  } else if (indicador == "fetal momento do obito por peso") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "ocorreram antes do parto")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "ocorreram durante o parto")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "não têm informação")
+        )
+      )
+    )
+
+  } else if (indicador == "perinatal momento do obito por peso") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "ocorreram antes do parto")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "ocorreram durante o parto")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "ocorreram no dia 0 de vida")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+          p(style = style_descricao, "ocorreram de 1 a 6 dias de vida")
+        )
+      )
+    )
+
+  } else if (indicador == "perinatal peso por momento do obito") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "possuem peso menor que 1500 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+          p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+        )
+      )
+    )
+  } else if (indicador == "neonatal momento do obito por peso") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "ocorreram no dia 0 de vida")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "ocorreram de 1 a 6 dias de vida")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "ocorreram de 7 a 27 dias de vida")
+        )
+      )
+    )
+
+  } else if (indicador == "neonatal peso por momento do obito") {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(
+        style = "height: 75%; overflow: auto; padding-bottom: 10px",
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+          p(style = style_descricao, "possuem peso menor que 1500 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+          p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+        )
+      )
+    )
+  }
+
+}
+
 
 
 cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
