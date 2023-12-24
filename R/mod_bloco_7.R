@@ -3336,7 +3336,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(6, direction = -1)[-c(1, 6)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo_dist()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo_dist()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
 
     })
@@ -3396,7 +3396,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo_dist()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo_dist()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -4527,7 +4527,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -4587,7 +4587,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
 
     })
