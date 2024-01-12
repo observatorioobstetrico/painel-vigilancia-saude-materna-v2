@@ -850,3 +850,69 @@ minha_paged_windmill <- function(logo = "0",
   )
 }
 
+seleciona <- function(aba, indicador){
+
+  if(aba == "fetal"){
+
+    if(indicador == "momento de obito por peso"){
+
+      return(
+        opcoes <- c( "dist_moment_obito_fetal_menos1500", "dist_moment_obito_fetal_1500_1999", "dist_moment_obito_fetal_2000_2499", "dist_moment_obito_fetal_mais2500")
+      )
+
+
+    } else if(indicador == "peso por momento do obito"){
+
+      return(
+
+        opcoes <- c("dist_peso_fetal_antes", "dist_peso_fetal_durante")
+      )
+    }
+
+
+  } else if(aba == "perinatal"){
+
+
+    if(indicador == "momento de obito por peso"){
+
+      return(
+
+        opcoes <- c("dist_moment_obito_perinat_menos1500", "dist_moment_obito_perinat_1500_1999", "dist_moment_obito_perinat_2000_2499", "dist_moment_obito_perinat_mais2500")
+      )
+
+
+    } else if(indicador == "peso por momento do obito"){
+
+      return(
+
+        opcoes <- c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto", "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6")
+      )
+
+    }
+
+
+  } else if(aba == "neonatal"){
+
+
+    if(indicador == "momento de obito por peso"){
+
+      return(
+
+        opcoes <- c("dist_moment_obito_neonat_menos1500", "dist_moment_obito_neonat_1500_1999", "dist_moment_obito_neonat_2000_2499", "dist_moment_obito_neonat_mais2500")
+      )
+
+
+    } else if(indicador == "peso por momento do obito"){
+
+      return(
+
+        opcoes <- c("dist_peso_neonat_dia_0", "dist_peso_neonat_dia_1_6", "dist_peso_neonat_dia_7_27")
+      )
+
+
+    }
+
+
+  }
+
+}
