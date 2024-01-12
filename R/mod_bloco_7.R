@@ -83,7 +83,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais &nbsp;</b>")
@@ -121,7 +121,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 450))
                 )
               ),
               column(
@@ -131,7 +131,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal  &nbsp;</b>")
@@ -169,7 +169,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 450))
                 )
               ),
               column(
@@ -179,7 +179,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso  &nbsp;</b>")
@@ -209,7 +209,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 440))
                 )
               ),
               column(
@@ -219,7 +219,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por idade gestacional  &nbsp;</b>")
@@ -244,7 +244,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 480))
                 )
               )
             )
@@ -306,9 +306,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g) &nbsp;</b>")
                   ),
                   hr(),
@@ -342,9 +342,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos perinatais (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)  &nbsp;</b>")
                   ),
                   hr(),
@@ -376,9 +376,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)  &nbsp;</b>")
                   ),
                   hr(),
@@ -410,9 +410,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)  &nbsp;</b>")
                   ),
                   hr(),
@@ -444,9 +444,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso  &nbsp;</b>")
                   ),
                   hr(),
@@ -483,9 +483,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito  &nbsp;</b>")
                   ),
                   hr(),
@@ -585,7 +585,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos neonatais &nbsp;</b>")
@@ -609,7 +609,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 450))
                 )
               ),
               column(
@@ -619,7 +619,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
@@ -643,7 +643,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 450))
                 )
               ),
               column(
@@ -653,9 +653,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal precoce por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
@@ -687,9 +687,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal tardia por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
@@ -721,9 +721,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso &nbsp;</b>")
                   ),
                   hr(),
@@ -761,9 +761,9 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito &nbsp;</b>")
                   ),
                   hr(),
