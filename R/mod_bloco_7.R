@@ -2288,10 +2288,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data7_juncao_aux_invertido <- reactive({
       data7_juncao_aux() |>
-        dplyr::arrange(dplyr::desc(ano)) |>
-        dplyr::mutate(
-          ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
-        )
+        dplyr::arrange(dplyr::desc(ano))
+      # |>
+      #   dplyr::mutate(
+      #     ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
+      #   )
     })
 
 
