@@ -985,7 +985,7 @@ mod_nivel_3_server <- function(id, filtros){
           ) |>
           dplyr::group_by(regiao) |>
           dplyr::summarise(
-            numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 8)),
+            numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)),
             denominador := sum(pop_fem_10_49),
             proporcao = round(numerador/denominador * 1000, 1)
           ) |>
@@ -997,7 +997,7 @@ mod_nivel_3_server <- function(id, filtros){
             ) |>
             dplyr::group_by(regiao) |>
             dplyr::summarise(
-              numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 8)),
+              numerador := ((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)),
               denominador := sum(total_de_nascidos_vivos),
               proporcao = round(numerador/denominador * 100, 1)
             ) |>

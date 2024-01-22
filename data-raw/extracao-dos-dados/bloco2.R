@@ -42,7 +42,7 @@ df_bloco2_antigo <- read.csv2("data-raw/extracao-dos-dados/databases-antigas/ind
   mutate_if(is.character, as.numeric) |>
   right_join(df_aux_municipios |> filter(ano < 2021))
 
-#Criando o data.frame que irá receber todos os dados do bloco 1
+#Criando o data.frame que irá receber todos os dados do bloco 2
 df_bloco2 <- data.frame()
 
 
@@ -121,7 +121,7 @@ df_microdatasus_aux <- fetch_datasus(
   clean_names()
 
 df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% df_municipios_aux$codmunres) |>
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
   mutate(
     ano = as.numeric(substr(dtnasc, 5, 8)),
     nvm_menor_que_20 = 1,
@@ -129,7 +129,8 @@ df_microdatasus <- df_microdatasus_aux |>
   ) |>
   filter(idademae < 20) |>
   group_by(codmunres, ano) |>
-  summarise(nvm_menor_que_20 = sum(nvm_menor_que_20))
+  summarise(nvm_menor_que_20 = sum(nvm_menor_que_20)) |>
+  mutate(codmunres = as.numeric(codmunres))
 
 ##Juntando com o restante da base do bloco 2
 df_bloco2 <- left_join(df_bloco2, df_microdatasus)
@@ -464,58 +465,41 @@ df_est_pop_fem_10_49_long <- df_est_pop_fem_10_49 |>
 df_bloco2 <- left_join(df_bloco2, df_est_pop_fem_10_49_long)
 
 
-# Abortos SUS menor 30 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_sus_menor_30 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_sus_menor_30)
+
+# Abortos SUS e ANS -------------------------------------------------------
+##Lendo os arquivos com os dados de aborto atualizados e os juntando
+df_aborto_sih <- read.csv("data-raw/extracao-dos-dados/databases-antigas/dados_SIH_aborto_2015_2023_tabela.csv") |>
+  clean_names() |>
+  rename(
+    codmunres = munic_res,
+    abortos_sus_menor_30 = sih_menor_30,
+    abortos_sus_30_a_39 = sih_30_a_39,
+    abortos_sus_40_a_49 = sih_40_a_49
+  ) |>
+  select(!sih_total)
+
+df_aborto_ans <- read.csv("data-raw/extracao-dos-dados/databases-antigas/dados_ANS_aborto_2015a2022_tabela.csv") |>
+  clean_names() |>
+  rename(
+    codmunres = cd_municipio_beneficiario,
+    abortos_ans_menor_30 = ans_menor_30,
+    abortos_ans_30_a_39 = ans_30_a_39,
+    abortos_ans_40_a_49 = ans_40_a_49
+  ) |>
+  select(!ans_total)
+
+df_aborto <- full_join(df_aborto_sih, df_aborto_ans)
 
 ##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_sus_menor_30)
+df_bloco2 <- left_join(df_bloco2, df_aborto)
 
-
-# Abortos SUS 30 a 39 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_sus_30_a_39 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_sus_30_a_39)
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_sus_30_a_39)
-
-
-# Abortos SUS 40 a 49 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_sus_40_a_49 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_sus_40_a_49)
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_sus_40_a_49)
-
-
-# Abortos ANS menor 30 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_ans_menor_30 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_ans_menor_30)
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_ans_menor_30)
-
-
-# Abortos ANS 30 a 39 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_ans_30_a_39 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_ans_30_a_39)
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_ans_30_a_39)
-
-
-# Abortos ANS 40 a 49 -------------------
-##Ainda não disponíveis para o ano de 2021
-df_abortos_ans_40_a_49 <- df_bloco2_antigo |>
-  select(codmunres, ano, abortos_ans_40_a_49)
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_abortos_ans_40_a_49)
+##Substituindo os NA's das colunas de aborto por 0 (gerados após o left_join)
+df_bloco2$abortos_sus_menor_30[is.na(df_bloco2$abortos_sus_menor_30)] <- 0
+df_bloco2$abortos_sus_30_a_39[is.na(df_bloco2$abortos_sus_30_a_39)] <- 0
+df_bloco2$abortos_sus_40_a_49[is.na(df_bloco2$abortos_sus_40_a_49)] <- 0
+df_bloco2$abortos_ans_menor_30[is.na(df_bloco2$abortos_ans_menor_30)] <- 0
+df_bloco2$abortos_ans_30_a_39[is.na(df_bloco2$abortos_ans_30_a_39)] <- 0
+df_bloco2$abortos_ans_40_a_49[is.na(df_bloco2$abortos_ans_40_a_49)] <- 0
 
 
 # Verificando se os dados novos e antigos estão batendo -------------------
@@ -524,12 +508,13 @@ sum(df_bloco2 |> filter(ano < 2021) |> pull(nvm_menor_que_20)) - sum(df_bloco2_a
 sum(df_bloco2 |> filter(ano < 2021) |> pull(pop_feminina_10_a_19)) - sum(df_bloco2_antigo$pop_feminina_10_a_19)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(mulheres_com_mais_de_tres_partos_anteriores)) - sum(df_bloco2_antigo$mulheres_com_mais_de_tres_partos_anteriores)
 sum(df_bloco2 |> filter(ano < 2021) |> pull(pop_fem_10_49)) - sum(df_bloco2_antigo$pop_fem_10_49)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_menor_30)) - sum(df_bloco2_antigo$abortos_sus_menor_30)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_30_a_39)) - sum(df_bloco2_antigo$abortos_sus_30_a_39)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_40_a_49)) - sum(df_bloco2_antigo$abortos_sus_40_a_49)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_menor_30)) - sum(df_bloco2_antigo$abortos_ans_menor_30)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_30_a_39)) - sum(df_bloco2_antigo$abortos_ans_30_a_39)
-sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_40_a_49)) - sum(df_bloco2_antigo$abortos_ans_40_a_49)
+##Os dados de aborto são diferentes; não faz sentido comparar
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_menor_30)) - sum(df_bloco2_antigo$abortos_sus_menor_30)
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_30_a_39)) - sum(df_bloco2_antigo$abortos_sus_30_a_39)
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_sus_40_a_49)) - sum(df_bloco2_antigo$abortos_sus_40_a_49)
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_menor_30)) - sum(df_bloco2_antigo$abortos_ans_menor_30)
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_30_a_39)) - sum(df_bloco2_antigo$abortos_ans_30_a_39)
+# sum(df_bloco2 |> filter(ano < 2021) |> pull(abortos_ans_40_a_49)) - sum(df_bloco2_antigo$abortos_ans_40_a_49)
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
