@@ -454,7 +454,7 @@ df_bloco4 <- left_join(df_bloco4, df)
 df_bloco4$total_cesariana_grupo_robson_10[is.na(df_bloco4$total_cesariana_grupo_robson_10)] <- 0
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2021.csv", row.names = FALSE)
+write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2022.csv", row.names = FALSE)
 
 
 
