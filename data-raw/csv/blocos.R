@@ -71,7 +71,7 @@ bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo
 bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2021.csv") |>
   janitor::clean_names()
 
-bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2021.csv", sep = ';') |>
+bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2022.csv") |>
   janitor::clean_names()
 
 bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2020.csv") |>
