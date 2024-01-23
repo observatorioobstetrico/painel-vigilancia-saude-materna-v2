@@ -27,7 +27,7 @@ mod_bloco_4_ui <- function(id){
             width = 5,
             selectizeInput(
               inputId = ns("indicador_robson"),
-              label = HTML("<p style='font-size:19px'>Indicador</p>"),
+              label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
               options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
               choices = c(
                 "Porcentagem de cesarianas por grupo de Robson" = "indicador1",

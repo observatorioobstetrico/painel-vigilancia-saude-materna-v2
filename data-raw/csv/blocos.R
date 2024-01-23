@@ -128,8 +128,6 @@ bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
-
-###VER QUAIS COLUNAS VOCÊS PRECISAM TIRAR AQUI; NO ARQUIVO DE 2012 A 2020, ESTOU TIRANDO A COLUNA 'X' E A COLUNA 'UF'
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
