@@ -18,84 +18,19 @@ mod_bloco_8_ui <- function(id){
     ),
     fluidRow(
       column(
-        width = 4,
-        HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-        HTML("<b style='font-size:18px'> Resumo do período </b>"),
-        hr(),
-        fluidRow(
-          column(
-            width = 12,
-            HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-            uiOutput(ns("input_localidade_resumo")),
-            align = "center"
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("caixa_b8_i1")), proxy.height = "300px")
-          )
-        )
-      ),
-      column(
-        width = 8,
-        fluidRow(
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela primeira filtragem) &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao1"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao1"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 400))
-            )
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência dos Garbage Codes para óbitos maternos &nbsp;</b>")
           ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Taxa de nascidos vivos com asfixia dentre os nascidos vivos com peso \U2265 2500 g e sem anomalia (por 10.000 e pela segunda filtragem) &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao2"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao2"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 400))
-            )
-          )
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_materno_garbage")))
         )
       ),
       column(
@@ -108,22 +43,90 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela de frequência dos grupos de malformações prioritárias para vigilância &nbsp;</b>"),
-            shinyjs::hidden(
-              span(
-                id = ns("mostrar_botao3"),
-                shinyWidgets::actionBttn(
-                  inputId = ns("botao3"),
-                  icon = icon("triangle-exclamation", style = "color: red"),
-                  color = "warning",
-                  style = "material-circle",
-                  size = "xs"
-                )
-              )
-            )
+            HTML("<b style='font-size:18px'> Tabela de frequência dos Garbage Codes para óbitos fetais &nbsp;</b>")
           ),
           hr(),
-          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_garbage")))
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência dos Garbage Codes para óbitos maternos &nbsp;</b>")
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_garbage")))
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência das causas mais comuns de óbitos fetais &nbsp;</b>")
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_causas")))
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência das causas mais comuns de óbitos neonatais &nbsp;</b>")
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_causas")))
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência das causas evitáveis de óbitos fetais &nbsp;</b>")
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_evitaveis")))
+        )
+      ),
+      column(
+        width = 12,
+        bs4Dash::bs4Card(
+          width = 12,
+          status = "primary",
+          collapsible = FALSE,
+          headerBorder = FALSE,
+          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          div(
+            style = "height: 15%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequência das causas evitáveis de óbitos neonatais &nbsp;</b>")
+          ),
+          hr(),
+          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_evitaveis")))
         )
       )
     )
@@ -801,10 +804,9 @@ mod_bloco_8_server <- function(id, filtros){
     #   }
     # })
 
-
-    ##### Criando tabela #####
-    data8_nascidos_vivos <- reactive({
-      asfixia |>
+    # tabela garbage codes obitos maternos
+    data8_materno_garbage <- reactive({
+      bloco8_materno_garbage |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -820,41 +822,17 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(ano) |>
+        dplyr::group_by(capitulo_cid10, causabas_categoria, ano) |>
         dplyr::summarize(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos)
+          frequencia = sum(obitos)
         ) |>
         dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
     })
 
-    data8_malformacao <- reactive({
-      malformacao |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(grupo_de_anomalias_congenitas, codigo_cid, descricao, ano) |>
-        dplyr::summarize(
-          frequencia = sum(nascidos_vivos_anomalia)
-        ) |>
-        dplyr::ungroup() |>
-        dplyr::right_join(data8_nascidos_vivos()) |>
-        dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
-        dplyr::mutate(anomalia_descricao = paste(codigo_cid, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
-    })
-
-    output$tabela_malformacoes <- reactable::renderReactable({
+    output$tabela_materno_garbage <- reactable::renderReactable({
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -886,67 +864,798 @@ mod_bloco_8_server <- function(id, filtros){
         )
       }
 
-      data8_malformacao() |>
-          reactable::reactable(
-            groupBy = c("grupo_de_anomalias_congenitas", "anomalia_descricao"),
-            defaultColDef = reactable::colDef(
-              footerStyle = list(fontWeight = "bold"),
-              align = "center"
+      data8_materno_garbage() |>
+        reactable::reactable(
+          groupBy = c("capitulo_cid10", "causabas_categoria"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
             ),
-            columns = list(
-              grupo_de_anomalias_congenitas = reactable::colDef(
-                name = "Grupo de anomalias congênitas",
-                minWidth = 60,
-                aggregate = "unique",
-                align = "left"
-              ),
-              anomalia_descricao = reactable::colDef(
-                name = "Código CID-10",
-                minWidth = 60,
-                aggregate = htmlwidgets::JS("function() { return ''}"),
-                format = list(aggregated = reactable::colFormat(prefix = "Todos")),
-                align = "left"
-              ),
-              ano = reactable::colDef(
-                name = "Período",
-                minWidth = 60,
-                aggregate = htmlwidgets::JS("function() { return ''}"),
-                format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
-              ),
-              frequencia = reactable::colDef(
-                name = "Frequência",
-                minWidth = 60,
-                aggregate = "sum"
-              ),
-              total_de_nascidos_vivos = reactable::colDef(show = FALSE),
-              prevalencia = reactable::colDef(
-                name = "Prevalência",
-                minWidth = 60,
-                aggregate = proporcao_geral("frequencia", "total_de_nascidos_vivos", 10000),
-                format = reactable::colFormat(
-                  digits = 2
-                )
-              )
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
             ),
-            sortable = TRUE,
-            resizable = TRUE,
-            highlight = TRUE,
-            striped = TRUE,
-            borderless = TRUE,
-            pagination = FALSE,
-            height = 500,
-            rowStyle = htmlwidgets::JS(
-              "function(rowInfo) {
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
                 if (rowInfo.aggregated === true) {
                  return { fontWeight: 700 }
                 }
               }"
-            )
           )
+        )
 
     })
 
 
+    # tabela garbage codes obitos fetais
+    data8_fetal_garbage <- reactive({
+      bloco8_fetal_garbage |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, ano) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_fetal_garbage <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_fetal_garbage() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
+
+    # tabela garbage codes obitos neonatais
+    data8_neonat_garbage <- reactive({
+      bloco8_neonat_garbage |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, ano, idade_dias) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_neonat_garbage <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_neonat_garbage() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria", "idade_dias"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            idade_dias = reactable::colDef(
+              name = "Grupo de idade",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos"))
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
+
+
+    # tabela principais causas obitos fetais
+    data8_fetal_causas <- reactive({
+      bloco8_fetal_causas |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, ano) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_fetal_causas <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_fetal_causas() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
+
+    # tabela principais causas obitos neonatais
+    data8_neonat_causas <- reactive({
+      bloco8_neonat_causas |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, ano, idade_dias) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_neonat_causas <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_neonat_causas() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria", "idade_dias"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            idade_dias = reactable::colDef(
+              name = "Grupo de idade",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos"))
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
+
+    # tabela evitaveis obitos fetais
+    data8_fetal_evitaveis <- reactive({
+      bloco8_fetal_evitaveis |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, grupo, ano) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_fetal_evitaveis <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_fetal_evitaveis() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria", "grupo"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            grupo = reactable::colDef(
+              name = "Grupo de causas",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
+
+    # tabela evitaveis obitos neonatais
+    data8_neonat_evitaveis <- reactive({
+      bloco8_neonat_evitaveis |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, ano, idade_dias, grupo) |>
+        dplyr::summarize(
+          frequencia = sum(obitos)
+        ) |>
+        dplyr::ungroup()
+      #dplyr::right_join(data5_nascidos_vivos()) |>
+      #dplyr::mutate(prevalencia = round(frequencia/total_de_nascidos_vivos * 10000, 2)) |>
+      #dplyr::mutate(anomalia_descricao = paste(anomalia, descricao, sep = " - "), .keep = "unused", .after = grupo_de_anomalias_congenitas)
+    })
+
+    output$tabela_neonat_evitaveis <- reactable::renderReactable({
+      proporcao_geral <- function(numerador, denominador, fator) {
+        reactable::JS(
+          paste0(
+            "function(values, rows) {
+              var numerator = 0
+              var denominator = 0
+              var uniqueDenominatorValues = new Set();
+
+              rows.forEach(function (row, index) {
+                numerator += row['", numerador, "'];
+
+                // Adicione o valor ao conjunto de valores únicos no denominador
+                uniqueDenominatorValues.add(row['", denominador, "']);
+              });
+
+              // Converta o conjunto de valores únicos de volta a um array
+              var uniqueDenominatorArray = Array.from(uniqueDenominatorValues);
+
+              // Soma os valores únicos no denominador
+              uniqueDenominatorArray.forEach(function (value) {
+                denominator += value;
+              });
+
+              if ('", fator, "' == 10000) {
+                return numerator / denominator * 10000
+              }
+            }"
+          )
+        )
+      }
+
+      data8_neonat_evitaveis() |>
+        reactable::reactable(
+          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria", "grupo", "idade_dias"),
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            causabas_grupo = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = "unique",
+              align = "left"
+            ),
+            capitulo_cid10 = reactable::colDef(
+              name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            causabas_categoria = reactable::colDef(
+              name = "Categoria CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            grupo = reactable::colDef(
+              name = "Grupo de causas",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos"))
+            ),
+            idade_dias = reactable::colDef(
+              name = "Grupo de idade",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos"))
+            ),
+            ano = reactable::colDef(
+              name = "Período",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")))
+            ),
+            frequencia = reactable::colDef(
+              name = "Frequência",
+              minWidth = 60,
+              aggregate = "sum"
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 500,
+          rowStyle = htmlwidgets::JS(
+            "function(rowInfo) {
+                if (rowInfo.aggregated === true) {
+                 return { fontWeight: 700 }
+                }
+              }"
+          )
+        )
+
+    })
 
   })
 }
