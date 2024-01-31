@@ -1040,11 +1040,7 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
-          porc_dependentes_sus = ifelse(
-            filtros()$ano != 2021,
-            round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
-            NaN
-          ),
+          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
           porc_cobertura_esf = round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1),
           porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
@@ -1080,11 +1076,7 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
-          porc_dependentes_sus = ifelse(
-            filtros()$ano != 2021,
-            round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
-            NaN
-          ),
+          porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
           porc_cobertura_esf = 95,
           porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
@@ -2287,6 +2279,12 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     output$caixa_b5_i4 <- renderUI({
+      validate(
+        need(
+          filtros()$ano != 2022,
+          "Aguardando atualização dos dados de 2022"
+        )
+      )
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "baixo peso",
@@ -2295,6 +2293,12 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     output$caixa_b5_i5 <- renderUI({
+      validate(
+        need(
+          filtros()$ano != 2022,
+          "Aguardando atualização dos dados de 2022"
+        )
+      )
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "prematuridade",

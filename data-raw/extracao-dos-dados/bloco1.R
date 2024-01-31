@@ -571,7 +571,7 @@ pop_com_plano_saude_tabnet <- function (linha = "Município",
 }
 
 # Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2021.csv") |>
+df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
   clean_names()
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -604,7 +604,6 @@ df <- df_microdatasus_aux %>%
 df <- df %>%
   mutate_if(is.character, as.numeric)
 
-
 ## Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
 df_bloco1 <- left_join(df_aux_municipios, df)
 
@@ -621,6 +620,7 @@ df_microdatasus_aux <- microdatasus::fetch_datasus(
   information_system = "SINASC"
 ) |>
   clean_names()
+
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
   mutate(
@@ -632,7 +632,9 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_menor_que_20_anos = sum(nvm_menor_que_20_anos)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
+
 ## Juntando com o restante da base do bloco 1
 df_bloco1 <- left_join(df_bloco1, df_microdatasus)
 
@@ -641,7 +643,6 @@ df_bloco1$nvm_menor_que_20_anos[is.na(df_bloco1$nvm_menor_que_20_anos)] <- 0
 
 
 # Proporção de nascidos vivos de mulheres com idade de 20 a 34 anos -------------------------------
-
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
   mutate(
@@ -653,7 +654,9 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_entre_20_e_34_anos = sum(nvm_entre_20_e_34_anos)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
+
 ## Juntando com o restante da base do bloco 2
 df_bloco1 <- left_join(df_bloco1, df_microdatasus)
 
@@ -661,10 +664,7 @@ df_bloco1 <- left_join(df_bloco1, df_microdatasus)
 df_bloco1$nvm_entre_20_e_34_anos[is.na(df_bloco1$nvm_entre_20_e_34_anos)] <- 0
 
 
-
 # Proporção de nascidos vivos de mulheres com idade de 35 ou mais anos -------------------
-
-
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
   mutate(
@@ -675,15 +675,14 @@ df_microdatasus <- df_microdatasus_aux |>
   filter(idademae >=35 & idademae <= 55) |>
   group_by(codmunres, ano) |>
   summarise(nvm_maior_que_34_anos = sum(nvm_maior_que_34_anos))
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
+
 ## Juntando com o restante da base do bloco 2
 df_bloco1 <- left_join(df_bloco1, df_microdatasus)
 
 ## Substituindo os NA's da coluna 'nvm_maior_que_34_anos' por 0 (gerados após o left_join)
 df_bloco1$nvm_maior_que_34_anos[is.na(df_bloco1$nvm_maior_que_34_anos)] <- 0
-
-
-
 
 
 # Proporção de nascidos vivos de mulheres brancas -------------------------
@@ -694,6 +693,7 @@ df_microdatasus_aux <- microdatasus::fetch_datasus(
   information_system = "SINASC"
 ) |>
   clean_names()
+
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
   mutate(
@@ -705,6 +705,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_branca = sum(nvm_com_cor_da_pele_branca)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -726,6 +727,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_preta = sum(nvm_com_cor_da_pele_preta)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -747,6 +749,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_parda = sum(nvm_com_cor_da_pele_parda)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -768,6 +771,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_amarela = sum(nvm_com_cor_da_pele_amarela)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -789,6 +793,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_indigenas = sum(nvm_indigenas)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -806,6 +811,7 @@ df_microdatasus_aux <- microdatasus::fetch_datasus(
   information_system = "SINASC"
 ) |>
   clean_names()
+
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
   mutate(
@@ -817,8 +823,8 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_escolaridade_ate_3 = sum(nvm_com_escolaridade_ate_3)) |>
   mutate_if(is.character, as.numeric)
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
+df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
 df_bloco1 <- left_join(df_bloco1, df_microdatasus)
@@ -839,6 +845,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_escolaridade_de_4_a_7 = sum(nvm_com_escolaridade_de_4_a_7)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -860,6 +867,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_escolaridade_de_8_a_11 = sum(nvm_com_escolaridade_de_8_a_11)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -881,6 +889,7 @@ df_microdatasus <- df_microdatasus_aux |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_escolaridade_acima_de_11 = sum(nvm_com_escolaridade_acima_de_11)) |>
   mutate_if(is.character, as.numeric)
+
 df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
 
 ## Juntando com o restante da base do bloco 1
@@ -902,7 +911,7 @@ df_bloco1 <- left_join(df_bloco1, df_cobertura_esf)
 # População total ---------------------------------------------------------
 df_est_pop_total_aux <- est_pop_tabnet(
   coluna = "Ano",
-  periodo = as.character(2012:2022),
+  periodo = as.character(2012:2021),
   sexo = "Todas as categorias",
   faixa_etaria = "Todas as categorias"
 ) |>
@@ -922,82 +931,99 @@ df_bloco1 <- left_join(df_bloco1, df_est_pop_total)
 
 
 # População feminina de 10 a 49 anos com plano de saúde -------------------
-## Estimativas da população feminina de 10 a 49 anos -----------------------
-### Baixando os dados de estimativas populacionais de mulheres de 10 a 49 anos (as seleções utilizadas são os argumentos padrão da função)
-df_est_pop_aux <- est_pop_tabnet() |>
+##Baixando os dados de estimativas da população feminina de 10 a 49 anos
+df_est_pop_aux <- est_pop_tabnet(
+  coluna = "Ano", periodo = as.character(2012:2021)
+) |>
   select(!municipio)
 
-### Verificando se existem NAs
+##Verificando se existem NAs
 if (any(is.na(df_est_pop_aux))) {
   print("existem NAs")
 } else {
   print("não existem NAs")
 }
 
-### Passando o data.frame para o formato long
+##Passando o data.frame para o formato long
 df_est_pop <- df_est_pop_aux |>
   pivot_longer(
-    "2012":"2021",
+    !codmunres,
     names_to = "ano",
-    values_to = paste0("populacao_feminina_10_a_49")
+    values_to = "populacao_feminina_10_a_49"
   ) |>
   mutate(
     ano = as.numeric(ano),
   ) |>
-  arrange(codmunres, ano)
+  arrange(codmunres, ano) |>
+  filter(codmunres %in% df_aux_municipios$codmunres)
 
-### Transformando as colunas que estão em caracter para numéricas
-df_est_pop <- df_est_pop |> mutate_if(is.character, as.numeric)
-
-### Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_est_pop)
-
-### Substituindo os NA's da coluna 'populacao_feminina_10_a_49' por 0 (gerados após o left_join)
-df_bloco1$populacao_feminina_10_a_49[is.na(df_bloco1$populacao_feminina_10_a_49)] <- 0
-
-
-## Beneficiárias de planos de saúde entre 10 a 49 anos ---------------------
-### Baixando os dados de mulheres de 10 a 49 anos beneficíarias de planos de saúde (as seleções utilizadas são os argumentos padrão da função)
-df_beneficiarias_aux <- pop_com_plano_saude_tabnet() |>
+##Baixando os dados de mulheres de 10 a 49 anos beneficíarias de planos de saúde
+df_beneficiarias_aux <- pop_com_plano_saude_tabnet(
+  faixa_etaria = c("10 a 14 anos", "15 a 19 anos", "20 a 24 anos", "25 a 29 anos", "30 a 34 anos", "35 a 39 anos", "40 a 44 anos", "45 a 49 anos")
+) |>
   select(!municipio)
 
-### Verificando se existem NAs
+##Verificando se existem NAs
 if (any(is.na(df_beneficiarias_aux))) {
   print("existem NAs")
 } else {
   print("não existem NAs")
 }
 
-### Passando o data.frame para o formato long
+##Passando o data.frame para o formato long
 df_beneficiarias <- df_beneficiarias_aux |>
   pivot_longer(
-    3:ncol(df_beneficiarias_aux),
+    !codmunres,
     names_to = "mes_ano",
     values_to = paste0("beneficiarias_10_a_49")
   ) |>
   mutate(
+    mes = substr(mes_ano, start = 1, stop = 3),
     ano = as.numeric(paste0("20", substr(mes_ano, start = 5, stop = 6))),
-    .after = mes_ano
+    .after = mes_ano,
+    .keep = "unused"
   ) |>
   arrange(codmunres, ano) |>
-  filter(codmunres %in% codigos_municipios)
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
+  left_join(df_est_pop) |>
+  group_by(codmunres, ano) |>
+  filter(beneficiarias_10_a_49 < populacao_feminina_10_a_49) |>
+  summarise(
+    beneficiarias_10_a_49 = round(median(beneficiarias_10_a_49))
+  ) |>
+  ungroup()
 
-### Juntando com os dados de estimativas populacionais
-df_beneficiarias_pop <- left_join(df_beneficiarias, df_est_pop)
+##Juntando com os dados de estimativas populacionais
+df_beneficiarias_pop <- left_join(df_est_pop, df_beneficiarias)
 
-### Retirando as ocorrências em que o número de beneficíarias é maior que a população estimada e calculando a mediana do número de beneficiárias
-df_beneficiarias_final <- df_beneficiarias_pop |>
-  filter(beneficiarias_10_a_49 <= populacao_feminina_10_a_49) |>
-  group_by(codmunres, ano, populacao_feminina_10_a_49) |>
-  summarise(pop_fem_10_49_com_plano_saude = round(median(beneficiarias_10_a_49))) |>
+##Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
+df_cob_suplementar <- df_beneficiarias_pop |>
+  mutate(
+    cob_suplementar = round(beneficiarias_10_a_49 / populacao_feminina_10_a_49, 3)
+  ) |>
+  group_by(codmunres) |>
+  mutate(
+    q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.25), 3),
+    q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.75), 3),
+    iiq = q3 - q1,
+    lim_inf = round(q1 - 1.5*iiq, 3),
+    lim_sup = round(q3 + 1.5*iiq, 3),
+    outlier = ifelse((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)), 1, 0),
+    novo_cob_suplementar = ifelse(
+      outlier == 0,
+      cob_suplementar,
+      round(median(cob_suplementar[which(outlier == 0 & ano %in% 2014:2021)]), 3)
+    ),
+    novo_beneficiarias_10_a_49 = round(novo_cob_suplementar * populacao_feminina_10_a_49)
+  ) |>
   ungroup() |>
-  select(!populacao_feminina_10_a_49)
+  select(codmunres, ano, pop_fem_10_49_com_plano_saude = novo_beneficiarias_10_a_49, populacao_feminina_10_a_49)
 
 ### Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_beneficiarias_final)
+df_bloco1 <- left_join(df_bloco1, df_cob_suplementar)
 
 ### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
-df_bloco1$pop_fem_10_49_com_plano_saude[is.na(df_bloco1$pop_fem_10_49_com_plano_saude)] <- 0
+df_bloco1$pop_fem_10_49_com_plano_saude[is.na(df_bloco1$pop_fem_10_49_com_plano_saude) & df_bloco1$ano <= 2021] <- 0
 
 # Verificando se os dados novos e antigos estão batendo -------------------
 sum(df_bloco1 |> filter(ano < 2022) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
@@ -1014,8 +1040,8 @@ sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_de_4_a_7)) - su
 sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
 sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
 sum(df_bloco1 |> filter(ano < 2022) |> pull(media_cobertura_esf)) - sum(df_bloco1_antigo$media_cobertura_esf)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total) #Não está batendo
-sum(df_bloco1 |> filter(ano < 2022) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE)
+sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total) #Não está batendo, mas são dados de lugares diferentes
+#sum(df_bloco1 |> filter(ano < 2022) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE) #Metodologias diferentes
 sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49)
 
 ## Para os nascidos vivos de mães com menos de 20 anos, utilizaremos os dados do microdatasus (batem com os que estavam
@@ -1032,15 +1058,15 @@ df_est_pop_total_antigo <- df_bloco1_antigo |>
 df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo) |>
   select(1:16, populacao_total, 17:18)
 
-## Para o número de beneficiárias, considerar os dados antigos por enquanto
-df_bloco1 <- df_bloco1 |>
-  select(!pop_fem_10_49_com_plano_saude)
-
-df_befeciarias_antigo <- df_bloco1_antigo |>
-  select(codmunres, ano, pop_fem_10_49_com_plano_saude)
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_befeciarias_antigo)
+# ## Para o número de beneficiárias, considerar os dados antigos por enquanto
+# df_bloco1 <- df_bloco1 |>
+#   select(!pop_fem_10_49_com_plano_saude)
+#
+# df_befeciarias_antigo <- df_bloco1_antigo |>
+#   select(codmunres, ano, pop_fem_10_49_com_plano_saude)
+#
+# ## Juntando com o restante da base do bloco 1
+# df_bloco1 <- left_join(df_bloco1, df_befeciarias_antigo)
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
