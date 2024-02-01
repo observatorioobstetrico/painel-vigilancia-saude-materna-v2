@@ -128,31 +128,31 @@ bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
-bloco8_materno_garbage_aux <- read.csv("data-raw/csv/materno_garbage_2019-2022.csv") |>
+bloco8_materno_garbage_aux <- read.csv("data-raw/csv/materno_garbage_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_fetal_garbage_aux <- read.csv("data-raw/csv/fetais_garbage_2019-2022.csv") |>
+bloco8_fetal_garbage_aux <- read.csv("data-raw/csv/fetais_garbage_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_neonat_garbage_aux <- read.csv("data-raw/csv/neonat_garbage_2019-2022.csv") |>
+bloco8_neonat_garbage_aux <- read.csv("data-raw/csv/neonat_garbage_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_fetal_causas_aux <- read.csv("data-raw/csv/fetais_causas_2019-2022.csv") |>
+bloco8_fetal_causas_aux <- read.csv("data-raw/csv/fetais_causas_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_neonat_causas_aux <- read.csv("data-raw/csv/neonat_causas_2019-2022.csv") |>
+bloco8_neonat_causas_aux <- read.csv("data-raw/csv/neonat_causas_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2019-2022.csv") |>
+bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2019-2022.csv") |>
+bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 

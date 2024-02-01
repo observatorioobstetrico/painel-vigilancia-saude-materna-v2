@@ -100,7 +100,7 @@ app_ui <- function(request) {
               icon = icon("7")
             ),
             bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Teste",
+              text = "- Garbage codes, causas principais e causas evitáveis",
               tabName = "bloco_8",
               icon = icon("8")
             )

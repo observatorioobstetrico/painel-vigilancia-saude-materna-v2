@@ -3,7 +3,7 @@ library(tidyverse)
 dados_obitos_maternos <- read_delim("data-raw/csv/dados_oobr_obitos_grav_puerp_maternos_oficiais_2023.csv",
                                     delim = ",", escape_double = FALSE, trim_ws = TRUE) |>
   rename(codmunres = codigo) |>
-  filter(ano >= 2019)
+  filter(ano >= 2012)
 
 
 dados_obitos_fetais <- read.csv("data-raw/csv/dados_obitos_fetais.csv") |>
@@ -56,7 +56,10 @@ fetal <- c(sprintf("P%02d", 90:96),
            sprintf("Q%02d", 10:18),
            sprintf("Q%02d", 35:37),
            sprintf("Q%02d", 80:89),
-           sprintf("Q%02d", 90:99)
+           sprintf("Q%02d", 90:99),
+           sprintf("R%02d", 0:94),
+           sprintf("R9%d", 6:9),
+           "I469", "I959", "I99", "J960", "J969", "P285"
 )
 
 fetais_garbage <- dados_obitos_fetais |>
@@ -307,13 +310,13 @@ neonat_evitaveis <- dados_obitos_neonatais |>
 #baixa dados
 #############################
 
-write.csv(materno_garbage, "data-raw/csv/materno_garbage_2019-2022.csv", row.names = FALSE)
-write.csv(fetais_garbage, "data-raw/csv/fetais_garbage_2019-2022.csv", row.names = FALSE)
-write.csv(neonat_garbage, "data-raw/csv/neonat_garbage_2019-2022.csv", row.names = FALSE)
-write.csv(fetais_causas, "data-raw/csv/fetais_causas_2019-2022.csv", row.names = FALSE)
-write.csv(neonat_causas, "data-raw/csv/neonat_causas_2019-2022.csv", row.names = FALSE)
-write.csv(fetais_evitaveis, "data-raw/csv/fetais_evitaveis_2019-2022.csv", row.names = FALSE)
-write.csv(neonat_evitaveis, "data-raw/csv/neonat_evitaveis_2019-2022.csv", row.names = FALSE)
+write.csv(materno_garbage, "data-raw/csv/materno_garbage_2012-2022.csv", row.names = FALSE)
+write.csv(fetais_garbage, "data-raw/csv/fetais_garbage_2012-2022.csv", row.names = FALSE)
+write.csv(neonat_garbage, "data-raw/csv/neonat_garbage_2012-2022.csv", row.names = FALSE)
+write.csv(fetais_causas, "data-raw/csv/fetais_causas_2012-2022.csv", row.names = FALSE)
+write.csv(neonat_causas, "data-raw/csv/neonat_causas_2012-2022.csv", row.names = FALSE)
+write.csv(fetais_evitaveis, "data-raw/csv/fetais_evitaveis_2012-2022.csv", row.names = FALSE)
+write.csv(neonat_evitaveis, "data-raw/csv/neonat_evitaveis_2012-2022.csv", row.names = FALSE)
 
 
 
