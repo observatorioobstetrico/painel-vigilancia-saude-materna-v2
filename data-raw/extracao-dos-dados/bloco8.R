@@ -1,325 +1,204 @@
 library(tidyverse)
+library(httr)
+library(janitor)
+library(getPass)
+library(repr)
+library(data.table)
+library(readr)
+library(microdatasus)
 
-dados_obitos_maternos <- read_delim("data-raw/csv/dados_oobr_obitos_grav_puerp_maternos_oficiais_2023.csv",
-                                    delim = ",", escape_double = FALSE, trim_ws = TRUE) |>
-  rename(codmunres = codigo) |>
-  filter(ano >= 2012)
+token = getPass()  #Token de acesso ? API da PCDaS (todos os arquivos gerados se encontram na pasta "Databases", no Google Drive)
 
+url_base = "https://bigdata-api.fiocruz.br"
+endpoint <- paste0(url_base,"/","sql_query")
 
-dados_obitos_fetais <- read.csv("data-raw/csv/dados_obitos_fetais.csv") |>
-  rename(codmunres = codigo)
+convertRequestToDF <- function(request){
+  variables = unlist(content(request)$columns)
+  variables = variables[names(variables) == "name"]
+  column_names <- unname(variables)
+  values = content(request)$rows
+  df <- as.data.frame(do.call(rbind,lapply(values,function(r) {
+    row <- r
+    row[sapply(row, is.null)] <- NA
+    rbind(unlist(row))
+  } )))
+  names(df) <- column_names
+  return(df)
+}
 
-dados_obitos_neonatais <- read.csv("data-raw/csv/dados_obitos_neonatais.csv") |>
-  rename(codmunres = codigo)
+#Baixando os dados do SIM-DOFET (?bitos fetais) para os anos de 2012 a 2021
+df_fetais_aux1 <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  information_system = "SIM-DOFET"
+) |>
+  process_sim(municipality_data = TRUE)
 
+df_fetais_aux1$SEMAGESTAC <- as.numeric(df_fetais_aux1$SEMAGESTAC)
+df_fetais_aux1$PESO <- as.numeric(df_fetais_aux1$PESO)
 
-dados_obitos_maternos$cid <- sapply(strsplit(dados_obitos_maternos$causabas_categoria, " "), function(x) x[1])
+table(sort(df_fetais_aux1$SEMAGESTAC))
+unique(sort(df_fetais_aux1$PESO, decreasing = TRUE))
 
-dados_obitos_fetais$cid <- sapply(strsplit(dados_obitos_fetais$causabas_categoria, " "), function(x) x[1])
-
-dados_obitos_neonatais$cid <- sapply(strsplit(dados_obitos_neonatais$causabas_categoria, " "), function(x) x[1])
-
-
-###############################
-###############################
-###############################
-
-dados_obitos_neonatais <- dados_obitos_neonatais |>
+#Selecionando as colunas necess?rias e criando algumas vari?veis
+df_fetais_aux2 <- df_fetais_aux1 |>
+  select(
+    municipio = munResNome,
+    uf = munResUf,
+    codigo = CODMUNRES,
+    DTOBITO,
+    CAUSABAS,
+    PESO,
+    GESTACAO,
+    SEMAGESTAC
+  ) |>
+  filter(
+    ((GESTACAO != "Menos de 22 semanas" & !is.na(GESTACAO)) | (is.na(GESTACAO) & SEMAGESTAC >= 22 & SEMAGESTAC != 99)) | (PESO >= 500)
+  ) |>
   mutate(
-    idade_dias = case_when(
-      idade < 207 ~ "0 a 6 dias",
-      idade >= 207 & idade < 228 ~ "7 a 27 dias",
-      idade >= 228 ~ "28 a 364 dias"
-    )
-  )
+    ano = substr(DTOBITO, 1, 4),
+    .after = DTOBITO
+  ) |>
+  mutate(
+    tipo_do_obito = "Fetal",
+    faixa_de_peso = case_when(
+      is.na(PESO) ~ "Sem informa??o",
+      PESO < 1500 ~ "< 1500 g",
+      PESO >= 1500 & PESO < 2000 ~ "1500 a 1999 g",
+      PESO >= 2000 & PESO < 2500 ~ "2000 a 2499 g",
+      PESO >= 2500 ~ "\U2265 2500 g"
+    ),
+    obitos = 1,
+    .after = PESO
+  ) |>
+  select(!c(DTOBITO, PESO)) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup()
 
-dados_obitos_neonatais$idade_dias <- factor(dados_obitos_neonatais$idade_dias,
-                                            levels = c("0 a 6 dias", "7 a 27 dias",
-                                                       "28 a 364 dias"))
-
-
-###############################
-#materno
-###############################
-
-materno <- c("D39", "F53", "O08", "O94", "O95")
-
-materno_garbage <- dados_obitos_maternos |>
-  filter(cid %in% materno)
-
-
-###############################
-#fetal
-###############################
-
-fetal <- c(sprintf("P%02d", 90:96),
-           sprintf("Q%02d", 10:18),
-           sprintf("Q%02d", 35:37),
-           sprintf("Q%02d", 80:89),
-           sprintf("Q%02d", 90:99),
-           sprintf("R%02d", 0:94),
-           sprintf("R9%d", 6:9),
-           "I469", "I959", "I99", "J960", "J969", "P285"
-)
-
-fetais_garbage <- dados_obitos_fetais |>
-  filter(cid %in% fetal | CAUSABAS %in% fetal)
+#sum(df_fetais_aux2$obitos[which()])
+# sum(df_fetais_aux2$obitos[which(df_fetais_aux2$uf == "São Paulo" & df_fetais_aux2$ano == 2020)])  #Tem que dar 4974
+# sum(df_fetais_aux2$obitos[which(df_fetais_aux2$uf == "Espírito Santo" & df_fetais_aux2$ano == 2019)])  #Tem que dar 489
+# sum(df_fetais_aux2$obitos[which(df_fetais_aux2$uf == "Espírito Santo" & df_fetais_aux2$municipio == "Alegre" & df_fetais_aux2$ano == 2020)])  #Tem que dar 4
+# sum(df_fetais_aux2$obitos[which(df_fetais_aux2$uf == "São Paulo" & df_fetais_aux2$municipio == "Bauru" & df_fetais_aux2$ano == 2020)])  #Tem que dar 44
 
 
+#Obtendo um dataframe contendo o nome dos grupos, capítulos e categorias da CID10
+df1_nomes_cid10 <- data.frame()
+params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query":" SELECT CAUSABAS, causabas_grupo, causabas_capitulo, causabas_categoria, COUNT(1)',
+                ' FROM \\"datasus-sim\\"',
+                ' GROUP BY CAUSABAS, causabas_grupo, causabas_capitulo, causabas_categoria",
+                        "fetch_size": 65000}
+      }
+    }')
 
-###############################
-#neonatal
-###############################
+request <- POST(url = endpoint, body = params, encode = "form")
+df1_nomes_cid10 <- convertRequestToDF(request)
+names(df1_nomes_cid10) <- c("CAUSABAS", "causabas_grupo", "capitulo_cid10", "causabas_categoria", "obitos")
 
-mal_definidas <- c(sprintf("R%02d", 0:94),
-                   sprintf("R9%d", 6:9),
-                   "I469", "I959", "I99", "J960", "J969", "P285")
+df1_nomes_cid10 <- df1_nomes_cid10 |>
+  select(!obitos)
 
-infantil <- c(
-  sprintf("A%02d", 00:09),
-  sprintf("A%02d", 30:49),
-  sprintf("A%02d", 50:64),
-  sprintf("A%02d", 70:64),
-  sprintf("A%02d", 90:99),
-  sprintf("B%02d", 00:09),
-  sprintf("B%02d", 25:34),
-  sprintf("B%02d", 35:49),
-  sprintf("B%02d", 50:64),
-  sprintf("B%02d", 65:83),
-  sprintf("B%02d", 85:89),
-  sprintf("B%02d", 90:97),
-  sprintf("B%02d", 99:99),
-  sprintf("C%02d", 00:97),
-  sprintf("D%02d", 00:09),
-  sprintf("D%02d", 10:48),
-  sprintf("D%02d", 50:53),
-  sprintf("D%02d", 55:59),
-  sprintf("D%02d", 60:64),
-  sprintf("D%02d", 65:69),
-  sprintf("D%02d", 70:77),
-  sprintf("D%02d", 80:89),
-  sprintf("E%02d", 00:07),
-  sprintf("E%02d", 15:16),
-  sprintf("E%02d", 20:35),
-  sprintf("E%02d", 50:64),
-  sprintf("E%02d", 70:90),
-  sprintf("F%02d", 00:39),
-  sprintf("F%02d", 40:48),
-  sprintf("F%02d", 50:99),
-  sprintf("G%02d", 00:09),
-  sprintf("G%02d", 30:32),
-  sprintf("G%02d", 40:47),
-  sprintf("G%02d", 50:59),
-  sprintf("G%02d", 60:64),
-  sprintf("G%02d", 80:83),
-  sprintf("G%02d", 90:99),
-  sprintf("H%02d", 00:06),
-  sprintf("H%02d", 10:13),
-  sprintf("H%02d", 15:22),
-  sprintf("H%02d", 25:28),
-  sprintf("H%02d", 30:36),
-  sprintf("H%02d", 40:59),
-  sprintf("H%02d", 60:62),
-  sprintf("H%02d", 65:75),
-  sprintf("H%02d", 80:83),
-  sprintf("H%02d", 90:95),
-  sprintf("I%02d", 10:15),
-  sprintf("I%02d", 26:28),
-  sprintf("I%02d", 30:52),
-  sprintf("I%02d", 60:69),
-  sprintf("I%02d", 70:79),
-  sprintf("I%02d", 95:99),
-  sprintf("J%02d", 00:06),
-  sprintf("J%02d", 09:18),
-  sprintf("J%02d", 20:22),
-  sprintf("J%02d", 60:70),
-  sprintf("J%02d", 80:86),
-  sprintf("J%02d", 90:99),
-  sprintf("J%02d", 95:99),
-  sprintf("K%02d", 00:14),
-  sprintf("K%02d", 20:31),
-  sprintf("K%02d", 55:63),
-  sprintf("K%02d", 65:67),
-  sprintf("K%02d", 70:77),
-  sprintf("K%02d", 80:87),
-  sprintf("K%02d", 90:93),
-  sprintf("L%02d", 20:30),
-  sprintf("L%02d", 40:45),
-  sprintf("L%02d", 50:75),
-  sprintf("L%02d", 80:99),
-  sprintf("M%02d", 00:25),
-  sprintf("M%02d", 40:54),
-  sprintf("M%02d", 60:99),
-  sprintf("N%02d", 10:19),
-  sprintf("N%02d", 30:51),
-  sprintf("N%02d", 60:64),
-  sprintf("N%02d", 80:98),
-  sprintf("O%02d", 00:08),
-  sprintf("O%02d", 94:99),
-  sprintf("P%02d", 20:29),
-  sprintf("P%02d", 35:39),
-  sprintf("P%02d", 90:96),
-  sprintf("Q%02d", 10:18),
-  sprintf("Q%02d", 35:37),
-  sprintf("Q%02d", 80:89),
-  sprintf("Q%02d", 90:99),
-  sprintf("S%02d", 00:99),
-  sprintf("T%02d", 00:98),
-  sprintf("V%02d", 87:89),
-  sprintf("V%02d", 98:99),
-  sprintf("W%02d", 76:76),
-  sprintf("X%02d", 40:49),
-  sprintf("X%02d", 59:59),
-  sprintf("Y%02d", 09:34),
-  sprintf("Y%02d", 85:89),
-  sprintf("Y%02d", 90:98),
-  mal_definidas
-  # sprintf("%s%02d", rep(c("A", "B"), each = 100), 0:99),
-  # sprintf("%s%02d", rep(c("C", "D"), each = 49), 0:48),
-  # sprintf("%s%02d", rep(c("D", "E"), each = 40), 50:89),
-  # sprintf("%s%02d", rep("E", each = 91), 0:90),
-  # sprintf("%s%02d", rep("F", each = 100), 0:99),
-  # sprintf("%s%02d", rep("G", each = 100), 0:99),
-  # sprintf("%s%02d", rep("H", each = 60), 0:59),
-  # sprintf("%s%02d", rep("H", each = 36), 60:95),
-  # sprintf("%s%02d", rep("I", each = 100), 0:99),
-  # sprintf("%s%02d", rep("J", each = 100), 0:99),
-  # sprintf("%s%02d", rep("K", each = 94), 0:93),
-  # sprintf("%s%02d", rep("L", each = 100), 0:99),
-  # sprintf("%s%02d", rep("M", each = 100), 0:99),
-  # sprintf("%s%02d", rep("N", each = 100), 0:99),
-  # sprintf("%s%02d", rep("O", each = 100), 0:99),
-  # #sprintf("%s%02d", rep("P", each = 97), 0:96),
-  # #sprintf("%s%02d", rep("Q", each = 100), 0:99),
-  # fetal,
-  # sprintf("%s%02d", rep(c("S", "T"), each = 99), 0:98),
-  # sprintf("%s%02d", rep(c("V", "W", "X", "Y"), each = 98), 1:98),
-)
+df2_nomes_cid10 <- data.frame()
+params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query":" SELECT CAUSABAS, causabas_grupo, causabas_capitulo, causabas_categoria, COUNT(1)',
+                ' FROM \\"datasus-sim-dofet\\"',
+                ' GROUP BY CAUSABAS, causabas_grupo, causabas_capitulo, causabas_categoria",
+                        "fetch_size": 65000}
+      }
+    }')
 
-neonat_garbage <- dados_obitos_neonatais |>
-  filter(cid %in% infantil | CAUSABAS %in% infantil)
+request <- POST(url = endpoint, body = params, encode = "form")
+df2_nomes_cid10 <- convertRequestToDF(request)
+names(df2_nomes_cid10) <- c("CAUSABAS", "causabas_grupo", "capitulo_cid10", "causabas_categoria", "obitos")
+
+df2_nomes_cid10 <- df2_nomes_cid10 |>
+  select(!obitos)
+
+df_nomes_cid10 <- full_join(df1_nomes_cid10, df2_nomes_cid10)
+
+df_fetais_aux3 <- left_join(df_fetais_aux2, df_nomes_cid10)
+
+#Obtendo um dataframe com as regiões às quais pertencem os estados
+df_regioes <- data.frame()
+params = paste0('{
+      "token": {
+        "token": "',token,'"
+      },
+      "sql": {
+        "sql": {"query":" SELECT res_REGIAO, CODMUNRES, COUNT(1)',
+                ' FROM \\"datasus-sim-dofet\\"',
+                ' GROUP BY res_REGIAO, CODMUNRES",
+                        "fetch_size": 65000}
+      }
+    }')
+
+request <- POST(url = endpoint, body = params, encode = "form")
+df_regioes <- convertRequestToDF(request)
+names(df_regioes) <- c("regiao", "codigo", "obitos")
+
+df_regioes <- df_regioes |>
+  select(!obitos)
+
+#Criando a base final de óbitos fetais
+df_obitos_fetais <- left_join(df_fetais_aux3, df_regioes) |>
+  select(regiao, uf, municipio, codigo, ano, CAUSABAS, causabas_grupo, capitulo_cid10, causabas_categoria, tipo_do_obito, faixa_de_peso, obitos) |>
+  arrange(codigo)
+
+##Exportando os dados
+write.table(df_obitos_fetais, 'data-raw/csv/dados_obitos_fetais.csv', sep = ",", dec = ".", row.names = FALSE, fileEncoding = "utf-8")
 
 
-
-###############################
-#principais causas
-###############################
-
-
-afeccoes_perinatais <- c("P21", "A502", "P07")
-
-mf_confenitas <- c(sprintf("Q%02d", 00:99))
-
-doencas_infec <- c(sprintf("A%02d", 00:09),
-                   sprintf("J%02d", 10:21),
-                   sprintf("E%02d", 40:46),
-                   sprintf("A%02d", 40:41),
-                   "A39", "A87", "G00", "G03",
-                   "J45")
-
-principais_causas <- c(afeccoes_perinatais, mf_confenitas, doencas_infec)
-
-fetais_causas <- dados_obitos_fetais |>
-  filter(cid %in% principais_causas | CAUSABAS %in% principais_causas)
-
-neonat_causas <- dados_obitos_neonatais |>
-  filter(cid %in% principais_causas | CAUSABAS %in% principais_causas)
-
-
-###############################
-# causas evitaveis
-###############################
-
-
-# atencao a mulher na gestacao
-
-atencao_gestac <- c("P00", "P01", "P03", "P04",
-                    "P05", "P07",
-                    "P22")
-
-atencao_parto <- c("P02",
-                   "P20", "P21"
+###Baixando os dados óbitos neonatais de 2012 a 2022
+df_obitos_neonatais <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  information_system = "SIM-DO",
+  vars = c("CODMUNRES", "DTOBITO", "IDADE", "PESO", "CAUSABAS")
 )
 
 
+df_obitos_neonatais <- df_obitos_neonatais |>
+  clean_names() |>
+  mutate_at(c("codmunres", "idade", "peso"), as.numeric) |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+    tipo_do_obito = case_when(
+      idade < 207 ~ "Neonatal precoce",
+      idade >= 207 & idade < 228 ~ "Neonatal tardio",
+      idade >= 228 ~ "Pós-neonatal"
+    ),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "Sem informação",
+      peso < 1500 ~ "< 1500 g",
+      #peso >= 1500 & peso < 2500 ~ "1500 a 1999 g",
+      peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+      peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+      peso >= 2500 ~ ">= 2500 g"
+    ),
+    .after = "codmunres"
+  ) |>
+  filter(
+    idade < 228
+  ) |>
+  select(!c(dtobito, peso)) |>
+  mutate(obitos = 1) |>
+  group_by(across(!c(obitos))) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup()
 
-acoes_diag <- c(sprintf("J%02d", 10:21),
-                "J22",
-                "A48")
+df_obitos_neonatais <- left_join(df_obitos_neonatais, df_nomes_cid10)
 
-acoes_saude <- c(sprintf("A%02d", 00:09),
-                 sprintf("A%02d", 40:41),
-                 #"A39", "A87", "G00", "G03",
-                 sprintf("E%02d", 40:46),
-                 #"J45",
-                 "E63",
-                 sprintf("W%02d", 75:84))
-
-mal_definidas <- c(sprintf("R%02d", 0:94),
-                   sprintf("R9%d", 6:9),
-                   "I469", "I959", "I99", "J960", "J969", "P285")
-
-atencao_rn <- c(#sprintf("P21%d", 0:9),
-  #sprintf("P22%d", 0:9),
-  sprintf("P23%d", 0:9),
-  sprintf("P24%d", 0:9),
-  sprintf("P25%d", 0:9),
-  sprintf("P26%d", 0:9),
-  sprintf("P27%d", 0:9),
-  sprintf("P28%d", 0:9),
-  sprintf("P29%d", 0:9),
-  sprintf("P35%d", 1:2),
-  sprintf("P35%d", 4:9),
-  sprintf("P36%d", 0:9),
-  sprintf("P37%d", 0:9),
-  sprintf("P38%d", 0:9),
-  sprintf("P39%d", 0:9)
-)
-
-
-filtro_evitaveis <- c(atencao_gestac, atencao_parto, acoes_diag,
-                acoes_saude, atencao_rn, mal_definidas)
-
-
-fetais_evitaveis <- dados_obitos_fetais |>
-  filter(cid %in% filtro_evitaveis | CAUSABAS %in% filtro_evitaveis) |>
-  mutate(grupo = case_when(
-    cid %in% atencao_gestac ~ "Aten??o ? mulher na gesta??o",
-    cid %in% atencao_parto ~ "Aten??o ? mulher no parto",
-    cid %in% atencao_rn | CAUSABAS %in% atencao_rn  ~ "Aten??o ao rec?m-nascido",
-    cid %in% acoes_diag ~ "A??es diagn?stico e tratamento adequado",
-    cid %in% acoes_saude ~ "A??es adequadas de promo??o ? sa?de",
-    cid %in% mal_definidas | CAUSABAS %in% mal_definidas ~ "Causas mal definidas",
-    TRUE ~ "Demais causas"
-  ))
-
-neonat_evitaveis <- dados_obitos_neonatais |>
-  filter(cid %in% filtro_evitaveis | CAUSABAS %in% filtro_evitaveis) |>
-  mutate(grupo = case_when(
-    cid %in% atencao_gestac ~ "Aten??o ? mulher na gesta??o",
-    cid %in% atencao_parto ~ "Aten??o ? mulher no parto",
-    cid %in% atencao_rn | CAUSABAS %in% atencao_rn  ~ "Aten??o ao rec?m-nascido",
-    cid %in% acoes_diag ~ "A??es diagn?stico e tratamento adequado",
-    cid %in% acoes_saude ~ "A??es adequadas de promo??o ? sa?de",
-    cid %in% mal_definidas | CAUSABAS %in% mal_definidas ~ "Causas mal definidas",
-    TRUE ~ "Demais causas"
-  ))
-
-
-#############################
-#baixa dados
-#############################
-
-write.csv(materno_garbage, "data-raw/csv/materno_garbage_2012-2022.csv", row.names = FALSE)
-write.csv(fetais_garbage, "data-raw/csv/fetais_garbage_2012-2022.csv", row.names = FALSE)
-write.csv(neonat_garbage, "data-raw/csv/neonat_garbage_2012-2022.csv", row.names = FALSE)
-write.csv(fetais_causas, "data-raw/csv/fetais_causas_2012-2022.csv", row.names = FALSE)
-write.csv(neonat_causas, "data-raw/csv/neonat_causas_2012-2022.csv", row.names = FALSE)
-write.csv(fetais_evitaveis, "data-raw/csv/fetais_evitaveis_2012-2022.csv", row.names = FALSE)
-write.csv(neonat_evitaveis, "data-raw/csv/neonat_evitaveis_2012-2022.csv", row.names = FALSE)
-
-
-
-
+##Exportando os dados
+write.table(df_obitos_neonatais, 'data-raw/csv/dados_obitos_neonatais.csv', sep = ",", dec = ".", row.names = FALSE, fileEncoding = "utf-8")
 
 

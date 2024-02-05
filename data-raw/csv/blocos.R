@@ -137,24 +137,21 @@ bloco8_fetal_garbage_aux <- read.csv("data-raw/csv/fetais_garbage_2012-2022.csv"
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco8_neonat_garbage_aux <- read.csv("data-raw/csv/neonat_garbage_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
+  janitor::clean_names()
 
 bloco8_fetal_causas_aux <- read.csv("data-raw/csv/fetais_causas_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco8_neonat_causas_aux <- read.csv("data-raw/csv/neonat_causas_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
+  janitor::clean_names()
 
 bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
 
 bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
+  janitor::clean_names()
 
 
 ###VER QUAIS COLUNAS VOCÊS PRECISAM TIRAR AQUI; NO ARQUIVO DE 2012 A 2020, ESTOU TIRANDO A COLUNA 'X' E A COLUNA 'UF'
@@ -267,6 +264,7 @@ bloco8_fetal_garbage <- bloco8_fetal_garbage_aux |>
     (which(names(bloco8_fetal_garbage_aux) == "ano") + 1):(which(names(bloco8_fetal_garbage_aux) == "municipio") - 1)
   )
 
+
 bloco8_neonat_garbage_aux <- dplyr::left_join(bloco8_neonat_garbage_aux, aux_municipios, by = "codmunres")
 bloco8_neonat_garbage <- bloco8_neonat_garbage_aux |>
   dplyr::select(
@@ -294,6 +292,7 @@ bloco8_fetal_evitaveis <- bloco8_fetal_evitaveis_aux |>
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(bloco8_fetal_evitaveis_aux) == "ano") + 1):(which(names(bloco8_fetal_evitaveis_aux) == "municipio") - 1)
   )
+
 
 bloco8_neonat_evitaveis_aux <- dplyr::left_join(bloco8_neonat_evitaveis_aux, aux_municipios, by = "codmunres")
 bloco8_neonat_evitaveis <- bloco8_neonat_evitaveis_aux |>
