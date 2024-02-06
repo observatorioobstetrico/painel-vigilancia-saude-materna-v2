@@ -98,12 +98,12 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal, perinatal e neonatal",
               tabName = "bloco_7",
               icon = icon("7")
-            )#,
-            # bs4Dash::bs4SidebarMenuSubItem(
-            #   text = "- Garbage codes, causas principais e causas evitáveis",
-            #   tabName = "bloco_8",
-            #   icon = icon("8")
-            # )
+            ),
+            bs4Dash::bs4SidebarMenuSubItem(
+              text = "- Garbage codes, causas principais e causas evitáveis",
+              tabName = "bloco_8",
+              icon = icon("8")
+            )
           ),
           bs4Dash::bs4SidebarMenuItem(
             text = HTML("<b> Visão detalhada dos indicadores </b>"),
@@ -576,10 +576,10 @@ app_ui <- function(request) {
             tabName = "bloco_7",
             mod_bloco_7_ui("bloco_7_1")
           ),
-          # bs4Dash::bs4TabItem(
-          #   tabName = "bloco_8",
-          #   mod_bloco_8_ui("bloco_8_1")
-          # ),
+          bs4Dash::bs4TabItem(
+            tabName = "bloco_8",
+            mod_bloco_8_ui("bloco_8_1")
+          ),
           bs4Dash::bs4TabItem(
             tabName = "nivel_3",
             mod_nivel_3_ui("nivel_3_1")

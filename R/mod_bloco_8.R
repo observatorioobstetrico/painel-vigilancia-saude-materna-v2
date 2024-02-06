@@ -24,10 +24,10 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos maternos &nbsp;</b>")
+            style = "height: 10%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequências dos garbage codes para óbitos maternos &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_materno_garbage")))
@@ -40,10 +40,10 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos fetais &nbsp;</b>")
+            style = "height: 10%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequências dos garbage codes para óbitos fetais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_garbage")))
@@ -56,10 +56,10 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos neonatais &nbsp;</b>")
+            style = "height: 10%; display: flex; align-items: center;",
+            HTML("<b style='font-size:18px'> Tabela de frequências dos garbage codes para óbitos neonatais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_garbage")))
@@ -72,9 +72,9 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
+            style = "height: 10%; display: flex; align-items: center;",
             HTML("<b style='font-size:18px'> Tabela de frequências das causas mais comuns de óbitos fetais &nbsp;</b>")
           ),
           hr(),
@@ -88,9 +88,9 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
+            style = "height: 10%; display: flex; align-items: center;",
             HTML("<b style='font-size:18px'> Tabela de frequências das causas mais comuns de óbitos neonatais &nbsp;</b>")
           ),
           hr(),
@@ -104,9 +104,9 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
+            style = "height: 10%; display: flex; align-items: center;",
             HTML("<b style='font-size:18px'> Tabela de frequências das causas evitáveis de óbitos fetais &nbsp;</b>")
           ),
           hr(),
@@ -120,9 +120,9 @@ mod_bloco_8_ui <- function(id){
           status = "primary",
           collapsible = FALSE,
           headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
-            style = "height: 15%; display: flex; align-items: center;",
+            style = "height: 10%; display: flex; align-items: center;",
             HTML("<b style='font-size:18px'> Tabela de frequências das causas evitáveis de óbitos neonatais &nbsp;</b>")
           ),
           hr(),
@@ -256,6 +256,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_materno_garbage <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_materno_garbage()) != 0,
+          "Não existem ocorrências de garbage codes para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -377,6 +383,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_fetal_garbage <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_fetal_garbage()) != 0,
+          "Não existem ocorrências de garbage codes para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -495,6 +507,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_neonat_garbage <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_neonat_garbage()) != 0,
+          "Não existem ocorrências de garbage codes para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -620,6 +638,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_fetal_causas <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_fetal_causas()) != 0,
+          "Não existem ocorrências de óbitos fetais pelas causas mais comuns para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -738,6 +762,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_neonat_causas <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_neonat_causas()) != 0,
+          "Não existem ocorrências de óbitos neonatais pelas causas mais comuns para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -862,6 +892,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_fetal_evitaveis <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_fetal_evitaveis()) != 0,
+          "Não existem ocorrências de óbitos fetais por causas evitáveis para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
@@ -987,6 +1023,12 @@ mod_bloco_8_server <- function(id, filtros){
     })
 
     output$tabela_neonat_evitaveis <- reactable::renderReactable({
+      validate(
+        need(
+          nrow(data8_neonat_evitaveis()) != 0,
+          "Não existem ocorrências de óbitos neonatais por causas evitáveis para a localidade e períodos selecionados."
+        )
+      )
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(
           paste0(
