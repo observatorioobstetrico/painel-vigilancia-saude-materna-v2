@@ -25,7 +25,9 @@ sinasc20 <- microdatasus::fetch_datasus(year_start = 2020, year_end = 2020, info
 
 sinasc21 <- microdatasus::fetch_datasus(year_start = 2021, year_end = 2021, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-## criando coluna de anos 
+sinasc22 <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
+
+## criando coluna de anos
 sinasc12$Ano <- 2012
 sinasc13$Ano <- 2013
 sinasc14$Ano <- 2014
@@ -37,84 +39,85 @@ sinasc18$Ano <- 2018
 sinasc19$Ano <- 2019
 sinasc20$Ano <- 2020
 sinasc21$Ano <- 2021
+sinasc21$Ano <- 2022
 
-sinasc_microdatasus <- dplyr::bind_rows(sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21)
+sinasc_microdatasus <- dplyr::bind_rows(sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21, sinasc22)
 
-write.table(sinasc_microdatasus, 'bruto_sinasc_microdatasus_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(sinasc_microdatasus, 'bruto_sinasc_microdatasus_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
-#### agrupando 
+#### agrupando
 
-sinasc_microdatasus <- read.csv('bruto_sinasc_microdatasus_2012_2021.csv', sep = ";")
+sinasc_microdatasus <- read.csv('bruto_sinasc_microdatasus_2012_2022.csv', sep = ";")
 
-sinasc_microdatasus <- sinasc_microdatasus |> 
-  group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |> 
+sinasc_microdatasus <- sinasc_microdatasus |>
+  group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   summarise(Nascimentos = n())
 
 #### salvar base agrupada
-write.table(sinasc_microdatasus, 'sinasc_microdatasus_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(sinasc_microdatasus, 'sinasc_microdatasus_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 ###################
 # TRATAMENTO DOS DADOS PARA CRIAÇÃO DAS TABELAS
 ##################
 
-dados <- read.csv('sinasc_microdatasus_2012_2021.csv', sep = ";")
+dados <- read.csv('sinasc_microdatasus_2012_2022.csv', sep = ";")
 tabela_aux_municipios <- read_csv("tabela_municipios.csv")
 
-#### adicionando uf e municipio os dados 
+#### adicionando uf e municipio os dados
 
 tabela_aux_municipios <- tabela_aux_municipios[,c(2:4)]
-tabela_aux_municipios <- tabela_aux_municipios |> 
+tabela_aux_municipios <- tabela_aux_municipios |>
   rename(CODMUNRES = codmunres)
 
-dados <- dados |> 
+dados <- dados |>
   filter(CODMUNRES %in% tabela_aux_municipios$CODMUNRES)
 
-dados <- left_join(dados, tabela_aux_municipios) 
+dados <- left_join(dados, tabela_aux_municipios)
 
 
 ########## asfixia 1 ##########
 ## Asfixia 1
 
-asfixia1 <- dados |> 
-  filter(PESO >= 2500 & ((IDANOMAL == 2) | ((IDANOMAL == '' | is.na(IDANOMAL)) & 
-                                              (CODANOMAL == '' | is.na(CODANOMAL))))) 
+asfixia1 <- dados |>
+  filter(PESO >= 2500 & ((IDANOMAL == 2) | ((IDANOMAL == '' | is.na(IDANOMAL)) &
+                                              (CODANOMAL == '' | is.na(CODANOMAL)))))
 
 #uma dúvida: será que tem dados faltantes para peso?
 unique(asfixia1$PESO)
 #Tem sim: 9999 é peso ignorado
 
-asfixia12 <- asfixia1 %>% 
-  filter(PESO < 9999) 
+asfixia12 <- asfixia1 %>%
+  filter(PESO < 9999)
 
 
 asfixia12$APGAR5 <- as.numeric(asfixia12$APGAR5)
 
 ##O apgar 99 é dado faltante e criar indicadora de apgar menor 7
-asfixia13 <- asfixia12 %>% 
-  filter(APGAR5 < 99) %>% 
+asfixia13 <- asfixia12 %>%
+  filter(APGAR5 < 99) %>%
   mutate(apgar5_menor7 = ifelse(APGAR5 < 7, 1, 0))
 
 # View(asfixia13)
 
-asfixia14 <- asfixia13 %>% 
-  group_by(uf, municipio, CODMUNRES, Ano) %>% 
+asfixia14 <- asfixia13 %>%
+  group_by(uf, municipio, CODMUNRES, Ano) %>%
   summarise(total_de_nascidos_vivos = n()) # total_de_nascidos_vivos = peso <2500 & sem anomalia
 
 #filtrar apgar menor 7
-asfixia14_1 <- asfixia13 %>% 
-  group_by(uf, municipio, CODMUNRES, Ano) %>% 
-  summarise(nascidos_vivos_asfixia1 = sum(apgar5_menor7 == 1))  
-asfixia1_final <- left_join(asfixia14, asfixia14_1, 
-                            by = c("uf", "municipio", 
+asfixia14_1 <- asfixia13 %>%
+  group_by(uf, municipio, CODMUNRES, Ano) %>%
+  summarise(nascidos_vivos_asfixia1 = sum(apgar5_menor7 == 1))
+asfixia1_final <- left_join(asfixia14, asfixia14_1,
+                            by = c("uf", "municipio",
                                    "CODMUNRES", "Ano"))
 
-asfixia1_final <- asfixia1_final %>% 
-  mutate(nascidos_vivos_asfixia1  = ifelse(is.na(nascidos_vivos_asfixia1), 0, nascidos_vivos_asfixia1)) 
+asfixia1_final <- asfixia1_final %>%
+  mutate(nascidos_vivos_asfixia1  = ifelse(is.na(nascidos_vivos_asfixia1), 0, nascidos_vivos_asfixia1))
 
-write.csv(asfixia1_final, "asfixia1_2012_2021.csv")
+write.csv(asfixia1_final, "asfixia1_2012_2022.csv")
 
-###################### malformação 
+###################### malformação
 
 
 malformacao <- dados
@@ -327,42 +330,42 @@ write.table(filtro_malformacao, 'malformacao_2012_2021.csv', sep = ";", dec = ".
 ###################
 
 
-asfixia_1 <- read.csv('asfixia1_2012_2021.csv', sep = ",")
+asfixia_1 <- read.csv('asfixia1_2012_2022.csv', sep = ",")
 
 asfixia_1 <- asfixia_1[,c(4:7)]
 
-df_bloco8 <- asfixia_1 |> 
-  group_by(CODMUNRES, Ano) |> 
+df_bloco8 <- asfixia_1 |>
+  group_by(CODMUNRES, Ano) |>
   summarise(nascidos_vivos_asfixia1 = sum(nascidos_vivos_asfixia1),
-            total_de_nascidos_vivos = sum(total_de_nascidos_vivos)) |> 
-  ungroup() |> 
+            total_de_nascidos_vivos = sum(total_de_nascidos_vivos)) |>
+  ungroup() |>
   rename(codmunres = CODMUNRES,
          ano = Ano)
 
-write.table(df_bloco8, 'asfixia_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(df_bloco8, 'asfixia_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 ####
 
-malformacao <- read.csv('malformacao_2012_2021.csv', sep = ";")
+malformacao <- read.csv('malformacao_2012_2022.csv', sep = ";")
 #malformacao <- malformacao[,c(3:12)]
 
-malformacao <- malformacao |> 
+malformacao <- malformacao |>
   rename(nascidos_vivos_anomalia = Nascimentos,
          codmunres = CODMUNRES,
          ano = Ano,
          anomalia = valor)
 
 
-malformacao <- malformacao |> 
+malformacao <- malformacao |>
   select(codmunres,
          ano,
-         anomalia, 
+         anomalia,
          grupo_de_anomalias_congenitas,
          descricao,
          nascidos_vivos_anomalia)
 
-write.table(malformacao, 'malformacao_2012_2021.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(malformacao, 'malformacao_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 

@@ -17,8 +17,8 @@ soma_var <- function(vars,dados) {
 #Carregando os dados do SIM de 2021
 
 df_causas_especif_aux <- fetch_datasus(
-  year_start = 2021,
-  year_end = 2021,
+  year_start = 2022,
+  year_end = 2022,
   information_system = "SIM-DOMAT"
 ) |>
   mutate(
@@ -84,7 +84,7 @@ df_nascimentos <- read_delim("databases-antigas/dados_sinasc.csv",
 
 df_nascimentos$codigo <- as.character(df_nascimentos$codigo)
 
-df_nascimentos_2021 <- filter(df_nascimentos, ano==2021)
+df_nascimentos_2021 <- filter(df_nascimentos, ano==2022)
 
 df_completo <- left_join(df_nascimentos_2021, df_causas_especificas, by = c("codigo", "ano")) |>
   select(
@@ -127,13 +127,13 @@ df_completo_plus[is.na(df_completo_plus)] <- 0
 
 get_dupes(df_completo_plus, codmunres, municipio, uf, regiao, ano)
 
-write.table(df_completo_plus, 'indicadores_bloco6_mortalidade_materna_2021.csv', sep = ",", dec = ".", row.names = FALSE)
+write.table(df_completo_plus, 'indicadores_bloco6_mortalidade_materna_2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
-indicadores_bloco6_mortalidade_materna_2012_2020 <- read_csv("databases-antigas/indicadores_bloco6_mortalidade_materna_2012-2020.csv")
+indicadores_bloco6_mortalidade_materna_2012_2021 <- read_csv("databases-antigas/indicadores_bloco6_mortalidade_materna_2012-2021.csv")
 
-bloco6_mortalidade_materna_2012_2021 <- rbind(indicadores_bloco6_mortalidade_materna_2012_2020, df_completo_plus)
+bloco6_mortalidade_materna_2012_2022 <- rbind(indicadores_bloco6_mortalidade_materna_2012_2021, df_completo_plus)
 
-write.table(bloco6_mortalidade_materna_2012_2021, 'indicadores_bloco6_mortalidade_materna_2012-2021.csv', sep = ",", dec = ".", row.names = FALSE)
+write.table(bloco6_mortalidade_materna_2012_2022, 'indicadores_bloco6_mortalidade_materna_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ################## DADOS DE RMM CORRIGIDOS
