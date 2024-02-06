@@ -13,7 +13,7 @@ mod_bloco_8_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Garbage codes, causas principais e causas evitáveis: tabelas (Brasil, 2012 a 2022)"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(tags$b(HTML("Garbage codes, causas principais e causas evitáveis: tabelas"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
@@ -27,7 +27,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências dos Garbage Codes para óbitos maternos &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos maternos &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_materno_garbage")))
@@ -43,7 +43,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências dos Garbage Codes para óbitos fetais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos fetais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_garbage")))
@@ -59,7 +59,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências dos Garbage Codes para óbitos neonatais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências dos Garbage Codes para óbitos neonatais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_garbage")))
@@ -75,7 +75,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências das causas mais comuns de óbitos fetais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências das causas mais comuns de óbitos fetais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_causas")))
@@ -91,7 +91,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências das causas mais comuns de óbitos neonatais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências das causas mais comuns de óbitos neonatais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_causas")))
@@ -107,7 +107,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências das causas evitáveis de óbitos fetais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências das causas evitáveis de óbitos fetais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_fetal_evitaveis")))
@@ -123,7 +123,7 @@ mod_bloco_8_ui <- function(id){
           style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           div(
             style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> tabela de frequências das causas evitáveis de óbitos neonatais &nbsp;</b>")
+            HTML("<b style='font-size:18px'> Tabela de frequências das causas evitáveis de óbitos neonatais &nbsp;</b>")
           ),
           hr(),
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_evitaveis")))

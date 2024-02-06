@@ -2279,12 +2279,6 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     output$caixa_b5_i4 <- renderUI({
-      validate(
-        need(
-          filtros()$ano != 2022,
-          "Aguardando atualização dos dados de 2022"
-        )
-      )
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "baixo peso",
@@ -2293,12 +2287,6 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     output$caixa_b5_i5 <- renderUI({
-      validate(
-        need(
-          filtros()$ano != 2022,
-          "Aguardando atualização dos dados de 2022"
-        )
-      )
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "prematuridade",
