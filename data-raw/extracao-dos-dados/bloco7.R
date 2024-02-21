@@ -24,10 +24,10 @@ df_fetais_totais2 <- process_sim(df_fetais_totais, municipality_data = TRUE)
 
 ########### Filtrando para maior ou igual a 22 semanas ou peso>=500g
 
-dados_fetais <- df_fetais_totais2 |> 
+dados_fetais <- df_fetais_totais2 |>
   mutate(SEMAGESTAC = as.numeric(SEMAGESTAC), PESO = as.numeric(PESO)) |>
   filter(
-    ((GESTACAO == "28 a 31 semanas" | GESTACAO == "32 a 36 semanas"  | GESTACAO == "37 a 41 semanas" | GESTACAO == "42 semanas e mais" | GESTACAO == "22 a 27 semanas") | (is.na(GESTACAO) & SEMAGESTAC >= 22 & SEMAGESTAC != 99)) 
+    ((GESTACAO == "28 a 31 semanas" | GESTACAO == "32 a 36 semanas"  | GESTACAO == "37 a 41 semanas" | GESTACAO == "42 semanas e mais" | GESTACAO == "22 a 27 semanas") | (is.na(GESTACAO) & SEMAGESTAC >= 22 & SEMAGESTAC != 99))
     | (PESO >= 500)
   )
 
@@ -37,7 +37,7 @@ df_fetais <- dados_fetais |>
   mutate(
     ano = substr(DTOBITO, 1, 4),
     codmunres = CODMUNRES
-  ) |>  
+  ) |>
   mutate(
     obitos= 1,
     peso_menos_1500 = case_when(
@@ -136,7 +136,7 @@ df_fetais <- dados_fetais |>
     #   (PESO >= 2500) & (SEMAGESTAC < 28 & SEMAGESTAC != 99)  ~ 1,
     #   !((PESO >= 2500) & (SEMAGESTAC < 28 & SEMAGESTAC != 99)) ~ 0
     # ),
-    # 
+    #
     # peso_menos_1500_sem_28_32 = case_when(
     #   (PESO < 1500) & (SEMAGESTAC >= 28 & SEMAGESTAC <= 32 & SEMAGESTAC != 99)  ~ 1,
     #   !((PESO < 1500) & (SEMAGESTAC >= 28 & SEMAGESTAC <= 32 & SEMAGESTAC != 99)) ~ 0
@@ -201,11 +201,11 @@ df_fetais <- dados_fetais |>
     #   (SEMAGESTAC >= 35 & SEMAGESTAC <= 36 & SEMAGESTAC != 99) ~ 1,
     #   !(SEMAGESTAC >= 35 & SEMAGESTAC <= 36 & SEMAGESTAC != 99) ~ 0
     # )
-    
+
   ) |>
   group_by(codmunres, ano) |>
   summarise(
-    
+
     obitos_fetais_mais_22sem = sum(obitos),
     fetal_peso_menos_1500 = sum(peso_menos_1500, na.rm = T),
     fetal_peso_1500_1999 = sum(peso_1500_1999, na.rm = T),
@@ -248,7 +248,7 @@ df_fetais <- dados_fetais |>
     # fetal_sem_28_32 = sum(fetal_sem_28_32, na.rm=T),
     # fetal_sem_33_34 = sum(fetal_sem_33_34, na.rm=T),
     # fetal_sem_35_36 = sum(fetal_sem_35_36, na.rm=T)
-    
+
     ) |>
   ungroup()
 
@@ -352,10 +352,10 @@ df_obitos_fetais$fetal_depois_peso_mais_2500[is.na(df_obitos_fetais$fetal_depois
 
 
 
-#write.table(df_obitos_fetais, 'Bloco_7/indicadores_bloco7_mortalidade_fetal_2021-2022.csv', sep = ",", dec = ".", row.names = FALSE)   
+#write.table(df_obitos_fetais, 'Bloco_7/indicadores_bloco7_mortalidade_fetal_2021-2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
-write.csv(df_obitos_fetais, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)   
+write.csv(df_obitos_fetais, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ######### INDICADORES DA ABA PERINATAL
@@ -370,7 +370,7 @@ df_fetais_28sem <- df_fetais_totais2 |>
   mutate(
     ano = substr(DTOBITO, 1, 4),
     codmunres = as.numeric(CODMUNRES)
-  ) |>  
+  ) |>
   mutate(
     peso_menos_1500 = case_when(
       PESO < 1500 ~ 1,
@@ -425,7 +425,7 @@ df_obitos_perinatais <- juncao %>%
   )
 
 
-write.table(df_obitos_perinatais, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)   
+write.table(df_obitos_perinatais, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ######### INDICADORES DA ABA A NEONATAL
@@ -433,7 +433,7 @@ write.table(df_obitos_perinatais, 'data-raw/csv/indicadores_bloco7_mortalidade_p
 df_neonat_total <- fetch_datasus(
   year_start = 2012,
   year_end = 2022,
-  #vars = c("CODMUNRES", "DTOBITO", "IDADEminutos", "IDADEhoras", "IDADEdias", "PESO"),
+  #vars = c("CODMUNRES", "DTOBITO", "IDADE", "PESO"),
   information_system = "SIM-DOINF"
 )
 
@@ -452,7 +452,7 @@ df_neonat_total3 <- df_neonat_total2  |>
     IDADEhoras = as.numeric(IDADEhoras),
     IDADEdias = as.numeric(IDADEdias),
     PESO = as.numeric(PESO)
-  ) |>  
+  ) |>
   mutate(
     obitos_27dias = case_when(
       (IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) ~ 1,
@@ -462,131 +462,131 @@ df_neonat_total3 <- df_neonat_total2  |>
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO <1500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO < 1500) ~ 0
     ),
-    
+
     obitos_27dias_1500_1999 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 1500 & PESO <= 1999)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
-    
+
     obitos_27dias_2000_2499 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2000 & PESO <= 2499)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
-    
+
     obitos_27dias_mais2500 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2500) ~ 0
     ),
-    
+
     obitos_6dias = case_when(
-      
+
       (IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) ~ 1,
       !(IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) ~ 0
     ),
-    
+
     obitos_6dias_menos1500 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO <1500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO < 1500) ~ 0
     ),
-    
+
     obitos_6dias_1500_1999 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 1500 & PESO <= 1999)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
-    
+
     obitos_6dias_2000_2499 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2000 & PESO <= 2499)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
-    
+
     obitos_6dias_mais2500 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2500) ~ 0
     ),
-    
+
     obitos_0dias = case_when(
-      
+
       (IDADEminutos <= 59| IDADEhoras <= 23 ) ~ 1,
       !(IDADEminutos <= 59| IDADEhoras <= 23 ) ~ 0
     ),
-    
+
     obitos_0dias_menos1500 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO <1500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO < 1500) ~ 0
     ),
-    
+
     obitos_0dias_1500_1999 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 1500 & PESO <= 1999)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
-    
+
     obitos_0dias_2000_2499 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2000 & PESO <= 2499)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
-    
+
     obitos_0dias_mais2500 = case_when(
       ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2500)  ~ 1,
       !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2500) ~ 0
     ),
-    
+
     obitos_1_6dias = case_when(
-      
+
       (IDADEdias <= 6 & IDADEdias >= 1) ~ 1,
       !(IDADEdias <= 6 & IDADEdias >= 1) ~ 0
     ),
-    
+
     obitos_1_6dias_menos1500 = case_when(
       ((IDADEdias <= 6 & IDADEdias >= 1) & PESO <1500)  ~ 1,
       !((IDADEdias <= 6 & IDADEdias >= 1) & PESO < 1500) ~ 0
     ),
-    
+
     obitos_1_6dias_1500_1999 = case_when(
       ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 1500 & PESO <= 1999)  ~ 1,
       !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
-    
+
     obitos_1_6dias_2000_2499 = case_when(
       ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2000 & PESO <= 2499)  ~ 1,
       !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
-    
+
     obitos_1_6dias_mais2500 = case_when(
       ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2500)  ~ 1,
       !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2500) ~ 0
     ),
-    
+
     obitos_7_27dias = case_when(
-      
+
       (IDADEdias <= 27 & IDADEdias >= 7) ~ 1,
       !(IDADEdias <= 27 & IDADEdias >= 7) ~ 0
     ),
-    
+
     obitos_7_27dias_menos1500 = case_when(
       ((IDADEdias <= 27 & IDADEdias >= 7) & PESO <1500)  ~ 1,
       !((IDADEdias <= 27 & IDADEdias >= 7) & PESO < 1500) ~ 0
     ),
-    
+
     obitos_7_27dias_1500_1999 = case_when(
       ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 1500 & PESO <= 1999)  ~ 1,
       !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
-    
+
     obitos_7_27dias_2000_2499 = case_when(
       ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2000 & PESO <= 2499)  ~ 1,
       !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
-    
+
     obitos_7_27dias_mais2500 = case_when(
       ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2500)  ~ 1,
       !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2500) ~ 0
     )
-    
+
   ) |>
   group_by(codmunres, ano) |>
   summarise(
-    
-    obitos_27dias = sum( obitos_27dias,na.rm=T), 
+
+    obitos_27dias = sum( obitos_27dias,na.rm=T),
     obitos_27dias_menos1500 = sum( obitos_27dias_menos1500,na.rm=T),
     obitos_27dias_1500_1999 = sum( obitos_27dias_1500_1999,na.rm=T),
     obitos_27dias_2000_2499 = sum(obitos_27dias_2000_2499 ,na.rm=T),
@@ -631,7 +631,7 @@ df_nascidos_total3 <- df_nascidos_total2 |>
     ano = substr(DTNASC, 1, 4),
     codmunres = as.numeric(CODMUNRES),
     PESO = as.numeric(PESO)
-  ) |>  
+  ) |>
   mutate(
     nascidos = 1,
     nascidos_menos1500 = case_when(
@@ -641,13 +641,13 @@ df_nascidos_total3 <- df_nascidos_total2 |>
     nascidos_1500_1999 = case_when(
       (PESO >=  1500 & PESO<=1999) ~ 1,
       !((PESO >=  1500 & PESO<=1999)) ~ 0
-    ), 
-    
+    ),
+
     nascidos_2000_2499 = case_when(
       (PESO >=  2000 & PESO<=2499) ~ 1,
       !(PESO >=  2000 & PESO<=2499) ~ 0
     ),
-    
+
     nascidos_mais2500 = case_when(
       (PESO >=  2500) ~ 1,
       !(PESO >=  2500) ~ 0
@@ -655,7 +655,7 @@ df_nascidos_total3 <- df_nascidos_total2 |>
   ) |>
   group_by(codmunres, ano) |>
   summarise(
-    
+
     nascidos = sum(nascidos, na.rm=T),
     nascidos_menos1500 = sum(nascidos_menos1500, na.rm = T),
     nascidos_1500_1999 = sum(nascidos_1500_1999, na.rm = T),
@@ -706,7 +706,7 @@ df_neonat <- left_join(df_aux_municipios, df_juncao, by=c("codmunres", "ano")) |
     obitos_1_6dias_mais2500
   )
 
-write.csv(df_neonat, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)   
+write.csv(df_neonat, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 
