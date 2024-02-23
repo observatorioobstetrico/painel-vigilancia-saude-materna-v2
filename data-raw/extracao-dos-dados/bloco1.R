@@ -650,7 +650,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_entre_20_e_34_anos = 1,
     .keep = "unused"
   ) |>
-  filter(idademae >= 20 &  idademae <35) |>
+  filter(idademae >= 20 &  idademae < 35) |>
   group_by(codmunres, ano) |>
   summarise(nvm_entre_20_e_34_anos = sum(nvm_entre_20_e_34_anos)) |>
   mutate_if(is.character, as.numeric)
@@ -672,7 +672,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_maior_que_34_anos = 1,
     .keep = "unused"
   ) |>
-  filter(idademae >=35 & idademae <= 55) |>
+  filter(idademae >= 35 & idademae <= 55) |>
   group_by(codmunres, ano) |>
   summarise(nvm_maior_que_34_anos = sum(nvm_maior_que_34_anos))
 
@@ -723,7 +723,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_com_cor_da_pele_preta = 1,
     .keep = "unused"
   ) |>
-  filter(racacormae ==2) |>
+  filter(racacormae == 2) |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_preta = sum(nvm_com_cor_da_pele_preta)) |>
   mutate_if(is.character, as.numeric)
@@ -745,7 +745,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_com_cor_da_pele_parda = 1,
     .keep = "unused"
   ) |>
-  filter(racacormae ==4) |>
+  filter(racacormae == 4) |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_parda = sum(nvm_com_cor_da_pele_parda)) |>
   mutate_if(is.character, as.numeric)
@@ -767,7 +767,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_com_cor_da_pele_amarela = 1,
     .keep = "unused"
   ) |>
-  filter(racacormae ==3) |>
+  filter(racacormae == 3) |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_cor_da_pele_amarela = sum(nvm_com_cor_da_pele_amarela)) |>
   mutate_if(is.character, as.numeric)
@@ -789,7 +789,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_indigenas = 1,
     .keep = "unused"
   ) |>
-  filter(racacormae ==5) |>
+  filter(racacormae == 5) |>
   group_by(codmunres, ano) |>
   summarise(nvm_indigenas = sum(nvm_indigenas)) |>
   mutate_if(is.character, as.numeric)
@@ -819,7 +819,7 @@ df_microdatasus <- df_microdatasus_aux |>
     nvm_com_escolaridade_ate_3 = 1,
     .keep = "unused"
   ) |>
-  filter(escmae ==1 | escmae == 2) |>
+  filter(escmae == 1 | escmae == 2) |>
   group_by(codmunres, ano) |>
   summarise(nvm_com_escolaridade_ate_3 = sum(nvm_com_escolaridade_ate_3)) |>
   mutate_if(is.character, as.numeric)
@@ -1008,7 +1008,7 @@ df_cob_suplementar <- df_beneficiarias_pop |>
     iiq = q3 - q1,
     lim_inf = round(q1 - 1.5*iiq, 3),
     lim_sup = round(q3 + 1.5*iiq, 3),
-    outlier = ifelse((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)), 1, 0),
+    outlier = ifelse((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)) | (is.na(cob_suplementar)), 1, 0),
     novo_cob_suplementar = ifelse(
       outlier == 0,
       cob_suplementar,
@@ -1025,24 +1025,25 @@ df_bloco1 <- left_join(df_bloco1, df_cob_suplementar)
 ### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
 df_bloco1$pop_fem_10_49_com_plano_saude[is.na(df_bloco1$pop_fem_10_49_com_plano_saude) & df_bloco1$ano <= 2021] <- 0
 
+
 # Verificando se os dados novos e antigos estão batendo -------------------
-sum(df_bloco1 |> filter(ano < 2022) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos) #Não está batendo
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(media_cobertura_esf)) - sum(df_bloco1_antigo$media_cobertura_esf)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total) #Não está batendo, mas são dados de lugares diferentes
-#sum(df_bloco1 |> filter(ano < 2022) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE) #Metodologias diferentes
-sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos) #Não está batendo
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(media_cobertura_esf)) - sum(df_bloco1_antigo$media_cobertura_esf)
+sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total) #Não está batendo, mas são dados de lugares diferentes
+#sum(df_bloco1 |> filter(ano < 2021) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE) #Metodologias diferentes
+sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49)
 
 ## Para os nascidos vivos de mães com menos de 20 anos, utilizaremos os dados do microdatasus (batem com os que estavam
 ## no bloco 2 mas não batem com os que estavam no bloco 1)
@@ -1055,8 +1056,7 @@ df_est_pop_total_antigo <- df_bloco1_antigo |>
   select(codmunres, ano, populacao_total)
 
 ## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo) |>
-  select(1:16, populacao_total, 17:18)
+df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo)
 
 # ## Para o número de beneficiárias, considerar os dados antigos por enquanto
 # df_bloco1 <- df_bloco1 |>
