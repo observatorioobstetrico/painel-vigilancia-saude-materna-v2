@@ -24,60 +24,8 @@ df_bloco2_antigo <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_repro
 #Criando o data.frame que irá receber todos os dados do bloco 2
 df_bloco2 <- data.frame()
 
-
-# Total de nascidos vivos -------------------------------------------------
-df_microdatasus_aux <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-
-df <- df_microdatasus_aux %>%
-  mutate(ano = as.numeric(substr(dtnasc, 5, 8)),
-         codmunres = as.numeric(codmunres)) %>%
-  group_by(ano, codmunres ) %>%
-  summarise(total_de_nascidos_vivos = n()) %>%
-  rename(codmunres = codmunres)
-##Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
-df_bloco2 <- left_join(df_aux_municipios, df)
-
-##Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
-df_bloco2$total_de_nascidos_vivos[is.na(df_bloco2$total_de_nascidos_vivos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
-##Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
-df_microdatasus_aux <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC","IDADEMAE"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% df_aux_municipios$codmunres) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_menor_que_20 = 1,
-    .keep = "unused"
-  ) |>
-  filter(idademae < 20) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_menor_que_20 = sum(nvm_menor_que_20)) |>
-  mutate(codmunres = as.numeric(codmunres))
-
-##Juntando com o restante da base do bloco 2
-df_bloco2 <- left_join(df_bloco2, df_microdatasus)
-
-##Substituindo os NA's da coluna 'nvm_menor_que_20' por 0 (gerados após o left_join)
-df_bloco2$nvm_menor_que_20[is.na(df_bloco2$nvm_menor_que_20)] <- 0
-
-
-# População feminina de 10 a 19 anos --------------------------------------
-##Criando a função que utiliza web scrapping para pegar dados de estimativas populacionais do Tabnet DATASUS
-est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteudo = 1, periodo = 2021, regiao = "Todas as categorias",
+# Criando a função que utiliza web scrapping para baixar dados de estimativas populacionais do Tabnet DATASUS
+est_pop_tabnet <- function (linha = "Município", coluna = "Ano", conteudo = 1, periodo = 2012:2021, regiao = "Todas as categorias",
                             unidade_da_federacao = "Todas as categorias", sexo = "Feminino", faixa_etaria = c("10 a 14 anos", "15 a 19 anos", "20 a 29 anos", "30 a 39 anos", "40 a 49 anos"),
                             faixa_etaria_reajuste = "Todas as categorias")
 {
@@ -219,6 +167,7 @@ est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteud
   } else {
     form_conteudo <- paste0("Incremento=", form_conteudo)
   }
+
   form_periodo <- dplyr::filter(periodo.df, periodo.df$id %in%
                                   periodo)
   form_periodo <- paste0("Arquivos=", form_periodo$value, collapse = "&")
@@ -263,9 +212,410 @@ est_pop_tabnet <- function (linha = "Município", coluna = "Não ativa", conteud
   tabela_final[-1] <- lapply(tabela_final[-1], f1)
   tabela_final[-1] <- suppressWarnings(lapply(tabela_final[-1],
                                               f2))
-  tabela_final
+
+  if (linha == "Município") {
+    tabela_final <- tabela_final[-1, ] |>
+      dplyr::mutate(
+        codmunres = as.numeric(stringr::str_extract(Município, "\\d+")),
+        municipio = stringr::str_replace(Município, "\\d+ ", ""),
+        .before = "Município",
+        .keep = "unused"
+      )
+  } else {
+    tabela_final <- tabela_final[-1, ]
+  }
+
 }
 
+# Criando a função que utiliza web scrapping para baixar dados de usuárias de planos de saúde do Tabnet ANS
+pop_com_plano_saude_tabnet <- function (linha = "Município",
+                                        coluna = "Competência",
+                                        conteudo = "Assistência Médica",
+                                        periodo = 2012:2021,
+                                        sexo = "Feminino",
+                                        faixa_etaria = c(
+                                          "10 a 14 anos",
+                                          "15 a 19 anos",
+                                          "20 a 24 anos",
+                                          "25 a 29 anos",
+                                          "30 a 34 anos",
+                                          "35 a 39 anos",
+                                          "40 a 44 anos",
+                                          "45 a 49 anos"
+                                        ),
+                                        faixa_etaria_reajuste = "Todas as categorias",
+                                        tipo_de_contratacao = "Todas as categorias",
+                                        epoca_de_contratacao = "Todas as categorias",
+                                        segmentacao = "Todas as categorias",
+                                        segmentacao_grupo = c(
+                                          "Ambulatorial", "Hospitalar", "Hospitalar e Ambulatorial",
+                                          "Referência", "Informado incorretamente", "Não Informado"
+                                        ),
+                                        uf = "Todas as categorias",
+                                        regiao = "Todas as categorias",
+                                        capital = "Todas as categorias",
+                                        reg_metropolitana = "Todas as categorias",
+                                        microrregiao = "Todas as categorias",
+                                        municipio = "Todas as categorias"
+)
+
+{
+
+  page <- xml2::read_html("http://www.ans.gov.br/anstabnet/cgi-bin/dh?dados/tabnet_02.def")
+
+  linha.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#L option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#L option") |>
+      rvest::html_attr("value")
+  )
+
+  coluna.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#C option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#C option") |>
+      rvest::html_attr("value")
+  )
+
+  conteudo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#I option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#I option") |>
+      rvest::html_attr("value")
+  )
+
+  periodo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#A option") |>
+      rvest::html_text() |>
+      substr(start = 1, stop = 8),
+    value = page |>
+      rvest::html_elements("#A option") |>
+      rvest::html_attr("value")
+  )
+
+  sexo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S1 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S1 option") |>
+      rvest::html_attr("value")
+  )
+
+  faixa_etaria.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S2 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S2 option") |>
+      rvest::html_attr("value")
+  )
+
+  faixa_etaria_reajuste.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S3 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S3 option") |>
+      rvest::html_attr("value")
+  )
+
+  tipo_de_contratacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S4 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S4 option") |>
+      rvest::html_attr("value")
+  )
+
+  epoca_de_contratacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S5 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S5 option") |>
+      rvest::html_attr("value")
+  )
+
+  segmentacao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S6 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S6 option") |>
+      rvest::html_attr("value")
+  )
+
+  segmentacao_grupo.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S7 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S7 option") |>
+      rvest::html_attr("value")
+  )
+
+  uf.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S8 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S8 option") |>
+      rvest::html_attr("value")
+  )
+
+  regiao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S9 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S9 option") |>
+      rvest::html_attr("value")
+  )
+
+  capital.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S10 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S10 option") |>
+      rvest::html_attr("value")
+  )
+
+  reg_metropolitana.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S11 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S11 option") |>
+      rvest::html_attr("value")
+  )
+
+  microrregiao.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S12 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S12 option") |>
+      rvest::html_attr("value")
+  )
+
+  municipio.df <- data.frame(
+    id = page |>
+      rvest::html_elements("#S13 option") |>
+      rvest::html_text() |>
+      trimws(),
+    value = page |>
+      rvest::html_elements("#S13 option") |>
+      rvest::html_attr("value")
+  )
+
+  if (is.numeric(periodo)) {
+    periodo <- periodo.df |>
+      dplyr::filter(
+        substr(id, start = 5, stop = 8) %in% as.character(periodo)
+      ) |>
+      dplyr::pull(id)
+  }
+
+  argumentos <- c(
+    "linha",
+    "coluna",
+    "conteudo",
+    "periodo",
+    "sexo",
+    "faixa_etaria",
+    "faixa_etaria_reajuste",
+    "tipo_de_contratacao",
+    "epoca_de_contratacao",
+    "segmentacao",
+    "segmentacao_grupo",
+    "uf",
+    "regiao",
+    "capital",
+    "reg_metropolitana",
+    "microrregiao",
+    "municipio"
+  )
+
+  invisible(lapply(argumentos, function(argumento) {
+    if (!(all(get(argumento) %in% get(glue::glue("{argumento}.df"))$id))) {
+      stop(glue::glue("Some element in the '{argumento}' argument is wrong"))
+    }
+    if (argumento == "periodo") {
+      if (length(periodo) > 1 & !(linha == "Competência" | coluna == "Competência")) {
+        stop("When more than one period is specified, either the 'linha' or the 'coluna' argument must be equal to 'Competência'")
+      }
+    }
+  }))
+
+  argumentos.df <- data.frame(
+    argumento = argumentos,
+    name =   page |>
+      rvest::html_elements("select") |>
+      rvest::html_attr("name") |>
+      stringi::stri_escape_unicode()
+  )
+
+  for(argumento in argumentos.df$argumento) {
+    assign(
+      glue::glue("{argumento}.value"),
+      get(glue::glue("{argumento}.df")) |>
+        dplyr::filter(id %in% get(argumento)) |>
+        dplyr::pull(value)
+    )
+
+    name <- argumentos.df$name[argumentos.df$argumento == argumento]
+
+    assign(
+      glue::glue("form_{argumento}"),
+      paste0(name, "=",  stringi::stri_escape_unicode(get(glue::glue("{argumento}.value"))), collapse = "&")
+    )
+  }
+
+  form_data <- paste(
+    form_linha,
+    form_coluna,
+    form_conteudo,
+    form_periodo,
+    form_sexo,
+    form_faixa_etaria,
+    form_faixa_etaria_reajuste,
+    form_tipo_de_contratacao,
+    form_epoca_de_contratacao,
+    form_segmentacao,
+    form_segmentacao_grupo,
+    form_uf,
+    form_regiao,
+    form_capital,
+    form_reg_metropolitana,
+    form_microrregiao,
+    form_municipio,
+    "formato=table&mostre=Mostra",
+    sep = "&"
+  )
+
+  form_data <- gsub("\\\\u00", "%", form_data)
+
+  #form_data <- "Linha=Munic%edpio&Coluna=--N%E3o-Ativa--&Incremento=Assist%EAncia_M%E9dica&Arquivos=tb_bb_2306.dbf&SSexo=TODAS_AS_CATEGORIAS__&SFaixa_et%E1ria=TODAS_AS_CATEGORIAS__&SFaixa_et%E1ria-Reajuste=TODAS_AS_CATEGORIAS__&STipo_de_contrata%E7%E3o=TODAS_AS_CATEGORIAS__&S%C9poca_de_Contrata%E7%E3o=TODAS_AS_CATEGORIAS__&SSegmenta%E7%E3o=TODAS_AS_CATEGORIAS__&SSegmenta%E7%E3o_grupo=TODAS_AS_CATEGORIAS__&SUF=TODAS_AS_CATEGORIAS__&SGrande_Regi%E3o=TODAS_AS_CATEGORIAS__&SCapital=TODAS_AS_CATEGORIAS__&SReg._Metropolitana=TODAS_AS_CATEGORIAS__&SMicrorregi%E3o=TODAS_AS_CATEGORIAS__&SMunic%EDpio=TODAS_AS_CATEGORIAS__&formato=table&mostre=Mostra"
+
+  site <- httr::POST(url = "http://www.ans.gov.br/anstabnet/cgi-bin/tabnet?dados/tabnet_02.def",
+                     body = form_data)
+
+  tabdados_col1 <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("tr th") |> rvest::html_text() |>
+    trimws()
+  tabdados_col1 <- tabdados_col1[-c(1:(which(tabdados_col1 == "TOTAL") - 1))]
+
+  tabdados_outras_cols <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("center td") |> rvest::html_text() |>
+    trimws()
+
+  col_tabdados <- httr::content(site, encoding = "Latin1") |>
+    rvest::html_elements("tr:nth-child(1) th") |> rvest::html_text() |> trimws()
+
+  f1 <- function(x) x <- gsub("\\.", "", x)
+  f2 <- function(x) x <- as.numeric(as.character(x))
+
+  tabela_final <- as.data.frame(
+    cbind(
+      tabdados_col1,
+      matrix(tabdados_outras_cols, ncol = length(tabdados_outras_cols)/length(tabdados_col1), byrow = TRUE)
+    )
+  )
+
+  names(tabela_final) <- col_tabdados
+  tabela_final[-1] <- lapply(tabela_final[-1], f1)
+  tabela_final[-1] <- suppressWarnings(lapply(tabela_final[-1], f2))
+
+  if (linha == "Município") {
+    tabela_final <- tabela_final[-1, ] |>
+      dplyr::mutate(
+        codmunres = as.numeric(stringr::str_extract(Município, "\\d+")),
+        municipio = stringr::str_replace(Município, "\\d+ ", ""),
+        .before = "Município",
+        .keep = "unused"
+      )
+  } else {
+    tabela_final <- tabela_final[-1, ]
+  }
+
+}
+
+# Total de nascidos vivos -------------------------------------------------
+df_microdatasus_aux <- microdatasus::fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  vars = c("CODMUNRES", "DTNASC"),
+  information_system = "SINASC"
+) |>
+  clean_names()
+
+df <- df_microdatasus_aux %>%
+  mutate(ano = as.numeric(substr(dtnasc, 5, 8)),
+         codmunres = as.numeric(codmunres)) %>%
+  group_by(ano, codmunres ) %>%
+  summarise(total_de_nascidos_vivos = n()) %>%
+  rename(codmunres = codmunres)
+##Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
+df_bloco2 <- left_join(df_aux_municipios, df)
+
+##Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
+df_bloco2$total_de_nascidos_vivos[is.na(df_bloco2$total_de_nascidos_vivos)] <- 0
+
+
+# Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
+##Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
+df_microdatasus_aux <- microdatasus::fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  vars = c("CODMUNRES", "DTNASC","IDADEMAE"),
+  information_system = "SINASC"
+) |>
+  clean_names()
+df_microdatasus <- df_microdatasus_aux |>
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
+  mutate(
+    ano = as.numeric(substr(dtnasc, 5, 8)),
+    nvm_menor_que_20 = 1,
+    .keep = "unused"
+  ) |>
+  filter(idademae < 20) |>
+  group_by(codmunres, ano) |>
+  summarise(nvm_menor_que_20 = sum(nvm_menor_que_20)) |>
+  mutate(codmunres = as.numeric(codmunres))
+
+##Juntando com o restante da base do bloco 2
+df_bloco2 <- left_join(df_bloco2, df_microdatasus)
+
+##Substituindo os NA's da coluna 'nvm_menor_que_20' por 0 (gerados após o left_join)
+df_bloco2$nvm_menor_que_20[is.na(df_bloco2$nvm_menor_que_20)] <- 0
+
+
+# População feminina de 10 a 19 anos --------------------------------------
 df_est_pop_fem_10_19 <- est_pop_tabnet(
   coluna = "Ano",
   periodo = as.character(2012:2021),
@@ -273,19 +623,8 @@ df_est_pop_fem_10_19 <- est_pop_tabnet(
 )
 head(df_est_pop_fem_10_19)
 
-##Retirando a linha de "TOTAL"
-df_est_pop_fem_10_19 <- df_est_pop_fem_10_19[-1, ]
-head(df_est_pop_fem_10_19)
-
 ##Passando os dados para o formato long
 df_est_pop_fem_10_19_long <- df_est_pop_fem_10_19 |>
-  rename(
-    municipio = Município
-  ) |>
-  mutate(
-    codmunres = substr(municipio, start = 1, stop = 6),
-    .before = municipio
-  ) |>
   select(!municipio) |>
   pivot_longer(
     cols = !c(codmunres),
@@ -297,7 +636,6 @@ df_est_pop_fem_10_19_long <- df_est_pop_fem_10_19 |>
 head(df_est_pop_fem_10_19_long)
 
 ##Juntando com o restante da base do bloco 2
-
 df_bloco2 <- left_join(df_bloco2, df_est_pop_fem_10_19_long)
 
 
@@ -336,19 +674,8 @@ df_bloco2$mulheres_com_mais_de_tres_partos_anteriores[is.na(df_bloco2$mulheres_c
 df_est_pop_fem_10_49 <- est_pop_tabnet(coluna = "Ano", periodo = as.character(2012:2021))
 head(df_est_pop_fem_10_49)
 
-##Retirando a linha de "TOTAL"
-df_est_pop_fem_10_49 <- df_est_pop_fem_10_49[-1, ]
-head(df_est_pop_fem_10_49)
-
 ##Passando os dados para o formato long
 df_est_pop_fem_10_49_long <- df_est_pop_fem_10_49 |>
-  rename(
-    municipio = Município
-  ) |>
-  mutate(
-    codmunres = substr(municipio, start = 1, stop = 6),
-    .before = municipio
-  ) |>
   select(!municipio) |>
   pivot_longer(
     cols = !c(codmunres),
@@ -359,7 +686,6 @@ df_est_pop_fem_10_49_long <- df_est_pop_fem_10_49 |>
 
 ##Juntando com o restante da base do bloco 2
 df_bloco2 <- left_join(df_bloco2, df_est_pop_fem_10_49_long)
-
 
 
 # Abortos SUS e ANS -------------------------------------------------------
@@ -397,6 +723,130 @@ df_bloco2$abortos_ans_menor_30[is.na(df_bloco2$abortos_ans_menor_30)] <- 0
 df_bloco2$abortos_ans_30_a_39[is.na(df_bloco2$abortos_ans_30_a_39)] <- 0
 df_bloco2$abortos_ans_40_a_49[is.na(df_bloco2$abortos_ans_40_a_49)] <- 0
 
+
+# Para os indicadores de aborto exclusivos da ANS ou do SUS ---------------
+##Baixando os dados de nascidos vivos
+df_nascidos_aux <- microdatasus::fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  vars = c("CODMUNRES", "DTNASC"),
+  information_system = "SINASC"
+) |>
+  clean_names()
+
+df_nascidos <- df_nascidos_aux |>
+  mutate(ano = as.numeric(substr(dtnasc, 5, 8)),
+         codmunres = as.numeric(codmunres)) |>
+  group_by(ano, codmunres ) |>
+  summarise(total_de_nascidos_vivos = n())
+
+##Baixando os dados de estimativas da população feminina de 10 a 49 anos
+df_est_pop_aux <- est_pop_tabnet(
+  coluna = "Ano", periodo = as.character(2012:2021)
+) |>
+  select(!municipio)
+
+##Verificando se existem NAs
+if (any(is.na(df_est_pop_aux))) {
+  print("existem NAs")
+} else {
+  print("não existem NAs")
+}
+
+##Passando o data.frame para o formato long
+df_est_pop <- df_est_pop_aux |>
+  pivot_longer(
+    !codmunres,
+    names_to = "ano",
+    values_to = "populacao_feminina_10_a_49"
+  ) |>
+  mutate(
+    ano = as.numeric(ano),
+  ) |>
+  arrange(codmunres, ano) |>
+  filter(codmunres %in% df_aux_municipios$codmunres)
+
+##Baixando os dados de mulheres de 10 a 49 anos beneficíarias de planos de saúde
+df_beneficiarias_aux <- pop_com_plano_saude_tabnet(
+  faixa_etaria = c("10 a 14 anos", "15 a 19 anos", "20 a 24 anos", "25 a 29 anos", "30 a 34 anos", "35 a 39 anos", "40 a 44 anos", "45 a 49 anos")
+) |>
+  select(!municipio)
+
+##Verificando se existem NAs
+if (any(is.na(df_beneficiarias_aux))) {
+  print("existem NAs")
+} else {
+  print("não existem NAs")
+}
+
+##Passando o data.frame para o formato long
+df_beneficiarias <- df_beneficiarias_aux |>
+  pivot_longer(
+    !codmunres,
+    names_to = "mes_ano",
+    values_to = paste0("beneficiarias_10_a_49")
+  ) |>
+  mutate(
+    mes = substr(mes_ano, start = 1, stop = 3),
+    ano = as.numeric(paste0("20", substr(mes_ano, start = 5, stop = 6))),
+    .after = mes_ano,
+    .keep = "unused"
+  ) |>
+  arrange(codmunres, ano) |>
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
+  left_join(df_est_pop) |>
+  group_by(codmunres, ano) |>
+  filter(beneficiarias_10_a_49 < populacao_feminina_10_a_49) |>
+  summarise(
+    beneficiarias_10_a_49 = round(median(beneficiarias_10_a_49))
+  ) |>
+  ungroup()
+
+##Juntando os dados de nascidos vivos com as estimativas populacionais
+df_est_pop_nasc <- left_join(df_est_pop, df_nascidos)
+df_est_pop_nasc$total_de_nascidos_vivos[is.na(df_est_pop_nasc$total_de_nascidos_vivos)] <- 0
+
+##Juntando com os dados de estimativas populacionais
+df_beneficiarias_pop <- left_join(df_est_pop_nasc, df_beneficiarias)
+
+##Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
+df_cob_suplementar <- df_beneficiarias_pop |>
+  mutate(
+    cob_suplementar = round(beneficiarias_10_a_49 / populacao_feminina_10_a_49, 3)
+  ) |>
+  group_by(codmunres) |>
+  mutate(
+    q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.25), 3),
+    q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.75), 3),
+    iiq = q3 - q1,
+    lim_inf = round(q1 - 1.5*iiq, 3),
+    lim_sup = round(q3 + 1.5*iiq, 3),
+    outlier = ifelse((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)) | (is.na(cob_suplementar)), 1, 0),
+    novo_cob_suplementar = ifelse(
+      outlier == 0,
+      cob_suplementar,
+      round(median(cob_suplementar[which(outlier == 0 & ano %in% 2014:2021)]), 3)
+    ),
+    novo_beneficiarias_10_a_49 = round(novo_cob_suplementar * populacao_feminina_10_a_49)
+  ) |>
+  ungroup() |>
+  select(codmunres, ano, populacao_feminina_10_a_49, cob_suplementar = novo_cob_suplementar, total_de_nascidos_vivos)
+
+### Substituindo os NA's da coluna 'cob_suplementar' por 0 (gerados após o left_join)
+df_cob_suplementar$cob_suplementar[is.na(df_cob_suplementar$cob_suplementar) & df_cob_suplementar$ano <= 2021] <- 0
+
+##Criando as variáveis exclusivas do SUS ou da ANS
+df_pop_ans_sus <- df_cob_suplementar |>
+  mutate(
+    pop_fem_ans_10_49 = round(populacao_feminina_10_a_49 * cob_suplementar),
+    pop_fem_sus_10_49 = populacao_feminina_10_a_49 - pop_fem_ans_10_49,
+    total_de_nascidos_vivos_ans = round(total_de_nascidos_vivos * cob_suplementar),
+    total_de_nascidos_vivos_sus = total_de_nascidos_vivos - total_de_nascidos_vivos_ans
+  ) |>
+  select(codmunres, ano, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_ans, total_de_nascidos_vivos_sus)
+
+##Juntando com o restante da base do bloco 2
+df_bloco2 <- left_join(df_bloco2, df_pop_ans_sus)
 
 # Verificando se os dados novos e antigos estão batendo -------------------
 sum(df_bloco2 |> filter(ano < 2022 ) |> pull(total_de_nascidos_vivos)) - sum(df_bloco2_antigo$total_de_nascidos_vivos)

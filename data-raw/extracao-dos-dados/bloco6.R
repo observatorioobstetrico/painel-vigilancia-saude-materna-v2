@@ -144,12 +144,13 @@ library(readr)
 
 #Carregando as tabelas pde 2012 a 2021
 
-rmm_brasil <- read_excel("databases-antigas/analises_obitos_RMM_1996_2021.xlsx") %>%
+rmm_brasil <- read_excel("data-raw/extracao-dos-dados/databases-antigas/analises_obitos_RMM_1996_2021.xlsx") %>%
   filter(Ano >= 2012)
 
-rmm_regioes <- read_excel("databases-antigas/RMM_Regioes.xlsx") %>%
+rmm_regioes <- read_excel("data-raw/extracao-dos-dados/databases-antigas/RMM_Regioes.xlsx") %>%
   filter(Ano>=2012)
-rmm_estados <- read_excel("databases-antigas/RMM_Estados.xlsx") %>%
+
+rmm_estados <- read_excel("data-raw/extracao-dos-dados/databases-antigas/RMM_Estados.xlsx") %>%
   filter(Ano>=2012)
 
 dicionario_estados <- data.frame(
@@ -163,8 +164,6 @@ dicionario_estados <- data.frame(
 )
 
 rmm_estados <- left_join(rmm_estados, dicionario_estados, by = c("Estado" = "sigla"))
-
-
 
 rmm_regioes$localidade <- rmm_regioes$Regiao
 rmm_brasil$localidade <- "Brasil"

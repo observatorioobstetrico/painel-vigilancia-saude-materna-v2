@@ -1067,7 +1067,6 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::ungroup()
     })
 
-
     ##### Dados do primeiro bloco de indicadores para a comparação com o Brasil #####
     data1_comp <- reactive({
       bloco1 |>
