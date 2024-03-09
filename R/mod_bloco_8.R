@@ -17,6 +17,7 @@ mod_bloco_8_ui <- function(id){
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
+      id = ns("sem_comparacao"),
       column(
         width = 12,
         bs4Dash::bs4Card(
@@ -129,6 +130,106 @@ mod_bloco_8_ui <- function(id){
           shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_neonat_evitaveis")))
         )
       )
+    ),
+    shinyjs::hidden(
+     fluidRow(
+       id = ns("com_comparacao"),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de óbitos maternos preenchidos com garbage codes &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao1"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao1"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_garbage_materno"),
+                 label = "Garbage codes",
+                 options = list(placeholder = "Selecione os garbage codes", `actions-box` = TRUE),
+                 choices = c(
+                   "D39 Neoplasia de comportamento incerto ou desconhecido dos órgãos genitais femininos" = "garbage_materno_d39",
+                   "F53 Transtornos mentais e comportamentais associados ao puerpério, não classificados em outra parte" = "garbage_materno_f53",
+                   "O94 Sequelas de complicações da gravidez, parto e puerpério" = "garbage_materno_o94",
+                   "095 Morte obstétrica de causa não especificada" = "garbage_materno_o95"
+                 ),
+                 selected = names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+              )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 360))
+         )
+       ),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de óbitos fetais preenchidos com garbage codes &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao2"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao2"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_garbage_fetal"),
+                 label = "Grupos de garbage codes",
+                 options = list(placeholder = "Selecione os grupos de garbage codes", `actions-box` = TRUE),
+                 choices = c(
+                   "(P90-P96) Outros transtornos originados no período perinatal" = "garbage_fetal_p90_p96",
+                   "(Q10-Q18) Malformações congênitas do olho, do ouvido, da face e do pescoço" = "garbage_fetal_q10_q18",
+                   "(Q35-Q37) Fenda labial e fenda palatina" = "garbage_fetal_q35_q37",
+                   "(Q80-Q89) Outras malformações congênitas" = "garbage_fetal_q80_q89"
+                 ),
+                 selected = names(bloco8_graficos)[grepl("garbage_fetal", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+               )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_fetal"), height = 360))
+         )
+       ),
+       # Adicionar outras columns com width 6 a partir daqui (ele já vai entender que vão ficar dois gráficos por linha)
+     )
     )
   )
 }
@@ -140,6 +241,17 @@ mod_bloco_8_ui <- function(id){
 mod_bloco_8_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
+    observeEvent(filtros()$pesquisar, {
+      if (filtros()$comparar == "Não") {
+        shinyjs::hide(id = "com_comparacao", anim = TRUE, animType = "slide", time = 0.001)
+        shinyjs::show(id = "sem_comparacao", anim = TRUE, animType = "slide", time = 0.8)
+      } else {
+        shinyjs::hide(id = "sem_comparacao", anim = TRUE, animType = "slide", time = 0.001)
+        shinyjs::show(id = "com_comparacao", anim = TRUE, animType = "slide", time = 0.8)
+      }
+    }, ignoreNULL = FALSE)
+
 
     ##### Criando o output que recebe a localidade e o ano escolhidos #####
     output$titulo_localidade <- renderUI({
@@ -1129,6 +1241,173 @@ mod_bloco_8_server <- function(id, filtros){
         )
 
     })
+
+    data_filtrada_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_filtrada_comp_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel2 == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+
+    # Criando o gráfico da porcentagem de garbage codes p/ óbitos maternos --------
+    output$plot_garbage_materno <- highcharter::renderHighchart({
+
+      data_plot_garbage_materno <- reactive({
+        data_filtrada_aux() |>
+          dplyr::summarise(
+            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+            obitos_maternos_totais = sum(obitos_maternos_totais),
+            prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+            class = dplyr::case_when(
+              filtros()$nivel == "Nacional" ~ "Brasil",
+              filtros()$nivel == "Regional" ~ filtros()$regiao,
+              filtros()$nivel == "Estadual" ~ filtros()$estado,
+              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+              filtros()$nivel == "Municipal" ~ filtros()$municipio
+            )
+          )
+      })
+
+      data_plot_garbage_materno_comp <- reactive({
+        data_filtrada_comp_aux() |>
+          dplyr::summarise(
+            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+            obitos_maternos_totais = sum(obitos_maternos_totais),
+            prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+            class = dplyr::case_when(
+              filtros()$nivel2 == "Nacional" ~ "Brasil",
+              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            )
+          ) |>
+          dplyr::ungroup()
+      })
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_materno(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_materno_comp(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos preenchidos com garbage codes"), min = 0, max = 100)
+
+    })
+
+
+    # Criando o gráfico da porcentagem de garbage codes p/ óbitos fetais --------
+    output$plot_garbage_fetal <- highcharter::renderHighchart({
+
+      data_plot_garbage_fetal <- reactive({
+        data_filtrada_aux() |>
+          dplyr::summarise(
+            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
+            obitos_fetais_totais = sum(obitos_fetais_totais),
+            prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
+            class = dplyr::case_when(
+              filtros()$nivel == "Nacional" ~ "Brasil",
+              filtros()$nivel == "Regional" ~ filtros()$regiao,
+              filtros()$nivel == "Estadual" ~ filtros()$estado,
+              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+              filtros()$nivel == "Municipal" ~ filtros()$municipio
+            )
+          )
+      })
+
+      observe(print(data_plot_garbage_fetal()))
+
+      data_plot_garbage_fetal_comp <- reactive({
+        data_filtrada_comp_aux() |>
+          dplyr::summarise(
+            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
+            obitos_fetais_totais = sum(obitos_fetais_totais),
+            prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
+            class = dplyr::case_when(
+              filtros()$nivel2 == "Nacional" ~ "Brasil",
+              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            )
+          ) |>
+          dplyr::ungroup()
+      })
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_fetal(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_fetal_comp(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos preenchidos com garbage codes"), min = 0, max = 100)
+
+    })
+
 
   })
 }

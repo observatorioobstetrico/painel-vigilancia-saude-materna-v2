@@ -129,6 +129,9 @@ bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
+bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv") |>
+  janitor::clean_names()
+
 bloco8_materno_garbage_aux <- read.csv("data-raw/csv/materno_garbage_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))
@@ -154,9 +157,7 @@ bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.
 bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2012-2022.csv") |>
   janitor::clean_names()
 
-
-###VER QUAIS COLUNAS VOCÊS PRECISAM TIRAR AQUI; NO ARQUIVO DE 2012 A 2020, ESTOU TIRANDO A COLUNA 'X' E A COLUNA 'UF'
-base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2021.csv", sep = ",")[, -1] |>
+base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2022.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
@@ -249,6 +250,13 @@ malformacao <- malformacao |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
+  )
+
+bloco8_graficos <- dplyr::left_join(bloco8_graficos_aux, aux_municipios, by = "codmunres")
+bloco8_graficos <- bloco8_graficos |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_graficos) == "ano") + 1):(which(names(bloco8_graficos) == "municipio") - 1)
   )
 
 bloco8_materno_garbage_aux <- dplyr::left_join(bloco8_materno_garbage_aux, aux_municipios, by = "codmunres")
@@ -385,6 +393,7 @@ macro_r_saude_choices <- tabela_aux_municipios |>
   unique()
 
 #Criando uma tabela contendo informações sobre os indicadores
+#Criando uma tabela contendo informações sobre os indicadores
 tabela_indicadores <- data.frame(
   nome_abreviado = c(
     "porc_nvm_menor_que_20_anos",
@@ -404,7 +413,11 @@ tabela_indicadores <- data.frame(
     "porc_menor20",
     "porc_mais_3pt",
     "tx_abortos_mil_mulheres_valor_medio",
-    "tx_abortos_cem_nascidos_vivos_valor_medio",  #Fim do bloco 2
+    "sus_tx_abortos_mil_mulheres_valor_medio",
+    "ans_tx_abortos_mil_mulheres_valor_medio",
+    "tx_abortos_cem_nascidos_vivos_valor_medio",
+    "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
+    "ans_tx_abortos_cem_nascidos_vivos_valor_medio",  #Fim do bloco 2
     "cobertura_pre_natal",
     "porc_inicio_prec",
     "porc_7",
@@ -495,8 +508,12 @@ tabela_indicadores <- data.frame(
     "Cobertura populacional com equipes de Saúde da Família",  #Fim do bloco 1
     "Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil)",
     "Porcentagem de mulheres com mais de 3 partos anteriores",
-    "Taxa de abortos inseguros por mil mulheres em idade fértil",
-    "Razão de abortos inseguros por 100 nascidos vivos", #Fim do bloco 2
+    "Taxa de abortos inseguros por mil mulheres em idade fértil (geral)",
+    "Taxa de abortos inseguros por mil mulheres em idade fértil (apenas SUS)",
+    "Taxa de abortos inseguros por mil mulheres em idade fértil (apenas ANS)",
+    "Razão de abortos inseguros por 100 nascidos vivos (geral)",
+    "Razão de abortos inseguros por 100 nascidos vivos (apenas SUS)",
+    "Razão de abortos inseguros por 100 nascidos vivos (apenas ANS)", #Fim do bloco 2
     "Cobertura de assistência pré-natal",
     "Porcentagem de mulheres com início precoce do pré-natal",
     "Porcentagem de mulheres com mais de 7 consultas de pré-natal",
@@ -569,11 +586,10 @@ tabela_indicadores <- data.frame(
     "Mortalidade neonatal tardia para peso ao nascer maior ou igual a 2500g",
     "Número de óbitos fetais",
     "Taxa de mortalidade fetal"
-
   ),
   bloco = c(
     rep("bloco1", times = 14),
-    rep("bloco2", times = 4),
+    rep("bloco2", times = 8),
     rep("bloco3", times = 4),
     rep("bloco4", times = 22),
     rep("bloco4_deslocamento", times = 11),
@@ -583,124 +599,245 @@ tabela_indicadores <- data.frame(
     rep("bloco7_neonatal", times = 15),
     rep("bloco7_fetal", times = 2)
   ),
+  calculo = c(
+    "round(sum(nvm_menor_que_20_anos) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_entre_20_e_34_anos) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_maior_que_34_anos) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_cor_da_pele_branca) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_cor_da_pele_preta) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_cor_da_pele_amarela) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_cor_da_pele_parda) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_indigenas) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_escolaridade_ate_3) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_escolaridade_de_4_a_7) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_escolaridade_de_8_a_11) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nvm_com_escolaridade_acima_de_11) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round((sum(populacao_feminina_10_a_49) - sum(pop_fem_10_49_com_plano_saude)) / sum(populacao_feminina_10_a_49) * 100, 1)",
+    "round(sum(media_cobertura_esf) / sum(populacao_total) * 100, 1)",  #Fim do bloco 1
+    "round(sum(nvm_menor_que_20) / sum(pop_feminina_10_a_19) * 1000, 1)",
+    "round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)) / sum(pop_fem_10_49) * 1000, 1)",
+    "round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) / sum(pop_fem_sus_10_49) * 1000, 1)",
+    "round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6) / sum(pop_fem_ans_10_49) * 1000, 1)",
+    "round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) / sum(total_de_nascidos_vivos_sus) * 100, 1)",
+    "round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6) / sum(total_de_nascidos_vivos_ans) * 100, 1)",  #Fim do bloco 2
+    "round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(mulheres_com_inicio_precoce_do_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(mulheres_com_mais_de_sete_consultas_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)",  #Fim do bloco 3
+    "round(sum(mulheres_com_parto_cesariana) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_1) / sum(mulheres_dentro_do_grupo_de_robson_1)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_2) / sum(mulheres_dentro_do_grupo_de_robson_2)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_3) / sum(mulheres_dentro_do_grupo_de_robson_3)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_4) / sum(mulheres_dentro_do_grupo_de_robson_4)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_5) / sum(mulheres_dentro_do_grupo_de_robson_5)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_6_ao_9) / sum(mulheres_dentro_do_grupo_de_robson_6_ao_9)) * 100, 1)",
+    "round((sum(total_cesariana_grupo_robson_10) / sum(mulheres_dentro_do_grupo_de_robson_10)) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_1) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_2) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_3) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_4) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_5) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_6_ao_9) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round(sum(total_cesariana_grupo_robson_10) / sum(mulheres_com_parto_cesariana) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_1) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_2) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_3) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_4) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_5) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_6_ao_9) / sum(total_de_nascidos_vivos)) * 100, 1)",
+    "round((sum(mulheres_dentro_do_grupo_de_robson_10) / sum(total_de_nascidos_vivos)) * 100, 1)",  #Fim do bloco 4 (grupos de Robson)
+    "round(sum(local, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "round(sum(nao_local, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "round(sum(dentro_regiao_saude, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "round(sum(dentro_macrorregiao_saude, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "round(sum(fora_macrorregiao_saude, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "round(sum(outra_uf, na.rm = TRUE) / sum(destino_total, na.rm = TRUE) * 100, 1)",
+    "km_partos_fora_municipio",
+    "km_partos_na_regiao",
+    "km_partos_na_macrorregiao",
+    "km_partos_fora_macrorregiao",
+    "km_partos_fora_uf",  #Fim do bloco 4 (deslocamento)
+    "round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)",
+    "round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)",  #Fim do bloco 5
+    "sum(obitos_mat_totais)",
+    "round(sum(obitos_mat_totais) / sum(nascidos) * 100000, 1)",
+    "round(sum(obitos_mat_diretos) / sum(obitos_mat_totais) * 100, 1)",
+    "round(sum(obitos_mat_aborto) / sum(obitos_mat_diretos) * 100, 1)",
+    "round(sum(obitos_mat_hipertensao) / sum(obitos_mat_diretos) * 100, 1)",
+    "round(sum(obitos_mat_hemorragia) / sum(obitos_mat_diretos) * 100, 1)",
+    "round(sum(obitos_mat_infec_puerperal) / sum(obitos_mat_diretos) * 100, 1)",  #Fim do bloco 6 (mortalidade)
+    "round(sum(casos_mmg) / sum(total_internacoes) * 100, 1)",
+    "round(sum(casos_mmg_hipertensao) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_hemorragia) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_infeccoes) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_uti) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_tmp) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_transfusao) / sum(casos_mmg)  * 100, 1)",
+    "round(sum(casos_mmg_cirurgia) / sum(casos_mmg)  * 100, 1)",  #Fim do bloco 6 (morbidade)
+    rep("", 17)
+  ),
   numerador = c(
-    "nvm_menor_que_20_anos",
-    "nvm_entre_20_e_34_anos",
-    "nvm_maior_que_34_anos",
-    "nvm_com_cor_da_pele_branca",
-    "nvm_com_cor_da_pele_preta",
-    "nvm_com_cor_da_pele_parda",
-    "nvm_com_cor_da_pele_amarela",
-    "nvm_indigenas",
-    "nvm_com_escolaridade_ate_3",
-    "nvm_com_escolaridade_de_4_a_7",
-    "nvm_com_escolaridade_de_8_a_11",
-    "nvm_com_escolaridade_acima_de_11",
-    "exceção",
-    "exceção",  #Fim do bloco 1
-    "nvm_menor_que_20",
-    "mulheres_com_mais_de_tres_partos_anteriores",
-    "exceção",
-    "exceção",  #Fim do bloco 2
-    "mulheres_com_pelo_menos_uma_consulta_prenatal",
-    "mulheres_com_inicio_precoce_do_prenatal",
-    "mulheres_com_mais_de_sete_consultas_prenatal",
-    "casos_sc",  #Fim do bloco 3
-    "mulheres_com_parto_cesariana",
-    "total_cesariana_grupo_robson_1",
-    "total_cesariana_grupo_robson_2",
-    "total_cesariana_grupo_robson_3",
-    "total_cesariana_grupo_robson_4",
-    "total_cesariana_grupo_robson_5",
-    "total_cesariana_grupo_robson_6_ao_9",
-    "total_cesariana_grupo_robson_10",
-    "total_cesariana_grupo_robson_1",
-    "total_cesariana_grupo_robson_2",
-    "total_cesariana_grupo_robson_3",
-    "total_cesariana_grupo_robson_4",
-    "total_cesariana_grupo_robson_5",
-    "total_cesariana_grupo_robson_6_ao_9",
-    "total_cesariana_grupo_robson_10",
-    "mulheres_dentro_do_grupo_de_robson_1",
-    "mulheres_dentro_do_grupo_de_robson_2",
-    "mulheres_dentro_do_grupo_de_robson_3",
-    "mulheres_dentro_do_grupo_de_robson_4",
-    "mulheres_dentro_do_grupo_de_robson_5",
-    "mulheres_dentro_do_grupo_de_robson_6_ao_9",
-    "mulheres_dentro_do_grupo_de_robson_10", #Fim do bloco 4 (grupos de Robson)
-    "local",
-    "nao_local",
-    "dentro_regiao_saude",
-    "dentro_macrorregiao_saude",
-    "fora_macrorregiao_saude",
-    "outra_uf",
-    rep("exceção", times = 5),  #Fim do bloco 4 (deslocamento)
-    "nascidos_vivos_com_baixo_peso",
-    "nascidos_vivos_prematuros",
-    "nascidos_vivos_termo_precoce",  #Fim do bloco 5
-    "exceção",
-    "obitos_mat_totais",
-    "obitos_mat_diretos",
-    "obitos_mat_aborto",
-    "obitos_mat_hipertensao",
-    "obitos_mat_hemorragia",
-    "obitos_mat_infec_puerperal",  #Fim do bloco 6 (mortalidade)
-    "casos_mmg",
-    "casos_mmg_hipertensao",
-    "casos_mmg_hemorragia",
-    "casos_mmg_infeccoes",
-    "casos_mmg_uti",
-    "casos_mmg_tmp",
-    "casos_mmg_transfusao",
-    "casos_mmg_cirurgia", #fim do bloco 6 (morbidade)
-    "obitos_27dias",
-    "obitos_6dias",
-    "obitos_7_27dias",
-    "obitos_27dias_menos1500",
-    "obitos_6dias_menos1500",
-    "obitos_7_27dias_menos1500",
-    "obitos_27dias_1500-1999",
-    "obitos_6dias_1500_1999",
-    "obitos_7_27dias_1500_1999",
-    "obitos_27dias_2000_2499",
-    "obitos_6dias_2000_2499",
-    "obitos_7_27dias_2000_2499",
-    "obitos_27dias_mais2500",
-    "obitos_6dias_mais2500",
-    "obitos_7_27dias_mais2500",
-    "obitos_fetais_mais22sem",
-    "obitos_fetais_mais22sem" #fim do bloco 7
+    "sum(nvm_menor_que_20_anos)",
+    "sum(nvm_entre_20_e_34_anos)",
+    "sum(nvm_maior_que_34_anos)",
+    "sum(nvm_com_cor_da_pele_branca)",
+    "sum(nvm_com_cor_da_pele_preta)",
+    "sum(nvm_com_cor_da_pele_amarela)",
+    "sum(nvm_com_cor_da_pele_parda)",
+    "sum(nvm_indigenas)",
+    "sum(nvm_com_escolaridade_ate_3)",
+    "sum(nvm_com_escolaridade_de_4_a_7)",
+    "sum(nvm_com_escolaridade_de_8_a_11)",
+    "sum(nvm_com_escolaridade_acima_de_11)",
+    "(sum(populacao_feminina_10_a_49) - sum(pop_fem_10_49_com_plano_saude))",
+    "sum(media_cobertura_esf)",  #Fim do bloco 1
+    "sum(nvm_menor_que_20)",
+    "sum(mulheres_com_mais_de_tres_partos_anteriores)",
+    "((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6))",
+    "(((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4)",
+    "(((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)",
+    "((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6))",
+    "(((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 4)",
+    "(((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6)",  #Fim do bloco 2
+    "sum(mulheres_com_pelo_menos_uma_consulta_prenatal)",
+    "sum(mulheres_com_inicio_precoce_do_prenatal)",
+    "sum(mulheres_com_mais_de_sete_consultas_prenatal)",
+    "sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)",  #Fim do bloco 3
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(total_cesariana_grupo_robson_1)",
+    "sum(total_cesariana_grupo_robson_2)",
+    "sum(total_cesariana_grupo_robson_3)",
+    "sum(total_cesariana_grupo_robson_4)",
+    "sum(total_cesariana_grupo_robson_5)",
+    "sum(total_cesariana_grupo_robson_6_ao_9)",
+    "sum(total_cesariana_grupo_robson_10)",
+    "sum(total_cesariana_grupo_robson_1)",
+    "sum(total_cesariana_grupo_robson_2)",
+    "sum(total_cesariana_grupo_robson_3)",
+    "sum(total_cesariana_grupo_robson_4)",
+    "sum(total_cesariana_grupo_robson_5)",
+    "sum(total_cesariana_grupo_robson_6_ao_9)",
+    "sum(total_cesariana_grupo_robson_10)",
+    "sum(mulheres_dentro_do_grupo_de_robson_1)",
+    "sum(mulheres_dentro_do_grupo_de_robson_2)",
+    "sum(mulheres_dentro_do_grupo_de_robson_3)",
+    "sum(mulheres_dentro_do_grupo_de_robson_4)",
+    "sum(mulheres_dentro_do_grupo_de_robson_5)",
+    "sum(mulheres_dentro_do_grupo_de_robson_6_ao_9)",
+    "sum(mulheres_dentro_do_grupo_de_robson_10)",  #Fim do bloco 4 (grupos de Robson)
+    "sum(local, na.rm = TRUE)",
+    "sum(nao_local, na.rm = TRUE)",
+    "sum(dentro_regiao_saude, na.rm = TRUE)",
+    "sum(dentro_macrorregiao_saude, na.rm = TRUE)",
+    "sum(fora_macrorregiao_saude, na.rm = TRUE)",
+    "sum(outra_uf, na.rm = TRUE)",
+    "km_partos_fora_municipio",
+    "km_partos_na_regiao",
+    "km_partos_na_macrorregiao",
+    "km_partos_fora_macrorregiao",
+    "km_partos_fora_uf",  #Fim do bloco 4 (deslocamento)
+    "sum(nascidos_vivos_com_baixo_peso)",
+    "sum(nascidos_vivos_prematuros)",
+    "sum(nascidos_vivos_termo_precoce)",  #Fim do bloco 5
+    "sum(obitos_mat_totais)",
+    "sum(obitos_mat_totais)",
+    "sum(obitos_mat_diretos)",
+    "sum(obitos_mat_aborto)",
+    "sum(obitos_mat_hipertensao)",
+    "sum(obitos_mat_hemorragia)",
+    "sum(obitos_mat_infec_puerperal)",  #Fim do bloco 6 (mortalidade)
+    "sum(casos_mmg)",
+    "sum(casos_mmg_hipertensao)",
+    "sum(casos_mmg_hemorragia)",
+    "sum(casos_mmg_infeccoes)",
+    "sum(casos_mmg_uti)",
+    "sum(casos_mmg_tmp)",
+    "sum(casos_mmg_transfusao)",
+    "sum(casos_mmg_cirurgia)",  #Fim do bloco 6 (morbidade)
+    rep("", 17)
   ),
   denominador = c(
-    rep("total_de_nascidos_vivos", times = 12),
-    "populacao_feminina_10_a_49",
-    "populacao_total",  #Fim do bloco 1
-    "pop_feminina_10_a_19",
-    "total_de_nascidos_vivos",
-    rep("exceção", times = 2),  #Fim do bloco 2
-    rep("total_de_nascidos_vivos", times = 4),  #Fim do bloco 3
-    rep("total_de_nascidos_vivos", times = 1),
-    "mulheres_dentro_do_grupo_de_robson_1",
-    "mulheres_dentro_do_grupo_de_robson_2",
-    "mulheres_dentro_do_grupo_de_robson_3",
-    "mulheres_dentro_do_grupo_de_robson_4",
-    "mulheres_dentro_do_grupo_de_robson_5",
-    "mulheres_dentro_do_grupo_de_robson_6_ao_9",
-    "mulheres_dentro_do_grupo_de_robson_10",
-    rep("mulheres_com_parto_cesariana", times = 7),
-    rep("total_de_nascidos_vivos", times = 7), #Fim do bloco 4 (grupos de Robson)
-    rep("destino_total", times = 6),
-    rep("excecao", times = 5),  #Fim do bloco 4 (deslocamento)
-    rep("total_de_nascidos_vivos", times = 3),  #Fim do bloco 5,
-    "exceção",
-    "nascidos",
-    "obitos_mat_totais",
-    rep("obitos_mat_diretos", times = 4),  #Fim do bloco 6 (mortalidade)
-    "total_internacoes",
-    rep("casos_mmg", times = 7), #Fim do bloco 6 (morbidade)
-    rep("nascidos", times=15), #Fim do bloco 7 (neonatal)
-    "exceção",
-    "nascidos + obitos_fetais_mais22sem"
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(populacao_feminina_10_a_49)",
+    "sum(populacao_total)",  #Fim do bloco 1
+    "sum(pop_feminina_10_a_19)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(pop_fem_10_49)",
+    "sum(pop_fem_sus_10_49)",
+    "sum(pop_fem_ans_10_49)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos_sus)",
+    "sum(total_de_nascidos_vivos_ans)",  #Fim do bloco 2
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",  #Fim do bloco 3
+    "sum(total_de_nascidos_vivos)",
+    "sum(mulheres_dentro_do_grupo_de_robson_1)",
+    "sum(mulheres_dentro_do_grupo_de_robson_2)",
+    "sum(mulheres_dentro_do_grupo_de_robson_3)",
+    "sum(mulheres_dentro_do_grupo_de_robson_4)",
+    "sum(mulheres_dentro_do_grupo_de_robson_5)",
+    "sum(mulheres_dentro_do_grupo_de_robson_6_ao_9)",
+    "sum(mulheres_dentro_do_grupo_de_robson_10)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(mulheres_com_parto_cesariana)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",  #Fim do bloco 4 (grupos de Robson)
+    "sum(destino_total, na.rm = TRUE)",
+    "sum(destino_total, na.rm = TRUE)",
+    "sum(destino_total, na.rm = TRUE)",
+    "sum(destino_total, na.rm = TRUE)",
+    "sum(destino_total, na.rm = TRUE)",
+    "sum(destino_total, na.rm = TRUE)",
+    "1",
+    "1",
+    "1",
+    "1",
+    "1",  #Fim do bloco 4 (deslocamento)
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",
+    "sum(total_de_nascidos_vivos)",  #Fim do bloco 5
+    "1",
+    "sum(nascidos)",
+    "sum(obitos_mat_totais)",
+    "sum(obitos_mat_diretos)",
+    "sum(obitos_mat_diretos)",
+    "sum(obitos_mat_diretos)",
+    "sum(obitos_mat_diretos)",  #Fim do bloco 6 (mortalidade)
+    "sum(total_internacoes)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",
+    "sum(casos_mmg)",  #Fim do bloco 6 (morbidade)
+    rep("", 17)
   ),
   fator = c(
     rep(100, times = 12),
@@ -708,7 +845,11 @@ tabela_indicadores <- data.frame(
     1000,
     100,
     1000,
-    100,  #Fim do bloco 2
+    1000,
+    1000,
+    100,
+    100,
+    100, #Fim do bloco 2
     rep(100, times = 3),
     1000,  #Fim do bloco 3
     rep(100, times = 22),  #Fim do bloco 4 (grupos de Robson)
@@ -729,7 +870,11 @@ tabela_indicadores <- data.frame(
     "taxa",
     "porcentagem",
     "taxa",
-    "taxa",  #Fim do bloco 2
+    "taxa",
+    "taxa",
+    "taxa",
+    "taxa",
+    "taxa", #Fim do bloco 2
     rep("porcentagem", times = 3),
     "taxa",  #Fim do bloco 3
     rep("porcentagem", times = 22),  #Fim do bloco 4 (grupos de Robson)
@@ -748,6 +893,10 @@ tabela_indicadores <- data.frame(
     rep("Nacional", times = 13),
     95,  #Fim do bloco 1
     30,
+    "Nacional",
+    "Nacional",
+    "Nacional",
+    "Nacional",
     "Nacional",
     "Nacional",
     "Nacional", #Fim do bloco 2
@@ -777,7 +926,7 @@ tabela_indicadores <- data.frame(
     rep("média nacional", times = 13),
     "meta ODS",  #Fim do bloco 1
     "países desenvolvidos",
-    rep("média nacional", times = 3), #Fim do bloco 2
+    rep("média nacional", times = 7), #Fim do bloco 2
     rep("recomendações OMS", times = 3),
     "meta OMS",  #Fim do bloco 3
     rep("meta OMS", times = 6),
@@ -811,7 +960,12 @@ tabela_indicadores <- data.frame(
     "Média da população atendida por equipes de Saúde da Família",  #Fim do bloco 1
     "Nascidos vivos de mães com menos de 20 anos",
     "Mulheres com mais de 3 partos anteriores",
-    rep("Número de internações por aborto corrigido", times = 2),  #Fim do bloco 2
+    "Número de internações por aborto corrigido",
+    "Número de internações por abortos corrigido (apenas SUS)",
+    "Número de internações por aborto corrigido (apenas ANS)",
+    "Número de internações por aborto corrigido",
+    "Número de internações por abortos corrigido (apenas SUS)",
+    "Número de internações por aborto corrigido (apenas ANS)", #Fim do bloco 2
     "Mulheres com pelo menos uma consulta pré-natal",
     "Mulheres com início precoce do pré-natal",
     "Mulheres com mais de sete consultas pré-natal",
@@ -890,7 +1044,13 @@ tabela_indicadores <- data.frame(
     "População feminina entre 10 e 49 anos",
     "População total",  #Fim do bloco 1
     "População feminina entre 10 e 19 anos",
-    rep("Total de nascidos vivos", times = 3),  #Fim do bloco 2
+    "Total de nascidos vivos",
+    "População feminina entre 10 e 49 anos",
+    "População feminina entre 10 e 49 anos usuárias exclusiva do SUS",
+    "População feminina entre 10 e 49 anos usuárias de planos de saúde privados",
+    "Total de nascidos vivos",
+    "Total de nascidos vivos de mães usuárias exclusiva do SUS",
+    "Total de nascidos vivos de mãe usuárias de planos de saúde privados",  #Fim do bloco 2
     rep("Total de nascidos vivos", times = 4),  #Fim do bloco 3
     rep("Total de nascidos vivos", times = 1),
     "Mulheres dentro do grupo 1 de Robson",
@@ -920,7 +1080,7 @@ tabela_indicadores <- data.frame(
     rep(0, times = 2),   #Fim do bloco 1
     1,
     2,
-    rep(0, times = 2),   #Fim do bloco 2
+    rep(0, times = 6),   #Fim do bloco 2
     rep(1, times = 3),
     0,  #Fim do bloco 3
     rep(1, times = 22),  #Fim do bloco 4 (grupos de Robson)
@@ -937,7 +1097,7 @@ tabela_indicadores <- data.frame(
     rep("Sem incompletude", times = 2),  #Fim do bloco 1
     "Porcentagem da variável IDADEMAE, do SINASC, não preenchida, ignorada ou maior que 55 anos",
     "Porcentagem da variável QTDPARTNOR, do SINASC, não preenchida ou preenchida com 99",
-    rep("Sem incompletude", times = 2),  #Fim do bloco 2
+    rep("Sem incompletude", times = 6),  #Fim do bloco 2
     "Porcentagem da variável CONSPRENAT, do SINASC, em branco",
     "Porcentagem da variável MESPRENAT, do SINASC, em branco",
     "Porcentagem da variável CONSPRENAT, do SINASC, em branco",
@@ -958,7 +1118,7 @@ tabela_indicadores <- data.frame(
     rep("-", times = 2), #Fim do bloco 1
     "-",
     "Porcentagem da variável QTDPARTCES, do SINASC, não preenchida ou preenchida com 99",
-    rep("-", times = 2),  #Fim do bloco 2
+    rep("-", times = 6),  #Fim do bloco 2
     rep("-", times = 4),  #Fim do bloco 3
     rep("-", times = 22),  #Fim do bloco 4 (grupos de Robson)
     rep("Porcentagem de Declaração de Nascido Vivo com CNES inválido", times = 11),  #Fim do bloco 4 (deslocamento)
@@ -974,7 +1134,7 @@ tabela_indicadores <- data.frame(
     rep("Sem incompletude", 2),  #Fim do bloco 1,
     "idademae_incompletos",
     "qtdpartces_incompletos",
-    rep("Sem incompletude", times=2),  #Fim do bloco 2
+    rep("Sem incompletude", times = 6),  #Fim do bloco 2
     "consprenat_incompletos",
     "mesprenat_incompletos",
     "consprenat_incompletos",
@@ -995,14 +1155,14 @@ tabela_indicadores <- data.frame(
     rep("-", times = 2),  #Fim do bloco 1
     "-",
     "qtdpartnor_incompletos",
-    rep("-", times = 2),  #Fim do bloco 2
+    rep("-", times = 6),  #Fim do bloco 2
     rep("-", times = 4),  #Fim do bloco 3
     rep("-", times = 22),  #Fim do bloco 4 (grupos de Robson)
     rep("exceção", times = 11),  #Fim do bloco 4 (deslocamento)
     rep("-", times = 3),  #Fim do bloco 5
     rep("exceção", times = 7),  #Fim do bloco 6
     rep("-", times = 8),
-    rep("-", times=17) #bloco 7
+    rep("-", times = 17) #bloco 7
   ),
   denominador_incompletude1 = c(
     rep("idademae_totais", times = 3),
@@ -1011,7 +1171,7 @@ tabela_indicadores <- data.frame(
     rep("Sem incompletude", times = 2),  #Fim do bloco 1,
     "idademae_totais",
     "qtdpartces_totais",
-    rep("Sem incompletude", times = 2),  #Fim do bloco 2
+    rep("Sem incompletude", times = 6),  #Fim do bloco 2
     "consprenat_totais",
     "mesprenat_totais",
     "consprenat_totais",
@@ -1032,18 +1192,18 @@ tabela_indicadores <- data.frame(
     rep("-", times = 2),  #Fim do bloco 1
     "-",
     "qtdpartnor_totais",
-    rep("-", times = 2),  #Fim do bloco 2
+    rep("-", times = 6),  #Fim do bloco 2
     rep("-", times = 4),  #Fim do bloco 3
     rep("-", times = 22),  #Fim do bloco 4 (grupos de Robson)
     rep("dn_hospital_id_fertil", times = 11),  #Fim do bloco 4 (deslocamento)
     rep("-", times = 3),  #Fim do bloco 5
     rep("total_obitos_maternos", times = 7),
     rep("-", times = 8) ,
-    rep("-", times=17) #bloco 7
+    rep("-", times = 17) #bloco 7
   ),
   fator_incompletude = c(
-    rep(100, times = 73),
-    rep(100, times=17) # bloco 7
+    rep(100, times = 77),
+    rep(100, times = 17) # bloco 7
   )
 )
 
@@ -1066,6 +1226,7 @@ usethis::use_data(bloco8_fetal_causas, overwrite = TRUE)
 usethis::use_data(bloco8_neonat_causas, overwrite = TRUE)
 usethis::use_data(bloco8_fetal_evitaveis, overwrite = TRUE)
 usethis::use_data(bloco8_neonat_evitaveis, overwrite = TRUE)
+usethis::use_data(bloco8_graficos, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
 usethis::use_data(municipios_choices, overwrite = TRUE)
