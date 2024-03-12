@@ -132,7 +132,7 @@ bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("
 bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv") |>
   janitor::clean_names()
 
-bloco8_materno_garbage_aux <- read.csv("data-raw/csv/garbage_materno_2012_2022.csv") |>
+bloco8_materno_garbage_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>
   janitor::clean_names()
 
 bloco8_fetal_garbage_aux <- read.csv("data-raw/csv/fetais_garbage_2012-2022.csv") |>
