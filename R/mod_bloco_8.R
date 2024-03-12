@@ -228,6 +228,224 @@ mod_bloco_8_ui <- function(id){
            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_fetal"), height = 360))
          )
        ),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de principais causas para óbitos fetais &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao2"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao2"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_causas_fetal"),
+                 label = "Grupos de principais causas",
+                 options = list(placeholder = "Selecione os grupos de principais causas", `actions-box` = TRUE),
+                 choices = c(
+                   "(P00-P04) Feto e recém-nascido afetados por fatores maternos e por complicações da gravidez, do trabalho de parto e do parto" = "fetal_causas_p00_p04",
+                   "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "fetal_causas_p05_p08",
+                   "(P10-P15) Traumatismo de parto" = "fetal_causas_p10_p15",
+                   "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período perinatal" = "fetal_causas_p20_p29",
+                   "(P35-P39) Infecções específicas do período perinatal" = "fetal_causas_p35_p39",
+                   "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "fetal_causas_p50_p61",
+                   "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "fetal_causas_p70_p74",
+                   "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "fetal_causas_p75_p78",
+                   "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "fetal_causas_p80_p83",
+                   "(P90-P96) Outros transtornos originados no período perinatal" = "fetal_causas_p90_p96",
+                   "(Q00-Q99) Anomalias congênitas" = "fetal_causas_q00_q99",
+                   "(J00-J99) Respiratórias" = "fetal_causas_j00_j99",
+                   "(A00-B99) Infecciosas" = "fetal_causas_a00_b99",
+                   "Outros" = "fetal_causas_outros"
+
+                 ),
+                 selected = names(bloco8_graficos)[grepl("fetal_causas", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+               )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_causas_fetal"), height = 360))
+         )
+       ),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de principais causas para óbitos neonatais &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao2"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao2"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_causas_neonatal"),
+                 label = "Grupos de principais causas",
+                 options = list(placeholder = "Selecione os grupos de principais causas", `actions-box` = TRUE),
+                 choices = c(
+                   "(P00-P04) Feto e recém-nascido afetados por fatores maternos e por complicações da gravidez, do trabalho de parto e do parto" = "neonatal_causas_p00_p04",
+                   "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento neonatal" = "neonatal_causas_p05_p08",
+                   "(P10-P15) Traumatismo de parto" = "neonatal_causas_p10_p15",
+                   "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período perinatal" = "neonatal_causas_p20_p29",
+                   "(P35-P39) Infecções específicas do período perinatal" = "neonatal_causas_p35_p39",
+                   "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "neonatal_causas_p50_p61",
+                   "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "neonatal_causas_p70_p74",
+                   "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "neonatal_causas_p75_p78",
+                   "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "neonatal_causas_p80_p83",
+                   "(P90-P96) Outros transtornos originados no período perinatal" = "neonatal_causas_p90_p96",
+                   "(Q00-Q99) Anomalias congênitas" = "neonatal_causas_q00_q99",
+                   "(J00-J99) Respiratórias" = "neonatal_causas_j00_j99",
+                   "(A00-B99) Infecciosas" = "neonatal_causas_a00_b99",
+                   "Outros" = "neonatal_causas_outros"
+
+                 ),
+                 selected = names(bloco8_graficos)[grepl("neonatal_causas", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+               )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_causas_neonatal"), height = 360))
+         )
+       ),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de causas evitáveis para óbitos fetais &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao2"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao2"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_evitaveis_fetal"),
+                 label = "Grupos de principais causas",
+                 options = list(placeholder = "Selecione os grupos de principais causas", `actions-box` = TRUE),
+                 choices = c(
+                   "Reduzível pelas ações de imunização" = "fetal_evitaveis_imunoprevencao",
+                   "Reduzíveis por adequada atenção à mulher na gestação" = "fetal_evitaveis_mulher_gestacao",
+                   "Reduzíveis por adequada atenção à mulher no parto" = "fetal_evitaveis_parto",
+                   "Reduzíveis por adequada atenção ao recém-nascido" = "fetal_evitaveis_recem_nascido",
+                   "Reduzíveis por ações de diagnóstico e tratamento adequado" = "fetal_evitaveis_tratamento",
+                   #"Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "fetal_evitaveis_saude",
+                   #"Causas mal definidas" = "fetal_evitaveis_mal_definidas",
+                   "Demais causas (não claramente evitáveis)" = "fetal_evitaveis_outros"
+                 ),
+                 selected = names(bloco8_graficos)[grepl("fetal_evitaveis", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+               )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 360))
+         )
+       ),
+       column(
+         width = 6,
+         bs4Dash::bs4Card(
+           width = 12,
+           status = "primary",
+           collapsible = FALSE,
+           headerBorder = FALSE,
+           style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+           div(
+             style = "height: 15%; display: flex; align-items: center;",
+             HTML("<b style='font-size:19px'> Porcentagem de causas evitáveis para óbitos neonatais &nbsp;</b>"),
+             shinyjs::hidden(
+               span(
+                 id = ns("mostrar_botao2"),
+                 shinyWidgets::actionBttn(
+                   inputId = ns("botao2"),
+                   icon = icon("triangle-exclamation", style = "color: red"),
+                   color = "warning",
+                   style = "material-circle",
+                   size = "xs"
+                 )
+               )
+             )
+           ),
+           hr(),
+           fluidRow(
+             column(
+               width = 12,
+               shinyWidgets::pickerInput(
+                 inputId = ns("cids_evitaveis_neonatal"),
+                 label = "Grupos de principais causas",
+                 options = list(placeholder = "Selecione os grupos de principais causas", `actions-box` = TRUE),
+                 choices = c(
+                   "Reduzível pelas ações de imunização" = "neonatal_evitaveis_imunoprevencao",
+                   "Reduzíveis por adequada atenção à mulher na gestação" = "neonatal_evitaveis_mulher_gestacao",
+                   "Reduzíveis por adequada atenção à mulher no parto" = "neonatal_evitaveis_parto",
+                   "Reduzíveis por adequada atenção ao recém-nascido" = "neonatal_evitaveis_recem_nascido",
+                   "Reduzíveis por ações de diagnóstico e tratamento adequado" = "neonatal_evitaveis_tratamento",
+                   "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "neonatal_evitaveis_saude",
+                   "Causas mal definidas" = "neonatal_evitaveis_mal_definidas",
+                   "Demais causas (não claramente evitáveis)" = "neonatal_evitaveis_outros"
+                 ),
+                 selected = names(bloco8_graficos)[grepl("neonatal_evitaveis", names(bloco8_graficos))],
+                 multiple = TRUE,
+                 width = "100%"
+               )
+             )
+           ),
+           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 360))
+         )
+       ),
        # Adicionar outras columns com width 6 a partir daqui (ele já vai entender que vão ficar dois gráficos por linha)
      )
     )
@@ -1414,6 +1632,262 @@ mod_bloco_8_server <- function(id, filtros){
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos preenchidos com garbage codes"), min = 0, max = 100)
+
+    })
+
+    # Criando o gráfico da porcentagem de principais causas p/ óbitos fetais --------
+    data_plot_causas_fetal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_causas_fetal = sum(dplyr::across(dplyr::all_of(input$cids_causas_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_causas_fetal = round(obitos_causas_fetal / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    observe(print(data_plot_causas_fetal()))
+
+    data_plot_causas_fetal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_causas_fetal = sum(dplyr::across(dplyr::all_of(input$cids_causas_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_causas_fetal = round(obitos_causas_fetal / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    output$plot_causas_fetal <- highcharter::renderHighchart({
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_causas_fetal(),
+          highcharter::hcaes(x = ano, y = prop_causas_fetal, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_causas_fetal_comp(),
+          highcharter::hcaes(x = ano, y = prop_causas_fetal, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos principais causas"), min = 0, max = 100)
+
+    })
+
+    # Criando o gráfico da porcentagem de principais causas p/ óbitos neonatais --------
+
+    data_plot_causas_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_causas_neonatal = sum(dplyr::across(dplyr::all_of(input$cids_causas_neonatal))),
+          obitos_neonatais_totais = sum(obitos_neonatais_totais),
+          prop_causas_neonatal = round(obitos_causas_neonatal / obitos_neonatais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    observe(print(data_plot_causas_neonatal()))
+
+    data_plot_causas_neonatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_causas_neonatal = sum(dplyr::across(dplyr::all_of(input$cids_causas_neonatal))),
+          obitos_neonatais_totais = sum(obitos_neonatais_totais),
+          prop_causas_neonatal = round(obitos_causas_neonatal / obitos_neonatais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    output$plot_causas_neonatal <- highcharter::renderHighchart({
+
+
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_causas_neonatal(),
+          highcharter::hcaes(x = ano, y = prop_causas_neonatal, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_causas_neonatal_comp(),
+          highcharter::hcaes(x = ano, y = prop_causas_neonatal, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos principais causas"), min = 0, max = 100)
+
+    })
+
+
+    # Criando o gráfico da porcentagem de causas evitáveis p/ óbitos fetais --------
+    data_plot_evitaveis_fetal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_evitaveis_fetal = sum(dplyr::across(dplyr::all_of(input$cids_evitaveis_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_evitaveis_fetal = round(obitos_evitaveis_fetal / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    observe(print(data_plot_evitaveis_fetal()))
+
+    data_plot_evitaveis_fetal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_evitaveis_fetal = sum(dplyr::across(dplyr::all_of(input$cids_evitaveis_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_evitaveis_fetal = round(obitos_evitaveis_fetal / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    output$plot_evitaveis_fetal <- highcharter::renderHighchart({
+
+
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_fetal(),
+          highcharter::hcaes(x = ano, y = prop_evitaveis_fetal, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_fetal_comp(),
+          highcharter::hcaes(x = ano, y = prop_evitaveis_fetal, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos causas evitáveis"), min = 0, max = 100)
+
+    })
+
+    # Criando o gráfico da porcentagem de causas evitáveis p/ óbitos neonatais --------
+    data_plot_evitaveis_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_evitaveis_neonatal = sum(dplyr::across(dplyr::all_of(input$cids_evitaveis_neonatal))),
+          obitos_neonatais_totais = sum(obitos_neonatais_totais),
+          prop_evitaveis_neonatal = round(obitos_evitaveis_neonatal / obitos_neonatais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    observe(print(data_plot_evitaveis_neonatal()))
+
+    data_plot_evitaveis_neonatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_evitaveis_neonatal = sum(dplyr::across(dplyr::all_of(input$cids_evitaveis_neonatal))),
+          obitos_neonatais_totais = sum(obitos_neonatais_totais),
+          prop_evitaveis_neonatal = round(obitos_evitaveis_neonatal / obitos_neonatais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    output$plot_evitaveis_neonatal <- highcharter::renderHighchart({
+
+
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_neonatal(),
+          highcharter::hcaes(x = ano, y = prop_evitaveis_neonatal, group = class),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_neonatal_comp(),
+          highcharter::hcaes(x = ano, y = prop_evitaveis_neonatal, group = class),
+          type = "column",
+          color = "#b73779",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos causas evitáveis"), min = 0, max = 100)
 
     })
 
