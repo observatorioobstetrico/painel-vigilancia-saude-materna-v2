@@ -420,6 +420,13 @@ mod_bloco_8_server <- function(id, filtros){
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
               align = "left"
             ),
+            grupo_cid10 = reactable::colDef(
+              name = "Grupo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
             causabas_categoria = reactable::colDef(
               name = "Categoria CID-10",
               minWidth = 60,

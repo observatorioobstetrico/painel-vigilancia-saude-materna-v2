@@ -66,11 +66,39 @@ df_maternos_garbage <- df_sim_domat |>
   right_join(df_maternos_totais) |>
   arrange(codmunres)
 
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_maternos_garbage[is.na(df_maternos_garbage)] <- 0
-
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_maternos_garbage)
+
+## Para a tabela de garbage codes em óbitos maternos
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10.csv")
+
+df_maternos_garbage_tabela <- df_sim_domat |>
+  filter(grepl(paste(garbage_codes_materno, collapse = "|"), causabas)) |>
+  select(codmunres, ano, causabas) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  left_join(df_cid10 |> select(causabas, causabas_categoria)) |>
+  select(!causabas) |>
+  pivot_wider(
+    names_from = causabas_categoria,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
+  pivot_longer(
+    cols = !c(codmunres, ano),
+    names_to = "causabas_categoria",
+    values_to = "obitos"
+  ) |>
+  left_join(df_cid10 |> select(!causabas)) |>
+  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_categoria, obitos) |>
+  arrange(codmunres)
+
+write.csv(df_maternos_garbage_tabela, "data-raw/csv/garbage_materno_2012_2022.csv", row.names = FALSE)
+
 
 ## Removendo objetos já utilizados
 rm(df_maternos_garbage, df_maternos_totais, df_sim_domat, df_sim_domat_aux, garbage_codes_materno)
