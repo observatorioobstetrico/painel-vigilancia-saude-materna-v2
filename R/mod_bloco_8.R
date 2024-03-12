@@ -1291,45 +1291,85 @@ mod_bloco_8_server <- function(id, filtros){
         dplyr::group_by(ano)
     })
 
+    data_plot_garbage_materno <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+          obitos_maternos_totais = sum(obitos_maternos_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    data_plot_garbage_materno_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+          obitos_maternos_totais = sum(obitos_maternos_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_garbage_fetal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+
+    data_plot_garbage_fetal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
+          obitos_fetais_totais = sum(obitos_fetais_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    observe(print(data_filtrada_aux()))
+    observe(print(names(data_filtrada_aux())))
+    observe(print(input$cids_garbage_materno))
 
     # Criando o gráfico da porcentagem de garbage codes p/ óbitos maternos --------
     output$plot_garbage_materno <- highcharter::renderHighchart({
-
-      data_plot_garbage_materno <- reactive({
-        data_filtrada_aux() |>
-          dplyr::summarise(
-            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
-            obitos_maternos_totais = sum(obitos_maternos_totais),
-            prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
-            class = dplyr::case_when(
-              filtros()$nivel == "Nacional" ~ "Brasil",
-              filtros()$nivel == "Regional" ~ filtros()$regiao,
-              filtros()$nivel == "Estadual" ~ filtros()$estado,
-              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-              filtros()$nivel == "Municipal" ~ filtros()$municipio
-            )
-          )
-      })
-
-      data_plot_garbage_materno_comp <- reactive({
-        data_filtrada_comp_aux() |>
-          dplyr::summarise(
-            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
-            obitos_maternos_totais = sum(obitos_maternos_totais),
-            prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
-            class = dplyr::case_when(
-              filtros()$nivel2 == "Nacional" ~ "Brasil",
-              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-            )
-          ) |>
-          dplyr::ungroup()
-      })
 
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1355,44 +1395,6 @@ mod_bloco_8_server <- function(id, filtros){
 
     # Criando o gráfico da porcentagem de garbage codes p/ óbitos fetais --------
     output$plot_garbage_fetal <- highcharter::renderHighchart({
-
-      data_plot_garbage_fetal <- reactive({
-        data_filtrada_aux() |>
-          dplyr::summarise(
-            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
-            obitos_fetais_totais = sum(obitos_fetais_totais),
-            prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
-            class = dplyr::case_when(
-              filtros()$nivel == "Nacional" ~ "Brasil",
-              filtros()$nivel == "Regional" ~ filtros()$regiao,
-              filtros()$nivel == "Estadual" ~ filtros()$estado,
-              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-              filtros()$nivel == "Municipal" ~ filtros()$municipio
-            )
-          )
-      })
-
-      observe(print(data_plot_garbage_fetal()))
-
-      data_plot_garbage_fetal_comp <- reactive({
-        data_filtrada_comp_aux() |>
-          dplyr::summarise(
-            obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_fetal))),
-            obitos_fetais_totais = sum(obitos_fetais_totais),
-            prop_garbage_code = round(obitos_garbage_code / obitos_fetais_totais * 100, 1),
-            class = dplyr::case_when(
-              filtros()$nivel2 == "Nacional" ~ "Brasil",
-              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-            )
-          ) |>
-          dplyr::ungroup()
-      })
 
       highcharter::highchart() |>
         highcharter::hc_add_series(

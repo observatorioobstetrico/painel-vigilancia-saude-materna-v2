@@ -97,7 +97,7 @@ df_maternos_garbage_tabela <- df_sim_domat |>
   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_categoria, obitos) |>
   arrange(codmunres)
 
-write.csv(df_maternos_garbage_tabela, "data-raw/csv/garbage_materno_2012_2022.csv", row.names = FALSE)
+write.csv(df_maternos_garbage_tabela, gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz"), row.names = FALSE)
 
 
 ## Removendo objetos já utilizados
