@@ -382,14 +382,28 @@ mod_bloco_8_ui <- function(id){
                    "Reduzíveis por adequada atenção à mulher no parto" = "fetal_evitaveis_parto",
                    "Reduzíveis por adequada atenção ao recém-nascido" = "fetal_evitaveis_recem_nascido",
                    "Reduzíveis por ações de diagnóstico e tratamento adequado" = "fetal_evitaveis_tratamento",
-                   #"Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "fetal_evitaveis_saude",
-                   #"Causas mal definidas" = "fetal_evitaveis_mal_definidas",
+                   "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "fetal_evitaveis_saude",
+                   "Causas mal definidas" = "fetal_evitaveis_mal_definidas",
                    "Demais causas (não claramente evitáveis)" = "fetal_evitaveis_outros"
                  ),
                  selected = names(bloco8_graficos)[grepl("fetal_evitaveis", names(bloco8_graficos))],
                  multiple = TRUE,
                  width = "100%"
-               )
+               ),
+               shinyWidgets::pickerInput(
+                 inputId = ns("peso_evitaveis_fetal"),
+                 label = "Grupos de principais causas",
+                 options = list(placeholder = "Selecione o peso", `actions-box` = TRUE),
+                 choices = c(
+                   "Sem informação", ">= 1000 g", ">= 1500 g"
+                 ),
+                 selected = c(
+                   "Sem informação", ">= 1000 g", ">= 1500 g"
+                 ),
+                 multiple = TRUE,
+                 width = "100%"
+               ),
+
              )
            ),
            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 360))
@@ -681,6 +695,7 @@ mod_bloco_8_server <- function(id, filtros){
         )
 
     })
+
 
 
     # tabela garbage codes obitos fetais
@@ -1218,7 +1233,7 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(causabas_grupo, capitulo_cid10, causabas_categoria, grupo, ano) |>
+        dplyr::group_by(capitulo_cid10, grupo_cid10, causabas_categoria, grupo_cid, faixa_de_peso, ano) |>
         dplyr::summarize(
           frequencia = sum(obitos)
         ) |>
@@ -1268,20 +1283,21 @@ mod_bloco_8_server <- function(id, filtros){
 
       data8_fetal_evitaveis() |>
         reactable::reactable(
-          groupBy = c("causabas_grupo", "capitulo_cid10", "causabas_categoria", "grupo"),
+          groupBy = c("capitulo_cid10", "grupo_cid10", "causabas_categoria", "grupo_cid", "faixa_de_peso"),
           defaultColDef = reactable::colDef(
             footerStyle = list(fontWeight = "bold"),
             align = "center"
           ),
           columns = list(
-            causabas_grupo = reactable::colDef(
-              name = "Grupo CID-10",
-              minWidth = 60,
-              aggregate = "unique",
-              align = "left"
-            ),
             capitulo_cid10 = reactable::colDef(
               name = "Capítulo CID-10",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+              align = "left"
+            ),
+            grupo_cid10 = reactable::colDef(
+              name = "Grupo CID-10",
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
@@ -1294,12 +1310,18 @@ mod_bloco_8_server <- function(id, filtros){
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
               align = "left"
             ),
-            grupo = reactable::colDef(
+            grupo_cid = reactable::colDef(
               name = "Grupo de causas",
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
               align = "left"
+            ),
+            faixa_de_peso = reactable::colDef(
+              name = "Faixa de peso",
+              minWidth = 60,
+              aggregate = htmlwidgets::JS("function() { return ''}"),
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("Todos")))
             ),
             ano = reactable::colDef(
               name = "Período",

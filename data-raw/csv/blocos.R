@@ -149,6 +149,9 @@ bloco8_fetal_causas_aux <- read.csv("data-raw/csv/fetais_causas_2012-2022.csv") 
 bloco8_neonat_causas_aux <- read.csv("data-raw/csv/neonat_causas_2012-2022.csv") |>
   janitor::clean_names()
 
+# bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz") |>
+#   janitor::clean_names()
+
 bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.csv") |>
   janitor::clean_names() |>
   dplyr::select(!c(uf, municipio, regiao))

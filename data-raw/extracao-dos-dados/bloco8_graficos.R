@@ -116,11 +116,10 @@ df_sim_dofet_aux <- fetch_datasus(
 ) |>
   clean_names()
 
-## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas pelos óbitos fetais que consideramos
+## Criando a variável de ano e filtrando apenas pelos óbitos fetais que consideramos
 df_sim_dofet <- df_sim_dofet_aux |>
   mutate(
-    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
-    causabas = substr(causabas, 1, 3)
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
   ) |>
   filter(
     ((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)
@@ -142,6 +141,7 @@ df_fetais_totais[is.na(df_fetais_totais)] <- 0
 ## Criando um data.frame com os óbitos maternos preenchidos com garbage codes
 df_fetais_garbage <- df_sim_dofet |>
   mutate(
+    causabas = substr(causabas, 1, 3),
     grupo_cid = case_when(
       causabas >= "P90" & causabas <= "P96" ~ "garbage_fetal_p90_p96",
       causabas >= "Q10" & causabas <= "Q18" ~ "garbage_fetal_q10_q18",
@@ -362,10 +362,23 @@ df_fetais_evitaveis <- df_sim_dofet |>
       causabas %in% saude | causabas2 %in% saude ~ "fetal_evitaveis_saude",
       causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "fetal_evitaveis_mal_definidas",
       TRUE ~ "fetal_evitaveis_outros"
+    ),
+    fetal_evitaveis_saude = 0,
+    fetal_evitaveis_mal_definidas = 0,
+    faixa_de_peso = case_when(
+      # is.na(peso) ~ "Sem informação",
+      # peso < 1000 ~ "< 1500 g",
+      # peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+      # peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+      # peso >= 2500 ~ ">= 2500 g"
+      is.na(peso) ~ "Sem informação",
+      peso >= 1000 & peso < 1500 ~ ">= 1000 g",
+      peso >= 1500 ~ ">= 1500 g",
+      TRUE ~ "<1000"
     )
   ) |>
   filter(!is.na(grupo_cid)) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, fetal_evitaveis_saude, fetal_evitaveis_mal_definidas, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
@@ -385,6 +398,62 @@ df_fetais_evitaveis[is.na(df_fetais_evitaveis)] <- 0
 
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_evitaveis)
+
+
+## Para a tabela de evitáveis para óbitos fetais
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10.csv")
+
+df_evitaveis_fetal_tabela <- df_sim_dofet |>
+  mutate(
+    causabas2 = substr(causabas, 1, 3),
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "Reduzível pelas ações de imunização",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "Reduzíveis por adequada atenção à mulher na gestação",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "Reduzíveis por adequada atenção à mulher no parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "Reduzíveis por adequada atenção ao recém-nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "Reduzíveis por ações de diagnóstico e tratamento adequado",
+      causabas %in% saude | causabas2 %in% saude ~ "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "Causas mal definidas",
+      TRUE ~ "Demais causas (não claramente evitáveis)"
+    ),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "Sem informação",
+      peso < 1500 ~ "< 1500 g",
+      #peso >= 1500 & peso < 2500 ~ "1500 a 1999 g",
+      peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+      peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+      peso >= 2500 ~ ">= 2500 g"
+    )
+  ) |>
+  mutate(causabas = substr(causabas, 1, 3)) |>
+  select(codmunres, ano, causabas, faixa_de_peso, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  left_join(df_cid10 |> select(causabas, causabas_categoria)) |>
+  select(!causabas) |>
+  pivot_wider(
+    names_from = causabas_categoria,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
+  pivot_longer(
+    cols = !c(codmunres, ano, faixa_de_peso, grupo_cid),
+    names_to = "causabas_categoria",
+    values_to = "obitos"
+  ) |>
+  left_join(df_cid10 |> select(!causabas)) |>
+  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_categoria, grupo_cid, faixa_de_peso, obitos) |>
+  arrange(codmunres)
+
+df_evitaveis_fetal_tabela$faixa_de_peso <- factor(df_evitaveis_fetal_tabela$faixa_de_peso,
+                                              levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação"))
+
+write.csv(df_evitaveis_fetal_tabela, gzfile("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz"), row.names = FALSE)
+
 
 # causas evitáveis para óbitos neonatais -------------------------------------------------------
 
@@ -425,6 +494,64 @@ df_neonatais_evitaveis[is.na(df_neonatais_evitaveis)] <- 0
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_evitaveis)
 
+## Para a tabela de evitáveis para óbitos neonatais
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10.csv")
+
+df_evitaveis_neonatal_tabela <- df_sim_doinf |>
+  mutate(
+    causabas2 = substr(causabas, 1, 3),
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "Reduzível pelas ações de imunização",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "Reduzíveis por adequada atenção à mulher na gestação",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "Reduzíveis por adequada atenção à mulher no parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "Reduzíveis por adequada atenção ao recém-nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "Reduzíveis por ações de diagnóstico e tratamento adequado",
+      causabas %in% saude | causabas2 %in% saude ~ "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "Causas mal definidas",
+      TRUE ~ "Demais causas (não claramente evitáveis)"
+    ),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "Sem informação",
+      peso < 1500 ~ "< 1500 g",
+      #peso >= 1500 & peso < 2500 ~ "1500 a 1999 g",
+      peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+      peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+      peso >= 2500 ~ ">= 2500 g"
+    ),
+    faixa_etaria = case_when(
+      idade < 207 ~ "0 a 6 dias",
+      idade >= 207 & idade < 228 ~ "7 a 27 dias",
+      idade >= 228 ~ "28 a 365 dias"
+    )
+  ) |>
+  mutate(causabas = substr(causabas, 1, 3)) |>
+  select(codmunres, ano, causabas, faixa_de_peso, grupo_cid, faixa_etaria) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  left_join(df_cid10 |> select(causabas, causabas_categoria)) |>
+  select(!causabas) |>
+  pivot_wider(
+    names_from = causabas_categoria,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
+  pivot_longer(
+    cols = !c(codmunres, ano, faixa_de_peso, grupo_cid, faixa_etaria),
+    names_to = "causabas_categoria",
+    values_to = "obitos"
+  ) |>
+  left_join(df_cid10 |> select(!causabas)) |>
+  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_categoria, grupo_cid, faixa_de_peso, faixa_etaria, obitos) |>
+  arrange(codmunres)
+
+df_evitaveis_neonatal_tabela$faixa_de_peso <- factor(df_evitaveis_neonatal_tabela$faixa_de_peso,
+                                                  levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação"))
+
+write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2012_2022.csv.gz"), row.names = FALSE)
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv", row.names = FALSE)
