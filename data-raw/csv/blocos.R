@@ -159,6 +159,9 @@ bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.
 bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2012-2022.csv") |>
   janitor::clean_names()
 
+bloco8_fetal_grupos_aux <- read.csv(gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
+
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2022.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
@@ -311,6 +314,28 @@ bloco8_neonat_evitaveis <- bloco8_neonat_evitaveis_aux |>
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(bloco8_neonat_evitaveis_aux) == "ano") + 1):(which(names(bloco8_neonat_evitaveis_aux) == "municipio") - 1)
   )
+
+bloco8_fetal_grupos_aux <- dplyr::left_join(bloco8_fetal_grupos_aux, aux_municipios, by = "codmunres")
+bloco8_fetal_grupos <- bloco8_fetal_grupos_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_fetal_grupos_aux) == "ano") + 1):(which(names(bloco8_fetal_grupos_aux) == "municipio") - 1)
+  )
+
+anos <- 2012:2022
+
+for(i in anos){
+  assign(paste0("bloco8_fetal_grupos", i), bloco8_fetal_grupos |> filter(ano == i))
+}
+
+# bloco8_fetal_grupos_2012_2017 <- bloco8_fetal_grupos |> filter (
+#   ano <= 2017
+# )
+#
+# bloco8_fetal_grupos_2018_2022 <- bloco8_fetal_grupos |> filter (
+#   ano > 2017
+# )
+#
 
 
 base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
