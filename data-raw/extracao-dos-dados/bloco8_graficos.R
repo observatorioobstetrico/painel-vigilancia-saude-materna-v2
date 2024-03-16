@@ -813,72 +813,46 @@ grupos_ma_formacao <- c(paste0("Q", sprintf("%02d", 0:99)))
 grupos_mal_definida <- c(paste0("R", sprintf("%02d", 0:99)))
 
 
+grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", "P221", "P228", "P229",
+                                "P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
+                                "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P964", "P969")
+
+
 ## Para a tabela de grupos de causa em óbitos fetais
 
-# df_cid10_sub <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_subcategorias_cid10.csv")
-# df_cid10_completa <- rbind(df_cid10, df_cid10_sub)
-#
-# codigos_grupos_causas <- c(grupos_prematuridade, grupos_infeccoes,
-#                            grupos_asfixia, grupos_respiratorias,
-#                            grupos_gravidez, grupos_cardiorrespiratoria,
-#                            grupos_afeccoes_perinatal, grupos_ma_formacao,
-#                            grupos_mal_definida)
-#
-#
-#
-# df_fetais_grupos_tabela1 <- df_sim_dofet |>
-#   filter(grepl(paste(codigos_grupos_causas, collapse = "|"), causabas)) |>
-#   select(codmunres, ano, causabas) |>
-#   mutate(obitos = 1) |>
-#   group_by(across(!obitos)) |>
-#   summarise(obitos = sum(obitos)) |>
-#   ungroup() |>
-#   left_join(df_cid10_completa |> select(causabas, causabas_subcategoria)) |>
-#   select(!causabas) |>
-#   pivot_wider(
-#     names_from = causabas_subcategoria,
-#     values_from = obitos,
-#     values_fill = 0
-#   ) |>
-#   right_join(df_aux_municipios) |>
-#   mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
-#   pivot_longer(
-#     cols = !c(codmunres, ano),
-#     names_to = "causabas_subcategoria",
-#     values_to = "obitos"
-#   ) |>
-#   left_join(df_cid10_completa |> select(!causabas)) |>
-#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
-#   arrange(codmunres)
-#
-# df_fetais_grupos_tabela2 <- df_sim_dofet |>
-#   filter(grepl(paste(codigos_grupos_causas, collapse = "|"), causabas_o)) |>
-#   select(codmunres, ano, causabas = causabas_o) |>
-#   mutate(obitos = 1) |>
-#   group_by(across(!obitos)) |>
-#   summarise(obitos = sum(obitos)) |>
-#   ungroup() |>
-#   left_join(df_cid10_completa |> select(causabas, causabas_subcategoria)) |>
-#   select(!causabas) |>
-#   pivot_wider(
-#     names_from = causabas_subcategoria,
-#     values_from = obitos,
-#     values_fill = 0
-#   ) |>
-#   right_join(df_aux_municipios) |>
-#   mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
-#   pivot_longer(
-#     cols = !c(codmunres, ano),
-#     names_to = "causabas_subcategoria",
-#     values_to = "obitos"
-#   ) |>
-#   left_join(df_cid10_completa |> select(!causabas)) |>
-#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
-#   arrange(codmunres)
-#
-# df_fetais_grupos_tabela <- rbind(df_fetais_grupos_tabela1, df_fetais_grupos_tabela2)
-#
-# write.csv(df_fetais_grupos_tabela, gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz"), row.names = FALSE)
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
+
+df_grupos_fetais_tabela <- df_sim_dofet |>
+  filter(codmunres %in% codigos_municipios) |>
+  left_join(df_cid10) |>
+  mutate(
+    causabas_categoria = causabas,
+    causabas = substr(causabas, 1, 3),
+    grupo_cid10 = case_when(
+      causabas %in% grupos_prematuridade | causabas_categoria %in% grupos_prematuridade ~ "Prematuridade",
+      causabas %in% grupos_infeccoes | causabas_categoria %in% grupos_infeccoes ~ "Infecções",
+      causabas %in% grupos_asfixia | causabas_categoria %in% grupos_asfixia ~ "Asfixia/Hipóxia",
+      causabas %in% grupos_respiratorias | causabas_categoria %in% grupos_respiratorias ~ "Afecções respiratórias do recém-nascido",
+      causabas %in% grupos_gravidez | causabas_categoria %in% grupos_gravidez ~ "Fatores maternos relacionados à gravidez",
+      causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
+      causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
+      causabas %in% grupos_ma_formacao ~ "Má formação congênita",
+      causabas %in% grupos_mal_definida ~ "Causas mal definidas",
+      TRUE ~ "Demais causas"
+    ),
+    obitos = 1
+  ) |>
+  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  arrange(codmunres, ano)
+
+get_dupes(df_grupos_fetais_tabela)
+
+write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz"), row.names = FALSE)
+
+# dados organizados para os gráficos de grupos de causa fetal
 
 df_fetais_grupos <- df_sim_dofet |>
   mutate(
@@ -917,6 +891,62 @@ df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_grupos)
 
 
 # Grupos de causas para óbitos neonatais -------------------------------------------------------
+
+
+#tabela grupos de causa para óbitos neonatais
+
+df_grupos_neonatais_tabela <- df_sim_doinf |>
+  filter(codmunres %in% codigos_municipios) |>
+  left_join(df_cid10) |>
+  mutate(
+    idade = as.numeric(idade),
+    peso = as.numeric(peso),
+    faixa_de_peso = factor(
+      case_when(
+        is.na(peso) ~ "Sem informação",
+        peso < 1500 ~ "< 1500 g",
+        peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+        peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+        peso >= 2500 ~ "\U2265 2500 g"
+      ),
+      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
+    ),
+    faixa_de_idade = factor(
+      case_when(
+        idade <= 206 ~ "0 a 6 dias",
+        idade > 206 & idade <= 227 ~ "7 a 27 dias"
+      ),
+      levels = c("0 a 6 dias", "7 a 27 dias")
+    ),
+    causabas_categoria = causabas,
+    causabas = substr(causabas, 1, 3),
+    grupo_cid10 = case_when(
+      causabas %in% grupos_prematuridade | causabas_categoria %in% grupos_prematuridade ~ "Prematuridade",
+      causabas %in% grupos_infeccoes | causabas_categoria %in% grupos_infeccoes ~ "Infecções",
+      causabas %in% grupos_asfixia | causabas_categoria %in% grupos_asfixia ~ "Asfixia/Hipóxia",
+      causabas %in% grupos_respiratorias | causabas_categoria %in% grupos_respiratorias ~ "Afecções respiratórias do recém-nascido",
+      causabas %in% grupos_gravidez | causabas_categoria %in% grupos_gravidez ~ "Fatores maternos relacionados à gravidez",
+      causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
+      causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
+      causabas %in% grupos_ma_formacao ~ "Má formação congênita",
+      causabas %in% grupos_mal_definida ~ "Causas mal definidas",
+      TRUE ~ "Demais causas"
+    ),
+    obitos = 1
+  ) |>
+  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  arrange(codmunres, ano)
+
+get_dupes(df_grupos_neonatais_tabela)
+
+write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+
+
+#gráfico grupos de causa para óbitos neonatais
+
 df_neonatais_grupos <- df_sim_doinf |>
   mutate(
     grupo_cid = case_when(

@@ -168,6 +168,16 @@ bloco8_evitaveis_neonatal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_neonata
     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
   )
 
+bloco8_fetal_grupos_aux <- read.csv(gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
+
+bloco8_grupos_neonatal_aux <- read.csv(gzfile("data-raw/csv/grupos_neonatal_2012_2022.csv.gz")) |>
+  janitor::clean_names() |>
+  dplyr::mutate(
+    faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
+    faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
+  )
+
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2022.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
@@ -326,6 +336,21 @@ bloco8_evitaveis_neonatal <- bloco8_evitaveis_neonatal_aux |>
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(bloco8_evitaveis_neonatal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_neonatal_aux) == "municipio") - 1)
   )
+
+bloco8_fetal_grupos_aux <- dplyr::left_join(bloco8_fetal_grupos_aux, aux_municipios, by = "codmunres")
+bloco8_fetal_grupos <- bloco8_fetal_grupos_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_fetal_grupos_aux) == "ano") + 1):(which(names(bloco8_fetal_grupos_aux) == "municipio") - 1)
+  )
+
+bloco8_grupos_neonatal_aux <- dplyr::left_join(bloco8_grupos_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_grupos_neonatal <- bloco8_grupos_neonatal_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_grupos_neonatal_aux) == "ano") + 1):(which(names(bloco8_grupos_neonatal_aux) == "municipio") - 1)
+  )
+
 
 
 base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
@@ -1245,6 +1270,8 @@ usethis::use_data(bloco8_principais_fetal, overwrite = TRUE)
 usethis::use_data(bloco8_principais_neonatal, overwrite = TRUE)
 usethis::use_data(bloco8_evitaveis_fetal, overwrite = TRUE)
 usethis::use_data(bloco8_evitaveis_neonatal, overwrite = TRUE)
+usethis::use_data(bloco8_fetal_grupos, overwrite = TRUE)
+usethis::use_data(bloco8_grupos_neonatal, overwrite = TRUE)
 usethis::use_data(bloco8_graficos, overwrite = TRUE)
 usethis::use_data(bloco8_grafico_evitaveis_neonatal, overwrite = TRUE)
 usethis::use_data(df_cid10, overwrite = TRUE)
