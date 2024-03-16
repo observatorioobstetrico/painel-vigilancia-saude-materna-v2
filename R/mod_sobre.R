@@ -32,7 +32,7 @@ mod_sobre_ui <- function(id){
           mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde
           recebida ao longo da sua vida reprodutiva. Os indicadores estão disponíveis para municípios, estados, regiões de saúde e país e foram
           calculados a partir de vários sistemas de informação brasileiros (SINASC, SIM, SINAN, SIH, SIAB,
-          ANS e estimativas populacionais). O painel contém indicadores para o período 2012 a 2020 e
+          ANS e estimativas populacionais). O painel contém indicadores para o período 2012 a 2022 e
           será atualizado anualmente.
 
           <span style='display: block; margin-bottom: 12px;'> </span>

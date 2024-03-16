@@ -129,31 +129,31 @@ bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
-bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv") |>
+bloco8_graficos_aux <- read.csv("data-raw/csv/2ndicadores_bloco8_graficos_2012-2022.csv") |>
   janitor::clean_names()
 
-bloco8_materno_garbage_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>
+bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv") |>
   janitor::clean_names()
 
-bloco8_fetal_garbage_aux <- read.csv("data-raw/csv/fetais_garbage_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
-
-bloco8_neonat_garbage_aux <- read.csv("data-raw/csv/neonat_garbage_2012-2022.csv") |>
+bloco8_garbage_materno_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>
   janitor::clean_names()
 
-bloco8_fetal_causas_aux <- read.csv("data-raw/csv/fetais_causas_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
-
-bloco8_neonat_causas_aux <- read.csv("data-raw/csv/neonat_causas_2012-2022.csv") |>
+bloco8_garbage_fetal_aux <- read.csv(gzfile("data-raw/csv/garbage_fetal_2012_2022.csv.gz")) |>
   janitor::clean_names()
 
-bloco8_fetal_evitaveis_aux <- read.csv("data-raw/csv/fetais_evitaveis_2012-2022.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!c(uf, municipio, regiao))
+bloco8_garbage_neonatal_aux <- read.csv(gzfile("data-raw/csv/garbage_neonatal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
 
-bloco8_neonat_evitaveis_aux <- read.csv("data-raw/csv/neonat_evitaveis_2012-2022.csv") |>
+bloco8_principais_fetal_aux <- read.csv(gzfile("data-raw/csv/principais_fetal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
+
+bloco8_principais_neonatal_aux <- read.csv(gzfile("data-raw/csv/principais_neonatal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
+
+bloco8_evitaveis_fetal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz")) |>
+  janitor::clean_names()
+
+bloco8_evitaveis_neonatal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_neonatal_2012_2022.csv.gz")) |>
   janitor::clean_names()
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2022.csv", sep = ",")[, -1] |>
@@ -221,6 +221,21 @@ bloco5 <- bloco5 |>
     (which(names(bloco5) == "ano") + 1):(which(names(bloco5) == "municipio") - 1)
   )
 
+asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
+asfixia <- asfixia |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
+  )
+
+malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
+malformacao <- malformacao |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
+  )
+
 bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres")
 bloco6 <- bloco6 |>
   dplyr::select(
@@ -235,22 +250,6 @@ bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
 #     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
 #   )
 
-asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
-asfixia <- asfixia |>
-  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
-  )
-
-malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
-
-malformacao <- malformacao |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
-  )
-
 bloco8_graficos <- dplyr::left_join(bloco8_graficos_aux, aux_municipios, by = "codmunres")
 bloco8_graficos <- bloco8_graficos |>
   dplyr::select(
@@ -258,55 +257,62 @@ bloco8_graficos <- bloco8_graficos |>
     (which(names(bloco8_graficos) == "ano") + 1):(which(names(bloco8_graficos) == "municipio") - 1)
   )
 
-bloco8_materno_garbage_aux <- dplyr::left_join(bloco8_materno_garbage_aux, aux_municipios, by = "codmunres")
-bloco8_materno_garbage <- bloco8_materno_garbage_aux |>
+bloco8_grafico_evitaveis_neonatal <- dplyr::left_join(bloco8_grafico_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_materno_garbage_aux) == "ano") + 1):(which(names(bloco8_materno_garbage_aux) == "municipio") - 1)
+    (which(names(bloco8_grafico_evitaveis_neonatal) == "ano") + 1):(which(names(bloco8_grafico_evitaveis_neonatal) == "municipio") - 1)
   )
 
-bloco8_fetal_garbage_aux <- dplyr::left_join(bloco8_fetal_garbage_aux, aux_municipios, by = "codmunres")
-bloco8_fetal_garbage <- bloco8_fetal_garbage_aux |>
+bloco8_garbage_materno_aux <- dplyr::left_join(bloco8_garbage_materno_aux, aux_municipios, by = "codmunres")
+bloco8_garbage_materno <- bloco8_garbage_materno_aux |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_fetal_garbage_aux) == "ano") + 1):(which(names(bloco8_fetal_garbage_aux) == "municipio") - 1)
+    (which(names(bloco8_garbage_materno_aux) == "ano") + 1):(which(names(bloco8_garbage_materno_aux) == "municipio") - 1)
   )
 
-
-bloco8_neonat_garbage_aux <- dplyr::left_join(bloco8_neonat_garbage_aux, aux_municipios, by = "codmunres")
-bloco8_neonat_garbage <- bloco8_neonat_garbage_aux |>
+bloco8_garbage_fetal_aux <- dplyr::left_join(bloco8_garbage_fetal_aux, aux_municipios, by = "codmunres")
+bloco8_garbage_fetal <- bloco8_garbage_fetal_aux |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_neonat_garbage_aux) == "ano") + 1):(which(names(bloco8_neonat_garbage_aux) == "municipio") - 1)
-  )
-
-bloco8_fetal_causas_aux <- dplyr::left_join(bloco8_fetal_causas_aux, aux_municipios, by = "codmunres")
-bloco8_fetal_causas <- bloco8_fetal_causas_aux |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_fetal_causas_aux) == "ano") + 1):(which(names(bloco8_fetal_causas_aux) == "municipio") - 1)
-  )
-
-bloco8_neonat_causas_aux <- dplyr::left_join(bloco8_neonat_causas_aux, aux_municipios, by = "codmunres")
-bloco8_neonat_causas <- bloco8_neonat_causas_aux |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_neonat_causas_aux) == "ano") + 1):(which(names(bloco8_neonat_causas_aux) == "municipio") - 1)
-  )
-
-bloco8_fetal_evitaveis_aux <- dplyr::left_join(bloco8_fetal_evitaveis_aux, aux_municipios, by = "codmunres")
-bloco8_fetal_evitaveis <- bloco8_fetal_evitaveis_aux |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_fetal_evitaveis_aux) == "ano") + 1):(which(names(bloco8_fetal_evitaveis_aux) == "municipio") - 1)
+    (which(names(bloco8_garbage_fetal_aux) == "ano") + 1):(which(names(bloco8_garbage_fetal_aux) == "municipio") - 1)
   )
 
 
-bloco8_neonat_evitaveis_aux <- dplyr::left_join(bloco8_neonat_evitaveis_aux, aux_municipios, by = "codmunres")
-bloco8_neonat_evitaveis <- bloco8_neonat_evitaveis_aux |>
+bloco8_garbage_neonatal_aux <- dplyr::left_join(bloco8_garbage_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_garbage_neonatal <- bloco8_garbage_neonatal_aux |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_neonat_evitaveis_aux) == "ano") + 1):(which(names(bloco8_neonat_evitaveis_aux) == "municipio") - 1)
+    (which(names(bloco8_garbage_neonatal_aux) == "ano") + 1):(which(names(bloco8_garbage_neonatal_aux) == "municipio") - 1)
+  )
+
+bloco8_principais_fetal_aux <- dplyr::left_join(bloco8_principais_fetal_aux, aux_municipios, by = "codmunres")
+bloco8_principais_fetal <- bloco8_principais_fetal_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_principais_fetal_aux) == "ano") + 1):(which(names(bloco8_principais_fetal_aux) == "municipio") - 1)
+  )
+
+bloco8_principais_neonatal_aux <- dplyr::left_join(bloco8_principais_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_principais_neonatal <- bloco8_principais_neonatal_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_principais_neonatal_aux) == "ano") + 1):(which(names(bloco8_principais_neonatal_aux) == "municipio") - 1)
+  )
+
+bloco8_evitaveis_fetal_aux <- dplyr::left_join(bloco8_evitaveis_fetal_aux, aux_municipios, by = "codmunres")
+bloco8_evitaveis_fetal <- bloco8_evitaveis_fetal_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_evitaveis_fetal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_fetal_aux) == "municipio") - 1)
+  )
+
+
+bloco8_evitaveis_neonatal_aux <- dplyr::left_join(bloco8_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_evitaveis_neonatal <- bloco8_evitaveis_neonatal_aux |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_evitaveis_neonatal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_neonatal_aux) == "municipio") - 1)
   )
 
 
@@ -1206,6 +1212,8 @@ tabela_indicadores <- data.frame(
   )
 )
 
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
+
 
 usethis::use_data(bloco1, overwrite = TRUE)
 usethis::use_data(bloco2, overwrite = TRUE)
@@ -1214,18 +1222,20 @@ usethis::use_data(bloco4, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
-usethis::use_data(bloco6, overwrite = TRUE)
-usethis::use_data(bloco7, overwrite = TRUE)
 usethis::use_data(asfixia, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
-usethis::use_data(bloco8_materno_garbage, overwrite = TRUE)
-usethis::use_data(bloco8_fetal_garbage, overwrite = TRUE)
-usethis::use_data(bloco8_neonat_garbage, overwrite = TRUE)
-usethis::use_data(bloco8_fetal_causas, overwrite = TRUE)
-usethis::use_data(bloco8_neonat_causas, overwrite = TRUE)
-usethis::use_data(bloco8_fetal_evitaveis, overwrite = TRUE)
-usethis::use_data(bloco8_neonat_evitaveis, overwrite = TRUE)
+usethis::use_data(bloco6, overwrite = TRUE)
+usethis::use_data(bloco7, overwrite = TRUE)
+usethis::use_data(bloco8_garbage_materno, overwrite = TRUE)
+usethis::use_data(bloco8_garbage_fetal, overwrite = TRUE)
+usethis::use_data(bloco8_garbage_neonatal, overwrite = TRUE)
+usethis::use_data(bloco8_principais_fetal, overwrite = TRUE)
+usethis::use_data(bloco8_principais_neonatal, overwrite = TRUE)
+usethis::use_data(bloco8_evitaveis_fetal, overwrite = TRUE)
+usethis::use_data(bloco8_evitaveis_neonatal, overwrite = TRUE)
 usethis::use_data(bloco8_graficos, overwrite = TRUE)
+usethis::use_data(bloco8_grafico_evitaveis_neonatal, overwrite = TRUE)
+usethis::use_data(df_cid10, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
 usethis::use_data(municipios_choices, overwrite = TRUE)
