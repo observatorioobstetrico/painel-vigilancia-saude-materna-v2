@@ -190,7 +190,7 @@ mod_bloco_8_ui <- function(id){
                               dplyr::pull(capitulo_cid10)
                           }
                         ) |> unlist()
-                        x[sort(names(x))]
+                        x[DescTools::SortMixed(names(x), numeric.type = "roman", roman.case = "upper")]
                       },
                       selected = names(bloco8_graficos)[grepl("garbage_neonatal", names(bloco8_graficos))],
                       multiple = TRUE,
@@ -312,7 +312,7 @@ mod_bloco_8_ui <- function(id){
                               dplyr::pull(capitulo_cid10)
                           }
                         ) |> unlist()
-                        x[sort(names(x))]
+                        x[DescTools::SortMixed(names(x), numeric.type = "roman", roman.case = "upper")]
                       },
                       selected = names(bloco8_graficos)[grepl("garbage_neonatal", names(bloco8_graficos))],
                       multiple = TRUE,
