@@ -282,9 +282,9 @@ rm(df_neonatais_garbage)
 #         peso < 1500 ~ "< 1500 g",
 #         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
 #         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-#         peso >= 2500 ~ ">= 2500 g"
+#         peso >= 2500 ~ "\U2265 2500 g"
 #       ),
-#       #levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação")
+#       #levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
 #     #),
 #     faixa_de_idade = #factor(
 #       case_when(
@@ -342,9 +342,9 @@ df_garbage_neonatais_tabela <- df_sim_doinf |>
         peso < 1500 ~ "< 1500 g",
         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-        peso >= 2500 ~ ">= 2500 g"
+        peso >= 2500 ~ "\U2265 2500 g"
       ),
-      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação")
+      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
     ),
     faixa_de_idade = factor(
       case_when(
@@ -538,9 +538,9 @@ df_principais_neonatais_tabela <- df_sim_doinf |>
         peso < 1500 ~ "< 1500 g",
         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-        peso >= 2500 ~ ">= 2500 g"
+        peso >= 2500 ~ "\U2265 2500 g"
       ),
-      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação")
+      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
     ),
     faixa_de_idade = factor(
       case_when(
@@ -754,9 +754,9 @@ df_evitaveis_neonatal_tabela <- df_sim_doinf |>
         peso < 1500 ~ "< 1500 g",
         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-        peso >= 2500 ~ ">= 2500 g"
+        peso >= 2500 ~ "\U2265 2500 g"
       ),
-      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", ">= 2500 g", "Sem informação")
+      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
     ),
     faixa_de_idade = factor(
       case_when(
@@ -953,7 +953,7 @@ df_neonatais_grupos[is.na(df_neonatais_grupos)] <- 0
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_grupos)
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco8_graficos, "data-raw/csv/2ndicadores_bloco8_graficos_2012-2022.csv", row.names = FALSE)
+write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv", row.names = FALSE)
 write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv", row.names = FALSE)
 
 
