@@ -729,7 +729,7 @@ mod_bloco_8_ui <- function(id){
                 hr(),
                 fluidRow(
                   column(
-                    width = 6,
+                    width = 12,
                     shinyWidgets::pickerInput(
                       inputId = ns("cids_evitaveis_fetal_comp"),
                       label = "Grupos de causas evitáveis",
@@ -746,20 +746,6 @@ mod_bloco_8_ui <- function(id){
                       ),
                       selected = names(bloco8_graficos)[grepl("evitaveis_fetal", names(bloco8_graficos))][-2],
                       multiple = TRUE,
-                      width = "100%"
-                    )
-                  ),
-                  column(
-                    width = 6,
-                    selectizeInput(
-                      inputId = ns("peso_evitaveis_neonatal_comp"),
-                      label = "Faixa de peso",
-                      options = list(placeholder = "Selecione a faixa de peso"),
-                      choices = c(
-                        "Todas",
-                        "> 1000 g",
-                        "> 1500 g"
-                      ),
                       width = "100%"
                     )
                   )
@@ -779,7 +765,7 @@ mod_bloco_8_ui <- function(id){
                 hr(),
                 fluidRow(
                   column(
-                    width = 12,
+                    width = 6,
                     shinyWidgets::pickerInput(
                       inputId = ns("cids_evitaveis_neonatal_comp"),
                       label = "Grupos de causas evitáveis",
@@ -796,6 +782,20 @@ mod_bloco_8_ui <- function(id){
                       ),
                       selected = names(bloco8_grafico_evitaveis_neonatal)[grepl("evitaveis_neonatal", names(bloco8_grafico_evitaveis_neonatal))][-1],
                       multiple = TRUE,
+                      width = "100%"
+                    )
+                  ),
+                  column(
+                    width = 6,
+                    selectizeInput(
+                      inputId = ns("peso_evitaveis_neonatal_comp"),
+                      label = "Faixa de peso",
+                      options = list(placeholder = "Selecione a faixa de peso"),
+                      choices = c(
+                        "Todas",
+                        "> 1000 g",
+                        "> 1500 g"
+                      ),
                       width = "100%"
                     )
                   )
