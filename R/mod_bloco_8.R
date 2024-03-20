@@ -2584,7 +2584,8 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(capitulo_cid10, grupo_cid10, causabas_subcategoria, ano) |>
+        dplyr::group_by(#capitulo_cid10,
+          grupo_cid10, causabas_subcategoria, ano) |>
         dplyr::summarize(
           frequencia = sum(obitos)
         ) |>
@@ -2631,20 +2632,21 @@ mod_bloco_8_server <- function(id, filtros){
 
       data8_grupos_fetal() |>
         reactable::reactable(
-          groupBy = c("capitulo_cid10", "grupo_cid10", "causabas_subcategoria"),
+          groupBy = c(#"capitulo_cid10",
+            "grupo_cid10", "causabas_subcategoria"),
           defaultColDef = reactable::colDef(
             footerStyle = list(fontWeight = "bold"),
             align = "center"
           ),
           columns = list(
-            capitulo_cid10 = reactable::colDef(
-              name = "Capítulo CID-10",
-              minWidth = 60,
-              aggregate = htmlwidgets::JS("function() { return ''}"),
-              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
-              align = "left",
-              footer = "Total"
-            ),
+            # capitulo_cid10 = reactable::colDef(
+            #   name = "Capítulo CID-10",
+            #   minWidth = 60,
+            #   aggregate = htmlwidgets::JS("function() { return ''}"),
+            #   format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+            #   align = "left",
+            #   footer = "Total"
+            # ),
             grupo_cid10 = reactable::colDef(
               name = "Grupo CID-10",
               minWidth = 60,
@@ -2717,7 +2719,8 @@ mod_bloco_8_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::group_by(capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_idade, faixa_de_peso, ano) |>
+        dplyr::group_by(#capitulo_cid10,
+          grupo_cid10, causabas_subcategoria, faixa_de_idade, faixa_de_peso, ano) |>
         dplyr::summarize(
           frequencia = sum(obitos)
         ) |>
@@ -2764,20 +2767,21 @@ mod_bloco_8_server <- function(id, filtros){
 
       data8_grupos_neonatal() |>
         reactable::reactable(
-          groupBy = c("capitulo_cid10", "grupo_cid10", "causabas_subcategoria", "faixa_de_idade", "faixa_de_peso"),
+          groupBy = c(#"capitulo_cid10",
+            "grupo_cid10", "causabas_subcategoria", "faixa_de_idade", "faixa_de_peso"),
           defaultColDef = reactable::colDef(
             footerStyle = list(fontWeight = "bold"),
             align = "center"
           ),
           columns = list(
-            capitulo_cid10 = reactable::colDef(
-              name = "Capítulo CID-10",
-              minWidth = 60,
-              aggregate = htmlwidgets::JS("function() { return ''}"),
-              format = list(aggregated = reactable::colFormat(prefix = "Todos")),
-              align = "left",
-              footer = "Total"
-            ),
+            # capitulo_cid10 = reactable::colDef(
+            #   name = "Capítulo CID-10",
+            #   minWidth = 60,
+            #   aggregate = htmlwidgets::JS("function() { return ''}"),
+            #   format = list(aggregated = reactable::colFormat(prefix = "Todos")),
+            #   align = "left",
+            #   footer = "Total"
+            # ),
             grupo_cid10 = reactable::colDef(
               name = "Grupo CID-10",
               minWidth = 60,

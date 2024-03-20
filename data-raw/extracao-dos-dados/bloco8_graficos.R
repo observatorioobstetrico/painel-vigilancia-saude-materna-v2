@@ -838,7 +838,7 @@ df_grupos_fetais_tabela <- df_sim_dofet |>
       causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
       causabas %in% grupos_ma_formacao ~ "Má formação congênita",
       causabas %in% grupos_mal_definida ~ "Causas mal definidas",
-      TRUE ~ "Demais causas"
+      TRUE ~ "Outras causas"
     ),
     obitos = 1
   ) |>
@@ -930,7 +930,7 @@ df_grupos_neonatais_tabela <- df_sim_doinf |>
       causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
       causabas %in% grupos_ma_formacao ~ "Má formação congênita",
       causabas %in% grupos_mal_definida ~ "Causas mal definidas",
-      TRUE ~ "Demais causas"
+      TRUE ~ "Outras causas"
     ),
     obitos = 1
   ) |>
