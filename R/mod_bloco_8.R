@@ -2652,7 +2652,8 @@ mod_bloco_8_server <- function(id, filtros){
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
-              align = "left"
+              align = "left",
+              footer = "Total"
             ),
             causabas_subcategoria = reactable::colDef(
               name = "Categoria CID-10",
@@ -2787,7 +2788,8 @@ mod_bloco_8_server <- function(id, filtros){
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
               format = list(aggregated = reactable::colFormat(prefix = "Todos")),
-              align = "left"
+              align = "left",
+              footer = "Total"
             ),
             causabas_subcategoria = reactable::colDef(
               name = "Categoria CID-10",
