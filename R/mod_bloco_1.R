@@ -248,7 +248,7 @@ mod_bloco_1_ui <- function(id){
               style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Cobertura populacional com equipes de Saúde da Família &nbsp;</b>"),
+                HTML("<b style='font-size:19px'> Cobertura populacional da atenção básica &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao5"),
@@ -958,7 +958,7 @@ mod_bloco_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data_resumo(),
         indicador = "porc_cobertura_esf",
-        titulo = "Cobertura populacional com equipes de Saúde da Família",
+        titulo = "Cobertura populacional da atenção básica",
         tem_meta = TRUE,
         valor_de_referencia = 95,
         tipo = "porcentagem",
