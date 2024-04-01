@@ -646,7 +646,7 @@ mod_bloco_2_server <- function(id, filtros){
 
     data_cobertura <- reactive({
       if (filtros()$nivel == "Municipal") {
-        sub_registro_sinasc_muni_2015_2020 |>
+        sub_registro_sinasc_muni_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             municipio == filtros()$municipio,
@@ -656,19 +656,19 @@ mod_bloco_2_server <- function(id, filtros){
             localidade = municipio
           )
       } else if (filtros()$nivel == "Estadual") {
-        sub_registro_sinasc_uf_regioes_2015_2020 |>
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             localidade == filtros()$estado
           )
       } else if (filtros()$nivel == "Regional") {
-        sub_registro_sinasc_uf_regioes_2015_2020 |>
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             localidade == filtros()$regiao
           )
       } else if (filtros()$nivel == "Nacional") {
-        sub_registro_sinasc_uf_regioes_2015_2020 |>
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             localidade == "Brasil"

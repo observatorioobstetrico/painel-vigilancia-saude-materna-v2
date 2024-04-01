@@ -81,13 +81,7 @@ mod_nivel_3_ui <- function(id){
                   shinycssloaders::withSpinner(uiOutput(ns("gauge1")), proxy.height = "250px")
                 )
               ),
-              tags$style(
-                HTML("
-                  .html-widget.gauge svg {
-                    height: 260px; /*or try sth like 320px instead of 100%, whatever you prefer*/
-                  }"
-                )
-              )
+              tags$style(HTML(".html-widget.gauge svg {height: 260px;}"))
             ),
             fluidRow(
               column(
@@ -133,6 +127,70 @@ mod_nivel_3_ui <- function(id){
                   ),
                   hr(),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_incompletude")))
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco_selecionado == 'bloco6'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
+                    div(
+                      style = "height: 10%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Percentual de óbitos maternos preenchidos com garbage codes </b>")
+                    ),
+                    hr(),
+                    fluidRow(
+                      column(
+                        width = 12,
+                        shinyWidgets::pickerInput(
+                          inputId = ns("cids_garbage_materno"),
+                          label = "Garbage codes",
+                          options = list(placeholder = "Selecione os garbage codes", `actions-box` = TRUE),
+                          choicesOpt = list(
+                            content = stringr::str_trunc(
+                              {
+                                x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
+                                names(x) <- lapply(
+                                  sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
+                                  function (cid) {
+                                    nome_cid <- df_cid10 |>
+                                      dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
+                                      dplyr::pull(causabas_subcategoria)
+                                  }
+                                ) |> unlist()
+                                sort(names(x))
+                              },
+                              width = 60
+                            )
+                          ),
+                          choices = {
+                            x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
+                            names(x) <- lapply(
+                              sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
+                              function (cid) {
+                                nome_cid <- df_cid10 |>
+                                  dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
+                                  dplyr::pull(causabas_subcategoria)
+                              }
+                            ) |> unlist()
+                            x[sort(names(x))]
+                          },
+                          selected = names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))],
+                          multiple = TRUE,
+                          width = "100%"
+                        )
+                      )
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 380))
+                  )
                 )
               )
             ),
@@ -218,9 +276,10 @@ mod_nivel_3_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 923px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                id = "tabela",
+                uiOutput(ns("css_tabela")),
                 div(
-                  style = "height: 15%",
+                  style = "height: 140px",
                   br(),
                   HTML(
                     "<b style='font-size:19px'> Distribuição do indicador por UF, macrorregião de saúde e município ao longo do período &nbsp;</b>"
@@ -247,7 +306,7 @@ mod_nivel_3_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "600px")
+                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "713px")
               )
             )
           )
@@ -431,10 +490,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           HTML("dos anos considerados apresentam problemas de qualidade em alguma das variáveis necessárias para a construção do indicador")
         )
       }
-
-
     })
-
 
     observeEvent(input$botao, {
       descricao_incompletude1 <- dplyr::case_when(
@@ -556,7 +612,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       if (infos_indicador()$bloco == "bloco6") {
         if (infos_indicador()$nome_abreviado == "rmm" & input$sistema_cobertura == "SINASC") {
           if (filtros()$nivel == "Municipal") {
-            sub_registro_sinasc_muni_2015_2020 |>
+            sub_registro_sinasc_muni_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 municipio == filtros()$municipio,
@@ -566,19 +622,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                 localidade = municipio
               )
           } else if (filtros()$nivel == "Estadual") {
-            sub_registro_sinasc_uf_regioes_2015_2020 |>
+            sub_registro_sinasc_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == filtros()$estado
               )
           } else if (filtros()$nivel == "Regional") {
-            sub_registro_sinasc_uf_regioes_2015_2020 |>
+            sub_registro_sinasc_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == filtros()$regiao
               )
           } else if (filtros()$nivel == "Nacional") {
-            sub_registro_sinasc_uf_regioes_2015_2020 |>
+            sub_registro_sinasc_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == "Brasil"
@@ -599,7 +655,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           }
         } else {
           if (filtros()$nivel == "Municipal") {
-            sub_registro_sim_muni_2015_2020 |>
+            sub_registro_sim_muni_2015_2021 |>
               dplyr::filter(
                 ano >= max(2015, filtros()$ano2[1]) & ano <= filtros()$ano2[2],
                 municipio == filtros()$municipio,
@@ -609,19 +665,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                 localidade = municipio
               )
           } else if (filtros()$nivel == "Estadual") {
-            sub_registro_sim_uf_regioes_2015_2020 |>
+            sub_registro_sim_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == filtros()$estado
               )
           } else if (filtros()$nivel == "Regional") {
-            sub_registro_sim_uf_regioes_2015_2020 |>
+            sub_registro_sim_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == filtros()$regiao
               )
           } else if (filtros()$nivel == "Nacional") {
-            sub_registro_sim_uf_regioes_2015_2020 |>
+            sub_registro_sim_uf_regioes_2015_2021 |>
               dplyr::filter(
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
                 localidade == "Brasil"
@@ -643,7 +699,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         }
       } else {
         if (filtros()$nivel == "Municipal") {
-          sub_registro_sinasc_muni_2015_2020 |>
+          sub_registro_sinasc_muni_2015_2021 |>
             dplyr::filter(
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
               municipio == filtros()$municipio,
@@ -653,19 +709,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               localidade = municipio
             )
         } else if (filtros()$nivel == "Estadual") {
-          sub_registro_sinasc_uf_regioes_2015_2020 |>
+          sub_registro_sinasc_uf_regioes_2015_2021 |>
             dplyr::filter(
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
               localidade == filtros()$estado
             )
         } else if (filtros()$nivel == "Regional") {
-          sub_registro_sinasc_uf_regioes_2015_2020 |>
+          sub_registro_sinasc_uf_regioes_2015_2021 |>
             dplyr::filter(
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
               localidade == filtros()$regiao
             )
         } else if (filtros()$nivel == "Nacional") {
-          sub_registro_sinasc_uf_regioes_2015_2020 |>
+          sub_registro_sinasc_uf_regioes_2015_2021 |>
             dplyr::filter(
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
               localidade == "Brasil"
@@ -1355,7 +1411,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = cobertura, group = localidade, colour = localidade)
         ) |>
         highcharter::hc_add_series(
-          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2020),
+          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2021),
           type = "line",
           highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
           dashStyle = "ShortDot",
@@ -1420,6 +1476,92 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
     })
 
+
+    # Criando o gráfico da porcentagem de garbage codes p/ óbitos maternos --------
+    data_filtrada_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_plot_garbage_materno <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+          obitos_maternos_totais = sum(obitos_maternos_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        )
+    })
+
+    data_plot_garbage_materno_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
+          obitos_maternos_totais = sum(obitos_maternos_totais),
+          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+          class = "Referência (média nacional)"
+        ) |>
+        dplyr::ungroup()
+    })
+
+    output$plot_garbage_materno <- highcharter::renderHighchart({
+
+      grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_materno(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+          name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data_plot_garbage_materno()$class)),
+          type = "column",
+          color = "#2c115f",
+          showInLegend = TRUE
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de óbitos preenchidos com garbage codes"), min = 0, max = 100)
+
+      if (filtros()$nivel == "Nacional") {
+        grafico_base
+      } else {
+        grafico_base |>
+          highcharter::hc_add_series(
+            data = data_plot_garbage_materno_referencia(),
+            type = "line",
+            name = "Referência (média nacional)",
+            dashStyle = "ShortDot",
+            highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
+            color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+            showInLegend = TRUE,
+            opacity = 0.8
+          )
+      }
+
+    })
 
     output$grafico_regioes <- highcharter::renderHighchart({
 
@@ -1684,7 +1826,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = 730,
+            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1230),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -1730,7 +1872,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = 730,
+            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1230),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -1741,6 +1883,16 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           )
       }
 
+
+    })
+
+    output$css_tabela <- renderUI({
+      if (infos_indicador()$bloco != "bloco6") {
+        tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 0; overflow-y: auto}"))
+      } else {
+        req(filtros()$indicador)
+        tags$style(HTML("#tabela {height: 1543px; padding-top: 0; padding-bottom: 0; overflow-y: auto}"))
+      }
 
     })
 
