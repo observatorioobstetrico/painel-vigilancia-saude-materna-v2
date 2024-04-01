@@ -144,52 +144,52 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
                     div(
                       style = "height: 10%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Percentual de óbitos maternos preenchidos com garbage codes </b>")
+                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos maternos </b>")
                     ),
                     hr(),
-                    fluidRow(
-                      column(
-                        width = 12,
-                        shinyWidgets::pickerInput(
-                          inputId = ns("cids_garbage_materno"),
-                          label = "Garbage codes",
-                          options = list(placeholder = "Selecione os garbage codes", `actions-box` = TRUE),
-                          choicesOpt = list(
-                            content = stringr::str_trunc(
-                              {
-                                x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
-                                names(x) <- lapply(
-                                  sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
-                                  function (cid) {
-                                    nome_cid <- df_cid10 |>
-                                      dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
-                                      dplyr::pull(causabas_subcategoria)
-                                  }
-                                ) |> unlist()
-                                sort(names(x))
-                              },
-                              width = 60
-                            )
-                          ),
-                          choices = {
-                            x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
-                            names(x) <- lapply(
-                              sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
-                              function (cid) {
-                                nome_cid <- df_cid10 |>
-                                  dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
-                                  dplyr::pull(causabas_subcategoria)
-                              }
-                            ) |> unlist()
-                            x[sort(names(x))]
-                          },
-                          selected = names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))],
-                          multiple = TRUE,
-                          width = "100%"
-                        )
-                      )
-                    ),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 380))
+                    # fluidRow(
+                    #   column(
+                    #     width = 12,
+                    #     shinyWidgets::pickerInput(
+                    #       inputId = ns("cids_garbage_materno"),
+                    #       label = "Garbage codes",
+                    #       options = list(placeholder = "Selecione os garbage codes", `actions-box` = TRUE),
+                    #       choicesOpt = list(
+                    #         content = stringr::str_trunc(
+                    #           {
+                    #             x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
+                    #             names(x) <- lapply(
+                    #               sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
+                    #               function (cid) {
+                    #                 nome_cid <- df_cid10 |>
+                    #                   dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
+                    #                   dplyr::pull(causabas_subcategoria)
+                    #               }
+                    #             ) |> unlist()
+                    #             sort(names(x))
+                    #           },
+                    #           width = 60
+                    #         )
+                    #       ),
+                    #       choices = {
+                    #         x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
+                    #         names(x) <- lapply(
+                    #           sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
+                    #           function (cid) {
+                    #             nome_cid <- df_cid10 |>
+                    #               dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
+                    #               dplyr::pull(causabas_subcategoria)
+                    #           }
+                    #         ) |> unlist()
+                    #         x[sort(names(x))]
+                    #       },
+                    #       selected = names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))],
+                    #       multiple = TRUE,
+                    #       width = "100%"
+                    #     )
+                    #   )
+                    # ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 450))
                   )
                 )
               )
@@ -1477,7 +1477,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
 
-    # Criando o gráfico da porcentagem de garbage codes p/ óbitos maternos --------
+    # Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos --------
     data_filtrada_aux <- reactive({
       bloco8_graficos |>
         dplyr::filter(
@@ -1500,10 +1500,21 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     data_plot_garbage_materno <- reactive({
       data_filtrada_aux() |>
-        dplyr::summarise(
-          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
-          obitos_maternos_totais = sum(obitos_maternos_totais),
-          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
+        dplyr::select(!obitos_maternos_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_materno"),
+          names_to = "cid",
+          values_to = "prop_garbage_code"
+        ) |>
+        dplyr::filter(prop_garbage_code != 0) |>
+        dplyr::mutate(
+          prop_garbage_code = round(prop_garbage_code, 1),
+          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid))),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -1511,6 +1522,14 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
             filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
             filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
           )
         )
     })
@@ -1521,47 +1540,106 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise(
-          obitos_garbage_code = sum(dplyr::across(dplyr::all_of(input$cids_garbage_materno))),
-          obitos_maternos_totais = sum(obitos_maternos_totais),
-          prop_garbage_code = round(obitos_garbage_code / obitos_maternos_totais * 100, 1),
-          class = "Referência (média nacional)"
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
+        dplyr::select(!obitos_maternos_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_materno"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code"
         ) |>
-        dplyr::ungroup()
+        dplyr::filter(br_prop_garbage_code != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code = round(br_prop_garbage_code, 1),
+          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_materno_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_materno()) != 0,
+          "Não existem ocorrências de óbitos maternos preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_materno(), data_plot_garbage_materno_referencia())
     })
 
     output$plot_garbage_materno <- highcharter::renderHighchart({
-
-      grafico_base <- highcharter::highchart() |>
+      highcharter::highchart() |>
         highcharter::hc_add_series(
-          data = data_plot_garbage_materno(),
-          highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
-          name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data_plot_garbage_materno()$class)),
-          type = "column",
-          color = "#2c115f",
-          showInLegend = TRUE
-        ) |>
-        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de óbitos preenchidos com garbage codes"), min = 0, max = 100)
-
-      if (filtros()$nivel == "Nacional") {
-        grafico_base
-      } else {
-        grafico_base |>
-          highcharter::hc_add_series(
-            data = data_plot_garbage_materno_referencia(),
-            type = "line",
-            name = "Referência (média nacional)",
-            dashStyle = "ShortDot",
-            highcharter::hcaes(x = ano, y = prop_garbage_code, group = class),
-            color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-            showInLegend = TRUE,
-            opacity = 0.8
+          data = data_plot_garbage_materno_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = cid),
+          type = "bar",
+          showInLegend = TRUE,
+          # tooltip = list(
+          #   pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.causabas_subcategoria}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
+          # )
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
           )
-      }
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_materno_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_materno_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos maternos preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
+    #grafico distribuicao do baixo peso
+    output$plot1_1 <- highcharter::renderHighchart({
+      highcharter::highchart()|>
+        highcharter::hc_add_series(
+          name = "De 2000 a 2499 g",
+          data =  data5_juncao_aux_invertido(),
+          highcharter::hcaes(x = ano, y = porc_peso_2000_a_2499),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_2000_a_2499:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "De 1500 a 1999 g",
+          data =  data5_juncao_aux_invertido(),
+          highcharter::hcaes(x = ano, y = porc_peso_1500_a_1999),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_1500_a_1999:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = "Menor que 1500 g",
+          data =  data5_juncao_aux_invertido(),
+          highcharter::hcaes(x = ano, y = porc_peso_menor_1500),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_peso_menor_1500:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = TRUE) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data5_juncao_aux_invertido()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
 
     })
+
 
     output$grafico_regioes <- highcharter::renderHighchart({
 
