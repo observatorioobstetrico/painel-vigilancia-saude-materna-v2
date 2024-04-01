@@ -476,7 +476,8 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 410))
                 )
-              ), column(
+              ),
+              column(
                 width = 6,
                 bs4Dash::bs4Card(
                   width = 12,
@@ -516,6 +517,51 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 410))
                 )
               ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_principais_perinatal"),
+                        label = "Grupos de causas principais",
+                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
+                        choices = c(
+                          "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
+                          "(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
+                          "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_perinatal_p00_p04",
+                          "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_perinatal_p05_p08",
+                          "(P10-P15) Traumatismo de parto" = "principais_perinatal_p10_p15",
+                          "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período perinatal" = "principais_perinatal_p20_p29",
+                          "(P35-P39) Infeccções específicas do período perinatal" = "principais_perinatal_p35_p39",
+                          "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_perinatal_p50_p61",
+                          "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_perinatal_p70_p74",
+                          "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_perinatal_p75_p78",
+                          "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_perinatal_p80_p83",
+                          "(P90-P96) Outros transtornos originados do período perinatal" = "principais_perinatal_p90_p96",
+                          "(Q00-Q99) Anomalias congênitas" = "principais_perinatal_q00_q99",
+                          "Outros" = "principais_perinatal_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 450))
+                )
+              )
             )
           )
         )
@@ -808,6 +854,250 @@ mod_bloco_7_ui <- function(id) {
 mod_bloco_7_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+
+    data_filtrada_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_filtrada_comp_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel2 == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    # Para obter o nome das 6 colunas de causas principais com mais ocorrências de óbitos perinatais
+    data_principais_perinatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    # Atualizando o input para selecionar essas 6 colunas
+    observeEvent(filtros()$nivel, {
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_principais_perinatal",
+        selected = data_principais_perinatal_aux()$grupo_cid10
+      )
+
+      #Pode colocar os outros updatePickerInput aqui
+      # shinyWidgets::updatePickerInput(
+      #   session = session,
+      #   inputId = "cids_principais_perinatal",
+      #   selected = data_principais_perinatal_aux()$grupo_cid10
+      # )
+    })
+
+    # Calculando a porcentagem de óbitos perinatais em cada grupo de causas principais, relativa ao total de óbitos perinatais por causas principais
+    data_plot_principais_perinatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_perinatal()) != 0,
+          "Não existem ocorrências de óbitos perinatais por causas principais para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_perinatal(), data_plot_principais_perinatal_referencia())
+    })
+
+    output$plot_principais_perinatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_principais_perinatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por causas principais"), min = 0, max = 100)
+
+    })
+
+
+
 
 
     # Códigos compartilhados para os dois blocos ------------------------------
@@ -2862,7 +3152,7 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -2887,7 +3177,7 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_precoc]],
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -2912,7 +3202,7 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_tardia]],
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -2944,7 +3234,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -2954,7 +3244,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre os óbitos neonatais,"
+        titulo = "Dentre os óbitos neonatais,",
+        tamanho_caixa = "330px"
       )
     })
 
@@ -2962,7 +3253,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre os óbitos neonatais,"
+        titulo = "Dentre os óbitos neonatais,",
+        tamanho_caixa = "330px"
       )
     })
 
@@ -3666,7 +3958,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3682,7 +3974,7 @@ mod_bloco_7_server <- function(id, filtros){
                                              data7_resumo_referencia()[[taxa_mortalidade_fetal()]], NaN),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3692,7 +3984,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais,"
+        titulo = "Dentre os óbitos fetais,",
+        tamanho_caixa = "330px"
       )
     })
 
@@ -3700,7 +3993,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais,"
+        titulo = "Dentre os óbitos fetais,",
+        tamanho_caixa = "330px"
       )
     })
 
@@ -4057,7 +4351,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -4088,7 +4382,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -4114,7 +4408,7 @@ mod_bloco_7_server <- function(id, filtros){
                                              data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]], NaN),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -4140,7 +4434,7 @@ mod_bloco_7_server <- function(id, filtros){
                                              data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]], NaN),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -4150,7 +4444,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "perinatal momento do obito por peso",
-        titulo = "Dentre os óbitos perinatais,"
+        titulo = "Dentre os óbitos perinatais,",
+        tamanho_caixa = "350px",
       )
     })
 
@@ -4158,7 +4453,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_dist(),
         indicador = "perinatal peso por momento do obito",
-        titulo = "Dentre os óbitos perinatais,"
+        titulo = "Dentre os óbitos perinatais,",
+        tamanho_caixa = "350px",
       )
     })
 
