@@ -561,6 +561,86 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 450))
                 )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_perinatal"),
+                        label = "Grupos de causas evitáveis",
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_perinatal_mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_perinatal_parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_perinatal_recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_perinatal_tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_perinatal_saude",
+                          "Causas mal definidas" = "evitaveis_perinatal_mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "evitaveis_perinatal_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_grupos_perinatal"),
+                        label = "Grupos de causas",
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                        choices = c(
+                          "Prematuridade" = "perinatal_grupos_prematuridade",
+                          "Infecções" = "perinatal_grupos_infeccoes",
+                          "Asfixia/Hipóxia" = "perinatal_grupos_asfixia",
+                          "Má formação congênita" = "perinatal_grupos_ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "perinatal_grupos_respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "perinatal_grupos_gravidez",
+                          #"Transtornos cardiorrespiratórios originados do período perinatal" = "perinatalt_grupos_cardiorrespiratorias",
+                          "Afecções originais no período perinatal" = "perinatal_grupos_afeccoes_perinatal",
+                          "Mal definidas" = "perinatal_grupos_mal_definida",
+                          "Demais causas" = "perinatal_grupos_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 450))
+                )
               )
             )
           )
@@ -854,250 +934,6 @@ mod_bloco_7_ui <- function(id) {
 mod_bloco_7_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
-    data_filtrada_aux <- reactive({
-      bloco8_graficos |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano)
-    })
-
-    data_filtrada_comp_aux <- reactive({
-      bloco8_graficos |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel2 == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano)
-    })
-
-    # Para obter o nome das 6 colunas de causas principais com mais ocorrências de óbitos perinatais
-    data_principais_perinatal_aux <- reactive({
-      data_filtrada_aux() |>
-        dplyr::ungroup() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
-        tidyr::pivot_longer(
-          cols = tidyr::everything(),
-          names_to = "grupo_cid10",
-          values_to = "obitos"
-        ) |>
-        dplyr::arrange(dplyr::desc(obitos)) |>
-        head(n = 6)
-    })
-
-    # Atualizando o input para selecionar essas 6 colunas
-    observeEvent(filtros()$nivel, {
-      shinyWidgets::updatePickerInput(
-        session = session,
-        inputId = "cids_principais_perinatal",
-        selected = data_principais_perinatal_aux()$grupo_cid10
-      )
-
-      #Pode colocar os outros updatePickerInput aqui
-      # shinyWidgets::updatePickerInput(
-      #   session = session,
-      #   inputId = "cids_principais_perinatal",
-      #   selected = data_principais_perinatal_aux()$grupo_cid10
-      # )
-    })
-
-    # Calculando a porcentagem de óbitos perinatais em cada grupo de causas principais, relativa ao total de óbitos perinatais por causas principais
-    data_plot_principais_perinatal <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
-        tidyr::pivot_longer(
-          cols = dplyr::contains("principais_perinatal"),
-          names_to = "grupo_cid10",
-          values_to = "porc_obitos"
-        ) |>
-        dplyr::mutate(
-          grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
-            ),
-            "Grupos não selecionados"
-          ),
-          class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
-          )
-        ) |>
-        dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, class) |>
-        dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_plot_principais_perinatal_comp <- reactive({
-      data_filtrada_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
-        tidyr::pivot_longer(
-          cols = dplyr::contains("principais_perinatal"),
-          names_to = "grupo_cid10",
-          values_to = "porc_obitos"
-        ) |>
-        dplyr::mutate(
-          grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
-            ),
-            "Grupos não selecionados"
-          ),
-          class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-          )
-        ) |>
-        dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, class) |>
-        dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_plot_principais_perinatal_referencia <- reactive({
-      bloco8_graficos |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
-        tidyr::pivot_longer(
-          cols = dplyr::contains("principais_perinatal"),
-          names_to = "grupo_cid10",
-          values_to = "br_porc_obitos"
-        ) |>
-        dplyr::mutate(
-          grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
-            ),
-            "Grupos não selecionados"
-          )
-        ) |>
-        dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10) |>
-        dplyr::summarise(
-          br_porc_obitos = round(sum(br_porc_obitos), 1)
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_plot_principais_perinatal_completo <- reactive({
-      validate(
-        need(
-          nrow(data_plot_principais_perinatal()) != 0,
-          "Não existem ocorrências de óbitos perinatais por causas principais para a localidade, período e grupos CID-10 selecionados."
-        )
-      )
-      dplyr::full_join(data_plot_principais_perinatal(), data_plot_principais_perinatal_referencia())
-    })
-
-    output$plot_principais_perinatal <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data_plot_principais_perinatal_completo(),
-            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
-            type = "column",
-            showInLegend = TRUE,
-            tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
-            )
-          )
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data_plot_principais_perinatal(),
-            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
-            type = "column",
-            showInLegend = TRUE,
-            tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
-            ),
-            stack = 0
-          ) |>
-          highcharter::hc_add_series(
-            data = data_plot_principais_perinatal_comp(),
-            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
-            type = "column",
-            showInLegend = FALSE,
-            tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
-            ),
-            stack = 1
-          )
-      }
-
-      grafico_base |>
-        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
-        highcharter::hc_colors(
-          viridis::magma(length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2)]
-        ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_principais_perinatal()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por causas principais"), min = 0, max = 100)
-
-    })
-
-
-
 
 
     # Códigos compartilhados para os dois blocos ------------------------------
@@ -4945,6 +4781,625 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
 
     })
+
+
+#########-------------------- Gráficos de distribuição dos grupos de CID
+
+    data_filtrada_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_filtrada_comp_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel2 == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    # Para obter o nome das 6 colunas de causas principais com mais ocorrências de óbitos perinatais
+    data_principais_perinatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    data_evitaveis_perinatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    data_grupos_perinatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    # Atualizando o input para selecionar essas 6 colunas
+    observeEvent(filtros()$nivel, {
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_principais_perinatal",
+        selected = data_principais_perinatal_aux()$grupo_cid10
+      )
+
+
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_evitaveis_perinatal",
+        selected = data_evitaveis_perinatal_aux()$grupo_cid10
+      )
+
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_grupos_perinatal",
+        selected = data_grupos_perinatal_aux()$grupo_cid10
+      )
+    })
+
+    # Calculando a porcentagem de óbitos perinatais em cada grupo de causas principais, relativa ao total de óbitos perinatais por causas principais
+    data_plot_principais_perinatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_perinatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_perinatal")), ~ (. / obitos_perinatais_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_perinatal,
+            ifelse(
+              grupo_cid10 != "principais_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_perinatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_perinatal()) != 0,
+          "Não existem ocorrências de óbitos perinatais por causas principais para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_perinatal(), data_plot_principais_perinatal_referencia())
+    })
+
+    output$plot_principais_perinatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_perinatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_principais_perinatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_principais_perinatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por causas principais"), min = 0, max = 100)
+
+    })
+
+
+
+    # Calculando a porcentagem de óbitos perinatais em cada grupo de causas evitáveis, relativa ao total de óbitos perinatais por causas evitáveis
+    data_plot_evitaveis_perinatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_perinatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveiss_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_perinatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_perinatal"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_perinatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_evitaveis_perinatal()) != 0,
+          "Não existem ocorrências de óbitos perinatais por causas evitáveis para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_evitaveis_perinatal(), data_plot_evitaveis_perinatal_referencia())
+    })
+
+    output$plot_evitaveis_perinatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_perinatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_perinatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_perinatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_perinatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por causas evitáveis"), min = 0, max = 100)
+
+    })
+
+
+    # Calculando a porcentagem de óbitos perinatais em cada grupo de causas, relativa ao total de óbitos perinatais por grupos de causas
+
+    data_plot_grupos_perinatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("perinatal_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_perinatal,
+            ifelse(
+              grupo_cid10 != "perinatal_grupos_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_perinatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("perinatal_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_perinatal,
+            ifelse(
+              grupo_cid10 != "grupos_perinatal_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("grupos_perinatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_perinatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("perinatal_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_perinatal,
+            ifelse(
+              grupo_cid10 != "perinatal_grupos_outros",
+              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_perinatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_perinatal()) != 0,
+          "Não existem ocorrências de óbitos perinatais por grupos de causas para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_perinatal(), data_plot_grupos_perinatal_referencia())
+    })
+
+    output$plot_grupos_perinatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_perinatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_perinatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_perinatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_grupos_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_perinatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_grupos_perinatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por grupos de causas"), min = 0, max = 100)
+
+    })
+
 
 
 
