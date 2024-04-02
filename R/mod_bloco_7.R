@@ -42,6 +42,17 @@ mod_bloco_7_ui <- function(id) {
         value = "tabpanel_fetal",
         fluidRow(
           column(
+            width=12,
+            HTML(
+              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                </b> </div>"
+            ),
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+          )
+        ),
+        fluidRow(
+          column(
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             HTML("<b style='font-size:19px'> Resumo do período </b>"),
@@ -197,8 +208,8 @@ mod_bloco_7_ui <- function(id) {
                           label    = NULL,
                           choices = c(
                             "Menor que 1500 g" = "dist_moment_obito_fetal_menos1500",
-                            "De 1500 a 1999 g" = "dist_moment_obito_fetal_1500_1999",
                             "De 2000 a 2499 g" = "dist_moment_obito_fetal_2000_2499",
+                            "De 1500 a 1999 g" = "dist_moment_obito_fetal_1500_1999",
                             "Maior ou igual a 2500 g" = "dist_moment_obito_fetal_mais2500"
                           ),
                           selected = c(
@@ -255,6 +266,17 @@ mod_bloco_7_ui <- function(id) {
       tabPanel(
         HTML("<b>Indicadores relacionados à mortalidade perinatal </b>"),
         value = "tabpanel_perinatal",
+        fluidRow(
+          column(
+            width=12,
+            HTML(
+              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                </b> </div>"
+            ),
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+          )
+        ),
         fluidRow(
           column(
             width = 4,
@@ -462,8 +484,8 @@ mod_bloco_7_ui <- function(id) {
                           label    = NULL,
                           choices = c(
                             "Menor que 1500 g" = "dist_moment_obito_perinat_menos1500",
-                            "De 1500 a 1999 g" = "dist_moment_obito_perinat_1500_1999",
                             "De 2000 a 2499 g" = "dist_moment_obito_perinat_2000_2499",
+                            "De 1500 a 1999 g" = "dist_moment_obito_perinat_1500_1999",
                             "Maior ou igual a 2500 g" = "dist_moment_obito_perinat_mais2500"
                           ),
                           selected = c(
@@ -649,6 +671,17 @@ mod_bloco_7_ui <- function(id) {
       tabPanel(
         HTML("<b>Indicadores relacionados à mortalidade neonatal</b>"),
         value = "tabpanel_neonatal",
+        fluidRow(
+          column(
+            width=12,
+            HTML(
+              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                </b> </div>"
+            ),
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+          )
+        ),
         fluidRow(
           # column(
           #   width = 12,
@@ -865,8 +898,8 @@ mod_bloco_7_ui <- function(id) {
                           label    = NULL,
                           choices = c(
                             "Menor que 1500 g" = "dist_moment_obito_neonat_menos1500",
-                            "De 1500 g a 1999 g" = "dist_moment_obito_neonat_1500_1999",
                             "De 2000 g a 2499 g" = "dist_moment_obito_neonat_2000_2499",
+                            "De 1500 g a 1999 g" = "dist_moment_obito_neonat_1500_1999",
                             "Maior ou igual a 2500 g" = "dist_moment_obito_neonat_mais2500"
                           ),
                           selected = c(
