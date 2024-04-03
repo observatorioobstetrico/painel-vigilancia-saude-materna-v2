@@ -24,6 +24,19 @@ app_ui <- function(request) {
         width: 100%
       }
     ")),
+    tags$style(HTML("
+      .dropdown-menu {
+        max-height: 251.3px;
+        overflow: hidden;
+        min-height: 153px;
+        width: inherit;
+        position: absolute;
+        will-change: transform;
+        top: 0px;
+        left: 0px;
+        transform: translate3d(0px, 37px, 0px)!important;
+      }
+    ")),
     # Leave this function for adding external resources
     golem_add_external_resources(
     ),
