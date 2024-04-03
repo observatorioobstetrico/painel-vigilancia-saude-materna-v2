@@ -4939,7 +4939,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_principais_perinatal,
             ifelse(
               grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -4977,7 +4977,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_principais_perinatal,
             ifelse(
               grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5020,7 +5020,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_principais_perinatal,
             ifelse(
               grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5110,7 +5110,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
             ifelse(
               grupo_cid10 != "evitaveis_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5148,7 +5148,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
             ifelse(
               grupo_cid10 != "evitaveis_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveiss_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveiss_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5191,7 +5191,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
             ifelse(
               grupo_cid10 != "evitaveis_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5281,7 +5281,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_grupos_perinatal,
             ifelse(
               grupo_cid10 != "perinatal_grupos_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5319,7 +5319,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_grupos_perinatal,
             ifelse(
               grupo_cid10 != "grupos_perinatal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("grupos_perinatal_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("grupos_perinatal_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"
@@ -5362,7 +5362,7 @@ mod_bloco_7_server <- function(id, filtros){
             grupo_cid10 %in% input$cids_grupos_perinatal,
             ifelse(
               grupo_cid10 != "perinatal_grupos_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
               "Outros"
             ),
             "Grupos não selecionados"

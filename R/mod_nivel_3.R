@@ -141,55 +141,16 @@ mod_nivel_3_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
-                      style = "height: 10%; display: flex; align-items: center;",
+                      style = "height: 8%; display: flex; align-items: center;",
                       HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos maternos </b>")
                     ),
                     hr(),
-                    # fluidRow(
-                    #   column(
-                    #     width = 12,
-                    #     shinyWidgets::pickerInput(
-                    #       inputId = ns("cids_garbage_materno"),
-                    #       label = "Garbage codes",
-                    #       options = list(placeholder = "Selecione os garbage codes", `actions-box` = TRUE),
-                    #       choicesOpt = list(
-                    #         content = stringr::str_trunc(
-                    #           {
-                    #             x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
-                    #             names(x) <- lapply(
-                    #               sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
-                    #               function (cid) {
-                    #                 nome_cid <- df_cid10 |>
-                    #                   dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
-                    #                   dplyr::pull(causabas_subcategoria)
-                    #               }
-                    #             ) |> unlist()
-                    #             sort(names(x))
-                    #           },
-                    #           width = 60
-                    #         )
-                    #       ),
-                    #       choices = {
-                    #         x <- sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))])
-                    #         names(x) <- lapply(
-                    #           sort(names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))]),
-                    #           function (cid) {
-                    #             nome_cid <- df_cid10 |>
-                    #               dplyr::filter(causabas == toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))) |>
-                    #               dplyr::pull(causabas_subcategoria)
-                    #           }
-                    #         ) |> unlist()
-                    #         x[sort(names(x))]
-                    #       },
-                    #       selected = names(bloco8_graficos)[grepl("garbage_materno", names(bloco8_graficos))],
-                    #       multiple = TRUE,
-                    #       width = "100%"
-                    #     )
-                    #   )
-                    # ),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 450))
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_materno"), height = 600))
+                    )
                   )
                 )
               )
@@ -1580,14 +1541,14 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       highcharter::highchart() |>
         highcharter::hc_add_series(
           data = data_plot_garbage_materno_completo(),
-          highcharter::hcaes(x = ano, y = prop_garbage_code, group = cid),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = causabas_subcategoria),
           type = "bar",
           showInLegend = TRUE,
           # tooltip = list(
           #   pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.causabas_subcategoria}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
           # )
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
           )
         ) |>
         highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
@@ -1925,10 +1886,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     output$css_tabela <- renderUI({
       if (infos_indicador()$bloco != "bloco6") {
-        tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 0; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else {
         req(filtros()$indicador)
-        tags$style(HTML("#tabela {height: 1543px; padding-top: 0; padding-bottom: 0; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1693px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       }
 
     })
