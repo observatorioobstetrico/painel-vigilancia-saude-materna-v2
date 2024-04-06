@@ -952,6 +952,131 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 410))
                 )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatal por causas principais &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_principais_neonatal"),
+                        label = "Grupos de causas principais",
+                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
+                        choices = c(
+                          "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
+                          "(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
+                          "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_neonatal_p00_p04",
+                          "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_neonatal_p05_p08",
+                          "(P10-P15) Traumatismo de parto" = "principais_neonatal_p10_p15",
+                          "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período neonatal" = "principais_neonatal_p20_p29",
+                          "(P35-P39) Infeccções específicas do período neonatal" = "principais_neonatal_p35_p39",
+                          "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_neonatal_p50_p61",
+                          "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_neonatal_p70_p74",
+                          "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_neonatal_p75_p78",
+                          "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_neonatal_p80_p83",
+                          "(P90-P96) Outros transtornos originados do período neonatal" = "principais_neonatal_p90_p96",
+                          "(Q00-Q99) Anomalias congênitas" = "principais_neonatal_q00_q99",
+                          "Outros" = "principais_neonatal_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_neonatal"),
+                        label = "Grupos de causas evitáveis",
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_neonatal_mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_neonatal_parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_neonatal_recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_neonatal_tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_neonatal_saude",
+                          "Causas mal definidas" = "evitaveis_neonatal_mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "evitaveis_neonatal_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_grupos_neonatal"),
+                        label = "Grupos de causas",
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                        choices = c(
+                          "Prematuridade" = "neonat_grupos_prematuridade",
+                          "Infecções" = "neonat_grupos_infeccoes",
+                          "Asfixia/Hipóxia" = "neonat_grupos_asfixia",
+                          "Má formação congênita" = "neonat_grupos_ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "neonat_grupos_respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "neonat_grupos_gravidez",
+                          #"Transtornos cardiorrespiratórios originados do período neonatal" = "neonat_grupos_cardiorrespiratorias",
+                          "Afecções originais no período neonatal" = "neonat_grupos_afeccoes_perinatal",
+                          "Mal definidas" = "neonat_grupos_mal_definida",
+                          "Demais causas" = "neonat_grupos_outros"
+                        ),
+                        selected = NULL,
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 450))
+                )
               )
             )
           )
@@ -4816,6 +4941,11 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
+## bloco8_graficos porem sem as colunas principais_neonatal_precoce e neonat_precoce_grupos
+    bloco8_graficos <- bloco8_graficos |>
+      dplyr::select(-c(colnames(bloco8_graficos)[73:86],colnames(bloco8_graficos)[107:115]))
+## tive que realizar esse filtro para evitar confusão entre  os as colunas neonatal e neonatal_precoce
+
 #########-------------------- Gráficos de distribuição dos grupos de CID
 
     data_filtrada_aux <- reactive({
@@ -5434,9 +5564,685 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
 
+    ###################################################################################
+    ############ Gráficos de distribuição dos grupos de CID (neonatal) ################
+    ###################################################################################
+
+    # ###filtro para evitar a confusão entre neonatal e neonatal_precoce###
+    # sem_neonat_precoce <- bloco8_graficos |>
+    #   dplyr::select(-c(colnames(bloco8_graficos)[73:86],colnames(bloco8_graficos)[107:115]))
+    # #####################################################################
+    #
+    # data_filtrada_aux <- reactive({
+    #   sem_neonat_precoce |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #       if (filtros()$nivel == "Nacional")
+    #         regiao %in% unique(tabela_aux_municipios$regiao)
+    #       else if (filtros()$nivel == "Regional")
+    #         regiao == filtros()$regiao
+    #       else if (filtros()$nivel == "Estadual")
+    #         uf == filtros()$estado
+    #       else if (filtros()$nivel == "Macrorregião de saúde")
+    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #       else if(filtros()$nivel == "Microrregião de saúde")
+    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #       else if(filtros()$nivel == "Municipal")
+    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #     ) |>
+    #     dplyr::group_by(ano)
+    # })
+    #
+    # data_filtrada_comp_aux <- reactive({
+    #   sem_neonat_precoce |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #       if (filtros()$nivel2 == "Nacional")
+    #         regiao %in% unique(tabela_aux_municipios$regiao)
+    #       else if (filtros()$nivel2 == "Regional")
+    #         regiao == filtros()$regiao2
+    #       else if (filtros()$nivel2 == "Estadual")
+    #         uf == filtros()$estado2
+    #       else if (filtros()$nivel2 == "Macrorregião de saúde")
+    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #       else if(filtros()$nivel2 == "Microrregião de saúde")
+    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #       else if(filtros()$nivel2 == "Municipal")
+    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #       else if (filtros()$nivel2 == "Municípios semelhantes")
+    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #     ) |>
+    #     dplyr::group_by(ano)
+    # })
+
+
+    #############################################################################################################
+    # tive que usar o bloco8_grafico_evitaveis_neonatal pelo fato do bloco8_grafico não conter evitaveis_neonatal
+    #############################################################################################################
+
+    evitaveis_neonatal_filtrado <- reactive({
+      bloco8_grafico_evitaveis_neonatal |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    evitaveis_neonatal_filtrado_comp <- reactive({
+      bloco8_grafico_evitaveis_neonatal |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel2 == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    #############################################################################################################
+    #############################################################################################################
 
 
 
+    # Para obter o nome das 6 colunas de causas principais com mais ocorrências de óbitos neonatais
+    data_principais_neonatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_neonatal")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    data_evitaveis_neonatal_aux <- reactive({
+      evitaveis_neonatal_filtrado() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    data_grupos_neonatal_aux <- reactive({
+      data_filtrada_aux() |>
+        dplyr::ungroup() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos")), sum) |>
+        tidyr::pivot_longer(
+          cols = tidyr::everything(),
+          names_to = "grupo_cid10",
+          values_to = "obitos"
+        ) |>
+        dplyr::arrange(dplyr::desc(obitos)) |>
+        head(n = 6)
+    })
+
+    # Atualizando o input para selecionar essas 6 colunas
+    observeEvent(filtros()$nivel, {
+
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_principais_neonatal",
+        selected = data_principais_neonatal_aux()$grupo_cid10
+      )
+
+
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_evitaveis_neonatal",
+        selected = data_evitaveis_neonatal_aux()$grupo_cid10
+      )
+
+      shinyWidgets::updatePickerInput(
+        session = session,
+        inputId = "cids_grupos_neonatal",
+        selected = data_grupos_neonatal_aux()$grupo_cid10
+      )
+
+    })
+
+    # Calculando a porcentagem de óbitos neonatais em cada grupo de causas principais, relativa ao total de óbitos neonatais por causas principais
+    ##########################################################################################################################
+
+    data_plot_principais_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_neonatal") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatal_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_neonatal")), ~ (. / obitos_neonatal_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_neonatal,
+            ifelse(
+              grupo_cid10 != "principais_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_neonatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_neonatal") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatal_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_neonatal")), ~ (. / obitos_neonatal_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_neonatal,
+            ifelse(
+              grupo_cid10 != "principais_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_neonatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("principais_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatal_principais_total = sum(dplyr::c_across(dplyr::starts_with("principais_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("principais_neonatal")), ~ (. / obitos_neonatal_principais_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("principais_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_neonatal,
+            ifelse(
+              grupo_cid10 != "principais_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_principais_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_neonatal()) != 0,
+          "Não existem ocorrências de óbitos neonatais por causas principais para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_neonatal(), data_plot_principais_neonatal_referencia())
+    })
+
+    output$plot_principais_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_neonatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_neonatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_principais_neonatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_principais_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_principais_neonatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_principais_neonatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais por causas principais"), min = 0, max = 100)
+
+    })
+
+    #Calculando a porcentagem de óbitos neonatais em cada grupo de causas evitáveis, relativa ao total de óbitos neonatais por causas evitáveis
+    ##########################################################################################################################
+
+    data_plot_evitaveis_neonatal <- reactive({
+      evitaveis_neonatal_filtrado() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_neonatal_comp <- reactive({
+      evitaveis_neonatal_filtrado_comp() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveiss_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_neonatal_referencia <- reactive({
+      bloco8_grafico_evitaveis_neonatal |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("evitaveis_neonatal"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            ifelse(
+              grupo_cid10 != "evitaveis_neonatal_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_evitaveis_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_evitaveis_neonatal()) != 0,
+          "Não existem ocorrências de óbitos neonatais por causas evitáveis para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_evitaveis_neonatal(), data_plot_evitaveis_neonatal_referencia())
+    })
+
+    output$plot_evitaveis_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_neonatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_neonatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_evitaveis_neonatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_neonatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais por causas evitáveis"), min = 0, max = 100)
+
+    })
+
+    # Calculando a porcentagem de óbitos neonatais em cada grupo de causas, relativa ao total de óbitos neonatais por grupos de causas
+    ##########################################################################################################################
+
+    data_plot_grupos_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("neonat_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_neonatal,
+            ifelse(
+              grupo_cid10 != "neonat_grupos_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_neonatal_comp <- reactive({
+      data_filtrada_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("neonat_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_neonatal,
+            ifelse(
+              grupo_cid10 != "grupos_neonat_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("grupos_neonat_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_neonatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::contains("neonat_grupos"),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_grupos_neonatal,
+            ifelse(
+              grupo_cid10 != "neonat_grupos_outros",
+              gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+              "Outros"
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data_plot_grupos_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_neonatal()) != 0,
+          "Não existem ocorrências de óbitos neonatais por grupos de causas para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_neonatal(), data_plot_grupos_neonatal_referencia())
+    })
+
+    output$plot_grupos_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_neonatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_neonatal(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_neonatal_comp(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_grupos_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_neonatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_grupos_neonatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais por grupos de causas"), min = 0, max = 100)
+
+    })
 
   })
 }
