@@ -619,7 +619,7 @@ mod_bloco_5_server <- function(id, filtros){
     # Para o resumo do período ------------------------------------------------
     ## Calculando uma média dos indicadores para o período selecionado --------
     data5_resumo <- reactive({
-      bloco5 |>
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$comparar == "Não") {
@@ -684,7 +684,8 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1)
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -745,8 +746,8 @@ mod_bloco_5_server <- function(id, filtros){
 
     })
 
-    data5_resumo_asfixia <- reactive({
-      asfixia |>
+    data5_resumo_referencia <- reactive({
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$comparar == "Não") {
@@ -796,17 +797,9 @@ mod_bloco_5_server <- function(id, filtros){
           }
         ) |>
         dplyr::summarise(
-          total_nascidos = sum(total_nascidos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1)) |>
-        dplyr::ungroup()
-    })
-
-    data5_resumo_asfixia_referencia <- reactive({
-      asfixia |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::summarise(
-          total_nascidos = sum(total_nascidos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1)) |>
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
         dplyr::ungroup()
     })
 
@@ -904,11 +897,11 @@ mod_bloco_5_server <- function(id, filtros){
 
     output$b5_i6 <- renderUI({
       cria_caixa_server(
-        dados = data5_resumo_asfixia(),
+        dados = data5_resumo(),
         indicador = "porc_nascidos_vivos_asfixia1",
         titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
         tem_meta = FALSE,
-        valor_de_referencia = data5_resumo_asfixia_referencia()$porc_nascidos_vivos_asfixia1,
+        valor_de_referencia = data5_resumo_referencia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
@@ -933,10 +926,7 @@ mod_bloco_5_server <- function(id, filtros){
         indicador = "porc_condicoes_ameacadoras",
         titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
         tem_meta = TRUE,
-        valor_de_referencia = bloco5 |>
-          dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-          dplyr::summarise(porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)) |>
-          dplyr::pull(porc_condicoes_ameacadoras),
+        valor_de_referencia = data5_resumo_referencia()$porc_condicoes_ameacadoras,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
@@ -961,7 +951,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     ## Calculando os indicadores para cada ano do período selecionado ---------
     data5 <- reactive({
-      bloco5 |>
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -995,6 +985,7 @@ mod_bloco_5_server <- function(id, filtros){
           porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
           porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -1008,7 +999,7 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     data5_comp <- reactive({
-      bloco5 |>
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -1044,6 +1035,7 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
             filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
@@ -1055,6 +1047,142 @@ mod_bloco_5_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup()
+    })
+
+    data5_referencia <- reactive({
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+        dplyr::filter(ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "Nacional")
+            ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_premat = 10,
+          porc_termo_precoce = 20,
+          br_porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          br_porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
+          br_porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                                  nascidos_vivos_28_a_32_semanas,
+                                                                                                  nascidos_vivos_33_a_34_semanas,
+                                                                                                  nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          localidade_comparacao = dplyr::if_else(
+            filtros()$comparar == "Não",
+            "Média nacional",
+            dplyr::case_when(
+              filtros()$nivel2 == "Nacional" ~ "Média nacional",
+              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
+            )
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data5_juncao_aux <-  reactive({dplyr::full_join(data5(), data5_referencia(), by = "ano")})
+
+    data5_juncao_aux_invertido <- reactive({
+      data5_juncao_aux() |>
+        dplyr::arrange(dplyr::desc(ano)) |>
+        dplyr::mutate(
+          ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
+        )
+    })
+
+    data5_referencia_baixo_peso <- reactive({
+      data5_referencia_baixo_peso_aux <- reactive({
+        base_referencia_baixo_peso |>
+          dplyr::filter(
+            if (filtros()$nivel == "Nacional")
+              regiao %in% unique(tabela_aux_municipios$regiao)
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          ) |>
+          dplyr::summarise(
+            total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
+            porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+            class = "Referência"
+          ) |>
+          dplyr::ungroup()
+      })
+
+      dplyr::full_join(
+        data5_referencia_baixo_peso_aux(),
+        data.frame(
+          ano = filtros()$ano2[1]:filtros()$ano2[2],
+          porc_baixo_peso = data5_referencia_baixo_peso_aux()$porc_baixo_peso,
+          class = "Referência"
+        )
+      )
+    })
+
+    data5_referencia_baixo_peso_comp <- reactive({
+      data5_referencia_baixo_peso_comp_aux <- reactive({
+        base_referencia_baixo_peso |>
+          dplyr::filter(
+            if (filtros()$nivel2 == "Nacional")
+              regiao %in% unique(tabela_aux_municipios$regiao)
+            else if (filtros()$nivel2 == "Regional")
+              regiao == filtros()$regiao2
+            else if (filtros()$nivel2 == "Estadual")
+              uf == filtros()$estado2
+            else if (filtros()$nivel2 == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+            else if(filtros()$nivel2 == "Microrregião de saúde")
+              r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+            else if(filtros()$nivel2 == "Municipal")
+              municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+            else if (filtros()$nivel2 == "Municípios semelhantes")
+              grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+          ) |>
+          dplyr::summarise(
+            total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
+            porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+            class = "Referência"
+          ) |>
+          dplyr::ungroup()
+      })
+
+      dplyr::full_join(
+        data5_referencia_baixo_peso_comp_aux(),
+        data.frame(
+          ano = filtros()$ano2[1]:filtros()$ano2[2],
+          porc_baixo_peso = data5_referencia_baixo_peso_comp_aux()$porc_baixo_peso,
+          class = "Referência"
+        )
+      )
     })
 
     data5_serie <- reactive({
@@ -1153,157 +1281,6 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::ungroup()
     })
 
-    data_referencia <- reactive({
-      bloco5 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos, na.rm = TRUE),
-          porc_premat = 10,
-          porc_termo_precoce = 20,
-          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          porc_peso_2000_a_2499 = round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
-          class = "Referência"
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_referencia_baixo_peso_aux <- reactive({
-      base_referencia_baixo_peso |>
-        dplyr::filter(
-          if (filtros()$nivel == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
-          class = "Referência"
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_referencia_baixo_peso <- reactive({
-      data.frame(
-        ano = filtros()$ano2[1]:filtros()$ano2[2],
-        porc_baixo_peso = data_referencia_baixo_peso_aux()$porc_baixo_peso,
-        class = "Referência"
-      )
-    })
-
-    data_referencia_baixo_peso_comp_aux <- reactive({
-      base_referencia_baixo_peso |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
-          class = "Referência"
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data_referencia_baixo_peso_comp <- reactive({
-      data.frame(
-        ano = filtros()$ano2[1]:filtros()$ano2[2],
-        porc_baixo_peso = data_referencia_baixo_peso_comp_aux()$porc_baixo_peso,
-        class = "Referência"
-      )
-    })
-
-    data5_referencia <- reactive({
-      bloco5 |>
-        dplyr::filter(ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          br_porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          br_porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          br_porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          br_porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
-          br_porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          br_porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          br_porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          br_porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros) * 100, 1),
-          br_porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
-                                                                                                  nascidos_vivos_28_a_32_semanas,
-                                                                                                  nascidos_vivos_33_a_34_semanas,
-                                                                                                  nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-
-          br_porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          br_porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
-          localidade_comparacao = dplyr::if_else(
-            filtros()$comparar == "Não",
-            "Média nacional",
-            dplyr::case_when(
-              filtros()$nivel2 == "Nacional" ~ "Média nacional",
-              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
-            )
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data5_juncao_aux <-  reactive({dplyr::full_join(data5(), data5_referencia(), by = "ano")})
-
-    data5_juncao_aux_invertido <- reactive({
-      data5_juncao_aux() |>
-        dplyr::arrange(dplyr::desc(ano)) |>
-        dplyr::mutate(
-          ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
-        )
-    })
-
     data5_baixo_peso <- reactive(
       data5_serie() |>
         dplyr::select(
@@ -1340,104 +1317,6 @@ mod_bloco_5_server <- function(id, filtros){
         )
     )
 
-    data5_asfixia <- reactive({
-      asfixia |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
-        dplyr::filter(
-          if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_nascidos = sum(total_nascidos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
-          class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ dplyr::if_else(
-              filtros()$comparar == "Não",
-              "Brasil (valor de referência)",
-              dplyr::if_else(
-                filtros()$mostrar_referencia == "nao_mostrar_referencia",
-                "Brasil",
-                "Brasil (valor de referência)"
-              )
-            ),
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data5_asfixia_comp <- reactive({
-      asfixia |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_nascidos = sum(total_nascidos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
-          class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
-              filtros()$comparar == "Não",
-              "Brasil (valor de referência)",
-              dplyr::if_else(
-                filtros()$mostrar_referencia == "nao_mostrar_referencia",
-                "Brasil",
-                "Brasil (valor de referência)"
-              )
-            ),
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-    data5_asfixia_referencia <- reactive({
-      asfixia |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_nascidos = sum(total_nascidos),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1)/total_nascidos*100, 1),
-          class = "Referência"
-        ) |>
-        dplyr::ungroup()
-    })
-
 
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Baixo peso ------------------------------------------------------------
@@ -1457,7 +1336,7 @@ mod_bloco_5_server <- function(id, filtros){
         if (input$baixo_peso == "porc_baixo_peso") {
           grafico_base <- grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia_baixo_peso(),
+              data = data5_referencia_baixo_peso(),
               type = "line",
               name = "Referência para a localidade (meta de redução global)",
               highcharter::hcaes(x = ano, y = porc_baixo_peso, group = class, colour = class),
@@ -1488,7 +1367,7 @@ mod_bloco_5_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia_baixo_peso(),
+              data = data5_referencia_baixo_peso(),
               type = "line",
               name = glue::glue("Referência para {unique(data5()$class)} (meta de redução global)"),
               highcharter::hcaes(x = ano, y = porc_baixo_peso, group = class, colour = class),
@@ -1516,10 +1395,10 @@ mod_bloco_5_server <- function(id, filtros){
         if(input$faixa_prematuridade == "porc_premat") {
           grafico_base <- grafico_base  |>
             highcharter::hc_add_series(
-              data = data_referencia(),
+              data = data5_referencia(),
               type = "line",
               name = "Referência (países desenvolvidos)",
-              highcharter::hcaes(x = ano, y = porc_premat, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_premat, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1546,10 +1425,10 @@ mod_bloco_5_server <- function(id, filtros){
           grafico_base
         } else {
           grafico_base |> highcharter::hc_add_series(
-            data = data_referencia(),
+            data = data5_referencia(),
             type = "line",
             name = "Referência (países desenvolvidos)",
-            highcharter::hcaes(x = ano, y = porc_premat, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_premat, group = localidade_comparacao, colour = localidade_comparacao),
             dashStyle = "ShortDot",
             opacity = 0.7
           )
@@ -1567,10 +1446,10 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_termo_precoce, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data_referencia(),
+            data = data5_referencia(),
             type = "line",
             name = "Referência (países desenvolvidos)",
-            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
             dashStyle = "ShortDot",
             opacity = 0.8
           ) |>
@@ -1599,10 +1478,10 @@ mod_bloco_5_server <- function(id, filtros){
           grafico_base
         } else {
           grafico_base |> highcharter::hc_add_series(
-            data = data_referencia(),
+            data = data5_referencia(),
             type = "line",
             name = "Referência (países desenvolvidos)",
-            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
             dashStyle = "ShortDot",
             opacity = 0.7
           )
@@ -1615,8 +1494,9 @@ mod_bloco_5_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data5_asfixia(),
+            data = data5(),
             type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
@@ -1628,10 +1508,10 @@ mod_bloco_5_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data5_asfixia_referencia(),
+              data = data5_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1639,13 +1519,15 @@ mod_bloco_5_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data5_asfixia(),
+            data = data5(),
             type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data5_asfixia_comp(),
+            data = data5_comp(),
             type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp()$class),
             highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
@@ -1657,10 +1539,10 @@ mod_bloco_5_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data5_asfixia_referencia(),
+              data = data5_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nascidos_vivos_asfixia1, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.7
             )
@@ -1676,6 +1558,7 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data5(),
             type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
@@ -1687,10 +1570,10 @@ mod_bloco_5_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia(),
+              data = data5_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1700,11 +1583,13 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data5(),
             type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data5_comp(),
             type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
@@ -1716,10 +1601,10 @@ mod_bloco_5_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia(),
+              data = data5_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.7
             )

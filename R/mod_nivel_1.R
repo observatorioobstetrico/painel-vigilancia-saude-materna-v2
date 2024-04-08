@@ -481,13 +481,21 @@ mod_nivel_1_ui <- function(id) {
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i3")), proxy.height = "270px")
                 ),
                 column(
-                  offset = 2,
                   width = 4,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i4")), proxy.height = "270px")
                 ),
                 column(
                   width = 4,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i5")), proxy.height = "270px")
+                ),
+                column(
+                  width = 4,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i6")), proxy.height = "270px")
+                ),
+                column(
+                  offset = 4,
+                  width = 4,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i7")), proxy.height = "270px")
                 )
               )
             )
@@ -2156,7 +2164,7 @@ mod_nivel_1_server <- function(id, filtros){
 
     ##### Dados do quinto bloco de indicadores para a localidade escolhida #####
     data5 <- reactive({
-      bloco5 |>
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano == filtros()$ano) |>
         #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
@@ -2189,7 +2197,9 @@ mod_nivel_1_server <- function(id, filtros){
           porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
-                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)
+                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2197,13 +2207,15 @@ mod_nivel_1_server <- function(id, filtros){
 
     ##### Dados do quinto bloco de indicadores para a comparação com o Brasil #####
     data5_comp <- reactive({
-      bloco5 |>
+      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_premat = 10,
-          porc_termo_precoce = 20
+          porc_termo_precoce = 20,
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2236,7 +2248,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_baixo_peso",
-        titulo = "Porcentagem de baixo peso ao nascer",
+        titulo = "Porcentagem de baixo peso ao nascer (< 2500 g)",
         tem_meta = TRUE,
         valor_de_referencia = data5_comp_baixo_peso()$porc_baixo_peso,
         tipo = "porcentagem",
@@ -2248,6 +2260,14 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     output$caixa_b5_i2 <- renderUI({
+      cria_caixa_conjunta_bloco5(
+        dados = data5(),
+        indicador = "baixo peso",
+        titulo = "Dentre os nascidos vivos com baixo peso (< 2500 g),"
+      )
+    })
+
+    output$caixa_b5_i3 <- renderUI({
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_premat",
@@ -2262,7 +2282,15 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b5_i3 <- renderUI({
+    output$caixa_b5_i4 <- renderUI({
+      cria_caixa_conjunta_bloco5(
+        dados = data5(),
+        indicador = "prematuridade",
+        titulo = "Dentre os nascimentos prematuros,"
+      )
+    })
+
+    output$caixa_b5_i5 <- renderUI({
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_termo_precoce",
@@ -2277,21 +2305,38 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b5_i4 <- renderUI({
-      cria_caixa_conjunta_bloco5(
+    output$caixa_b5_i6 <- renderUI({
+      cria_caixa_server(
         dados = data5(),
-        indicador = "baixo peso",
-        titulo = "Dentre os nascidos vivos com baixo peso,"
+        indicador = "porc_condicoes_ameacadoras",
+        titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
+        tem_meta = TRUE,
+        valor_de_referencia = data5_comp()$porc_condicoes_ameacadoras,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        fonte_titulo = "15px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
       )
     })
 
-    output$caixa_b5_i5 <- renderUI({
-      cria_caixa_conjunta_bloco5(
+    output$caixa_b5_i7 <- renderUI({
+      cria_caixa_server(
         dados = data5(),
-        indicador = "prematuridade",
-        titulo = "Dentre os nascimentos prematuros,"
+        indicador = "porc_nascidos_vivos_asfixia1",
+        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+        tem_meta = FALSE,
+        valor_de_referencia = data5_comp()$porc_nascidos_vivos_asfixia1,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        fonte_titulo = "15px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
       )
     })
+
 
     ##### Dados do sexto bloco para a localidade escolhida #####
     data6 <- reactive({
