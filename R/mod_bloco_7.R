@@ -281,7 +281,7 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_fetal_a00_b99",
-                          "(J00-J99) Respiratórias" = "principais_fetal_j00_j99",
+                          #"(J00-J99) Respiratórias" = "principais_fetal_j00_j99",
                           "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_fetal_p00_p04",
                           "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_fetal_p05_p08",
                           "(P10-P15) Traumatismo de parto" = "principais_fetal_p10_p15",
@@ -293,7 +293,7 @@ mod_bloco_7_ui <- function(id) {
                           "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_fetal_p80_p83",
                           "(P90-P96) Outros transtornos originados do período fetal" = "principais_fetal_p90_p96",
                           "(Q00-Q99) Anomalias congênitas" = "principais_fetal_q00_q99",
-                          "Outros" = "principais_fetal_outros"
+                          "Demais causas" = "principais_fetal_outros"
                         ),
                         selected = NULL,
                         multiple = TRUE,
@@ -381,10 +381,11 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "fetal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
+                          "Demais causas" = "fetal_grupos_outros",
                           #"Transtornos cardiorrespiratórios originados do período fetal" = "fetalt_grupos_cardiorrespiratorias",
                           "Afecções originais no período fetal" = "fetal_grupos_afeccoes_fetal",
-                          "Mal definidas" = "fetal_grupos_mal_definida",
-                          "Demais causas" = "fetal_grupos_outros"
+                          "Mal definidas" = "fetal_grupos_mal_definida"
+                          #"Demais causas" = "fetal_grupos_outros"
                         ),
                         selected = c(
                           "fetal_grupos_prematuridade",
@@ -709,7 +710,7 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
-                          "(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
+                          #"(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
                           "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_perinatal_p00_p04",
                           "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_perinatal_p05_p08",
                           "(P10-P15) Traumatismo de parto" = "principais_perinatal_p10_p15",
@@ -807,10 +808,11 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "perinatal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "perinatal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "perinatal_grupos_gravidez",
+                          "Demais causas" = "perinatal_grupos_outros",
                           #"Transtornos cardiorrespiratórios originados do período perinatal" = "perinatalt_grupos_cardiorrespiratorias",
                           "Afecções originais no período perinatal" = "perinatal_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "perinatal_grupos_mal_definida",
-                          "Demais causas" = "perinatal_grupos_outros"
+                          "Mal definidas" = "perinatal_grupos_mal_definida"
+                          #"Demais causas" = "perinatal_grupos_outros"
                         ),
                         selected = c(
                           "perinatal_grupos_prematuridade",
@@ -819,7 +821,7 @@ mod_bloco_7_ui <- function(id) {
                           "perinatal_grupos_ma_formacao",
                           "perinatal_grupos_respiratorias",
                           "perinatal_grupos_gravidez",
-                          #"perinatalt_grupos_cardiorrespiratorias",
+                          "perinatalt_grupos_cardiorrespiratorias",
                           "perinatal_grupos_afeccoes_perinatal",
                           "perinatal_grupos_mal_definida",
                           "perinatal_grupos_outros"
@@ -1143,7 +1145,7 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
-                          "(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
+                          #"(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
                           "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_neonatal_p00_p04",
                           "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_neonatal_p05_p08",
                           "(P10-P15) Traumatismo de parto" = "principais_neonatal_p10_p15",
@@ -1241,10 +1243,11 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "neonat_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "neonat_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "neonat_grupos_gravidez",
+                          "Demais causas " = "neonat_grupos_outros",
                           #"Transtornos cardiorrespiratórios originados do período neonatal" = "neonat_grupos_cardiorrespiratorias",
                           "Afecções originais no período neonatal" = "neonat_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "neonat_grupos_mal_definida",
-                          "Demais causas" = "neonat_grupos_outros"
+                          "Mal definidas" = "neonat_grupos_mal_definida"
+                          #"Demais causas " = "neonat_grupos_outros"
                         ),
                         selected = c(
                           "neonat_grupos_prematuridade",
@@ -5131,7 +5134,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     ## bloco8_graficos porem sem as colunas principais_neonatal_precoce e neonat_precoce_grupos
     bloco8_graficos <- bloco8_graficos |>
-      dplyr::select(-c(colnames(bloco8_graficos)[73:86],colnames(bloco8_graficos)[107:115]))
+      dplyr::select(-c(colnames(bloco8_graficos)[72:84],colnames(bloco8_graficos)[108:116]))
     ## tive que realizar esse filtro para evitar confusão entre  os as colunas neonatal e neonatal_precoce
 
     #########-------------------- Gráficos de distribuição dos grupos de CID
@@ -5255,10 +5258,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5293,10 +5308,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5336,10 +5363,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_perinatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_perinatal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -5425,19 +5464,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_perinatal_outros",
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+                grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
+                grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+                grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
+                grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+                grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+                grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+                grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
+                grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5472,19 +5508,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_perinatal_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveiss_perinatal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5524,19 +5557,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_perinatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_perinatal_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_perinatal == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -5623,20 +5653,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_perinatal,
-            ifelse(
-              grupo_cid10 != "perinatal_grupos_outros",
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_grupos_perinatal == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_perinatal == "perinatal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_perinatal == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_perinatal == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_perinatal == "perinatal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_perinatal == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_perinatal == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_perinatal == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+                grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
+                grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
+                grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+                grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+                grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+                grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+                grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
+                grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5671,20 +5698,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_perinatal,
-            ifelse(
-              grupo_cid10 != "grupos_perinatal_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("grupos_perinatal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_perinatal == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_perinatal == "perinatal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_perinatal == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_perinatal == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_perinatal == "perinatal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_perinatal == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_perinatal == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_perinatal == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5724,20 +5748,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_perinatal,
-            ifelse(
-              grupo_cid10 != "perinatal_grupos_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_perinatal == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_perinatal == "perinatal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_perinatal == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_perinatal == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_perinatal == "perinatal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_perinatal == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_perinatal == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_perinatal == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -5990,13 +6011,24 @@ mod_bloco_7_server <- function(id, filtros){
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
-          grupo_cid10 = ifelse(
+          grupo_cid10 =  ifelse(
             grupo_cid10 %in% input$cids_principais_neonatal,
-            ifelse(
-              grupo_cid10 != "principais_neonatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
-
-              "Demais causas"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6029,15 +6061,36 @@ mod_bloco_7_server <- function(id, filtros){
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
-          grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_principais_neonatal,
-            ifelse(
-              grupo_cid10 != "principais_neonatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
-              "Demais causas"
-            ),
-            "Grupos não selecionados"
-          ),
+           grupo_cid10 = ifelse(
+             grupo_cid10 %in% input$cids_principais_neonatal,
+             #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+             dplyr::case_when(
+               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+               grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+               grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+               grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+               grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+               grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+               grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
+             ),
+             "Grupos não selecionados"
+           ),
+             # ifelse(
+          #   grupo_cid10 %in% input$cids_principais_neonatal,
+          #   ifelse(
+          #     grupo_cid10 != "principais_neonatal_outros",
+          #     gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
+          #     "Demais causas"
+          #   ),
+          #   "Grupos não selecionados"
+          # ),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
             filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
@@ -6074,10 +6127,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_neonatal,
-            ifelse(
-              grupo_cid10 != "principais_neonatal_outros",
-              gsub("_", "-", toupper(substr(grupo_cid10, nchar("principais_neonatal_") + 1,  nchar(grupo_cid10)))),
-              "Demais causas"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -6164,19 +6229,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_neonatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_neonatal_outros",
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Demais causas"
+                grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
+                grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+                grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
+                grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+                grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+                grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+                grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
+                grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6211,19 +6273,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_neonatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_neonatal_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveiss_neonatal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Demais causas"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6263,19 +6322,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_neonatal,
-            ifelse(
-              grupo_cid10 != "evitaveis_neonatal_outros",
-              dplyr::case_when(
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_neonatal == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
-              "Demais causas"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           )
@@ -6362,20 +6418,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_neonatal,
-            ifelse(
-              grupo_cid10 != "neonat_grupos_outros",
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_grupos_neonatal == "neonat_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_neonatal == "neonat_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_neonatal == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_neonatal == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_neonatal == "neonat_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_neonatal == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_neonatal == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_neonatal == "neonat_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+                grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
+                grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
+                grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
+                grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+                grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+                grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+                grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
+                grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6410,20 +6463,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_neonatal,
-            ifelse(
-              grupo_cid10 != "grupos_neonat_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("grupos_neonat_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_neonatal == "neonat_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_neonatal == "neonat_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_neonatal == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_neonatal == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_neonatal == "neonat_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_neonatal == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_neonatal == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_neonatal == "neonat_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Outros"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6463,20 +6513,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_neonatal,
-            ifelse(
-              grupo_cid10 != "neonat_grupos_outros",
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_neonatal == "neonat_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_neonatal == "neonat_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_neonatal == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_neonatal == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_neonatal == "neonat_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_neonatal == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_neonatal == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_neonatal == "neonat_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           )
@@ -6628,10 +6675,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_fetal,
-            ifelse(
-              grupo_cid10 != "principais_fetal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_fetal_") + 1,  nchar(grupo_cid10)))),
-              "Demais causas"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6666,10 +6725,22 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_fetal,
-            ifelse(
-              grupo_cid10 != "principais_fetal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_fetal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6708,11 +6779,23 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_principais_perinatal,
-            ifelse(
-              grupo_cid10 != "principais_fetal_outros",
-              gsub("_", " - ", toupper(substr(grupo_cid10, nchar("principais_fetal_") + 1,  nchar(grupo_cid10)))),
-              "Outros"
+            grupo_cid10 %in% input$cids_principais_fetal,
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -6797,19 +6880,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-            ifelse(
-              grupo_cid10 != "evitaveis_fetal_outros",
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_evitaveis_fetal == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6844,19 +6924,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-            ifelse(
-              grupo_cid10 != "evitaveis_fetal_outros",
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveiss_fetal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_evitaveis_fetal == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
+              grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+              grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
+              grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+              grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+              grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
+              grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -6896,19 +6973,16 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-            ifelse(
-              grupo_cid10 != "evitaveis_fetal_outros",
               #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_evitaveis_fetal == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                input$cids_evitaveis_fetal == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas"
-              ),
-              "Outros"
+                grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
+                grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+                grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
+                grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+                grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+                grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+                grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
+                grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           )
@@ -6994,20 +7068,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-            ifelse(
-              grupo_cid10 != "fetal_grupos_outros",
               #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                input$cids_grupos_fetal == "fetal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_fetal == "fetal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_fetal == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_fetal == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_fetal == "fetal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_fetal == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_fetal == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_fetal == "fetal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+                grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
+                grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
+                grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+                grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+                grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+                grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+                grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
+                grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -7042,20 +7113,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-            ifelse(
-              grupo_cid10 != "grupos_fetal_outros",
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("grupos_fetal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_fetal == "fetal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_fetal == "fetal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_fetal == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_fetal == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_fetal == "fetal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_fetal == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_fetal == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_fetal == "fetal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           ),
@@ -7095,20 +7163,17 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-            ifelse(
-              grupo_cid10 != "fetal_grupos_outros",
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                input$cids_grupos_fetal == "fetal_grupos_prematuridade" ~ "Prematuridade",
-                input$cids_grupos_fetal == "fetal_grupos_infeccoes" ~ "Infecções",
-                input$cids_grupos_fetal == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                input$cids_grupos_fetal == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
-                input$cids_grupos_fetal == "fetal_grupos_respitatorias" ~ "Afecções respiratórias do recém-nascido",
-                input$cids_grupos_fetal == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                input$cids_grupos_fetal == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                input$cids_grupos_fetal == "fetal_grupos_mal_definida" ~ "Mal definidas",
-              ),
-              "Demais causas"
+            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
+              grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
+              grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
+              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
+              grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
+              grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
+              grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
+              grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
             ),
             "Grupos não selecionados"
           )

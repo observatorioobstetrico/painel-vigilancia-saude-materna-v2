@@ -402,7 +402,7 @@ df_principais_fetal <- df_sim_dofet |>
       causabas >= "P80" & causabas <= "P83" ~ "principais_fetal_p80_p83",
       causabas >= "P90" & causabas <= "P96" ~ "principais_fetal_p90_p96",
       causabas >= "Q00" & causabas <= "Q99" ~ "principais_fetal_q00_q99",
-      causabas >= "J00" & causabas <= "J99" ~ "principais_fetal_j00_j99",
+      #causabas >= "J00" & causabas <= "J99" ~ "principais_fetal_j00_j99",
       causabas >= "A00" & causabas <= "A99" |
         causabas >= "B00" & causabas <= "B99" ~ "principais_fetal_a00_b99"
     ),
@@ -475,7 +475,7 @@ df_principais_fetais_tabela <- df_sim_dofet |>
     causabas = substr(causabas, 1, 3),
     grupo_cid10 = case_when(
       causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
-      causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
+      #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
       causabas >= "A00" & causabas <= "A99" |
         causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
       causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
@@ -513,7 +513,7 @@ df_principais_neonatal <- df_sim_doinf |>
       causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_p80_p83",
       causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_p90_p96",
       causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_q00_q99",
-      causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_j00_j99",
+      #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_j00_j99",
       causabas >= "A00" & causabas <= "A99" |
         causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_a00_b99"
     ),
@@ -555,7 +555,7 @@ df_principais_neonatal_precoce <- df_sim_doinf |>
       causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_precoce_p80_p83",
       causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_precoce_p90_p96",
       causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_precoce_q00_q99",
-      causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_precoce_j00_j99",
+      #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_precoce_j00_j99",
       causabas >= "A00" & causabas <= "A99" |
         causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_precoce_a00_b99"
     ),
@@ -610,7 +610,7 @@ df_principais_neonatais_tabela <- df_sim_doinf |>
     causabas = substr(causabas, 1, 3),
     grupo_cid10 = case_when(
       causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
-      causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
+      #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
       causabas >= "A00" & causabas <= "A99" |
         causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
       causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
@@ -689,14 +689,18 @@ mal_definidas <- c(
 ## Causas evitáveis para óbitos fetais ------------------------------------
 df_evitaveis_fetal <- df_sim_dofet |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% imunoprevencao ~ "evitaveis_fetal_imunoprevencao",
-      causabas %in% mulher_gestacao ~ "evitaveis_fetal_mulher_gestacao",
-      causabas %in% evitaveis_parto ~ "evitaveis_fetal_parto",
-      causabas %in% recem_nascido ~ "evitaveis_fetal_recem_nascido",
-      causabas %in% tratamento ~ "evitaveis_fetal_tratamento",
-      causabas %in% saude ~ "evitaveis_fetal_saude",
-      causabas %in% mal_definidas ~ "evitaveis_fetal_mal_definidas"
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_fetal_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "evitaveis_fetal_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_fetal_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_fetal_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_fetal_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_fetal_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_fetal_mal_definidas"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_outros", grupo_cid)
   ) |>
@@ -782,14 +786,18 @@ df_neonatais_precoce_totais_peso <- df_sim_doinf |>
 
 df_neonatais_evitaveis <- df_sim_doinf |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% imunoprevencao ~ "evitaveis_neonatal_imunoprevencao",
-      causabas %in% mulher_gestacao ~ "evitaveis_neonatal_mulher_gestacao",
-      causabas %in% evitaveis_parto ~ "evitaveis_neonatal_parto",
-      causabas %in% recem_nascido ~ "evitaveis_neonatal_recem_nascido",
-      causabas %in% tratamento ~ "evitaveis_neonatal_tratamento",
-      causabas %in% saude ~ "evitaveis_neonatal_saude",
-      causabas %in% mal_definidas ~ "evitaveis_neonatal_mal_definidas"
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_mal_definidas"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_outros", grupo_cid),
     faixa_de_peso = case_when(
@@ -819,14 +827,18 @@ df_neonatais_evitaveis[is.na(df_neonatais_evitaveis)] <- 0
 
 df_neonatais_precoce_evitaveis <- df_sim_doinf |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% imunoprevencao ~ "evitaveis_neonatal_precoce_imunoprevencao",
-      causabas %in% mulher_gestacao ~ "evitaveis_neonatal_precoce_mulher_gestacao",
-      causabas %in% evitaveis_parto ~ "evitaveis_neonatal_precoce_parto",
-      causabas %in% recem_nascido ~ "evitaveis_neonatal_precoce_recem_nascido",
-      causabas %in% tratamento ~ "evitaveis_neonatal_precoce_tratamento",
-      causabas %in% saude ~ "evitaveis_neonatal_precoce_saude",
-      causabas %in% mal_definidas ~ "evitaveis_neonatal_precoce_mal_definidas"
+      causabas %in% imunoprevencao  | causabas2 %in% imunoprevencao~ "evitaveis_neonatal_precoce_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_precoce_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto~ "evitaveis_neonatal_precoce_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_precoce_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento~ "evitaveis_neonatal_precoce_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_precoce_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "evitaveis_neonatal_precoce_mal_definidas"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_precoce_outros", grupo_cid),
   ) |>
@@ -944,7 +956,7 @@ df_grupos_fetais_tabela <- df_sim_dofet |>
       causabas %in% grupos_asfixia | causabas_categoria %in% grupos_asfixia ~ "Asfixia/Hipóxia",
       causabas %in% grupos_respiratorias | causabas_categoria %in% grupos_respiratorias ~ "Afecções respiratórias do recém-nascido",
       causabas %in% grupos_gravidez | causabas_categoria %in% grupos_gravidez ~ "Fatores maternos relacionados à gravidez",
-      causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
+      #causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
       causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
       causabas %in% grupos_ma_formacao ~ "Má formação congênita",
       causabas %in% grupos_mal_definida ~ "Causas mal definidas",
@@ -966,16 +978,20 @@ write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2012_2022.c
 
 df_fetais_grupos <- df_sim_dofet |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade ~ "fetal_grupos_prematuridade",
-      causabas %in% grupos_infeccoes ~ "fetal_grupos_infeccoes",
-      causabas %in% grupos_asfixia ~ "fetal_grupos_asfixia",
-      causabas %in% grupos_respiratorias ~ "fetal_grupos_respiratorias",
-      causabas %in% grupos_gravidez ~ "fetal_grupos_gravidez",
-      causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal ~ "fetal_grupos_afeccoes_perinatal",
-      causabas %in% grupos_ma_formacao ~ "fetal_grupos_ma_formacao",
-      causabas %in% grupos_mal_definida ~ "fetal_grupos_mal_definida",
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "fetal_grupos_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes  ~ "fetal_grupos_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "fetal_grupos_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "fetal_grupos_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_grupos_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_grupos_afeccoes_perinatal",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_grupos_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_grupos_mal_definida",
       TRUE ~ "fetal_grupos_outros"
     )
   ) |>
@@ -1036,7 +1052,7 @@ df_grupos_neonatais_tabela <- df_sim_doinf |>
       causabas %in% grupos_asfixia | causabas_categoria %in% grupos_asfixia ~ "Asfixia/Hipóxia",
       causabas %in% grupos_respiratorias | causabas_categoria %in% grupos_respiratorias ~ "Afecções respiratórias do recém-nascido",
       causabas %in% grupos_gravidez | causabas_categoria %in% grupos_gravidez ~ "Fatores maternos relacionados à gravidez",
-      causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
+      #causabas %in% grupos_cardiorrespiratoria | causabas_categoria %in% grupos_cardiorrespiratoria ~ "Transtornos cardiorrespiratórios originados do período perinatal",
       causabas %in% grupos_afeccoes_perinatal | causabas_categoria %in% grupos_afeccoes_perinatal ~ "Afecções ariginais no período perinatal",
       causabas %in% grupos_ma_formacao ~ "Má formação congênita",
       causabas %in% grupos_mal_definida ~ "Causas mal definidas",
@@ -1059,14 +1075,18 @@ write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2012_
 
 df_neonatais_grupos <- df_sim_doinf |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade ~ "neonat_grupos_prematuridade",
-      causabas %in% grupos_infeccoes ~ "neonat_grupos_infeccoes",
-      causabas %in% grupos_asfixia ~ "neonat_grupos_asfixia",
-      causabas %in% grupos_respiratorias ~ "neonat_grupos_respiratorias",
-      causabas %in% grupos_gravidez ~ "neonat_grupos_gravidez",
-      causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal ~ "neonat_grupos_afeccoes_perinatal",
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "neonat_grupos_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "neonat_grupos_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "neonat_grupos_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "neonat_grupos_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "neonat_grupos_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "neonat_grupos_afeccoes_perinatal",
       causabas >= "Q00" & causabas <= "Q99" ~ "neonat_grupos_ma_formacao",
       causabas >= "R00" & causabas <= "R99" ~ "neonat_grupos_mal_definida",
       TRUE ~ "neonat_grupos_outros"
@@ -1091,14 +1111,18 @@ df_neonatais_grupos[is.na(df_neonatais_grupos)] <- 0
 
 df_neonatais_precoce_grupos <- df_sim_doinf |>
   mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade ~ "neonat_precoce_grupos_prematuridade",
-      causabas %in% grupos_infeccoes ~ "neonat_precoce_grupos_infeccoes",
-      causabas %in% grupos_asfixia ~ "neonat_precoce_grupos_asfixia",
-      causabas %in% grupos_respiratorias ~ "neonat_precoce_grupos_respiratorias",
-      causabas %in% grupos_gravidez ~ "neonat_precoce_grupos_gravidez",
-      causabas %in% grupos_cardiorrespiratoria ~ "neonat_precoce_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal ~ "neonat_precoce_grupos_afeccoes_perinatal",
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "neonat_precoce_grupos_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "neonat_precoce_grupos_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "neonat_precoce_grupos_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias~ "neonat_precoce_grupos_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "neonat_precoce_grupos_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_precoce_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "neonat_precoce_grupos_afeccoes_perinatal",
       causabas >= "Q00" & causabas <= "Q99" ~ "neonat_precoce_grupos_ma_formacao",
       causabas >= "R00" & causabas <= "R99" ~ "neonat_precoce_grupos_mal_definida",
       TRUE ~ "neonat_precoce_grupos_outros"
@@ -1134,7 +1158,7 @@ df_bloco8_graficos <- df_bloco8_graficos |>
   mutate(
     obitos_perinatais_totais = obitos_neonatais_precoce_totais + obitos_fetais_totais,
     principais_perinatal_a00_b99 = principais_neonatal_precoce_a00_b99 + principais_fetal_a00_b99,
-    principais_perinatal_j00_j99 = principais_neonatal_precoce_j00_j99, #não temos essa categoria para fetal,
+    #principais_perinatal_j00_j99 = principais_neonatal_precoce_j00_j99, #não temos essa categoria para fetal,
     principais_perinatal_p00_p04 = principais_neonatal_precoce_p00_p04 + principais_fetal_p00_p04,
     principais_perinatal_p05_p08 = principais_neonatal_precoce_p05_p08 + principais_fetal_p05_p08,
     principais_perinatal_p10_p15 = principais_neonatal_precoce_p10_p15 + principais_fetal_p10_p15,
