@@ -367,6 +367,7 @@ mod_bloco_7_ui <- function(id) {
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas &nbsp;</b>")
                   ),
                   hr(),
+
                   fluidRow(
                     column(
                       width = 12,
@@ -381,29 +382,55 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "fetal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
-                          "Demais causas" = "fetal_grupos_outros",
-                          #"Transtornos cardiorrespiratórios originados do período fetal" = "fetalt_grupos_cardiorrespiratorias",
-                          "Afecções originais no período fetal" = "fetal_grupos_afeccoes_fetal",
-                          "Mal definidas" = "fetal_grupos_mal_definida"
-                          #"Demais causas" = "fetal_grupos_outros"
+                          "Afecções originais no período fetal" = "fetal_grupos_afeccoes_perinatal",
+                          "Mal definidas" = "fetal_grupos_mal_definida",
+                          "Demais causas" = "fetal_grupos_outros"
                         ),
-                        selected = c(
-                          "fetal_grupos_prematuridade",
-                          "fetal_grupos_infeccoes",
-                          "fetal_grupos_asfixia",
-                          "fetal_grupos_ma_formacao",
-                          "fetal_grupos_respiratorias",
-                          "fetal_grupos_gravidez",
-                          #"fetalt_grupos_cardiorrespiratorias",
-                          "fetal_grupos_afeccoes_fetal",
-                          "fetal_grupos_mal_definida",
-                          "fetal_grupos_outros"
-                        ),
+                        selected = c("fetal_grupos_prematuridade", "fetal_grupos_infeccoes",
+                                     "fetal_grupos_asfixia", "fetal_grupos_ma_formacao", "fetal_grupos_respiratorias",
+                                     "fetal_grupos_gravidez", "fetal_grupos_afeccoes_perinatal", "fetal_grupos_mal_definida",
+                                     "fetal_grupos_outros"),
                         multiple = TRUE,
                         width = "100%"
                       )
                     )
                   ),
+
+                  # fluidRow(
+                  #   column(
+                  #     width = 12,
+                  #     shinyWidgets::pickerInput(
+                  #       inputId = ns("cids_grupos_fetal"),
+                  #       label = "Grupos de causas",
+                  #       options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                  #       choices = c(
+                  #         "Prematuridade" = "fetal_grupos_prematuridade",
+                  #         "Infecções" = "fetal_grupos_infeccoes",
+                  #         "Asfixia/Hipóxia" = "fetal_grupos_asfixia",
+                  #         "Má formação congênita" = "fetal_grupos_ma_formacao",
+                  #         "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
+                  #         "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
+                  #         "Demais causas" = "fetal_grupos_outros",
+                  #         "Afecções originais no período fetal" = "fetal_grupos_afeccoes_fetal",
+                  #         "Mal definidas" = "fetal_grupos_mal_definida",
+                  #         "teste" = "teste"
+                  #         ),
+                  #       selected = c(
+                  #         "fetal_grupos_prematuridade",
+                  #         "fetal_grupos_infeccoes",
+                  #         "fetal_grupos_asfixia",
+                  #         "fetal_grupos_ma_formacao",
+                  #         "fetal_grupos_respiratorias",
+                  #         "fetal_grupos_gravidez",
+                  #         "fetal_grupos_afeccoes_fetal",
+                  #         "fetal_grupos_mal_definida",
+                  #         "fetal_grupos_outros"
+                  #       ),
+                  #       multiple = TRUE,
+                  #       width = "100%"
+                  #     )
+                  #   )
+                  # ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 450))
                 )
               )
@@ -808,11 +835,10 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "perinatal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "perinatal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "perinatal_grupos_gravidez",
-                          "Demais causas" = "perinatal_grupos_outros",
-                          #"Transtornos cardiorrespiratórios originados do período perinatal" = "perinatalt_grupos_cardiorrespiratorias",
                           "Afecções originais no período perinatal" = "perinatal_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "perinatal_grupos_mal_definida"
-                          #"Demais causas" = "perinatal_grupos_outros"
+                          "Mal definidas" = "perinatal_grupos_mal_definida",
+                          "Demais causas" = "perinatal_grupos_outros"
+
                         ),
                         selected = c(
                           "perinatal_grupos_prematuridade",
@@ -821,7 +847,6 @@ mod_bloco_7_ui <- function(id) {
                           "perinatal_grupos_ma_formacao",
                           "perinatal_grupos_respiratorias",
                           "perinatal_grupos_gravidez",
-                          "perinatalt_grupos_cardiorrespiratorias",
                           "perinatal_grupos_afeccoes_perinatal",
                           "perinatal_grupos_mal_definida",
                           "perinatal_grupos_outros"
@@ -1243,11 +1268,9 @@ mod_bloco_7_ui <- function(id) {
                           "Má formação congênita" = "neonat_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "neonat_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "neonat_grupos_gravidez",
-                          "Demais causas " = "neonat_grupos_outros",
-                          #"Transtornos cardiorrespiratórios originados do período neonatal" = "neonat_grupos_cardiorrespiratorias",
                           "Afecções originais no período neonatal" = "neonat_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "neonat_grupos_mal_definida"
-                          #"Demais causas " = "neonat_grupos_outros"
+                          "Mal definidas" = "neonat_grupos_mal_definida",
+                          "Demais causas " = "neonat_grupos_outros"
                         ),
                         selected = c(
                           "neonat_grupos_prematuridade",
@@ -1256,7 +1279,6 @@ mod_bloco_7_ui <- function(id) {
                           "neonat_grupos_ma_formacao",
                           "neonat_grupos_respiratorias",
                           "neonat_grupos_gravidez",
-                          #"neonat_grupos_cardiorrespiratorias",
                           "neonat_grupos_afeccoes_perinatal",
                           "neonat_grupos_mal_definida",
                           "neonat_grupos_outros"
@@ -6020,7 +6042,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
@@ -6070,7 +6092,7 @@ mod_bloco_7_server <- function(id, filtros){
                grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
                grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
                grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-               grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+               grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
                grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
                grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
                grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
@@ -6134,7 +6156,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_neonatall_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
