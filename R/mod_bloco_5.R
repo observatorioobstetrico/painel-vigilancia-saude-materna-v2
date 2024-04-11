@@ -306,53 +306,79 @@ mod_bloco_5_ui <- function(id) {
                 )
               )
             )
-          )
-        )
-      )
-    ),
-    fluidRow(
-      column(
-        width = 4,
-        bs4Dash::bs4Card(
-          width = 12,
-          status = "primary",
-          collapsible = FALSE,
-          headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-          div(
-            style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
-            shinyjs::hidden(
-              span(
-                id = ns("mostrar_botao7"),
-                shinyWidgets::actionBttn(
-                  inputId = ns("botao7"),
-                  icon = icon("triangle-exclamation", style = "color: red"),
-                  color = "warning",
-                  style = "material-circle",
-                  size = "xs"
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao7"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao7"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
                 )
-              )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 500))
             )
           ),
-          hr(),
-          shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 500))
-        )
-      ),
-      column(
-        width = 8,
-        bs4Dash::bs4Card(
-          width = 12,
-          status = "primary",
-          collapsible = FALSE,
-          headerBorder = FALSE,
-          style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-          div(
-            style = "height: 15%; display: flex; align-items: center;",
-            HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritários para vigilância  definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância  definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao7"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao7"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 500))
+            )
           ),
-          hr(),
-          shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
+          column(
+            width = 12,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritários para vigilância  definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
+              ),
+              hr(),
+              shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
+            )
+          )
         )
       )
     )
@@ -949,9 +975,18 @@ mod_bloco_5_server <- function(id, filtros){
     # Para os gráficos --------------------------------------------------------
     cols <- c("#2c115f", "#b73779", "#fc8961")
 
+    # organizando tabela malformações -----------------------------------------
+
+    malformacao2 <- malformacao |>
+      dplyr::select(c(1:3), 5, 14) |>
+      dplyr::group_by(ano, codmunres, municipio, uf) |>
+      dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
+
+
     ## Calculando os indicadores para cada ano do período selecionado ---------
     data5 <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      dplyr::left_join(bloco5, asfixia) |>
+      dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -986,6 +1021,7 @@ mod_bloco_5_server <- function(id, filtros){
           porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -999,7 +1035,8 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     data5_comp <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      dplyr::left_join(bloco5, asfixia) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -1036,6 +1073,7 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
             filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
@@ -1050,7 +1088,9 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     data5_referencia <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      dplyr::left_join(bloco5, asfixia) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -1086,6 +1126,7 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                   nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
           localidade_comparacao = dplyr::if_else(
             filtros()$comparar == "Não",
             "Média nacional",
@@ -1715,6 +1756,68 @@ mod_bloco_5_server <- function(id, filtros){
 
     })
 
+
+    ### Gráfico malformações  -------------------------------------------------
+
+    output$plot6 <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data5(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
+            highcharter::hcaes(x = ano, y = porc_malformacao, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_malformacao, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data5(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
+            highcharter::hcaes(x = ano, y = porc_malformacao, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data5_comp(),
+            type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp()$class),
+            highcharter::hcaes(x = ano, y = porc_malformacao, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_malformacao, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
     ### Tabela de malformações ------------------------------------------------
     data5_nascidos_vivos <- reactive({
       bloco5 |>
