@@ -26,9 +26,7 @@ app_ui <- function(request) {
     ")),
     tags$style(HTML("
       .dropdown-menu {
-        max-height: 251.3px;
-        overflow: hidden;
-        min-height: 153px;
+        overflow: auto;
         width: inherit;
         position: absolute;
         will-change: transform;

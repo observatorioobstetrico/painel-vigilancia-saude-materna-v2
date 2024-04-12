@@ -220,7 +220,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 440))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 480))
                 )
               ),
               column(
@@ -255,7 +255,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 520))
                 )
               ),
               ###### Inclusão gráfico plot_principais_fetal
@@ -268,8 +268,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -278,7 +278,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_fetal"),
                         label = "Grupos de causas principais",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_fetal_a00_b99",
                           #"(J00-J99) Respiratórias" = "principais_fetal_j00_j99",
@@ -301,7 +301,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_fetal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_fetal"), height = 500))
                 )
               ),
               # Inclusão Gráfico plot_grupos_fetal
@@ -314,8 +314,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
 
@@ -325,7 +325,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
                         label = "Grupos de causas",
-                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "fetal_grupos_prematuridade",
                           "Infecções" = "fetal_grupos_infeccoes",
@@ -353,7 +353,7 @@ mod_bloco_7_ui <- function(id) {
                   #     shinyWidgets::pickerInput(
                   #       inputId = ns("cids_grupos_fetal"),
                   #       label = "Grupos de causas",
-                  #       options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                  #       options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                   #       choices = c(
                   #         "Prematuridade" = "fetal_grupos_prematuridade",
                   #         "Infecções" = "fetal_grupos_infeccoes",
@@ -382,7 +382,7 @@ mod_bloco_7_ui <- function(id) {
                   #     )
                   #   )
                   # ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 500))
                 )
               ),
               column(
@@ -394,8 +394,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -404,7 +404,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal"),
                         label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_fetal_imunoprevencao",
                           "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_fetal_mulher_gestacao",
@@ -430,7 +430,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 500))
                 )
               )
             )
@@ -503,10 +503,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -539,10 +539,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -573,10 +573,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -607,10 +607,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -643,7 +643,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso  &nbsp;</b>")
                   ),
                   hr(),
@@ -671,7 +671,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 480))
                 )
               ),
               column(
@@ -683,7 +683,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito  &nbsp;</b>")
                   ),
                   hr(),
@@ -711,7 +711,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 480))
                 )
               ),
               column(
@@ -723,8 +723,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -733,7 +733,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_perinatal"),
                         label = "Grupos de causas principais",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
                           #"(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
@@ -756,7 +756,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 500))
                 )
               ),
               column(
@@ -768,8 +768,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -778,7 +778,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
                         label = "Grupos de causas",
-                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "perinatal_grupos_prematuridade",
                           "Infecções" = "perinatal_grupos_infeccoes",
@@ -807,7 +807,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 500))
                 )
               ),
               column(
@@ -819,8 +819,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -829,7 +829,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
                         label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
                           "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_perinatal_mulher_gestacao",
@@ -855,7 +855,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 500))
                 )
               )
             )
@@ -1076,7 +1076,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso &nbsp;</b>")
                   ),
                   hr(),
@@ -1104,7 +1104,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 480))
                 )
               ),
               column(
@@ -1116,7 +1116,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito &nbsp;</b>")
                   ),
                   hr(),
@@ -1144,7 +1144,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 480))
                 )
               ),
               column(
@@ -1156,8 +1156,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1166,7 +1166,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_neonatal"),
                         label = "Grupos de causas principais",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
                           #"(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
@@ -1189,7 +1189,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 500))
                 )
               ),
 
@@ -1202,8 +1202,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1212,7 +1212,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_neonatal"),
                         label = "Grupos de causas",
-                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "neonat_grupos_prematuridade",
                           "Infecções" = "neonat_grupos_infeccoes",
@@ -1240,7 +1240,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 500))
                 )
               ),
               column(
@@ -1252,8 +1252,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1262,7 +1262,7 @@ mod_bloco_7_ui <- function(id) {
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_neonatal"),
                         label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
                           "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_neonatal_mulher_gestacao",
@@ -1288,7 +1288,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 500))
                 )
               )
             )
@@ -1717,7 +1717,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(fetal_peso_menos_1500, fetal_peso_1500_1999, fetal_peso_2000_2499, fetal_peso_mais_2500))
             *100, 2),
 
-          faltante_dist_moment_obito_fetal = round(100 - antes_dist_moment_obito_fetal - durante_dist_moment_obito_fetal, 2),
+          faltante_dist_moment_obito_fetal = round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2),
 
           menos_1500_dist_peso_fetal = round(
             sum(c(fetal_antes_peso_menos_1500, fetal_durante_peso_menos_1500))/
@@ -1739,7 +1739,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(fetal_antes, fetal_durante))
             *100, 2),
 
-          faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal - de_1500_1999_dist_peso_fetal - de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
+          faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
 
           antes_dist_moment_obito_perinat = round(
             sum(c(fetal_antes_peso_menos_1500, fetal_antes_peso_1500_1999, fetal_antes_peso_2000_2499, fetal_antes_peso_mais_2500))/
@@ -2212,7 +2212,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(fetal_peso_menos_1500, fetal_peso_1500_1999, fetal_peso_2000_2499, fetal_peso_mais_2500)[seleciona(aba = "fetal", indicador ="momento de obito por peso") %in% input$faixa_peso_dist_moment_obit_fetal])
             *100, 2),
 
-          faltante_dist_moment_obito_fetal = round(100 - antes_dist_moment_obito_fetal - durante_dist_moment_obito_fetal, 2),
+          faltante_dist_moment_obito_fetal = round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2),
 
           antes_dist_moment_obito_perinat = round(
             sum(c(fetal_antes_peso_menos_1500, fetal_antes_peso_1500_1999, fetal_antes_peso_2000_2499, fetal_antes_peso_mais_2500)[seleciona(aba = "perinatal", indicador = "momento de obito por peso") %in% input$faixa_peso_dist_moment_obit_perinat])/
@@ -2439,7 +2439,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(fetal_antes, fetal_durante)[seleciona(aba = "fetal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_fetal])
             *100, 2),
 
-          faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal - de_1500_1999_dist_peso_fetal - de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
+          faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
 
           menos_1500_dist_peso_perinat = round(
             sum(c(fetal_antes_peso_menos_1500, fetal_durante_peso_menos_1500, obitos_0dias_menos1500, obitos_1_6dias_menos1500)[seleciona(aba = "perinatal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_perinat])/
@@ -2821,7 +2821,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(br_fetal_peso_menos_1500, br_fetal_peso_1500_1999, br_fetal_peso_2000_2499, br_fetal_peso_mais_2500)[seleciona(aba = "fetal", indicador ="momento de obito por peso") %in% input$faixa_peso_dist_moment_obit_fetal])
             *100, 2),
 
-          br_faltante_dist_moment_obito_fetal = round(100 - br_antes_dist_moment_obito_fetal - br_durante_dist_moment_obito_fetal, 2),
+          br_faltante_dist_moment_obito_fetal = round(100-br_antes_dist_moment_obito_fetal-br_durante_dist_moment_obito_fetal, 2),
 
           br_menos_1500_dist_peso_fetal = round(
             sum(c(br_fetal_antes_peso_menos_1500, br_fetal_durante_peso_menos_1500)[seleciona(aba = "fetal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_fetal])/
@@ -2843,7 +2843,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(br_fetal_antes, br_fetal_durante)[seleciona(aba = "fetal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_fetal])
             *100, 2),
 
-          br_faltante_dist_peso_fetal = round(100 -br_menos_1500_dist_peso_fetal - br_de_1500_1999_dist_peso_fetal - br_de_2000_2499_dist_peso_fetal -br_mais_2500_dist_peso_fetal, 2),
+          br_faltante_dist_peso_fetal = round(100 -br_menos_1500_dist_peso_fetal-br_de_1500_1999_dist_peso_fetal-br_de_2000_2499_dist_peso_fetal -br_mais_2500_dist_peso_fetal, 2),
 
           br_antes_dist_moment_obito_perinat = round(
             sum(c(br_fetal_antes_peso_menos_1500, br_fetal_antes_peso_1500_1999, br_fetal_antes_peso_2000_2499, br_fetal_antes_peso_mais_2500)[seleciona(aba = "perinatal", indicador = "momento de obito por peso") %in% input$faixa_peso_dist_moment_obit_perinat])/
@@ -3042,7 +3042,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(br_fetal_peso_menos_1500, br_fetal_peso_1500_1999, br_fetal_peso_2000_2499, br_fetal_peso_mais_2500)[seleciona(aba = "fetal", indicador ="momento de obito por peso") %in% input$faixa_peso_dist_moment_obit_fetal])
             *100, 2),
 
-          br_faltante_dist_moment_obito_fetal = round(100 - br_antes_dist_moment_obito_fetal - br_durante_dist_moment_obito_fetal, 2),
+          br_faltante_dist_moment_obito_fetal = round(100-br_antes_dist_moment_obito_fetal-br_durante_dist_moment_obito_fetal, 2),
 
 
           br_antes_dist_moment_obito_perinat = round(
@@ -3208,7 +3208,7 @@ mod_bloco_7_server <- function(id, filtros){
               sum(c(br_fetal_antes, br_fetal_durante)[seleciona(aba = "fetal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_fetal])
             *100, 2),
 
-          br_faltante_dist_peso_fetal = round(100 -br_menos_1500_dist_peso_fetal - br_de_1500_1999_dist_peso_fetal - br_de_2000_2499_dist_peso_fetal -br_mais_2500_dist_peso_fetal, 2),
+          br_faltante_dist_peso_fetal = round(100 -br_menos_1500_dist_peso_fetal-br_de_1500_1999_dist_peso_fetal-br_de_2000_2499_dist_peso_fetal -br_mais_2500_dist_peso_fetal, 2),
 
           br_menos_1500_dist_peso_perinat = round(
             sum(c(br_fetal_antes_peso_menos_1500, br_fetal_durante_peso_menos_1500, br_obitos_0dias_menos1500, br_obitos_1_6dias_menos1500)[seleciona(aba = "perinatal", indicador ="peso por momento do obito") %in% input$momento_obito_dist_peso_perinat])/
@@ -5280,21 +5280,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -5330,21 +5330,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -5385,21 +5385,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_perinatal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_perinatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_perinatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_perinatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_perinatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_perinatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_perinatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_perinatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_perinatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_perinatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_perinatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_perinatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_perinatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -5649,7 +5649,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2)]
         ) |>
@@ -5841,7 +5841,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_grupos_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_perinatal()$grupo_cid10)) + 2)]
         ) |>
@@ -6035,21 +6035,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 =  ifelse(
             grupo_cid10 %in% input$cids_principais_neonatal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -6085,21 +6085,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
            grupo_cid10 = ifelse(
              grupo_cid10 %in% input$cids_principais_neonatal,
-             #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
              dplyr::case_when(
-               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-               grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-               grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-               grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-               grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-               grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+               grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+               grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+               grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+               grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+               grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
                grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
              ),
              "Grupos não selecionados"
@@ -6149,21 +6149,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_neonatal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -6414,7 +6414,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2)]
         ) |>
@@ -6606,7 +6606,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_grupos_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_neonatal()$grupo_cid10)) + 2)]
         ) |>
@@ -6657,6 +6657,8 @@ mod_bloco_7_server <- function(id, filtros){
         head(n = 6)
     })
 
+    observe(print(data_principais_fetal_aux()$grupo_cid10))
+
     # Atualizando o input para selecionar essas 6 colunas
     observeEvent(filtros()$nivel, {
 
@@ -6697,21 +6699,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -6747,21 +6749,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -6802,21 +6804,21 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_principais_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00 - P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05 - P08) Duração da gestação e crescimento fetal",
-              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10 - P15) Traumatismo de parto",
-              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20 - P29) Transtornos respiratórios e cardiovasculares do período fetal",
-              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35 - P39) Infecções do período fetal",
-              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50 - P61) Transtornos hemorrágicos e hematológicos",
-              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70 - P74) Transtornos endócrinos e metabólicos transitórios",
-              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75 - P78) Transtornos do aparelho digestivo",
-              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80 - P83) Afecções comprometendo tegumento e regulação térmica ",
-              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90 - P96) Outros transtornos no período fetal",
-              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00 - B99) Infecciosas",
-              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00 - Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_fetal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_fetal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_fetal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_fetal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_fetal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_fetal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_fetal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_fetal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_fetal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_fetal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_fetal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
               grupo_cid10 == "principais_fetal_outros" ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -6902,7 +6904,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
               grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
               grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
@@ -6946,7 +6948,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
               grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
               grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
@@ -6995,7 +6997,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_evitaveis_fetal,
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
                 grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
                 grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
@@ -7065,7 +7067,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_fetal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_fetal()$grupo_cid10)) + 2)]
         ) |>
@@ -7090,7 +7092,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-              #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
                 grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
                 grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
@@ -7135,7 +7137,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
               grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
@@ -7185,7 +7187,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = ifelse(
             grupo_cid10 %in% input$cids_grupos_fetal,
-            #gsub("_", " - ", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
               grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
@@ -7257,7 +7259,7 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo CID-10")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_grupos_fetal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_fetal()$grupo_cid10)) + 2)]
         ) |>
