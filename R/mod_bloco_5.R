@@ -347,7 +347,7 @@ mod_bloco_5_ui <- function(id) {
               headerBorder = FALSE,
               style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 20%; display: flex; align-items: center",
                 HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
@@ -363,7 +363,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 500))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 470))
             )
           ),
           column(
@@ -821,6 +821,7 @@ mod_bloco_5_server <- function(id, filtros){
         dados = data5_resumo(),
         indicador = "baixo peso",
         titulo = "Dentre os nascidos vivos com baixo peso (< 2500 g),",
+        fonte_titulo = "15px",
         tamanho_caixa = "320px"
       )
     })
