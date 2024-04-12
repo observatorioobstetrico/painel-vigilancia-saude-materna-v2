@@ -6660,8 +6660,6 @@ mod_bloco_7_server <- function(id, filtros){
         head(n = 6)
     })
 
-    observe(print(data_principais_fetal_aux()$grupo_cid10))
-
     # Atualizando o input para selecionar essas 6 colunas
     observeEvent(filtros()$nivel, {
 
