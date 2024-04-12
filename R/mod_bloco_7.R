@@ -269,7 +269,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -304,55 +304,6 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_fetal"), height = 450))
                 )
               ),
-              # Inclusão gráfico plot_evitaveis_fetal
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_evitaveis_fetal"),
-                        label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
-                        choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_fetal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_fetal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_fetal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_fetal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_fetal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_fetal_saude",
-                          "Causas mal definidas" = "evitaveis_fetal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_fetal_outros"
-                        ),
-                        selected = c(
-                          "evitaveis_fetal_imunoprevencao",
-                          "evitaveis_fetal_mulher_gestacao",
-                           "evitaveis_fetal_parto",
-                          "evitaveis_fetal_recem_nascido",
-                          "evitaveis_fetal_tratamento",
-                          "evitaveis_fetal_saude",
-                          "evitaveis_fetal_mal_definidas",
-                          "evitaveis_fetal_outros"
-                        ),
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 450))
-                )
-              ),
               # Inclusão Gráfico plot_grupos_fetal
               column(
                 width = 12,
@@ -364,7 +315,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
                   ),
                   hr(),
 
@@ -432,6 +383,54 @@ mod_bloco_7_ui <- function(id) {
                   #   )
                   # ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_fetal"),
+                        label = "Grupos de causas evitáveis",
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "evitaveis_fetal_imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_fetal_mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_fetal_parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_fetal_recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_fetal_tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_fetal_saude",
+                          "Causas mal definidas" = "evitaveis_fetal_mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "evitaveis_fetal_outros"
+                        ),
+                        selected = c(
+                          "evitaveis_fetal_imunoprevencao",
+                          "evitaveis_fetal_mulher_gestacao",
+                          "evitaveis_fetal_parto",
+                          "evitaveis_fetal_recem_nascido",
+                          "evitaveis_fetal_tratamento",
+                          "evitaveis_fetal_saude",
+                          "evitaveis_fetal_mal_definidas",
+                          "evitaveis_fetal_outros"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 450))
                 )
               )
             )
@@ -504,10 +503,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -540,10 +539,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -574,10 +573,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -608,10 +607,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 900px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -725,7 +724,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -770,55 +769,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_evitaveis_perinatal"),
-                        label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
-                        choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_perinatal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_perinatal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_perinatal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_perinatal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_perinatal_saude",
-                          "Causas mal definidas" = "evitaveis_perinatal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_perinatal_outros"
-                        ),
-                        selected = c(
-                          "evitaveis_perinatal_imunoprevencao",
-                          "evitaveis_perinatal_mulher_gestacao",
-                          "evitaveis_perinatal_parto",
-                          "evitaveis_perinatal_recem_nascido",
-                          "evitaveis_perinatal_tratamento",
-                          "evitaveis_perinatal_saude",
-                          "evitaveis_perinatal_mal_definidas",
-                           "evitaveis_perinatal_outros"
-                        ),
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 450))
-                )
-              ),
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -857,6 +808,54 @@ mod_bloco_7_ui <- function(id) {
                     )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_perinatal"),
+                        label = "Grupos de causas evitáveis",
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_perinatal_mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_perinatal_parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_perinatal_recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_perinatal_tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_perinatal_saude",
+                          "Causas mal definidas" = "evitaveis_perinatal_mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "evitaveis_perinatal_outros"
+                        ),
+                        selected = c(
+                          "evitaveis_perinatal_imunoprevencao",
+                          "evitaveis_perinatal_mulher_gestacao",
+                          "evitaveis_perinatal_parto",
+                          "evitaveis_perinatal_recem_nascido",
+                          "evitaveis_perinatal_tratamento",
+                          "evitaveis_perinatal_saude",
+                          "evitaveis_perinatal_mal_definidas",
+                          "evitaveis_perinatal_outros"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 450))
                 )
               )
             )
@@ -1158,7 +1157,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatal por causas principais &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1193,6 +1192,7 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 450))
                 )
               ),
+
               column(
                 width = 12,
                 bs4Dash::bs4Card(
@@ -1203,55 +1203,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_evitaveis_neonatal"),
-                        label = "Grupos de causas evitáveis",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
-                        choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_neonatal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_neonatal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_neonatal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_neonatal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_neonatal_saude",
-                          "Causas mal definidas" = "evitaveis_neonatal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_neonatal_outros"
-                        ),
-                        selected = c(
-                          "evitaveis_neonatal_imunoprevencao",
-                          "evitaveis_neonatal_mulher_gestacao",
-                          "evitaveis_neonatal_parto",
-                          "evitaveis_neonatal_recem_nascido",
-                          "evitaveis_neonatal_tratamento",
-                          "evitaveis_neonatal_saude",
-                          "evitaveis_neonatal_mal_definidas",
-                          "evitaveis_neonatal_outros"
-                        ),
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 450))
-                )
-              ),
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf</a>). &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1289,6 +1241,54 @@ mod_bloco_7_ui <- function(id) {
                     )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 450))
+                )
+              ),
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf</a>). &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_neonatal"),
+                        label = "Grupos de causas evitáveis",
+                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_neonatal_mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_neonatal_parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_neonatal_recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_neonatal_tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_neonatal_saude",
+                          "Causas mal definidas" = "evitaveis_neonatal_mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "evitaveis_neonatal_outros"
+                        ),
+                        selected = c(
+                          "evitaveis_neonatal_imunoprevencao",
+                          "evitaveis_neonatal_mulher_gestacao",
+                          "evitaveis_neonatal_parto",
+                          "evitaveis_neonatal_recem_nascido",
+                          "evitaveis_neonatal_tratamento",
+                          "evitaveis_neonatal_saude",
+                          "evitaveis_neonatal_mal_definidas",
+                          "evitaveis_neonatal_outros"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 450))
                 )
               )
             )
@@ -4535,11 +4535,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_total == "obitos_perinatal_total" ~ "Número de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais com peso menor que 1500 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais com peso de 1500 a 1999 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais com peso de 2000 a 2499 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
+        input$faixa_peso_perinatal_total == "obitos_perinatal_total" ~ "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_total == "perinatal_total_menos1500" ~ "Número de óbitos perinatais com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_total == "perinatal_total_1500_1999" ~ "Número de óbitos perinatais com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_total == "perinatal_total_2000_2499" ~ "Número de óbitos perinatais com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_total == "perinatal_total_mais2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -4566,11 +4566,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_perinatal_oms <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_oms == "obitos_perinatal_oms" ~ "Número de óbitos perinatais (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais com peso menor que 1500 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais com peso de 1500 a 1999 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais com peso de 2000 a 2499 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
-        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
+        input$faixa_peso_perinatal_oms == "obitos_perinatal_oms" ~ "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_menos1500" ~ "Número de óbitos perinatais com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_1500_1999" ~ "Número de óbitos perinatais com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_2000_2499" ~ "Número de óbitos perinatais com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_oms == "perinatal_oms_mais2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -4597,11 +4597,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_taxa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a  500g)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -4623,11 +4623,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_caixa_taxa_perinatal_oms <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a  1000g)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
       )
     })
 
