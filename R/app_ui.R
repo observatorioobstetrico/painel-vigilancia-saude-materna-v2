@@ -26,7 +26,6 @@ app_ui <- function(request) {
     ")),
     tags$style(HTML("
       .dropdown-menu {
-        overflow: auto;
         width: inherit;
         position: absolute;
         will-change: transform;
