@@ -493,9 +493,13 @@ mod_nivel_1_ui <- function(id) {
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i6")), proxy.height = "270px")
                 ),
                 column(
-                  offset = 4,
+                  offset = 2,
                   width = 4,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i7")), proxy.height = "270px")
+                ),
+                column(
+                  width = 4,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i8")), proxy.height = "270px")
                 )
               )
             )
@@ -2163,8 +2167,14 @@ mod_nivel_1_server <- function(id, filtros){
 
 
     ##### Dados do quinto bloco de indicadores para a localidade escolhida #####
+    malformacao2 <- malformacao |>
+      dplyr::select(c(1:3), 5, 14) |>
+      dplyr::group_by(ano, codmunres, municipio, uf) |>
+      dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
+
     data5 <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano == filtros()$ano) |>
         #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
@@ -2199,7 +2209,8 @@ mod_nivel_1_server <- function(id, filtros){
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2208,6 +2219,7 @@ mod_nivel_1_server <- function(id, filtros){
     ##### Dados do quinto bloco de indicadores para a comparação com o Brasil #####
     data5_comp <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
@@ -2215,7 +2227,8 @@ mod_nivel_1_server <- function(id, filtros){
           porc_premat = 10,
           porc_termo_precoce = 20,
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
-          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)
+          porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2328,6 +2341,22 @@ mod_nivel_1_server <- function(id, filtros){
         titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data5_comp()$porc_nascidos_vivos_asfixia1,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        fonte_titulo = "15px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
+
+    output$caixa_b5_i8 <- renderUI({
+      cria_caixa_server(
+        dados = data5(),
+        indicador = "porc_malformacao",
+        titulo = "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde",
+        tem_meta = FALSE,
+        valor_de_referencia = data5_comp()$porc_malformacao,
         tipo = "porcentagem",
         invertido = FALSE,
         fonte_titulo = "15px",

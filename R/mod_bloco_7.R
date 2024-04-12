@@ -48,6 +48,7 @@ mod_bloco_7_ui <- function(id) {
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
+            hr(),
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
           )
         ),
@@ -449,6 +450,7 @@ mod_bloco_7_ui <- function(id) {
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
+            hr(),
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
           )
         ),
@@ -873,6 +875,7 @@ mod_bloco_7_ui <- function(id) {
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
+            hr(),
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
           )
         ),
