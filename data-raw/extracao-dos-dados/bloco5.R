@@ -41,7 +41,7 @@ df_bloco5_aux <- df_sinasc |>
     nascidos_vivos_28_a_32_semanas = if_else(SEMAGESTAC >= 28 & SEMAGESTAC <= 32, 1, 0, missing = 0),
     nascidos_vivos_33_a_34_semanas = if_else(SEMAGESTAC %in% c(33, 34), 1, 0, missing = 0),
     nascidos_vivos_35_a_36_semanas = if_else(SEMAGESTAC %in% c(35, 36), 1, 0, missing = 0),
-    nascidos_condicoes_ameacadoras = if_else(PESO < 1500 | SEMAGESTAC < 32 | APGAR5 < 7, 1, 0, missing = 0),
+    nascidos_condicoes_ameacadoras = if_else(PESO < 1500 | (GESTACAO < 4 | SEMAGESTAC < 32) | APGAR5 < 7, 1, 0, missing = 0),
     .keep = "unused"
   ) |>
   clean_names() |>
