@@ -221,7 +221,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 460))
                 )
               ),
               column(
@@ -278,7 +278,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_fetal"),
-                        label = "Grupos de causas principais",
+                        label = "Selecione os grupos de causas principais da CID-10:",
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_fetal_a00_b99",
@@ -325,13 +325,13 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
-                        label = "Grupos de causas",
+                        label = "Selecione os grupos de causas:",
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "fetal_grupos_prematuridade",
                           "Infecções" = "fetal_grupos_infeccoes",
                           "Asfixia/Hipóxia" = "fetal_grupos_asfixia",
-                          "Má formação congênita" = "fetal_grupos_ma_formacao",
+                          "Malformação congênita" = "fetal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
                           "Afecções originais no período fetal" = "fetal_grupos_afeccoes_perinatal",
@@ -353,13 +353,13 @@ mod_bloco_7_ui <- function(id) {
                   #     width = 12,
                   #     shinyWidgets::pickerInput(
                   #       inputId = ns("cids_grupos_fetal"),
-                  #       label = "Grupos de causas",
+                  #       label = "Selecione os grupos de causas:",
                   #       options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                   #       choices = c(
                   #         "Prematuridade" = "fetal_grupos_prematuridade",
                   #         "Infecções" = "fetal_grupos_infeccoes",
                   #         "Asfixia/Hipóxia" = "fetal_grupos_asfixia",
-                  #         "Má formação congênita" = "fetal_grupos_ma_formacao",
+                  #         "Malformação congênita" = "fetal_grupos_ma_formacao",
                   #         "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
                   #         "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
                   #         "Demais causas" = "fetal_grupos_outros",
@@ -404,7 +404,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal"),
-                        label = "Grupos de causas evitáveis",
+                        label = "Selecione os grupos de causas evitáveis:",
                         options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_fetal_imunoprevencao",
@@ -673,7 +673,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 460))
                 )
               ),
               column(
@@ -734,7 +734,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_perinatal"),
-                        label = "Grupos de causas principais",
+                        label = "Selecione os grupos de causas principais da CID-10:",
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
@@ -779,13 +779,13 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
-                        label = "Grupos de causas",
+                        label = "Selecione os grupos de causas:",
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "perinatal_grupos_prematuridade",
                           "Infecções" = "perinatal_grupos_infeccoes",
                           "Asfixia/Hipóxia" = "perinatal_grupos_asfixia",
-                          "Má formação congênita" = "perinatal_grupos_ma_formacao",
+                          "Malformação congênita" = "perinatal_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "perinatal_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "perinatal_grupos_gravidez",
                           "Afecções originais no período perinatal" = "perinatal_grupos_afeccoes_perinatal",
@@ -830,7 +830,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
-                        label = "Grupos de causas evitáveis",
+                        label = "Selecione os grupos de causas evitáveis:",
                         options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
@@ -1107,7 +1107,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 460))
                 )
               ),
               column(
@@ -1168,7 +1168,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_principais_neonatal"),
-                        label = "Grupos de causas principais",
+                        label = "Selecione os grupos de causas principais da CID-10:",
                         options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
@@ -1214,13 +1214,13 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_neonatal"),
-                        label = "Grupos de causas",
+                        label = "Selecione os grupos de causas:",
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "neonat_grupos_prematuridade",
                           "Infecções" = "neonat_grupos_infeccoes",
                           "Asfixia/Hipóxia" = "neonat_grupos_asfixia",
-                          "Má formação congênita" = "neonat_grupos_ma_formacao",
+                          "Malformação congênita" = "neonat_grupos_ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "neonat_grupos_respiratorias",
                           "Fatores maternos relacionados à gravidez " = "neonat_grupos_gravidez",
                           "Afecções originais no período neonatal" = "neonat_grupos_afeccoes_perinatal",
@@ -1264,7 +1264,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_neonatal"),
-                        label = "Grupos de causas evitáveis",
+                        label = "Selecione os grupos de causas evitáveis:",
                         options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
@@ -5426,6 +5426,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_principais_perinatal(), data_plot_principais_perinatal_referencia())
     })
 
+    data_plot_principais_perinatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_perinatal_comp()) != 0,
+          "Não existem ocorrências de óbitos perinatais por causas principais para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_perinatal_comp(), data_plot_principais_perinatal_referencia())
+    })
+
     output$plot_principais_perinatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -5441,22 +5451,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_principais_perinatal(),
+            data = data_plot_principais_perinatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_principais_perinatal_comp(),
+            data = data_plot_principais_perinatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -5614,6 +5624,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_evitaveis_perinatal(), data_plot_evitaveis_perinatal_referencia())
     })
 
+    data_plot_evitaveis_perinatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_evitaveis_perinatal_comp()) != 0,
+          "Não existem ocorrências de óbitos perinatais por causas evitáveis para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_evitaveis_perinatal_comp(), data_plot_evitaveis_perinatal_referencia())
+    })
+
     output$plot_evitaveis_perinatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -5629,22 +5649,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_perinatal(),
+            data = data_plot_evitaveis_perinatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_perinatal_comp(),
+            data = data_plot_evitaveis_perinatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -5683,7 +5703,7 @@ mod_bloco_7_server <- function(id, filtros){
                 grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
                 grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
                 grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
                 grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
                 grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
                 grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -5728,7 +5748,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -5778,7 +5798,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -5806,6 +5826,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_grupos_perinatal(), data_plot_grupos_perinatal_referencia())
     })
 
+    data_plot_grupos_perinatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_perinatal_comp()) != 0,
+          "Não existem ocorrências de óbitos perinatais por grupos de causas para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_perinatal_comp(), data_plot_grupos_perinatal_referencia())
+    })
+
     output$plot_grupos_perinatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -5821,22 +5851,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_perinatal(),
+            data = data_plot_grupos_perinatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_perinatal_comp(),
+            data = data_plot_grupos_perinatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -6190,6 +6220,17 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_principais_neonatal(), data_plot_principais_neonatal_referencia())
     })
 
+    data_plot_principais_neonatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_neonatal_comp()) != 0,
+          "Não existem ocorrências de óbitos neonatais por causas principais para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_neonatal_comp(), data_plot_principais_neonatal_referencia())
+    })
+
+
     output$plot_principais_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -6205,22 +6246,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_principais_neonatal(),
+            data = data_plot_principais_neonatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_principais_neonatal_comp(),
+            data = data_plot_principais_neonatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -6379,6 +6420,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_evitaveis_neonatal(), data_plot_evitaveis_neonatal_referencia())
     })
 
+    data_plot_evitaveis_neonatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_evitaveis_neonatal_comp()) != 0,
+          "Não existem ocorrências de óbitos neonatais por causas evitáveis para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_evitaveis_neonatal_comp(), data_plot_evitaveis_neonatal_referencia())
+    })
+
     output$plot_evitaveis_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -6394,22 +6445,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_neonatal(),
+            data = data_plot_evitaveis_neonatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_neonatal_comp(),
+            data = data_plot_evitaveis_neonatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -6448,7 +6499,7 @@ mod_bloco_7_server <- function(id, filtros){
                 grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
                 grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
                 grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
                 grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
                 grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
                 grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -6493,7 +6544,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -6543,7 +6594,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -6571,6 +6622,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_grupos_neonatal(), data_plot_grupos_neonatal_referencia())
     })
 
+    data_plot_grupos_neonatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_neonatal_comp()) != 0,
+          "Não existem ocorrências de óbitos neonatais por grupos de causas para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_neonatal_comp(), data_plot_grupos_neonatal_referencia())
+    })
+
     output$plot_grupos_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -6586,22 +6647,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_neonatal(),
+            data = data_plot_grupos_neonatal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_neonatal_comp(),
+            data = data_plot_grupos_neonatal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b>"
             ),
             stack = 1
           )
@@ -6843,6 +6904,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_principais_fetal(), data_plot_principais_fetal_referencia())
     })
 
+    data_plot_principais_fetal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_principais_fetal_comp()) != 0,
+          "Não existem ocorrências de óbitos fetais por causas principais para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_principais_fetal_comp(), data_plot_principais_fetal_referencia())
+    })
+
     output$plot_principais_fetal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -6858,22 +6929,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_principais_fetal(),
+            data = data_plot_principais_fetal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_principais_fetal_comp(),
+            data = data_plot_principais_fetal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -7030,6 +7101,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_evitaveis_fetal(), data_plot_evitaveis_fetal_referencia())
     })
 
+    data_plot_evitaveis_fetal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_evitaveis_fetal_comp()) != 0,
+          "Não existem ocorrências de óbitos fetais por causas evitáveis para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_evitaveis_fetal_comp(), data_plot_evitaveis_fetal_referencia())
+    })
+
     output$plot_evitaveis_fetal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -7045,22 +7126,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_fetal(),
+            data = data_plot_evitaveis_fetal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_evitaveis_fetal_comp(),
+            data = data_plot_evitaveis_fetal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -7098,7 +7179,7 @@ mod_bloco_7_server <- function(id, filtros){
                 grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
                 grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
                 grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+                grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
                 grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
                 grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
                 grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -7143,7 +7224,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -7193,7 +7274,7 @@ mod_bloco_7_server <- function(id, filtros){
               grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
               grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
               grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Má formação congênita",
+              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
               grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
               grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
               grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
@@ -7221,6 +7302,16 @@ mod_bloco_7_server <- function(id, filtros){
       dplyr::full_join(data_plot_grupos_fetal(), data_plot_grupos_fetal_referencia())
     })
 
+    data_plot_grupos_fetal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_fetal_comp()) != 0,
+          "Não existem ocorrências de óbitos fetais por grupos de causas para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_fetal_comp(), data_plot_grupos_fetal_referencia())
+    })
+
     output$plot_grupos_fetal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -7236,22 +7327,22 @@ mod_bloco_7_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_fetal(),
+            data = data_plot_grupos_fetal_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data_plot_grupos_fetal_comp(),
+            data = data_plot_grupos_fetal_comp_completo(),
             highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} ({point.class}): <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
