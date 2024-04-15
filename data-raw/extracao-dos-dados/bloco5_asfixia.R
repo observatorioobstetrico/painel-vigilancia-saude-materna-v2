@@ -368,6 +368,35 @@ malformacao <- malformacao |>
 write.table(malformacao, 'malformacao_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
+# adicionando malformacao geral a base de asfixia
+
+df_bloco8 <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';')
+
+tabela_aux_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv")
+
+
+sinasc_microdatasus_2012_2022 <- data.table::fread("data-raw/csv/sinasc_microdatasus_2012_2022.csv")
+
+malformacao_geral <- sinasc_microdatasus_2012_2022 |>
+  dplyr::filter((IDANOMAL == 1) | !is.na(CODANOMAL)) |>
+  janitor::clean_names()
+
+
+malformacao_geral <- malformacao_geral |>
+  filter(codmunres %in% tabela_aux_municipios$codmunres)
+
+dados <- left_join(malformacao_geral, tabela_aux_municipios)
+
+malformacao_geral <- malformacao_geral |>
+  group_by(codmunres, ano) %>%
+  summarise(total_de_nascidos_malformacao = n())
+
+
+df_bloco8 <- left_join(df_bloco8, malformacao_geral)
+
+df_bloco8[is.na(df_bloco8)] <- 0
+
+write.table(df_bloco8, 'data-raw/csv/asfixia_2012_2022.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 
