@@ -127,6 +127,24 @@ df_sim_dofet <- df_sim_dofet_aux |>
     ((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)
   )
 
+df_sim_dofet_antes <- df_sim_dofet_aux |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+    obitoparto = as.numeric(obitoparto)
+  ) |>
+  filter(
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)) & obitoparto == 1
+  )
+
+df_sim_dofet_durante <- df_sim_dofet_aux |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+    obitoparto = as.numeric(obitoparto)
+  ) |>
+  filter(
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)) & obitoparto == 2
+  )
+
 ## Criando um data.frame com os óbitos fetais totais
 df_fetais_totais <- df_sim_dofet |>
   select(codmunres, ano) |>
@@ -139,6 +157,32 @@ df_fetais_totais <- df_sim_dofet |>
 
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_fetais_totais[is.na(df_fetais_totais)] <- 0
+
+## Criando um data.frame com os óbitos fetais totais antes do parto
+df_fetais_totais_antes <- df_sim_dofet_antes |>
+  select(codmunres, ano) |>
+  mutate(obitos_fetais_totais_antes = 1) |>
+  group_by(across(!obitos_fetais_totais_antes)) |>
+  summarise(obitos_fetais_totais_antes = sum(obitos_fetais_totais_antes)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_fetais_totais_antes[is.na(df_fetais_totais_antes)] <- 0
+
+## Criando um data.frame com os óbitos fetais totais durante o parto
+df_fetais_totais_durante <- df_sim_dofet |>
+  select(codmunres, ano) |>
+  mutate(obitos_fetais_totais_durante = 1) |>
+  group_by(across(!obitos_fetais_totais_durante)) |>
+  summarise(obitos_fetais_totais_durante = sum(obitos_fetais_totais_durante)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_fetais_totais_durante[is.na(df_fetais_totais_durante)] <- 0
 
 ## Criando um data.frame com os óbitos fetais preenchidos com garbage codes
 df_fetais_garbage <- df_sim_dofet |>
@@ -215,10 +259,34 @@ df_sim_doinf_aux <- fetch_datasus(
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas os óbitos neonatais
 df_sim_doinf <- df_sim_doinf_aux |>
   mutate(
-    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
   ) |>
   filter(
     idade < 228
+  )
+
+df_sim_doinf_0_dias <- df_sim_doinf_aux |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+  ) |>
+  filter(
+    idade <= 200
+  )
+
+df_sim_doinf_1_6_dias <- df_sim_doinf_aux |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+  ) |>
+  filter(
+    idade > 200 & idade < 207
+  )
+
+df_sim_doinf_7_27_dias <- df_sim_doinf_aux |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+  ) |>
+  filter(
+    idade > 206 & idade < 228
   )
 
 ## Criando um data.frame com os óbitos neonatais totais
@@ -247,6 +315,46 @@ df_neonatais_totais_precoce <- df_sim_doinf |>
 
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_neonatais_totais_precoce[is.na(df_neonatais_totais_precoce)] <- 0
+
+## Criando um data.frame com os óbitos neonatais totais com 0 dias de vida
+df_neonatais_totais_0_dias <- df_sim_doinf |>
+  select(codmunres, ano) |>
+  mutate(obitos_neonatais_totais_0_dias = 1) |>
+  group_by(across(!obitos_neonatais_totais_0_dias)) |>
+  summarise(obitos_neonatais_totais_0_dias = sum(obitos_neonatais_totais_0_dias)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_totais_0_dias[is.na(df_neonatais_totais_0_dias)] <- 0
+
+## Criando um data.frame com os óbitos neonatais totais com 0 dias de vida
+df_neonatais_totais_1_6_dias <- df_sim_doinf |>
+  select(codmunres, ano)|>
+  mutate(obitos_neonatais_totais_1_6_dias = 1) |>
+  group_by(across(!obitos_neonatais_totais_1_6_dias)) |>
+  summarise(obitos_neonatais_totais_1_6_dias = sum(obitos_neonatais_totais_1_6_dias)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_totais_1_6_dias[is.na(df_neonatais_totais_1_6_dias)] <- 0
+
+## Criando um data.frame com os óbitos neonatais totais com 0 dias de vida
+df_neonatais_totais_7_27_dias <- df_sim_doinf |>
+  select(codmunres, ano)|>
+  mutate(obitos_neonatais_totais_7_27_dias = 1) |>
+  group_by(across(!obitos_neonatais_totais_7_27_dias)) |>
+  summarise(obitos_neonatais_totais_7_27_dias = sum(obitos_neonatais_totais_7_27_dias)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_totais_7_27_dias[is.na(df_neonatais_totais_7_27_dias)] <- 0
+
 
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
@@ -724,6 +832,80 @@ df_evitaveis_fetal[is.na(df_evitaveis_fetal)] <- 0
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal)
 
+df_evitaveis_fetal_antes <- df_sim_dofet_antes |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_fetal_antes_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "evitaveis_fetal_antes_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_fetal_antes_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_fetal_antes_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_fetal_antes_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_fetal_antes_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_fetal_antes_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_antes_outros", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_antes) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal_antes[is.na(df_evitaveis_fetal_antes)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal_antes)
+
+df_evitaveis_fetal_durante <- df_sim_dofet_durante |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_fetal_durante_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "evitaveis_fetal_durante_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_fetal_durante_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_fetal_durante_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_fetal_durante_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_fetal_durante_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_fetal_durante_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_durante_outros", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_durante) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal_durante[is.na(df_evitaveis_fetal_durante)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal_durante)
+
 ## Para a tabela de causas evitáveis em óbitos fetais
 df_evitaveis_fetal_tabela <- df_sim_dofet |>
   filter(codmunres %in% codigos_municipios) |>
@@ -861,6 +1043,133 @@ df_neonatais_precoce_evitaveis <- df_sim_doinf |>
 df_neonatais_precoce_evitaveis[is.na(df_neonatais_precoce_evitaveis)] <- 0
 
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_precoce_evitaveis)
+
+
+df_neonatais_evitaveis_0_dias <- df_sim_doinf_0_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_0_dias_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_0_dias_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_0_dias_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_0_dias_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_0_dias_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_0_dias_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_0_dias_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_0_dias_outros", grupo_cid)#,
+    # faixa_de_peso = case_when(
+    #   as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
+    #   as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
+    #   as.numeric(peso) > 1500 ~ "> 1500 g"
+    # )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_neonatais_totais_0_dias) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres) #|>
+  #mutate(faixa_de_peso = ifelse(is.na(faixa_de_peso), "não se aplica", faixa_de_peso))
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_evitaveis_0_dias[is.na(df_neonatais_evitaveis_0_dias)] <- 0
+
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_evitaveis_0_dias)
+
+df_neonatais_evitaveis_1_6_dias <- df_sim_doinf_1_6_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_1_6_dias_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_1_6_dias_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_1_6_dias_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_1_6_dias_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_1_6_dias_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_1_6_dias_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_1_6_dias_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_1_6_dias_outros", grupo_cid)#,
+    # faixa_de_peso = case_when(
+    #   as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
+    #   as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
+    #   as.numeric(peso) > 1500 ~ "> 1500 g"
+    # )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_neonatais_totais_1_6_dias) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres) #|>
+  #mutate(faixa_de_peso = ifelse(is.na(faixa_de_peso), "não se aplica", faixa_de_peso))
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_evitaveis_1_6_dias[is.na(df_neonatais_evitaveis_1_6_dias)] <- 0
+
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_evitaveis_1_6_dias)
+
+df_neonatais_evitaveis_7_27_dias <- df_sim_doinf_7_27_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_7_27_dias_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_7_27_dias_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_7_27_dias_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_7_27_dias_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_7_27_dias_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_7_27_dias_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_7_27_dias_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_7_27_dias_outros", grupo_cid)#,
+    # faixa_de_peso = case_when(
+    #   as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
+    #   as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
+    #   as.numeric(peso) > 1500 ~ "> 1500 g"
+    # )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_neonatais_totais_7_27_dias) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres) #|>
+  #mutate(faixa_de_peso = ifelse(is.na(faixa_de_peso), "não se aplica", faixa_de_peso))
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_evitaveis_7_27_dias[is.na(df_neonatais_evitaveis_7_27_dias)] <- 0
+
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_evitaveis_7_27_dias)
 
 
 ## Para a tabela de causas evitáveis em óbitos neonatais
@@ -1015,6 +1324,85 @@ df_fetais_grupos[is.na(df_fetais_grupos)] <- 0
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_grupos)
 
+df_fetais_grupos_antes <- df_sim_dofet_antes |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "fetal_grupos_antes_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes  ~ "fetal_grupos_antes_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "fetal_grupos_antes_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "fetal_grupos_antes_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_grupos_antes_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_grupos_antes_afeccoes_perinatal",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_grupos_antes_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_grupos_antes_mal_definida",
+      TRUE ~ "fetal_grupos_antes_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_antes) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_fetais_grupos_antes[is.na(df_fetais_grupos_antes)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_grupos_antes)
+
+
+df_fetais_grupos_durante <- df_sim_dofet_durante |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "fetal_grupos_durante_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes  ~ "fetal_grupos_durante_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "fetal_grupos_durante_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "fetal_grupos_durante_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_grupos_durante_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_grupos_durante_afeccoes_perinatal",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_grupos_durante_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_grupos_durante_mal_definida",
+      TRUE ~ "fetal_grupos_durante_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_durante) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_fetais_grupos_durante[is.na(df_fetais_grupos_durante)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_grupos_durante)
+
 
 # Grupos de causas para óbitos neonatais -------------------------------------------------------
 
@@ -1149,6 +1537,126 @@ df_neonatais_precoce_grupos[is.na(df_neonatais_precoce_grupos)] <- 0
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_precoce_grupos)
 
+df_neonatais_grupos_0_dias <- df_sim_doinf_0_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "neonat_grupos_0_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "neonat_grupos_0_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "neonat_grupos_0_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "neonat_grupos_0_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "neonat_grupos_0_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "neonat_grupos_0_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "neonat_grupos_0_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "neonat_grupos_0_dias_mal_definida",
+      TRUE ~ "neonat_grupos_0_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_neonatais_totais_0_dias) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_grupos_0_dias[is.na(df_neonatais_grupos_0_dias)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_grupos_0_dias)
+
+
+df_neonatais_grupos_1_6_dias <- df_sim_doinf_1_6_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "neonat_grupos_1_6_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "neonat_grupos_1_6_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "neonat_grupos_1_6_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "neonat_grupos_1_6_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "neonat_grupos_1_6_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "neonat_grupos_1_6_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "neonat_grupos_1_6_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "neonat_grupos_1_6_dias_mal_definida",
+      TRUE ~ "neonat_grupos_1_6_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_neonatais_totais_1_6_dias) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_grupos_1_6_dias[is.na(df_neonatais_grupos_1_6_dias)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_grupos_1_6_dias)
+
+
+df_neonatais_grupos_7_27_dias <- df_sim_doinf_7_27_dias |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "neonat_grupos_7_27_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "neonat_grupos_7_27_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "neonat_grupos_7_27_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "neonat_grupos_7_27_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "neonat_grupos_7_27_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "neonat_grupos_7_27_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "neonat_grupos_7_27_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "neonat_grupos_7_27_dias_mal_definida",
+      TRUE ~ "neonat_grupos_7_27_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_neonatais_totais_7_27_dias) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_grupos_7_27_dias[is.na(df_neonatais_grupos_7_27_dias)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_grupos_7_27_dias)
+
+
 ## Juntando com o restante da base do bloco 8
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_grupos)
 
@@ -1188,7 +1696,85 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
     perinatal_grupos_afeccoes_perinatal = neonat_precoce_grupos_afeccoes_perinatal + fetal_grupos_afeccoes_perinatal,
     perinatal_grupos_mal_definida = neonat_precoce_grupos_mal_definida,
-    perinatal_grupos_outros = neonat_precoce_grupos_outros + fetal_grupos_outros
+    perinatal_grupos_outros = neonat_precoce_grupos_outros + fetal_grupos_outros,
+
+    evitaveis_perinatal_antes_imunoprevencao = evitaveis_fetal_antes_imunoprevencao,
+    evitaveis_perinatal_antes_mulher_gestacao = evitaveis_fetal_antes_mulher_gestacao,
+    evitaveis_perinatal_antes_parto = evitaveis_fetal_antes_parto,
+    evitaveis_perinatal_antes_recem_nascido = evitaveis_fetal_antes_recem_nascido,
+    #evitaveis_perinatal_antes_tratamento = evitaveis_neonatal_precoce_tratamento,
+    #evitaveis_perinatal_antes_saude = evitaveis_neonatal_precoce_saude ,
+    evitaveis_perinatal_antes_mal_definidas = evitaveis_fetal_antes_mal_definidas,
+    evitaveis_perinatal_antes_outros = evitaveis_fetal_antes_outros,
+    perinatal_grupos_antes_prematuridade = fetal_grupos_antes_prematuridade,
+    #perinatal_grupos_antes_infeccoes = neonat_precoce_grupos_infeccoes,
+    perinatal_grupos_antes_asfixia = fetal_grupos_antes_asfixia,
+    perinatal_grupos_antes_ma_formacao = fetal_grupos_antes_ma_formacao,
+    #perinatal_grupos_antes_respiratorias = neonat_precoce_grupos_respiratorias,
+    perinatal_grupos_antes_gravidez = fetal_grupos_antes_gravidez,
+    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
+    perinatal_grupos_antes_afeccoes_perinatal = fetal_grupos_antes_afeccoes_perinatal,
+    #perinatal_grupos_antes_mal_definida = neonat_precoce_grupos_mal_definida,
+    perinatal_grupos_antes_outros = fetal_grupos_antes_outros,
+
+    #evitaveis_perinatal_durante_imunoprevencao = evitaveis_fetal_durante_imunoprevencao,
+    evitaveis_perinatal_durante_mulher_gestacao = evitaveis_fetal_durante_mulher_gestacao,
+    evitaveis_perinatal_durante_parto = evitaveis_fetal_durante_parto,
+    evitaveis_perinatal_durante_recem_nascido = evitaveis_fetal_durante_recem_nascido,
+    #evitaveis_perinatal_antes_tratamento = evitaveis_neonatal_precoce_tratamento,
+    #evitaveis_perinatal_antes_saude = evitaveis_neonatal_precoce_saude ,
+    evitaveis_perinatal_durante_mal_definidas = evitaveis_fetal_durante_mal_definidas,
+    evitaveis_perinatal_durante_outros = evitaveis_fetal_durante_outros,
+    perinatal_grupos_durante_prematuridade = fetal_grupos_durante_prematuridade,
+    #perinatal_grupos_antes_infeccoes = neonat_precoce_grupos_infeccoes,
+    perinatal_grupos_durante_asfixia = fetal_grupos_durante_asfixia,
+    perinatal_grupos_durante_ma_formacao = fetal_grupos_durante_ma_formacao,
+    #perinatal_grupos_antes_respiratorias = neonat_precoce_grupos_respiratorias,
+    perinatal_grupos_durante_gravidez = fetal_grupos_durante_gravidez,
+    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
+    perinatal_grupos_durante_afeccoes_perinatal = fetal_grupos_durante_afeccoes_perinatal,
+    #perinatal_grupos_antes_mal_definida = neonat_precoce_grupos_mal_definida,
+    perinatal_grupos_durante_outros = fetal_grupos_durante_outros,
+
+
+    evitaveis_perinatal_0_dias_imunoprevencao = evitaveis_neonatal_0_dias_imunoprevencao,
+    evitaveis_perinatal_0_dias_mulher_gestacao = evitaveis_neonatal_0_dias_mulher_gestacao ,
+    evitaveis_perinatal_0_dias_parto = evitaveis_neonatal_0_dias_parto,
+    evitaveis_perinatal_0_dias_recem_nascido = evitaveis_neonatal_0_dias_recem_nascido,
+    evitaveis_perinatal_0_dias_tratamento = evitaveis_neonatal_0_dias_tratamento,
+    evitaveis_perinatal_0_dias_saude = evitaveis_neonatal_0_dias_saude ,
+    evitaveis_perinatal_0_dias_mal_definidas = evitaveis_neonatal_0_dias_mal_definidas,
+    evitaveis_perinatal_0_dias_outros = evitaveis_neonatal_0_dias_outros,
+    perinatal_grupos_0_dias_prematuridade = neonat_grupos_0_dias_prematuridade,
+    perinatal_grupos_0_dias_infeccoes = neonat_grupos_0_dias_infeccoes,
+    perinatal_grupos_0_dias_asfixia = neonat_grupos_0_dias_asfixia,
+    perinatal_grupos_0_dias_ma_formacao = neonat_grupos_0_dias_ma_formacao,
+    perinatal_grupos_0_dias_respiratorias = neonat_grupos_0_dias_respiratorias,
+    perinatal_grupos_0_dias_gravidez = neonat_grupos_0_dias_gravidez,
+    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
+    perinatal_grupos_0_dias_afeccoes_perinatal = neonat_grupos_0_dias_afeccoes_perinatal,
+    perinatal_grupos_0_dias_mal_definida = neonat_grupos_0_dias_mal_definida,
+    perinatal_grupos_0_dias_outros = neonat_grupos_0_dias_outros,
+
+    evitaveis_perinatal_1_6_dias_imunoprevencao = evitaveis_neonatal_1_6_dias_imunoprevencao,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao = evitaveis_neonatal_1_6_dias_mulher_gestacao ,
+    evitaveis_perinatal_1_6_dias_parto = evitaveis_neonatal_1_6_dias_parto,
+    evitaveis_perinatal_1_6_dias_recem_nascido = evitaveis_neonatal_1_6_dias_recem_nascido,
+    evitaveis_perinatal_1_6_dias_tratamento = evitaveis_neonatal_1_6_dias_tratamento,
+    evitaveis_perinatal_1_6_dias_saude = evitaveis_neonatal_1_6_dias_saude ,
+    evitaveis_perinatal_1_6_dias_mal_definidas = evitaveis_neonatal_1_6_dias_mal_definidas,
+    evitaveis_perinatal_1_6_dias_outros = evitaveis_neonatal_1_6_dias_outros,
+    perinatal_grupos_1_6_dias_prematuridade = neonat_grupos_1_6_dias_prematuridade,
+    perinatal_grupos_1_6_dias_infeccoes = neonat_grupos_1_6_dias_infeccoes,
+    perinatal_grupos_1_6_dias_asfixia = neonat_grupos_1_6_dias_asfixia,
+    perinatal_grupos_1_6_dias_ma_formacao = neonat_grupos_1_6_dias_ma_formacao,
+    perinatal_grupos_1_6_dias_respiratorias = neonat_grupos_1_6_dias_respiratorias,
+    perinatal_grupos_1_6_dias_gravidez = neonat_grupos_1_6_dias_gravidez,
+    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
+    perinatal_grupos_afeccoes_perinatal = neonat_grupos_1_6_dias_afeccoes_perinatal,
+    perinatal_grupos_1_6_dias_mal_definida = neonat_grupos_1_6_dias_mal_definida,
+    perinatal_grupos_1_6_dias_outros = neonat_grupos_1_6_dias_outros
+
     )
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
