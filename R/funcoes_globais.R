@@ -916,3 +916,69 @@ seleciona <- function(aba, indicador){
   }
 
 }
+
+
+momento_obitos <- function(aba, grafico, input){
+
+  if(aba == "perinatal"){
+    if(grafico == "grupos"){
+
+      if(length(input) < 4){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("perinatal_grupos_prematuridade|perinatal_grupos_infeccoes|perinatal_grupos_asfixia|perinatal_grupos_ma_formacao|perinatal_grupos_respiratorias|perinatal_grupos_gravidez|perinatal_grupos_afeccoes_perinatal|perinatal_grupos_mal_definida|perinatal_grupos_outros")
+      }
+
+    } else if(grafico == "evitaveis"){
+
+      if(length(input) < 4){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("evitaveis_perinatal_imunoprevencao|evitaveis_perinatal_mulher_gestacao|evitaveis_perinatal_parto|evitaveis_perinatal_recem_nascido|evitaveis_perinatal_tratamento|evitaveis_perinatal_saude|evitaveis_perinatal_mal_definidas|evitaveis_perinatal_outros")
+      }
+
+    }
+  }
+  else if(aba == "fetal"){
+
+    if(grafico == "grupos"){
+
+      if(length(input) < 2){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("^fetal_grupos[^_antes|_durante]")
+      }
+
+    } else if(grafico == "evitaveis"){
+
+      if(length(input) < 2){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("^evitaveis_fetal[^_antes|_durante")
+      }
+
+    }
+
+  }
+
+  else if(aba == "neonatal"){
+    if(grafico == "grupos"){
+
+      if(length(input) < 3){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("^neonat_grupos[^_0_dias|_1_6_dias|_7_27_dias]")
+      }
+
+
+    } else if(grafico == "evitaveis"){
+
+      if(length(input) < 3){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("^evitaveis_neonatal[^_0_dias|_1_6_dias|_7_27_dias]")
+      }
+
+    }
+  }
+}

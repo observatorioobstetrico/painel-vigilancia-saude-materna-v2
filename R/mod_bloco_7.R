@@ -260,51 +260,52 @@ mod_bloco_7_ui <- function(id) {
                 )
               ),
               ###### Inclusão gráfico plot_principais_fetal
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_principais_fetal"),
-                        label = "Selecione os grupos de causas principais da CID-10:",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "(A00-B99) Infecciosas" = "principais_fetal_a00_b99",
-                          #"(J00-J99) Respiratórias" = "principais_fetal_j00_j99",
-                          "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_fetal_p00_p04",
-                          "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_fetal_p05_p08",
-                          "(P10-P15) Traumatismo de parto" = "principais_fetal_p10_p15",
-                          "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período fetal" = "principais_fetal_p20_p29",
-                          "(P35-P39) Infeccções específicas do período fetal" = "principais_fetal_p35_p39",
-                          "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_fetal_p50_p61",
-                          "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_fetal_p70_p74",
-                          "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_fetal_p75_p78",
-                          "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_fetal_p80_p83",
-                          "(P90-P96) Outros transtornos originados do período fetal" = "principais_fetal_p90_p96",
-                          "(Q00-Q99) Anomalias congênitas" = "principais_fetal_q00_q99",
-                          "Demais causas" = "principais_fetal_outros"
-                        ),
-                        selected = NULL,
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_fetal"), height = 500))
-                )
-              ),
+              # column(
+              #
+              #   width = 12,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 10%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 12,
+              #         shinyWidgets::pickerInput(
+              #           inputId = ns("cids_principais_fetal"),
+              #           label = "Selecione os grupos de causas principais da CID-10:",
+              #           options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+              #           choices = c(
+              #             "(A00-B99) Infecciosas" = "principais_fetal_a00_b99",
+              #             #"(J00-J99) Respiratórias" = "principais_fetal_j00_j99",
+              #             "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_fetal_p00_p04",
+              #             "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_fetal_p05_p08",
+              #             "(P10-P15) Traumatismo de parto" = "principais_fetal_p10_p15",
+              #             "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período fetal" = "principais_fetal_p20_p29",
+              #             "(P35-P39) Infeccções específicas do período fetal" = "principais_fetal_p35_p39",
+              #             "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_fetal_p50_p61",
+              #             "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_fetal_p70_p74",
+              #             "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_fetal_p75_p78",
+              #             "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_fetal_p80_p83",
+              #             "(P90-P96) Outros transtornos originados do período fetal" = "principais_fetal_p90_p96",
+              #             "(Q00-Q99) Anomalias congênitas" = "principais_fetal_q00_q99",
+              #             "Demais causas" = "principais_fetal_outros"
+              #           ),
+              #           selected = NULL,
+              #           multiple = TRUE,
+              #           width = "100%"
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_fetal"), height = 500))
+              #   )
+              # ),
               # Inclusão Gráfico plot_grupos_fetal
               column(
                 width = 12,
@@ -716,51 +717,51 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 480))
                 )
               ),
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_principais_perinatal"),
-                        label = "Selecione os grupos de causas principais da CID-10:",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
-                          #"(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
-                          "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_perinatal_p00_p04",
-                          "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_perinatal_p05_p08",
-                          "(P10-P15) Traumatismo de parto" = "principais_perinatal_p10_p15",
-                          "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período perinatal" = "principais_perinatal_p20_p29",
-                          "(P35-P39) Infeccções específicas do período perinatal" = "principais_perinatal_p35_p39",
-                          "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_perinatal_p50_p61",
-                          "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_perinatal_p70_p74",
-                          "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_perinatal_p75_p78",
-                          "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_perinatal_p80_p83",
-                          "(P90-P96) Outros transtornos originados do período perinatal" = "principais_perinatal_p90_p96",
-                          "(Q00-Q99) Anomalias congênitas" = "principais_perinatal_q00_q99",
-                          "Outros" = "principais_perinatal_outros"
-                        ),
-                        selected = NULL,
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 500))
-                )
-              ),
+              # column(
+              #   width = 12,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 10%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 12,
+              #         shinyWidgets::pickerInput(
+              #           inputId = ns("cids_principais_perinatal"),
+              #           label = "Selecione os grupos de causas principais da CID-10:",
+              #           options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+              #           choices = c(
+              #             "(A00-B99) Infecciosas" = "principais_perinatal_a00_b99",
+              #             #"(J00-J99) Respiratórias" = "principais_perinatal_j00_j99",
+              #             "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_perinatal_p00_p04",
+              #             "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_perinatal_p05_p08",
+              #             "(P10-P15) Traumatismo de parto" = "principais_perinatal_p10_p15",
+              #             "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período perinatal" = "principais_perinatal_p20_p29",
+              #             "(P35-P39) Infeccções específicas do período perinatal" = "principais_perinatal_p35_p39",
+              #             "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_perinatal_p50_p61",
+              #             "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_perinatal_p70_p74",
+              #             "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_perinatal_p75_p78",
+              #             "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_perinatal_p80_p83",
+              #             "(P90-P96) Outros transtornos originados do período perinatal" = "principais_perinatal_p90_p96",
+              #             "(Q00-Q99) Anomalias congênitas" = "principais_perinatal_q00_q99",
+              #             "Outros" = "principais_perinatal_outros"
+              #           ),
+              #           selected = NULL,
+              #           multiple = TRUE,
+              #           width = "100%"
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_perinatal"), height = 500))
+              #   )
+              # ),
               column(
                 width = 12,
                 bs4Dash::bs4Card(
@@ -777,32 +778,54 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_perinatal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "perinatal_grupos_antes",
+                            "Durante o parto" = "perinatal_grupos_durante",
+                            "Dia 0 de vida" = "perinatal_grupos_0_dias",
+                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
+                          ),
+                          selected = c(
+                            "perinatal_grupos_antes", "perinatal_grupos_durante",
+                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"
+                          )
+                        )
+                      )
+                    ),
+                    column(
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
-                        label = "Selecione os grupos de causas:",
-                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione aqui os grupos de interesse:",
+                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Prematuridade" = "perinatal_grupos_prematuridade",
-                          "Infecções" = "perinatal_grupos_infeccoes",
-                          "Asfixia/Hipóxia" = "perinatal_grupos_asfixia",
-                          "Malformação congênita" = "perinatal_grupos_ma_formacao",
-                          "Afecções respiratórias dos recém nascidos" = "perinatal_grupos_respiratorias",
-                          "Fatores maternos relacionados à gravidez " = "perinatal_grupos_gravidez",
-                          "Afecções originais no período perinatal" = "perinatal_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "perinatal_grupos_mal_definida",
-                          "Demais causas" = "perinatal_grupos_outros"
+                          "Prematuridade" = "prematuridade",
+                          "Infecções" = "infeccoes",
+                          "Asfixia/Hipóxia" = "asfixia",
+                          "Malformação congênita" = "ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "gravidez",
+                          "Afecções originais no período perinatal" = "afeccoes",
+                          "Mal definidas" = "mal_definida",
+                          "Demais causas" = "outros"
 
                         ),
                         selected = c(
-                          "perinatal_grupos_prematuridade",
-                          "perinatal_grupos_infeccoes",
-                          "perinatal_grupos_asfixia",
-                          "perinatal_grupos_ma_formacao",
-                          "perinatal_grupos_respiratorias",
-                          "perinatal_grupos_gravidez",
-                          "perinatal_grupos_afeccoes_perinatal",
-                          "perinatal_grupos_mal_definida",
-                          "perinatal_grupos_outros"
+                          "prematuridade",
+                          "infeccoes",
+                          "asfixia",
+                          "ma_formacao",
+                          "respiratorias",
+                          "gravidez",
+                          "afeccoes",
+                          "mal_definida",
+                          "outros"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -828,29 +851,52 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_perinatal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_perinatal_antes",
+                            "Durante o parto" = "evitaveis_perinatal_durante",
+                            "Dia 0 de vida" = "evitaveis_perinatal_0_dias",
+                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias"
+                          ),
+                          selected = c(
+                            "evitaveis_perinatal_antes", "evitaveis_perinatal_durante",
+                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias"
+                          )
+                        )
+                      )
+                    ),
+
+                    column(
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
-                        label = "Selecione os grupos de causas evitáveis:",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione aqui os grupos de interesse:",
+                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_perinatal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_perinatal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_perinatal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_perinatal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_perinatal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_perinatal_saude",
-                          "Causas mal definidas" = "evitaveis_perinatal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_perinatal_outros"
+                          "Reduzível pelas ações de imunização" = "imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
+                          "Causas mal definidas" = "mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "outros"
                         ),
                         selected = c(
-                          "evitaveis_perinatal_imunoprevencao",
-                          "evitaveis_perinatal_mulher_gestacao",
-                          "evitaveis_perinatal_parto",
-                          "evitaveis_perinatal_recem_nascido",
-                          "evitaveis_perinatal_tratamento",
-                          "evitaveis_perinatal_saude",
-                          "evitaveis_perinatal_mal_definidas",
-                          "evitaveis_perinatal_outros"
+                          "imunoprevencao",
+                          "mulher_gestacao",
+                          "parto",
+                          "recem_nascido",
+                          "tratamento",
+                          "saude",
+                          "mal_definidas",
+                          "outros"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -1136,7 +1182,7 @@ mod_bloco_7_ui <- function(id) {
                           choices = c(
                             "Dia 0 de vida" = "dist_peso_neonat_dia_0",
                             "De 1 a 6 dias de vida" = "dist_peso_neonat_dia_1_6",
-                            "De 7 a 28 dias de vida" = "dist_peso_neonat_dia_7_28"
+                            "De 7 a 27 dias de vida" = "dist_peso_neonat_dia_7_28"
                           ),
                           selected = c(
                             "dist_peso_neonat_dia_0",
@@ -1150,51 +1196,51 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 480))
                 )
               ),
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_principais_neonatal"),
-                        label = "Selecione os grupos de causas principais da CID-10:",
-                        options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
-                          #"(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
-                          "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_neonatal_p00_p04",
-                          "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_neonatal_p05_p08",
-                          "(P10-P15) Traumatismo de parto" = "principais_neonatal_p10_p15",
-                          "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período neonatal" = "principais_neonatal_p20_p29",
-                          "(P35-P39) Infeccções específicas do período neonatal" = "principais_neonatal_p35_p39",
-                          "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_neonatal_p50_p61",
-                          "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_neonatal_p70_p74",
-                          "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_neonatal_p75_p78",
-                          "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_neonatal_p80_p83",
-                          "(P90-P96) Outros transtornos originados do período neonatal" = "principais_neonatal_p90_p96",
-                          "(Q00-Q99) Anomalias congênitas" = "principais_neonatal_q00_q99",
-                          "Outros" = "principais_neonatal_outros"
-                        ),
-                        selected = NULL,
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 500))
-                )
-              ),
+              # column(
+              #   width = 12,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 10%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 12,
+              #         shinyWidgets::pickerInput(
+              #           inputId = ns("cids_principais_neonatal"),
+              #           label = "Selecione os grupos de causas principais da CID-10:",
+              #           options = list(placeholder = "Selecione os grupos de causas principais", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+              #           choices = c(
+              #             "(A00-B99) Infecciosas" = "principais_neonatal_a00_b99",
+              #             #"(J00-J99) Respiratórias" = "principais_neonatal_j00_j99",
+              #             "(P00-P04) Feto e recém nascido afetado por fatores maternos e por condições da gravidez, do trabalho de parto e do parto" = "principais_neonatal_p00_p04",
+              #             "(P05-P08) Transtornos relacionados com a duração da gestação e com o crescimento fetal" = "principais_neonatal_p05_p08",
+              #             "(P10-P15) Traumatismo de parto" = "principais_neonatal_p10_p15",
+              #             "(P20-P29) Transtornos respiratórios e cardiovasculares específicos do período neonatal" = "principais_neonatal_p20_p29",
+              #             "(P35-P39) Infeccções específicas do período neonatal" = "principais_neonatal_p35_p39",
+              #             "(P50-P61) Transtornos hemorrágicos e hematológicos do feto e do recém-nascido" = "principais_neonatal_p50_p61",
+              #             "(P70-P74) Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "principais_neonatal_p70_p74",
+              #             "(P75-P78) Transtornos do aparelho digestivo do feto ou do recém-nascido" = "principais_neonatal_p75_p78",
+              #             "(P80-P83) Afecções comprometendo o tegumento e a regulação térmica do feto e do recém-nascido" = "principais_neonatal_p80_p83",
+              #             "(P90-P96) Outros transtornos originados do período neonatal" = "principais_neonatal_p90_p96",
+              #             "(Q00-Q99) Anomalias congênitas" = "principais_neonatal_q00_q99",
+              #             "Outros" = "principais_neonatal_outros"
+              #           ),
+              #           selected = NULL,
+              #           multiple = TRUE,
+              #           width = "100%"
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_principais_neonatal"), height = 500))
+              #   )
+              # ),
 
               column(
                 width = 12,
@@ -5159,7 +5205,8 @@ mod_bloco_7_server <- function(id, filtros){
 
     ## bloco8_graficos porem sem as colunas principais_neonatal_precoce e neonat_precoce_grupos
     bloco8_graficos <- bloco8_graficos |>
-      dplyr::select(-c(colnames(bloco8_graficos)[72:84],colnames(bloco8_graficos)[108:116]))
+      #dplyr::select(-c(colnames(bloco8_graficos)[72:84],colnames(bloco8_graficos)[108:116]))
+      dplyr::select(-dplyr::contains("neonat_precoce"))
     ## tive que realizar esse filtro para evitar confusão entre  os as colunas neonatal e neonatal_precoce
 
     #########-------------------- Gráficos de distribuição dos grupos de CID
@@ -5489,26 +5536,27 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_perinatal"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
+            #grupo_cid10 %in% input$cids_evitaveis_perinatal,
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-                grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-                grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
-                grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
+                grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+                grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+                grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+                grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+                grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+                grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+                grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+                grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5526,33 +5574,36 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |># "Demais causas" como ultima barra da pilha da pilha
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_perinatal_comp <- reactive({
       data_filtrada_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_perinatal"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5571,7 +5622,10 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_perinatal_referencia <- reactive({
@@ -5582,26 +5636,26 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_perinatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_perinatal"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_perinatal,
+            (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_perinatal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_perinatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_perinatal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_perinatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_perinatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_perinatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_perinatal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_perinatal_outros" ~ "Demais causas",
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -5611,7 +5665,10 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_perinatal_completo <- reactive({
@@ -5688,27 +5745,27 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("perinatal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_perinatal,
+            (grepl(paste(input$cids_grupos_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_perinatal)),
               #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
               dplyr::case_when(
-                grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-                grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
-                grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
-                grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-                grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-                grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
+                grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+                grepl("infeccoes", grupo_cid10) ~ "Infecções",
+                grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+                grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+                grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+                grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+                grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+                grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+                grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5726,34 +5783,36 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_perinatal_comp <- reactive({
       data_filtrada_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("perinatal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_perinatal,
+            (grepl(paste(input$cids_grupos_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_perinatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -5772,7 +5831,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_perinatal_referencia <- reactive({
@@ -5783,27 +5844,27 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("perinatal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("perinatal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_perinatal,
+            (grepl(paste(input$cids_grupos_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_perinatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "perinatal_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "perinatal_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "perinatal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "perinatal_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "perinatal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "perinatal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "perinatal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "perinatal_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "perinatal_grupos_outros" ~ "Demais causas",
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -5813,7 +5874,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_perinatal_completo <- reactive({
