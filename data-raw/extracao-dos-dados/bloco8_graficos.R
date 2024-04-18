@@ -2,6 +2,7 @@ library(microdatasus)
 library(dplyr)
 library(janitor)
 library(tidyr)
+library(readxl)
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
@@ -1215,6 +1216,142 @@ df_evitaveis_neonatal_tabela <- df_sim_doinf |>
   arrange(codmunres)
 
 write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+
+
+
+
+# Nova Referência de causas evitáveis --------------------------------------------------------
+## Criando um vetor com as cids
+
+df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/evitabilidade_fetal.xlsx")
+colnames(df_cids_fetal_evitaveis2) <- c("nome", "cid")
+
+
+imunoprevencao2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por ações de imunoprevenção")$cid
+
+mulher_gestacao2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por adequada atenção à mulher na gestação")$cid
+
+evitaveis_parto2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por adequada atenção à mulher no parto")$cid
+
+recem_nascido2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíves por adequada atenção ao feto e recém nascido" )$cid
+
+tratamento2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por ações adequadas de diagnóstico e tratamento")$cid
+
+saude2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por ações adequadas de promoção à saúde, vinculadas a ações adequadas de atenção à saúde")$cid
+
+mal_definidas2 <- filter(df_cids_fetal_evitaveis2, nome == "Causas de morte mal-definidas")$cid
+
+## Causas evitáveis para óbitos fetais ------------------------------------
+df_evitaveis_fetal2 <- df_sim_dofet |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_imunoprevencao2",
+      causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_mulher_gestacao2",
+      causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_parto2",
+      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_recem_nascido2",
+      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_tratamento2",
+      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_saude2",
+      causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_mal_definidas2"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_outros2", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal2[is.na(df_evitaveis_fetal2)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal2)
+
+df_evitaveis_fetal_antes2 <- df_sim_dofet_antes |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_antes_imunoprevencao2",
+      causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_antes_mulher_gestacao2",
+      causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_antes_parto2",
+      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_antes_recem_nascido2",
+      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_antes_tratamento2",
+      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_antes_saude2",
+      causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_antes_mal_definidas2"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_antes_outros2", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_antes) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal_antes2[is.na(df_evitaveis_fetal_antes2)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal_antes2)
+
+df_evitaveis_fetal_durante2 <- df_sim_dofet_durante |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_durante_imunoprevencao2",
+      causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_durante_mulher_gestacao2",
+      causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_durante_parto2",
+      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_durante_recem_nascido2",
+      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_durante_tratamento2",
+      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_durante_saude2",
+      causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_durante_mal_definidas2"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_durante_outros2", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais_durante) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal_durante2[is.na(df_evitaveis_fetal_durante2)] <- 0
+
+## Juntando com o restante da base do bloco 8
+df_bloco8_graficos <- left_join(df_bloco8_graficos, df_evitaveis_fetal_durante2)
 
 
 # Grupos de causas para óbitos fetais -------------------------------------------------------
