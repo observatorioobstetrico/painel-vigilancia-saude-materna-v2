@@ -850,23 +850,40 @@ minha_paged_windmill <- function(logo = "0",
   )
 }
 
-seleciona <- function(aba, indicador){
+seleciona <- function(aba, indicador, input){
 
   if(aba == "fetal"){
 
     if(indicador == "momento de obito por peso"){
 
-      return(
-        opcoes <- c( "dist_moment_obito_fetal_menos1500", "dist_moment_obito_fetal_1500_1999", "dist_moment_obito_fetal_2000_2499", "dist_moment_obito_fetal_mais2500")
-      )
+      if(length(input) < 4){
+
+        return(
+          opcoes <- c( "dist_moment_obito_fetal_menos1500", "dist_moment_obito_fetal_1500_1999", "dist_moment_obito_fetal_2000_2499", "dist_moment_obito_fetal_mais2500", "falso")
+        )
+
+      } else{
+        return(
+          opcoes <- c(rep("falso", 4), "dist_moment_obito_fetal_menos1500")
+        )
+      }
+
+
 
 
     } else if(indicador == "peso por momento do obito"){
 
-      return(
+      if(length(input)<2){
 
-        opcoes <- c("dist_peso_fetal_antes", "dist_peso_fetal_durante")
-      )
+        return(
+
+          opcoes <- c("dist_peso_fetal_antes", "dist_peso_fetal_durante", "falso")
+        )
+      } else{
+        return(
+          opcoes <- c("falso", "falso", "dist_peso_fetal_antes")
+        )
+      }
     }
 
 
@@ -875,18 +892,31 @@ seleciona <- function(aba, indicador){
 
     if(indicador == "momento de obito por peso"){
 
-      return(
+        if(length(input)<4){
 
-        opcoes <- c("dist_moment_obito_perinat_menos1500", "dist_moment_obito_perinat_1500_1999", "dist_moment_obito_perinat_2000_2499", "dist_moment_obito_perinat_mais2500")
-      )
+          return(
+
+            opcoes <- c("dist_moment_obito_perinat_menos1500", "dist_moment_obito_perinat_1500_1999", "dist_moment_obito_perinat_2000_2499", "dist_moment_obito_perinat_mais2500", "falso")
+          )
+
+        } else{
+          return( opcoes <- c(rep("falso", 4), "dist_moment_obito_perinat_menos1500"))
+        }
+
 
 
     } else if(indicador == "peso por momento do obito"){
 
-      return(
+          if(length(input) < 4){
 
-        opcoes <- c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto", "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6")
-      )
+            return(
+
+              opcoes <- c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto", "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6", "falso")
+            )
+
+          } else{
+            return(opcoes <- c(rep("falso", 4), "dist_peso_perinat_antes_parto"))
+          }
 
     }
 
@@ -896,18 +926,33 @@ seleciona <- function(aba, indicador){
 
     if(indicador == "momento de obito por peso"){
 
-      return(
+      if(length(input) < 4){
 
-        opcoes <- c("dist_moment_obito_neonat_menos1500", "dist_moment_obito_neonat_1500_1999", "dist_moment_obito_neonat_2000_2499", "dist_moment_obito_neonat_mais2500")
-      )
+        return(
+
+          opcoes <- c("dist_moment_obito_neonat_menos1500", "dist_moment_obito_neonat_1500_1999", "dist_moment_obito_neonat_2000_2499", "dist_moment_obito_neonat_mais2500", "falso")
+        )
+
+      } else{
+        return(opcoes <- c(rep("falso", 4), "dist_moment_obito_neonat_menos1500"))
+      }
+
 
 
     } else if(indicador == "peso por momento do obito"){
 
-      return(
+      if(length(input) < 3){
 
-        opcoes <- c("dist_peso_neonat_dia_0", "dist_peso_neonat_dia_1_6", "dist_peso_neonat_dia_7_27")
-      )
+        return(
+
+          opcoes <- c("dist_peso_neonat_dia_0", "dist_peso_neonat_dia_1_6", "dist_peso_neonat_dia_7_27", "falso")
+        )
+
+      } else{
+        return(opcoes <- c(rep("falso", 3), "dist_peso_neonat_dia_0"))
+      }
+
+
 
 
     }
