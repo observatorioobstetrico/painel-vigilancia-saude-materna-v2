@@ -808,7 +808,7 @@ df_evitaveis_fetal <- df_sim_dofet |>
       causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_fetal_parto",
       causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_fetal_recem_nascido",
       causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_fetal_tratamento",
-      causabas %in% saude | causabas2 %in% saude~ "evitaveis_fetal_saude",
+      causabas %in% saude | causabas2 %in% saude ~ "evitaveis_fetal_saude",
       causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_fetal_mal_definidas"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_outros", grupo_cid)
@@ -1436,8 +1436,8 @@ df_fetais_grupos <- df_sim_dofet |>
       causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_grupos_gravidez",
       #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
       causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_grupos_afeccoes_perinatal",
-      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_grupos_ma_formacao",
-      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_grupos_mal_definida",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao ~ "fetal_grupos_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida ~ "fetal_grupos_mal_definida",
       TRUE ~ "fetal_grupos_outros"
     )
   ) |>

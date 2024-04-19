@@ -320,29 +320,58 @@ mod_bloco_7_ui <- function(id) {
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
                   ),
                   hr(),
-
                   fluidRow(
+                    column(
+                      width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "fetal_grupos_antes",
+                            "Durante o parto" = "fetal_grupos_durante"
+                          ),
+                          selected = c("fetal_grupos_antes","fetal_grupos_durante"
+                          )
+                        )
+                      )
+                    ),
                     column(
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
-                        label = "Selecione os grupos de causas:",
-                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione aqui os grupos de interesse:",
+                        options = list(placeholder = "Selecione aqui os grupos de interesse:",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Prematuridade" = "fetal_grupos_prematuridade",
-                          "Infecções" = "fetal_grupos_infeccoes",
-                          "Asfixia/Hipóxia" = "fetal_grupos_asfixia",
-                          "Malformação congênita" = "fetal_grupos_ma_formacao",
-                          "Afecções respiratórias dos recém nascidos" = "fetal_grupos_respiratorias",
-                          "Fatores maternos relacionados à gravidez " = "fetal_grupos_gravidez",
-                          "Afecções originais no período fetal" = "fetal_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "fetal_grupos_mal_definida",
-                          "Demais causas" = "fetal_grupos_outros"
+                          "Prematuridade" = "prematuridade",
+                          "Infecções" = "infeccoes",
+                          "Asfixia/Hipóxia" = "asfixia",
+                          "Malformação congênita" = "ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "gravidez",
+                          "Afecções originais no período perinatal" = "afeccoes",
+                          "Mal definidas" = "mal_definida",
+                          "Demais causas" = "outros"
+
                         ),
-                        selected = c("fetal_grupos_prematuridade", "fetal_grupos_infeccoes",
-                                     "fetal_grupos_asfixia", "fetal_grupos_ma_formacao", "fetal_grupos_respiratorias",
-                                     "fetal_grupos_gravidez", "fetal_grupos_afeccoes_perinatal", "fetal_grupos_mal_definida",
-                                     "fetal_grupos_outros"),
+                        selected = c(
+                          "prematuridade",
+                          "infeccoes",
+                          "asfixia",
+                          "ma_formacao",
+                          "respiratorias",
+                          "gravidez",
+                          "afeccoes",
+                          "mal_definida",
+                          "outros"
+                        ),
                         multiple = TRUE,
                         width = "100%"
                       )
@@ -403,29 +432,49 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                            #"Faltante" = "evitaveis_fetal_faltantes"
+                          ),
+                          selected = c(
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                          )
+                        )
+                      )
+                    ),
+                    column(
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal"),
-                        label = "Selecione os grupos de causas evitáveis:",
-                        options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione aqui os grupos de interesse:",
+                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_fetal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_fetal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_fetal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_fetal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_fetal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_fetal_saude",
-                          "Causas mal definidas" = "evitaveis_fetal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_fetal_outros"
+                          "Reduzível pelas ações de imunização" = "imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
+                          "Causas mal definidas" = "mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "outros"
                         ),
                         selected = c(
-                          "evitaveis_fetal_imunoprevencao",
-                          "evitaveis_fetal_mulher_gestacao",
-                          "evitaveis_fetal_parto",
-                          "evitaveis_fetal_recem_nascido",
-                          "evitaveis_fetal_tratamento",
-                          "evitaveis_fetal_saude",
-                          "evitaveis_fetal_mal_definidas",
-                          "evitaveis_fetal_outros"
+                          "imunoprevencao",
+                          "mulher_gestacao",
+                          "parto",
+                          "recem_nascido",
+                          "tratamento",
+                          "saude",
+                          "mal_definidas",
+                          "outros"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -434,6 +483,74 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 500))
                 )
+              ),
+              column(
+                 width = 12,
+                bs4Dash::bs4Card(
+                   width = 12 ,
+                   status = "primary",
+                   collapsible = FALSE,
+                   headerBorder = FALSE,
+                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                    div(
+                   style = "height: 10%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o artigo de evitabilidade fetal. &nbsp;</b>")
+                    ),
+                   hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_evitaveis2"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                          ),
+                          selected = c(
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                          )
+                        )
+                      )
+                    ),
+                    column(
+                      width = 12,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_fetal2"),
+                        label = "Selecione aqui os grupos de interesse:",
+                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Mortes reduzíveis por ações de imunoprevenção" = "imunoprevencao2",
+                          "Mortes reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao2",
+                          "Mortes reduzíveis por adequada atenção à mulher no parto" = "parto2",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido2",
+                          "Reduzíveis por ações adequadas de diagnóstico e tratamento" = "tratamento2",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude2",
+                          "Causas de morte mal-definidas" = "mal_definidas2",
+                          "Demais causas (não claramente evitáveis)" = "outros2"
+                        ),
+                        selected = c(
+                          "imunoprevencao2",
+                          "mulher_gestacao2",
+                          "parto2",
+                          "recem_nascido2",
+                          "tratamento2",
+                          "saude2",
+                          "mal_definidas2",
+                          "outros2"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    )
+
+                   ),
+                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 500))
+                 )
               )
             )
           )
@@ -786,7 +903,7 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_perinatal_grupos"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "perinatal_grupos_antes",
+                            "Antes do parto" = "perinatal_grupos_antes", # estou aqui
                             "Durante o parto" = "perinatal_grupos_durante",
                             "Dia 0 de vida" = "perinatal_grupos_0_dias",
                             "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
@@ -1256,6 +1373,30 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   hr(),
                   fluidRow(
+                    ############################################################
+                    column(
+                      width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_neonatal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Dia 0 de vida" = "neonat_grupos_0_dias",
+                            "De 1 a 6 dias de vida" = "neonat_grupos_1_6_dias",
+                            "De 7 a 27 dias de vida" = "neonat_grupos_7_27_dias"
+                          ),
+                          selected = c(
+                            "neonat_grupos_0_dias",
+                            "neonat_grupos_1_6_dias",
+                            "neonat_grupos_7_27_dias"
+                          )
+                        )
+                      )
+                    ),
+                    ############################################################
                     column(
                       width = 12,
                       shinyWidgets::pickerInput(
@@ -1263,26 +1404,27 @@ mod_bloco_7_ui <- function(id) {
                         label = "Selecione os grupos de causas:",
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Prematuridade" = "neonat_grupos_prematuridade",
-                          "Infecções" = "neonat_grupos_infeccoes",
-                          "Asfixia/Hipóxia" = "neonat_grupos_asfixia",
-                          "Malformação congênita" = "neonat_grupos_ma_formacao",
-                          "Afecções respiratórias dos recém nascidos" = "neonat_grupos_respiratorias",
-                          "Fatores maternos relacionados à gravidez " = "neonat_grupos_gravidez",
-                          "Afecções originais no período neonatal" = "neonat_grupos_afeccoes_perinatal",
-                          "Mal definidas" = "neonat_grupos_mal_definida",
-                          "Demais causas " = "neonat_grupos_outros"
+                          "Prematuridade" = "prematuridade",
+                          "Infecções" = "infeccoes",
+                          "Asfixia/Hipóxia" = "asfixia",
+                          "Malformação congênita" = "ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "gravidez",
+                          "Afecções originais no período perinatal" = "afeccoes",
+                          "Mal definidas" = "mal_definida",
+                          "Demais causas" = "outros"
+
                         ),
                         selected = c(
-                          "neonat_grupos_prematuridade",
-                          "neonat_grupos_infeccoes",
-                          "neonat_grupos_asfixia",
-                          "neonat_grupos_ma_formacao",
-                          "neonat_grupos_respiratorias",
-                          "neonat_grupos_gravidez",
-                          "neonat_grupos_afeccoes_perinatal",
-                          "neonat_grupos_mal_definida",
-                          "neonat_grupos_outros"
+                          "prematuridade",
+                          "infeccoes",
+                          "asfixia",
+                          "ma_formacao",
+                          "respiratorias",
+                          "gravidez",
+                          "afeccoes",
+                          "mal_definida",
+                          "outros"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -1306,6 +1448,30 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   hr(),
                   fluidRow(
+                    ############################################################
+                    column(
+                      width = 12,
+                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_neonatal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Dia 0 de vida" = "evitaveis_neonatal_0_dias",
+                            "De 1 a 6 dias de vida" = "evitaveis_neonatal_1_6_dias",
+                            "De 7 a 27 dias de vida" = "evitaveis_neonatal_7_27_dias"
+                          ),
+                          selected = c(
+                            "evitaveis_neonatal_0_dias",
+                            "evitaveis_neonatal_1_6_dias",
+                            "evitaveis_neonatal_7_27_dias"
+                          )
+                        )
+                      )
+                    ),
+                    ############################################################
                     column(
                       width = 12,
                       shinyWidgets::pickerInput(
@@ -1313,24 +1479,24 @@ mod_bloco_7_ui <- function(id) {
                         label = "Selecione os grupos de causas evitáveis:",
                         options = list(placeholder = "Selecione os grupos de causas evitáveis", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Reduzível pelas ações de imunização" = "evitaveis_neonatal_imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "evitaveis_neonatal_mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "evitaveis_neonatal_parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "evitaveis_neonatal_recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "evitaveis_neonatal_tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "evitaveis_neonatal_saude",
-                          "Causas mal definidas" = "evitaveis_neonatal_mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "evitaveis_neonatal_outros"
+                          "Reduzível pelas ações de imunização" = "imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
+                          "Causas mal definidas" = "mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "outros"
                         ),
                         selected = c(
-                          "evitaveis_neonatal_imunoprevencao",
-                          "evitaveis_neonatal_mulher_gestacao",
-                          "evitaveis_neonatal_parto",
-                          "evitaveis_neonatal_recem_nascido",
-                          "evitaveis_neonatal_tratamento",
-                          "evitaveis_neonatal_saude",
-                          "evitaveis_neonatal_mal_definidas",
-                          "evitaveis_neonatal_outros"
+                          "imunoprevencao",
+                          "mulher_gestacao",
+                          "parto",
+                          "recem_nascido",
+                          "tratamento",
+                          "saude",
+                          "mal_definidas",
+                          "outros"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -5137,9 +5303,11 @@ mod_bloco_7_server <- function(id, filtros){
 
 
     ## bloco8_graficos porem sem as colunas principais_neonatal_precoce e neonat_precoce_grupos
-    bloco8_graficos <- bloco8_graficos |>
-      #dplyr::select(-c(colnames(bloco8_graficos)[72:84],colnames(bloco8_graficos)[108:116]))
-      dplyr::select(-dplyr::contains("neonat_precoce"))
+   # bloco8_graficos <- bloco8_graficos |>
+    #  dplyr::select(-c(colnames(bloco8_graficos)[142:161]))
+      #dplyr::select(-dplyr::contains("neonat_precoce"))
+      #dplyr::select(where(~!grepl("fetal", .x) | !grepl("2$", names(.x))))
+
     ## tive que realizar esse filtro para evitar confusão entre  os as colunas neonatal e neonatal_precoce
 
     #########-------------------- Gráficos de distribuição dos grupos de CID
@@ -5475,7 +5643,7 @@ mod_bloco_7_server <- function(id, filtros){
           cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
-        ) |>
+        ) |> # esta aqui
         dplyr::mutate(
           grupo_cid10 = ifelse(
             (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
@@ -5879,7 +6047,6 @@ mod_bloco_7_server <- function(id, filtros){
 
     })
 
-
     ###################################################################################
     ############ Gráficos de distribuição dos grupos de CID (neonatal) ################
     ###################################################################################
@@ -5936,47 +6103,47 @@ mod_bloco_7_server <- function(id, filtros){
     # tive que usar o bloco8_grafico_evitaveis_neonatal pelo fato do bloco8_grafico não conter evitaveis_neonatal
     #############################################################################################################
 
-    evitaveis_neonatal_filtrado <- reactive({
-      bloco8_grafico_evitaveis_neonatal |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano)
-    })
-
-    evitaveis_neonatal_filtrado_comp <- reactive({
-      bloco8_grafico_evitaveis_neonatal |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel2 == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano)
-    })
+    # evitaveis_neonatal_filtrado <- reactive({
+    #   bloco8_grafico_evitaveis_neonatal |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #       if (filtros()$nivel == "Nacional")
+    #         regiao %in% unique(tabela_aux_municipios$regiao)
+    #       else if (filtros()$nivel == "Regional")
+    #         regiao == filtros()$regiao
+    #       else if (filtros()$nivel == "Estadual")
+    #         uf == filtros()$estado
+    #       else if (filtros()$nivel == "Macrorregião de saúde")
+    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #       else if(filtros()$nivel == "Microrregião de saúde")
+    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #       else if(filtros()$nivel == "Municipal")
+    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #     ) |>
+    #     dplyr::group_by(ano)
+    # })
+    #
+    # evitaveis_neonatal_filtrado_comp <- reactive({
+    #   bloco8_grafico_evitaveis_neonatal |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #       if (filtros()$nivel2 == "Nacional")
+    #         regiao %in% unique(tabela_aux_municipios$regiao)
+    #       else if (filtros()$nivel2 == "Regional")
+    #         regiao == filtros()$regiao2
+    #       else if (filtros()$nivel2 == "Estadual")
+    #         uf == filtros()$estado2
+    #       else if (filtros()$nivel2 == "Macrorregião de saúde")
+    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #       else if(filtros()$nivel2 == "Microrregião de saúde")
+    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #       else if(filtros()$nivel2 == "Municipal")
+    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #       else if (filtros()$nivel2 == "Municípios semelhantes")
+    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #     ) |>
+    #     dplyr::group_by(ano)
+    # })
 
     #############################################################################################################
     #############################################################################################################
@@ -6112,28 +6279,28 @@ mod_bloco_7_server <- function(id, filtros){
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
-           grupo_cid10 = ifelse(
-             grupo_cid10 %in% input$cids_principais_neonatal,
-             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
-             dplyr::case_when(
-               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
-               grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
-               grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
-               grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
-               grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
-               grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
-               grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
-               grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
-               grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
-               grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
-               grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
-               grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
-               grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
-               grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
-             ),
-             "Grupos não selecionados"
-           ),
-             # ifelse(
+          grupo_cid10 = ifelse(
+            grupo_cid10 %in% input$cids_principais_neonatal,
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_p00_p04" ~ "(P00-P04) Fatores maternos e condições da gravidez, parto e trabalho de parto",
+              grupo_cid10 == "principais_neonatal_p05_p08" ~ "(P05-P08) Duração da gestação e crescimento fetal",
+              grupo_cid10 == "principais_neonatal_p10_p15" ~ "(P10-P15) Traumatismo de parto",
+              grupo_cid10 == "principais_neonatal_p20_p29" ~ "(P20-P29) Transtornos respiratórios e cardiovasculares do período fetal",
+              grupo_cid10 == "principais_neonatal_p35_p39" ~ "(P35-P39) Infecções do período fetal",
+              grupo_cid10 == "principais_neonatal_p50_p61" ~ "(P50-P61) Transtornos hemorrágicos e hematológicos",
+              grupo_cid10 == "principais_neonatal_p70_p74" ~ "(P70-P74) Transtornos endócrinos e metabólicos transitórios",
+              grupo_cid10 == "principais_neonatal_p75_p78" ~ "(P75-P78) Transtornos do aparelho digestivo",
+              grupo_cid10 == "principais_neonatal_p80_p83" ~ "(P80-P83) Afecções comprometendo tegumento e regulação térmica ",
+              grupo_cid10 == "principais_neonatal_p90_p96" ~ "(P90-P96) Outros transtornos no período fetal",
+              grupo_cid10 == "principais_neonatal_a00_b99" ~ "(A00-B99) Infecciosas",
+              grupo_cid10 == "principais_neonatal_q00_q99" ~ "(Q00-Q99) Anomalias congênitas",
+              grupo_cid10 == "principais_neonatal_outros" ~ "Demais causas",
+            ),
+            "Grupos não selecionados"
+          ),
+          # ifelse(
           #   grupo_cid10 %in% input$cids_principais_neonatal,
           #   ifelse(
           #     grupo_cid10 != "principais_neonatal_outros",
@@ -6278,29 +6445,30 @@ mod_bloco_7_server <- function(id, filtros){
     ##########################################################################################################################
 
     data_plot_evitaveis_neonatal <- reactive({
-      evitaveis_neonatal_filtrado() |>
+      data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal") | "obitos_neonatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_neonatal"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_neonatal,
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-                grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-                grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
-                grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
+            (grepl(paste(input$cids_evitaveis_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_neonatal)),
+            #grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6318,33 +6486,36 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |># "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_neonatal_comp <- reactive({
-      evitaveis_neonatal_filtrado_comp() |>
+      data_filtrada_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal") | "obitos_neonatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_neonatal"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            (grepl(paste(input$cids_evitaveis_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_neonatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6363,37 +6534,40 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_neonatal_referencia <- reactive({
-      bloco8_grafico_evitaveis_neonatal |>
+      bloco8_graficos |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_neonatal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_neonatal"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = input$momento_obito_neonatal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_neonatal,
+            (grepl(paste(input$cids_evitaveis_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_neonatal)),
             #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_neonatal_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_neonatal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_neonatal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_neonatal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_neonatal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_neonatal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_neonatal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_neonatal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_neonatal_outros" ~ "Demais causas"
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -6403,7 +6577,10 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_neonatal_completo <- reactive({
@@ -6480,27 +6657,27 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("neonat_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_neonatal,
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
-                grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
-                grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
-                grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-                grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
-                grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
+            (grepl(paste(input$cids_grupos_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_neonatal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonatal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6518,34 +6695,36 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_neonatal_comp <- reactive({
       data_filtrada_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("neonat_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_neonatal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_grupos_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_neonatal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -6564,7 +6743,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_neonatal_referencia <- reactive({
@@ -6575,27 +6756,27 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("neonat_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("neonat_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("neonat_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = input$momento_obito_neonatal_grupos)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_neonatal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonat_grupos_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_grupos_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_neonatal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("neonatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "neonat_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "neonat_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "neonat_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "neonat_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "neonat_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "neonat_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "neonat_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "neonat_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "neonat_grupos_outros" ~ "Demais causas"
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -6605,7 +6786,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_neonatal_completo <- reactive({
@@ -6648,7 +6831,7 @@ mod_bloco_7_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 0
           ) |>
@@ -6658,7 +6841,7 @@ mod_bloco_7_server <- function(id, filtros){
             type = "column",
             showInLegend = FALSE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
             ),
             stack = 1
           )
@@ -6960,29 +7143,46 @@ mod_bloco_7_server <- function(id, filtros){
     # Calculando a porcentagem de óbitos fetais em cada grupo de causas evitáveis, relativa ao total de óbitos fetais por causas evitáveis
     data_plot_evitaveis_fetal <- reactive({
       data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal") | "obitos_fetais_totais"), sum) |>
+        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & !dplyr::contains("2") )| "obitos_fetais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_fetal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_fetal"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
+ #       tidyr::pivot_longer(
+#          cols = dplyr::contains("evitaveis_fetal"),
+#          names_to = "grupo_cid10",
+#          values_to = "porc_obitos"
+#        ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_fetal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_evitaveis_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal)),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
+          #grupo_cid10 = ifelse(
+          #  grupo_cid10 %in% input$cids_evitaveis_fetal,
+          #  gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+          #  dplyr::case_when(
+          #    grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
+          #    grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
+          #    grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
+          #    grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
+          #    grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
+          #    grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+          #    grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
+          #   grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
+          #  ),
             "Grupos não selecionados"
           ),
           class = dplyr::case_when(
@@ -6999,33 +7199,35 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_evitaveis_fetal_comp <- reactive({
       data_filtrada_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal") | "obitos_fetais_totais"), sum) |>
+        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & !dplyr::contains("2"))| "obitos_fetais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_fetal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_fetal"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_fetal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_evitaveis_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal)),
             dplyr::case_when(
-              grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-              grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-              grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-              grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-              grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-              grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-              grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
-              grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -7044,7 +7246,11 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |>
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+
     })
 
     data_plot_evitaveis_fetal_referencia <- reactive({
@@ -7053,28 +7259,27 @@ mod_bloco_7_server <- function(id, filtros){
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
+        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & !dplyr::contains("2"))), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::starts_with("evitaveis_fetal")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("evitaveis_fetal"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis", input = input$momento_obito_fetal_evitaveis)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_evitaveis_fetal,
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_fetal_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                grupo_cid10 == "evitaveis_fetal_imunoprevencao" ~ "Imunoprevenção",
-                grupo_cid10 == "evitaveis_fetal_mulher_gestacao" ~ "Adequada atenção à mulher na gestação",
-                grupo_cid10 == "evitaveis_fetal_parto" ~ "Adequada atenção à mulher no parto",
-                grupo_cid10 == "evitaveis_fetal_recem_nascido" ~ "Adequada atenção ao recém nascido",
-                grupo_cid10 == "evitaveis_fetal_tratamento" ~ "Ações de diagnóstico e tratamento adequado",
-                grupo_cid10 == "evitaveis_fetal_saude" ~ "Ações de promoção à saúde vinculadas a ações de atenção",
-                grupo_cid10 == "evitaveis_fetal_mal_definidas" ~ "Causas mal definidas",
-                grupo_cid10 == "evitaveis_fetal_outros" ~ "Demais causas"
+            (grepl(paste(input$cids_evitaveis_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal)),
+            dplyr::case_when(
+              grepl("imunoprevencao", grupo_cid10) ~ "Imunoprevenção",
+              grepl("mulher_gestacao", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+              grepl("parto", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+              grepl("recem_nascido", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+              grepl("tratamento", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+              grepl("saude", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+              grepl("mal_definidas", grupo_cid10) ~ "Causas mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -7084,7 +7289,11 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+
     })
 
     data_plot_evitaveis_fetal_completo <- reactive({
@@ -7160,27 +7369,27 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos") | "obitos_fetais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("fetal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("fetal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_fetal,
-              #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
-              dplyr::case_when(
-                grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
-                grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
-                grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-                grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
-                grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-                grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-                grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-                grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
-                grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
+            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
+            dplyr::case_when(
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -7198,34 +7407,36 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_fetal_comp <- reactive({
       data_filtrada_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos") | "obitos_fetais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("fetal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("fetal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_fetal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           ),
@@ -7244,7 +7455,10 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
+                                           levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_fetal_referencia <- reactive({
@@ -7255,27 +7469,27 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::starts_with("fetal_grupos")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::contains("fetal_grupos"),
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
         dplyr::mutate(
           grupo_cid10 = ifelse(
-            grupo_cid10 %in% input$cids_grupos_fetal,
-            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("fetal_grupos_") + 1,  nchar(grupo_cid10)))),
+            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
+            #gsub("_", "-", toupper(substr(grupo_cid10, nchar("perinatal_grupos_") + 1,  nchar(grupo_cid10)))),
             dplyr::case_when(
-              grupo_cid10 == "fetal_grupos_prematuridade" ~ "Prematuridade",
-              grupo_cid10 == "fetal_grupos_infeccoes" ~ "Infecções",
-              grupo_cid10 == "fetal_grupos_asfixia" ~ "Asfixia/Hipóxia",
-              grupo_cid10 == "fetal_grupos_ma_formacao" ~ "Malformação congênita",
-              grupo_cid10 == "fetal_grupos_respiratorias" ~ "Afecções respiratórias do recém-nascido",
-              grupo_cid10 == "fetal_grupos_gravidez" ~ "Fatores maternos relacionados à gravidez",
-              grupo_cid10 == "fetal_grupos_afeccoes_perinatal" ~ "Afecções originais no período perinatal",
-              grupo_cid10 == "fetal_grupos_mal_definida" ~ "Mal definidas",
-              grupo_cid10 == "fetal_grupos_outros" ~ "Demais causas"
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
           )
@@ -7285,7 +7499,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise(
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
     })
 
     data_plot_grupos_fetal_completo <- reactive({
@@ -7354,8 +7570,216 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_grupos_fetal()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais por grupos de causas"), min = 0, max = 100)
     })
+
+
+    # Nova referência fetal: Calculando a porcentagem de óbitos fetais em cada grupo de causas evitáveis, relativa ao total de óbitos fetais por causas evitáveis
+    data_plot_evitaveis_fetal2 <- reactive({
+    data_filtrada_aux() |>
+      dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | "obitos_fetais_totais"), sum) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
+      dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+      tidyr::pivot_longer(
+        cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+        names_to = "grupo_cid10",
+        values_to = "porc_obitos"
+      ) |>
+      dplyr::mutate(
+        grupo_cid10 = ifelse(
+          (grepl(paste(input$cids_evitaveis_fetal2, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal2)),
+          #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+          dplyr::case_when(
+            grepl("imunoprevencao2", grupo_cid10) ~ "Imunoprevenção",
+            grepl("mulher_gestacao2", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+            grepl("parto2", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+            grepl("recem_nascido2", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+            grepl("tratamento2", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+            grepl("saude2", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+            grepl("mal_definidas2", grupo_cid10) ~ "Causas mal definidas",
+            grepl("outros2", grupo_cid10) ~ "Demais causas",
+          ),
+          "Grupos não selecionados"
+        ),
+        class = dplyr::case_when(
+          filtros()$nivel == "Nacional" ~ "Brasil",
+          filtros()$nivel == "Regional" ~ filtros()$regiao,
+          filtros()$nivel == "Estadual" ~ filtros()$estado,
+          filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+          filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+          filtros()$nivel == "Municipal" ~ filtros()$municipio
+        )
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(ano, grupo_cid10, class) |>
+      dplyr::summarise(
+        porc_obitos = round(sum(porc_obitos), 1)
+      ) |>
+      dplyr::ungroup()|># "Demais causas" como ultima barra da pilha da pilha
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
   })
+
+    data_plot_evitaveis_fetal_comp2 <- reactive({
+    data_filtrada_comp_aux() |>
+      dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | "obitos_fetais_totais"), sum) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
+      dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+      tidyr::pivot_longer(
+        cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+        names_to = "grupo_cid10",
+        values_to = "porc_obitos"
+      ) |>
+      dplyr::mutate(
+        grupo_cid10 = ifelse(
+          (grepl(paste(input$cids_evitaveis_fetal2, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal2)),
+          #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+          dplyr::case_when(
+            grepl("imunoprevencao2", grupo_cid10) ~ "Imunoprevenção",
+            grepl("mulher_gestacao2", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+            grepl("parto2", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+            grepl("recem_nascido2", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+            grepl("tratamento2", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+            grepl("saude2", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+            grepl("mal_definidas2", grupo_cid10) ~ "Causas mal definidas",
+            grepl("outros2", grupo_cid10) ~ "Demais causas",
+          ),
+          "Grupos não selecionados"
+        ),
+        class = dplyr::case_when(
+          filtros()$nivel2 == "Nacional" ~ "Brasil",
+          filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+          filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+          filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+          filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+          filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+          filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+        )
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(ano, grupo_cid10, class) |>
+      dplyr::summarise(
+        porc_obitos = round(sum(porc_obitos), 1)
+      ) |>
+      dplyr::ungroup()|># "Demais causas" como ultima barra da pilha da pilha
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+  })
+
+    data_plot_evitaveis_fetal_referencia2 <- reactive({
+    bloco8_graficos |>
+      dplyr::filter(
+        ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+      ) |>
+      dplyr::group_by(ano) |>
+      dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal") & dplyr::contains("2")), sum) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
+      dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+      tidyr::pivot_longer(
+        cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+        names_to = "grupo_cid10",
+        values_to = "br_porc_obitos"
+      ) |>
+      dplyr::mutate(
+        grupo_cid10 = ifelse(
+          (grepl(paste(input$cids_evitaveis_fetal2, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal2)),
+          #gsub("_", "-", toupper(substr(grupo_cid10, nchar("evitaveis_perinatal_") + 1,  nchar(grupo_cid10)))),
+          dplyr::case_when(
+            grepl("imunoprevencao2", grupo_cid10) ~ "Imunoprevenção",
+            grepl("mulher_gestacao2", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
+            grepl("parto2", grupo_cid10) ~ "Adequada atenção à mulher no parto",
+            grepl("recem_nascido2", grupo_cid10) ~ "Adequada atenção ao recém nascido",
+            grepl("tratamento2", grupo_cid10) ~ "Ações de diagnóstico e tratamento adequado",
+            grepl("saude2", grupo_cid10) ~ "Ações de promoção à saúde vinculadas a ações de atenção",
+            grepl("mal_definidas2", grupo_cid10) ~ "Causas mal definidas",
+            grepl("outros2", grupo_cid10) ~ "Demais causas",
+          ),
+          "Grupos não selecionados"
+        )
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::group_by(ano, grupo_cid10) |>
+      dplyr::summarise(
+        br_porc_obitos = round(sum(br_porc_obitos), 1)
+      ) |>
+      dplyr::ungroup() |># "Demais causas" como ultima barra da pilha da pilha
+      dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                 "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+  })
+
+    data_plot_evitaveis_fetal_completo2 <- reactive({
+    validate(
+      need(
+        nrow(data_plot_evitaveis_fetal2()) != 0,
+        "Não existem ocorrências de óbitos fetais por causas evitáveis para a localidade, período e grupos CID-10 selecionados."
+      )
+    )
+    dplyr::full_join(data_plot_evitaveis_fetal2(), data_plot_evitaveis_fetal_referencia2())
+  })
+
+    data_plot_evitaveis_fetal_comp_completo2 <- reactive({
+    validate(
+      need(
+        nrow(data_plot_evitaveis_fetal_comp2()) != 0,
+        "Não existem ocorrências de óbitos fetais por causas evitáveis para a localidade de comparação, período e grupos CID-10 selecionados."
+      )
+    )
+    dplyr::full_join(data_plot_evitaveis_fetal_comp2(), data_plot_evitaveis_fetal_referencia2())
+  })
+
+    output$plot_evitaveis_fetal2 <- highcharter::renderHighchart({
+    if (filtros()$comparar == "Não") {
+      grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_fetal_completo2(),
+          highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+          )
+        )
+    } else {
+      grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_fetal_completo2(),
+          highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+          type = "column",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+          ),
+          stack = 0
+        ) |>
+        highcharter::hc_add_series(
+          data = data_plot_evitaveis_fetal_comp_completo2(),
+          highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+          type = "column",
+          showInLegend = FALSE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+          ),
+          stack = 1
+        )
+    }
+
+    grafico_base |>
+      highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+      highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
+      highcharter::hc_colors(
+        viridis::magma(length(unique(data_plot_evitaveis_fetal2()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_fetal2()$grupo_cid10)) + 2)]
+      ) |>
+      highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_fetal2()$ano), allowDecimals = FALSE) |>
+      highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais por causas evitáveis"), min = 0, max = 100)
+
+  })
+ })
 }
+
 
 
 

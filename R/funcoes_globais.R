@@ -962,7 +962,6 @@ seleciona <- function(aba, indicador, input){
 
 }
 
-
 momento_obitos <- function(aba, grafico, input){
 
   if(aba == "perinatal"){
@@ -991,7 +990,8 @@ momento_obitos <- function(aba, grafico, input){
       if(length(input) < 2){
         return(paste(input, collapse = "|"))
       } else {
-        return("^fetal_grupos[^_antes|_durante]")
+        #return("fetal_grupos_antes"|"fetal_grupos_durante")
+        return("fetal_grupos_prematuridade|fetal_grupos_infeccoes|fetal_grupos_asfixia|fetal_grupos_ma_formacao|fetal_grupos_respiratorias|fetal_grupos_gravidez|fetal_grupos_afeccoes_perinatal|fetal_grupos_mal_definida|fetal_grupos_outros")
       }
 
     } else if(grafico == "evitaveis"){
@@ -999,8 +999,18 @@ momento_obitos <- function(aba, grafico, input){
       if(length(input) < 2){
         return(paste(input, collapse = "|"))
       } else {
-        return("^evitaveis_fetal[^_antes|_durante")
+        #return("evitaveis_fetal_antes|evitaveis_fetal_durante")
+        return("evitaveis_fetal_imunoprevencao|evitaveis_fetal_mulher_gestacao|evitaveis_fetal_parto|evitaveis_fetal_recem_nascido|evitaveis_fetal_tratamento|evitaveis_fetal_saude|evitaveis_fetal_mal_definidas|evitaveis_fetal_outros")
       }
+
+    } else if(grafico == "evitaveis2"){
+
+      if(length(input) < 2){
+        return(paste(input, collapse = "|"))
+      } else {
+        return("evitaveis_fetal_imunoprevencao2|evitaveis_fetal_mulher_gestacao2|evitaveis_fetal_parto2|evitaveis_fetal_recem_nascido2|evitaveis_fetal_tratamento2|evitaveis_fetal_saude2|evitaveis_fetal_mal_definidas2|evitaveis_fetal_outros2")
+      }
+
 
     }
 
@@ -1012,7 +1022,9 @@ momento_obitos <- function(aba, grafico, input){
       if(length(input) < 3){
         return(paste(input, collapse = "|"))
       } else {
-        return("^neonat_grupos[^_0_dias|_1_6_dias|_7_27_dias]")
+        #return("neonat_grupos_0_dias|neonat_grupos_1_6_dias|neonat_grupos_7_27_dias")
+        return("neonat_grupos_prematuridade|neonat_grupos_infeccoes|neonat_grupos_asfixia|neonat_grupos_ma_formacao|neonat_grupos_respiratorias|neonat_grupos_gravidez|neonat_grupos_afeccoes_perinatal|neonat_grupos_mal_definida|neonat_grupos_outros")
+
       }
 
 
@@ -1021,7 +1033,10 @@ momento_obitos <- function(aba, grafico, input){
       if(length(input) < 3){
         return(paste(input, collapse = "|"))
       } else {
-        return("^evitaveis_neonatal[^_0_dias|_1_6_dias|_7_27_dias]")
+        return("evitaveis_neonatal_0_dias|evitaveis_neonatal_1_6_dias|evitaveis_neonatal_7_27_dias")
+        #return("evitaveis_neonatal_imunoprevencao|evitaveis_neonatal_mulher_gestacao|evitaveis_neonatal_parto|evitaveis_neonatal_recem_nascido|evitaveis_neonatal_tratamento|evitaveis_neonatal_saude|evitaveis_neonatal_mal_definidas|evitaveis_neonatal_outros")
+
+
       }
 
     }
