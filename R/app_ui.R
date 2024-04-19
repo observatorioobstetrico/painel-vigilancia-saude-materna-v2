@@ -31,7 +31,7 @@ app_ui <- function(request) {
         will-change: transform;
         top: 0px;
         left: 0px;
-        transform: translate3d(0px, 37px, 0px)!important;
+        transform: translate3d(0px, 0px, 0px)!important;
       }
     ")),
     # Leave this function for adding external resources

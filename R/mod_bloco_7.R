@@ -322,29 +322,11 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_grupos"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "fetal_grupos_antes",
-                            "Durante o parto" = "fetal_grupos_durante"
-                          ),
-                          selected = c("fetal_grupos_antes","fetal_grupos_durante"
-                          )
-                        )
-                      )
-                    ),
-                    column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
-                        label = "Selecione aqui os grupos de interesse:",
-                        options = list(placeholder = "Selecione aqui os grupos de interesse:",
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse:",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
                                        `select-all-text` = "Selecionar todas",
@@ -375,9 +357,28 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("momento_obito_fetal_grupos"),
+                        label = "Selecione, aqui, os momentos de óbito considerados:",
+                        options = list(placeholder = "Selecione, aqui, os momentos de óbito:",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Antes do parto" = "fetal_grupos_antes",
+                          "Durante o parto" = "fetal_grupos_durante"
+                        ),
+                        selected = c("fetal_grupos_antes","fetal_grupos_durante"),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+
                     )
                   ),
-
                   # fluidRow(
                   #   column(
                   #     width = 12,
@@ -431,31 +432,11 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_evitaveis"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes",
-                            "Durante o parto" = "evitaveis_fetal_durante"#,
-                            #"Faltante" = "evitaveis_fetal_faltantes"
-                          ),
-                          selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
-                          )
-                        )
-                      )
-                    ),
-                    column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal"),
-                        label = "Selecione aqui os grupos de interesse:",
-                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "imunoprevencao",
                           "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
@@ -479,6 +460,26 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                            #"Faltante" = "evitaveis_fetal_faltantes"
+                          ),
+                          selected = c(
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                          )
+                        )
+                      )
                     )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 500))
@@ -499,30 +500,11 @@ mod_bloco_7_ui <- function(id) {
                    hr(),
                   fluidRow(
                     column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_evitaveis2"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes",
-                            "Durante o parto" = "evitaveis_fetal_durante"#,
-                          ),
-                          selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
-                          )
-                        )
-                      )
-                    ),
-                    column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal2"),
-                        label = "Selecione aqui os grupos de interesse:",
-                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Mortes reduzíveis por ações de imunoprevenção" = "imunoprevencao2",
                           "Mortes reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao2",
@@ -546,8 +528,26 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_evitaveis2"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                          ),
+                          selected = c(
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                          )
+                        )
+                      )
                     )
-
                    ),
                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 500))
                  )
@@ -894,33 +894,11 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_perinatal_grupos"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "perinatal_grupos_antes", # estou aqui
-                            "Durante o parto" = "perinatal_grupos_durante",
-                            "Dia 0 de vida" = "perinatal_grupos_0_dias",
-                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
-                          ),
-                          selected = c(
-                            "perinatal_grupos_antes", "perinatal_grupos_durante",
-                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"
-                          )
-                        )
-                      )
-                    ),
-                    column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
-                        label = "Selecione aqui os grupos de interesse:",
-                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
@@ -947,9 +925,31 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_perinatal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "perinatal_grupos_antes", # estou aqui
+                            "Durante o parto" = "perinatal_grupos_durante",
+                            "Dia 0 de vida" = "perinatal_grupos_0_dias",
+                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
+                          ),
+                          selected = c(
+                            "perinatal_grupos_antes", "perinatal_grupos_durante",
+                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"
+                          )
+                        )
+                      )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 480))
                 )
               ),
               column(
@@ -967,34 +967,11 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_perinatal_evitaveis"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "evitaveis_perinatal_antes",
-                            "Durante o parto" = "evitaveis_perinatal_durante",
-                            "Dia 0 de vida" = "evitaveis_perinatal_0_dias",
-                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias"
-                          ),
-                          selected = c(
-                            "evitaveis_perinatal_antes", "evitaveis_perinatal_durante",
-                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias"
-                          )
-                        )
-                      )
-                    ),
-
-                    column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
-                        label = "Selecione aqui os grupos de interesse:",
-                        options = list(placeholder = "Selecione aqui os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "imunoprevencao",
                           "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
@@ -1018,9 +995,31 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_perinatal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_perinatal_antes",
+                            "Durante o parto" = "evitaveis_perinatal_durante",
+                            "Dia 0 de vida" = "evitaveis_perinatal_0_dias",
+                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias"
+                          ),
+                          selected = c(
+                            "evitaveis_perinatal_antes", "evitaveis_perinatal_durante",
+                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias"
+                          )
+                        )
+                      )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 480))
                 )
               )
             )
@@ -1374,31 +1373,9 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     ############################################################
-                    column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_neonatal_grupos"),
-                          label    = NULL,
-                          choices = c(
-                            "Dia 0 de vida" = "neonat_grupos_0_dias",
-                            "De 1 a 6 dias de vida" = "neonat_grupos_1_6_dias",
-                            "De 7 a 27 dias de vida" = "neonat_grupos_7_27_dias"
-                          ),
-                          selected = c(
-                            "neonat_grupos_0_dias",
-                            "neonat_grupos_1_6_dias",
-                            "neonat_grupos_7_27_dias"
-                          )
-                        )
-                      )
-                    ),
                     ############################################################
                     column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_neonatal"),
                         label = "Selecione os grupos de causas:",
@@ -1429,6 +1406,28 @@ mod_bloco_7_ui <- function(id) {
                         multiple = TRUE,
                         width = "100%"
                       )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_neonatal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Dia 0 de vida" = "neonat_grupos_0_dias",
+                            "De 1 a 6 dias de vida" = "neonat_grupos_1_6_dias",
+                            "De 7 a 27 dias de vida" = "neonat_grupos_7_27_dias"
+                          ),
+                          selected = c(
+                            "neonat_grupos_0_dias",
+                            "neonat_grupos_1_6_dias",
+                            "neonat_grupos_7_27_dias"
+                          )
+                        )
+                      )
                     )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 500))
@@ -1449,31 +1448,9 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     ############################################################
-                    column(
-                      width = 12,
-                      strong(p("Selecione os momentos do óbito:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_neonatal_evitaveis"),
-                          label    = NULL,
-                          choices = c(
-                            "Dia 0 de vida" = "evitaveis_neonatal_0_dias",
-                            "De 1 a 6 dias de vida" = "evitaveis_neonatal_1_6_dias",
-                            "De 7 a 27 dias de vida" = "evitaveis_neonatal_7_27_dias"
-                          ),
-                          selected = c(
-                            "evitaveis_neonatal_0_dias",
-                            "evitaveis_neonatal_1_6_dias",
-                            "evitaveis_neonatal_7_27_dias"
-                          )
-                        )
-                      )
-                    ),
                     ############################################################
                     column(
-                      width = 12,
+                      width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_neonatal"),
                         label = "Selecione os grupos de causas evitáveis:",
@@ -1500,6 +1477,28 @@ mod_bloco_7_ui <- function(id) {
                         ),
                         multiple = TRUE,
                         width = "100%"
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_neonatal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Dia 0 de vida" = "evitaveis_neonatal_0_dias",
+                            "De 1 a 6 dias de vida" = "evitaveis_neonatal_1_6_dias",
+                            "De 7 a 27 dias de vida" = "evitaveis_neonatal_7_27_dias"
+                          ),
+                          selected = c(
+                            "evitaveis_neonatal_0_dias",
+                            "evitaveis_neonatal_1_6_dias",
+                            "evitaveis_neonatal_7_27_dias"
+                          )
+                        )
                       )
                     )
                   ),
