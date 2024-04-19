@@ -34,6 +34,12 @@ app_ui <- function(request) {
         transform: translate3d(0px, 0px, 0px)!important;
       }
     ")),
+    tags$style(HTML("
+      .btn-light {
+        background-color: #ebeff2;
+        border-color: #ebeff2;
+      }
+    ")),
     # Leave this function for adding external resources
     golem_add_external_resources(
     ),
