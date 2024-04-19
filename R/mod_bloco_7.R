@@ -360,23 +360,20 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("momento_obito_fetal_grupos"),
-                        label = "Selecione, aqui, os momentos de óbito considerados:",
-                        options = list(placeholder = "Selecione, aqui, os momentos de óbito:",
-                                       `actions-box` = TRUE,
-                                       `deselect-all-text` = "Desselecionar todas",
-                                       `select-all-text` = "Selecionar todas",
-                                       `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "Antes do parto" = "fetal_grupos_antes",
-                          "Durante o parto" = "fetal_grupos_durante"
-                        ),
-                        selected = c("fetal_grupos_antes","fetal_grupos_durante"),
-                        multiple = TRUE,
-                        width = "100%"
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "fetal_grupos_antes",
+                            "Durante o parto" = "fetal_grupos_durante"
+                          ),
+                          selected = c("fetal_grupos_antes","fetal_grupos_durante"),
+                        )
                       )
-
                     )
                   ),
                   # fluidRow(
