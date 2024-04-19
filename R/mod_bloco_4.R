@@ -2642,7 +2642,7 @@ mod_bloco_4_server <- function(id, filtros){
       if (filtros()$nivel == "Municipal") {
         municipio1 <- municipio2 <- municipio3 <- NULL
 
-        for (i in 1:length(filtros()$ano2[1]:filtros()$ano2[2])) {
+        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2020))) {
           municipio1[i] <- tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data4_deslocamento()$codmunnasc1[i])]
           #uf_municipio_1[i] <- tabela_aux_municipios$uf[which(tabela_aux_municipios$codmunres == data4_deslocamento$codmunnasc1[i])]
           municipio2[i] <- tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data4_deslocamento()$codmunnasc2[i])]
@@ -2659,7 +2659,7 @@ mod_bloco_4_server <- function(id, filtros){
         estabelecimento <- data4_deslocamento()$nome_estabelecimento_fantasia
         partos_estabelecimento <- data4_deslocamento()$nasc_estab
 
-        ano <- filtros()$ano2[1]:filtros()$ano2[2]
+        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2020)
         infos_municipio1 <- dplyr::if_else(
           glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
           glue::glue("---"),
@@ -2711,7 +2711,8 @@ mod_bloco_4_server <- function(id, filtros){
             highlight = TRUE,
             striped = TRUE,
             borderless = TRUE,
-            pagination = FALSE
+            pagination = FALSE,
+            height = 600
           )
       }
     })
