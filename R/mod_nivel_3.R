@@ -290,6 +290,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # Objetos auxiliares ------------------------------------------------------
+    ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
         ano <- glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")
@@ -309,16 +311,48 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
     })
 
-    #cores pros graficos
-    cols <- c("#2c115f", "#b73779", "#fc8961")
+    ## Buscando as informações do indicador selecionado na tabela_indicadores --------
+    infos_indicador <- reactive({
+      if (!(filtros()$bloco %in% c("bloco4", "bloco6"))) {
+        tabela_indicadores |>
+          dplyr::filter(indicador == filtros()$indicador)
+      } else {
+        tabela_indicadores |>
+          dplyr::filter(indicador == filtros()$indicador_blocos4_6)
+      }
+    })
 
-    ##### Criando o vetor que recebe os indicadores que precisam ser criados um a um #####
-    indicadores_sem_incompletude <- tabela_indicadores$nome_abreviado[which(tabela_indicadores$num_indicadores_incompletude == 0)]
+    ## Criando alguns outputs de texto que precisam ser usados na UI ----------
+    output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
+    output$bloco_selecionado <- renderText({infos_indicador()$bloco})
+    output$num_indicadores_incompletude <- renderText({infos_indicador()$num_indicadores_incompletude})
+    output$escolha1 <- renderText({
+      dplyr::case_when(
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
+        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN sem CNES preenchido",
+        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+      )
+    })
+    output$escolha2 <- renderText({
+      dplyr::case_when(
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
+        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN com CNES inválido",
+        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
+      )
+    })
 
-    ##### Criando o vetor que recebe os indicadores que precisam ser criados um a um #####
-    indicadores_especiais <- tabela_indicadores$nome_abreviado[which(tabela_indicadores$numerador == "exceção")]
+    outputOptions(output, "nome_abreviado", suspendWhenHidden = FALSE)
+    outputOptions(output, "bloco_selecionado", suspendWhenHidden = FALSE)
+    outputOptions(output, "num_indicadores_incompletude", suspendWhenHidden = FALSE)
+    outputOptions(output, "escolha1", suspendWhenHidden = FALSE)
+    outputOptions(output, "escolha2", suspendWhenHidden = FALSE)
 
-    ##### Criando o vetor que recebe os indicadores que só estão disponíveis a partir de 2013
+    ## Buscando a documentação do indicador selecionado -----------------------
+    output$documentacao <- renderUI({
+      includeHTML(glue::glue("inst/app/www/html/{infos_indicador()$nome_abreviado}.html"))
+    })
+
+    ## Criando vetores que recebem os indicadores que só estão disponíveis a partir de ou até certos anos --------
     indicadores_sem_2013 <- c(
       "tx_abortos_mil_mulheres_valor_medio",
       "sus_tx_abortos_mil_mulheres_valor_medio",
@@ -368,157 +402,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         }
     })
 
-    output$gauge1 <- renderUI({
-      if (infos_indicador()$num_indicadores_incompletude == 0 & !(infos_indicador()$nome_abreviado %in% c(indicadores_sem_2013[1:6], "porc_sc"))) {
-        if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
-          div(
-            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
-            HTML(
-              "
-          Este indicador depende da qualidade dos dados de beneficiárias de plano de saúde e das
-          estimativas populacionais, que se tornam mais imprecisas quando o período
-          intercensitário é maior."
-            )
-          )
-        } else if (infos_indicador()$nome_abreviado == "porc_cobertura_esf") {
-          div(
-            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
-            HTML(
-              "
-          Este indicador depende da qualidade da informação registrada no CNES e das estimativas populacionais
-            do IBGE, que se tornam mais imprecisas quando o período intercensitário é maior."
-            )
-          )
-        } else if (grepl("tx_abortos_mil_mulheres_valor_medio", infos_indicador()$nome_abreviado)) {
-          div(
-            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
-            HTML(
-              "
-        Este indicador depende da cobertura e da qualidade do preenchimento do SIH/SUS e das internações
-        hospitalares em serviços do sistema de saúde suplementar, bem como do cálculo das estimativas populacionais, que
-          se tornam mais imprecisas conforme aumento o período intercensitário."
-            )
-          )
-        } else if (infos_indicador()$bloco == "bloco6_morbidade") {
-          div(
-            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
-            HTML(
-              "
-          Este indicador depende da qualidade do preenchimento da Autorização de Internação Hospitalar."
-            )
-          )
-        }
-      } else {
-        if (infos_indicador()$num_indicadores_incompletude == 1) {
-          if (infos_indicador()$bloco != "bloco6") {
-            anos_incompletude <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
-          } else {
-            anos_incompletude <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao < 90)]
-          }
-          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
-          valor <- round(length(unique(c(anos_incompletude, anos_cobertura)))/length(anos_disponiveis()) * 100)
-        } else if (infos_indicador()$num_indicadores_incompletude == 2) {
-          if (infos_indicador()$bloco != "bloco6") {
-            anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
-            anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao > 5)]
-          } else {
-            anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao < 90)]
-            anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao < 100)]
-          }
-          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
-          valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_cobertura)))/length(anos_disponiveis()) * 100)
-        } else {
-          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
-          valor <- round(length(anos_cobertura)/length(anos_disponiveis()) * 100)
-        }
-
-        div(
-          style = 'text-align: center;',
-          flexdashboard::renderGauge({
-            flexdashboard::gauge(
-              valor,
-              min = 0,
-              max = 100,
-              symbol = '%',
-              flexdashboard::gaugeSectors(
-                success = c(0, 1),
-                warning = c(2, 49),
-                danger = c(50, 100),
-                colors = c("green", "orange", "#b22222") # "#f2db45"
-              )
-            )
-          }),
-          HTML("dos anos considerados apresentam problemas de qualidade em alguma das variáveis necessárias para a construção do indicador")
-        )
-      }
-    })
-
-    observeEvent(input$botao, {
-      descricao_incompletude1 <- dplyr::case_when(
-        infos_indicador()$numerador_incompletude1 == "idademae_incompletos" ~ "não preenchidos, preenchidos com 99 ou maiores que 55 anos",
-        infos_indicador()$numerador_incompletude1 == "racacor_incompletos" ~ "em branco ou ignorados",
-        infos_indicador()$numerador_incompletude1 == "escmae_incompletos" ~ "em branco ou ignorados (ESCMAE = 9)",
-        infos_indicador()$numerador_incompletude1 == "qtdpartces_incompletos" ~ "não preenchidos ou preenchidos com 99",
-        infos_indicador()$numerador_incompletude1 == "qtdpartnor_incompletos" ~ "não preenchidos ou preenchidos com 99",
-        infos_indicador()$numerador_incompletude1 == "consprenat_incompletos" ~ "em branco",
-        infos_indicador()$numerador_incompletude1 == "mesprenat_incompletos" ~ "em branco",
-        infos_indicador()$numerador_incompletude1 == "parto_incompletos" ~ "em branco ou ignorados (PARTO = 9)",
-        infos_indicador()$numerador_incompletude1 == "tprobson_incompletos" ~ "em branco ou ignorados (TPROBSON = 11 ou 12)",
-        infos_indicador()$numerador_incompletude1 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
-        infos_indicador()$numerador_incompletude1 == "gestacao_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude1 == "semagestac_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos" ~ "em branco ou sem informação",
-      )
-
-      descricao_incompletude2 <- dplyr::case_when(
-        infos_indicador()$numerador_incompletude2 == "idademae_incompletos" ~ "não preenchidos, preenchidos com 99 ou maiores que 55 anos",
-        infos_indicador()$numerador_incompletude2 == "racacor_incompletos" ~ "em branco ou ignorados",
-        infos_indicador()$numerador_incompletude2 == "escmae_incompletos" ~ "em branco ou ignorados (ESCMAE = 9)",
-        infos_indicador()$numerador_incompletude2 == "qtdpartces_incompletos" ~ "não preenchidos ou preenchidos com 99",
-        infos_indicador()$numerador_incompletude2 == "qtdpartnor_incompletos" ~ "não preenchidos ou preenchidos com 99",
-        infos_indicador()$numerador_incompletude2 == "consprenat_incompletos" ~ "em branco",
-        infos_indicador()$numerador_incompletude2 == "mesprenat_incompletos" ~ "em branco",
-        infos_indicador()$numerador_incompletude2 == "parto_incompletos" ~ "em branco ou ignorados (PARTO = 9)",
-        infos_indicador()$numerador_incompletude2 == "tprobson_incompletos" ~ "em branco ou ignorados (TPROBSON = 11 ou 12)",
-        infos_indicador()$numerador_incompletude2 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
-        infos_indicador()$numerador_incompletude2 == "gestacao_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude2 == "semagestac_incompletos" ~ "em branco ou sem informação"
-      )
-
-      cria_modal_incompletude(
-        incompletude1 = data_grafico_incompletude1()$proporcao,
-        variavel_incompletude1 = ifelse(
-          infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos",
-          "PARTO e TPROBSON",
-          stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
-        ),
-        descricao_incompletude1 = descricao_incompletude1,
-        incompletude2 = data_grafico_incompletude2()$proporcao,
-        variavel_incompletude2 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ','),
-        descricao_incompletude2 = descricao_incompletude2,
-        df = data_grafico_incompletude1(),
-        cobertura = data_cobertura()$cobertura,
-        nivel = 3,
-        bloco = dplyr::case_when(
-          infos_indicador()$bloco == "bloco6" ~ "bloco6",
-          infos_indicador()$bloco == "bloco4_deslocamento" ~ "deslocamento",
-          !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ "geral"
-        )
-      )
-    })
-
-    ##### Buscando as informações do indicador selecionado na tabela_indicadores #####
-    infos_indicador <- reactive({
-      if (!(filtros()$bloco %in% c("bloco4", "bloco6"))) {
-        tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador)
-      } else {
-        tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador_blocos4_6)
-      }
-
-    })
-
+    ## Criando um vetor com a lista de anos disponíveis para o indicador selecionado --------
     anos_disponiveis <- reactive({
       if (infos_indicador()$nome_abreviado %in% indicadores_2014) {
         anos_disponiveis_aux <- max(2014, filtros()$ano2[1]):filtros()$ano2[2]
@@ -538,175 +422,116 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     })
 
-    output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
-    output$bloco_selecionado <- renderText({infos_indicador()$bloco})
-    output$num_indicadores_incompletude <- renderText({infos_indicador()$num_indicadores_incompletude})
-    output$escolha1 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
-        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN sem CNES preenchido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
-      )
-    })
-    output$escolha2 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN com CNES inválido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
-      )
-    })
+    ## Definindo as cores dos gráficos ----------------------------------------
+    cols <- c("#2c115f", "#b73779", "#fc8961")
 
-    outputOptions(output, "nome_abreviado", suspendWhenHidden = FALSE)
-    outputOptions(output, "bloco_selecionado", suspendWhenHidden = FALSE)
-    outputOptions(output, "num_indicadores_incompletude", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha1", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha2", suspendWhenHidden = FALSE)
-
-    ##### Buscando a documentação do indicador selecionado #####
-    output$documentacao <- renderUI({
-      includeHTML(glue::glue("inst/app/www/html/{infos_indicador()$nome_abreviado}.html"))
-    })
-
-
-    ##### Dados de cobertura para o indicador selecionado #####
+    # Incompletude e cobertura ------------------------------------------------
+    ## Criando os data.frames com os dados de cobertura -----------------------
     data_cobertura <- reactive({
-      if (infos_indicador()$bloco == "bloco6") {
-        if (infos_indicador()$nome_abreviado == "rmm" & input$sistema_cobertura == "SINASC") {
-          if (filtros()$nivel == "Municipal") {
-            sub_registro_sinasc_muni_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                municipio == filtros()$municipio,
-                uf == filtros()$estado_municipio
-              ) |>
-              dplyr::rename(
-                localidade = municipio
+      base_cobertura <- reactive({
+        if (infos_indicador()$bloco == "bloco_6") {
+          if (infos_indicador()$nome_abreviado == "rmm") {
+            get(
+              ifelse(
+                filtros()$nivel == "Municipal",
+                glue::glue("sub_registro_{tolower(input$sistema_cobertura)}_muni_2015_2021"),
+                glue::glue("sub_registro_{tolower(input$sistema_cobertura)}_uf_regioes_2015_2021")
               )
-          } else if (filtros()$nivel == "Estadual") {
-            sub_registro_sinasc_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == filtros()$estado
-              )
-          } else if (filtros()$nivel == "Regional") {
-            sub_registro_sinasc_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == filtros()$regiao
-              )
-          } else if (filtros()$nivel == "Nacional") {
-            sub_registro_sinasc_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == "Brasil"
-              )
+            )
           } else {
-            data.frame(
-              ano = filtros()$ano,
-              localidade = dplyr::case_when(
-                filtros()$nivel == "Nacional" ~ "Brasil",
-                filtros()$nivel == "Regional" ~ filtros()$regiao,
-                filtros()$nivel == "Estadual" ~ filtros()$estado,
-                filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-                filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-                filtros()$nivel == "Municipal" ~ filtros()$municipio
-              ),
-              cobertura = 100
+            get(
+              ifelse(
+                filtros()$nivel == "Municipal",
+                glue::glue("sub_registro_sim_muni_2015_2021"),
+                glue::glue("sub_registro_sim_uf_regioes_2015_2021")
+              )
             )
           }
         } else {
-          if (filtros()$nivel == "Municipal") {
-            sub_registro_sim_muni_2015_2021 |>
-              dplyr::filter(
-                ano >= max(2015, filtros()$ano2[1]) & ano <= filtros()$ano2[2],
-                municipio == filtros()$municipio,
-                uf == filtros()$estado_municipio
-              ) |>
-              dplyr::rename(
-                localidade = municipio
-              )
-          } else if (filtros()$nivel == "Estadual") {
-            sub_registro_sim_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == filtros()$estado
-              )
-          } else if (filtros()$nivel == "Regional") {
-            sub_registro_sim_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == filtros()$regiao
-              )
-          } else if (filtros()$nivel == "Nacional") {
-            sub_registro_sim_uf_regioes_2015_2021 |>
-              dplyr::filter(
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-                localidade == "Brasil"
-              )
-          } else {
-            data.frame(
-              ano = filtros()$ano,
-              localidade = dplyr::case_when(
-                filtros()$nivel == "Nacional" ~ "Brasil",
-                filtros()$nivel == "Regional" ~ filtros()$regiao,
-                filtros()$nivel == "Estadual" ~ filtros()$estado,
-                filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-                filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-                filtros()$nivel == "Municipal" ~ filtros()$municipio
-              ),
-              cobertura = 100
+          get(
+            ifelse(
+              filtros()$nivel == "Municipal",
+              glue::glue("sub_registro_sinasc_muni_2015_2021"),
+              glue::glue("sub_registro_sinasc_uf_regioes_2015_2021")
             )
-          }
-        }
-      } else {
-        if (filtros()$nivel == "Municipal") {
-          sub_registro_sinasc_muni_2015_2021 |>
-            dplyr::filter(
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-              municipio == filtros()$municipio,
-              uf == filtros()$estado_municipio
-            ) |>
-            dplyr::rename(
-              localidade = municipio
-            )
-        } else if (filtros()$nivel == "Estadual") {
-          sub_registro_sinasc_uf_regioes_2015_2021 |>
-            dplyr::filter(
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-              localidade == filtros()$estado
-            )
-        } else if (filtros()$nivel == "Regional") {
-          sub_registro_sinasc_uf_regioes_2015_2021 |>
-            dplyr::filter(
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-              localidade == filtros()$regiao
-            )
-        } else if (filtros()$nivel == "Nacional") {
-          sub_registro_sinasc_uf_regioes_2015_2021 |>
-            dplyr::filter(
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-              localidade == "Brasil"
-            )
-        } else {
-          data.frame(
-            ano = filtros()$ano,
-            localidade = dplyr::case_when(
-              filtros()$nivel == "Nacional" ~ "Brasil",
-              filtros()$nivel == "Regional" ~ filtros()$regiao,
-              filtros()$nivel == "Estadual" ~ filtros()$estado,
-              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-              filtros()$nivel == "Municipal" ~ filtros()$municipio
-            ),
-            cobertura = 100
           )
         }
-      }
+      })
 
+      if (filtros()$nivel %in% c("Municipal", "Estadual", "Regional", "Nacional")) {
+        base_cobertura() |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+            if (filtros()$nivel == "Municipal") {
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+            } else {
+              if (filtros()$nivel == "Estadual") {
+                localidade == filtros()$estado
+              } else if (filtros()$nivel == "Regional") {
+                localidade == filtros()$regiao
+              } else if (filtros()$nivel == "Nacional") {
+                localidade == "Brasil"
+              }
+            }
+          ) |>
+          dplyr::rename_at(dplyr::vars(dplyr::starts_with("municipio")), ~ "localidade")
+      }
     })
 
+    data_referencia_cobertura <- reactive({
+      data.frame(
+        ano = max(2015, filtros()$ano2[1]):filtros()$ano2[2],
+        referencia = 90,
+        localidade = "Referência (Ministério da Saúde)"
+      )
+    })
 
-    ##### Dados de incompletude para o indicador selecionado #####
+    ## Criando o gráfico de linhas para a cobertura ---------------------------
+    output$grafico_cobertura <- highcharter::renderHighchart({
+      base <- dplyr::if_else(
+        infos_indicador()$bloco == "bloco6",
+        dplyr::if_else(infos_indicador()$nome_abreviado == "rmm", input$sistema_cobertura, "SIM"),
+        "SINASC"
+      )
+
+      validate(
+        need(
+          filtros()$nivel != "Microrregião de saúde" & filtros()$nivel != "Macrorregião de saúde",
+          glue::glue("A cobertura do {base} não está disponível para o nível de análise selecionado.")
+        ),
+        need(
+          infos_indicador()$num_indicadores_incompletude != 0 |
+            (infos_indicador()$nome_abreviado == "porc_sc" |
+               grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado)),
+          "Informações a respeito da cobertura dos sistemas de informação utilizados para a construção deste indicador não estão disponíveis."
+        )
+      )
+
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_cobertura(),
+          type = "line",
+          highcharter::hcaes(x = ano, y = cobertura, group = localidade, colour = localidade)
+        ) |>
+        highcharter::hc_add_series(
+          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2021),
+          type = "line",
+          highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
+          dashStyle = "ShortDot",
+          opacity = 0.8
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> Cobertura do {base} </b>"))) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = anos_disponiveis(),
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
+        highcharter::hc_colors(cols)
+    })
+
+    ## Criando os data.frames com os dados de incompletude --------------------
     data_grafico_incompletude1 <- reactive({
       if (infos_indicador()$num_indicadores_incompletude != 0) {
         base_incompletude |>
@@ -801,61 +626,392 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           ) |>
           dplyr::ungroup()
       }
-
     })
 
     data_referencia_incompletude <- reactive({
-      if (infos_indicador()$nome_abreviado %in% indicadores_sem_2013) {
-        if (!(infos_indicador()$bloco %in% c("bloco6"))) {
-          data.frame(
-            ano = max(2014, max(2014, filtros()$ano2[1])):filtros()$ano2[2],
-            bom = rep(10, times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2])),
-            excelente = rep(5, times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2])),
-            class_bom = rep("Bom", times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2])),
-            class_excelente = rep("Excelente", times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2]))
-          )
-        } else {
-          if (infos_indicador()$bloco == "bloco6") {
-            data.frame(
-              ano = max(2014, max(2014, filtros()$ano2[1])):filtros()$ano2[2],
-              ideal_mif = rep(90, times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2])),
-              ideal_maternos = rep(100, times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2])),
-              class = rep("Ideal", times = length(max(2014, filtros()$ano2[1]):filtros()$ano2[2]))
-            )
-          }
-        }
+      if (!(infos_indicador()$bloco %in% c("bloco6"))) {
+        data.frame(
+          ano = anos_disponiveis(),
+          valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
+          class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
+        )
       } else {
-        if (!(infos_indicador()$bloco %in% c("bloco6"))) {
-          data.frame(
-            ano = anos_disponiveis(),
-            bom = rep(10, times = length(anos_disponiveis())),
-            excelente = rep(5, times = length(anos_disponiveis())),
-            class_bom = rep("Bom", times = length(anos_disponiveis())),
-            class_excelente = rep("Excelente", times = length(anos_disponiveis()))
-          )
+        data.frame(
+          ano = anos_disponiveis(),
+          valor = c(rep(90, times = length(anos_disponiveis())), rep(100, times = length(anos_disponiveis()))),
+          indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis()))),
+          class = rep("Ideal", times = length(anos_disponiveis()))
+        )
+      }
+    })
+
+    ## Criando os gráficos de linhas para a incompletude ----------------------
+    output$grafico_incompletude <- highcharter::renderHighchart({
+      validate(
+        need(
+          infos_indicador()$num_indicadores_incompletude != 0,
+          "Informações a respeito da incompletude das variáveis necessárias para a construção deste indicador não estão disponíveis."
+        )
+      )
+
+      if (infos_indicador()$num_indicadores_incompletude == 1) {
+        data_grafico_incompletude <- data_grafico_incompletude1()
+      } else {
+        if (input$variavel_incompletude == "escolha1") {
+          data_grafico_incompletude <- data_grafico_incompletude1()
         } else {
-          if (infos_indicador()$bloco == "bloco6") {
-            data.frame(
-              ano = anos_disponiveis(),
-              ideal_mif = rep(90, times = length(anos_disponiveis())),
-              ideal_maternos = rep(100, times = length(anos_disponiveis())),
-              class = rep("Ideal", times = length(anos_disponiveis()))
-            )
-          }
+          data_grafico_incompletude <- data_grafico_incompletude2()
         }
       }
 
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_grafico_incompletude,
+          type = "line",
+          highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
+        ) |>
+        highcharter::hc_add_series(
+          data = {
+            if (infos_indicador()$bloco == "bloco6") {
+              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude, ano <= 2020)
+            } else {
+              data_referencia_incompletude() |>
+                dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento"), 2020, 2022))
+            }
+          },
+          type = "line",
+          highcharter::hcaes(x = ano, y = valor, group = class, colour = class),
+          dashStyle = "ShortDot",
+          opacity = 0.8
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = anos_disponiveis(),
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+        highcharter::hc_title(
+          text = HTML(
+            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, infos_indicador()$nome_incompletude2)}</b>")
+          )
+        ) |>
+        highcharter::hc_colors(cols)
     })
 
-    data_referencia_cobertura <- reactive({
-      data.frame(
-        ano = max(2015, filtros()$ano2[1]):filtros()$ano2[2],
-        referencia = 90,
-        localidade = "Referência (Ministério da Saúde)"
+    ## Criando o output do velocímetro (gauge) --------------------------------
+    output$gauge1 <- renderUI({
+      if (infos_indicador()$num_indicadores_incompletude == 0 &
+          !(infos_indicador()$nome_abreviado %in% c(indicadores_sem_2013[1:6], "porc_sc"))) {
+        if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
+          div(
+            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
+            HTML(
+              "
+              Este indicador depende da qualidade dos dados de beneficiárias de plano de saúde e das
+              estimativas populacionais, que se tornam mais imprecisas quando o período
+              intercensitário é maior."
+            )
+          )
+        } else if (infos_indicador()$nome_abreviado == "porc_cobertura_esf") {
+          div(
+            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
+            HTML(
+              "
+              Este indicador depende da qualidade da informação registrada no CNES e das estimativas populacionais
+              do IBGE, que se tornam mais imprecisas quando o período intercensitário é maior."
+            )
+          )
+        } else if (grepl("tx_abortos_mil_mulheres_valor_medio", infos_indicador()$nome_abreviado)) {
+          div(
+            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
+            HTML(
+              "
+              Este indicador depende da cobertura e da qualidade do preenchimento do SIH/SUS e das internações
+              hospitalares em serviços do sistema de saúde suplementar, bem como do cálculo das estimativas populacionais, que
+              se tornam mais imprecisas conforme aumento o período intercensitário."
+            )
+          )
+        } else if (infos_indicador()$bloco == "bloco6_morbidade") {
+          div(
+            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
+            HTML(
+              "
+          Este indicador depende da qualidade do preenchimento da Autorização de Internação Hospitalar."
+            )
+          )
+        }
+      } else {
+        if (infos_indicador()$num_indicadores_incompletude == 1) {
+          if (infos_indicador()$bloco != "bloco6") {
+            anos_incompletude <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
+          } else {
+            anos_incompletude <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao < 90)]
+          }
+          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
+          valor <- round(length(unique(c(anos_incompletude, anos_cobertura)))/length(anos_disponiveis()) * 100)
+        } else if (infos_indicador()$num_indicadores_incompletude == 2) {
+          if (infos_indicador()$bloco != "bloco6") {
+            anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
+            anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao > 5)]
+          } else {
+            anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao < 90)]
+            anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao < 100)]
+          }
+          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
+          valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_cobertura)))/length(anos_disponiveis()) * 100)
+        } else {
+          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
+          valor <- round(length(anos_cobertura)/length(anos_disponiveis()) * 100)
+        }
+
+        div(
+          style = 'text-align: center;',
+          flexdashboard::renderGauge({
+            flexdashboard::gauge(
+              valor,
+              min = 0,
+              max = 100,
+              symbol = '%',
+              flexdashboard::gaugeSectors(
+                success = c(0, 1),
+                warning = c(2, 49),
+                danger = c(50, 100),
+                colors = c("green", "orange", "#b22222") # "#f2db45"
+              )
+            )
+          }),
+          HTML("dos anos considerados apresentam problemas de qualidade em alguma das variáveis necessárias para a construção do indicador")
+        )
+      }
+    })
+
+    ## Criando o output do botão de alerta  -----------------------------------
+    observeEvent(input$botao, {
+      descricao_incompletude1 <- dplyr::case_when(
+        infos_indicador()$numerador_incompletude1 == "idademae_incompletos" ~ "não preenchidos, preenchidos com 99 ou maiores que 55 anos",
+        infos_indicador()$numerador_incompletude1 == "racacor_incompletos" ~ "em branco ou ignorados",
+        infos_indicador()$numerador_incompletude1 == "escmae_incompletos" ~ "em branco ou ignorados (ESCMAE = 9)",
+        infos_indicador()$numerador_incompletude1 == "qtdpartces_incompletos" ~ "não preenchidos ou preenchidos com 99",
+        infos_indicador()$numerador_incompletude1 == "qtdpartnor_incompletos" ~ "não preenchidos ou preenchidos com 99",
+        infos_indicador()$numerador_incompletude1 == "consprenat_incompletos" ~ "em branco",
+        infos_indicador()$numerador_incompletude1 == "mesprenat_incompletos" ~ "em branco",
+        infos_indicador()$numerador_incompletude1 == "parto_incompletos" ~ "em branco ou ignorados (PARTO = 9)",
+        infos_indicador()$numerador_incompletude1 == "tprobson_incompletos" ~ "em branco ou ignorados (TPROBSON = 11 ou 12)",
+        infos_indicador()$numerador_incompletude1 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
+        infos_indicador()$numerador_incompletude1 == "gestacao_incompletos" ~ "em branco ou sem informação",
+        infos_indicador()$numerador_incompletude1 == "semagestac_incompletos" ~ "em branco ou sem informação",
+        infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos" ~ "em branco ou sem informação",
+      )
+
+      descricao_incompletude2 <- dplyr::case_when(
+        infos_indicador()$numerador_incompletude2 == "idademae_incompletos" ~ "não preenchidos, preenchidos com 99 ou maiores que 55 anos",
+        infos_indicador()$numerador_incompletude2 == "racacor_incompletos" ~ "em branco ou ignorados",
+        infos_indicador()$numerador_incompletude2 == "escmae_incompletos" ~ "em branco ou ignorados (ESCMAE = 9)",
+        infos_indicador()$numerador_incompletude2 == "qtdpartces_incompletos" ~ "não preenchidos ou preenchidos com 99",
+        infos_indicador()$numerador_incompletude2 == "qtdpartnor_incompletos" ~ "não preenchidos ou preenchidos com 99",
+        infos_indicador()$numerador_incompletude2 == "consprenat_incompletos" ~ "em branco",
+        infos_indicador()$numerador_incompletude2 == "mesprenat_incompletos" ~ "em branco",
+        infos_indicador()$numerador_incompletude2 == "parto_incompletos" ~ "em branco ou ignorados (PARTO = 9)",
+        infos_indicador()$numerador_incompletude2 == "tprobson_incompletos" ~ "em branco ou ignorados (TPROBSON = 11 ou 12)",
+        infos_indicador()$numerador_incompletude2 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
+        infos_indicador()$numerador_incompletude2 == "gestacao_incompletos" ~ "em branco ou sem informação",
+        infos_indicador()$numerador_incompletude2 == "semagestac_incompletos" ~ "em branco ou sem informação"
+      )
+
+      cria_modal_incompletude(
+        incompletude1 = data_grafico_incompletude1()$proporcao,
+        variavel_incompletude1 = ifelse(
+          infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos",
+          "PARTO e TPROBSON",
+          stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+        ),
+        descricao_incompletude1 = descricao_incompletude1,
+        incompletude2 = data_grafico_incompletude2()$proporcao,
+        variavel_incompletude2 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ','),
+        descricao_incompletude2 = descricao_incompletude2,
+        df = data_grafico_incompletude1(),
+        cobertura = data_cobertura()$cobertura,
+        nivel = 3,
+        bloco = dplyr::case_when(
+          infos_indicador()$bloco == "bloco6" ~ "bloco6",
+          infos_indicador()$bloco == "bloco4_deslocamento" ~ "deslocamento",
+          !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ "geral"
+        )
       )
     })
 
-    ##### Dados para a construção do gráfico de barras para o indicador selecionado #####
+    ## Criando o output do botão de informações -------------------------------
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
+      if (infos_indicador()$nome_abreviado %in% c("porc_sc", "porc_menor20")) {
+        shinyjs::show(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
+      }
+      if (infos_indicador()$bloco != "bloco6") {
+        if (infos_indicador()$num_indicadores_incompletude == 1) {
+          shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+          req(any(data_grafico_incompletude1()$proporcao > 5, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
+          shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+        } else {
+          shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+          req(any(data_grafico_incompletude1()$proporcao > 5, na.rm = TRUE) | any(data_grafico_incompletude2()$proporcao > 5, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
+          shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+        }
+      } else {
+        shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+        req(any(data_grafico_incompletude1()$proporcao < 90, na.rm = TRUE) | any(data_grafico_incompletude2()$proporcao < 100, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
+        shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
+      }
+    },
+    ignoreNULL = FALSE
+    )
+
+    observeEvent(input$botao_infos, {
+      if (infos_indicador()$nome_abreviado == "porc_sc") {
+        texto <- "Dados a respeito da cobertura do SINAN não estão disponíveis."
+      } else if (infos_indicador()$nome_abreviado == "porc_menor20") {
+        texto <- "Este indicador depende, também, do cálculo das estimativas
+          populacionais, que se tornam mais imprecisas conforme aumenta o período
+          intercensitário."
+      }
+      shinyalert::shinyalert(
+        html = TRUE,
+        text = texto,
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    })
+
+    ## Criando os data.frames para a construção do gráfico de garbage codes p/ óbitos maternos --------
+    data_filtrada_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_plot_garbage_materno <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
+        dplyr::select(!obitos_maternos_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_materno"),
+          names_to = "cid",
+          values_to = "prop_garbage_code"
+        ) |>
+        dplyr::filter(prop_garbage_code != 0) |>
+        dplyr::mutate(
+          prop_garbage_code = round(prop_garbage_code, 1),
+          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid))),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_materno_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
+        dplyr::select(!obitos_maternos_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_materno"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code"
+        ) |>
+        dplyr::filter(br_prop_garbage_code != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code = round(br_prop_garbage_code, 1),
+          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_materno_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_materno()) != 0,
+          "Não existem ocorrências de óbitos maternos preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_materno(), data_plot_garbage_materno_referencia())
+    })
+
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    output$plot_garbage_materno <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_materno_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code, group = causabas_subcategoria),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_materno_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_materno_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos maternos preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
+
+    # Gráfico de barras das regiões -------------------------------------------
+    ## Criando um data.frame que recebe a distribuição do indicador selecionado entre as regiões do país --------
     data_grafico_regioes <- reactive({
       validate(
         need(
@@ -881,8 +1037,34 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         dplyr::ungroup()
     })
 
+    ## Criando o gráfico de barras --------------------------------------------
+    output$grafico_regioes <- highcharter::renderHighchart({
+      proporcoes <- data_grafico_regioes()$indicador
+      regioes <- data_grafico_regioes()$regiao
+      df <- data.frame(regioes, proporcoes)
 
-    ##### Dados para a construção do gráfico de linhas para o indicador selecionado #####
+      highcharter::hchart(
+        df,
+        type = "column",
+        name = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%"),
+        highcharter::hcaes(
+          x = regioes,
+          y = proporcoes,
+          color = c("#FE9F6DFF", "#DE4968FF", "#8C2981FF", "#3B0F70FF", "#000004FF")
+        )
+      ) |>
+        highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", "")) |>
+        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(
+          text = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%")
+        ),
+        min = 0
+        )
+    })
+
+
+    # Gráfico de linhas do indicador ------------------------------------------
+    ## Criando data.frames com os dados do indicador ---------------------------
     data_grafico_serie <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
         data_filtrada_aux <- get(filtros()$bloco)
@@ -1038,9 +1220,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
-
-    ##### Dados para a construção da linha de referência para o indicador selecionado #####
-    data_referencia <- reactive({
+    data_referencia_serie <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
         data_referencia_aux <- get(filtros()$bloco)
       } else {
@@ -1134,469 +1314,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
     })
 
-
-    ##### Dados para a construção da tabela para o indicador selecionado #####
-    data_tabela1 <- eventReactive(c(input$opcoes_tab1, filtros()$pesquisar), {
-      validate(
-        need(
-          !startsWith(infos_indicador()$indicador, "Medianas"),
-          "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde, para regiões do país e para o nível de análise nacional. Além disso, mesmo que esses indicadores sejam calculados para municípios e estados, calcular um valor médio para representar o resumo do período não é aconselhável. Dessa forma, esta visualização não se aplica."
-        )
-      )
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        data_filtrada_aux <- get(filtros()$bloco)
-      } else {
-        if (filtros()$nivel != "Estadual") {
-          data_filtrada_aux <- bloco4_deslocamento_muni
-        } else {
-          data_filtrada_aux <- bloco4_deslocamento_uf
-        }
-      }
-      if (input$opcoes_tab1 == "escolha1") {
-        data_filtrada_aux |>
-          dplyr::filter(ano %in% anos_disponiveis()) |>
-          dplyr::group_by(uf, macro_r_saude, municipio) |>
-          dplyr::summarise(
-            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
-            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
-            indicador := dplyr::if_else(
-              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
-              true = numerador/denominador,
-              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
-            )
-          )
-      } else {
-        data_filtrada_aux |>
-          dplyr::filter(
-            ano %in% anos_disponiveis(),
-            if (filtros()$nivel == "Nacional")
-              regiao %in% unique(tabela_aux_municipios$regiao)
-            else if (filtros()$nivel == "Regional")
-              regiao == filtros()$regiao
-            else if (filtros()$nivel == "Estadual")
-              uf == filtros()$estado
-            else if (filtros()$nivel == "Macrorregião de saúde")
-              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-            else if(filtros()$nivel == "Microrregião de saúde")
-              r_saude == filtros()$micro & uf == filtros()$estado_micro
-            else if(filtros()$nivel == "Municipal")
-              municipio == filtros()$municipio & uf == filtros()$estado_municipio
-          ) |>
-          dplyr::group_by(uf, macro_r_saude, municipio) |>
-          dplyr::summarise(
-            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
-            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
-            indicador := dplyr::if_else(
-              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
-              true = numerador/denominador,
-              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
-            )
-          )
-      }
-    },
-    ignoreNULL = FALSE
-    )
-
-    output$grafico_incompletude <- highcharter::renderHighchart({
-      validate(
-        need(
-          infos_indicador()$num_indicadores_incompletude != 0,
-          "Informações a respeito da incompletude das variáveis necessárias para a construção deste indicador não estão disponíveis."
-        )
-      )
-      if (infos_indicador()$num_indicadores_incompletude == 1) {
-        data_grafico_incompletude <- data_grafico_incompletude1()
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data_grafico_incompletude,
-            type = "line",
-            highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
-          ) |>
-          highcharter::hc_add_series(
-            data = data_referencia_incompletude() |>
-              dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-            type = "line",
-            highcharter::hcaes(x = ano, y = excelente, group = class_excelente, colour = class_excelente),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-            #tooltip = list(valuePrefix = "<")
-          ) |>
-          highcharter::hc_add_series(
-            data = data_referencia_incompletude() |>
-              dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-            type = "line",
-            highcharter::hcaes(x = ano, y = bom, group = class_bom, colour = class_bom),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-            #tooltip = list(valuePrefix = "<")
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = anos_disponiveis(),
-            allowDecimals = FALSE
-          ) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-          highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> {infos_indicador()$nome_incompletude1} </b>"))) |>
-          highcharter::hc_colors(cols)
-      } else {
-        if (input$variavel_incompletude == "escolha1") {
-          data_grafico_incompletude <- data_grafico_incompletude1()
-        } else {
-          data_grafico_incompletude <- data_grafico_incompletude2()
-        }
-        if (infos_indicador()$bloco != "bloco6") {
-          highcharter::highchart() |>
-            highcharter::hc_add_series(
-              data = data_grafico_incompletude,
-              type = "line",
-              highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
-            ) |>
-            highcharter::hc_add_series(
-              data = data_referencia_incompletude() |>
-                dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-              type = "line",
-              highcharter::hcaes(x = ano, y = excelente, group = class_excelente, colour = class_excelente),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-              #tooltip = list(valuePrefix = "<")
-            ) |>
-            highcharter::hc_add_series(
-              data = data_referencia_incompletude() |>
-                dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-              type = "line",
-              highcharter::hcaes(x = ano, y = bom, group = class_bom, colour = class_bom),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-              #tooltip = list(valuePrefix = "<")
-            ) |>
-            highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_xAxis(
-              title = list(text = ""),
-              categories = anos_disponiveis(),
-              allowDecimals = FALSE
-            ) |>
-            highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-            highcharter::hc_title(
-              text = HTML(
-                glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, infos_indicador()$nome_incompletude2)}</b>")
-              )
-            ) |>
-            highcharter::hc_colors(cols)
-        } else if (infos_indicador()$bloco == "bloco6") {
-          if (input$variavel_incompletude == "escolha1") {
-            highcharter::highchart() |>
-              highcharter::hc_add_series(
-                data = data_grafico_incompletude,
-                type = "line",
-                highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
-              ) |>
-              highcharter::hc_add_series(
-                data = data_referencia_incompletude() |>
-                  dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-                type = "line",
-                highcharter::hcaes(x = ano, y = ideal_mif, group = class, colour = class),
-                dashStyle = "ShortDot",
-                opacity = 0.8
-                #tooltip = list(valuePrefix = "<")
-              ) |>
-              highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-              highcharter::hc_xAxis(
-                title = list(text = ""),
-                categories = anos_disponiveis(),
-                allowDecimals = FALSE
-              ) |>
-              highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
-              highcharter::hc_title(
-                text = HTML(
-                  glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, infos_indicador()$nome_incompletude2)}</b>")
-                )
-              ) |>
-              highcharter::hc_colors(cols)
-          } else {
-            highcharter::highchart() |>
-              highcharter::hc_add_series(
-                data = data_grafico_incompletude,
-                type = "line",
-                highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
-              ) |>
-              highcharter::hc_add_series(
-                data = data_referencia_incompletude() |>
-                  dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento"), 2020, 2022)),
-                type = "line",
-                highcharter::hcaes(x = ano, y = ideal_maternos, group = class, colour = class),
-                dashStyle = "ShortDot",
-                opacity = 0.8
-                #tooltip = list(valuePrefix = "<")
-              ) |>
-              highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-              highcharter::hc_xAxis(
-                title = list(text = ""),
-                categories = anos_disponiveis(),
-                allowDecimals = FALSE
-              ) |>
-              highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
-              highcharter::hc_title(
-                text = HTML(
-                  glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, infos_indicador()$nome_incompletude2)}</b>")
-                )
-              ) |>
-              highcharter::hc_colors(cols)
-          }
-        }
-      }
-
-    })
-
-    output$grafico_cobertura <- highcharter::renderHighchart({
-      if (infos_indicador()$num_indicadores_incompletude == 0) {
-        if (infos_indicador()$nome_abreviado != "porc_sc" & grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado)) {
-          validate("Informações a respeito da cobertura dos sistemas de informação utilizados para a construção deste indicador não estão disponíveis.")
-        }
-      }
-      base <- dplyr::if_else(
-        infos_indicador()$bloco == "bloco6",
-        dplyr::if_else(infos_indicador()$nome_abreviado == "rmm", input$sistema_cobertura, "SIM"),
-        "SINASC"
-      )
-      validate(
-        need(
-          filtros()$nivel != "Microrregião de saúde" & filtros()$nivel != "Macrorregião de saúde",
-          glue::glue("A cobertura do {base} não está disponível para o nível de análise selecionado.")
-        )
-      )
-      highcharter::highchart() |>
-        highcharter::hc_add_series(
-          data = data_cobertura(),
-          type = "line",
-          highcharter::hcaes(x = ano, y = cobertura, group = localidade, colour = localidade)
-        ) |>
-        highcharter::hc_add_series(
-          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2021),
-          type = "line",
-          highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
-          dashStyle = "ShortDot",
-          opacity = 0.8
-        ) |>
-        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> Cobertura do {base} </b>"))) |>
-        highcharter::hc_xAxis(
-          title = list(text = ""),
-          categories = anos_disponiveis(),
-          allowDecimals = FALSE
-        ) |>
-        highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
-        highcharter::hc_colors(cols)
-    })
-
-
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
-      if (infos_indicador()$nome_abreviado %in% c("porc_sc", "porc_menor20")) {
-        shinyjs::show(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
-      }
-      if (infos_indicador()$bloco != "bloco6") {
-        if (infos_indicador()$num_indicadores_incompletude == 1) {
-          shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-          req(any(data_grafico_incompletude1()$proporcao > 5, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
-          shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-        } else {
-          shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-          req(any(data_grafico_incompletude1()$proporcao > 5, na.rm = TRUE) | any(data_grafico_incompletude2()$proporcao > 5, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
-          shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-        }
-      } else {
-        shinyjs::hide(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-        req(any(data_grafico_incompletude1()$proporcao < 90, na.rm = TRUE) | any(data_grafico_incompletude2()$proporcao < 100, na.rm = TRUE) | any(data_cobertura()$cobertura < 90, na.rm = TRUE))
-        shinyjs::show(id = "mostrar_botao", anim = TRUE, animType = "fade", time = 0.7)
-      }
-    },
-    ignoreNULL = FALSE
-    )
-
-    observeEvent(input$botao_infos, {
-      if (infos_indicador()$nome_abreviado == "porc_sc") {
-        texto <- "Dados a respeito da cobertura do SINAN não estão disponíveis."
-      } else if (infos_indicador()$nome_abreviado == "porc_menor20") {
-        texto <- "Este indicador depende, também, do cálculo das estimativas
-          populacionais, que se tornam mais imprecisas conforme aumenta o período
-          intercensitário."
-      }
-      shinyalert::shinyalert(
-        html = TRUE,
-        text = texto,
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
-        animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-
-    # Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos --------
-    data_filtrada_aux <- reactive({
-      bloco8_graficos |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel == "Nacional")
-            regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano)
-    })
-
-    data_plot_garbage_materno <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
-        dplyr::select(!obitos_maternos_garbage) |>
-        dplyr::ungroup() |>
-        tidyr::pivot_longer(
-          cols = dplyr::starts_with("garbage_materno"),
-          names_to = "cid",
-          values_to = "prop_garbage_code"
-        ) |>
-        dplyr::filter(prop_garbage_code != 0) |>
-        dplyr::mutate(
-          prop_garbage_code = round(prop_garbage_code, 1),
-          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid))),
-          class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
-          )
-        ) |>
-        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
-        dplyr::mutate(
-          cid = ifelse(
-            nchar(cid) == 4,
-            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
-            cid
-          )
-        )
-    })
-
-    data_plot_garbage_materno_referencia <- reactive({
-      bloco8_graficos |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_materno")), sum) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(obitos_maternos_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_materno")))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_materno")), ~ round((. / obitos_maternos_garbage * 100), 1)) |>
-        dplyr::select(!obitos_maternos_garbage) |>
-        dplyr::ungroup() |>
-        tidyr::pivot_longer(
-          cols = dplyr::starts_with("garbage_materno"),
-          names_to = "cid",
-          values_to = "br_prop_garbage_code"
-        ) |>
-        dplyr::filter(br_prop_garbage_code != 0) |>
-        dplyr::mutate(
-          br_prop_garbage_code = round(br_prop_garbage_code, 1),
-          cid = toupper(substr(cid, nchar("garbage_materno_") + 1, nchar(cid)))
-        ) |>
-        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
-        dplyr::mutate(
-          cid = ifelse(
-            nchar(cid) == 4,
-            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
-            cid
-          )
-        )
-    })
-
-    data_plot_garbage_materno_completo <- reactive({
-      validate(
-        need(
-          nrow(data_plot_garbage_materno()) != 0,
-          "Não existem ocorrências de óbitos maternos preenchidos com garbage codes para a localidade e períodos selecionados."
-        )
-      )
-      dplyr::left_join(data_plot_garbage_materno(), data_plot_garbage_materno_referencia())
-    })
-
-    output$plot_garbage_materno <- highcharter::renderHighchart({
-      highcharter::highchart() |>
-        highcharter::hc_add_series(
-          data = data_plot_garbage_materno_completo(),
-          highcharter::hcaes(x = ano, y = prop_garbage_code, group = causabas_subcategoria),
-          type = "bar",
-          showInLegend = TRUE,
-          # tooltip = list(
-          #   pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.causabas_subcategoria}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
-          # )
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
-        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_colors(
-          viridis::magma(length(unique(data_plot_garbage_materno_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_materno_completo()$cid)) + 2)]
-        ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
-        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos maternos preenchidos com garbage codes"), min = 0, max = 100)
-    })
-
-
-    output$grafico_regioes <- highcharter::renderHighchart({
-
-      proporcoes <- data_grafico_regioes()$indicador
-      regioes <- data_grafico_regioes()$regiao
-      df <- data.frame(regioes, proporcoes)
-
-      highcharter::hchart(
-        df,
-        type = "column",
-        name = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%"),
-        # name = dplyr::case_when(
-        #   infos_indicador()$tipo_do_indicador == "porcentagem" ~ "Porcentagem",
-        #   infos_indicador()$tipo_do_indicador == "taxa" ~ "Taxa",
-        #   infos_indicador()$tipo_do_indicador == "absoluto" ~ "Frequência"
-        # ),
-        highcharter::hcaes(
-          x = regioes,
-          y = proporcoes,
-          color = c("#FE9F6DFF", "#DE4968FF", "#8C2981FF", "#3B0F70FF", "#000004FF")
-        )
-      ) |>
-        highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", "")) |>
-        highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(
-          # text = dplyr::case_when(
-          #   infos_indicador()$tipo_do_indicador == "porcentagem" ~ "%",
-          #   infos_indicador()$tipo_do_indicador == "taxa" ~ "Taxa",
-          #   infos_indicador()$tipo_do_indicador == "absoluto" ~ "Frequência"
-          #   )
-          text = stringr::str_replace(infos_indicador()$indicador, "Porcentagem", "%")
-        ),
-        min = 0
-        )
-
-    })
-
+    ## Criando o gráfico de linhas --------------------------------------------
     output$grafico_serie <- highcharter::renderHighchart({
       if (!(base::startsWith(infos_indicador()$indicador, "Medianas"))) {
         if (infos_indicador()$nome_abreviado == "rmm") {
@@ -1687,7 +1405,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       } else {
         if (infos_indicador()$nome_abreviado == "prop_robson2_tx_cesariana") {
           grafico_base |> highcharter::hc_add_series(
-            data = data_referencia(),
+            data = data_referencia_serie(),
             name = "Referência (meta OMS)",
             highcharter::hcaes(x = ano, low = 20, high = 35),
             type = "arearange",
@@ -1698,7 +1416,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           )
         } else if (infos_indicador()$nome_abreviado == "prop_robson5_tx_cesariana") {
           grafico_base |> highcharter::hc_add_series(
-            data = data_referencia(),
+            data = data_referencia_serie(),
             name = "Referência (meta OMS)",
             highcharter::hcaes(x = ano, low = 50, high = 60),
             type = "arearange",
@@ -1720,7 +1438,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data_referencia() |>
+              data = data_referencia_serie() |>
                 dplyr::filter(
                   ano <= ifelse(
                     infos_indicador()$nome_abreviado %in% indicadores_2022(),
@@ -1739,6 +1457,70 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
 
+    # Tabela ------------------------------------------------------------------
+    ## Criando um data.frame com as informações necessárias para a construção da tabela --------
+    data_tabela1 <- eventReactive(c(input$opcoes_tab1, filtros()$pesquisar), {
+      validate(
+        need(
+          !startsWith(infos_indicador()$indicador, "Medianas"),
+          "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde, para regiões do país e para o nível de análise nacional. Além disso, mesmo que esses indicadores sejam calculados para municípios e estados, calcular um valor médio para representar o resumo do período não é aconselhável. Dessa forma, esta visualização não se aplica."
+        )
+      )
+      if (infos_indicador()$bloco != "bloco4_deslocamento") {
+        data_filtrada_aux <- get(filtros()$bloco)
+      } else {
+        if (filtros()$nivel != "Estadual") {
+          data_filtrada_aux <- bloco4_deslocamento_muni
+        } else {
+          data_filtrada_aux <- bloco4_deslocamento_uf
+        }
+      }
+      if (input$opcoes_tab1 == "escolha1") {
+        data_filtrada_aux |>
+          dplyr::filter(ano %in% anos_disponiveis()) |>
+          dplyr::group_by(uf, macro_r_saude, municipio) |>
+          dplyr::summarise(
+            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
+            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
+            indicador := dplyr::if_else(
+              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
+              true = numerador/denominador,
+              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
+            )
+          )
+      } else {
+        data_filtrada_aux |>
+          dplyr::filter(
+            ano %in% anos_disponiveis(),
+            if (filtros()$nivel == "Nacional")
+              regiao %in% unique(tabela_aux_municipios$regiao)
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          ) |>
+          dplyr::group_by(uf, macro_r_saude, municipio) |>
+          dplyr::summarise(
+            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
+            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
+            indicador := dplyr::if_else(
+              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
+              true = numerador/denominador,
+              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
+            )
+          )
+      }
+    },
+    ignoreNULL = FALSE
+    )
+
+    ## Criando a tabela --------------------------------------------------------
     output$tabela1 <- reactable::renderReactable({
       proporcao_geral <- function(numerador, denominador, fator, tipo_do_indicador) {
         reactable::JS(
@@ -1766,7 +1548,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         )
       }
 
-      if (infos_indicador()$nome_abreviado != "obitos_mat_totais") {
+      if (infos_indicador()$tipo_do_indicador != "absoluto") {
         data_tabela1() |>
           reactable::reactable(
             defaultColDef = reactable::colDef(
@@ -1860,7 +1642,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                 format = list(aggregated = reactable::colFormat(prefix = "Todos"))
               ),
               indicador = reactable::colDef(
-                name = "Óbitos maternos",
+                name = infos_indicador()$nome_numerador,
                 aggregate = "sum"
               )
             ),
@@ -1880,10 +1662,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           )
       }
-
-
     })
 
+    ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
       if (infos_indicador()$bloco != "bloco6") {
         tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
