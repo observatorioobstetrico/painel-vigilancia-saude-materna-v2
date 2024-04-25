@@ -114,12 +114,7 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal, perinatal e neonatal",
               tabName = "bloco_7",
               icon = icon("7")
-            )#,
-            # bs4Dash::bs4SidebarMenuSubItem(
-            #   text = "- Garbage codes, causas principais e causas evitáveis",
-            #   tabName = "bloco_8",
-            #   icon = icon("8")
-            # )
+            )
           ),
           bs4Dash::bs4SidebarMenuItem(
             text = HTML("<b> Visão detalhada dos indicadores </b>"),
@@ -522,6 +517,28 @@ app_ui <- function(request) {
                           width = "95%"
                         )
                       )
+                    )
+                  )
+                )
+              ),
+              fluidRow(
+                column(
+                  offset = 6,
+                  width = 6,
+                  conditionalPanel(
+                    condition = {
+                      indicadores_caixinha_adicional <- c(
+                        "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
+                        "'Porcentagem de nascidos vivos prematuros'"
+                      )
+
+                      glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
+                    },
+                    selectizeInput(
+                      inputId = "indicador_caixinha_adicional",
+                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      choices = NULL,
+                      width = "98%"
                     )
                   )
                 )

@@ -291,6 +291,25 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ns <- session$ns
 
     # Objetos auxiliares ------------------------------------------------------
+    ## Buscando as informações do indicador selecionado na tabela_indicadores --------
+    infos_indicador <- reactive({
+      if (!(filtros()$bloco %in% c("bloco4", "bloco6"))) {
+        if (filtros()$indicador == "Porcentagem de nascidos vivos com baixo peso ao nascer") {
+          tabela_indicadores |>
+            dplyr::filter(nome_abreviado == !!glue::glue("porc_baixo_peso"))
+        } else if (filtros()$indicador == "Porcentagem de nascidos vivos prematuros") {
+          tabela_indicadores |>
+            dplyr::filter(nome_abreviado == !!glue::glue("porc_premat"))
+        } else {
+          tabela_indicadores |>
+            dplyr::filter(indicador == filtros()$indicador)
+        }
+      } else {
+        tabela_indicadores |>
+          dplyr::filter(indicador == filtros()$indicador_blocos4_6)
+      }
+    })
+
     ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -311,18 +330,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
     })
 
-    ## Buscando as informações do indicador selecionado na tabela_indicadores --------
-    infos_indicador <- reactive({
-      if (!(filtros()$bloco %in% c("bloco4", "bloco6"))) {
-        tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador)
-      } else {
-        tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador_blocos4_6)
-      }
-    })
-
     ## Criando alguns outputs de texto que precisam ser usados na UI ----------
+    output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
     output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
     output$bloco_selecionado <- renderText({infos_indicador()$bloco})
     output$num_indicadores_incompletude <- renderText({infos_indicador()$num_indicadores_incompletude})
@@ -353,7 +362,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     ## Criando vetores que recebem os indicadores que só estão disponíveis a partir de ou até certos anos --------
-    indicadores_sem_2013 <- c(
+    indicadores_2014 <- c(
       "tx_abortos_mil_mulheres_valor_medio",
       "sus_tx_abortos_mil_mulheres_valor_medio",
       "ans_tx_abortos_mil_mulheres_valor_medio",
@@ -366,12 +375,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     )
 
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
-
-    indicadores_2014 <- c(
-      "cobertura_pre_natal",
-      "porc_7",
-      tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4"][-1]
-    )
 
     indicadores_2020 <- c(
       "porc_cobertura_esf",
@@ -702,7 +705,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando o output do velocímetro (gauge) --------------------------------
     output$gauge1 <- renderUI({
       if (infos_indicador()$num_indicadores_incompletude == 0 &
-          !(infos_indicador()$nome_abreviado %in% c(indicadores_sem_2013[1:6], "porc_sc"))) {
+          !(infos_indicador()$nome_abreviado %in% c(indicadores_2014[1:6], "porc_sc"))) {
         if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
           div(
             style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
@@ -1308,7 +1311,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     data_referencia_baixo_peso <- reactive({
       data.frame(
-        ano = ano %in% anos_disponiveis(),
+        ano = anos_disponiveis(),
         porc_baixo_peso = data_referencia_baixo_peso_aux()$porc_baixo_peso,
         class = "Referência"
       )

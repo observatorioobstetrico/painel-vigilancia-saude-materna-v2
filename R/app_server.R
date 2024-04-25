@@ -234,6 +234,25 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     }
   })
 
+  observeEvent(input$indicador, {
+    if (input$indicador == "Porcentagem de nascidos vivos com baixo peso ao nascer") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_caixinha_adicional",
+        choices = c("< 1500 g" = "menos_1500", "< 2500 g" = "menos_2500"),
+        label = "Faixa de peso"
+      )
+    } else if (input$indicador == "Porcentagem de nascidos vivos prematuros") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_caixinha_adicional",
+        choices = c("< 28 semanas" = "menos_28", "< 32 semanas" = "menos_32", "< 37 semanas" = "menos_37"),
+        label = "Idade gestacional"
+      )
+    }
+  })
+
+
   filtros <- eventReactive(input$pesquisar, {
     list(
       ano = input$ano,
@@ -262,7 +281,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       pesquisar = input$pesquisar,
       mostrar_referencia = input$mostrar_referencia,
       tipo_do_indicador_blocos4_6 = input$tipo_do_indicador_blocos4_6,
-      indicador_blocos4_6 = input$indicador_blocos4_6
+      indicador_blocos4_6 = input$indicador_blocos4_6,
+      indicadores_caixinha_adicional = input$indicador_caixinha_adicional
     )
   },
   ignoreNULL = FALSE
