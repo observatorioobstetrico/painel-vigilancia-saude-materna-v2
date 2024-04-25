@@ -271,7 +271,7 @@ mod_bloco_7_ui <- function(id) {
               #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -317,7 +317,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -424,7 +424,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -492,7 +492,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o artigo de evitabilidade fetal. &nbsp;</b>")
+                      HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o artigo de evitabilidade fetal &nbsp;</b>")
                     ),
                    hr(),
                   fluidRow(
@@ -841,7 +841,7 @@ mod_bloco_7_ui <- function(id) {
               #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -886,7 +886,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -959,7 +959,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1319,7 +1319,7 @@ mod_bloco_7_ui <- function(id) {
               #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>). &nbsp;</b>")
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -1365,7 +1365,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1440,7 +1440,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>). &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(

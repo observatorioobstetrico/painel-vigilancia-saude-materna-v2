@@ -15,9 +15,14 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 df_sinasc <- fetch_datasus(
   year_start = 2012,
   year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5"),
+  vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
   information_system = "SINASC"
 )
+
+unique(df_sinasc$IDANOMAL)
+unique(df_sinasc$CODANOMAL)
+any(is.na(unique(df_sinasc$CODANOMAL)))  #Existem NAs
+any(unique(df_sinasc$CODANOMAL) == '', na.rm = TRUE)  #Não existem ''
 
 # Transformando algumas variáveis e criando as variáveis necessárias
 df_bloco5_aux <- df_sinasc |>
@@ -42,6 +47,7 @@ df_bloco5_aux <- df_sinasc |>
     nascidos_vivos_33_a_34_semanas = if_else(SEMAGESTAC %in% c(33, 34), 1, 0, missing = 0),
     nascidos_vivos_35_a_36_semanas = if_else(SEMAGESTAC %in% c(35, 36), 1, 0, missing = 0),
     nascidos_condicoes_ameacadoras = if_else(PESO < 1500 | (GESTACAO < 4 | SEMAGESTAC < 32) | APGAR5 < 7, 1, 0, missing = 0),
+    total_de_nascidos_malformacao = if_else(IDANOMAL == "1" | !is.na(CODANOMAL), 1, 0, missing = 0),
     .keep = "unused"
   ) |>
   clean_names() |>
@@ -49,7 +55,7 @@ df_bloco5_aux <- df_sinasc |>
   summarise_at(vars(contains("nascidos")), sum) |>
   ungroup()
 
-## Fazendo um left_join da base auxiliar de municípios com o data.frame que contém os dados do bloco 5
+## Fazendo um left_join com a base auxiliar de municípios
 df_bloco5 <- left_join(df_aux_municipios, df_bloco5_aux, by = c("codmunres", "ano"))
 
 ## Preenchendo os valores NAs, gerados após o left_join, com 0

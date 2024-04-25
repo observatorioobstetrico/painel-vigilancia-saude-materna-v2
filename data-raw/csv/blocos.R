@@ -99,7 +99,8 @@ bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2
 
 asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
   janitor::clean_names() |>
-  dplyr::rename(total_nascidos = total_de_nascidos_vivos)
+  dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
+  select(!total_de_nascidos_malformacao)
 
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';') |>
   janitor::clean_names() |>
