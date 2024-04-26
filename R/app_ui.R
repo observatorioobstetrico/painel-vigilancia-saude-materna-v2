@@ -529,8 +529,8 @@ app_ui <- function(request) {
                   conditionalPanel(
                     condition = {
                       indicadores_caixinha_adicional <- c(
-                        "'Porcentagem de nascidos vivos com baixo peso ao nascer'"#,
-                        #"'Porcentagem de nascidos vivos prematuros'"
+                        "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
+                        "'Porcentagem de nascidos vivos prematuros'"
                       )
 
                       glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")

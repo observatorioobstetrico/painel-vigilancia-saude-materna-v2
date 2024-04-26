@@ -293,8 +293,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     # Objetos auxiliares ------------------------------------------------------
     ## Buscando as informações do indicador selecionado na tabela_indicadores --------
     indicadores_caixinha_adicional_bloco5 <- c(
-      "Porcentagem de nascidos vivos com baixo peso ao nascer"#,
-      #"Porcentagem de nascidos vivos prematuros"
+      "Porcentagem de nascidos vivos com baixo peso ao nascer",
+      "Porcentagem de nascidos vivos prematuros"
     )
 
     indicadores_uma_caixinha_adicional_bloco7 <- c(
