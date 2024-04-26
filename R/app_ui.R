@@ -521,28 +521,28 @@ app_ui <- function(request) {
                   )
                 )
               ),
-              fluidRow(
-                column(
-                  offset = 6,
-                  width = 6,
-                  conditionalPanel(
-                    condition = {
-                      indicadores_caixinha_adicional <- c(
-                        "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
-                        "'Porcentagem de nascidos vivos prematuros'"
-                      )
-
-                      glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
-                    },
-                    selectizeInput(
-                      inputId = "indicador_caixinha_adicional",
-                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
-                      choices = NULL,
-                      width = "98%"
-                    )
-                  )
-                )
-              ),
+              # fluidRow(
+              #   column(
+              #     offset = 6,
+              #     width = 6,
+              #     conditionalPanel(
+              #       condition = {
+              #         indicadores_caixinha_adicional <- c(
+              #           "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
+              #           "'Porcentagem de nascidos vivos prematuros'"
+              #         )
+              #
+              #         glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
+              #       },
+              #       selectizeInput(
+              #         inputId = "indicador_caixinha_adicional",
+              #         label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+              #         choices = NULL,
+              #         width = "98%"
+              #       )
+              #     )
+              #   )
+              # ),
               style = "display: none;"
             ),
             fluidRow(

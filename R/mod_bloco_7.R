@@ -2642,7 +2642,7 @@ mod_bloco_7_server <- function(id, filtros){
 
           de_2000_2499_dist_peso_fetal = round(
             sum(c(fetal_antes_peso_2000_2499, fetal_durante_peso_2000_2499, fetal_peso_2000_2499)[seleciona(aba = "fetal", indicador ="peso por momento do obito", input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])/
-              sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = "fetal", indicador ="peso por momento do obito, input$momento_obito_dist_peso_fetal") %in% input$momento_obito_dist_peso_fetal])
+              sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = "fetal", indicador ="peso por momento do obito", input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])
             *100, 2),
 
           mais_2500_dist_peso_fetal = round(
@@ -4534,8 +4534,6 @@ mod_bloco_7_server <- function(id, filtros){
         }
       }
     })
-
-
 
     output$plot3_fetal <- highcharter::renderHighchart({
       highcharter::highchart()|>
