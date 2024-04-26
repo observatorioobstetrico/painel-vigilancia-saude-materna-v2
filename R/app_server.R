@@ -147,7 +147,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     if (input$bloco == "bloco4") {
       updateSelectizeInput(
         session,
-        inputId = "tipo_do_indicador_blocos4_6",
+        inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
           "Relacionados aos grupos de Robson e cesariana" = "robson",
           "Relacionados ao deslocamento para o parto" = "deslocamento"
@@ -156,7 +156,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     } else if (input$bloco == "bloco6") {
       updateSelectizeInput(
         session,
-        inputId = "tipo_do_indicador_blocos4_6",
+        inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
           "Relacionados à mortalidade materna" = "mortalidade",
           "Relacionados à morbidade materna" = "morbidade"
@@ -165,21 +165,22 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     } else if (input$bloco == "bloco7") {
       updateSelectizeInput(
         session,
-        inputId = "tipo_do_indicador_blocos4_6",
+        inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
-          "Relacionados à morbidade fetal" = "fetal",
-          "Relacionados à mortalidade neonatal" = "neonatal"
+          "Relacionados à mortalidade fetal" = "fetal"#,
+          # "Relacionados à mortalidade perinatal" = "perinatal",
+          # "Relacionados à mortalidade neonatal" = "neonatal"
         )
       )
     }
   })
 
 
-  observeEvent(c(input$tipo_do_indicador_blocos4_6, input$nivel), {
-    if (input$tipo_do_indicador_blocos4_6 == "robson") {
+  observeEvent(c(input$tipo_do_indicador_blocos4_6_7, input$nivel), {
+    if (input$tipo_do_indicador_blocos4_6_7 == "robson") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_blocos4_6",
+        inputId = "indicador_blocos4_6_7",
         choices = c(
           tabela_indicadores$indicador[which(startsWith(tabela_indicadores$indicador, "Porcentagem de nascidos vivos") & tabela_indicadores$bloco == "bloco4")],
           tabela_indicadores$indicador[which(startsWith(tabela_indicadores$indicador, "Porcentagem de cesarianas") & tabela_indicadores$bloco == "bloco4")],
@@ -187,71 +188,110 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         ),
         server = FALSE
       )
-    } else if (input$tipo_do_indicador_blocos4_6 == "deslocamento") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "deslocamento") {
       if (input$nivel %in% c("Municipal", "Estadual")) {
         updateSelectizeInput(
           session,
-          inputId = "indicador_blocos4_6",
+          inputId = "indicador_blocos4_6_7",
           choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento")],
           server = FALSE
         )
       } else {
         updateSelectizeInput(
           session,
-          inputId = "indicador_blocos4_6",
+          inputId = "indicador_blocos4_6_7",
           choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento" & !base::startsWith(tabela_indicadores$indicador, "Medianas"))],
           server = FALSE
         )
       }
-    } else if (input$tipo_do_indicador_blocos4_6 == "mortalidade") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "mortalidade") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_blocos4_6",
+        inputId = "indicador_blocos4_6_7",
         choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6")],
         server = FALSE
       )
-    } else if (input$tipo_do_indicador_blocos4_6 == "morbidade") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_blocos4_6",
+        inputId = "indicador_blocos4_6_7",
         choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6_morbidade")],
         server = FALSE
       )
-    } else if (input$tipo_do_indicador_blocos4_6 == "neonatal") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "fetal") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_blocos4_6",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")],
+        inputId = "indicador_blocos4_6_7",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_fetal")],
         server = FALSE
       )
-    } else if (input$tipo_do_indicador_blocos4_6 == "fetal") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "perinatal") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_blocos4_6",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_fetal")],
+        inputId = "indicador_blocos4_6_7",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_perinatal")],
+        server = FALSE
+      )
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "neonatal") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6_7",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")],
         server = FALSE
       )
     }
   })
 
+
   observeEvent(input$indicador, {
     if (input$indicador == "Porcentagem de nascidos vivos com baixo peso ao nascer") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_caixinha_adicional",
+        inputId = "indicador_uma_caixinha_adicional_bloco5",
         choices = c("< 1500 g" = "menos_1500", "< 2500 g" = "menos_2500"),
         label = "Faixa de peso"
       )
     } else if (input$indicador == "Porcentagem de nascidos vivos prematuros") {
       updateSelectizeInput(
         session,
-        inputId = "indicador_caixinha_adicional",
+        inputId = "indicador_uma_caixinha_adicional_bloco5",
         choices = c("< 28 semanas" = "menos_28", "< 32 semanas" = "menos_32", "< 37 semanas" = "menos_37"),
         label = "Idade gestacional"
       )
     }
   })
 
+  observeEvent(input$indicador_blocos4_6_7, {
+    if (input$indicador_blocos4_6_7 %in% c("Número de óbitos neonatais")) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c(
+          "Geral" = "geral", "< 1500 g" = "menos_1500", "1500 a 1999 g" = "1500_1999", "2000 a 2499 g" = "2000_2499", "Maior ou igual a 2500 g" = "mais_2500"
+        ),
+        label = "Faixa de peso"
+      )
+    }
+
+    if (input$indicador_blocos4_6_7 %in% c("Número de óbitos fetais", "Taxa de mortalidade fetal")) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_duas_caixinhas_adicionais1",
+        choices = c(
+          "Geral" = "geral", "Antes do parto" = "antes", "Durante o parto" = "durante"
+        ),
+        label = "Momento do óbito"
+      )
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_duas_caixinhas_adicionais2",
+        choices = c(
+          "Geral" = "geral", "< 1500 g" = "menos_1500", "1500 a 1999 g" = "1500_1999", "2000 a 2499 g" = "2000_2499", "Maior ou igual a 2500 g" = "mais_2500"
+        ),
+        label = "Faixa de peso"
+      )
+    }
+  })
 
   filtros <- eventReactive(input$pesquisar, {
     list(
@@ -280,9 +320,12 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       indicador = input$indicador,
       pesquisar = input$pesquisar,
       mostrar_referencia = input$mostrar_referencia,
-      tipo_do_indicador_blocos4_6 = input$tipo_do_indicador_blocos4_6,
-      indicador_blocos4_6 = input$indicador_blocos4_6,
-      indicadores_caixinha_adicional = input$indicador_caixinha_adicional
+      tipo_do_indicador_blocos4_6_7 = input$tipo_do_indicador_blocos4_6_7,
+      indicador_blocos4_6_7 = input$indicador_blocos4_6_7,
+      indicador_uma_caixinha_adicional_bloco5 = input$indicador_uma_caixinha_adicional_bloco5,
+      indicador_uma_caixinha_adicional_bloco7 = input$indicador_uma_caixinha_adicional_bloco7,
+      indicador_duas_caixinhas_adicionais1 = input$indicador_duas_caixinhas_adicionais1,
+      indicador_duas_caixinhas_adicionais2 = input$indicador_duas_caixinhas_adicionais2
     )
   },
   ignoreNULL = FALSE

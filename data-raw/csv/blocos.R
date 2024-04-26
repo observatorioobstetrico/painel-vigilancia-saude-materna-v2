@@ -438,6 +438,7 @@ macro_r_saude_choices <- tabela_aux_municipios |>
 #Lendo a tabela contendo as informações sobre os indicadores
 tabela_indicadores <- read.csv("data-raw/csv/tabela_indicadores.csv")
 
+
 #Lendo a tabela contendo informações sobre as CIDs
 df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
 

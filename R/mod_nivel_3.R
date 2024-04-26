@@ -292,21 +292,89 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     # Objetos auxiliares ------------------------------------------------------
     ## Buscando as informações do indicador selecionado na tabela_indicadores --------
+    indicadores_caixinha_adicional_bloco5 <- c(
+      "Porcentagem de nascidos vivos com baixo peso ao nascer"#,
+      #"Porcentagem de nascidos vivos prematuros"
+    )
+
+    indicadores_uma_caixinha_adicional_bloco7 <- c(
+      "Número de óbitos neonatais"
+    )
+
+    indicadores_duas_caixinhas_adicionais_bloco7 <- c(
+      "Número de óbitos fetais",
+      "Taxa de mortalidade fetal por 1000 nascidos vivos"
+    )
+
+
     infos_indicador <- reactive({
-      if (!(filtros()$bloco %in% c("bloco4", "bloco6"))) {
-        if (filtros()$indicador == "Porcentagem de nascidos vivos com baixo peso ao nascer") {
+      if (filtros()$bloco %in% c("bloco4", "bloco6")) {
+        tabela_indicadores |>
+          dplyr::filter(indicador == filtros()$indicador_blocos4_6_7)
+
+      } else if (filtros()$bloco == "bloco5") {
+        if (filtros()$indicador %in% indicadores_caixinha_adicional_bloco5) {
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador) |> dplyr::pull(nome_abreviado)
+
           tabela_indicadores |>
-            dplyr::filter(nome_abreviado == !!glue::glue("porc_baixo_peso"))
-        } else if (filtros()$indicador == "Porcentagem de nascidos vivos prematuros") {
+            dplyr::filter(
+              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco5}")
+            )
+        }  else if (filtros()$indicador %in% c(
+          "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+          "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde"
+        )) {
           tabela_indicadores |>
-            dplyr::filter(nome_abreviado == !!glue::glue("porc_premat"))
+            dplyr::filter(indicador == filtros()$indicador) |>
+            dplyr::mutate(bloco == "asfixia")
         } else {
           tabela_indicadores |>
             dplyr::filter(indicador == filtros()$indicador)
         }
+
+      } else if (filtros()$bloco == "bloco7") {
+        if (filtros()$indicador_blocos4_6_7 %in% indicadores_uma_caixinha_adicional_bloco7) {
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+
+          tabela_indicadores |>
+            dplyr::filter(
+              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")
+            )
+        } else if (filtros()$indicador_blocos4_6_7 %in% indicadores_duas_caixinhas_adicionais_bloco7) {
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+
+          tabela_indicadores |>
+            dplyr::filter(
+              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_duas_caixinhas_adicionais1}_{filtros()$indicador_duas_caixinhas_adicionais2}")
+            )
+        }
+
       } else {
         tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador_blocos4_6)
+          dplyr::filter(indicador == filtros()$indicador)
+      }
+
+    })
+
+    base_bloco_selecionado <- reactive({
+      if (infos_indicador()$bloco != "bloco4_deslocamento") {
+        if (infos_indicador()$nome_abreviado %in% c("porc_nascidos_vivos_asfixia1", "porc_malformacao_vigilancia")) {
+          malformacao2 <- malformacao |>
+            dplyr::select(c(1:3), 5, 14) |>
+            dplyr::group_by(ano, codmunres, municipio, uf) |>
+            dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
+
+          dplyr::left_join(bloco5, asfixia) |>
+            dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .))
+        } else {
+          get(filtros()$bloco)
+        }
+      } else {
+        if (filtros()$nivel != "Estadual") {
+          bloco4_deslocamento_muni
+        } else {
+          bloco4_deslocamento_uf
+        }
       }
     })
 
@@ -432,7 +500,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando os data.frames com os dados de cobertura -----------------------
     data_cobertura <- reactive({
       base_cobertura <- reactive({
-        if (infos_indicador()$bloco == "bloco_6") {
+        if (infos_indicador()$bloco == "bloco6" | startsWith(infos_indicador()$bloco, "bloco7")) {
           if (infos_indicador()$nome_abreviado == "rmm") {
             get(
               ifelse(
@@ -492,7 +560,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando o gráfico de linhas para a cobertura ---------------------------
     output$grafico_cobertura <- highcharter::renderHighchart({
       base <- dplyr::if_else(
-        infos_indicador()$bloco == "bloco6",
+        infos_indicador()$bloco == "bloco6" | startsWith(infos_indicador()$bloco, "bloco7"),
         dplyr::if_else(infos_indicador()$nome_abreviado == "rmm", input$sistema_cobertura, "SIM"),
         "SINASC"
       )
@@ -503,7 +571,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           glue::glue("A cobertura do {base} não está disponível para o nível de análise selecionado.")
         ),
         need(
-          infos_indicador()$num_indicadores_incompletude != 0 |
+          infos_indicador()$num_indicadores_incompletude != 0 | startsWith(infos_indicador()$bloco, "bloco7") |
             (infos_indicador()$nome_abreviado == "porc_sc" |
                grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado)),
           "Informações a respeito da cobertura dos sistemas de informação utilizados para a construção deste indicador não estão disponíveis."
@@ -704,7 +772,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando o output do velocímetro (gauge) --------------------------------
     output$gauge1 <- renderUI({
-      if (infos_indicador()$num_indicadores_incompletude == 0 &
+      if (infos_indicador()$num_indicadores_incompletude == 0 & !(startsWith(infos_indicador()$bloco, "bloco7")) &
           !(infos_indicador()$nome_abreviado %in% c(indicadores_2014[1:6], "porc_sc"))) {
         if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
           div(
@@ -1022,16 +1090,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde, para regiões do país e para o nível de análise nacional. Dessa forma, esta visualização não se aplica."
         )
       )
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        data_filtrada_aux <- get(filtros()$bloco)
-      } else {
-        if (filtros()$nivel != "Estadual") {
-          data_filtrada_aux <- bloco4_deslocamento_muni
-        } else {
-          data_filtrada_aux <- bloco4_deslocamento_uf
-        }
-      }
-      data_filtrada_aux |>
+      base_bloco_selecionado() |>
         dplyr::filter(ano %in% anos_disponiveis()) |>
         dplyr::group_by(regiao) |>
         dplyr::summarise(
@@ -1069,17 +1128,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     # Gráfico de linhas do indicador ------------------------------------------
     ## Criando data.frames com os dados do indicador ---------------------------
     data_grafico_serie <- reactive({
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        data_filtrada_aux <- get(filtros()$bloco)
-      } else {
-        if (filtros()$nivel != "Estadual") {
-          data_filtrada_aux <- bloco4_deslocamento_muni
-        } else {
-          data_filtrada_aux <- bloco4_deslocamento_uf
-        }
-      }
-
-      data_grafico_serie_aux <- data_filtrada_aux |>
+      data_grafico_serie_aux <- base_bloco_selecionado() |>
         dplyr::filter(
           ano %in% anos_disponiveis(),
           if (filtros()$nivel == "Nacional")
@@ -1224,16 +1273,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_referencia_serie <- reactive({
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        data_referencia_aux <- get(filtros()$bloco)
-      } else {
-        if (filtros()$nivel != "Estadual") {
-          data_referencia_aux <- bloco4_deslocamento_muni
-        } else {
-          data_referencia_aux <- bloco4_deslocamento_uf
-        }
-      }
-      data_referencia_aux |>
+      base_bloco_selecionado() |>
         dplyr::filter(
           ano %in% anos_disponiveis()
         ) |>
@@ -1242,7 +1282,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           indicador = ifelse(
             infos_indicador()$referencia == "Nacional",
             !!rlang::parse_expr(infos_indicador()$calculo),
-            {as.numeric(infos_indicador()$referencia)}
+            ifelse(
+              infos_indicador()$nome_abreviado != "porc_baixo_peso_menos_1500",
+              {as.numeric(infos_indicador()$referencia)},
+              NA
+            )
           ),
           tx_abortos_mil_mulheres_lim_inf = ifelse(
             grepl("tx_abortos_mil_mulheres_valor_medio", infos_indicador()$nome_abreviado),
@@ -1403,7 +1447,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
           highcharter::hc_colors(cols)
       }
-      if ((filtros()$nivel == "Nacional" & infos_indicador()$descricao_referencia == "média nacional") | (infos_indicador()$nome_abreviado == "obitos_mat_totais") | (base::startsWith(infos_indicador()$indicador, "Medianas"))) {
+      if ((filtros()$nivel == "Nacional" & infos_indicador()$descricao_referencia == "média nacional") | (infos_indicador()$descricao_referencia == "sem referência")) {
         grafico_base
       } else {
         if (infos_indicador()$nome_abreviado == "prop_robson2_tx_cesariana") {
@@ -1428,7 +1472,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             fillOpacity = 0.2,
             enableMouseTracking = TRUE
           )
-        } else if (infos_indicador()$nome_abreviado == "porc_baixo_peso") {
+        } else if (infos_indicador()$nome_abreviado == "porc_baixo_peso_menos_2500") {
           grafico_base |>
             highcharter::hc_add_series(
               data = data_referencia_baixo_peso(),
@@ -1469,17 +1513,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde, para regiões do país e para o nível de análise nacional. Além disso, mesmo que esses indicadores sejam calculados para municípios e estados, calcular um valor médio para representar o resumo do período não é aconselhável. Dessa forma, esta visualização não se aplica."
         )
       )
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        data_filtrada_aux <- get(filtros()$bloco)
-      } else {
-        if (filtros()$nivel != "Estadual") {
-          data_filtrada_aux <- bloco4_deslocamento_muni
-        } else {
-          data_filtrada_aux <- bloco4_deslocamento_uf
-        }
-      }
       if (input$opcoes_tab1 == "escolha1") {
-        data_filtrada_aux |>
+        base_bloco_selecionado() |>
           dplyr::filter(ano %in% anos_disponiveis()) |>
           dplyr::group_by(uf, macro_r_saude, municipio) |>
           dplyr::summarise(
@@ -1492,7 +1527,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           )
       } else {
-        data_filtrada_aux |>
+        base_bloco_selecionado() |>
           dplyr::filter(
             ano %in% anos_disponiveis(),
             if (filtros()$nivel == "Nacional")

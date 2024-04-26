@@ -474,7 +474,8 @@ app_ui <- function(request) {
                       "3 - Assistência pré-natal" = "bloco3",
                       "4 - Assistência ao parto" = "bloco4",
                       "5 - Condições de nascimento" = "bloco5",
-                      "6 - Mortalidade e morbidade materna" = "bloco6"
+                      "6 - Mortalidade e morbidade materna" = "bloco6",
+                      "7 - Mortalidade fetal, perinatal e neonatal" = "bloco7"
                     ),
                     width = "98%"
                   )
@@ -482,7 +483,7 @@ app_ui <- function(request) {
                 column(
                   width = 6,
                   conditionalPanel(
-                    condition = "input.bloco != 'bloco4' & input.bloco != 'bloco6'",
+                    condition = "input.bloco != 'bloco4' & input.bloco != 'bloco6' & input.bloco != 'bloco7'",
                     selectizeInput(
                       inputId = "indicador",
                       label = HTML("<span style = 'font-size: 17'> Indicador </span>"),
@@ -495,9 +496,9 @@ app_ui <- function(request) {
                     column(
                       width = 6,
                       conditionalPanel(
-                        condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6'",
+                        condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6' | input.bloco == 'bloco7'",
                         selectizeInput(
-                          inputId = "tipo_do_indicador_blocos4_6",
+                          inputId = "tipo_do_indicador_blocos4_6_7",
                           label = HTML("<span style = 'font-size: 17'> Selecione o grupo de indicadores </span>"),
                           options = list(placeholder = "Selecione um grupo de indicadores"),
                           choices = NULL,
@@ -508,9 +509,9 @@ app_ui <- function(request) {
                     column(
                       width = 6,
                       conditionalPanel(
-                        condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6'",
+                        condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6' | input.bloco == 'bloco7'",
                         selectizeInput(
-                          inputId = "indicador_blocos4_6",
+                          inputId = "indicador_blocos4_6_7",
                           label = HTML("<span style = 'font-size: 17'> Indicador </span>"),
                           options = list(placeholder = "Selecione o indicador"),
                           choices = NULL,
@@ -521,28 +522,85 @@ app_ui <- function(request) {
                   )
                 )
               ),
-              # fluidRow(
-              #   column(
-              #     offset = 6,
-              #     width = 6,
-              #     conditionalPanel(
-              #       condition = {
-              #         indicadores_caixinha_adicional <- c(
-              #           "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
-              #           "'Porcentagem de nascidos vivos prematuros'"
-              #         )
-              #
-              #         glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
-              #       },
-              #       selectizeInput(
-              #         inputId = "indicador_caixinha_adicional",
-              #         label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
-              #         choices = NULL,
-              #         width = "98%"
-              #       )
-              #     )
-              #   )
-              # ),
+              fluidRow(
+                column(
+                  offset = 6,
+                  width = 6,
+                  conditionalPanel(
+                    condition = {
+                      indicadores_caixinha_adicional <- c(
+                        "'Porcentagem de nascidos vivos com baixo peso ao nascer'"#,
+                        #"'Porcentagem de nascidos vivos prematuros'"
+                      )
+
+                      glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
+                    },
+                    selectizeInput(
+                      inputId = "indicador_uma_caixinha_adicional_bloco5",
+                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      choices = NULL,
+                      width = "94%"
+                    )
+                  )
+                ),
+                column(
+                  offset = 6,
+                  width = 6,
+                  conditionalPanel(
+                    condition = {
+                      indicadores_uma_caixinha_adicional_bloco7 <- c(
+                        "'Número de óbitos neonatais'"
+                      )
+
+                      glue::glue(
+                        "[{paste(indicadores_uma_caixinha_adicional_bloco7, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                      )
+                    },
+                    selectizeInput(
+                      inputId = "indicador_uma_caixinha_adicional_bloco7",
+                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      choices = NULL,
+                      width = "94%"
+                    )
+                  )
+                ),
+                column(
+                  offset = 6,
+                  width = 3,
+                  conditionalPanel(
+                    condition = {
+                      indicadores_duas_caixinhas_adicionais <- c(
+                        "'Número de óbitos fetais'",
+                        "'Taxa de mortalidade fetal por 1000 nascidos vivos'"
+                      )
+
+                      glue::glue(
+                        "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                      )
+                    },
+                    selectizeInput(
+                      inputId = "indicador_duas_caixinhas_adicionais1",
+                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      choices = NULL,
+                      width = "94%"
+                    )
+                  )
+                ),
+                column(
+                  width = 3,
+                  conditionalPanel(
+                    condition = glue::glue(
+                      "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                    ),
+                    selectizeInput(
+                      inputId = "indicador_duas_caixinhas_adicionais2",
+                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      choices = NULL,
+                      width = "94%"
+                    )
+                  )
+                )
+              ),
               style = "display: none;"
             ),
             fluidRow(
