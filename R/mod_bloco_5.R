@@ -1111,23 +1111,6 @@ mod_bloco_5_server <- function(id, filtros){
       dplyr::left_join(bloco5, asfixia) |>
         dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            ano >= max(filtros()$ano2[1]) & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
