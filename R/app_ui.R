@@ -539,7 +539,7 @@ app_ui <- function(request) {
                       inputId = "indicador_uma_caixinha_adicional_bloco5",
                       label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
                       choices = NULL,
-                      width = "94%"
+                      width = "97%"
                     )
                   )
                 ),
@@ -560,7 +560,7 @@ app_ui <- function(request) {
                       inputId = "indicador_uma_caixinha_adicional_bloco7",
                       label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
                       choices = NULL,
-                      width = "94%"
+                      width = "100%"
                     )
                   )
                 ),

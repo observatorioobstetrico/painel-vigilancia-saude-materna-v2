@@ -572,7 +572,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ),
         need(
           infos_indicador()$num_indicadores_incompletude != 0 | startsWith(infos_indicador()$bloco, "bloco7") |
-            (infos_indicador()$nome_abreviado == "porc_sc" |
+            startsWith(infos_indicador()$bloco, "bloco5") | (infos_indicador()$nome_abreviado == "porc_sc" |
                grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado)),
           "Informações a respeito da cobertura dos sistemas de informação utilizados para a construção deste indicador não estão disponíveis."
         )
@@ -772,7 +772,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando o output do velocímetro (gauge) --------------------------------
     output$gauge1 <- renderUI({
-      if (infos_indicador()$num_indicadores_incompletude == 0 & !(startsWith(infos_indicador()$bloco, "bloco7")) &
+      if (infos_indicador()$num_indicadores_incompletude == 0 & !(startsWith(infos_indicador()$bloco, "bloco5")) &
+          !(startsWith(infos_indicador()$bloco, "bloco7")) &
           !(infos_indicador()$nome_abreviado %in% c(indicadores_2014[1:6], "porc_sc"))) {
         if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
           div(
