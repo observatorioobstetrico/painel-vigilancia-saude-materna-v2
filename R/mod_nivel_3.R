@@ -298,7 +298,20 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     )
 
     indicadores_uma_caixinha_adicional_bloco7 <- c(
-      "Número de óbitos neonatais"
+      "Número de óbitos neonatais",
+      "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+      "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+      "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+      "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+      "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
+      "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  ",
+      "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  ",
+      "Porcentagem de óbitos fetais por causas evitáveis",
+      "Porcentagem de óbitos perinatais por causas evitáveis",
+      "Porcentagem de óbitos neonatais por causas evitáveis",
+      "Porcentagem de óbitos fetais por grupos de causas",
+      "Porcentagem de óbitos perinatais por grupos de causas",
+      "Porcentagem de óbitos neonatais por grupos de causas"
     )
 
     indicadores_duas_caixinhas_adicionais_bloco7 <- c(
