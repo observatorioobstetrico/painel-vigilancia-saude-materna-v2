@@ -269,13 +269,14 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
                                            "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
                                            "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
                                            "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  ",
-                                           "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  ",
-                                           "Porcentagem de óbitos fetais por causas evitáveis",
-                                           "Porcentagem de óbitos perinatais por causas evitáveis",
-                                           "Porcentagem de óbitos neonatais por causas evitáveis",
-                                           "Porcentagem de óbitos fetais por grupos de causas",
-                                           "Porcentagem de óbitos perinatais por grupos de causas",
-                                           "Porcentagem de óbitos neonatais por grupos de causas")) {
+                                           "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  "#,
+                                           # "Porcentagem de óbitos fetais por causas evitáveis",
+                                           # "Porcentagem de óbitos perinatais por causas evitáveis",
+                                           # "Porcentagem de óbitos neonatais por causas evitáveis",
+                                           # "Porcentagem de óbitos fetais por grupos de causas",
+                                           # "Porcentagem de óbitos perinatais por grupos de causas",
+                                           # "Porcentagem de óbitos neonatais por grupos de causas"
+                                           )) {
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
@@ -293,16 +294,14 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
-        choices = c(
-          "Reduzíveis por ações de imunização" = "imunoprevencao",
+        choices = c("Reduzíveis por ações de imunização" = "imunoprevencao",
           "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
           "Reduzíveis por adequada atenção à mulher no parto" = "parto",
           "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
           "Reduzíveis por ações de promoção à saúde vinculadas a ações de atenção" = "saude",
           "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
           "Reduzíveis por causas mal definidas" = "mal_definidas",
-          "Reduzíveis por demais causas" = "outros"
-        ),
+          "Reduzíveis por demais causas" = "outros"),
         label = "Grupos de interesse"
       )
     }
@@ -314,17 +313,49 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
-        choices = c(
-          "Prematuridade" = "prematuridade",
-          "Infecções" = "infeccoes",
-          "Asfixia/hipóxia" = "asfixia",
-          "Malformação" = "ma_formacao",
-          "Afecções respiratórias do recém-nascido" = "respiratorias",
-          "Fatores maternos relacionados à gravidez" = "gravidez",
-          "Afecções originais no período perinatal" = "afeccoes",
-          "Causas mal definidas" = "mal_definidas",
-          "Demais causas" = "outros"
-        ),
+        choices = c("Prematuridade" = "prematuridade",
+                           "Infecções" = "infeccoes",
+                            "Asfixia/hipóxia" = "asfixia",
+                             "Malformação" = "ma_formacao",
+                             "Afecções respiratórias do recém-nascido" = "respiratorias",
+                              "Fatores maternos relacionados à gravidez" = "gravidez",
+                              "Afecções originais no período perinatal" = "afeccoes",
+                              "Causas mal definidas" = "mal_definidas",
+                              "Demais causas" = "outros"),
+        label = "Grupos de interesse"
+      )
+    }
+
+
+    if (input$indicador_blocos4_6_7 == "Porcentagem de óbitos fetais por causas evitáveis") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c("Reduzíveis por ações de imunização" = "imunoprevencao",
+                    "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+                    "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+                    "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+                    #"Reduzíveis por ações de promoção à saúde vinculadas a ações de atenção" = "saude",
+                    "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+                    "Reduzíveis por causas mal definidas" = "mal_definidas",
+                    "Reduzíveis por demais causas" = "outros"),
+        label = "Grupos de interesse"
+      )
+    }
+
+    if (input$indicador_blocos4_6_7 == "Porcentagem de óbitos fetais por grupos de causas") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c("Prematuridade" = "prematuridade",
+                    "Infecções" = "infeccoes",
+                    "Asfixia/hipóxia" = "asfixia",
+                    "Malformação" = "ma_formacao",
+                    #"Afecções respiratórias do recém-nascido" = "respiratorias",
+                    "Fatores maternos relacionados à gravidez" = "gravidez",
+                    "Afecções originais no período perinatal" = "afeccoes",
+                    #"Causas mal definidas" = "mal_definidas",
+                    "Demais causas" = "outros"),
         label = "Grupos de interesse"
       )
     }
