@@ -379,6 +379,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
           dplyr::left_join(bloco5, asfixia) |>
             dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .))
+        } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
+          bloco8_grafico_evitaveis_neonatal
+        } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
+          bloco8_graficos
         } else {
           get(filtros()$bloco)
         }

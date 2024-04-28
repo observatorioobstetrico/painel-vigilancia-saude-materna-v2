@@ -336,7 +336,7 @@ mod_bloco_7_ui <- function(id) {
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
                           "Malformação congênita" = "ma_formacao",
-                          "Afecções respiratórias dos recém nascidos" = "respiratorias",
+                          #"Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
                           "Mal definidas" = "mal_definida",
