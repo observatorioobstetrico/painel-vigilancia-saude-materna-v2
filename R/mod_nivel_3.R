@@ -1120,7 +1120,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando o gráfico de barras --------------------------------------------
     output$grafico_regioes <- highcharter::renderHighchart({
       proporcoes <- data_grafico_regioes()$indicador
-      regioes <- data_grafico_regioes()$regiao
+      regioes <- factor(data_grafico_regioes()$regiao)
+      levels(regioes) <- c("Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul")
       df <- data.frame(regioes, proporcoes)
 
       highcharter::hchart(
