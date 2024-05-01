@@ -503,7 +503,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       if (infos_indicador()$nome_abreviado %in% indicadores_2020) {
         anos_disponiveis_aux[anos_disponiveis_aux <= 2020]
       } else if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
-        anos_disponiveis_aux[anos_disponiveis_aux <= 2021]
+        anos_disponiveis_aux[anos_disponiveis_aux <= 2022]
       } else {
         anos_disponiveis_aux
       }
@@ -602,7 +602,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = cobertura, group = localidade, colour = localidade)
         ) |>
         highcharter::hc_add_series(
-          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2021),
+          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2022),
           type = "line",
           highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
           dashStyle = "ShortDot",
