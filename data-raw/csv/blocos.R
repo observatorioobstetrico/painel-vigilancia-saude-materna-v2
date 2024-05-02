@@ -94,6 +94,20 @@ bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao <- as.numeric(bloco4_desl
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade)
 
+bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv") |>
+  janitor::clean_names() |>
+  dplyr::select(-c(3, 6:8, ))
+
+bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
+  dplyr::group_by(ano, codmunres) |>
+  dplyr::summarise(nascimentos = sum(nascimentos),
+                   desloc_1 = sum(desloc_1),
+                   desloc_2 = sum(desloc_2),
+                   desloc_3 = sum(desloc_3),
+                   desloc_4 = sum(desloc_4),
+                   desloc_5 = sum(desloc_5),
+                   desloc_6 = sum(desloc_6))
+
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2022.csv") |>
   janitor::clean_names()
 
@@ -236,6 +250,15 @@ bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
   )
 
 bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
+
+
+bloco4_deslocamento_macrorregiao <- dplyr::left_join(bloco4_deslocamento_macrorregiao, aux_municipios, by = "codmunres")
+bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_deslocamento_macrorregiao) == "ano") + 1):(which(names(bloco4_deslocamento_macrorregiao) == "municipio") - 1)
+  )
+
 
 bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres")
 bloco5 <- bloco5 |>
@@ -448,6 +471,7 @@ usethis::use_data(bloco3, overwrite = TRUE)
 usethis::use_data(bloco4, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
+usethis::use_data(bloco4_deslocamento_macrorregiao, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(asfixia, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)

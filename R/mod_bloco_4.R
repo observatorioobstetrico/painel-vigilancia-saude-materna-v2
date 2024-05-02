@@ -436,7 +436,34 @@ mod_bloco_4_ui <- function(id){
                   hr(),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_resto_prop1"), height = "640px"))
                 )
-              )
+              ),
+              fluidRow(
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "display: flex; align-items: center;",
+                    HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_deslocamento_prop2"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_prop2"),
+                          icon = icon("triangle-exclamation", style = "color: red"),
+                          color = "warning",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
+                  ),
+                  hr(),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_1"), height = "650px"))
+                )
+              ),
             )
           )
         ),
@@ -527,6 +554,33 @@ mod_bloco_4_ui <- function(id){
                     ),
                     hr(),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_muni_prop1"), height = "650px"))
+                  )
+                ),
+                fluidRow(
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                    div(
+                      style = "display: flex; align-items: center;",
+                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
+                      shinyjs::hidden(
+                        span(
+                          id = ns("mostrar_botao_deslocamento_prop2"),
+                          shinyWidgets::actionBttn(
+                            inputId = ns("botao_prop2"),
+                            icon = icon("triangle-exclamation", style = "color: red"),
+                            color = "warning",
+                            style = "material-circle",
+                            size = "xs"
+                          )
+                        )
+                      )
+                    ),
+                    hr(),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_2"), height = "650px"))
                   )
                 ),
                 fluidRow(
@@ -636,6 +690,33 @@ mod_bloco_4_ui <- function(id){
                     ),
                     hr(),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_uf_prop1"), height = "640px"))
+                  )
+                ),
+                fluidRow(
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                    div(
+                      style = "display: flex; align-items: center;",
+                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
+                      shinyjs::hidden(
+                        span(
+                          id = ns("mostrar_botao_deslocamento_prop2"),
+                          shinyWidgets::actionBttn(
+                            inputId = ns("botao_prop2"),
+                            icon = icon("triangle-exclamation", style = "color: red"),
+                            color = "warning",
+                            style = "material-circle",
+                            size = "xs"
+                          )
+                        )
+                      )
+                    ),
+                    hr(),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_3"), height = "650px"))
                   )
                 ),
                 fluidRow(
@@ -2717,6 +2798,190 @@ mod_bloco_4_server <- function(id, filtros){
       }
     })
 
+
+
+# grafico deslocamento macrorregiao ---------------------------------------
+
+    output$grafico_deslocamento_macrorregiao_1 <- highcharter::renderHighchart({
+      tryCatch({
+        highcharter::highchart() |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_1),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_1:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_2),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_2:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_3),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_3:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_4),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_4:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_5),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_5:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_6),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_6:,f}% </b>"
+            )
+          ) |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+          highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "teste"), min = 0, max = 100)
+      },
+      error = function(e) {}
+      )
+    })
+
+    output$grafico_deslocamento_macrorregiao_2 <- highcharter::renderHighchart({
+      tryCatch({
+        highcharter::highchart() |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_1),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_1:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_2),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_2:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_3),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_3:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_4),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_4:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_5),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_5:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_6),
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_desloc_6:,f}% </b>"
+            )
+          ) |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+          highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "teste"), min = 0, max = 100)
+      },
+      error = function(e) {}
+      )
+    })
+
+    output$grafico_deslocamento_macrorregiao_3 <- highcharter::renderHighchart({
+      tryCatch({
+        highcharter::highchart() |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_1)
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_2)
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_3)
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_4)
+          ) |>
+          highcharter::hc_add_series(
+            name = "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_5)
+          ) |>
+          highcharter::hc_add_series(
+            name = "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI",
+            data = data4_deslocamento_macrorregiao(),
+            type = "column",
+            highcharter::hcaes(x = ano, y = prop_desloc_6)
+          ) |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+          highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "teste"), min = 0, max = 100)
+      },
+      error = function(e) {}
+      )
+    })
+
     data4_deslocamento_resumo <- reactive({
       bloco4_deslocamento_muni |>
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
@@ -3402,6 +3667,165 @@ mod_bloco_4_server <- function(id, filtros){
 
 
     data4_deslocamento_juncao <- reactive({dplyr::full_join(data4_deslocamento(), data4_deslocamento_comp(), by = "ano")})
+
+
+
+
+# deslocamento macroregiao ------------------------------------------------
+
+    data4_deslocamento_macrorregiao <- reactive({
+      bloco4_deslocamento_macrorregiao |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          prop_desloc_1 = round(sum(desloc_1)/sum(nascimentos) * 100, 1),
+          prop_desloc_2 = round(sum(desloc_2)/sum(nascimentos) * 100, 1),
+          prop_desloc_3 = round(sum(desloc_3)/sum(nascimentos) * 100, 1),
+          prop_desloc_4 = round(sum(desloc_4)/sum(nascimentos) * 100, 1),
+          prop_desloc_5 = round(sum(desloc_5)/sum(nascimentos) * 100, 1),
+          prop_desloc_6 = round(sum(desloc_6)/sum(nascimentos) * 100, 1),
+          localidade = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+
+    # data4_deslocamento_macroregiao <- reactive({
+    #   if (filtros()$nivel == "Municipal") {
+    #     bloco4_deslocamento_macroregiao |>
+    #       dplyr::filter(
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #       ) |>
+    #       dplyr::group_by(ano) |>
+    #       dplyr::mutate(
+    #         prop_desloc_1 = round(desloc_1/nascimentos * 100, 1),
+    #         prop_desloc_2 = round(desloc_2/nascimentos * 100, 1),
+    #         prop_desloc_3 = round(desloc_3/nascimentos * 100, 1),
+    #         prop_desloc_4 = round(desloc_4/nascimentos * 100, 1),
+    #         prop_desloc_5 = round(desloc_5/nascimentos * 100, 1),
+    #         prop_desloc_6 = round(desloc_6/nascimentos * 100, 1),
+    #         localidade = filtros()$municipio,
+    #         .keep = "unused"
+    #       ) |>
+    #       dplyr::ungroup()
+    #   } else if (filtros()$nivel == "Estadual") {
+    #     bloco4_deslocamento_macroregiao |>
+    #       dplyr::filter(
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+    #         uf == filtros()$estado
+    #       ) |>
+    #       dplyr::group_by(ano) |>
+    #       dplyr::mutate(
+    #         prop_desloc_1 = round(desloc_1/nascimentos * 100, 1),
+    #         prop_desloc_2 = round(desloc_2/nascimentos * 100, 1),
+    #         prop_desloc_3 = round(desloc_3/nascimentos * 100, 1),
+    #         prop_desloc_4 = round(desloc_4/nascimentos * 100, 1),
+    #         prop_desloc_5 = round(desloc_5/nascimentos * 100, 1),
+    #         prop_desloc_6 = round(desloc_6/nascimentos * 100, 1),
+    #         localidade = filtros()$estado,
+    #         .keep = "unused"
+    #       ) |>
+    #       dplyr::ungroup()
+    #   } else {
+    #     bloco4_deslocamento_macroregiao |>
+    #       dplyr::filter(
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       ) |>
+    #       dplyr::filter(
+    #         if (filtros()$nivel == "Nacional")
+    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #         else if (filtros()$nivel == "Regional")
+    #           regiao == filtros()$regiao
+    #         else if (filtros()$nivel == "Macrorregião de saúde")
+    #           macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #         else if(filtros()$nivel == "Microrregião de saúde")
+    #           r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #       ) |>
+    #       dplyr::group_by(ano) |>
+    #       dplyr::summarise(
+    #         prop_desloc_1 = round(sum(desloc_1, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         prop_desloc_2 = round(sum(desloc_2, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         prop_desloc_3 = round(sum(desloc_3, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         prop_desloc_4 = round(sum(desloc_4, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         prop_desloc_5 = round(sum(desloc_5, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         prop_desloc_6 = round(sum(desloc_6, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #         localidade = dplyr::case_when(
+    #           filtros()$nivel == "Nacional" ~ "Brasil",
+    #           filtros()$nivel == "Regional" ~ filtros()$regiao,
+    #           filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+    #           filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro
+    #         )
+    #       ) |>
+    #       dplyr::ungroup()
+    #   }
+    #
+    # })
+    #
+    # data4_deslocamento_macrorregiao_comp <- reactive({
+    #   bloco4_deslocamento_macroregiao |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::filter(
+    #       if (filtros()$nivel2 == "Nacional")
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       else if (filtros()$nivel2 == "Regional")
+    #         regiao == filtros()$regiao2
+    #       else if (filtros()$nivel2 == "Estadual")
+    #         uf == filtros()$estado2
+    #       else if (filtros()$nivel2 == "Macrorregião de saúde")
+    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #       else if(filtros()$nivel2 == "Microrregião de saúde")
+    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #       else if (filtros()$nivel2 == "Municipal")
+    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #       else if (filtros()$nivel2 == "Municípios semelhantes")
+    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     dplyr::summarise(
+    #       br_prop_desloc_1 = round(sum(desloc_1, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       br_prop_desloc_2 = round(sum(desloc_2, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       br_prop_desloc_3 = round(sum(desloc_3, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       br_prop_desloc_4 = round(sum(desloc_4, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       br_prop_desloc_5 = round(sum(desloc_5, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       br_prop_desloc_6 = round(sum(desloc_6, na.rm = TRUE)/sum(nascimentos, na.rm = TRUE) * 100, 1),
+    #       localidade_comparacao = dplyr::case_when(
+    #         filtros()$nivel2 == "Nacional" ~ "Média nacional",
+    #         filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+    #         filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+    #         filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+    #         filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+    #         filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+    #         filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
+    #       )
+    #     ) |>
+    #     dplyr::ungroup()
+    # })
+
+
+    #data4_deslocamento_macrorregiao <- reactive({dplyr::full_join(data4_deslocamento_macroregiao(), data4_deslocamento_mracorregiao_comp(), by = "ano")})
+
 
     ##### Dados de incompletude e cobertura para os indicadores do segundo bloco #####
     data_incompletude_aux <- reactive({
