@@ -369,6 +369,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     })
 
+    observe(print(infos_indicador()))
+
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
         if (infos_indicador()$nome_abreviado %in% c("porc_nascidos_vivos_asfixia1", "porc_malformacao_vigilancia")) {
