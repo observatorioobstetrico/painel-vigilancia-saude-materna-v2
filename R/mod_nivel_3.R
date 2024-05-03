@@ -369,7 +369,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     })
 
-    observe(print(infos_indicador()))
 
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
