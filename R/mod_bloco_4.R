@@ -2828,7 +2828,7 @@ mod_bloco_4_server <- function(id, filtros){
           stack = 0
         ) |>
         highcharter::hc_add_series(
-          data = data_plot_macrorregiao_completo(),
+          data = data_plot_macrorregiao_comp_completo(),
           highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
           type = "column",
           showInLegend = FALSE,
@@ -2876,7 +2876,7 @@ mod_bloco_4_server <- function(id, filtros){
           stack = 0
         ) |>
         highcharter::hc_add_series(
-          data = data_plot_macrorregiao_completo(),
+          data = data_plot_macrorregiao_comp_completo(),
           highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
           type = "column",
           showInLegend = FALSE,
@@ -2924,7 +2924,7 @@ mod_bloco_4_server <- function(id, filtros){
           stack = 0
         ) |>
         highcharter::hc_add_series(
-          data = data_plot_macrorregiao_completo(),
+          data = data_plot_macrorregiao_comp_completo(),
           highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
           type = "column",
           showInLegend = FALSE,
