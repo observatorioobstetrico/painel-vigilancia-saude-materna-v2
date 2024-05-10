@@ -142,7 +142,7 @@ library(readxl)
 library(dplyr)
 library(readr)
 
-#Carregando as tabelas pde 2012 a 2021
+#Carregando as tabelas pde 2012 a 2022
 
 rmm_brasil <- read_excel("data-raw/extracao-dos-dados/databases-antigas/analises_obitos_RMM_1996_2021.xlsx") %>%
   filter(Ano >= 2012)
@@ -183,4 +183,4 @@ rmm_corrigida <- rbind(rmm_brasil, rmm_estados, rmm_regioes)
 rmm_corrigida$RMM <- round(rmm_corrigida$RMM, 2)
 
 
-write.table(rmm_corrigida, 'rmm_corrigida_2012-2021.csv', sep = ",", dec = ".", row.names = FALSE)
+write.table(rmm_corrigida, 'data-raw/csv/rmm_corrigida_2012-2021.csv', sep = ",", dec = ".", row.names = FALSE)
