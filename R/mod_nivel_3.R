@@ -476,8 +476,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             tabela_indicadores$nome_abreviado[grep("tx_abortos_mil", tabela_indicadores$nome_abreviado)],
             "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
             "ans_tx_abortos_cem_nascidos_vivos_valor_medio",
-            tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4_deslocamento"],
-            "rmm"
+            tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4_deslocamento"]
           )
         } else {
           c(
@@ -1664,7 +1663,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1230),
+            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1440),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -1710,7 +1709,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1230),
+            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1440),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
