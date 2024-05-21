@@ -74,14 +74,20 @@ bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_20
 bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2022.csv") |>
   janitor::clean_names()
 
-bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2020.csv") |>
+bloco4_deslocamento_muni_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2020.csv") |>
   janitor::clean_names()
 
-bloco4_deslocamento_muni_aux$km_partos_fora_uf <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf)
+bloco4_deslocamento_muni_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2021-2022.csv") |>
+  janitor::clean_names()
+
+bloco4_deslocamento_muni_aux1$km_partos_fora_uf <- as.numeric(bloco4_deslocamento_muni_aux1$km_partos_fora_uf)
+
+bloco4_deslocamento_muni_aux <- full_join(bloco4_deslocamento_muni_aux1, bloco4_deslocamento_muni_aux2)
+
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade)
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade)
 
-bloco4_deslocamento_uf_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
+bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
   janitor::clean_names() |>
   dplyr::select(!uf) |>
   dplyr::rename(uf = nome) |>
@@ -89,10 +95,18 @@ bloco4_deslocamento_uf_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocam
     uf = sub('.', '', uf)
   )
 
+bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2022.csv") |>
+  janitor::clean_names()
+
+bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
+
+bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade)
+bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade)
+
+bloco4_deslocamento_uf_aux <- full_join(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux1)
+
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
-bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao)
-bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_alta_complexidade)
-bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux$km_partos_fora_macrorregiao_baixa_complexidade)
+
 
 bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv") |>
   janitor::clean_names() |>

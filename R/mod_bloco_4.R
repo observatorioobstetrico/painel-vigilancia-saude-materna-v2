@@ -557,33 +557,6 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop2"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop2"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_2"), height = "650px"))
-                  )
-                ),
-                fluidRow(
                   column(
                     width = 12,
                     bs4Dash::bs4Card(
@@ -624,6 +597,33 @@ mod_bloco_4_ui <- function(id){
                       ),
                       shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_muni_med1"), height = "500px"))
                     )
+                  )
+                ),
+                fluidRow(
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                    div(
+                      style = "display: flex; align-items: center;",
+                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
+                      shinyjs::hidden(
+                        span(
+                          id = ns("mostrar_botao_deslocamento_prop2"),
+                          shinyWidgets::actionBttn(
+                            inputId = ns("botao_prop2"),
+                            icon = icon("triangle-exclamation", style = "color: red"),
+                            color = "warning",
+                            style = "material-circle",
+                            size = "xs"
+                          )
+                        )
+                      )
+                    ),
+                    hr(),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_2"), height = "650px"))
                   )
                 )
               ),
@@ -698,33 +698,6 @@ mod_bloco_4_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop2"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop2"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_3"), height = "650px"))
-                  )
-                ),
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
                     style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                       style = "display: flex; align-items: center;",
@@ -757,6 +730,33 @@ mod_bloco_4_ui <- function(id){
                       width = "100%"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_uf_med1"), height = "500px"))
+                  )
+                ),
+                fluidRow(
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                    div(
+                      style = "display: flex; align-items: center;",
+                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
+                      shinyjs::hidden(
+                        span(
+                          id = ns("mostrar_botao_deslocamento_prop2"),
+                          shinyWidgets::actionBttn(
+                            inputId = ns("botao_prop2"),
+                            icon = icon("triangle-exclamation", style = "color: red"),
+                            color = "warning",
+                            style = "material-circle",
+                            size = "xs"
+                          )
+                        )
+                      )
+                    ),
+                    hr(),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_3"), height = "650px"))
                   )
                 )
               )
@@ -2723,7 +2723,7 @@ mod_bloco_4_server <- function(id, filtros){
       if (filtros()$nivel == "Municipal") {
         municipio1 <- municipio2 <- municipio3 <- NULL
 
-        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2020))) {
+        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2022))) {
           municipio1[i] <- tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data4_deslocamento()$codmunnasc1[i])]
           #uf_municipio_1[i] <- tabela_aux_municipios$uf[which(tabela_aux_municipios$codmunres == data4_deslocamento$codmunnasc1[i])]
           municipio2[i] <- tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data4_deslocamento()$codmunnasc2[i])]
@@ -2740,7 +2740,7 @@ mod_bloco_4_server <- function(id, filtros){
         estabelecimento <- data4_deslocamento()$nome_estabelecimento_fantasia
         partos_estabelecimento <- data4_deslocamento()$nasc_estab
 
-        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2020)
+        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2022)
         infos_municipio1 <- dplyr::if_else(
           glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
           glue::glue("---"),
