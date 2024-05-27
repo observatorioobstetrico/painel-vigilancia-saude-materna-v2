@@ -73,13 +73,13 @@ mod_bloco_5_ui <- function(id) {
           ),
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
           )
         ),
         fluidRow(
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
           ),
           column(
             width = 6,
@@ -279,6 +279,34 @@ mod_bloco_5_ui <- function(id) {
           ),
           column(
             width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao7"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao7"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 430))
+            )
+          ),
+          column(
+            width = 6,
             fluidRow(
               column(
                 width = 12,
@@ -287,7 +315,7 @@ mod_bloco_5_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
@@ -319,34 +347,6 @@ mod_bloco_5_ui <- function(id) {
               headerBorder = FALSE,
               style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao7"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao7"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 500))
-            )
-          ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
                 style = "height: 20%; display: flex; align-items: center",
                 HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
                 shinyjs::hidden(
@@ -363,7 +363,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 470))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 430))
             )
           )
         )
