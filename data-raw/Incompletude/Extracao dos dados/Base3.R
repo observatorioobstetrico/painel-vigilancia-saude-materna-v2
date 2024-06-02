@@ -10,26 +10,7 @@ require(survival)
 require(truncnorm)
 require(LaplacesDemon)
 require(TeachingDemos)
-require(coda)
-library(foreign)
-library("reshape2")
-library(tidyr)
-# IMPORTACAO --------------------------------------------------------------
 
-TPROBSON_PARTO<- read_delim(("bases_novas/TPROBSON_PARTO_muni.csv"),
-                    delim = ",", escape_double = FALSE, trim_ws = TRUE)
-dados_nasc <- read_delim("bases_novas/total_nascidos_CODMUNRES.csv",
-                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
-# CRIACAO TABELA BASE MUNICIPIOS COMPARACAO -------------------------------
-
-dados_nasc_agr <- dados_nasc %>%
-  rename(nasc = total_de_nascidos_vivos)
-
-janitor::get_dupes(dados_nasc_agr, codmunres)
-
-dados <- dplyr::distinct(dados_nasc_agr, ano, codmunres, .keep_all = TRUE)
-dados_nasc_antigo <- read_delim("bases/total_nascidos_CODMUNRES.csv",
-                                delim = ",", escape_double = FALSE, trim_ws = TRUE)
 dados_nasc_agr_antigo <- dados_nasc_antigo %>% select(-...1) |>
   rename(nasc = TOTAL_DE_NASCIDOS_VIVOS)
 sum(dados_nasc_agr |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
@@ -57,10 +38,10 @@ names(dados_nasc_agr) <- names(dados_nasc_agr) |> toupper()
 # TPROBSON-PARTO ----------------------------------------------------------
 ## CORRIGINDO O ERRO DE 2013
 TPROBSON_PARTO_antigo <-  read_delim(("bases/TPROBSON_PARTO_muni.csv"),
-                               delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  rename(CODMUNRES = Municipio,
-         ANO = Ano,
-         NASC = Nascidos)
+                               delim = ",", escape_double = FALSE, trim_ws = TRUE) #|>
+  #rename(CODMUNRES = Municipio,
+  #       ANO = Ano,
+  #       NASC = Nascidos)
 TPROBSON_PARTO <- TPROBSON_PARTO |>
   rbind(TPROBSON_PARTO_antigo[TPROBSON_PARTO_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','TPROBSON', 'PARTO')])
 
@@ -85,4 +66,4 @@ UFS <- data.frame(
 dados_TPROBSON_PARTO$CODMUNRES <- dados_TPROBSON_PARTO$CODMUNRES %>% as.character()
 dados_TPROBSON_PARTO <-merge(dados_TPROBSON_PARTO, UFS, by.x = "aux", by.y = "COD", all.x = TRUE)
 dados_final_2 <- dados_TPROBSON_PARTO %>% select(-c(aux))
-write.csv(dados_final_2,'Base_3_2012-2022.csv')
+write.csv(dados_final_2,'Base_3_2012-2022_v2.csv')

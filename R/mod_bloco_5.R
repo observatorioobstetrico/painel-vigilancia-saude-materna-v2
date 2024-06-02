@@ -351,9 +351,9 @@ mod_bloco_5_ui <- function(id) {
                 HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
-                    id = ns("mostrar_botao7"),
+                    id = ns("mostrar_botao8"),
                     shinyWidgets::actionBttn(
-                      inputId = ns("botao7"),
+                      inputId = ns("botao8"),
                       icon = icon("triangle-exclamation", style = "color: red"),
                       color = "warning",
                       style = "material-circle",
@@ -383,9 +383,9 @@ mod_bloco_5_ui <- function(id) {
             HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
             shinyjs::hidden(
               span(
-                id = ns("mostrar_botao7"),
+                id = ns("mostrar_botao9"),
                 shinyWidgets::actionBttn(
-                  inputId = ns("botao7"),
+                  inputId = ns("botao9"),
                   icon = icon("triangle-exclamation", style = "color: red"),
                   color = "warning",
                   style = "material-circle",
@@ -673,6 +673,84 @@ mod_bloco_5_server <- function(id, filtros){
     },
     ignoreNULL = FALSE
     )
+
+    # Gráfico de porcentagem de nascidos vivoc com asfixia
+    # dentre os com anomailia e peso > 2500
+
+    observeEvent(input$botao6, {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$peso,
+        variavel_incompletude1 = "PESO",
+        descricao_incompletude1 = "em branco ou preenchida com 9999",
+        incompletude2 = data_incompletude()$idanomal,
+        variavel_incompletude2 = "IDANOMAL",
+        descricao_incompletude2 = "em branco ou ignorados",
+        df = data_incompletude(),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
+
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao6", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$peso > 5, na.rm = TRUE) |
+            any(data_incompletude()$idanomal > 5, na.rm = TRUE) |
+            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao6", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+
+    # Gráfico de porcentagem de nascidos com condições
+    # potencialmente ameaçadoras a vida
+
+    observeEvent(input$botao7, {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$peso,
+        variavel_incompletude1 = "PESO",
+        descricao_incompletude1 = "em branco ou ignorados",
+        incompletude2 = data_incompletude()$gestacao,
+        variavel_incompletude2 = "GESTACAO",
+        descricao_incompletude2 = "em branco ou ignorados",
+        df = data_incompletude(),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
+
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$gestacao > 5, na.rm = TRUE) |
+            any(data_incompletude()$peso > 5, na.rm = TRUE) |
+            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+    # Porcentagem de nascidos vivos com malformação
+
+    observeEvent(c(input$botao8,input$botao9), {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$idanomal,
+        variavel_incompletude1 = "IDANOMAL",
+        descricao_incompletude1 = "em branco ou ignorados",
+        df = data_incompletude(),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
+
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao8", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao9", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$idanomal > 5, na.rm = TRUE) |
+            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao8", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao9", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+
 
 
     # Para o resumo do período ------------------------------------------------

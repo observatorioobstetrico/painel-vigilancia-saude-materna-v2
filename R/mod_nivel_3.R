@@ -891,6 +891,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         infos_indicador()$numerador_incompletude1 == "gestacao_incompletos" ~ "em branco ou sem informação",
         infos_indicador()$numerador_incompletude1 == "semagestac_incompletos" ~ "em branco ou sem informação",
         infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos" ~ "em branco ou sem informação",
+        infos_indicador()$numerador_incompletude1 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)"
       )
 
       descricao_incompletude2 <- dplyr::case_when(
@@ -905,7 +906,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         infos_indicador()$numerador_incompletude2 == "tprobson_incompletos" ~ "em branco ou ignorados (TPROBSON = 11 ou 12)",
         infos_indicador()$numerador_incompletude2 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
         infos_indicador()$numerador_incompletude2 == "gestacao_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude2 == "semagestac_incompletos" ~ "em branco ou sem informação"
+        infos_indicador()$numerador_incompletude2 == "semagestac_incompletos" ~ "em branco ou sem informação",
+        infos_indicador()$numerador_incompletude2 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)"
       )
 
       cria_modal_incompletude(
