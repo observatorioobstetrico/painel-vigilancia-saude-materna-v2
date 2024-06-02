@@ -579,20 +579,27 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/ta
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
 # Criando o data.frame que irá receber todos os dados do bloco 1
 df_bloco1 <- data.frame()
 
 # Total de nascidos vivos -------------------------------------------------
 # Baixar os dados ano a ano
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
 
 df <- df_microdatasus_aux %>%
   mutate(ano = as.numeric(substr(dtnasc, 5, 8))) %>%
@@ -613,13 +620,22 @@ df_bloco1$total_de_nascidos_vivos[is.na(df_bloco1$total_de_nascidos_vivos)] <- 0
 
 # Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
 ## Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC","IDADEMAE"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC, IDADEMAE) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
 
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
@@ -686,13 +702,22 @@ df_bloco1$nvm_maior_que_34_anos[is.na(df_bloco1$nvm_maior_que_34_anos)] <- 0
 
 
 # Proporção de nascidos vivos de mulheres brancas -------------------------
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC","RACACORMAE"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC, RACACORMAE) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
 
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
@@ -804,13 +829,22 @@ df_bloco1$nvm_indigenas[is.na(df_bloco1$nvm_indigenas)] <- 0
 
 
 # Proporção de nascidos vivos de mulheres com menos de 4 anos de estudo -------------------
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC","ESCMAE"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC, ESCMAE) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
 
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% codigos_municipios) |>
@@ -1138,7 +1172,7 @@ df_bloco1 <- df_bloco1 |>
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2022.csv", row.names = FALSE)
+write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv", row.names = FALSE)
 
 
 

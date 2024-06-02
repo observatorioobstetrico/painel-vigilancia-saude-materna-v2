@@ -7,13 +7,15 @@ library(data.table)
 library(readr)
 library(openxlsx)
 library(microdatasus)
+library(ckanr)
+library(purrr)
 
 #Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
 #Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
 df_bloco2_antigo <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2021.csv") |>
@@ -566,13 +568,22 @@ pop_com_plano_saude_tabnet <- function (linha = "Município",
 }
 
 # Total de nascidos vivos -------------------------------------------------
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
 
 df <- df_microdatasus_aux %>%
   mutate(ano = as.numeric(substr(dtnasc, 5, 8)),
@@ -589,13 +600,23 @@ df_bloco2$total_de_nascidos_vivos[is.na(df_bloco2$total_de_nascidos_vivos)] <- 0
 
 # Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
 ##Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC","IDADEMAE"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC, IDADEMAE) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
+
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% df_aux_municipios$codmunres) |>
   mutate(
@@ -640,13 +661,23 @@ df_bloco2 <- left_join(df_bloco2, df_est_pop_fem_10_19_long)
 
 
 # Proporção de nascidos vivos de mulheres com mais de 3 partos anteriores ----------------------
-df_microdatasus_aux <- microdatasus::fetch_datasus(
+df_microdatasus_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC","QTDPARTNOR","QTDPARTCES"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+# dados preliminares  SINASC 2023
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC, QTDPARTNOR, QTDPARTCES) |>
+  clean_names()
+
+df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
+
 df_microdatasus <- df_microdatasus_aux |>
   filter(codmunres %in% df_aux_municipios$codmunres) |>
   mutate(
@@ -726,13 +757,20 @@ df_bloco2$abortos_ans_40_a_49[is.na(df_bloco2$abortos_ans_40_a_49)] <- 0
 
 # Para os indicadores de aborto exclusivos da ANS ou do SUS ---------------
 ##Baixando os dados de nascidos vivos
-df_nascidos_aux <- microdatasus::fetch_datasus(
+df_nascidos_aux1 <- microdatasus::fetch_datasus(
   year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC"),
   information_system = "SINASC"
 ) |>
   clean_names()
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, DTNASC) |>
+  clean_names()
+
+df_nascidos_aux <- rbind(df_nascidos_aux1, sinasc23)
 
 df_nascidos <- df_nascidos_aux |>
   mutate(ano = as.numeric(substr(dtnasc, 5, 8)),
@@ -864,4 +902,4 @@ sum(df_bloco2 |> filter(ano < 2022 ) |> pull(pop_fem_10_49)) - sum(df_bloco2_ant
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2022.csv", row.names = FALSE)
+write.csv(df_bloco2, "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2023.csv", row.names = FALSE)

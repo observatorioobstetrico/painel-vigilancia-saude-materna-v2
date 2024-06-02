@@ -1,11 +1,13 @@
 library(tidyverse)
+library(data.table)
+library(dplyr)
 
 #Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("Databases/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
 #Criando o data.frame que irá receber todos os dados do bloco 4
 df_bloco4 <- data.frame()
@@ -28,8 +30,14 @@ for (ano in 2012:2022) {
 }
 
 # Juntar os dataframes da lista em um único dataframe
-df <- bind_rows(df_list)
+df1 <- bind_rows(df_list)
 
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  mutate(ano = 2023) |>
+  select(CODMUNRES, ano)
+
+df <- rbind(df1, sinasc23)
 
 df <- df %>%
   group_by(ano, CODMUNRES) %>%
@@ -65,7 +73,14 @@ for (ano in 2012:2022) {
 }
 
 # Juntar os dataframes da lista em um único dataframe
-df <- bind_rows(df_list)
+df1 <- bind_rows(df_list)
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  select(CODMUNRES, PARTO) |>
+  mutate(ano = 2023)
+
+df <- rbind(df1, sinasc23)
 
 
 df <- df |>
@@ -102,7 +117,16 @@ for (ano in 2012:2022) {
 }
 
 # Juntar os dataframes da lista em um único dataframe
-df_robson <- bind_rows(df_list)
+df_robson1 <- bind_rows(df_list)
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  mutate(ano = 2023) |>
+  select(CODMUNRES, TPROBSON, ano)
+
+sinasc23$TPROBSON <- as.character(sinasc23$TPROBSON)
+
+df_robson <- rbind(df_robson1, sinasc23)
 
 
 # Número de nascidos vivos de mulheres pertencentes ao grupo 1 de Robson
@@ -113,7 +137,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "01") |>
+  filter(TPROBSON == "01" | TPROBSON == "1") |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_1 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -139,7 +163,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "02") |>
+  filter(TPROBSON == "02" | TPROBSON == "2") |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_2 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -162,7 +186,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "03") |>
+  filter(TPROBSON == "03" | TPROBSON == "3") |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_3 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -186,7 +210,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "04") |>
+  filter(TPROBSON == "04" | TPROBSON == "4") |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_4 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -210,7 +234,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "05") |>
+  filter(TPROBSON == "05" | TPROBSON == "5") |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_5 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -233,7 +257,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON >= "06" & TPROBSON <= "09") |>
+  filter(TPROBSON  %in% c("06", "07", "08", "09", "6", "7","8", "9")) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_6_ao_9 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -287,7 +311,14 @@ for (ano in 2012:2022) {
 }
 
 # Juntar os dataframes da lista em um único dataframe
-df_cesariana <- bind_rows(df_list)
+df_cesariana1 <- bind_rows(df_list)
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  mutate(ano = 2023) |>
+  select(ano, CODMUNRES, TPROBSON, PARTO)
+
+df_cesariana <- rbind(df_cesariana1, sinasc23)
 
 ## Número de nascidos vivos de mães do grupo 1
 
@@ -298,7 +329,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "01" & PARTO == 2) |>
+  filter((TPROBSON == "01" | TPROBSON == "1") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_1 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -322,7 +353,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "02" & PARTO == 2) |>
+  filter((TPROBSON == "02" | TPROBSON == "2") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_2 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -346,7 +377,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "03" & PARTO == 2) |>
+  filter((TPROBSON == "03" | TPROBSON == "3") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_3 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -370,7 +401,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "04" & PARTO == 2) |>
+  filter((TPROBSON == "04" | TPROBSON == "4") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_4 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -394,7 +425,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "05" & PARTO == 2) |>
+  filter((TPROBSON == "05" | TPROBSON == "5") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_5 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -416,7 +447,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON >= "06" & TPROBSON <= "09" & PARTO == 2) |>
+  filter(TPROBSON %in% c("06", "07", "08", "09", "6", "7", "8", "9") & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_6_ao_9 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -454,7 +485,7 @@ df_bloco4 <- left_join(df_bloco4, df)
 df_bloco4$total_cesariana_grupo_robson_10[is.na(df_bloco4$total_cesariana_grupo_robson_10)] <- 0
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2022.csv", row.names = FALSE)
+write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2023.csv", row.names = FALSE)
 
 
 

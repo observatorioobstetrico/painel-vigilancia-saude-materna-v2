@@ -62,16 +62,16 @@ aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv"
 tabela_aux_municipios <- dplyr::left_join(dplyr::left_join(aux_municipios, aux_idhm, by = "idhm"), aux_idh_estados, by = "uf")
 
 #Lendo os arquivos originais
-bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2022.csv") |>
+bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv") |>
   janitor::clean_names()
 
-bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2022.csv") |>
+bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2023.csv") |>
   janitor::clean_names()
 
-bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2022.csv") |>
+bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2023.csv") |>
   janitor::clean_names()
 
-bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2022.csv") |>
+bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2023.csv") |>
   janitor::clean_names()
 
 bloco4_deslocamento_muni_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2020.csv") |>
@@ -122,7 +122,7 @@ bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
                    desloc_5 = sum(desloc_5),
                    desloc_6 = sum(desloc_6))
 
-bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2022.csv") |>
+bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   janitor::clean_names()
 
 asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>

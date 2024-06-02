@@ -6,36 +6,47 @@ library(openxlsx)
 library(readxl)
 library(stringr)
 library(tidyr)
+library(data.table)
 
-  df <- fetch_datasus(
-    year_start = 2012,
-    year_end = 2022,
-    vars = c("CODMUNRES", "DTNASC", "CONSPRENAT", "MESPRENAT", "SEMAGESTAC"),
-    information_system = "SINASC"
-  )
-  
-  #write.csv(df, paste0("dados_sinasc_bloco3.csv"))
+df1 <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  #vars = c("CODMUNRES", "DTNASC", "CONSPRENAT", "MESPRENAT", "SEMAGESTAC"),
+  information_system = "SINASC"
+) |>
+  select(CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
+#write.csv(df, paste0("dados_sinasc_bloco3.csv"))
 
- df_proc <- process_sinasc(df, municipality_data = T) |>
-   select(
-     CODMUNRES,
-     DTNASC,
-     CONSPRENAT,
-     MESPRENAT,
-     SEMAGESTAC
-   )
- 
-  df2 <- df |>
+df_proc <- process_sinasc(df1, municipality_data = T) |>
+  select(
+    CODMUNRES,
+    DTNASC,
+    CONSPRENAT,
+    MESPRENAT,
+    SEMAGESTAC
+  ) |>
   mutate(
-    ano = as.numeric(substr(DTNASC, 5, 8)),
+    ano = as.numeric(substr(DTNASC, 1, 4))
+  )
+
+sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+sinasc23 <- sinasc23 |>
+  mutate(ano =2023) |>
+  select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
+
+df <- rbind(df_proc, sinasc23)
+
+
+df2 <- df |>
+  mutate(
     codmunres = as.numeric(CODMUNRES),
     CONSPRENAT = as.numeric(CONSPRENAT),
     MESPRENAT = as.numeric(MESPRENAT),
     SEMAGESTAC = as.numeric(SEMAGESTAC)
-  ) |>  
+  ) |>
   mutate(
-    
+
     nascidos= 1,
     pelo_menos_uma_consulta_prenatal = case_when(
       CONSPRENAT >= 1 ~ 1,
@@ -48,17 +59,17 @@ library(tidyr)
     mais_de_sete_consultas_prenatal = case_when(
       (CONSPRENAT > 7) ~ 1,
       !(CONSPRENAT > 7) ~ 0
-      ),
+    ),
     mulheres_com_consultas_prenatal_adequadas = case_when(
       ((SEMAGESTAC < 20 & CONSPRENAT >= 1) |
-        (SEMAGESTAC >= 20 & SEMAGESTAC < 26 & CONSPRENAT >= 2) |
-        (SEMAGESTAC >= 26 & SEMAGESTAC < 30 & CONSPRENAT >= 3) |
-        (SEMAGESTAC >= 30 & SEMAGESTAC < 34 & CONSPRENAT >= 4) |
-        (SEMAGESTAC >= 34 & SEMAGESTAC < 36 & CONSPRENAT >= 5) |
-        (SEMAGESTAC >= 36 & SEMAGESTAC < 38 & CONSPRENAT >= 6) |
-        (SEMAGESTAC >= 38 & SEMAGESTAC < 40 & CONSPRENAT >= 7) |
-        (SEMAGESTAC >= 40 & CONSPRENAT >= 8)) ~ 1,
-       
+         (SEMAGESTAC >= 20 & SEMAGESTAC < 26 & CONSPRENAT >= 2) |
+         (SEMAGESTAC >= 26 & SEMAGESTAC < 30 & CONSPRENAT >= 3) |
+         (SEMAGESTAC >= 30 & SEMAGESTAC < 34 & CONSPRENAT >= 4) |
+         (SEMAGESTAC >= 34 & SEMAGESTAC < 36 & CONSPRENAT >= 5) |
+         (SEMAGESTAC >= 36 & SEMAGESTAC < 38 & CONSPRENAT >= 6) |
+         (SEMAGESTAC >= 38 & SEMAGESTAC < 40 & CONSPRENAT >= 7) |
+         (SEMAGESTAC >= 40 & CONSPRENAT >= 8)) ~ 1,
+
       !((SEMAGESTAC < 20 & CONSPRENAT >= 1) |
           (SEMAGESTAC >= 20 & SEMAGESTAC < 26 & CONSPRENAT >= 2) |
           (SEMAGESTAC >= 26 & SEMAGESTAC < 30 & CONSPRENAT >= 3) |
@@ -68,7 +79,7 @@ library(tidyr)
           (SEMAGESTAC >= 38 & SEMAGESTAC < 40 & CONSPRENAT >= 7) |
           (SEMAGESTAC >= 40 & CONSPRENAT >= 8)) ~ 0
     )
-    
+
   ) |>
   #select(codmunres, ano, nascidos) |>
   group_by(codmunres, ano) |>
@@ -78,7 +89,7 @@ library(tidyr)
     mulheres_com_inicio_precoce_do_prenatal = sum(inicio_precoce_do_prenatal, na.rm = T),
     mulheres_com_mais_de_sete_consultas_prenatal = sum(mais_de_sete_consultas_prenatal, na.rm = T),
     mulheres_com_consultas_prenatal_adequadas = sum(mulheres_com_consultas_prenatal_adequadas, na.rm = T)
-    ) |>
+  ) |>
   ungroup()
 
 #Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -86,7 +97,7 @@ codigos_municipios <- read_csv("data-raw/extracao-dos-dados/databases-antigas/ta
   pull(municipio)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2020:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
 ##Transformando as colunas que estão em caracter para numéricas
 df2 <- df2 |> mutate_if(is.character, as.numeric)
@@ -99,7 +110,7 @@ df_bloco3[is.na(df_bloco3)] <- 0
 
 # Incidência de sífilis congênita por mil nascidos vivos ------------------
 ##Lendo a base de dados obtida pelo site http://indicadoressifilis.aids.gov.br/
-df_sifilis_excel <- read_excel("Bloco_3/Databases/dados_painel_sifilis_2023.xlsx",
+df_sifilis_excel <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2023.xlsx",
                                sheet = "DADOS CONTINUAÇÃO 2"
 )
 
@@ -125,7 +136,7 @@ df_sifilis_long <- df_sifilis |>
     names_to = "ano",
     values_to = "casos_sc"
   ) |>
-  filter(ano <= 2022) |>
+  filter(ano <= 2023) |>
   mutate_if(is.character, as.numeric)
 
 ##Juntando com o restante da base do bloco 3
@@ -135,5 +146,4 @@ df_bloco3 <- left_join(df_bloco3, df_sifilis_long)
 df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
 
 # Salvando a base de dados completa -----------------
-write.csv(df_bloco3, " data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2022.csv", row.names = FALSE)
-
+write.csv(df_bloco3, " data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2023.csv", row.names = FALSE)
