@@ -13,11 +13,13 @@ df_microdatasus_aux <- data.frame()
 anos <- 2012:2022
 vars <- c("CONSPRENAT","ESCMAE","GESTACAO","IDADEMAE","MESPRENAT","PARTO",
           "PESO","QTDPARTCES","QTDPARTNOR","RACACOR","SEMAGESTAC","TPROBSON")
-# Inicialize o dataframe vazio
-df_microdatasus_aux <- data.frame()
-anos <- 2012:2022
+          #"IDANOMAL")
+# OBS: IDANOMAL foi incluida em 05/2022
+
 # Loop pelos anos
 for(var in vars){
+  # Inicialize o dataframe vazio
+    df_microdatasus_aux <- data.frame()
 for (ano in anos) {
   tryCatch({
     aux <- microdatasus::fetch_datasus(
@@ -44,7 +46,6 @@ write.csv(df, paste0("bases_novas/",var,"_muni.csv"), row.names = FALSE)
 
 # Inicialize o dataframe vazio
 df_microdatasus_aux <- data.frame()
-anos <- 2012:2022
 # Loop pelos anos
 for (ano in anos) {
   tryCatch({
@@ -70,3 +71,24 @@ df <- df_microdatasus_aux %>%
 write.csv(df, "bases_novas/TPROBSON_PARTO_muni.csv", row.names = FALSE)
 ## AS BASES DE TPROBSON E CONSPRENAT NAO POSSUEM REGISTROS EM 2013
 ## PRECISAMOS DA BASE DE 2013 PARA TPROBSON_PARTO, USAR BASE ANTIGA PARA TAL
+
+
+#### extraindo total_nascidos_vivos para comparação com bases antigas
+
+dados_aux <- read_csv("indicadores_bloco1_socioeconomicos_2012-2022.csv")
+
+dados_aux <- dados_aux %>%
+  select(codmunres, ano, total_de_nascidos_vivos) #%>%
+  #rename(CODMUNRES = codmunres,
+  #       ANO = ano,
+  #       TOTAL_DE_NASCIDOS_VIVOS = total_de_nascidos_vivos)
+
+write.csv(dados_aux, "bases_novas/total_nascidos_CODMUNRES.csv")
+
+
+
+
+
+
+
+

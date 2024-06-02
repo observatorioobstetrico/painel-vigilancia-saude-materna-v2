@@ -14,12 +14,13 @@ require(coda)
 library(foreign)
 library("reshape2")
 library(tidyr)
+library(readr)
 
 
 ## carregando dados
 
-dados <- read_csv("Base_1_2012-2022.csv") |>
-  select(-...1) |> rename(VARIAVEL = variavel   )
+dados <- read_csv("Base_1_2012-2022_v2.csv") |>
+  select(-...1) %>% rename(VARIAVEL = variavel)
 
 # teste <- janitor::get_dupes(dados, c("CODMUNNASC", "ANO", "VARIAVEL"))
 
@@ -46,12 +47,13 @@ dados3 <- dados2 %>%
            VARIAVEL == "QTDPARTNOR" | VARIAVEL == "QTDPARTCES" |
            VARIAVEL == "CONSPRENAT" | VARIAVEL == "MESPRENAT" |
            VARIAVEL == "PARTO" |  VARIAVEL == "TPROBSON" |
-           VARIAVEL == "PESO" | VARIAVEL == "GESTACAO" | VARIAVEL == "SEMAGESTAC"
+           VARIAVEL == "PESO" | VARIAVEL == "GESTACAO" | VARIAVEL == "SEMAGESTAC" |
+           VARIAVEL == "IDANOMAL"
   ) %>%
   mutate(INCOMPLETOS = NULOS + IGNORADOS) %>%
   select(CODMUNRES, ANO, VARIAVEL, INCOMPLETOS, TOTAIS) # VARIAVEL1,
 
-dados_aux <- read_csv("Base_3_2012-2022.csv") |>
+dados_aux <- read_csv("Base_3_2012-2022_v2.csv") |>
   select(-...1) |> mutate(VARIAVEL = 'PARTO_TPROBSON') |> rename(INCOMPLETOS = INCOMPLETUDE)
 dados_aux$UF <- NULL
 
