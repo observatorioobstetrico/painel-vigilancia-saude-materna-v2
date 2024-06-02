@@ -402,9 +402,12 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
-                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_resto")), proxy.height = "332px")
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_deslocamento_resto")), proxy.height = "332px")
                 )
               )
             ),
@@ -505,25 +508,14 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
-                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px")
-                )#,
-                # column(
-                #   width = 6,
-                #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_deslocamento_muni")), proxy.height = "332px")
-                # )
-              )#,
-              # fluidRow(
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_deslocamento_muni")), proxy.height = "332px")
-              #   ),
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_deslocamento_muni")), proxy.height = "332px")
-              #   )
-              # )
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_deslocamento_muni")), proxy.height = "332px")
+                )
+              )
             ),
             shinyjs::hidden(
               column(
@@ -3405,6 +3397,62 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
+    output$caixa_b4_i6_deslocamento_muni <- renderUI({
+      tryCatch({
+        cria_caixa_server(
+          dados = data4_deslocamento_resumo(),
+          indicador = "prop_partos_fora_uf_res",
+          titulo = "Porcentagem de partos ocorridos fora da UF de residência",
+          tem_meta = FALSE,
+          valor_de_referencia = data4_deslocamento_resumo_brasil()$prop_partos_fora_uf_res,
+          tipo = "porcentagem",
+          invertido = FALSE,
+          tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+          fonte_titulo = "15px",
+          pagina = "bloco_4",
+          nivel_de_analise = ifelse(
+            filtros()$comparar == "Não",
+            filtros()$nivel,
+            ifelse(
+              input$localidade_resumo5 == "escolha1",
+              filtros()$nivel,
+              filtros()$nivel2
+            )
+          )
+        )
+      },
+      error = function(e) {}
+      )
+    })
+
+    output$caixa_b4_i6_deslocamento_resto <- renderUI({
+      tryCatch({
+        cria_caixa_server(
+          dados = data4_deslocamento_resumo(),
+          indicador = "prop_partos_fora_uf_res",
+          titulo = "Porcentagem de partos ocorridos fora da UF de residência",
+          tem_meta = FALSE,
+          valor_de_referencia = data4_deslocamento_resumo_brasil()$prop_partos_fora_uf_res,
+          tipo = "porcentagem",
+          invertido = FALSE,
+          tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+          fonte_titulo = "15px",
+          pagina = "bloco_4",
+          nivel_de_analise = ifelse(
+            filtros()$comparar == "Não",
+            filtros()$nivel,
+            ifelse(
+              input$localidade_resumo4 == "escolha1",
+              filtros()$nivel,
+              filtros()$nivel2
+            )
+          )
+        )
+      },
+      error = function(e) {}
+      )
+    })
+
     titulo_caixinhas_mediana <- reactive({
       if (filtros()$nivel == "Municipal") {
         dplyr::case_when(
@@ -3424,91 +3472,6 @@ mod_bloco_4_server <- function(id, filtros){
         )
       }
     })
-
-    output$caixa_b4_i6_deslocamento_muni <- renderUI({
-      # tryCatch({
-        cria_caixa_server(
-          dados = data4_deslocamento_resumo_med(),
-          indicador = "no_local",
-          titulo = glue::glue("Mediana de deslocamento do total de partos ocorridos {titulo_caixinhas_mediana()}"),
-          tem_meta = FALSE,
-          valor_de_referencia = NaN,
-          tipo = "km",
-          invertido = FALSE,
-          tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-          fonte_titulo = "15px",
-          pagina = "bloco_4",
-          nivel_de_analise = ifelse(
-            filtros()$comparar == "Não",
-            filtros()$nivel,
-            ifelse(
-              input$localidade_resumo5 == "escolha1",
-              filtros()$nivel,
-              filtros()$nivel2
-            )
-          )
-        )
-      # },
-      # error = function(e) {}
-      # )
-    })
-
-    output$caixa_b4_i7_deslocamento_muni <- renderUI({
-      # tryCatch({
-        cria_caixa_server(
-          dados = data4_deslocamento_resumo_med(),
-          indicador = "baixa_complexidade",
-          titulo = glue::glue("Mediana de deslocamento para serviços de baixa complexidade do total de partos ocorridos {titulo_caixinhas_mediana()}"),
-          tem_meta = FALSE,
-          valor_de_referencia = NaN,
-          tipo = "km",
-          invertido = FALSE,
-          tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-          fonte_titulo = "15px",
-          pagina = "bloco_4",
-          nivel_de_analise = ifelse(
-            filtros()$comparar == "Não",
-            filtros()$nivel,
-            ifelse(
-              input$localidade_resumo5 == "escolha1",
-              filtros()$nivel,
-              filtros()$nivel2
-            )
-          )
-        )
-      # },
-      # error = function(e) {}
-      # )
-    })
-
-    output$caixa_b4_i8_deslocamento_muni <- renderUI({
-      # tryCatch({
-        cria_caixa_server(
-          dados = data4_deslocamento_resumo_med(),
-          indicador = "alta_complexidade",
-          titulo = glue::glue("Mediana de deslocamento para serviços de alta complexidade do total de partos ocorridos {titulo_caixinhas_mediana()}"),
-          tem_meta = FALSE,
-          valor_de_referencia = NaN,
-          tipo = "km",
-          invertido = FALSE,
-          tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-          fonte_titulo = "15px",
-          pagina = "bloco_4",
-          nivel_de_analise = ifelse(
-            filtros()$comparar == "Não",
-            filtros()$nivel,
-            ifelse(
-              input$localidade_resumo5 == "escolha1",
-              filtros()$nivel,
-              filtros()$nivel2
-            )
-          )
-        )
-      # },
-      # error = function(e) {}
-      # )
-    })
-
 
     data4_deslocamento <- reactive({
       if (filtros()$nivel == "Municipal") {
