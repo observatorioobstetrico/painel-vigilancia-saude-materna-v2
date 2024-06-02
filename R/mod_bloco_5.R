@@ -535,6 +535,7 @@ mod_bloco_5_server <- function(id, filtros){
           peso = round(sum(peso_incompletos, na.rm = TRUE)/sum(peso_totais, na.rm = TRUE) * 100, 2),
           gestacao = round(sum(gestacao_incompletos, na.rm = TRUE)/sum(gestacao_totais, na.rm = TRUE) * 100, 2),
           semagestac = round(sum(semagestac_incompletos, na.rm = TRUE)/sum(semagestac_totais, na.rm = TRUE) * 100, 2),
+          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE)/sum(idanomal_totais,na.rm = TRUE) *100, 2),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
