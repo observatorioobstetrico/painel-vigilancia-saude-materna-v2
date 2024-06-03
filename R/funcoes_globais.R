@@ -1008,7 +1008,7 @@ momento_obitos <- function(aba, grafico, input){
       if(length(input) < 2){
         return(paste(input, collapse = "|"))
       } else {
-        return("evitaveis_fetal_imunoprevencao2|evitaveis_fetal_mulher_gestacao2|evitaveis_fetal_parto2|evitaveis_fetal_recem_nascido2|evitaveis_fetal_tratamento2|evitaveis_fetal_saude2|evitaveis_fetal_mal_definidas2|evitaveis_fetal_outros2")
+        return("evitaveis_fetal_imunoprevencao2|evitaveis_fetal_mulher_gestacao2|evitaveis_fetal_parto2|evitaveis_fetal_nao_aplica2|evitaveis_fetal_mal_definidas2|evitaveis_fetal_outros2")
       }
 
 
