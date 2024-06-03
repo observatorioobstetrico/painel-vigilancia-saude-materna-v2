@@ -1223,23 +1223,19 @@ write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_
 # Nova Referência de causas evitáveis --------------------------------------------------------
 ## Criando um vetor com as cids
 
-df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/evitabilidade_fetal.xlsx")
+df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/evitabilidade_fetal.xlsx", sheet = "Fetal")
 colnames(df_cids_fetal_evitaveis2) <- c("nome", "cid")
 
 
-imunoprevencao2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por ações de imunoprevenção")$cid
+imunoprevencao2 <- filter(df_cids_fetal_evitaveis2, nome == "Imunoprevenção")$cid
 
-mulher_gestacao2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por adequada atenção à mulher na gestação")$cid
+mulher_gestacao2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por adequada atenção à mulher na gestação")$cid
 
-evitaveis_parto2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíveis por adequada atenção à mulher no parto")$cid
-
-recem_nascido2 <- filter(df_cids_fetal_evitaveis2, nome == "Mortes reduzíves por adequada atenção ao feto e recém nascido" )$cid
-
-tratamento2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por ações adequadas de diagnóstico e tratamento")$cid
-
-saude2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por ações adequadas de promoção à saúde, vinculadas a ações adequadas de atenção à saúde")$cid
+evitaveis_parto2 <- filter(df_cids_fetal_evitaveis2, nome == "Reduzíveis por adequada atenção à mulher no parto")$cid
 
 mal_definidas2 <- filter(df_cids_fetal_evitaveis2, nome == "Causas de morte mal-definidas")$cid
+
+nao_aplica2 <- filter(df_cids_fetal_evitaveis2, nome == "Não se aplicam ao óbito fetal")$cid
 
 ## Causas evitáveis para óbitos fetais ------------------------------------
 df_evitaveis_fetal2 <- df_sim_dofet |>
@@ -1252,9 +1248,7 @@ df_evitaveis_fetal2 <- df_sim_dofet |>
       causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_imunoprevencao2",
       causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_mulher_gestacao2",
       causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_parto2",
-      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_recem_nascido2",
-      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_tratamento2",
-      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_saude2",
+      causabas %in% nao_aplica2 | causabas2 %in% nao_aplica2 ~ "evitaveis_fetal_nao_aplica2",
       causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_mal_definidas2"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_outros2", grupo_cid)
@@ -1289,9 +1283,7 @@ df_evitaveis_fetal_antes2 <- df_sim_dofet_antes |>
       causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_antes_imunoprevencao2",
       causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_antes_mulher_gestacao2",
       causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_antes_parto2",
-      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_antes_recem_nascido2",
-      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_antes_tratamento2",
-      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_antes_saude2",
+      causabas %in% nao_aplica2 | causabas2 %in% nao_aplica2 ~ "evitaveis_fetal_antes_nao_aplica2",
       causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_antes_mal_definidas2"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_antes_outros2", grupo_cid)
@@ -1326,9 +1318,7 @@ df_evitaveis_fetal_durante2 <- df_sim_dofet_durante |>
       causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_durante_imunoprevencao2",
       causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_durante_mulher_gestacao2",
       causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_durante_parto2",
-      causabas %in% recem_nascido2 | causabas2 %in% recem_nascido2 ~ "evitaveis_fetal_durante_recem_nascido2",
-      causabas %in% tratamento2 | causabas2 %in% tratamento2 ~ "evitaveis_fetal_durante_tratamento2",
-      causabas %in% saude2 | causabas2 %in% saude2~ "evitaveis_fetal_durante_saude2",
+      causabas %in% nao_aplica2 | causabas2 %in% nao_aplica2 ~ "evitaveis_fetal_durante_nao_aplica2",
       causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_durante_mal_definidas2"
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_durante_outros2", grupo_cid)
