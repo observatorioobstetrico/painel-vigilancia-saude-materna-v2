@@ -463,8 +463,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
 
     indicadores_2020 <- c(
-      "porc_cobertura_esf",
-      tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco6_morbidade"]
+      "porc_cobertura_esf"
     )
 
     indicadores_2022 <- reactive({
