@@ -119,12 +119,14 @@ for (ano in 2012:2022) {
 # Juntar os dataframes da lista em um único dataframe
 df_robson1 <- bind_rows(df_list)
 
+df_robson1$TPROBSON <- as.numeric(df_robson1$TPROBSON)
+
 sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 sinasc23 <- sinasc23 |>
   mutate(ano = 2023) |>
   select(CODMUNRES, TPROBSON, ano)
 
-sinasc23$TPROBSON <- as.character(sinasc23$TPROBSON)
+#sinasc23$TPROBSON <- as.character(sinasc23$TPROBSON)
 
 df_robson <- rbind(df_robson1, sinasc23)
 
@@ -137,7 +139,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "01" | TPROBSON == "1") |>
+  filter(TPROBSON == 1) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_1 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -163,7 +165,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "02" | TPROBSON == "2") |>
+  filter(TPROBSON == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_2 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -186,7 +188,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "03" | TPROBSON == "3") |>
+  filter(TPROBSON == 3) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_3 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -210,7 +212,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "04" | TPROBSON == "4") |>
+  filter(TPROBSON == 4) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_4 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -234,7 +236,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON == "05" | TPROBSON == "5") |>
+  filter(TPROBSON == 5) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_5 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -257,7 +259,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON"))
 
 df <- df_robson |>
-  filter(TPROBSON  %in% c("06", "07", "08", "09", "6", "7","8", "9")) |>
+  filter(TPROBSON <= 9 & TPROBSON >= 6) |>
   group_by(ano, CODMUNRES) |>
   summarise(mulheres_dentro_do_grupo_de_robson_6_ao_9 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -313,6 +315,8 @@ for (ano in 2012:2022) {
 # Juntar os dataframes da lista em um único dataframe
 df_cesariana1 <- bind_rows(df_list)
 
+df_cesariana1$TPROBSON <- as.numeric(df_cesariana1$TPROBSON)
+
 sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 sinasc23 <- sinasc23 |>
   mutate(ano = 2023) |>
@@ -329,7 +333,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter((TPROBSON == "01" | TPROBSON == "1") & PARTO == 2) |>
+  filter((TPROBSON == 1) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_1 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -353,7 +357,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter((TPROBSON == "02" | TPROBSON == "2") & PARTO == 2) |>
+  filter((TPROBSON == 2) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_2 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -377,7 +381,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter((TPROBSON == "03" | TPROBSON == "3") & PARTO == 2) |>
+  filter((TPROBSON == 3) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_3 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -401,7 +405,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter((TPROBSON == "04" | TPROBSON == "4") & PARTO == 2) |>
+  filter((TPROBSON == 4) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_4 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -425,7 +429,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter((TPROBSON == "05" | TPROBSON == "5") & PARTO == 2) |>
+  filter((TPROBSON == 5) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_5 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -447,7 +451,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON %in% c("06", "07", "08", "09", "6", "7", "8", "9") & PARTO == 2) |>
+  filter(TPROBSON >= 6 & TPROBSON <= 9 & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_6_ao_9 = n()) |>
   rename(codmunres = CODMUNRES)
@@ -470,7 +474,7 @@ df <- dataframe <- data.frame()
 #                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
 
 df <- df_cesariana |>
-  filter(TPROBSON == "10" & PARTO == 2) |>
+  filter(TPROBSON == 10 & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_10 = n()) |>
   rename(codmunres = CODMUNRES)
