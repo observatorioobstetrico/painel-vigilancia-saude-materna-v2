@@ -25,7 +25,11 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 
   if (isTruthy(valor_de_referencia) & isTruthy(valor_indicador_aux)) {
     if (length(valor_de_referencia) == 1) {
-      razao <- round(valor_indicador_aux/valor_de_referencia, 1)
+      if (valor_indicador_aux == 0 & valor_de_referencia == 0) {
+        razao <- 0
+      } else {
+        razao <- round(valor_indicador_aux/valor_de_referencia, 1)
+      }
     } else {
       if (valor_indicador_aux < min(valor_de_referencia)) {
         razao <- round(valor_indicador_aux/min(valor_de_referencia), 1)
