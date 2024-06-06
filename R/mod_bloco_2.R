@@ -998,7 +998,14 @@ mod_bloco_2_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
+          highcharter::hc_yAxis(
+            title = list(text = "Taxa"),
+            min = 0,
+            max = max(c(
+              c(data2()$geral_tx_abortos_mil_mulheres_valor_medio, data2()$sus_tx_abortos_mil_mulheres_valor_medio, data2()$ans_tx_abortos_mil_mulheres_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio, data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio, data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio)
+            ), na.rm = TRUE) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
@@ -1036,7 +1043,15 @@ mod_bloco_2_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
+          highcharter::hc_yAxis(
+            title = list(text = "Taxa"),
+            min = 0,
+            max = max(c(
+              c(data2()$geral_tx_abortos_mil_mulheres_valor_medio, data2()$sus_tx_abortos_mil_mulheres_valor_medio, data2()$ans_tx_abortos_mil_mulheres_valor_medio),
+              c(data2_comp()$geral_tx_abortos_mil_mulheres_valor_medio, data2_comp()$sus_tx_abortos_mil_mulheres_valor_medio, data2_comp()$ans_tx_abortos_mil_mulheres_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio, data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio, data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio)
+            ), na.rm = TRUE) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
@@ -1107,7 +1122,14 @@ mod_bloco_2_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
+          highcharter::hc_yAxis(
+            title = list(text = "Taxa"),
+            min = 0,
+            max = max(c(
+              c(data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio)
+            ), na.rm = TRUE) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
@@ -1145,7 +1167,15 @@ mod_bloco_2_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
+          highcharter::hc_yAxis(
+            title = list(text = "Taxa"),
+            min = 0,
+            max = max(c(
+              c(data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_comp()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_comp()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_comp()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio)
+            ), na.rm = TRUE) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
