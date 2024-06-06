@@ -135,25 +135,31 @@ malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';')
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
 
-bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2022.csv") |>
+bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2022.csv", sep = ",") |>
+bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2020.csv", sep = ";") |>
   janitor::clean_names()
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2022.csv") #|>
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2023.csv") #|>
   #dplyr::select(!c(uf, municipio, regiao))
 
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2022.csv") #|>
+bloco7_neonatal_aux[is.na(bloco7_neonatal_aux)] <- 0
+
+
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2023.csv") #|>
   #dplyr::select(!(nascidos)
   #) |>
  # dplyr::select(!c(uf, municipio, regiao))
 
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2022.csv") #|>
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2023.csv") #|>
   #dplyr::select(!c(uf, municipio, regiao))
 bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
+
+bloco7_perinatal_aux[is.na(bloco7_perinatal_aux)] <- 0
+
 
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
@@ -295,6 +301,8 @@ malformacao <- malformacao |>
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
   )
+
+bloco6_aux$codmunres <- as.numeric(bloco6_aux$codmunres)
 
 bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres")
 bloco6 <- bloco6 |>
