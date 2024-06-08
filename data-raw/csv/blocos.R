@@ -80,9 +80,14 @@ bloco4_deslocamento_muni_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslo
 bloco4_deslocamento_muni_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2021-2022.csv") |>
   janitor::clean_names()
 
+bloco4_deslocamento_muni_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2023.csv") |>
+  janitor::clean_names()
+
+bloco4_deslocamento_muni_aux4 <- rbind(bloco4_deslocamento_muni_aux2, bloco4_deslocamento_muni_aux3)
+
 bloco4_deslocamento_muni_aux1$km_partos_fora_uf <- as.numeric(bloco4_deslocamento_muni_aux1$km_partos_fora_uf)
 
-bloco4_deslocamento_muni_aux <- full_join(bloco4_deslocamento_muni_aux1, bloco4_deslocamento_muni_aux2)
+bloco4_deslocamento_muni_aux <- dplyr::full_join(bloco4_deslocamento_muni_aux1, bloco4_deslocamento_muni_aux4)
 
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade)
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade)
@@ -98,15 +103,19 @@ bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_desloca
 bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2022.csv") |>
   janitor::clean_names()
 
+bloco4_deslocamento_uf_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2023.csv") |>
+  janitor::clean_names()
+
+bloco4_deslocamento_uf_aux4 <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux3)
+
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade)
 
-bloco4_deslocamento_uf_aux <- full_join(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux1)
+bloco4_deslocamento_uf_aux <- dplyr::full_join(bloco4_deslocamento_uf_aux4, bloco4_deslocamento_uf_aux1)
 
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
-
 
 bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv") |>
   janitor::clean_names() |>
