@@ -173,10 +173,10 @@ bloco7_perinatal_aux[is.na(bloco7_perinatal_aux)] <- 0
 juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
-bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv") |>
+bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv") |>
   janitor::clean_names()
 
-bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv") |>
+bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv") |>
   janitor::clean_names()
 
 bloco8_garbage_materno_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>

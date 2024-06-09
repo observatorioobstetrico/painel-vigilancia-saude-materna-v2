@@ -1905,8 +1905,8 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     )
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv", row.names = FALSE)
-write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv", row.names = FALSE)
+write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv", row.names = FALSE)
+write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv", row.names = FALSE)
 #write.csv(df_neonatais_precoce_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_precoce_2012-2022.csv", row.names = FALSE)
 
 
