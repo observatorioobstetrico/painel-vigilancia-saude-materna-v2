@@ -171,6 +171,28 @@ app_ui <- function(request) {
                   style = "display: none;"
                 )
               ),
+
+              # column(
+              #   width = 3,
+              #   conditionalPanel(
+              #     condition = "input.abas == 'nivel_1' & input.ano == 2023",
+              #     HTML("<div style = 'text-align: right;'> <b style = 'font-size: 16px'>
+              #       <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
+              #       </b> </div>")
+              #   )
+              #
+              # ),
+              # column(
+              #   width = 3,
+              #   conditionalPanel(
+              #     condition = "input.abas != 'nivel_1' & input.ano2[1] == 2023",
+              #     HTML("<div style = 'text-align: right;'> <b style = 'font-size: 16px'>
+              #       <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
+              #       </b> </div>")
+              #   )
+              #
+              # ),
+
               column(
                 width = 3,
                 selectizeInput(
@@ -294,7 +316,29 @@ app_ui <- function(request) {
                     )
                   )
                 )
-              )
+              ),
+
+              column(
+                width = 3,
+                conditionalPanel(
+                  condition = "input.abas == 'nivel_1' & input.ano == 2023",
+                  HTML("<div style = 'text-align: left;'> <b style = 'font-size: 16px'>
+                    <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
+                    </b> </div>")
+                )
+
+              ),
+              column(
+                width = 3,
+                conditionalPanel(
+                  condition = "input.abas != 'nivel_1' & input.ano2[1] == 2023",
+                  HTML("<div style = 'text-align: left;'> <b style = 'font-size: 16px'>
+                    <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
+                    </b> </div>")
+                )
+
+              ),
+
             ),
             conditionalPanel(
               condition = "input.abas != 'nivel_1' & input.abas != 'nivel_3'",
@@ -633,6 +677,8 @@ app_ui <- function(request) {
           ),
           style = "display: none;"
         ),
+
+
         tags$script(HTML("
           var openTab = function(tabName){
             $('a', $('.sidebar')).each(function() {
@@ -729,6 +775,8 @@ app_ui <- function(request) {
     )
   )
 }
+
+
 
 
 #' Add external Resources to the Application
