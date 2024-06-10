@@ -303,9 +303,14 @@ app_ui <- function(request) {
               fluidRow(
                 column(
                   width = 3,
-                  HTML("<div style = 'text-align: left;'> <b style = 'font-size: 15px'>
-                    <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
-                    </b> </div>")
+                  HTML(
+                  "
+                    <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares
+                    </b> </div>
+                    <span style='display: block; margin-bottom: 15px;'> </span>
+                  "
+                  )
                 )
               )
             ),
