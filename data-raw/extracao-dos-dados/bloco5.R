@@ -27,13 +27,13 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
 df_sinasc1 <- fetch_datasus(
   year_start = 2012,
   year_end = 2022,
-  vars = c("CODMUNRES", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
+  vars = c("CODMUNRES", "CODMUNNASC", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
   information_system = "SINASC"
 )
 
 sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 sinasc23 <- sinasc23 |>
-  select(CODMUNRES, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL)
+  select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL)
 
 sinasc23$IDANOMAL <- as.character(sinasc23$IDANOMAL)
 
@@ -74,7 +74,7 @@ for (ano in anos) {
   df_estabelecimentos <- df_cnes_st |>
     group_by(CNES, CODUFMUN, ano) |>
     summarise(vinc_sus = ifelse(all(VINC_SUS == 1), 1, 0)) |>
-    select(cnes = CNES, codmunres = CODUFMUN, ano, vinc_sus)
+    select(cnes = CNES, codmunnasc = CODUFMUN, ano, vinc_sus)
 
   write.csv(
     df_estabelecimentos,
@@ -106,11 +106,11 @@ write.csv(
   row.names = FALSE
 )
 
-# df_estabelecimentos_publicos <- fread(
-#   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_2012_2022.csv.gz",
-#   colClasses = c("character", "character", "numeric", "numeric")
-#   ) |>
-#   mutate(codmunres = as.character(codmunres))
+df_estabelecimentos_publicos <- fread(
+  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_2012_2022.csv.gz",
+  colClasses = c("character", "character", "numeric", "numeric")
+  ) |>
+  mutate(codmunnasc = as.character(codmunnasc))
 
 
 # Transformando algumas variáveis e criando as variáveis necessárias
@@ -123,7 +123,7 @@ df_bloco5_sinasc <- df_sinasc |>
     APGAR5 = as.numeric(APGAR5),
     .keep = "unused",
   ) |>
-  left_join(df_estabelecimentos_publicos, by = join_by(CODESTAB == cnes, CODMUNRES == codmunres, ano)) |>
+  left_join(df_estabelecimentos_publicos, by = join_by(CODESTAB == cnes, CODMUNNASC == codmunnasc, ano)) |>
   mutate(
     total_de_nascidos_vivos = 1,
     nascidos_vivos_com_baixo_peso = if_else(PESO < 2500, 1, 0, missing = 0),
@@ -272,12 +272,13 @@ df_aih_wide <- df_aih_completo |>
   group_by(AIHREF) |>  # Agrupando pelo N_AIH comum para todas as linhas de um episódio de cuidado completo
   summarise(
     ANO_CMPT = last(ANO_CMPT),  # Ano de processamento do SIH da última internação
+    CNES = first(CNES),
     MUNIC_RES = first(MUNIC_RES),  # Município de residência da primeira internação
     MUNIC_MOV = first(MUNIC_MOV),  # Município do estabelecimento da primeira internação
     idade_dias = first(idade_dias)  # Idade, em dias, na data da primeira internação
   ) |>
   ungroup() |>
-  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, aihref = AIHREF, idade_dias) |>
+  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias) |>
   filter(codmunres %in% df_infos_municipios$codmunres & codmunocor %in% df_infos_municipios$codmunres)
 
 ## Adicionando a informação sobre a macrorregião dos municípios de residência e ocorrência
@@ -303,7 +304,7 @@ df_bloco5_sih <- df_aih_wide_macros |>
   ) |>
   arrange(codmunres, ano) |>
   right_join(data.frame(codmunres = rep(df_infos_municipios$codmunres, each = length(2012:2022)), ano = 2012:2022)) |>
-  mutate(across(.cols = -c(codmunres, ano), .fns = ~ replace_na(., 0))) |>
+  mutate(across(.cols = -c(codmunres, cnes, ano), .fns = ~ replace_na(., 0))) |>
   mutate(
     internacoes_geral_7_a_27_dias = internacoes_na_macro_7_a_27_dias + internacoes_fora_macro_7_a_27_dias,
     internacoes_geral_menores_7_dias = internacoes_na_macro_menores_7_dias + internacoes_fora_macro_menores_7_dias,
