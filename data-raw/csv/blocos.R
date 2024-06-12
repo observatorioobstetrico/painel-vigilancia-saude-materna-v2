@@ -134,12 +134,12 @@ bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   janitor::clean_names()
 
-asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
+asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2023.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
   select(!total_de_nascidos_malformacao)
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)

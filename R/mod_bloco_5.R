@@ -892,7 +892,7 @@ mod_bloco_5_server <- function(id, filtros){
     ## Calculando uma média dos indicadores para o período selecionado --------
     data5_resumo <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$comparar == "Não") {
@@ -969,7 +969,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_resumo_referencia <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
@@ -1296,7 +1296,7 @@ mod_bloco_5_server <- function(id, filtros){
     ## Calculando os indicadores para cada ano do período selecionado ---------
     data5_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -1363,7 +1363,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_comp_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -1433,7 +1433,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_referencia_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
@@ -2249,7 +2249,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2287,7 +2287,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2327,7 +2327,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2365,7 +2365,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2395,7 +2395,7 @@ mod_bloco_5_server <- function(id, filtros){
     ### Tabela de malformações ------------------------------------------------
     data5_nascidos_vivos <- reactive({
       bloco5 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -2419,10 +2419,10 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_malformacao <- reactive({
       malformacao |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)
+            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)
           else if (filtros()$nivel == "Regional")
             regiao == filtros()$regiao
           else if (filtros()$nivel == "Estadual")
@@ -2501,7 +2501,7 @@ mod_bloco_5_server <- function(id, filtros){
               name = "Período",
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
-              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2], 2022)}")))
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2], 2023)}")))
             ),
             frequencia = reactable::colDef(
               name = "Frequência",
