@@ -887,7 +887,6 @@ mod_bloco_5_server <- function(id, filtros){
 
 
 
-
     # Para o resumo do período ------------------------------------------------
     ## Calculando uma média dos indicadores para o período selecionado --------
     data5_resumo <- reactive({
@@ -942,10 +941,10 @@ mod_bloco_5_server <- function(id, filtros){
           }
         ) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -957,12 +956,12 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_sus) * 100, 1)
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 1),
+          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -972,13 +971,13 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_sus) * 100, 1)
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 1),
+          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -1314,8 +1313,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1327,24 +1326,24 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias) == 2,
-              round(sum(internacoes_{input$local_internacao}_geral) / total_de_nascidos_vivos * 100, 2),
-              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}) / total_de_nascidos_vivos * 100, 2)
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
             )"
           )),
           porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias_sus) == 2,
-              round(sum(internacoes_{input$local_internacao_sus}_geral) / sum(nascidos_estabelecimentos_sus) * 100, 2),
-              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}) / sum(nascidos_estabelecimentos_sus) * 100, 2)
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
             )"
           )),
           class = dplyr::case_when(
@@ -1383,10 +1382,10 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1398,22 +1397,22 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias) == 2,
-              round(sum(internacoes_{input$local_internacao}_geral) / total_de_nascidos_vivos * 100, 2),
-              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}) / total_de_nascidos_vivos * 100, 2)
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
             )"
           )),
           porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias_sus) == 2,
-              round(sum(internacoes_{input$local_internacao_sus}_geral) / sum(nascidos_estabelecimentos_sus) * 100, 2),
-              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}) / sum(nascidos_estabelecimentos_sus) * 100, 2)
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
             )"
           )),
           class = dplyr::case_when(
@@ -1437,7 +1436,7 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_premat = 10,
           porc_termo_precoce = 20,
           br_porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1451,22 +1450,22 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                   nascidos_vivos_28_a_32_semanas,
                                                                                                   nascidos_vivos_33_a_34_semanas,
                                                                                                   nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias) == 2,
-              round(sum(internacoes_{input$local_internacao}_geral) / total_de_nascidos_vivos * 100, 2),
-              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}) / total_de_nascidos_vivos * 100, 2)
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
             )"
           )),
           porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
             "ifelse(
               length(input$idade_dias_sus) == 2,
-              round(sum(internacoes_{input$local_internacao_sus}_geral) / sum(nascidos_estabelecimentos_sus) * 100, 2),
-              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}) / sum(nascidos_estabelecimentos_sus) * 100, 2)
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
             )"
           )),
           localidade_comparacao = dplyr::if_else(
@@ -1589,8 +1588,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(total_de_nascidos_vivos) * 100, 1),
@@ -1602,8 +1601,8 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(total_de_nascidos_vivos) * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -1637,10 +1636,10 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(total_de_nascidos_vivos) * 100, 1),
