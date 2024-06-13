@@ -3556,7 +3556,8 @@ mod_bloco_4_server <- function(id, filtros){
     # })
 
     output$caixa_b4_i9_deslocamento_macro <- renderUI({
-        #tryCatch({
+      # req(input$localidade_resumo5)
+        # tryCatch({
           cria_caixa_server(
             dados = data4_macrorregiao_resumo(),
             indicador = "prop_desloc_7",
@@ -3572,13 +3573,13 @@ mod_bloco_4_server <- function(id, filtros){
               filtros()$comparar == "Não",
               filtros()$nivel,
               ifelse(
-                input$localidade_resumo5 == "escolha1",
+                input$localidade_resumo4 == "escolha1",
                 filtros()$nivel,
                 filtros()$nivel2
               )
             )
           )
-        #},
+        # },
         # error = function(e) {}
         # )
       })
@@ -3614,6 +3615,7 @@ mod_bloco_4_server <- function(id, filtros){
 
 
     output$caixa_b4_i10_deslocamento_macro <- renderUI({
+      # req(input$localidade_resumo5)
       #tryCatch({
       cria_caixa_server(
         dados = data4_macrorregiao_resumo(),
@@ -3630,7 +3632,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            input$localidade_resumo5 == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -3692,7 +3694,6 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 0
@@ -3975,6 +3976,7 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::summarise(
           prop_indicador = round(sum(prop_indicador), 1)
         ) |>
+        dplyr::ungroup() |>
         dplyr::mutate(
           indicador = factor(indicador, levels = c(
             "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
@@ -3986,7 +3988,6 @@ mod_bloco_4_server <- function(id, filtros){
 
           ))
         )
-        dplyr::ungroup()
     })
 
 

@@ -117,7 +117,10 @@ bloco4_deslocamento_uf_aux <- dplyr::full_join(bloco4_deslocamento_uf_aux4, bloc
 
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
 
-bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv") |>
+bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv")
+bloco4_deslocamento_macrorregiao <- rbind(bloco4_deslocamento_macrorregiao, read.csv("data-raw/csv/indicador_deslocamento_1500_2023.csv"))
+
+bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
   janitor::clean_names() |>
   dplyr::select(-c(3, 6:8, ))
 
