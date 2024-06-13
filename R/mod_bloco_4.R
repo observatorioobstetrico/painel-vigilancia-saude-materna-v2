@@ -402,17 +402,17 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
-                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_resto")), proxy.height = "332px")
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
                 )
               ),
               fluidRow(
                 column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
-                ),
-                column(
+                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
                 )
@@ -515,31 +515,21 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px"),
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_resto")), proxy.height = "332px")
+                )
+              ),
+              fluidRow(
+                column(
                   offset = 3,
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px")
-                ),
-                fluidRow(
-                  column(
-                    width = 6,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_resto")), proxy.height = "332px")
-                  ),
-                  column(
-                    width = 6,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_resto")), proxy.height = "332px")
-                  )
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_resto")), proxy.height = "332px")
                 )
-              )#,
-              # fluidRow(
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_deslocamento_muni")), proxy.height = "332px")
-              #   ),
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_deslocamento_muni")), proxy.height = "332px")
-              #   )
-              # )
+              )
             ),
             shinyjs::hidden(
               column(
@@ -3531,7 +3521,7 @@ mod_bloco_4_server <- function(id, filtros){
     #       dados =  data_plot_macrorregiao() |>
     #         dplyr::filter(prop_indicador == 'Nascidos em serviço sem UTI neonatal'),
     #       indicador = "prop_indicador",
-    #       titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+    #       titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
     #       tem_meta = FALSE,
     #       valor_de_referencia = data_plot_macrorregiao_referencia() |>
     #         dplyr::filter(br_prop_indicador == 'Nascidos em serviço sem UTI neonatal'),
@@ -3561,7 +3551,7 @@ mod_bloco_4_server <- function(id, filtros){
           cria_caixa_server(
             dados = data4_macrorregiao_resumo(),
             indicador = "prop_desloc_7",
-            titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+            titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
             tem_meta = FALSE,
             valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_7,
             tipo = "porcentagem",
@@ -3589,7 +3579,7 @@ mod_bloco_4_server <- function(id, filtros){
         cria_caixa_server(
           dados = data4_macrorregiao_resumo(),
           indicador = "prop_desloc_7",
-          titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+          titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
           tem_meta = FALSE,
           valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_7,
           tipo = "porcentagem",
@@ -3620,7 +3610,7 @@ mod_bloco_4_server <- function(id, filtros){
       cria_caixa_server(
         dados = data4_macrorregiao_resumo(),
         indicador = "prop_desloc_8",
-        titulo = "Porcentagem de RN<1500g nascidos fora da macrorregião de saúde",
+        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
         tem_meta = FALSE,
         valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_8,
         tipo = "porcentagem",
@@ -3648,7 +3638,7 @@ mod_bloco_4_server <- function(id, filtros){
       cria_caixa_server(
         dados = data4_macrorregiao_resumo(),
         indicador = "prop_desloc_8",
-        titulo = "Porcentagem de RN<1500g nascidos fora da macrorregião de saúde",
+        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
         tem_meta = FALSE,
         valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_8,
         tipo = "porcentagem",
