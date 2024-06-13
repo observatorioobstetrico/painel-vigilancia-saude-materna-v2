@@ -289,7 +289,7 @@ df_aih_wide_macros <- df_aih_wide |>
     idade_cat = ifelse(idade_dias < 7, "menores_7_dias", "7_a_27_dias"),
     indicadora_mesma_macro = ifelse(macro_r_saude_res == macro_r_saude_ocor, "na_macro", "fora_macro")
   ) |>
-  select(!c(codmunocor, aihref, idade_dias, macro_r_saude_res, macro_r_saude_ocor))
+  select(!c(cnes, codmunocor, aihref, idade_dias, macro_r_saude_res, macro_r_saude_ocor))
 
 ## Passando a base para o formato wide (um município por linha), criando uma linha para cada município e ano e preenchendo os NAs gerados com 0
 df_bloco5_sih <- df_aih_wide_macros |>
@@ -304,7 +304,7 @@ df_bloco5_sih <- df_aih_wide_macros |>
   ) |>
   arrange(codmunres, ano) |>
   right_join(data.frame(codmunres = rep(df_infos_municipios$codmunres, each = length(2012:2022)), ano = 2012:2022)) |>
-  mutate(across(.cols = -c(codmunres, cnes, ano), .fns = ~ replace_na(., 0))) |>
+  mutate(across(.cols = -c(codmunres, ano), .fns = ~ replace_na(., 0))) |>
   mutate(
     internacoes_geral_7_a_27_dias = internacoes_na_macro_7_a_27_dias + internacoes_fora_macro_7_a_27_dias,
     internacoes_geral_menores_7_dias = internacoes_na_macro_menores_7_dias + internacoes_fora_macro_menores_7_dias,
