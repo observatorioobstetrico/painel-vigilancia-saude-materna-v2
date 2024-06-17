@@ -110,14 +110,31 @@ df_bloco3[is.na(df_bloco3)] <- 0
 
 # Incidência de sífilis congênita por mil nascidos vivos ------------------
 ##Lendo a base de dados obtida pelo site http://indicadoressifilis.aids.gov.br/
-df_sifilis_excel <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2023.xlsx",
+df_sifilis_excel1 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2022.xlsx",
                                sheet = "DADOS CONTINUAÇÃO 2"
 )
 
-#Corrigindo os nomes das colunas e filtrando pelos municípios que utilizamos no painel
-names(df_sifilis_excel) <- as.character(df_sifilis_excel[1,])
+df_sifilis_excel2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2013_2023.xlsx",
+                                sheet = "DADOS CONTINUAÇÃO 2"
+)
 
-df_sifilis <- df_sifilis_excel[-1, ] |>
+#Corrigindo os nomes das colunas e filtrando pelos municípios que utilizamos no painel
+names(df_sifilis_excel1) <- as.character(df_sifilis_excel1[1,])
+names(df_sifilis_excel2) <- as.character(df_sifilis_excel2[1,])
+
+df_sifilis1 <- df_sifilis_excel1[-1, ] |>
+  clean_names() |>
+  select(
+    codmunres = codigo,
+    starts_with("sifilis_congenita_em_menores_de_um_ano_2")
+  ) |>
+  rename_with(
+    str_sub, start = -4, starts_with("sifilis_congenita_em_menores_de_um_ano_2")
+  ) |>
+  filter(codmunres %in% df_aux_municipios$codmunres) |>
+  mutate_if(is.character, as.numeric)
+
+df_sifilis2 <- df_sifilis_excel2[-1, ] |>
   clean_names() |>
   select(
     codmunres = codigo,
@@ -130,14 +147,25 @@ df_sifilis <- df_sifilis_excel[-1, ] |>
   mutate_if(is.character, as.numeric)
 
 #Passando para o formato long
-df_sifilis_long <- df_sifilis |>
+df_sifilis_long1 <- df_sifilis1 |>
   pivot_longer(
     cols = !codmunres,
     names_to = "ano",
     values_to = "casos_sc"
   ) |>
-  filter(ano <= 2023) |>
+  filter(ano <= 2020) |>
   mutate_if(is.character, as.numeric)
+
+df_sifilis_long2 <- df_sifilis2 |>
+  pivot_longer(
+    cols = !codmunres,
+    names_to = "ano",
+    values_to = "casos_sc"
+  ) |>
+  filter(ano <= 2023 & ano > 2020) |>
+  mutate_if(is.character, as.numeric)
+
+df_sifilis_long <- rbind(df_sifilis_long1, df_sifilis_long2)
 
 ##Juntando com o restante da base do bloco 3
 df_bloco3 <- left_join(df_bloco3, df_sifilis_long)
@@ -146,4 +174,4 @@ df_bloco3 <- left_join(df_bloco3, df_sifilis_long)
 df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
 
 # Salvando a base de dados completa -----------------
-write.csv(df_bloco3, " data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2023.csv", row.names = FALSE)
+write.csv(df_bloco3, "data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2023.csv", row.names = FALSE)

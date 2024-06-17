@@ -3420,20 +3420,19 @@ mod_bloco_7_server <- function(id, filtros){
 
     data7_juncao_aux_invertido1 <- reactive({
       data7_juncao_aux1() |>
-        dplyr::arrange(dplyr::desc(ano))
-      # |>
-      #   dplyr::mutate(
-      #     ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
-      #   )
+        dplyr::arrange(dplyr::desc(ano)) |>
+         dplyr::mutate(
+           ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
+         )
     })
+
 
     data7_juncao_aux_invertido2 <- reactive({
       data7_juncao_aux2() |>
-        dplyr::arrange(dplyr::desc(ano))
-      # |>
-      #   dplyr::mutate(
-      #     ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
-      #   )
+        dplyr::arrange(dplyr::desc(ano)) |>
+         dplyr::mutate(
+           ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
+         )
     })
 
 
@@ -4033,7 +4032,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(6, direction = -1)[-c(1, 6)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido1()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
 
     })
@@ -4093,7 +4092,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido2()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -4566,7 +4565,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido1()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -4627,7 +4626,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo_dist()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido2()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -5226,7 +5225,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido1()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% de óbitos"), min = 0, max = 100)
 
     })
@@ -5286,7 +5285,7 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_legend(reversed = TRUE) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_resumo()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data7_juncao_aux_invertido2()$ano), allowDecimals = FALSE, reversed = TRUE, tickInterval = 1) |>
         highcharter::hc_yAxis(title = list(text = "% óbitos"), min = 0, max = 100)
 
     })
@@ -5876,7 +5875,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_perinatal_comp <- reactive({
@@ -5924,7 +5924,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_perinatal_referencia <- reactive({
@@ -5967,7 +5968,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_perinatal_completo <- reactive({
@@ -6479,7 +6481,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |># "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                    "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_evitaveis_neonatal_comp <- reactive({
@@ -6527,7 +6530,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                    "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_evitaveis_neonatal_referencia <- reactive({
@@ -6570,7 +6574,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                    "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_evitaveis_neonatal_completo <- reactive({
@@ -6687,7 +6692,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_neonatal_comp <- reactive({
@@ -6735,7 +6741,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_neonatal_referencia <- reactive({
@@ -6778,7 +6785,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|> # "Demais causas" como ultima barra da pilha da pilha
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_neonatal_completo <- reactive({
@@ -7192,7 +7200,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                    "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_evitaveis_fetal_comp <- reactive({
@@ -7239,7 +7248,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
       dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                  "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                 "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                    ano = factor(ano, levels = 2023:2012))
 
     })
 
@@ -7282,7 +7292,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
                                                                    "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
 
     })
 
@@ -7399,7 +7410,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_fetal_comp <- reactive({
@@ -7448,7 +7460,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
                                            levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_fetal_referencia <- reactive({
@@ -7491,7 +7504,8 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")))
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = 2023:2012))
     })
 
     data_plot_grupos_fetal_completo <- reactive({
@@ -7604,7 +7618,8 @@ mod_bloco_7_server <- function(id, filtros){
       ) |>
       dplyr::ungroup()|># "Demais causas" como ultima barra da pilha da pilha
       dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                 "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")))
+                                                                 "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")),
+                    ano = factor(ano, levels = 2023:2012))
   })
 
     data_plot_evitaveis_fetal_comp2 <- reactive({
@@ -7649,7 +7664,8 @@ mod_bloco_7_server <- function(id, filtros){
       ) |>
       dplyr::ungroup()|># "Demais causas" como ultima barra da pilha da pilha
       dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                 "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")))
+                                                                 "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")),
+                    ano = factor(ano, levels = 2023:2012))
   })
 
     data_plot_evitaveis_fetal_referencia2 <- reactive({
@@ -7689,7 +7705,8 @@ mod_bloco_7_server <- function(id, filtros){
       ) |>
       dplyr::ungroup() |># "Demais causas" como ultima barra da pilha da pilha
       dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                  "Causas mal definidas","Grupos não selecionados","Não se aplicam ao óbito fetal", "Demais causas")))
+                                                                  "Causas mal definidas","Grupos não selecionados","Não se aplicam ao óbito fetal", "Demais causas")),
+                    ano = factor(ano, levels = 2023:2012))
   })
 
     data_plot_evitaveis_fetal_completo2 <- reactive({

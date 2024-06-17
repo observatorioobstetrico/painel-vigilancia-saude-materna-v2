@@ -1153,6 +1153,14 @@ dados_ab_municipios <- dados_ab_municipios |>
 dados_ab_municipios$qt_populacao <- as.numeric(str_replace(dados_ab_municipios$qt_populacao, "\\..*$", ""))
 
 
+# Vamos garantir que qt_cobertura_ab não seja maior que qt_populacao
+
+dados_ab_municipios$qt_cobertura_ab <- pmin(dados_ab_municipios$qt_cobertura_ab, dados_ab_municipios$qt_populacao)
+
+
+## importando base antiga
+
+df_bloco1 <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv", row.names = 1)
 ## Fazendo um left_join da base auxiliar de municípios com a base de cobertura
 df_bloco1 <- left_join(df_bloco1, dados_ab_municipios)
 

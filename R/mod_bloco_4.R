@@ -402,17 +402,17 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
-                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_resto")), proxy.height = "332px")
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
                 )
               ),
               fluidRow(
                 column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
-                ),
-                column(
+                  offset = 3,
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
                 )
@@ -515,31 +515,21 @@ mod_bloco_4_ui <- function(id){
               ),
               fluidRow(
                 column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px"),
+                ),
+                column(
+                  width = 6,
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_resto")), proxy.height = "332px")
+                )
+              ),
+              fluidRow(
+                column(
                   offset = 3,
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px")
-                ),
-                fluidRow(
-                  column(
-                    width = 6,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_resto")), proxy.height = "332px")
-                  ),
-                  column(
-                    width = 6,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_resto")), proxy.height = "332px")
-                  )
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_resto")), proxy.height = "332px")
                 )
-              )#,
-              # fluidRow(
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_deslocamento_muni")), proxy.height = "332px")
-              #   ),
-              #   column(
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_deslocamento_muni")), proxy.height = "332px")
-              #   )
-              # )
+              )
             ),
             shinyjs::hidden(
               column(
@@ -1198,22 +1188,6 @@ mod_bloco_4_server <- function(id, filtros){
     data4_referencia <- reactive({
       bloco4 |>
         dplyr::filter(ano >= max(filtros()$ano2[1], 2014) & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            ano >= max(filtros()$ano2[1], 2014) & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
@@ -1243,19 +1217,7 @@ mod_bloco_4_server <- function(id, filtros){
           br_contrib_robson6_a_9_tx_cesariana = round(sum(total_cesariana_grupo_robson_6_ao_9) / mulheres_com_parto_cesariana * 100, 1),
           br_contrib_robson10_tx_cesariana = round(sum(total_cesariana_grupo_robson_10) / mulheres_com_parto_cesariana * 100, 1),
           br_contrib_robson_faltante_tx_cesariana = round((mulheres_com_parto_cesariana - sum(dplyr::across(dplyr::starts_with("total_cesariana")))) / mulheres_com_parto_cesariana * 100, 1),
-          localidade_comparacao = dplyr::if_else(
-            filtros()$comparar == "Não",
-            "Média nacional",
-            dplyr::case_when(
-              filtros()$nivel2 == "Nacional" ~ "Média nacional",
-              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
-            )
-          )
+          localidade_comparacao = "Média nacional"
         ) |>
         dplyr::ungroup()
     })
@@ -2325,7 +2287,19 @@ mod_bloco_4_server <- function(id, filtros){
 
 
     ##### Criando os outputs para o segundo indicador de Robson #####
-    data4_juncao_aux <- reactive({dplyr::full_join(data4(), data4_referencia(), by = "ano")})
+    data4_juncao_aux <- reactive({
+      if (filtros()$comparar == "Sim") {
+        dplyr::full_join(
+          data4(),
+          data4_comp() |>
+            dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("prop") | dplyr::starts_with("contrib")) |>
+            dplyr::rename(localidade_comparacao = localidade),
+          by = "ano"
+        )
+      } else {
+        dplyr::full_join(data4(), data4_referencia(), by = "ano")
+      }
+    })
 
     output$plot1_indicador2 <- highcharter::renderHighchart({
       highcharter::highchart() |>
@@ -3531,7 +3505,7 @@ mod_bloco_4_server <- function(id, filtros){
     #       dados =  data_plot_macrorregiao() |>
     #         dplyr::filter(prop_indicador == 'Nascidos em serviço sem UTI neonatal'),
     #       indicador = "prop_indicador",
-    #       titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+    #       titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
     #       tem_meta = FALSE,
     #       valor_de_referencia = data_plot_macrorregiao_referencia() |>
     #         dplyr::filter(br_prop_indicador == 'Nascidos em serviço sem UTI neonatal'),
@@ -3556,11 +3530,12 @@ mod_bloco_4_server <- function(id, filtros){
     # })
 
     output$caixa_b4_i9_deslocamento_macro <- renderUI({
-        #tryCatch({
+      # req(input$localidade_resumo5)
+        # tryCatch({
           cria_caixa_server(
             dados = data4_macrorregiao_resumo(),
             indicador = "prop_desloc_7",
-            titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+            titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
             tem_meta = FALSE,
             valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_7,
             tipo = "porcentagem",
@@ -3572,13 +3547,13 @@ mod_bloco_4_server <- function(id, filtros){
               filtros()$comparar == "Não",
               filtros()$nivel,
               ifelse(
-                input$localidade_resumo5 == "escolha1",
+                input$localidade_resumo4 == "escolha1",
                 filtros()$nivel,
                 filtros()$nivel2
               )
             )
           )
-        #},
+        # },
         # error = function(e) {}
         # )
       })
@@ -3588,7 +3563,7 @@ mod_bloco_4_server <- function(id, filtros){
         cria_caixa_server(
           dados = data4_macrorregiao_resumo(),
           indicador = "prop_desloc_7",
-          titulo = "Porcentagem de RN<1500g nascidos em serviço sem UTI neonatal",
+          titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
           tem_meta = FALSE,
           valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_7,
           tipo = "porcentagem",
@@ -3614,11 +3589,12 @@ mod_bloco_4_server <- function(id, filtros){
 
 
     output$caixa_b4_i10_deslocamento_macro <- renderUI({
+      # req(input$localidade_resumo5)
       #tryCatch({
       cria_caixa_server(
         dados = data4_macrorregiao_resumo(),
         indicador = "prop_desloc_8",
-        titulo = "Porcentagem de RN<1500g nascidos fora da macrorregião de saúde",
+        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
         tem_meta = FALSE,
         valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_8,
         tipo = "porcentagem",
@@ -3630,7 +3606,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            input$localidade_resumo5 == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -3646,7 +3622,7 @@ mod_bloco_4_server <- function(id, filtros){
       cria_caixa_server(
         dados = data4_macrorregiao_resumo(),
         indicador = "prop_desloc_8",
-        titulo = "Porcentagem de RN<1500g nascidos fora da macrorregião de saúde",
+        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
         tem_meta = FALSE,
         valor_de_referencia = data4_macrorregiao_resumo_brasil()$prop_desloc_8,
         tipo = "porcentagem",
@@ -3692,7 +3668,6 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 0
@@ -3975,6 +3950,7 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::summarise(
           prop_indicador = round(sum(prop_indicador), 1)
         ) |>
+        dplyr::ungroup() |>
         dplyr::mutate(
           indicador = factor(indicador, levels = c(
             "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
@@ -3986,7 +3962,6 @@ mod_bloco_4_server <- function(id, filtros){
 
           ))
         )
-        dplyr::ungroup()
     })
 
 
@@ -4172,12 +4147,6 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()
     })
-
-
-
-
-
-
 
 
 

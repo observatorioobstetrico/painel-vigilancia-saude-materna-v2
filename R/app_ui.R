@@ -153,6 +153,7 @@ app_ui <- function(request) {
                     value = 2022,
                     min = 2012,
                     max = 2023,
+                    step = 1,
                     width = "95%"
                   ),
                   style = "display: none;"
@@ -165,34 +166,13 @@ app_ui <- function(request) {
                     min = 2012,
                     max = 2023,
                     value = c(2012, 2022),
+                    step = 1,
                     sep = '',
                     width = "90%"
                   ),
                   style = "display: none;"
                 )
               ),
-
-              # column(
-              #   width = 3,
-              #   conditionalPanel(
-              #     condition = "input.abas == 'nivel_1' & input.ano == 2023",
-              #     HTML("<div style = 'text-align: right;'> <b style = 'font-size: 16px'>
-              #       <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
-              #       </b> </div>")
-              #   )
-              #
-              # ),
-              # column(
-              #   width = 3,
-              #   conditionalPanel(
-              #     condition = "input.abas != 'nivel_1' & input.ano2[1] == 2023",
-              #     HTML("<div style = 'text-align: right;'> <b style = 'font-size: 16px'>
-              #       <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
-              #       </b> </div>")
-              #   )
-              #
-              # ),
-
               column(
                 width = 3,
                 selectizeInput(
@@ -316,29 +296,23 @@ app_ui <- function(request) {
                     )
                   )
                 )
-              ),
-
-              column(
-                width = 3,
-                conditionalPanel(
-                  condition = "input.abas == 'nivel_1' & input.ano == 2023",
-                  HTML("<div style = 'text-align: left;'> <b style = 'font-size: 16px'>
-                    <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
-                    </b> </div>")
+              )
+            ),
+            conditionalPanel(
+              condition = "(input.abas == 'nivel_1' & input.ano == 2023) | (input.abas != 'nivel_1' & input.ano2[1] == 2023)",
+              fluidRow(
+                column(
+                  width = 3,
+                  HTML(
+                  "
+                    <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares
+                    </b> </div>
+                    <span style='display: block; margin-bottom: 15px;'> </span>
+                  "
+                  )
                 )
-
-              ),
-              column(
-                width = 3,
-                conditionalPanel(
-                  condition = "input.abas != 'nivel_1' & input.ano2[1] == 2023",
-                  HTML("<div style = 'text-align: left;'> <b style = 'font-size: 16px'>
-                    <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 são preliminares </a>
-                    </b> </div>")
-                )
-
-              ),
-
+              )
             ),
             conditionalPanel(
               condition = "input.abas != 'nivel_1' & input.abas != 'nivel_3'",

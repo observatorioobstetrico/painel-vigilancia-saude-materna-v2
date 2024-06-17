@@ -79,19 +79,26 @@ mod_bloco_5_ui <- function(id) {
         fluidRow(
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
           ),
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i11")), proxy.height = "325px")
           )
         ),
         fluidRow(
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i9")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
           ),
           column(
+            width = 6,
+            shinycssloaders::withSpinner(uiOutput(ns("b5_i9")), proxy.height = "325px")
+          )
+        ),
+        fluidRow(
+          column(
+            offset = 3,
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i8")), proxy.height = "325px")
           )
@@ -357,20 +364,84 @@ mod_bloco_5_ui <- function(id) {
                 ),
                 column(
                   width = 6,
-                  selectizeInput(
-                    inputId = ns("idade_dias"),
-                    label = "Idade, em dias, do bebê",
-                    options = list(placeholder = "Selecione a idade do bebê"),
-                    choices = c(
-                      "De 0 a 27 dias de idade" = "geral",
-                      "Menor que 7 dias de idade" = "menores_7_dias",
-                      "De 7 a 27 dias de idade" = "7_a_27_dias"
-                    ),
-                    width = "100%"
+                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                  tags$div(
+                    align = 'left',
+                    class = 'multicol',
+                    checkboxGroupInput(
+                      inputId = ns("idade_dias"),
+                      label = NULL,
+                      choices = c(
+                        "0 a 6 dias" = "menores_7_dias",
+                        "7 a 27 dias" = "7_a_27_dias"
+                      ),
+                      selected = c("menores_7_dias", "7_a_27_dias")
+                    )
                   )
                 )
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 370))
+            )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao11"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao11"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              fluidRow(
+                column(
+                  width = 6,
+                  selectizeInput(
+                    inputId = ns("local_internacao_sus"),
+                    label = "Local da internação",
+                    options = list(placeholder = "Selecione o local de internação"),
+                    choices = c(
+                      "Todos" = "geral",
+                      "Dentro da macrorregião de saúde" = "na_macro",
+                      "Fora da macrorregião de saúde" = "fora_macro"
+                    ),
+                    width = "100%"
+                  )
+                ),
+                column(
+                  width = 6,
+                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                  tags$div(
+                    align = 'left',
+                    class = 'multicol',
+                    checkboxGroupInput(
+                      inputId = ns("idade_dias_sus"),
+                      label = NULL,
+                      choices = c(
+                        "0 a 6 dias" = "menores_7_dias",
+                        "7 a 27 dias" = "7_a_27_dias"
+                      ),
+                      selected = c("menores_7_dias", "7_a_27_dias")
+                    )
+                  )
+                )
+              ),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 370))
             )
           ),
           column(
@@ -402,22 +473,6 @@ mod_bloco_5_ui <- function(id) {
             )
           ),
           column(
-            width = 12,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritárias para vigilância definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
-              ),
-              hr(),
-              shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
-            )
-          ),
-          column(
             width = 6,
             bs4Dash::bs4Card(
               width = 12,
@@ -444,34 +499,52 @@ mod_bloco_5_ui <- function(id) {
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 450))
             )
-          ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 18%; display: flex; align-items: center",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao9"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao9"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          width = 4,
+          bs4Dash::bs4Card(
+            width = 12,
+            status = "primary",
+            collapsible = FALSE,
+            headerBorder = FALSE,
+            style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+            div(
+              style = "height: 18%; display: flex; align-items: center",
+              HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
+              shinyjs::hidden(
+                span(
+                  id = ns("mostrar_botao9"),
+                  shinyWidgets::actionBttn(
+                    inputId = ns("botao9"),
+                    icon = icon("triangle-exclamation", style = "color: red"),
+                    color = "warning",
+                    style = "material-circle",
+                    size = "xs"
                   )
                 )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 430))
-            )
+              )
+            ),
+            hr(),
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 460))
+          )
+        ),
+        column(
+          width = 8,
+          bs4Dash::bs4Card(
+            width = 12,
+            status = "primary",
+            collapsible = FALSE,
+            headerBorder = FALSE,
+            style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+            div(
+              style = "height: 15%; display: flex; align-items: center;",
+              HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritárias para vigilância definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
+            ),
+            hr(),
+            shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
           )
         )
       )
@@ -814,12 +887,11 @@ mod_bloco_5_server <- function(id, filtros){
 
 
 
-
     # Para o resumo do período ------------------------------------------------
     ## Calculando uma média dos indicadores para o período selecionado --------
     data5_resumo <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$comparar == "Não") {
@@ -869,10 +941,10 @@ mod_bloco_5_server <- function(id, filtros){
           }
         ) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -884,26 +956,28 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral) / total_de_nascidos_vivos * 100, 1)
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 1),
+          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
 
     data5_resumo_referencia <- reactive({
       dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
-          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral) / total_de_nascidos_vivos * 100, 1)
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_internacoes_menores_28_dias = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 1),
+          porc_internacoes_menores_28_dias_sus = round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -1161,9 +1235,34 @@ mod_bloco_5_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5_resumo(),
         indicador = "porc_internacoes_menores_28_dias",
-        titulo = "Porcentagem de internações em bebês com até 27 dias de vida",
+        titulo = "Porcentagem de internações em bebês com até 27 dias de vida (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "320px",
+        fonte_titulo = "15px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+    output$b5_i11 <- renderUI({
+      cria_caixa_server(
+        dados = data5_resumo(),
+        indicador = "porc_internacoes_menores_28_dias_sus",
+        titulo = "Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS (geral)",
+        tem_meta = TRUE,
+        valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_sus,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
@@ -1196,7 +1295,7 @@ mod_bloco_5_server <- function(id, filtros){
     ## Calculando os indicadores para cada ano do período selecionado ---------
     data5_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -1214,8 +1313,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1227,14 +1326,25 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
-            "round(sum(internacoes_{input$local_internacao}_{input$idade_dias}) / total_de_nascidos_vivos * 100, 2)"
+            "ifelse(
+              length(input$idade_dias) == 2,
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
+            )"
+          )),
+          porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
+            "ifelse(
+              length(input$idade_dias_sus) == 2,
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
+            )"
           )),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
@@ -1252,7 +1362,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_comp_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -1272,10 +1382,10 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1287,12 +1397,23 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
-            "round(sum(internacoes_{input$local_internacao}_{input$idade_dias}) / total_de_nascidos_vivos * 100, 2)"
+            "ifelse(
+              length(input$idade_dias) == 2,
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
+            )"
+          )),
+          porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
+            "ifelse(
+              length(input$idade_dias_sus) == 2,
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
+            )"
           )),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
@@ -1311,11 +1432,11 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_referencia_aux <- reactive({
       dplyr::left_join(bloco5, asfixia) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2022, 0, .)) |>
+        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.) & ano <= 2023, 0, .)) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
           porc_premat = 10,
           porc_termo_precoce = 20,
           br_porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso) * 100, 1),
@@ -1329,12 +1450,23 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                   nascidos_vivos_28_a_32_semanas,
                                                                                                   nascidos_vivos_33_a_34_semanas,
                                                                                                   nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / soma_total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / total_de_nascidos_vivos * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / soma_total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / soma_total_de_nascidos_vivos * 100, 1),
           porc_internacoes_menores_28_dias := !!rlang::parse_expr(glue::glue(
-            "round(sum(internacoes_{input$local_internacao}_{input$idade_dias}) / total_de_nascidos_vivos * 100, 2)"
+            "ifelse(
+              length(input$idade_dias) == 2,
+              round(sum(internacoes_{input$local_internacao}_geral[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao}_{input$idade_dias[1]}[ano <= 2022]) / sum(total_de_nascidos_vivos[ano <= 2022]) * 100, 2)
+            )"
+          )),
+          porc_internacoes_menores_28_dias_sus := !!rlang::parse_expr(glue::glue(
+            "ifelse(
+              length(input$idade_dias_sus) == 2,
+              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2),
+              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 2)
+            )"
           )),
           localidade_comparacao = dplyr::if_else(
             filtros()$comparar == "Não",
@@ -1456,8 +1588,8 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(total_de_nascidos_vivos) * 100, 1),
@@ -1469,8 +1601,8 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                                nascidos_vivos_28_a_32_semanas,
                                                                                                nascidos_vivos_33_a_34_semanas,
                                                                                                nascidos_vivos_35_a_36_semanas)))) / sum(total_de_nascidos_vivos) * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -1504,10 +1636,10 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
+          soma_total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_premat = round(sum(nascidos_vivos_prematuros)/soma_total_de_nascidos_vivos * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/soma_total_de_nascidos_vivos * 100, 1),
           porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(total_de_nascidos_vivos) * 100, 1),
           porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(total_de_nascidos_vivos) * 100, 1),
@@ -1876,7 +2008,10 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data5_aux()$porc_internacoes_menores_28_dias, data5_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_referencia_aux()$porc_internacoes_menores_28_dias, data5_referencia_aux()$porc_internacoes_menores_28_dias_sus)
+          ), na.rm = TRUE) + 1) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
           grafico_base
@@ -1907,7 +2042,11 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data5_aux()$porc_internacoes_menores_28_dias, data5_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_comp_aux()$porc_internacoes_menores_28_dias, data5_comp_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_referencia_aux()$porc_internacoes_menores_28_dias, data5_referencia_aux()$porc_internacoes_menores_28_dias_sus)
+          ), na.rm = TRUE) + 1) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
@@ -1918,6 +2057,74 @@ mod_bloco_5_server <- function(id, filtros){
               type = "line",
               name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
+    ### Internações em menores de 28 dias para nascidos em estabs. públicos ----
+    output$plot11 <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data5_aux(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_aux()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sus, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data5_aux()$porc_internacoes_menores_28_dias, data5_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_referencia_aux()$porc_internacoes_menores_28_dias, data5_referencia_aux()$porc_internacoes_menores_28_dias_sus)
+          ), na.rm = TRUE) + 1) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia_aux(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sus, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data5_aux(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_aux()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sus, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data5_comp_aux(),
+            type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp_aux()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sus, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data5_aux()$porc_internacoes_menores_28_dias, data5_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_comp_aux()$porc_internacoes_menores_28_dias, data5_comp_aux()$porc_internacoes_menores_28_dias_sus),
+            c(data5_referencia_aux()$porc_internacoes_menores_28_dias, data5_referencia_aux()$porc_internacoes_menores_28_dias_sus)
+          ), na.rm = TRUE) + 1) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia_aux(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sus, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.7
             )
@@ -2022,7 +2229,7 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
-        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_aux_invertido()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) |>
         highcharter::hc_legend(reversed = TRUE)
 
@@ -2041,7 +2248,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2079,7 +2286,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2119,7 +2326,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2157,7 +2364,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2022), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2187,7 +2394,7 @@ mod_bloco_5_server <- function(id, filtros){
     ### Tabela de malformações ------------------------------------------------
     data5_nascidos_vivos <- reactive({
       bloco5 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -2211,10 +2418,10 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_malformacao <- reactive({
       malformacao |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2022)
+            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)
           else if (filtros()$nivel == "Regional")
             regiao == filtros()$regiao
           else if (filtros()$nivel == "Estadual")
@@ -2293,7 +2500,7 @@ mod_bloco_5_server <- function(id, filtros){
               name = "Período",
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
-              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2], 2022)}")))
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2], 2023)}")))
             ),
             frequencia = reactable::colDef(
               name = "Frequência",

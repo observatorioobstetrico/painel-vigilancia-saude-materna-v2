@@ -15,17 +15,25 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/ta
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
+# Criando um vetor com os anos considerados (2012 a 2022) (p/ a parte do CNES e do SIH)
+anos <- c(2012:2022)
+
+# Criando um vetor com as siglas de todos os estados do Brasil (p/ a parte do SIH)
+estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+             "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+             "RS", "RO", "RR", "SC", "SP", "SE", "TO")
+
 # Baixando os dados do SINASC de 2012 a 2022
 df_sinasc1 <- fetch_datasus(
   year_start = 2012,
   year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
+  vars = c("CODMUNRES", "CODMUNNASC", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
   information_system = "SINASC"
 )
 
 sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 sinasc23 <- sinasc23 |>
-  select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL)
+  select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL)
 
 sinasc23$IDANOMAL <- as.character(sinasc23$IDANOMAL)
 
@@ -35,6 +43,75 @@ unique(df_sinasc$IDANOMAL)
 unique(df_sinasc$CODANOMAL)
 any(is.na(unique(df_sinasc$CODANOMAL)))  #Existem NAs
 any(unique(df_sinasc$CODANOMAL) == '', na.rm = TRUE)  #Não existem ''
+
+# Baixando os dados do CNES-ST para discriminar entre estabelecimentos com ou sem vínculo com o SUS
+for (ano in anos) {
+  erro <- TRUE
+  while (erro) {
+    erro <- tryCatch({
+      # Baixando os dados do CNES-ST para o dado ano
+      df_cnes_st <- fetch_datasus(
+        year_start = ano,
+        year_end = ano,
+        month_start = 1,
+        month_end = 12,
+        information_system = "CNES-ST",
+        timeout = 500,
+        stop_on_error = TRUE,
+        vars = c("CNES", "CODUFMUN", "COMPETEN", "VINC_SUS")
+      ) |>
+        mutate(ano = as.numeric(substr(COMPETEN, 1, 4)), mes = as.numeric(substr(COMPETEN, 5, 6)))
+
+      erro <- FALSE
+    },
+    warning = function(cond) return(TRUE)
+    )
+  }
+
+  write.csv(df_cnes_st, gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/dados_brutos/df_cnes_st_{ano}.csv.gz")), row.names = FALSE)
+
+  # Classificando estabelecimentos entre públicos e não públicos
+  df_estabelecimentos <- df_cnes_st |>
+    group_by(CNES, CODUFMUN, ano) |>
+    summarise(vinc_sus = ifelse(all(VINC_SUS == 1), 1, 0)) |>
+    select(cnes = CNES, codmunnasc = CODUFMUN, ano, vinc_sus)
+
+  write.csv(
+    df_estabelecimentos,
+    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_{ano}.csv.gz")),
+    row.names = FALSE
+  )
+}
+
+# Criando o data.frame que guardará a base final
+df_estabelecimentos_publicos <- data.frame()
+
+for (ano in anos) {
+  df_estabelecimentos_aux <- fread(
+    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_{ano}.csv.gz"),
+    colClasses = c("character", "character", "numeric", "numeric"),
+    sep = ","
+  )
+
+  df_estabelecimentos_publicos <- bind_rows(df_estabelecimentos_publicos, df_estabelecimentos_aux)
+
+  rm(df_estabelecimentos_aux)
+  gc()
+}
+
+# Salvando a base completa
+write.csv(
+  df_estabelecimentos_publicos,
+  gzfile("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_2012_2022.csv.gz"),
+  row.names = FALSE
+)
+
+df_estabelecimentos_publicos <- fread(
+  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/CNES/estabelecimentos_class/df_estabelecimentos_publicos_2012_2022.csv.gz",
+  colClasses = c("character", "character", "numeric", "numeric")
+  ) |>
+  mutate(codmunnasc = as.character(codmunnasc))
+
 
 # Transformando algumas variáveis e criando as variáveis necessárias
 df_bloco5_sinasc <- df_sinasc |>
@@ -46,6 +123,7 @@ df_bloco5_sinasc <- df_sinasc |>
     APGAR5 = as.numeric(APGAR5),
     .keep = "unused",
   ) |>
+  left_join(df_estabelecimentos_publicos, by = join_by(CODESTAB == cnes, CODMUNNASC == codmunnasc, ano)) |>
   mutate(
     total_de_nascidos_vivos = 1,
     nascidos_vivos_com_baixo_peso = if_else(PESO < 2500, 1, 0, missing = 0),
@@ -60,6 +138,7 @@ df_bloco5_sinasc <- df_sinasc |>
     nascidos_vivos_35_a_36_semanas = if_else(SEMAGESTAC %in% c(35, 36), 1, 0, missing = 0),
     nascidos_condicoes_ameacadoras = if_else(PESO < 1500 | (GESTACAO < 4 | SEMAGESTAC < 32) | APGAR5 < 7, 1, 0, missing = 0),
     total_de_nascidos_malformacao = if_else((IDANOMAL == "1" | (!is.na(CODANOMAL) & CODANOMAL != "")), 1, 0, missing = 0),
+    nascidos_estabelecimentos_sus = if_else(vinc_sus == 1, 1, 0, missing = 0),
     .keep = "unused"
   ) |>
   clean_names() |>
@@ -68,14 +147,6 @@ df_bloco5_sinasc <- df_sinasc |>
   ungroup()
 
 # Para o indicador de porcentagem de internações em menores de 28 dias
-## Criando um vetor com os anos considerados (2012 a 2022)
-anos <- c(2012:2022)
-
-## Criando um vetor com as siglas de todos os estados do Brasil
-estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-             "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-             "RS", "RO", "RR", "SC", "SP", "SE", "TO")
-
 ## Baixando os dados do SIH-RD e do SIH-SP de internações em menores de 28 dias
 for (estado in estados) {
   # Criando o data.frame que guardará a base final do estado
@@ -125,7 +196,7 @@ for (estado in estados) {
   # Salvando as bases da UF
   write.csv2(
     df_sih_rd_uf,
-    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/{estado}_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv.gz")),
+    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv.gz")),
     row.names = FALSE
   )
 
@@ -139,7 +210,7 @@ df_sih_rd <- data.frame()
 
 for (estado in estados) {
   df_rd_aux <- fread(
-    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
+    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
     sep = ";",
     dec = ","
   )
@@ -152,7 +223,7 @@ for (estado in estados) {
 ## Salvando a base completa
 write.csv2(
   df_sih_rd,
-  glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/BR_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv"),
+  glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv"),
   row.names = FALSE
 )
 
@@ -161,7 +232,7 @@ write.csv2(
 diretorio_original <- getwd()
 
 ### Criando um vetor que contém o diretório das bases brutas do SIH-RD
-diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias")
+diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH")
 
 ### Mudando o diretório para a pasta que contém o algoritmo em C++
 setwd("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/")
@@ -201,12 +272,13 @@ df_aih_wide <- df_aih_completo |>
   group_by(AIHREF) |>  # Agrupando pelo N_AIH comum para todas as linhas de um episódio de cuidado completo
   summarise(
     ANO_CMPT = last(ANO_CMPT),  # Ano de processamento do SIH da última internação
+    CNES = first(CNES),
     MUNIC_RES = first(MUNIC_RES),  # Município de residência da primeira internação
     MUNIC_MOV = first(MUNIC_MOV),  # Município do estabelecimento da primeira internação
     idade_dias = first(idade_dias)  # Idade, em dias, na data da primeira internação
   ) |>
   ungroup() |>
-  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, aihref = AIHREF, idade_dias) |>
+  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias) |>
   filter(codmunres %in% df_infos_municipios$codmunres & codmunocor %in% df_infos_municipios$codmunres)
 
 ## Adicionando a informação sobre a macrorregião dos municípios de residência e ocorrência
@@ -217,7 +289,7 @@ df_aih_wide_macros <- df_aih_wide |>
     idade_cat = ifelse(idade_dias < 7, "menores_7_dias", "7_a_27_dias"),
     indicadora_mesma_macro = ifelse(macro_r_saude_res == macro_r_saude_ocor, "na_macro", "fora_macro")
   ) |>
-  select(!c(codmunocor, aihref, idade_dias, macro_r_saude_res, macro_r_saude_ocor))
+  select(!c(cnes, codmunocor, aihref, idade_dias, macro_r_saude_res, macro_r_saude_ocor))
 
 ## Passando a base para o formato wide (um município por linha), criando uma linha para cada município e ano e preenchendo os NAs gerados com 0
 df_bloco5_sih <- df_aih_wide_macros |>
@@ -240,14 +312,14 @@ df_bloco5_sih <- df_aih_wide_macros |>
     internacoes_fora_macro_geral = internacoes_fora_macro_menores_7_dias + internacoes_fora_macro_7_a_27_dias,
     internacoes_geral_geral = internacoes_geral_7_a_27_dias + internacoes_geral_menores_7_dias
   ) |>
-  select(ano, codmunres, ends_with("_7_dias"), ends_with("_27_dias"), internacoes_geral_geral)
+  select(ano, codmunres, ends_with("_7_dias"), ends_with("_27_dias"), ends_with("_geral"))
 
 ## Verificando se o total de internações equivale ao número de linhas das bases df_aih_wide/df_aih_wide_macros
 sum(df_bloco5_sih$internacoes_geral_geral) == nrow(df_aih_wide)
 
 ## Removendo arquivos já utilizados
 file.remove(c(
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/BR_sih_rd_menores_28_dias_2012_2022.csv",
+  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2022.csv",
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite"
@@ -257,8 +329,18 @@ file.remove(c(
 df_bloco5 <- left_join(df_aux_municipios, df_bloco5_sinasc, by = c("codmunres", "ano")) |>
   left_join(df_bloco5_sih)
 
-# Preenchendo os valores NAs, gerados após o left_join, com 0
-df_bloco5[is.na(df_bloco5)] <- 0
+# Preenchendo os valores NAs, gerados após o left_join, com 0 (MENOS PARA 2023 PARA AS COLUNAS QUE VEM DO SIH)
+internacoes_cols <- grep("^internacoes", names(df_bloco5), value = TRUE)
+
+for (col in names(df_bloco5)) {
+  if (col %in% internacoes_cols) {
+    # Nas colunas que começam com "internacoes", substituir os NAs por 0 apenas se o ano não for 2023
+    df_bloco5[[col]][is.na(df_bloco5[[col]]) & df_bloco5$ano != 2023] <- 0
+  } else {
+    # Nas outras colunas, substituir todos os NAs por 0
+    df_bloco5[[col]][is.na(df_bloco5[[col]])] <- 0
+  }
+}
 
 # Verificando se os dados novos e antigos estão batendo
 df_bloco5_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>

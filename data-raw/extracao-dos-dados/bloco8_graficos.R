@@ -3,13 +3,15 @@ library(dplyr)
 library(janitor)
 library(tidyr)
 library(readxl)
+library(data.table)
+library(readr)
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2022:2023)), ano = 2022:2023)
 
 # Criando o data.frame que irá receber todos os dados dos gráficos do bloco 8
 df_bloco8_graficos <- df_aux_municipios
@@ -17,12 +19,35 @@ df_bloco8_graficos <- df_aux_municipios
 
 # Garbage codes para óbitos maternos --------------------------------------
 ## Baixando os dados do SIM-DOMAT de 2012 a 2022
-df_sim_domat_aux <- fetch_datasus(
-  year_start = 2012,
+df_sim_domat_aux1 <- fetch_datasus(
+  year_start = 2022,
   year_end = 2022,
   information_system = "SIM-DOMAT"
 ) |>
   clean_names()
+
+df_sim_domat_aux1 <- df_sim_domat_aux1 |> select(-c(estabdescr, nudiasobin,
+                                                    nudiasinf, fontesinf))
+
+sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv")
+
+sim_mat2023 <- sim_2023 |>
+  filter(
+    SEXO == "2",
+    ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
+       (CAUSABAS >= "O980"  &  CAUSABAS <= "O999") |
+       (CAUSABAS == "A34" & OBITOPUERP != "2") |
+       ((CAUSABAS >= "B200"  &  CAUSABAS <= "B249") & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+       (CAUSABAS == "D392" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+       (CAUSABAS == "E230" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+       ((CAUSABAS >= "F530"  &  CAUSABAS <= "F539") & (OBITOPUERP != "2")) |
+       (CAUSABAS == "M830" & OBITOPUERP != "2"))
+  ) |>
+  clean_names()
+
+sim_mat2023 <- sim_mat2023 |> select(-c(opor_do, tp_altera, cb_alt))
+
+df_sim_domat_aux <- rbind(df_sim_domat_aux1, sim_mat2023)
 
 ## Criando a variável de ano e limitando a variável 'causabas' a três caracteres
 df_sim_domat <- df_sim_domat_aux |>
@@ -104,7 +129,9 @@ df_maternos_garbage_tabela <- df_maternos_garbage_tabela_aux |>
 
 get_dupes(df_maternos_garbage_tabela)
 
-write.csv(df_maternos_garbage_tabela, gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz"), row.names = FALSE)
+df_maternos_garbage_tabela_antigo <-read_csv("data-raw/csv/garbage_materno_2012_2022.csv.gz")
+
+write.csv(df_maternos_garbage_tabela, gzfile("data-raw/csv/garbage_materno_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
 rm(df_maternos_garbage, df_maternos_totais, df_maternos_garbage_tabela_aux, df_maternos_garbage_tabela)
@@ -112,12 +139,23 @@ rm(df_maternos_garbage, df_maternos_totais, df_maternos_garbage_tabela_aux, df_m
 
 # Garbage codes para óbitos fetais ----------------------------------------
 ## Baixando os dados do SIM-DOFET de 2012 a 2022
-df_sim_dofet_aux <- fetch_datasus(
-  year_start = 2012,
+df_sim_dofet_aux1 <- fetch_datasus(
+  year_start = 2022,
   year_end = 2022,
   information_system = "SIM-DOFET"
 ) |>
   clean_names()
+
+df_sim_dofet_aux1 <- df_sim_dofet_aux1 |>
+  select(-c(codmuncart, numregcart, codcart, dtregcart, estabdescr, medico, linhaa_o, linhab_o,
+            linhac_o, linhad_o, linhaii_o, dtrecorig, nudiasobin, nudiasinf, fontesinf))
+
+sim_dofet2023 <- sim_2023 |> filter(TIPOBITO == 1) |>
+  clean_names() |>
+  select(-c(opor_do, tp_altera, cb_alt))
+
+
+df_sim_dofet_aux <- rbind(df_sim_dofet_aux1, sim_dofet2023)
 
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas pelos óbitos fetais que consideramos
 df_sim_dofet <- df_sim_dofet_aux |>
@@ -243,19 +281,31 @@ df_garbage_fetais_tabela <- df_garbage_fetais_tabela_aux |>
 
 get_dupes(df_garbage_fetais_tabela)
 
-write.csv(df_garbage_fetais_tabela, gzfile("data-raw/csv/garbage_fetal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_garbage_fetais_tabela, gzfile("data-raw/csv/garbage_fetal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
 rm(df_garbage_fetais_tabela_aux, df_garbage_fetais_tabela)
 
 
 # Garbage codes para óbitos neonatais -------------------------------------
-df_sim_doinf_aux <- fetch_datasus(
-  year_start = 2012,
+df_sim_doinf_aux1 <- fetch_datasus(
+  year_start = 2022,
   year_end = 2022,
   information_system = "SIM-DOINF",
 ) |>
   clean_names()
+
+df_sim_doinf_aux1 <- df_sim_doinf_aux1|>
+  select(-c(estabdescr, nudiasobin, nudiasinf, fontesinf))
+
+sim_2023 <- sim_2023 |>
+  clean_names() |>
+  select(-c(opor_do, tp_altera, cb_alt))
+
+
+
+df_sim_doinf_aux <- rbind(df_sim_doinf_aux1, sim_2023)
+
 
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas os óbitos neonatais
 df_sim_doinf <- df_sim_doinf_aux |>
@@ -489,7 +539,7 @@ df_garbage_neonatais_tabela <- df_sim_doinf |>
 
 get_dupes(df_garbage_neonatais_tabela)
 
-write.csv(df_garbage_neonatais_tabela, gzfile("data-raw/csv/garbage_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_garbage_neonatais_tabela, gzfile("data-raw/csv/garbage_neonatal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
 rm(df_garbage_neonatais_tabela)
@@ -600,7 +650,7 @@ df_principais_fetais_tabela <- df_sim_dofet |>
 
 get_dupes(df_principais_fetais_tabela)
 
-write.csv(df_principais_fetais_tabela, gzfile("data-raw/csv/principais_fetal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_principais_fetais_tabela, gzfile("data-raw/csv/principais_fetal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
 rm(df_principais_fetais_tabela)
@@ -735,7 +785,7 @@ df_principais_neonatais_tabela <- df_sim_doinf |>
 
 get_dupes(df_principais_neonatais_tabela)
 
-write.csv(df_principais_neonatais_tabela, gzfile("data-raw/csv/principais_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_principais_neonatais_tabela, gzfile("data-raw/csv/principais_neonatal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
 rm(df_principais_neonatais_tabela)
@@ -930,7 +980,7 @@ df_evitaveis_fetal_tabela <- df_sim_dofet |>
   select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, obitos) |>
   arrange(codmunres)
 
-write.csv(df_evitaveis_fetal_tabela, gzfile("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_evitaveis_fetal_tabela, gzfile("data-raw/csv/evitaveis_fetal_2022_2023.csv.gz"), row.names = FALSE)
 
 
 ## Causas evitáveis para óbitos neonatais ------------------------------------------------------
@@ -1215,7 +1265,7 @@ df_evitaveis_neonatal_tabela <- df_sim_doinf |>
   select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
   arrange(codmunres)
 
-write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2022_2023.csv.gz"), row.names = FALSE)
 
 
 
@@ -1408,7 +1458,7 @@ df_grupos_fetais_tabela <- df_sim_dofet |>
 
 get_dupes(df_grupos_fetais_tabela)
 
-write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2022_2023.csv.gz"), row.names = FALSE)
 
 # dados organizados para os gráficos de grupos de causa fetal
 
@@ -1583,7 +1633,7 @@ df_grupos_neonatais_tabela <- df_sim_doinf |>
 
 get_dupes(df_grupos_neonatais_tabela)
 
-write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2012_2022.csv.gz"), row.names = FALSE)
+write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2022_2023.csv.gz"), row.names = FALSE)
 
 
 #gráfico grupos de causa para óbitos neonatais
@@ -1806,7 +1856,7 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     principais_perinatal_p90_p96 = principais_neonatal_precoce_p90_p96 + principais_fetal_p90_p96,
     principais_perinatal_q00_q99 = principais_neonatal_precoce_q00_q99 + principais_fetal_q00_q99,
     principais_perinatal_outros = principais_neonatal_precoce_outros,
-    evitaveis_perinatal_imunoprevencao = evitaveis_neonatal_precoce_imunoprevencao + evitaveis_fetal_imunoprevencao,
+    #evitaveis_perinatal_imunoprevencao = evitaveis_neonatal_precoce_imunoprevencao + evitaveis_fetal_imunoprevencao,
     evitaveis_perinatal_mulher_gestacao = evitaveis_neonatal_precoce_mulher_gestacao + evitaveis_fetal_mulher_gestacao,
     evitaveis_perinatal_parto = evitaveis_neonatal_precoce_parto + evitaveis_fetal_parto,
     evitaveis_perinatal_recem_nascido = evitaveis_neonatal_precoce_recem_nascido + evitaveis_fetal_recem_nascido,
@@ -1825,7 +1875,7 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     perinatal_grupos_mal_definida = neonat_precoce_grupos_mal_definida,
     perinatal_grupos_outros = neonat_precoce_grupos_outros + fetal_grupos_outros,
 
-    evitaveis_perinatal_antes_imunoprevencao = evitaveis_fetal_antes_imunoprevencao,
+    #evitaveis_perinatal_antes_imunoprevencao = evitaveis_fetal_antes_imunoprevencao,
     evitaveis_perinatal_antes_mulher_gestacao = evitaveis_fetal_antes_mulher_gestacao,
     evitaveis_perinatal_antes_parto = evitaveis_fetal_antes_parto,
     evitaveis_perinatal_antes_recem_nascido = evitaveis_fetal_antes_recem_nascido,
@@ -1864,7 +1914,7 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     perinatal_grupos_durante_outros = fetal_grupos_durante_outros,
 
 
-    evitaveis_perinatal_0_dias_imunoprevencao = evitaveis_neonatal_0_dias_imunoprevencao,
+    #evitaveis_perinatal_0_dias_imunoprevencao = evitaveis_neonatal_0_dias_imunoprevencao,
     evitaveis_perinatal_0_dias_mulher_gestacao = evitaveis_neonatal_0_dias_mulher_gestacao ,
     evitaveis_perinatal_0_dias_parto = evitaveis_neonatal_0_dias_parto,
     evitaveis_perinatal_0_dias_recem_nascido = evitaveis_neonatal_0_dias_recem_nascido,
@@ -1905,8 +1955,32 @@ df_bloco8_graficos <- df_bloco8_graficos |>
     )
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv", row.names = FALSE)
-write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv", row.names = FALSE)
+
+write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2022-2023.csv", row.names = FALSE)
+
+df_bloco8_graficos_antigo <- read_csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv")
+df_bloco8_graficos_2023 <- df_bloco8_graficos |> filter(ano == 2023)
+
+df_bloco8_graficos_2023$codmunres <- as.numeric(df_bloco8_graficos_2023$codmunres)
+df_bloco8_graficos_total <- full_join(df_bloco8_graficos_antigo, df_bloco8_graficos_2023)
+df_bloco8_graficos_total[is.na(df_bloco8_graficos_total)] <- 0
+
+write.csv(df_bloco8_graficos_total, "data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv", row.names = FALSE)
+
+df_neonatais_evitaveis_antigo <- read_csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv")
+
+df_neonatais_evitaveis_2023 <- df_neonatais_evitaveis |> filter(ano==2023)
+
+write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2022-2023.csv", row.names = FALSE)
+
+
+df_neonatais_evitaveis_2023$codmunres <- as.numeric(df_neonatais_evitaveis_2023$codmunres)
+df_neonatais_evitaveis_total <- full_join(df_neonatais_evitaveis_antigo, df_neonatais_evitaveis_2023)
+
+write.csv(df_neonatais_evitaveis_total, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv", row.names = FALSE)
+
+
 #write.csv(df_neonatais_precoce_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_precoce_2012-2022.csv", row.names = FALSE)
+
 
 
