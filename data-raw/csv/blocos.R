@@ -94,28 +94,34 @@ bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade <- as.numeric(
 
 bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
   janitor::clean_names() |>
-  dplyr::select(!uf) |>
+  dplyr::rename(cod_uf = uf) |>
+  # dplyr::select(!uf) |>
   dplyr::rename(uf = nome) |>
   dplyr::mutate(
     uf = sub('.', '', uf)
   )
 
-bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2022.csv") |>
+# bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2022.csv") |>
+#   janitor::clean_names()
+#
+# bloco4_deslocamento_uf_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2023.csv") |>
+#   janitor::clean_names()
+
+bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2023.csv") |>
   janitor::clean_names()
 
-bloco4_deslocamento_uf_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2023.csv") |>
-  janitor::clean_names()
-
-bloco4_deslocamento_uf_aux4 <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux3)
+# bloco4_deslocamento_uf_aux4 <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux3)
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade)
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade)
 
-bloco4_deslocamento_uf_aux <- dplyr::full_join(bloco4_deslocamento_uf_aux4, bloco4_deslocamento_uf_aux1)
+bloco4_deslocamento_uf_aux <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux1)
 
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
+
+
 
 bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv")
 bloco4_deslocamento_macrorregiao <- rbind(bloco4_deslocamento_macrorregiao, read.csv("data-raw/csv/indicador_deslocamento_1500_2023.csv"))
@@ -282,6 +288,8 @@ bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
   )
 
 bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
+
+bloco4_deslocamento_uf <- bloco4_deslocamento_uf |> dplyr::arrange(ano)
 
 
 bloco4_deslocamento_macrorregiao <- dplyr::left_join(bloco4_deslocamento_macrorregiao, aux_municipios, by = "codmunres")
