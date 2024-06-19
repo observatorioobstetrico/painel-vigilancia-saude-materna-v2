@@ -35,7 +35,7 @@ sinasc23 <- sinasc23 |>
   select(CODMUNRES, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
 
-sinasc23$CODMUNRES <- as.character(sinasc23$CODMUNRES)
+sinasc23[, 1:5] <- lapply(sinasc23[, 1:5], as.character)
 
 ## criando coluna de anos
 sinasc12$Ano <- 2012
@@ -55,13 +55,14 @@ sinasc23$Ano <- 2023
 
 sinasc_microdatasus <- dplyr::bind_rows(sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21, sinasc22, sinasc23)
 
+
 #write.table(sinasc_microdatasus, 'data-raw/csv/bruto_sinasc_microdatasus_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
 
 #### agrupando
 
 #sinasc_microdatasus <- read.csv('data-raw/csv/bruto_sinasc_microdatasus_2012_2023.csv', sep = ";")
 
-sinasc_microdatasus <- sinasc_microdatasus |>
+dados <- sinasc_microdatasus |>
   group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   summarise(Nascimentos = n())
 
@@ -72,20 +73,19 @@ sinasc_microdatasus <- sinasc_microdatasus |>
 ###################
 # TRATAMENTO DOS DADOS PARA CRIAÇÃO DAS TABELAS
 ##################
-#dados <- read.csv('data-raw/csv/sinasc_microdatasus_2012_2023.csv', sep = ";")
-dados <- sinasc_microdatasus
-tabela_aux_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv", row.names = 1)
 
-#### adicionando uf e municipio os dados
+#### adicionando uf e municipio aos dados
+tabela_aux_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv", row.names = 1)
 
 tabela_aux_municipios <- tabela_aux_municipios[,c(1, 2, 8)] |>
   rename(CODMUNRES = codmunres)
 
-
-dados <- dados |>
-  filter(CODMUNRES %in% tabela_aux_municipios$CODMUNRES)
+tabela_aux_municipios$CODMUNRES <- as.character(tabela_aux_municipios$CODMUNRES)
 
 dados <- left_join(dados, tabela_aux_municipios)
+
+dados <- dados |>
+  filter(!is.na(municipio))
 
 
 ########## asfixia 1 ##########
@@ -95,10 +95,7 @@ asfixia1 <- dados |>
   filter(PESO >= 2500 & ((IDANOMAL == 2) | ((IDANOMAL == '' | is.na(IDANOMAL)) &
                                               (CODANOMAL == '' | is.na(CODANOMAL)))))
 
-#uma dúvida: será que tem dados faltantes para peso?
-unique(asfixia1$PESO)
-#Tem sim: 9999 é peso ignorado
-
+# filtrando peso ignorado (9999)
 asfixia12 <- asfixia1 %>%
   filter(PESO < 9999)
 
@@ -127,10 +124,19 @@ asfixia1_final <- left_join(asfixia14, asfixia14_1,
 asfixia1_final <- asfixia1_final %>%
   mutate(nascidos_vivos_asfixia1  = ifelse(is.na(nascidos_vivos_asfixia1), 0, nascidos_vivos_asfixia1))
 
-#write.csv(asfixia1_final, "data-raw/csv/asfixia1_2012_2023.csv")
+
+asfixia <- asfixia1_final |>
+  group_by(CODMUNRES, Ano) |>
+  summarise(nascidos_vivos_asfixia1 = sum(nascidos_vivos_asfixia1),
+            total_de_nascidos_vivos = sum(total_de_nascidos_vivos)) |>
+  ungroup() |>
+  rename(codmunres = CODMUNRES,
+         ano = Ano)
+
+
+write.csv(asfixia, "data-raw/csv/asfixia_2012_2023.csv")
 
 ###################### malformação
-
 
 malformacao <- dados
 
@@ -331,15 +337,30 @@ obter_descricao <- function(valor) {
 # Aplique a função para criar a variável "descricao"
 filtro_malformacao$descricao <- sapply(filtro_malformacao$valor, obter_descricao)
 
-#write.table(filtro_malformacao, 'data-raw/csv/malformacao_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
+malformacao <- filtro_malformacao |>
+  rename(nascidos_vivos_anomalia = Nascimentos,
+         codmunres = CODMUNRES,
+         ano = Ano,
+         anomalia = valor)
+
+
+malformacao <- malformacao |>
+  dplyr::select(codmunres,
+                ano,
+                anomalia,
+                grupo_de_anomalias_congenitas,
+                descricao,
+                nascidos_vivos_anomalia)
+
+malformacao <- malformacao[,-c(1,2,3)]
+
+write.table(malformacao, 'data-raw/csv/malformacao_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 ###################
 
 
-#asfixia_1 <- read.csv('asfixia1_2012_2023.csv', sep = ",")
-
-asfixia_1 <- asfixia1_final
+asfixia_1 <- read.csv('asfixia1_2012_2023.csv', sep = ",")
 
 
 df_bloco8 <- asfixia_1 |>
@@ -351,68 +372,6 @@ df_bloco8 <- asfixia_1 |>
          ano = Ano)
 
 write.table(df_bloco8, 'data-raw/csv/asfixia_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
-
-
-####
-
-#malformacao <- read.csv('data-raw/csv/malformacao_2012_2023.csv', sep = ";")
-#malformacao <- malformacao[,c(3:12)]
-
-malformacao <- filtro_malformacao
-
-malformacao <- malformacao |>
-  rename(nascidos_vivos_anomalia = Nascimentos,
-         codmunres = CODMUNRES,
-         ano = Ano,
-         anomalia = valor)
-
-
-malformacao <- malformacao |>
-  dplyr::select(codmunres,
-         ano,
-         anomalia,
-         grupo_de_anomalias_congenitas,
-         descricao,
-         nascidos_vivos_anomalia)
-
-malformacao <- malformacao[,-c(1,2,3)]
-
-write.table(malformacao, 'data-raw/csv/malformacao_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
-malformacao2 <- read.csv('data-raw/csv/malformacao_2012_2022.csv', sep = ";")
-malformacao <- rbind(malformacao, malformacao2)
-
-
-# adicionando malformacao geral a base de asfixia
-
-df_bloco8 <- read.csv("data-raw/csv/asfixia_2012_2023.csv", sep = ';')
-
-tabela_aux_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv")
-#
-# sinasc_microdatasus_2012_2023 <- data.table::fread("data-raw/csv/sinasc_microdatasus_2012_2023.csv")
-
-sinasc_microdatasus_2012_2023 <- sinasc_microdatasus
-
-
-malformacao_geral <- sinasc_microdatasus_2012_2023 |>
-  dplyr::filter((IDANOMAL == 1) | !is.na(CODANOMAL)) |>
-  janitor::clean_names()
-
-
-malformacao_geral <- malformacao_geral |>
-  filter(codmunres %in% tabela_aux_municipios$codmunres)
-
-dados <- left_join(malformacao_geral, tabela_aux_municipios)
-
-malformacao_geral1 <- malformacao_geral |>
-  group_by(codmunres, ano) %>%
-  summarise(total_de_nascidos_malformacao = n())
-
-
-df_bloco8 <- left_join(df_bloco8, malformacao_geral1)
-
-df_bloco8[is.na(df_bloco8)] <- 0
-
-write.table(asfixia, 'data-raw/csv/asfixia_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 
