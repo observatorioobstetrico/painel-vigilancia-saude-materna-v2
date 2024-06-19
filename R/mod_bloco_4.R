@@ -822,14 +822,14 @@ mod_bloco_4_server <- function(id, filtros){
 
     bloco4_deslocamento_macro_calcs <- data.frame(  # Esse dataframe vai juntar com o de cima quando as informações estiverem na mesma base
       tipo = c("local", "referencia"),
-      prop_desloc_1 = rep("round(sum(desloc_1)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_2 = rep("round(sum(desloc_2)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_3 = rep("round(sum(desloc_3)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_4 = rep("round(sum(desloc_4)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_5 = rep("round(sum(desloc_5)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_6 = rep("round(sum(desloc_6)/sum(nascimentos) * 100, 1)", 2),
-      prop_desloc_7 = rep("round((sum(desloc_2) + sum(desloc_4)) / (sum(desloc_1) + sum(desloc_2) + sum(desloc_3) + sum(desloc_4)) * 100, 1)", 2),
-      prop_desloc_8 = rep("round((sum(desloc_3) + sum(desloc_4) + sum(desloc_6)) / sum(nascimentos) * 100, 1)", 2)
+      prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+      prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+      prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+      prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+      prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+      prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+      prop_desloc_7 = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
+      prop_desloc_8 = rep("round((sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti) + sum(partos_fora_macro_sem_inf)) / sum(nascimentos) * 100, 1)", 2)
     )
 
 
@@ -2216,12 +2216,12 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_desloc_1 = round(sum(desloc_1)/sum(nascimentos) * 100, 1),
-          prop_desloc_2 = round(sum(desloc_2)/sum(nascimentos) * 100, 1),
-          prop_desloc_3 = round(sum(desloc_3)/sum(nascimentos) * 100, 1),
-          prop_desloc_4 = round(sum(desloc_4)/sum(nascimentos) * 100, 1),
-          prop_desloc_5 = round(sum(desloc_5)/sum(nascimentos) * 100, 1),
-          prop_desloc_6 = round(sum(desloc_6)/sum(nascimentos) * 100, 1)) |>
+          prop_partos_na_macro_com_uti = round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_uti = round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_uti = round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_uti = round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -2230,12 +2230,12 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             dplyr::case_when(
-              grepl("prop_desloc_1", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_2", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_3", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_4", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_5", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
-              grepl("prop_desloc_6", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
+              grepl("prop_partos_na_macro_com_uti", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_na_macro_sem_uti", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_fora_macro_com_uti", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_fora_macro_sem_uti", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_na_macro_sem_inf", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+              grepl("prop_partos_fora_macro_sem_inf", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
             ),
           class = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
@@ -2360,12 +2360,12 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_desloc_1 = round(sum(desloc_1)/sum(nascimentos) * 100, 1),
-          prop_desloc_2 = round(sum(desloc_2)/sum(nascimentos) * 100, 1),
-          prop_desloc_3 = round(sum(desloc_3)/sum(nascimentos) * 100, 1),
-          prop_desloc_4 = round(sum(desloc_4)/sum(nascimentos) * 100, 1),
-          prop_desloc_5 = round(sum(desloc_5)/sum(nascimentos) * 100, 1),
-          prop_desloc_6 = round(sum(desloc_6)/sum(nascimentos) * 100, 1)) |>
+          prop_partos_na_macro_com_uti = round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_uti = round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_uti = round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_uti = round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -2374,12 +2374,12 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             dplyr::case_when(
-              grepl("prop_desloc_1", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_2", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_3", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_4", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_5", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
-              grepl("prop_desloc_6", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
+              grepl("prop_partos_na_macro_com_uti", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_na_macro_sem_uti", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_fora_macro_com_uti", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_fora_macro_sem_uti", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_na_macro_sem_inf", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+              grepl("prop_partos_fora_macro_sem_inf", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
             ),
           class = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
@@ -2429,12 +2429,12 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_desloc_1 = round(sum(desloc_1)/sum(nascimentos) * 100, 1),
-          prop_desloc_2 = round(sum(desloc_2)/sum(nascimentos) * 100, 1),
-          prop_desloc_3 = round(sum(desloc_3)/sum(nascimentos) * 100, 1),
-          prop_desloc_4 = round(sum(desloc_4)/sum(nascimentos) * 100, 1),
-          prop_desloc_5 = round(sum(desloc_5)/sum(nascimentos) * 100, 1),
-          prop_desloc_6 = round(sum(desloc_6)/sum(nascimentos) * 100, 1)) |>
+          prop_partos_na_macro_com_uti = round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_uti = round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_uti = round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_uti = round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -2443,12 +2443,12 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             dplyr::case_when(
-              grepl("prop_desloc_1", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_2", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_3", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
-              grepl("prop_desloc_4", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
-              grepl("prop_desloc_5", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
-              grepl("prop_desloc_6", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
+              grepl("prop_partos_na_macro_com_uti", indicador) ~ "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_na_macro_sem_uti", indicador) ~ "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_fora_macro_com_uti", indicador) ~ "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI",
+              grepl("prop_partos_fora_macro_sem_uti", indicador) ~ "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI",
+              grepl("prop_partos_na_macro_sem_inf", indicador) ~ "Na macrorregião de saúde, mas sem informação sobre leito de UTI",
+              grepl("prop_partos_fora_macro_sem_inf", indicador) ~ "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"
             )
         ) |>
         dplyr::ungroup() |>
