@@ -1,5 +1,5 @@
 #' @exportS3Method pkg::generic
-cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE) {
+cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL) {
 
   if (referencia == FALSE) {
     df_calcs <- df_calcs |>
@@ -52,7 +52,8 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
           filtros[[paste0("nivel", sufixo)]] == "Estadual" ~ filtros[[paste0("estado", sufixo)]],
           filtros[[paste0("nivel", sufixo)]] == "Macrorregião de saúde" ~ filtros[[paste0("macro", sufixo)]],
           filtros[[paste0("nivel", sufixo)]] == "Microrregião de saúde" ~ filtros[[paste0("micro", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Municipal" ~ filtros[[paste0("municipio", sufixo)]]
+          filtros[[paste0("nivel", sufixo)]] == "Municipal" ~ filtros[[paste0("municipio", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
         )
       ) |>
       dplyr::ungroup()
@@ -288,16 +289,16 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa = "300px", fonte_titulo = "16px", width_caixa = 12) {
 
   if (indicador == "baixo peso") {
-    valor_indicador1 <- dados[["porc_peso_menor_1500"]]
-    valor_indicador2 <- dados[["porc_peso_1500_a_1999"]]
-    valor_indicador3 <- dados[["porc_peso_2000_a_2499"]]
+    valor_indicador1 <- dados[["porc_baixo_peso_menor_1500"]]
+    valor_indicador2 <- dados[["porc_baixo_peso_1500_a_1999"]]
+    valor_indicador3 <- dados[["porc_baixo_peso_2000_a_2499"]]
   }
 
   if (indicador == "prematuridade") {
-    valor_indicador1 <- dados[["porc_menos_de_28_semanas"]]
-    valor_indicador2 <- dados[["porc_28_a_32_semanas"]]
-    valor_indicador3 <- dados[["porc_33_a_34_semanas"]]
-    valor_indicador4 <- dados[["porc_35_a_36_semanas"]]
+    valor_indicador1 <- dados[["porc_premat_menos_de_28_semanas"]]
+    valor_indicador2 <- dados[["porc_premat_28_a_32_semanas"]]
+    valor_indicador3 <- dados[["porc_premat_33_a_34_semanas"]]
+    valor_indicador4 <- dados[["porc_premat_35_a_36_semanas"]]
     valor_indicador5 <- dados[["porc_premat_faltantes"]]
   }
 
