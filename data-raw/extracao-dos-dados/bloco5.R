@@ -329,6 +329,26 @@ file.remove(c(
 df_bloco5 <- left_join(df_aux_municipios, df_bloco5_sinasc, by = c("codmunres", "ano")) |>
   left_join(df_bloco5_sih)
 
+
+# adicionar dados de asfixia e malformação a base df_bloco5
+# lembre-se de rodar o script bloco5_asfixia.R para obter os dados em caso de atualização
+
+
+asfixia <- read.csv("data-raw/csv/asfixia_2012_2023.csv", sep = ';') |>
+  janitor::clean_names() |>
+  dplyr::arrange(codmunres, ano) |>
+  dplyr::select(codmunres, ano, nascidos_vivos_asfixia1, total_nascidos)
+
+malformacao <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
+  janitor::clean_names() |>
+  dplyr::arrange(codmunres, ano) |>
+  select(codmunres, ano, anomalia, grupo_de_anomalias_congenitas, descricao, nascidos_vivos_anomalia)
+
+
+df_bloco5 <- left_join(df_bloco5, asfixia, by = c("codmunres", "ano")) |>
+  left_join(malformacao)
+
+
 # Preenchendo os valores NAs, gerados após o left_join, com 0 (MENOS PARA 2023 PARA AS COLUNAS QUE VEM DO SIH)
 internacoes_cols <- grep("^internacoes", names(df_bloco5), value = TRUE)
 
@@ -353,3 +373,16 @@ sum(df_bloco5 |> filter(ano <= 2020) |> pull(nascidos_vivos_termo_precoce)) - su
 
 # Exportando os dados
 write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv", row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+

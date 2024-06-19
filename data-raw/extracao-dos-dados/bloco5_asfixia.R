@@ -412,19 +412,7 @@ df_bloco8 <- left_join(df_bloco8, malformacao_geral1)
 
 df_bloco8[is.na(df_bloco8)] <- 0
 
-write.table(df_bloco8, 'data-raw/csv/asfixia_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
+write.table(asfixia, 'data-raw/csv/asfixia_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 
