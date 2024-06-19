@@ -1,4 +1,69 @@
 #' @exportS3Method pkg::generic
+cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE) {
+
+  if (referencia == FALSE) {
+    df_calcs <- df_calcs |>
+      dplyr::filter(tipo == "local") |>
+      dplyr::select(!tipo)
+  } else {
+    df_calcs <- df_calcs |>
+      dplyr::filter(tipo == "referencia") |>
+      dplyr::select(!tipo)
+  }
+
+
+  df_localidade_aux <- df_localidade |>
+    dplyr::summarise() |>
+    dplyr::ungroup()
+
+  if (ncol(df_localidade_aux) == 0) {
+    for (coluna in names(df_calcs)) {
+      df_localidade_aux <- cbind(
+        df_localidade_aux,
+        dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]]))
+      )
+    }
+  } else {
+    for (coluna in names(df_calcs)) {
+      df_localidade_aux <- dplyr::full_join(
+        df_localidade_aux,
+        dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]])),
+        by = dplyr::join_by(ano)
+      )
+    }
+  }
+
+  if (adicionar_localidade == TRUE) {
+    sufixo <- ifelse(comp == TRUE, "2", "")
+
+    df_localidade_aux |>
+      dplyr::mutate(
+        class = dplyr::case_when(
+          filtros[[paste0("nivel", sufixo)]] == "Nacional" ~ dplyr::if_else(
+            filtros$comparar == "Não",
+            "Brasil (valor de referência)",
+            dplyr::if_else(
+              filtros$mostrar_referencia == "nao_mostrar_referencia",
+              "Brasil",
+              "Brasil (valor de referência)"
+            )
+          ),
+          filtros[[paste0("nivel", sufixo)]] == "Regional" ~ filtros[[paste0("regiao", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "Estadual" ~ filtros[[paste0("estado", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "Macrorregião de saúde" ~ filtros[[paste0("macro", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "Microrregião de saúde" ~ filtros[[paste0("micro", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "Municipal" ~ filtros[[paste0("municipio", sufixo)]]
+        )
+      ) |>
+      dplyr::ungroup()
+  } else {
+    df_localidade_aux |> dplyr::ungroup()
+  }
+
+
+}
+
+
 cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = "300px", fonte_titulo = "16px", pagina, width_caixa = 12) {
 
   if (is.null(valor_indicador)) {

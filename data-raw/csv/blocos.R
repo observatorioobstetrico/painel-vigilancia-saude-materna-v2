@@ -78,7 +78,8 @@ bloco4_deslocamento_muni_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslo
   janitor::clean_names()
 
 bloco4_deslocamento_muni_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2021-2022.csv") |>
-  janitor::clean_names()
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
 
 bloco4_deslocamento_muni_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2023.csv") |>
   janitor::clean_names()
@@ -87,7 +88,9 @@ bloco4_deslocamento_muni_aux4 <- rbind(bloco4_deslocamento_muni_aux2, bloco4_des
 
 bloco4_deslocamento_muni_aux1$km_partos_fora_uf <- as.numeric(bloco4_deslocamento_muni_aux1$km_partos_fora_uf)
 
-bloco4_deslocamento_muni_aux <- dplyr::full_join(bloco4_deslocamento_muni_aux1, bloco4_deslocamento_muni_aux4)
+bloco4_deslocamento_muni_aux <- dplyr::full_join(bloco4_deslocamento_muni_aux1, bloco4_deslocamento_muni_aux4) |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
+  dplyr::arrange(codmunres, ano)
 
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_alta_complexidade)
 bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade <- as.numeric(bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade)
@@ -95,22 +98,13 @@ bloco4_deslocamento_muni_aux$km_partos_fora_uf_baixa_complexidade <- as.numeric(
 bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
   janitor::clean_names() |>
   dplyr::rename(cod_uf = uf) |>
-  # dplyr::select(!uf) |>
   dplyr::rename(uf = nome) |>
   dplyr::mutate(
     uf = sub('.', '', uf)
   )
 
-# bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2022.csv") |>
-#   janitor::clean_names()
-#
-# bloco4_deslocamento_uf_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2023.csv") |>
-#   janitor::clean_names()
-
 bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2023.csv") |>
   janitor::clean_names()
-
-# bloco4_deslocamento_uf_aux4 <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux3)
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
 
@@ -138,7 +132,8 @@ bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
                    desloc_3 = sum(desloc_3),
                    desloc_4 = sum(desloc_4),
                    desloc_5 = sum(desloc_5),
-                   desloc_6 = sum(desloc_6))
+                   desloc_6 = sum(desloc_6)) #|>
+  #dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
 
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   janitor::clean_names()
