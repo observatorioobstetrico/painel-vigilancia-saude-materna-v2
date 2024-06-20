@@ -1,5 +1,5 @@
 #' @exportS3Method pkg::generic
-cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL) {
+cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros") {
 
   if (referencia == FALSE) {
     df_calcs <- df_calcs |>
@@ -11,26 +11,53 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
       dplyr::select(!tipo)
   }
 
+  if (bloco == "bloco7") {
+    df_localidade <- df_localidade |>
+      dplyr::mutate(
+        obitos_fetais = obitos_fetais_mais_22sem,
+        obitos_perinatal_total = obitos_fetais_mais_22sem + obitos_6dias,
+        perinatal_total_menos1500 = fetal_peso_menos_1500 + obitos_6dias_menos1500,
+        perinatal_total_1500_1999 = fetal_peso_1500_1999 + obitos_6dias_1500_1999,
+        perinatal_total_2000_2499 = fetal_peso_2000_2499 + obitos_6dias_2000_2499,
+        perinatal_total_mais2500 = fetal_peso_mais_2500 + obitos_6dias_mais2500
+      )
+
+    colunas_summarise <- names(df_calcs)[!startsWith(names(df_calcs), "faltante")]
+  } else {
+    colunas_summarise <- names(df_calcs)
+  }
 
   df_localidade_aux <- df_localidade |>
     dplyr::summarise() |>
     dplyr::ungroup()
 
   if (ncol(df_localidade_aux) == 0) {
-    for (coluna in names(df_calcs)) {
+    for (coluna in colunas_summarise) {
       df_localidade_aux <- cbind(
         df_localidade_aux,
         dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]]))
       )
     }
   } else {
-    for (coluna in names(df_calcs)) {
+    for (coluna in colunas_summarise) {
       df_localidade_aux <- dplyr::full_join(
         df_localidade_aux,
         dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]])),
         by = dplyr::join_by(ano)
       )
     }
+  }
+
+  if (bloco == "bloco7") {
+    df_localidade_aux <- df_localidade_aux |>
+      dplyr::mutate(
+        faltante_dist_moment_obito_fetal = round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2),
+        faltante_dist_moment_obito_perinat = round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 2),
+        faltante_moment_obito_neonat = round(100 -dia_0_dist_moment_obito_neonat -dia_1_6dist_moment_obito_neonat -dia_7_27dist_moment_obito_neonat, 2),
+        faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
+        faltante_dist_peso_perinat = round(100 -menos_1500_dist_peso_perinat -de_1500_1999_dist_peso_perinat -de_2000_2499_dist_peso_perinat -mais_2500_dist_peso_perinat, 2),
+        faltante_dist_peso_neonat = round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)
+      )
   }
 
   if (adicionar_localidade == TRUE) {
@@ -668,7 +695,7 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
   if (length(anos1_aux) > 1) {
     if (bloco == "bloco6") {
       texto_incompletude <- glue::glue("Os <span style = 'font-weight: 700'>óbitos de mulheres em idade fértil (MIF)</span> apresentam problemas de investigação nos anos de <span style = 'font-weight: 700'> {anos1}.
-           </span> Nesses anos, a porcentagem de óbitos não investigados dessa população foi, respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span>
+           </span> Nesses anos, a porcentagem de óbitos investigados dessa população foi, respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span>
            São considerados como valores ideais aqueles acima de 90%.")
     } else if (bloco == "deslocamento") {
       texto_incompletude <- glue::glue("As Declarações de Nascidos Vivos apresentam problemas de <span style = 'font-weight: 700'>preenchimento do CNES</span> nos anos de <span style = 'font-weight: 700'> {anos1}.
@@ -691,7 +718,7 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
   } else if (length(anos1_aux) == 1) {
     if (bloco == "bloco6") {
       texto_incompletude <- glue::glue("Os <span style = 'font-weight: 700'>óbitos de mulheres em idade fértil (MIF)</span> apresentam problemas de investigação no ano de <span style = 'font-weight: 700'> {anos1_aux}.
-           </span> Nesse ano, a porcentagem de óbitos não investigados dessa população foi de <span style = 'font-weight: 700'> {val_incomp1_aux}%. </span>
+           </span> Nesse ano, a porcentagem de óbitos investigados dessa população foi de <span style = 'font-weight: 700'> {val_incomp1_aux}%. </span>
            São considerados como valores ideais aqueles acima de 90%.")
     } else if (bloco == "deslocamento") {
       texto_incompletude <- glue::glue("As Declarações de Nascidos Vivos apresentam problemas de <span style = 'font-weight: 700'>preenchimento do CNES</span> no ano de <span style = 'font-weight: 700'> {anos1_aux}.
@@ -767,7 +794,7 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
     if (length(anos2_aux) > 1) {
       if (bloco == "bloco6") {
         texto_incompletude2 <- glue::glue("{dplyr::if_else(length(anos1_aux) > 0, 'Além disso, os', 'Os')} <span style = 'font-weight: 700'>óbitos maternos</span> apresentam problemas de investigação nos anos de <span style = 'font-weight: 700'> {anos2}.
-           </span> Nesses anos, a porcentagem de óbitos não investigados dessa população foi, respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude2}. </span>
+           </span> Nesses anos, a porcentagem de óbitos investigados dessa população foi, respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude2}. </span>
            São considerados como valores ideais aqueles iguais a 100%.")
       } else if (bloco == "deslocamento") {
         texto_incompletude2 <- glue::glue("{dplyr::if_else(length(anos1_aux) > 0, 'Além disso, as', 'As')} Declarações de Nascidos Vivos apresentam problemas de <span style = 'font-weight: 700'>validade do CNES</span> nos anos de <span style = 'font-weight: 700'> {anos2}.
@@ -782,7 +809,7 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
     } else if (length(anos2_aux) == 1) {
       if (bloco == "bloco6") {
         texto_incompletude2 <- glue::glue("{dplyr::if_else(length(anos1_aux) > 0, 'Além disso, os', 'Os')} <span style = 'font-weight: 700'>óbitos maternos</span> apresentam problemas de investigação no ano de <span style = 'font-weight: 700'> {anos2_aux}.
-           </span> Nesse ano, a porcentagem de óbitos não investigados dessa população foi de <span style = 'font-weight: 700'> {val_incomp2_aux}%. </span>
+           </span> Nesse ano, a porcentagem de óbitos investigados dessa população foi de <span style = 'font-weight: 700'> {val_incomp2_aux}%. </span>
            São considerados como valores ideais aqueles iguais a 100%.")
       } else if (bloco == "deslocamento") {
         texto_incompletude2 <-  glue::glue("{dplyr::if_else(length(anos1_aux) > 0, 'Além disso, as', 'As')} Declarações de Nascidos Vivos apresentam problemas de <span style = 'font-weight: 700'>validade do CNES</span> no ano de <span style = 'font-weight: 700'> {anos2_aux}.

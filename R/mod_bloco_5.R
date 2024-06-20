@@ -1465,19 +1465,7 @@ mod_bloco_5_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco5_calcs(), filtros = filtros(), referencia = TRUE, adicionar_localidade = FALSE) |>
         dplyr::mutate(
-          localidade_comparacao = dplyr::if_else(
-            filtros()$comparar == "Não",
-            "Média nacional",
-            dplyr::case_when(
-              filtros()$nivel2 == "Nacional" ~ "Média nacional",
-              filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-              filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-              filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-              filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-              filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-              filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
-            )
-          )
+          localidade_comparacao = "Média nacional"
         ) |>
         dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("porc_baixo_peso_") | dplyr::starts_with("porc_premat_"))
     })

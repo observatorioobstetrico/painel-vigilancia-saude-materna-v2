@@ -1156,18 +1156,6 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     #### Indicadores de deslocamento ------------------------------------------
-    observeEvent(c(input$botao_prop1, input$botao_prop2, input$botao_prop3,
-                   input$botao_prop4, input$botao_prop5, input$botao_prop6,
-                   input$botao_mediana1, input$botao_mediana2, input$botao_infos), {
-                     cria_modal_incompletude(
-                       incompletude1 = data_incompletude()$prop_cnes_nao_preenchido,
-                       incompletude2 = data_incompletude()$prop_cnes_invalido,
-                       df = data_incompletude(),
-                       cobertura = data_incompletude()$cobertura,
-                       bloco = "deslocamento"
-                     )
-                   })
-
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao_deslocamento_prop1", anim = TRUE, animType = "fade", time = 0.8)
       shinyjs::hide(id = "mostrar_botao_deslocamento_prop2", anim = TRUE, animType = "fade", time = 0.8)
@@ -1195,6 +1183,18 @@ mod_bloco_4_server <- function(id, filtros){
     },
     ignoreNULL = FALSE
     )
+
+    observeEvent(c(input$botao_prop1, input$botao_prop2, input$botao_prop3,
+                   input$botao_prop4, input$botao_prop5, input$botao_prop6,
+                   input$botao_mediana1, input$botao_mediana2, input$botao_infos), {
+                     cria_modal_incompletude(
+                       incompletude1 = data_incompletude()$prop_cnes_nao_preenchido,
+                       incompletude2 = data_incompletude()$prop_cnes_invalido,
+                       df = data_incompletude(),
+                       cobertura = data_incompletude()$cobertura,
+                       bloco = "deslocamento"
+                     )
+                   })
 
 
     # Para o resumo do período ------------------------------------------------

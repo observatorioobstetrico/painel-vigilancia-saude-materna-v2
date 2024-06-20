@@ -483,10 +483,30 @@ mod_bloco_6_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    # Criando um data.frame com os cálculos dos indicadores -------------------
+    bloco6_calcs <- data.frame(
+      tipo = c("local", "referencia"),
+      soma_obitos_mat_totais = rep("sum(obitos_mat_totais)", 2),
+      rmm = c("round(sum(obitos_mat_totais) / sum(nascidos) * 100000, 1)", "30"),
+      prop_obitos_diretos = rep("round(sum(obitos_mat_diretos) / sum(obitos_mat_totais) * 100, 1)", 2),
+      prop_obitos_aborto = rep("round(sum(obitos_mat_aborto) / sum(obitos_mat_diretos) * 100, 1)", 2),
+      prop_obitos_hipertens = rep("round(sum(obitos_mat_hipertensao) / sum(obitos_mat_diretos) * 100, 1)", 2),
+      prop_obitos_hemo = rep("round(sum(obitos_mat_hemorragia) / sum(obitos_mat_diretos) * 100, 1)", 2),
+      prop_obitos_infec = rep("round(sum(obitos_mat_infec_puerperal) / sum(obitos_mat_diretos) * 100, 1)", 2),
+      soma_casos_mmg = rep("sum(casos_mmg[ano <= 2022])", 2),
+      prop_mmg_int_publicas = rep("round(sum(casos_mmg[ano <= 2022]) / sum(total_internacoes[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_hipertensao = rep("round(sum(casos_mmg_hipertensao[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_hemorragia = rep("round(sum(casos_mmg_hemorragia[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_infeccao = rep("round(sum(casos_mmg_infeccoes[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_uti = rep("round(sum(casos_mmg_uti[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_tmp = rep("round(sum(casos_mmg_tmp[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_transfusao = rep("round(sum(casos_mmg_transfusao[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
+      prop_mmg_cirurgia = rep("round(sum(casos_mmg_cirurgia[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2)
+    )
 
-  # Códigos compartilhados para os dois blocos ------------------------------
 
-    ##### Criando o output que recebe a localidade e o ano escolhidos #####
+    # Criando alguns outputs para a UI ----------------------------------------
+    ## Criando o output que recebe a localidade e o ano escolhidos ------------
     output$titulo_localidade <- renderUI({
 
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -529,12 +549,78 @@ mod_bloco_6_server <- function(id, filtros){
       tags$b(texto, style = "font-size: 33px")
     })
 
+    ## Criando os outputs que receberão os nomes dos locais selecionados quando há comparação --------
+    output$input_localidade_resumo_mort <- renderUI({
+      localidade_original <- dplyr::case_when(
+        filtros()$nivel == "Nacional" ~ "Brasil",
+        filtros()$nivel == "Regional" ~ filtros()$regiao,
+        filtros()$nivel == "Estadual" ~ filtros()$estado,
+        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+        filtros()$nivel == "Municipal" ~ filtros()$municipio
+      )
 
-    ##### Definindo as cores para os gráficos #####
-    cols <- c("#2c115f", "#b73779", "#fc8961")
+      localidade_comparacao <- dplyr::case_when(
+        filtros()$nivel2 == "Nacional" ~ "Brasil",
+        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+      )
 
+      if (filtros()$comparar == "Sim") {
+        radioButtons(
+          inputId = ns("localidade_resumo_mort"),
+          label = NULL,
+          choiceNames = list(
+            localidade_original,
+            localidade_comparacao
+          ),
+          choiceValues = list("escolha1", "escolha2"),
+          selected = "escolha1",
+          inline = TRUE
+        )
+      }
+    })
 
-    ##### Dados do resumo do período para a localidade escolhida #####
+    output$input_localidade_resumo_morb <- renderUI({
+      localidade_original <- dplyr::case_when(
+        filtros()$nivel == "Nacional" ~ "Brasil",
+        filtros()$nivel == "Regional" ~ filtros()$regiao,
+        filtros()$nivel == "Estadual" ~ filtros()$estado,
+        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+        filtros()$nivel == "Municipal" ~ filtros()$municipio
+      )
+
+      localidade_comparacao <- dplyr::case_when(
+        filtros()$nivel2 == "Nacional" ~ "Brasil",
+        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+      )
+
+      if (filtros()$comparar == "Sim") {
+        radioButtons(
+          inputId = ns("localidade_resumo_morb"),
+          label = NULL,
+          choiceNames = list(
+            localidade_original,
+            localidade_comparacao
+          ),
+          choiceValues = list("escolha1", "escolha2"),
+          selected = "escolha1",
+          inline = TRUE
+        )
+      }
+    })
+
+    ## Criando o output que receberá o nível selecionado ----------------------
     nivel_selecionado <- reactive({
       if (filtros()$comparar == "Não") {
         filtros()$nivel
@@ -557,253 +643,8 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
-
-    data6_resumo <- reactive({
-      if (filtros()$comparar == "Não") {
-        sufixo_inputs <- ""
-      } else {
-        if (input$tabset1 == "tabpanel_mortalidade") {
-          req(input$localidade_resumo_mort)
-          if (input$localidade_resumo_mort == "escolha1") {
-            sufixo_inputs <- ""
-          } else {
-            sufixo_inputs <- "2"
-          }
-        } else {
-          req(input$localidade_resumo_morb)
-          if (input$localidade_resumo_morb == "escolha1") {
-            sufixo_inputs <- ""
-          } else {
-            sufixo_inputs <- "2"
-          }
-        }
-      }
-      bloco6 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (nivel_selecionado() == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (nivel_selecionado() == "Regional")
-            regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Estadual")
-            uf == filtros()[[paste0("estado", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Macrorregião de saúde")
-            macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Microrregião de saúde")
-            r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Municipal")
-            municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos),
-          obitos_mat_totais = sum(obitos_mat_totais),
-          rmm = round(sum(obitos_mat_totais)/total_de_nascidos_vivos * 100000, 1),
-          prop_obitos_diretos = round(sum(obitos_mat_diretos)/obitos_mat_totais * 100, 1),
-          prop_obitos_aborto = round(sum(obitos_mat_aborto)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hipertens = round(sum(obitos_mat_hipertensao)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hemo = round(sum(obitos_mat_hemorragia)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_infec = round(sum(obitos_mat_infec_puerperal)/sum(obitos_mat_diretos) * 100, 1),
-          casos_mmg = sum(casos_mmg),
-          prop_mmg_int_publicas = round(casos_mmg/sum(total_internacoes) * 100, 1),
-          prop_mmg_hipertensao = round(sum(casos_mmg_hipertensao)/casos_mmg * 100, 1),
-          prop_mmg_hemorragia = round(sum(casos_mmg_hemorragia)/casos_mmg * 100, 1),
-          prop_mmg_infeccao = round(sum(casos_mmg_infeccoes)/casos_mmg * 100, 1),
-          prop_mmg_uti = round(sum(casos_mmg_uti)/casos_mmg * 100, 1),
-          prop_mmg_tmp = round(sum(casos_mmg_tmp)/casos_mmg * 100, 1),
-          prop_mmg_transfusao = round(sum(casos_mmg_transfusao)/casos_mmg * 100, 1),
-          prop_mmg_cirurgia = round(sum(casos_mmg_cirurgia)/casos_mmg * 100, 1),
-          localidade = dplyr::case_when(
-            nivel_selecionado() == "Nacional" ~ "Brasil",
-            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-
-    ##### Calculando os valores de referência para as caixinhas #####
-    data6_resumo_referencia <- reactive({
-      bloco6 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos),
-          obitos_mat_totais = sum(obitos_mat_totais),
-          rmm = 30,
-          prop_obitos_diretos = round(sum(obitos_mat_diretos)/obitos_mat_totais * 100, 1),
-          prop_obitos_aborto = round(sum(obitos_mat_aborto)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hipertens = round(sum(obitos_mat_hipertensao)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hemo = round(sum(obitos_mat_hemorragia)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_infec = round(sum(obitos_mat_infec_puerperal)/sum(obitos_mat_diretos) * 100, 1),
-          casos_mmg = sum(casos_mmg),
-          prop_mmg_int_publicas = round(casos_mmg/sum(total_internacoes) * 100, 1),
-          prop_mmg_hipertensao = round(sum(casos_mmg_hipertensao)/casos_mmg * 100, 1),
-          prop_mmg_hemorragia = round(sum(casos_mmg_hemorragia)/casos_mmg * 100, 1),
-          prop_mmg_infeccao = round(sum(casos_mmg_infeccoes)/casos_mmg * 100, 1),
-          prop_mmg_uti = round(sum(casos_mmg_uti)/casos_mmg * 100, 1),
-          prop_mmg_tmp = round(sum(casos_mmg_tmp)/casos_mmg * 100, 1),
-          prop_mmg_transfusao = round(sum(casos_mmg_transfusao)/casos_mmg * 100, 1),
-          prop_mmg_cirurgia = round(sum(casos_mmg_cirurgia)/casos_mmg * 100, 1)
-        ) |>
-        dplyr::ungroup()
-    })
-
-
-    ##### Calculando todos os indicadores para a localidade escolhida #####
-    data6 <- reactive({
-      bloco6 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos),
-          obitos_mat_totais = sum(obitos_mat_totais),
-          rmm = round(sum(obitos_mat_totais)/total_de_nascidos_vivos * 100000, 1),
-          prop_obitos_diretos = round(sum(obitos_mat_diretos)/obitos_mat_totais * 100, 1),
-          prop_obitos_aborto = round(sum(obitos_mat_aborto)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hipertens = round(sum(obitos_mat_hipertensao)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hemo = round(sum(obitos_mat_hemorragia)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_infec = round(sum(obitos_mat_infec_puerperal)/sum(obitos_mat_diretos) * 100, 1),
-          casos_mmg = sum(casos_mmg),
-          prop_mmg_int_publicas = round(casos_mmg/sum(total_internacoes) * 100, 1),
-          prop_mmg_hipertensao = round(sum(casos_mmg_hipertensao)/casos_mmg * 100, 1),
-          prop_mmg_hemorragia = round(sum(casos_mmg_hemorragia)/casos_mmg * 100, 1),
-          prop_mmg_infeccao = round(sum(casos_mmg_infeccoes)/casos_mmg * 100, 1),
-          prop_mmg_uti = round(sum(casos_mmg_uti)/casos_mmg * 100, 1),
-          prop_mmg_tmp = round(sum(casos_mmg_tmp)/casos_mmg * 100, 1),
-          prop_mmg_transfusao = round(sum(casos_mmg_transfusao)/casos_mmg * 100, 1),
-          prop_mmg_cirurgia = round(sum(casos_mmg_cirurgia)/casos_mmg * 100, 1),
-          class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ dplyr::if_else(
-              filtros()$comparar == "Não",
-              "Brasil (valor de referência)",
-              dplyr::if_else(
-                filtros()$mostrar_referencia == "nao_mostrar_referencia",
-                "Brasil",
-                "Brasil (valor de referência)"
-              )
-            ),
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-
-    ##### Calculando todos os indicadores para a localidade de comparação #####
-    data6_comp <- reactive({
-      bloco6 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos),
-          obitos_mat_totais = sum(obitos_mat_totais),
-          rmm = round(sum(obitos_mat_totais)/total_de_nascidos_vivos * 100000, 1),
-          prop_obitos_diretos = round(sum(obitos_mat_diretos)/obitos_mat_totais * 100, 1),
-          prop_obitos_aborto = round(sum(obitos_mat_aborto)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hipertens = round(sum(obitos_mat_hipertensao)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_hemo = round(sum(obitos_mat_hemorragia)/sum(obitos_mat_diretos) * 100, 1),
-          prop_obitos_infec = round(sum(obitos_mat_infec_puerperal)/sum(obitos_mat_diretos) * 100, 1),
-          casos_mmg = sum(casos_mmg),
-          prop_mmg_int_publicas = round(casos_mmg/sum(total_internacoes) * 100, 1),
-          prop_mmg_hipertensao = round(sum(casos_mmg_hipertensao)/casos_mmg * 100, 1),
-          prop_mmg_hemorragia = round(sum(casos_mmg_hemorragia)/casos_mmg * 100, 1),
-          prop_mmg_infeccao = round(sum(casos_mmg_infeccoes)/casos_mmg * 100, 1),
-          prop_mmg_uti = round(sum(casos_mmg_uti)/casos_mmg * 100, 1),
-          prop_mmg_tmp = round(sum(casos_mmg_tmp)/casos_mmg * 100, 1),
-          prop_mmg_transfusao = round(sum(casos_mmg_transfusao)/casos_mmg * 100, 1),
-          prop_mmg_cirurgia = round(sum(casos_mmg_cirurgia)/casos_mmg * 100, 1),
-          class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ dplyr::if_else(
-              filtros()$comparar == "Não",
-              "Brasil (valor de referência)",
-              dplyr::if_else(
-                filtros()$mostrar_referencia == "nao_mostrar_referencia",
-                "Brasil",
-                "Brasil (valor de referência)"
-              )
-            ),
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-          )
-        ) |>
-        dplyr::ungroup()
-    })
-
-
-    ##### Calculando todos os valores de referência para os gráficos #####
-    data6_referencia <- reactive({
-      bloco6 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise(
-          total_de_nascidos_vivos = sum(nascidos),
-          obitos_mat_totais = sum(obitos_mat_totais),
-          rmm = 30,
-          prop_obitos_diretos = round(sum(obitos_mat_diretos)/obitos_mat_totais * 100, 1),
-          prop_obitos_aborto = round(sum(obitos_mat_aborto)/sum(obitos_mat_diretos)*100, 1),
-          prop_obitos_hipertens = round(sum(obitos_mat_hipertensao)/sum(obitos_mat_diretos)*100, 1),
-          prop_obitos_hemo = round(sum(obitos_mat_hemorragia)/sum(obitos_mat_diretos)*100, 1),
-          prop_obitos_infec = round(sum(obitos_mat_infec_puerperal)/sum(obitos_mat_diretos)*100, 1),
-          casos_mmg = sum(casos_mmg),
-          prop_mmg_int_publicas = round(casos_mmg/sum(total_internacoes) * 100, 1),
-          prop_mmg_hipertensao = round(sum(casos_mmg_hipertensao)/casos_mmg * 100, 1),
-          prop_mmg_hemorragia = round(sum(casos_mmg_hemorragia)/casos_mmg * 100, 1),
-          prop_mmg_infeccao = round(sum(casos_mmg_infeccoes)/casos_mmg * 100, 1),
-          prop_mmg_uti = round(sum(casos_mmg_uti)/casos_mmg * 100, 1),
-          prop_mmg_tmp = round(sum(casos_mmg_tmp)/casos_mmg * 100, 1),
-          prop_mmg_transfusao = round(sum(casos_mmg_transfusao)/casos_mmg * 100, 1),
-          prop_mmg_cirurgia = round(sum(casos_mmg_cirurgia)/casos_mmg * 100, 1),
-          class = "Referência"
-        ) |>
-        dplyr::ungroup()
-    })
-
-
-    ##### Calculando os indicadores de incompletude e cobertura para todos os indicadores #####
+    ## Para os botões de alerta quanto à incompletude e cobertura --------------
+    ### Calculando os indicadores de incompletude ------------------------------
     data_incompletude_aux <- reactive({
       base_incompletude |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
@@ -837,6 +678,7 @@ mod_bloco_6_server <- function(id, filtros){
         dplyr::ungroup()
     })
 
+    ### Calculando os indicadores de cobertura --------------------------------
     data_cobertura <- reactive({
       if (filtros()$nivel == "Municipal") {
         sub_registro_sim_muni_2015_2021 |>
@@ -882,10 +724,24 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
+    ### Juntando os dados de incompletude e cobertura -------------------------
     data_incompletude <- reactive({dplyr::full_join(data_incompletude_aux(), data_cobertura(), by = c("ano", "localidade"))})
 
+    ### Ativando os botões de alerta quando necessário ------------------------
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
 
-    ##### Definindo os modais de incompletude e quando os botões de aviso devem aparecer #####
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$prop_mif_investigado,
@@ -895,14 +751,6 @@ mod_bloco_6_server <- function(id, filtros){
         bloco = "bloco6"
       )
     })
-
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-      shinyjs::show(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-    },
-    ignoreNULL = FALSE
-    )
 
     observeEvent(input$botao2, {
       cria_modal_incompletude(
@@ -914,14 +762,6 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-      shinyjs::show(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-    },
-    ignoreNULL = FALSE
-    )
-
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$prop_mif_investigado,
@@ -931,14 +771,6 @@ mod_bloco_6_server <- function(id, filtros){
         bloco = "bloco6"
       )
     })
-
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-      req((sum(data6()$obitos_mat_totais) != 0) & (any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE)))
-      shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-    },
-    ignoreNULL = FALSE
-    )
 
     observeEvent(input$botao4, {
       cria_modal_incompletude(
@@ -950,383 +782,161 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
-      req((sum(data6()$obitos_mat_totais) != 0) & (any(data_incompletude()$prop_mif_investigado < 90, na.rm = TRUE) | any(data_incompletude()$prop_obito_materno_investigado < 100, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE)))
-      shinyjs::show(id = "mostrar_botao4", anim = TRUE, animType = "fade", time = 0.8)
-    },
-    ignoreNULL = FALSE
-    )
 
+    # Para o resumo do período ------------------------------------------------
+    ## Calculando uma média dos indicadores para o período selecionado --------
+    ### Para a localidade selecionada -----------------------------------------
+    data6_resumo <- reactive({
+      if (filtros()$comparar == "Não") {
+        sufixo_inputs <- ""
+      } else {
+        if (input$tabset1 == "tabpanel_mortalidade") {
+          req(input$localidade_resumo_mort)
+          if (input$localidade_resumo_mort == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else {
+          req(input$localidade_resumo_morb)
+          if (input$localidade_resumo_morb == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        }
+      }
+      bloco6 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (nivel_selecionado() == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (nivel_selecionado() == "Regional")
+            regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Estadual")
+            uf == filtros()[[paste0("estado", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Macrorregião de saúde")
+            macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
+          else if(nivel_selecionado() == "Microrregião de saúde")
+            r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
+          else if(nivel_selecionado() == "Municipal")
+            municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), adicionar_localidade = FALSE) |>
+        dplyr::mutate(
+          localidade = dplyr::case_when(
+            nivel_selecionado() == "Nacional" ~ "Brasil",
+            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
+            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
+            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
+            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
+            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]],
+            nivel_selecionado() == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        )
+    })
 
+    data6_resumo_correcao_rmm <- reactive({
+      if (filtros()$comparar == "Não") {
+        sufixo_inputs <- ""
+      } else {
+        if (input$tabset1 == "tabpanel_mortalidade") {
+          req(input$localidade_resumo_mort)
+          if (input$localidade_resumo_mort == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else {
+          req(input$localidade_resumo_morb)
+          if (input$localidade_resumo_morb == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        }
+      }
 
-  # Para os indicadores de mortalidade materna ------------------------------
-
-    ##### Criando o input para selecionar a localidade do resumo quando há comparação #####
-    output$input_localidade_resumo_mort <- renderUI({
-      localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
-      )
-
-      localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-      )
-
-      if (filtros()$comparar == "Sim") {
-        radioButtons(
-          inputId = ns("localidade_resumo_mort"),
-          label = NULL,
-          choiceNames = list(
-            localidade_original,
-            localidade_comparacao
-          ),
-          choiceValues = list("escolha1", "escolha2"),
-          selected = "escolha1",
-          inline = TRUE
+      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")){
+        if (nivel_selecionado() == "Estadual"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()[[paste0("estado", sufixo_inputs)]],
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            ) |>
+            dplyr::group_by(localidade) |>
+            dplyr::summarise(
+              RMM_C = mean(RMM)
+            )
+        } else if (nivel_selecionado() == "Regional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()[[paste0("regiao", sufixo_inputs)]],
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            ) |>
+            dplyr::group_by(localidade) |>
+            dplyr::summarise(
+              RMM_C = mean(RMM)
+            )
+        } else if (nivel_selecionado() == "Nacional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == "Brasil",
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            ) |>
+            dplyr::group_by(localidade) |>
+            dplyr::summarise(
+              RMM_C = mean(RMM)
+            )
+        }
+      } else{
+        data.frame(
+          localidade = dplyr::case_when(
+            nivel_selecionado() == "Nacional" ~ "Brasil",
+            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
+            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
+            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
+            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
+            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]],
+            nivel_selecionado() == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
         )
       }
     })
 
-  # ##### Calculando a RMM corrigida para o resumo do período #####
-  #    data6_resumo_fator_de_correcao <- reactive({
-  #      if (filtros()$comparar == "Não") {
-  #        sufixo_inputs <- ""
-  #      } else {
-  #        if (input$tabset1 == "tabpanel_mortalidade") {
-  #          req(input$localidade_resumo_mort)
-  #          if (input$localidade_resumo_mort == "escolha1") {
-  #            sufixo_inputs <- ""
-  #          } else {
-  #            sufixo_inputs <- "2"
-  #          }
-  #        } else {
-  #          req(input$localidade_resumo_morb)
-  #          if (input$localidade_resumo_morb == "escolha1") {
-  #            sufixo_inputs <- ""
-  #          } else {
-  #            sufixo_inputs <- "2"
-  #          }
-  #        }
-  #      }
-  #      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
-  #        if (nivel_selecionado() == "Estadual") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()[[paste0("estado", sufixo_inputs)]],
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            ) |>
-  #            dplyr::group_by(localidade) |>
-  #            dplyr::summarise(
-  #              fator_de_correcao = mean(fator_de_correcao)
-  #            )
-  #        } else if (nivel_selecionado() == "Regional") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()[[paste0("regiao", sufixo_inputs)]],
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            ) |>
-  #            dplyr::group_by(localidade) |>
-  #            dplyr::summarise(
-  #              fator_de_correcao = mean(fator_de_correcao)
-  #            )
-  #        } else {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == "Brasil",
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            ) |>
-  #            dplyr::group_by(localidade) |>
-  #            dplyr::summarise(
-  #              fator_de_correcao = mean(fator_de_correcao)
-  #            )
-  #        }
-  #      } else {
-  #        data.frame(
-  #          fator_de_correcao = 1,
-  #          localidade = dplyr::case_when(
-  #            nivel_selecionado() == "Nacional" ~ "Brasil",
-  #            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-  #            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-  #            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-  #            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-  #            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
-  #         )
-  #        )
-  #      }
-  #
-  #    })
-  #
-  #    data6_resumo_rmm_corrigida <- reactive({
-  #      dplyr::left_join(data6_resumo(), rmm_corrigida, by = c("localidade")) |>
-  #        dplyr::mutate(
-  #          rmm = round(rmm*fator_de_correcao, 1)
-  #        )
-  #    })
-  #
-  #
-  #    ##### Calculando a RMM corrigida para os gráficos #####
-  #    data6_fator_de_correcao <- reactive({
-  #      if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-  #        if (filtros()$nivel == "Estadual") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()$estado,
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        } else if (filtros()$nivel == "Regional") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()$regiao,
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        } else {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == "Brasil",
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        }
-  #      } else {
-  #        data.frame(
-  #          ano = filtros()$ano2[1]:filtros()$ano2[2],
-  #          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-  #        )
-  #      }
-  #    })
-  #
-  #    data6_fator_de_correcao_comp <- reactive({
-  #      if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
-  #        if (filtros()$nivel2 == "Estadual") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()$estado,
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        } else if (filtros()$nivel2 == "Regional") {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == filtros()$regiao,
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        } else {
-  #          rmm_fator_de_correcao |>
-  #            dplyr::filter(
-  #              localidade == "Brasil",
-  #              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-  #            )
-  #        }
-  #      } else {
-  #        data.frame(
-  #          ano = filtros()$ano2[1]:filtros()$ano2[2],
-  #          fator_de_correcao = rep(1, length(filtros()$ano2[1]:filtros()$ano2[2]))
-  #        )
-  #      }
-  #    })
-  #
-  #    data6_rmm_corrigida <- reactive({
-  #      dplyr::full_join(data6(), data6_fator_de_correcao(), by = "ano") |>
-  #        dplyr::mutate(
-  #          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao()$fator_de_correcao[which(data6_fator_de_correcao()$ano == 2020)]),
-  #          rmm = round(rmm*fator_de_correcao, 1)
-  #        )
-  #    })
-  #
-  #    data6_comp_rmm_corrigida <- reactive({
-  #      dplyr::full_join(data6_comp(), data6_fator_de_correcao_comp(), by = "ano") |>
-  #        dplyr::mutate(
-  #          fator_de_correcao = ifelse(ano < 2021, fator_de_correcao, data6_fator_de_correcao_comp()$fator_de_correcao[which(data6_fator_de_correcao_comp()$ano == 2020)]),
-  #          rmm = round(rmm*fator_de_correcao, 1)
-  #        )
-  #    })
+    data6_resumo_rmm_corrigida <- reactive({
+      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
+        dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
+          dplyr::mutate(rmm_c = RMM_C)
+      } else {
+        dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
+          dplyr::mutate(rmm_c = rmm)
+      }
+    })
 
-     ########## Calculando as RMM com correção
-
-     data6_correcao_rmm <- reactive({
-       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
-         if(filtros()$nivel == "Estadual"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$estado,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         } else if(filtros()$nivel == "Regional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$regiao,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         } else if(filtros()$nivel=="Nacional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == "Brasil",
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         }
-       }
-       else{
-         data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
-       }
-     })
-
-     data6_rmm_corrigida <- reactive({
-       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
-         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
-           dplyr::mutate(
-             rmm_c=RMM
-           )
-       } else{
-         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
-           dplyr::mutate(
-             rmm_c=rmm
-           )
-       }
-     })
-
-     data6_comp_correcao_rmm <- reactive({
-       if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
-         if(filtros()$nivel2 == "Estadual"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$estado,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         } else if(filtros()$nivel2 == "Regional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$regiao,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         } else if(filtros()$nivel2=="Nacional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == "Brasil",
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             )
-         }
-       }
-       else{
-         data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
-       }
-     })
-
-     data6_comp_rmm_corrigida <- reactive({
-       if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
-         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
-           dplyr::mutate(
-             rmm_c=RMM
-           )
-       } else{
-         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
-           dplyr::mutate(
-             rmm_c=rmm
-           )
-       }
-     })
-
-     data6_resumo_correcao_rmm <- reactive({
-       if (filtros()$comparar == "Não") {
-         sufixo_inputs <- ""
-       } else {
-         if (input$tabset1 == "tabpanel_mortalidade") {
-           req(input$localidade_resumo_mort)
-           if (input$localidade_resumo_mort == "escolha1") {
-             sufixo_inputs <- ""
-           } else {
-             sufixo_inputs <- "2"
-           }
-         } else {
-           req(input$localidade_resumo_morb)
-           if (input$localidade_resumo_morb == "escolha1") {
-             sufixo_inputs <- ""
-           } else {
-             sufixo_inputs <- "2"
-           }
-         }
-       }
-
-       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
-         if(filtros()$nivel == "Estadual"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$estado,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             ) |>
-             dplyr::group_by(localidade) |>
-             dplyr::summarise(
-               RMM_C = mean(RMM)
-             )
-         } else if(filtros()$nivel == "Regional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == filtros()$regiao,
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             ) |>
-             dplyr::group_by(localidade) |>
-             dplyr::summarise(
-               RMM_C = mean(RMM)
-             )
-         } else if(filtros()$nivel=="Nacional"){
-           rmm_corrigida |>
-             dplyr::filter(
-               localidade == "Brasil",
-               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-             ) |>
-             dplyr::group_by(localidade) |>
-             dplyr::summarise(
-               RMM_C = mean(RMM)
-             )
-         }
-       }
-       else{
-         data.frame(
-           localidade = dplyr::case_when(
-             nivel_selecionado() == "Nacional" ~ "Brasil",
-             nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-             nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-             nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-             nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-             nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]]
-           )
-         )
-       }
-     })
-
-     data6_resumo_rmm_corrigida <- reactive({
-       if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
-           dplyr::mutate(rmm_c = RMM_C)
-       } else {
-         result <- dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
-           dplyr::mutate(rmm_c = rmm)
-       }
-
-       return(result)
-     })
+    ### Para a referência -----------------------------------------------------
+    data6_resumo_referencia <- reactive({
+      bloco6 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), referencia = TRUE)
+    })
 
 
-    ##### Criando as caixinhas do resumo do período #####
+    ## Criando os outputs das caixinhas ---------------------------------------
+    ### Para os indicadores de mortalidade materna ----------------------------
+    #### Número de total óbitos maternos ---------------------------------------
     output$caixa_b6_mort_i1 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "obitos_mat_totais",
-        titulo = "Número de óbitos maternos",
+        indicador = "soma_obitos_mat_totais",
+        titulo = "Número de total óbitos maternos",
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$obitos_mat_totais,
+        valor_de_referencia = data6_resumo_referencia()$soma_obitos_mat_totais,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        #cor = dplyr::if_else(filtros()$nivel == "Nacional", "lightgrey", "#cbd6ff"),
         texto_footer = dplyr::if_else(
           filtros()$nivel == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
@@ -1338,6 +948,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Razão de mortalidade materna por 100.000 nascidos vivos ---------------
     output$caixa_b6_mort_i2 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo_rmm_corrigida(),
@@ -1354,6 +965,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Porcentagem de óbitos maternos por causas obstétricas diretas ---------
     output$caixa_b6_mort_i3 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
@@ -1369,6 +981,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Porcentagem de óbitos maternos diretos por aborto ---------------------
     output$caixa_b6_mort_i4 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
@@ -1384,6 +997,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Porcentagem de óbitos maternos diretos por causas hemorrágicas --------
     output$caixa_b6_mort_i5 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
@@ -1399,6 +1013,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Porcentagem de óbitos maternos diretos por causas hipertensivas --------
     output$caixa_b6_mort_i6 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
@@ -1414,6 +1029,7 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
+    #### Porcentagem de óbitos maternos diretos por infecção puerperal ---------
     output$caixa_b6_mort_i7 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
@@ -1430,41 +1046,287 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
 
+    ### Para os indicadores de morbidade materna ------------------------------
+    #### Porcentagem de casos de morbidade materna grave em internações obstétricas públicas ----
+    output$caixa_b6_mmg_i1 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_int_publicas",
+        titulo = "Porcentagem de casos de morbidade materna grave em internações obstétricas públicas",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_int_publicas,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave por hipertensão ------
+    output$caixa_b6_mmg_i2 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_hipertensao",
+        titulo = "Porcentagem de casos de morbidade materna grave por hipertensão",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hipertensao,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave por hemorragia -------
+    output$caixa_b6_mmg_i3 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_hemorragia",
+        titulo = "Porcentagem de casos de morbidade materna grave por hemorragia",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hemorragia,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave por infecção ---------
+    output$caixa_b6_mmg_i4 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_infeccao",
+        titulo = "Porcentagem de casos de morbidade materna grave por infecção",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_infeccao,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave com internação em UTI ----
+    output$caixa_b6_mmg_i5 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_uti",
+        titulo = "Porcentagem de casos de morbidade materna grave com internação em UTI",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_uti,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado ----
+    output$caixa_b6_mmg_i6 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_tmp",
+        titulo = "Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_tmp,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave com transfusão sanguínea ----
+    output$caixa_b6_mmg_i7 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_transfusao",
+        titulo = "Porcentagem de casos de morbidade materna grave com transfusão sanguínea",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_transfusao,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    #### Porcentagem de casos de morbidade materna grave com intervenção cirúrgica ----
+    output$caixa_b6_mmg_i8 <- renderUI({
+      cria_caixa_server(
+        dados = data6_resumo(),
+        indicador = "prop_mmg_cirurgia",
+        titulo = "Porcentagem de casos de morbidade materna grave com intervenção cirúrgica",
+        tem_meta = FALSE,
+        valor_de_referencia = data6_resumo_referencia()$prop_mmg_cirurgia,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "303px",
+        pagina = "bloco_6",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
 
 
-    ##### Criando o gráfico de linhas para o número de óbitos maternos #####
+    # Para os gráficos --------------------------------------------------------
+    cols <- c("#2c115f", "#b73779", "#fc8961")
+
+    ## Calculando os indicadores para cada ano do período selecionado ---------
+    ### Para a localidade selecionada -----------------------------------------
+    data6 <- reactive({
+      bloco6 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros())
+    })
+
+    data6_correcao_rmm <- reactive({
+      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+        if(filtros()$nivel == "Estadual"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()$estado,
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        } else if(filtros()$nivel == "Regional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()$regiao,
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        } else if(filtros()$nivel=="Nacional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == "Brasil",
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        }
+      }
+      else{
+        data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
+      }
+    })
+
+    data6_rmm_corrigida <- reactive({
+      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
+          dplyr::mutate(
+            rmm_c=RMM
+          )
+      } else{
+        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
+          dplyr::mutate(
+            rmm_c=rmm
+          )
+      }
+    })
+
+    ### Para a comparação selecionada -----------------------------------------
+    data6_comp <- reactive({
+      bloco6 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), comp = TRUE)
+    })
+
+    data6_comp_correcao_rmm <- reactive({
+      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+        if(filtros()$nivel2 == "Estadual"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()$estado,
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        } else if(filtros()$nivel2 == "Regional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == filtros()$regiao,
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        } else if(filtros()$nivel2=="Nacional"){
+          rmm_corrigida |>
+            dplyr::filter(
+              localidade == "Brasil",
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            )
+        }
+      }
+      else{
+        data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
+      }
+    })
+
+    data6_comp_rmm_corrigida <- reactive({
+      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
+          dplyr::mutate(
+            rmm_c = RMM
+          )
+      } else{
+        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
+          dplyr::mutate(
+            rmm_c = rmm
+          )
+      }
+    })
+
+    ### Para a referência -----------------------------------------------------
+    data6_referencia <- reactive({
+      bloco6 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::group_by(ano) |>
+        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), referencia = TRUE)
+    })
+
+
+    ## Criando os outputs dos gráficos ----------------------------------------
+    ### Para os indicadores de mortalidade materna ----------------------------
+    #### Número de óbitos maternos --------------------------------------------
     output$plot1_mort <- highcharter::renderHighchart({
-      data6_obitos_mat <- data6() |>
-        dplyr::mutate(
-          class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
-          )
-        )
-
-      data6_comp_obitos_mat <- data6_comp() |>
-        dplyr::mutate(
-          class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-          )
-        )
-
       if (filtros()$comparar == "Não") {
         highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data6_obitos_mat,
+            data = data6(),
             type = "line",
-            highcharter::hcaes(x = ano, y = obitos_mat_totais, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1473,14 +1335,14 @@ mod_bloco_6_server <- function(id, filtros){
       } else {
         highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data6_obitos_mat,
+            data = data6(),
             type = "line",
-            highcharter::hcaes(x = ano, y = obitos_mat_totais, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp_obitos_mat,
+            data = data6_comp(),
             type = "line",
-            highcharter::hcaes(x = ano, y = obitos_mat_totais, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1489,8 +1351,7 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
-    ##### Criando o gráfico de linhas para a RMM #####
+    #### Razão de mortalidade materna por 100.000 nascidos vivos --------------
     output$plot2_mort <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         highcharter::highchart() |>
@@ -1498,8 +1359,7 @@ mod_bloco_6_server <- function(id, filtros){
             data = data6_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
-            highcharter::hcaes(x = ano, y = rmm_c,
-                               group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_referencia(),
@@ -1547,13 +1407,12 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
-    ##### Criando o gráfico de linhas para a porcentagem de óbitos maternos diretos #####
+    #### Porcentagem de óbitos maternos por causas obstétricas diretas --------
     output$plot3_mort <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            sum(data6()$obitos_mat_totais) != 0,
+            sum(data6()$soma_obitos_mat_totais) != 0,
             "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -1583,7 +1442,7 @@ mod_bloco_6_server <- function(id, filtros){
       } else {
         validate(
           need(
-            sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
+            sum(data6()$soma_obitos_mat_totais) != 0 | sum(data6_comp()$soma_obitos_mat_totais) != 0,
             "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -1618,8 +1477,7 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
-    ##### Criando o gráfico de linhas para a porcentagem de óbitos maternos diretos por causas específicas #####
+    #### Porcentagem de óbitos maternos diretos por causas específicas --------
     output$plot4_mort <- highcharter::renderHighchart({
       data6_aux <- data6() |>
         dplyr::select(
@@ -1645,7 +1503,7 @@ mod_bloco_6_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            sum(data6()$obitos_mat_totais) != 0,
+            sum(data6()$soma_obitos_mat_totais) != 0,
             "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -1675,7 +1533,7 @@ mod_bloco_6_server <- function(id, filtros){
       } else {
         validate(
           need(
-            sum(data6()$obitos_mat_totais) != 0 | sum(data6_comp()$obitos_mat_totais) != 0,
+            sum(data6()$soma_obitos_mat_totais) != 0 | sum(data6_comp()$soma_obitos_mat_totais) != 0,
             "Não foram registrados óbitos maternos no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -1711,167 +1569,8 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
 
-
-  # Para os indicadores de morbidade materna grave --------------------------------
-
-    ##### Criando o input para selecionar a localidade do resumo quando há comparação #####
-    output$input_localidade_resumo_morb <- renderUI({
-      localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
-      )
-
-      localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
-      )
-
-      if (filtros()$comparar == "Sim") {
-        radioButtons(
-          inputId = ns("localidade_resumo_morb"),
-          label = NULL,
-          choiceNames = list(
-            localidade_original,
-            localidade_comparacao
-          ),
-          choiceValues = list("escolha1", "escolha2"),
-          selected = "escolha1",
-          inline = TRUE
-        )
-      }
-    })
-
-
-    output$caixa_b6_mmg_i1 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_int_publicas",
-        titulo = "Porcentagem de casos de morbidade materna grave em internações obstétricas públicas",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_int_publicas,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-
-    output$caixa_b6_mmg_i2 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_hipertensao",
-        titulo = "Porcentagem de casos de morbidade materna grave por hipertensão",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hipertensao,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i3 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_hemorragia",
-        titulo = "Porcentagem de casos de morbidade materna grave por hemorragia",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hemorragia,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i4 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_infeccao",
-        titulo = "Porcentagem de casos de morbidade materna grave por infecção",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_infeccao,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i5 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_uti",
-        titulo = "Porcentagem de casos de morbidade materna grave com internação em UTI",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_uti,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i6 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_tmp",
-        titulo = "Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_tmp,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i7 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_transfusao",
-        titulo = "Porcentagem de casos de morbidade materna grave com transfusão sanguínea",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_transfusao,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    output$caixa_b6_mmg_i8 <- renderUI({
-      cria_caixa_server(
-        dados = data6_resumo(),
-        indicador = "prop_mmg_cirurgia",
-        titulo = "Porcentagem de casos de morbidade materna grave com intervenção cirúrgica",
-        tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_cirurgia,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "303px",
-        pagina = "bloco_6",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
+    ### Para os indicadores de morbidade materna ------------------------------
+    #### Porcentagem de casos de morbidade materna grave em internações obstétricas públicas ----
     output$plot1_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -1929,7 +1628,7 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
+    #### Porcentagem de casos de morbidade materna grave por causas específicas ----
     output$plot2_mmg <- highcharter::renderHighchart({
       data6_aux2 <- data6() |>
         dplyr::select(
@@ -1955,7 +1654,7 @@ mod_bloco_6_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -1985,7 +1684,7 @@ mod_bloco_6_server <- function(id, filtros){
       } else {
         validate(
           need(
-            data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -2020,12 +1719,12 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
-
+    #### Porcentagem de casos de morbidade materna grave com internação em UTI ----
     output$plot3_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -2054,7 +1753,7 @@ mod_bloco_6_server <- function(id, filtros){
         }
       } else {
         need(
-          data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
           "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
         )
         grafico_base <- highcharter::highchart() |>
@@ -2088,11 +1787,12 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
+    #### Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado ----
     output$plot4_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -2121,7 +1821,7 @@ mod_bloco_6_server <- function(id, filtros){
         }
       } else {
         need(
-          data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
           "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
         )
         grafico_base <- highcharter::highchart() |>
@@ -2155,11 +1855,12 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
+    #### Porcentagem de casos de morbidade materna grave com transfusão sanguínea ----
     output$plot5_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -2188,7 +1889,7 @@ mod_bloco_6_server <- function(id, filtros){
         }
       } else {
         need(
-          data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
           "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
         )
         grafico_base <- highcharter::highchart() |>
@@ -2222,11 +1923,12 @@ mod_bloco_6_server <- function(id, filtros){
       }
     })
 
+    #### Porcentagem de casos de morbidade materna grave com intervenção cirúrgica ----
     output$plot6_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$casos_mmg != 0,
+            data6()$soma_casos_mmg != 0,
             "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
           )
         )
@@ -2255,7 +1957,7 @@ mod_bloco_6_server <- function(id, filtros){
         }
       } else {
         need(
-          data6()$casos_mmg != 0 | data6_comp()$casos_mmg != 0,
+          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
           "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
         )
         grafico_base <- highcharter::highchart() |>
@@ -2288,6 +1990,8 @@ mod_bloco_6_server <- function(id, filtros){
         }
       }
     })
+
+
 
 
   })

@@ -518,8 +518,6 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
 
-
-
     # Para o resumo do período ------------------------------------------------
     ## Calculando uma média dos indicadores para o período selecionado --------
     ### Para a localidade selecionada -----------------------------------------
