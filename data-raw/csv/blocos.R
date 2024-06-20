@@ -117,33 +117,18 @@ bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <
 
 
 
-bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2022.csv")
-bloco4_deslocamento_macrorregiao <- rbind(bloco4_deslocamento_macrorregiao, read.csv("data-raw/csv/indicador_deslocamento_1500_2023.csv"))
+bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2023.csv")
 
-bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
-  janitor::clean_names() |>
-  dplyr::select(-c(3, 6:8, ))
-
-bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
-  dplyr::group_by(ano, codmunres) |>
-  dplyr::summarise(nascimentos = sum(nascimentos),
-                   desloc_1 = sum(desloc_1),
-                   desloc_2 = sum(desloc_2),
-                   desloc_3 = sum(desloc_3),
-                   desloc_4 = sum(desloc_4),
-                   desloc_5 = sum(desloc_5),
-                   desloc_6 = sum(desloc_6)) #|>
-  #dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
 
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   janitor::clean_names()
 
-asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2023.csv", sep = ';') |>
+asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
   select(!total_de_nascidos_malformacao)
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres)
