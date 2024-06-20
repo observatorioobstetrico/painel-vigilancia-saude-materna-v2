@@ -1386,6 +1386,7 @@ mod_bloco_7_server <- function(id, filtros){
     ns <- session$ns
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
+    ## Tive que fazer um tratamento especial para algumas variáveis. Ver no arquivo funcoes_globais.R
     bloco7_calcs <- reactive({
       data.frame(
         tipo = c("local", "referencia"),
