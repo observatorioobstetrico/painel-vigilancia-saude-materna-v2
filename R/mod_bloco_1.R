@@ -1107,7 +1107,7 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional")) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
