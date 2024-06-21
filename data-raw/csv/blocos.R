@@ -123,10 +123,10 @@ bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocament
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   janitor::clean_names()
 
-asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
-  janitor::clean_names() |>
-  dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
-  select(!total_de_nascidos_malformacao)
+# asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
+#   janitor::clean_names() |>
+#   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
+#   select(!total_de_nascidos_malformacao)
 
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';') |>
   janitor::clean_names() |>
@@ -287,13 +287,13 @@ bloco5 <- bloco5 |>
     (which(names(bloco5) == "ano") + 1):(which(names(bloco5) == "municipio") - 1)
   )
 
-asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
-asfixia <- asfixia |>
-  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
-  )
+# asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
+# asfixia <- asfixia |>
+#   dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
+#   dplyr::select(
+#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+#     (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
+#   )
 
 malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
 malformacao <- malformacao |>
@@ -495,7 +495,7 @@ usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_macrorregiao, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
-usethis::use_data(asfixia, overwrite = TRUE)
+# usethis::use_data(asfixia, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
 usethis::use_data(bloco7, overwrite = TRUE)

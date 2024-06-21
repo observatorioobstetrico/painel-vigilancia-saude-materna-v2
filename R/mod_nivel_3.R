@@ -333,13 +333,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             dplyr::filter(
               nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco5}")
             )
-        }  else if (filtros()$indicador %in% c(
-          "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
-          "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde"
-        )) {
-          tabela_indicadores |>
-            dplyr::filter(indicador == filtros()$indicador) |>
-            dplyr::mutate(bloco == "asfixia")
         } else {
           tabela_indicadores |>
             dplyr::filter(indicador == filtros()$indicador)
@@ -372,15 +365,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        if (infos_indicador()$nome_abreviado %in% c("porc_nascidos_vivos_asfixia1", "porc_malformacao_vigilancia")) {
-          malformacao2 <- malformacao |>
-            dplyr::select(c(1:3), 5, 14) |>
-            dplyr::group_by(ano, codmunres, municipio, uf) |>
-            dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
-
-          dplyr::left_join(bloco5, asfixia) |>
-            dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .))
-        } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
+        if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
           bloco8_grafico_evitaveis_neonatal
         } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
           bloco8_graficos

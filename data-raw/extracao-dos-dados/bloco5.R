@@ -146,11 +146,12 @@ df_bloco5_sinasc <- df_sinasc |>
   summarise_at(vars(contains("nascidos")), sum) |>
   ungroup()
 
-# Para o indicador de porcentagem de internações em menores de 28 dias
-## Baixando os dados do SIH-RD e do SIH-SP de internações em menores de 28 dias
+# Para os indicadores de porcentagem de internações em menores de 28 dias e de internações em UTI nessa mesma população
+## Baixando os dados do SIH-RD
 for (estado in estados) {
-  # Criando o data.frame que guardará a base final do estado
-  df_sih_rd_uf <- data.frame()
+  # Criando data.frames que guardarão as bases do estado
+  df_sih_rd_menores_28_uf <- data.frame()
+  df_sih_rd_partos_uf <- data.frame()
 
   for (ano in anos) {
 
@@ -172,11 +173,21 @@ for (estado in estados) {
             "DT_INTER", "DT_SAIDA", "COBRANCA", "N_AIH", "DIAG_PRINC", "PROC_REA",
             "US_TOT", "UTI_MES_TO"
           )
-        ) |>
-          # Filtrando apenas por internações de menores de 28 dias
+        )
+
+        # Criando um data.frame que contém apenas as internações de menores de 28 dias
+        df_sih_rd_aux_menores_28 <- df_sih_rd_aux |>
           mutate(idade_dias = as.numeric(as.Date(DT_INTER, format = "%Y%m%d") - as.Date(NASC, format = "%Y%m%d"))) |>
           dplyr::filter(
             idade_dias < 28
+          )
+
+        # Criando um data.frame que contém apenas os partos
+        df_sih_rd_aux_partos <- df_sih_rd_aux |>
+          dplyr::filter(
+            ((DIAG_PRINC >= "O32" & DIAG_PRINC <= "O36") | (DIAG_PRINC >= "O60" & DIAG_PRINC <= "O69") |
+               (DIAG_PRINC >= "O75" & DIAG_PRINC < "O76") | (DIAG_PRINC >= "O80" & DIAG_PRINC <= "O84") |
+               DIAG_PRINC == "P95") | (PROC_REA %in% procedimentos_parto)
           )
 
         erro_rd <- FALSE
@@ -186,17 +197,25 @@ for (estado in estados) {
     }
 
     # Juntando com os dados dos anos anteriores para a dada UF
-    df_sih_rd_uf <- bind_rows(df_sih_rd_uf, df_sih_rd_aux)
+    df_sih_rd_menores_28_uf <- bind_rows(df_sih_rd_menores_28_uf, df_sih_rd_aux_menores_28)
+    df_sih_rd_partos_uf <- bind_rows(df_sih_rd_partos_uf, df_sih_rd_aux_partos)
+
 
     # Limpando a memória
-    rm(df_sih_rd_aux)
+    rm(df_sih_rd_aux_menores_28, df_sih_rd_aux_partos)
     gc()
   }
 
   # Salvando as bases da UF
   write.csv2(
-    df_sih_rd_uf,
+    df_sih_rd_menores_28_uf,
     gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv.gz")),
+    row.names = FALSE
+  )
+
+  write.csv2(
+    df_sih_rd_partos_uf,
+    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv.gz")),
     row.names = FALSE
   )
 
@@ -205,29 +224,46 @@ for (estado in estados) {
   gc()
 }
 
-## Criando o data.frame que guardará a base final
-df_sih_rd <- data.frame()
+## Criando os data.frames que guardarão a base final
+df_sih_rd_menores_28 <- data.frame()
+df_sih_rd_partos <- data.frame()
 
 for (estado in estados) {
-  df_rd_aux <- fread(
+  df_sih_rd_menores_28_aux <- fread(
     glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
-    sep = ";",
-    dec = ","
+    sep = ";"
   )
-  df_sih_rd <- bind_rows(df_sih_rd, df_rd_aux)
+  df_sih_rd_menores_28 <- bind_rows(df_sih_rd_menores_28, df_sih_rd_menores_28_aux)
 
-  rm(df_rd_aux)
+  rm(df_sih_rd_menores_28_aux)
   gc()
 }
 
-## Salvando a base completa
+for (estado in estados) {
+  df_sih_rd_partos_aux <- fread(
+    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_2012_2022.csv.gz"),
+    sep = ";"
+  )
+  df_sih_rd_partos <- bind_rows(df_sih_rd_partos, df_sih_rd_partos_aux)
+
+  rm(df_sih_rd_partos_aux)
+  gc()
+}
+
+## Salvando as bases completas
 write.csv2(
-  df_sih_rd,
+  df_sih_rd_menores_28,
   glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv"),
   row.names = FALSE
 )
 
-## Rodando o algoritmo da Claudia na base completa do SIH-RD
+write.csv2(
+  df_sih_rd_partos,
+  glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv"),
+  row.names = FALSE
+)
+
+## Rodando o algoritmo da Claudia nas bases completas do SIH-RD
 ### Criando um vetor que contém o diretório original do projeto
 diretorio_original <- getwd()
 
@@ -237,7 +273,7 @@ diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/databases-
 ### Mudando o diretório para a pasta que contém o algoritmo em C++
 setwd("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
-### Rodando o algoritmo em C++
+### Rodando o algoritmo em C++ na base de internações
 system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2012_2022.csv"))
 
 ## Voltando para o diretório original do projeto
@@ -247,23 +283,63 @@ setwd(diretorio_original)
 con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
 
 ### Selecionando a tabela "aih" com todas as suas variáveis, ordenadas por AIHREF e DT_INTER
-df_aih <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
+df_aih_internacoes <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
 dbDisconnect(con)
 
 ### Adicionando variáveis que estão no SIH-RD, mas que não são devolvidas na base gerada pelo algoritmo
-df_aih_completo <- left_join(
-  df_aih,
-  df_sih_rd |>
+df_aih_internacoes_completo <- left_join(
+  df_aih_internacoes,
+  df_sih_rd_menores_28 |>
     select(ANO_CMPT, DT_INTER, DT_SAIDA, N_AIH, MUNIC_MOV, idade_dias) |>
     mutate_at(vars(c(DT_INTER, DT_SAIDA, N_AIH, MUNIC_MOV)), as.character)
+)
+
+### Mudando o diretório para a pasta que contém o algoritmo em C++
+setwd("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/")
+
+### Rodando o algoritmo em C++ na base de partos
+system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2012_2022.csv"))
+
+## Voltando para o diretório original do projeto
+setwd(diretorio_original)
+
+### Criando a conexão com o arquivo .sqlite gerado como resultado do algoritmo em C++
+con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
+
+### Selecionando a tabela "aih" com todas as suas variáveis, ordenadas por AIHREF e DT_INTER
+df_aih_partos <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
+dbDisconnect(con)
+
+### Adicionando variáveis que estão no SIH-RD, mas que não são devolvidas na base gerada pelo algoritmo
+df_aih_partos_completo <- left_join(
+  df_aih_partos,
+  df_sih_rd_partos |>
+    select(ANO_CMPT, DT_INTER, DT_SAIDA, N_AIH) |>
+    mutate_at(vars(c(DT_INTER, DT_SAIDA, N_AIH)), as.character)
 )
 
 ## Lendo uma base com informações auxiliares dos municípios
 df_infos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_aux_municipios.csv") |>
   mutate_if(is.numeric, as.character)
 
-## Passando a base para o formato wide (cada linha corresponderá a uma pessoa única)
-df_aih_wide <- df_aih_completo |>
+## Passando as bases para o formato wide (cada linha corresponderá a uma pessoa única)
+### Para a base de partos, criando a variável que contém o número nascimentos em hospitais públicos em cada município
+df_aih_partos_wide <- df_aih_partos_completo |>
+  group_by(AIHREF) |>  # Agrupando pelo N_AIH comum para todas as linhas de um episódio de cuidado completo
+  summarise(
+    ANO_CMPT = last(ANO_CMPT),  # Ano de processamento do SIH da última internação
+    MUNIC_RES = first(MUNIC_RES),  # Município de residência da primeira internação
+  ) |>
+  ungroup() |>
+  select(ano = ANO_CMPT, codmunres = MUNIC_RES, aihref = AIHREF) |>
+  filter(codmunres %in% df_infos_municipios$codmunres) |>
+  mutate(nascidos_estabelecimentos_publicos_sih = 1) |>
+  clean_names() |>
+  group_by(codmunres, ano) |>
+  summarise(nascidos_estabelecimentos_publicos_sih = sum(nascidos_estabelecimentos_publicos_sih)) |>
+  ungroup()
+
+df_aih_internacoes_wide <- df_aih_internacoes_completo |>
   mutate(
     DT_INTER = as.Date(DT_INTER, format = "%Y%m%d"),
     DT_SAIDA = as.Date(DT_SAIDA, format = "%Y%m%d"),
@@ -275,79 +351,98 @@ df_aih_wide <- df_aih_completo |>
     CNES = first(CNES),
     MUNIC_RES = first(MUNIC_RES),  # Município de residência da primeira internação
     MUNIC_MOV = first(MUNIC_MOV),  # Município do estabelecimento da primeira internação
-    idade_dias = first(idade_dias)  # Idade, em dias, na data da primeira internação
+    idade_dias = first(idade_dias),  # Idade, em dias, na data da primeira internação
+    SOMA_UTI = sum(as.integer(UTI_MES_TO))  # Total de dias na UTI
   ) |>
   ungroup() |>
-  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias) |>
+  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias, soma_uti_mes_to = SOMA_UTI) |>
   filter(codmunres %in% df_infos_municipios$codmunres & codmunocor %in% df_infos_municipios$codmunres)
 
-## Adicionando a informação sobre a macrorregião dos municípios de residência e ocorrência
-df_aih_wide_macros <- df_aih_wide |>
+## Para a base de internações, adicionando a informação sobre a macrorregião dos municípios de residência e ocorrência
+df_aih_wide_internacoes_macros <- df_aih_internacoes_wide |>
   left_join(df_infos_municipios |> select(codmunres, macro_r_saude_res = macro_r_saude), by = join_by(codmunres == codmunres)) |>
   left_join(df_infos_municipios |> select(codmunres, macro_r_saude_ocor = macro_r_saude), by = join_by(codmunocor == codmunres)) |>
   mutate(
     idade_cat = ifelse(idade_dias < 7, "menores_7_dias", "7_a_27_dias"),
-    indicadora_mesma_macro = ifelse(macro_r_saude_res == macro_r_saude_ocor, "na_macro", "fora_macro")
+    indicadora_mesma_macro = ifelse(macro_r_saude_res == macro_r_saude_ocor, "na_macro", "fora_macro"),
+    indicadora_uti = ifelse(soma_uti_mes_to > 0, "internado_uti", "nao_internado_uti")
   ) |>
-  select(!c(cnes, codmunocor, aihref, idade_dias, macro_r_saude_res, macro_r_saude_ocor))
+  select(!c(cnes, codmunocor, aihref, idade_dias, soma_uti_mes_to, macro_r_saude_res, macro_r_saude_ocor))
 
 ## Passando a base para o formato wide (um município por linha), criando uma linha para cada município e ano e preenchendo os NAs gerados com 0
-df_bloco5_sih <- df_aih_wide_macros |>
+df_bloco5_sih <- df_aih_wide_internacoes_macros |>
   group_by_all() |>
   summarise(num_internacoes = n()) |>
   ungroup() |>
   pivot_wider(
-    names_from = c(indicadora_mesma_macro, idade_cat),
+    names_from = c(indicadora_mesma_macro, idade_cat, indicadora_uti),
     values_from = num_internacoes,
     values_fill = 0,
     names_prefix = "internacoes_"
   ) |>
-  arrange(codmunres, ano) |>
   right_join(data.frame(codmunres = rep(df_infos_municipios$codmunres, each = length(2012:2022)), ano = 2012:2022)) |>
+  arrange(codmunres, ano) |>
   mutate(across(.cols = -c(codmunres, ano), .fns = ~ replace_na(., 0))) |>
+  rowwise() |>
   mutate(
+    internacoes_na_macro_7_a_27_dias = sum(c_across(contains("na_macro_7_a_27_dias"))),
+    internacoes_fora_macro_7_a_27_dias = sum(c_across(contains("fora_macro_7_a_27_dias"))),
+    internacoes_na_macro_menores_7_dias = sum(c_across(contains("na_macro_menores_7_dias"))),
+    internacoes_fora_macro_menores_7_dias = sum(c_across(contains("fora_macro_menores_7_dias"))),
     internacoes_geral_7_a_27_dias = internacoes_na_macro_7_a_27_dias + internacoes_fora_macro_7_a_27_dias,
     internacoes_geral_menores_7_dias = internacoes_na_macro_menores_7_dias + internacoes_fora_macro_menores_7_dias,
-    internacoes_na_macro_geral = internacoes_na_macro_menores_7_dias + internacoes_na_macro_7_a_27_dias,
-    internacoes_fora_macro_geral = internacoes_fora_macro_menores_7_dias + internacoes_fora_macro_7_a_27_dias,
-    internacoes_geral_geral = internacoes_geral_7_a_27_dias + internacoes_geral_menores_7_dias
+    internacoes_na_macro_geral = internacoes_na_macro_7_a_27_dias + internacoes_na_macro_menores_7_dias,
+    internacoes_fora_macro_geral = internacoes_fora_macro_7_a_27_dias + internacoes_fora_macro_menores_7_dias,
+    internacoes_geral_geral = internacoes_geral_7_a_27_dias + internacoes_geral_menores_7_dias,
+    internacoes_na_macro_geral_internado_uti = sum(c_across(contains("na_macro") & contains("s_internado"))),
+    internacoes_fora_macro_geral_internado_uti = sum(c_across(contains("fora_macro") & contains("s_internado"))),
+    internacoes_geral_7_a_27_dias_internado_uti = sum(c_across(contains("7_a_27_dias_internado"))),
+    internacoes_geral_menores_7_dias_internado_uti = sum(c_across(contains("menores_7_dias_internado"))),
+    internacoes_geral_geral_internado_uti = internacoes_geral_7_a_27_dias_internado_uti + internacoes_geral_menores_7_dias_internado_uti
   ) |>
-  select(ano, codmunres, ends_with("_7_dias"), ends_with("_27_dias"), ends_with("_geral"))
+  select(ano, codmunres, ends_with("_7_dias"), ends_with("_27_dias"), ends_with("_geral"), ends_with("internado_uti") & !ends_with("nao_internado_uti"))
 
 ## Verificando se o total de internações equivale ao número de linhas das bases df_aih_wide/df_aih_wide_macros
-sum(df_bloco5_sih$internacoes_geral_geral) == nrow(df_aih_wide)
+sum(df_bloco5_sih$internacoes_geral_geral) == nrow(df_aih_wide_internacoes_macros)
+sum(df_bloco5_sih$internacoes_geral_geral_internado_uti) == nrow(df_aih_internacoes_wide[df_aih_internacoes_wide$soma_uti_mes_to > 0, ])
+sum(df_bloco5_sih$internacoes_na_macro_geral_internado_uti, df_bloco5_sih$internacoes_fora_macro_geral_internado_uti) ==
+  sum(df_bloco5_sih$internacoes_geral_7_a_27_dias_internado_uti, df_bloco5_sih$internacoes_geral_menores_7_dias_internado_uti)
+sum(df_bloco5_sih$internacoes_geral_7_a_27_dias_internado_uti, df_bloco5_sih$internacoes_geral_menores_7_dias_internado_uti) ==
+  sum(df_bloco5_sih$internacoes_geral_geral_internado_uti)
 
 ## Removendo arquivos já utilizados
 file.remove(c(
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2022.csv",
+  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2012_2022.csv",
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
   "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite"
+  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite",
+
 ))
 
 # Fazendo um left_join de ambas as bases com a base auxiliar de municípios
 df_bloco5 <- left_join(df_aux_municipios, df_bloco5_sinasc, by = c("codmunres", "ano")) |>
+  left_join(df_aih_partos_wide) |>
   left_join(df_bloco5_sih)
-
 
 # adicionar dados de asfixia e malformação a base df_bloco5
 # lembre-se de rodar o script bloco5_asfixia.R para obter os dados em caso de atualização
-
-
 asfixia <- read.csv("data-raw/csv/asfixia_2012_2023.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
-  dplyr::select(codmunres, ano, nascidos_vivos_asfixia1, total_nascidos)
+  dplyr::select(codmunres, ano, nascidos_vivos_asfixia1, total_nascidos) |>
+  mutate(codmunres = as.character(codmunres))
 
 malformacao <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
-  select(codmunres, ano, anomalia, grupo_de_anomalias_congenitas, descricao, nascidos_vivos_anomalia)
-
+  dplyr::group_by(ano, codmunres) |>
+  dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia)) |>
+  ungroup() |>
+  mutate(codmunres = as.character(codmunres))
 
 df_bloco5 <- left_join(df_bloco5, asfixia, by = c("codmunres", "ano")) |>
   left_join(malformacao)
-
 
 # Preenchendo os valores NAs, gerados após o left_join, com 0 (MENOS PARA 2023 PARA AS COLUNAS QUE VEM DO SIH)
 internacoes_cols <- grep("^internacoes", names(df_bloco5), value = TRUE)
@@ -373,16 +468,3 @@ sum(df_bloco5 |> filter(ano <= 2020) |> pull(nascidos_vivos_termo_precoce)) - su
 
 # Exportando os dados
 write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv", row.names = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
