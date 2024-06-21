@@ -409,14 +409,14 @@ mod_bloco_4_ui <- function(id){
                   width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
                 )
-              ),
-              fluidRow(
-                column(
-                  offset = 3,
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
-                )
-             )
+              )
+             #  fluidRow(
+             #    column(
+             #      offset = 3,
+             #      width = 6,
+             #      shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
+             #    )
+             # )
             ),
             column(
               width = 8,
@@ -2065,29 +2065,29 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i10_deslocamento_macro <- output$caixa_b4_i10_deslocamento_resto <- renderUI({
-      cria_caixa_server(
-        dados = data4_macrorregiao_resumo(),
-        indicador = "prop_desloc_8",
-        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
-        tem_meta = FALSE,
-        valor_de_referencia = data4_macrorregiao_resumo_referencia()$prop_desloc_8,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
-        pagina = "bloco_4",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
+    # output$caixa_b4_i10_deslocamento_macro <- output$caixa_b4_i10_deslocamento_resto <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data4_macrorregiao_resumo(),
+    #     indicador = "prop_desloc_8",
+    #     titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos fora da macrorregião de saúde",
+    #     tem_meta = FALSE,
+    #     valor_de_referencia = data4_macrorregiao_resumo_referencia()$prop_desloc_8,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_4",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
 
 
     # Para os gráficos --------------------------------------------------------
