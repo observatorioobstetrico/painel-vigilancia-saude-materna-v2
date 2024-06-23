@@ -82,7 +82,14 @@ bloco4_deslocamento_muni_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslo
   dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
 
 bloco4_deslocamento_muni_aux3 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2023.csv") |>
-  janitor::clean_names()
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
+
+aux_municipios_deslocamento_mun_2023 <- aux_municipios |>
+  dplyr::select(codmunres) |>
+  dplyr::mutate(ano = 2023)
+
+bloco4_deslocamento_muni_aux3 <- dplyr::left_join(aux_municipios_deslocamento_mun_2023, bloco4_deslocamento_muni_aux3)
 
 bloco4_deslocamento_muni_aux4 <- rbind(bloco4_deslocamento_muni_aux2, bloco4_deslocamento_muni_aux3)
 
@@ -261,6 +268,7 @@ bloco4 <- bloco4 |>
   )
 
 bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, aux_municipios, by = "codmunres")
+
 bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
