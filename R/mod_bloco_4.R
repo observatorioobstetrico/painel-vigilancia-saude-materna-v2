@@ -2041,29 +2041,80 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
+    # output$caixa_b4_i9_deslocamento_macro <- output$caixa_b4_i9_deslocamento_resto <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data4_macrorregiao_resumo(),
+    #     indicador = "prop_desloc_7",
+    #     titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+    #     tem_meta = FALSE,
+    #     valor_de_referencia = data4_macrorregiao_resumo_referencia()$prop_desloc_7,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_4",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
+
     output$caixa_b4_i9_deslocamento_macro <- output$caixa_b4_i9_deslocamento_resto <- renderUI({
-      cria_caixa_server(
-        dados = data4_macrorregiao_resumo(),
-        indicador = "prop_desloc_7",
-        titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
-        tem_meta = FALSE,
-        valor_de_referencia = data4_macrorregiao_resumo_referencia()$prop_desloc_7,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
-        pagina = "bloco_4",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
+      tagList(
+        div(
+          style = "position: relative;",
+          # Caixinha criada pela função cria_caixa_server
+          cria_caixa_server(
+            dados = data4_macrorregiao_resumo(),
+            indicador = "prop_desloc_7",
+            titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+            tem_meta = FALSE,
+            valor_de_referencia = data4_macrorregiao_resumo_referencia()$prop_desloc_7,
+            tipo = "porcentagem",
+            invertido = FALSE,
+            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+            fonte_titulo = "15px",
+            pagina = "bloco_4",
+            nivel_de_analise = ifelse(
+              filtros()$comparar == "Não",
+              filtros()$nivel,
+              ifelse(
+                get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+                filtros()$nivel,
+                filtros()$nivel2
+              )
+            )
+          ),
+          # Botão de aviso posicionado no canto superior direito
+          div(
+            style = "position: absolute; top: 10px; right: 10px;",
+            shinyWidgets::actionBttn(
+              inputId = ns("aviso_desloc"),
+              icon = icon("triangle-exclamation", style = "color: red"),
+              color = "warning",
+              style = "material-circle",
+              size = "xs"
+            )
           )
         )
       )
     })
+
+    # Exibe a mensagem quando o botão for clicado
+    observeEvent(input$aviso_desloc, {
+      shinyalert::shinyalert(
+        title = "Atenção",
+        text = "Esse indicador é condicional a ter nascido vivo",
+        type = "info"
+      )
+    })
+
 
     # output$caixa_b4_i10_deslocamento_macro <- output$caixa_b4_i10_deslocamento_resto <- renderUI({
     #   cria_caixa_server(
