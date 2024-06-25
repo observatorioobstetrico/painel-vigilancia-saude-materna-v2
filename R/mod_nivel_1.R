@@ -2173,8 +2173,7 @@ mod_nivel_1_server <- function(id, filtros){
       dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
 
     data5 <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      bloco5 |>
         dplyr::filter(ano == filtros()$ano) |>
         #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
@@ -2225,8 +2224,7 @@ mod_nivel_1_server <- function(id, filtros){
 
     ##### Dados do quinto bloco de indicadores para a comparação com o Brasil #####
     data5_comp <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      bloco5 |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
@@ -2258,7 +2256,7 @@ mod_nivel_1_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7
         )
     })
 
@@ -2267,10 +2265,10 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b5_i1 <- renderUI({
       cria_caixa_server(
         dados = data5(),
-        indicador = "porc_baixo_peso",
+        indicador = "porc_nasc_baixo_peso",
         titulo = "Porcentagem de baixo peso ao nascer (< 2500 g)",
         tem_meta = TRUE,
-        valor_de_referencia = data5_comp_baixo_peso()$porc_baixo_peso,
+        valor_de_referencia = data5_comp_baixo_peso()$porc_nasc_baixo_peso,
         tipo = "porcentagem",
         invertido = FALSE,
         pagina = "nivel_1",

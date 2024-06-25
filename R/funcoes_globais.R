@@ -877,11 +877,11 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
 }
 
 minha_paged_windmill <- function(logo = "0",
-                          front_img = "0",
-                          back_img = "0",
-                          img_to_dark = TRUE,
-                          logo_to_white = FALSE,
-                          other_css = NULL) {
+                                 front_img = "0",
+                                 back_img = "0",
+                                 img_to_dark = FALSE,
+                                 logo_to_white = FALSE,
+                                 other_css = "inst/app/www/report/css_report.css") {
   # arguments
   main_css <-
     "pagedreport/resources/css/minha_style_windmill.css"
@@ -891,17 +891,17 @@ minha_paged_windmill <- function(logo = "0",
   # default img
   if (front_img == "0") {
     front_img <-
-      "pagedreport/resources/img/nuts-img.jpg"
+      "inst/app/www/report/capa.jpg"
   }
 
   if (back_img == "0") {
     back_img <-
-      "pagedreport/resources/img/hazelnuts-img.jpg"
+      "inst/app/www/report/fundo.jpg"
   }
 
   if (logo == "0") {
     logo <-
-      "pagedreport/resources/logo/square-logo.svg"
+      "inst/app/www/report/blank.svg"
   }
 
   # darken img

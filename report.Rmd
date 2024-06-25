@@ -27,13 +27,7 @@ params:
   data6_comp: NA   
   data_incompletude: NA
 output: 
-  painel.indicadores:::minha_paged_windmill:
-    logo: "inst/app/www/report/blank.svg"
-    front_img: "inst/app/www/report/capa.jpg"
-    back_img: "inst/app/www/report/fundo.jpg"
-    img_to_dark: FALSE
-    logo_to_white: TRUE
-    other_css: "inst/app/www/report/teste.css"
+  painel.indicadores:::minha_paged_windmill
 knit: pagedown::chrome_print
 main-color: "#32A0FF"
 ---
@@ -45,6 +39,8 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r echo = FALSE}
 #Funções globais 
 cria_textos <- function(infos_comp) {
+  infos_comp <- dplyr::mutate(infos_comp, valores_comp = ifelse(is.na(valores_comp), NaN, valores_comp))
+  
   textos_aux <- apply(infos_comp, 1, function(linha) {
     if (linha[2] == TRUE) {
       icone_comp <- dplyr::case_when(
@@ -175,6 +171,10 @@ data.frame(
     html_comp_bloco1[7]
   )
 ) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
   #Criando a tabela
   reactable::reactable(
     defaultColDef = reactable::colDef(
@@ -311,7 +311,12 @@ data.frame(
     html_comp_bloco2[3],
     html_comp_bloco2[4]
   )
-  ) |> reactable::reactable(
+) |> 
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -426,7 +431,12 @@ data.frame(
     html_comp_bloco3[3],
     html_comp_bloco3[4]
   )
-  ) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -545,6 +555,10 @@ referencia_porc_cesareas <- c(
 )
 
 data.frame(grupo_robson, porc_nascidos, porc_cesareas, referencia_porc_cesareas) |>
+  dplyr::mutate(
+    porc_nascidos = ifelse(grepl("NA|NaN", porc_nascidos), "---", porc_nascidos),
+    porc_cesareas = ifelse(grepl("NA|NaN", porc_cesareas), "---", porc_cesareas)
+  ) |>
   reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
@@ -595,14 +609,18 @@ if (params$nivel %in%  c("Municipal", "Estadual")) {
 Para os indicadores relacionados ao deslocamento para o parto:
 
 ```{r}
-  
+
  if (params$nivel != "Municipal" & params$nivel != "Estadual") {
   #Fazer igual você fez para os outros blocos, mas o único indicador aqui é o prop_partos_fora_macro_rsaude_res. Os de mediana não entram pra quando o nível não é municipal ou estadual
 
   infos_comp_bloco4 <- data.frame(
     valores_comp = c(
       # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
-      round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1)
+      ifelse(
+        isTruthy(params$data4_deslocamento$prop_partos_fora_mun_res),
+        round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1),
+        NaN
+      ) 
     ),
 
     invertido = c(
@@ -623,7 +641,7 @@ Para os indicadores relacionados ao deslocamento para o parto:
   data4_comp_formatado <- lapply(params$data4_comp_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
   max_min <- ifelse(infos_comp_bloco4$invertido == FALSE, "Máximo de ", "Mínimo de ")
-  
+
   data.frame(
     "indicador" = c(
       # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
@@ -644,7 +662,12 @@ Para os indicadores relacionados ao deslocamento para o parto:
       # html_comp_bloco4[1],
       html_comp_bloco4[1]
     )
-  ) |> reactable::reactable(
+  ) |>
+  dplyr::mutate(
+    valor_observado = ifelse(valor_observado == "%", "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -679,12 +702,16 @@ Para os indicadores relacionados ao deslocamento para o parto:
   )
 
 } else {
-  
+
 
   infos_comp_bloco4 <- data.frame(
   valores_comp = c(
     # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
-    round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1)
+    ifelse(
+      isTruthy(params$data4_deslocamento$prop_partos_fora_mun_res),
+      round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1),
+      NaN
+    ) 
   ),
 
   invertido = c(
@@ -746,7 +773,12 @@ data.frame(
     #rep("Comparação não aplicável", 3),
     rep("Comparação não aplicável", 3)
   )
-  ) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(valor_observado == "%" | valor_observado == " km", "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -823,8 +855,8 @@ data.frame(
 ```{r echo = FALSE}
 infos_comp_bloco5 <- data.frame(
   valores_comp = c(
-    round(100 - 100 * params$data5$porc_baixo_peso / params$data5_comp_baixo_peso$porc_baixo_peso, 1),
-    round(100 - 100 * params$data5$porc_premat / params$data5_comp$porc_premat, 1),
+    round(100 - 100 * params$data5$porc_nasc_baixo_peso / params$data5_comp_baixo_peso$porc_nasc_baixo_peso, 1),
+    round(100 - 100 * params$data5$porc_nasc_premat / params$data5_comp$porc_nasc_premat, 1),
     round(100 - 100 * params$data5$porc_termo_precoce / params$data5_comp$porc_termo_precoce, 1)),
   
   invertido = c(
@@ -854,14 +886,14 @@ data.frame(
   ),
   
   "valor_observado" = c(
-    paste0(data5_formatado$porc_baixo_peso, "%"),
-    paste0(data5_formatado$porc_premat, "%"),
+    paste0(data5_formatado$porc_nasc_baixo_peso, "%"),
+    paste0(data5_formatado$porc_nasc_premat, "%"),
     paste0(data5_formatado$porc_termo_precoce, "%")
   ),
   
   "valor_de_referencia" = c(
-    paste0(max_min[1], data5_comp_baixo_peso_formatado$porc_baixo_peso, "% (meta de redução global)"),
-    paste0(max_min[2], data5_comp_formatado$porc_premat, "% (países desenvolvidos)"),
+    paste0(max_min[1], data5_comp_baixo_peso_formatado$porc_nasc_baixo_peso, "% (meta de redução global)"),
+    paste0(max_min[2], data5_comp_formatado$porc_nasc_premat, "% (países desenvolvidos)"),
     paste0(max_min[3], data5_comp_formatado$porc_termo_precoce, "% (países desenvolvidos)")
   ),
   
@@ -870,7 +902,12 @@ data.frame(
     html_comp_bloco5[2],
     html_comp_bloco5[3]
   )
-  ) |> reactable::reactable(
+) |> 
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -992,7 +1029,12 @@ data.frame(
     html_comp_bloco6[5],
     html_comp_bloco6[6]
   )
-) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -1091,7 +1133,12 @@ data.frame(
     html_comp_bloco6[7],
     html_comp_bloco6[8]
   )
-) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -1161,31 +1208,52 @@ data.frame(
 
 if (params$nivel %in% c("Macrorregião de saúde", "Microrregião de saúde")) {
   #não colocar os indicadores de cobertura, porque pra esses níveis de análise não tem
-  infos_comp_imcompletude <- data.frame(
-  valores_comp = c(
-    round(100 - 100 * params$data_incompletude$idademae / 5, 1),
-    round(100 - 100 * params$data_incompletude$escmae / 5, 1),
-    round(100 - 100 * params$data_incompletude$racacor / 5, 1),
-    round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
-    round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
-    round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
-    round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
-    round(100 - 100 * params$data_incompletude$parto / 5, 1),
-    round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
-    round(100 - 100 * params$data_incompletude$peso / 5, 1),
-    round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
-    
-    ),
-  
-  invertido = c(
-    rep(FALSE, 11)
-  ),
-  
-  tem_meta = c(
-    rep(TRUE, 11)
-  )
-  
-)
+  if (isTruthy(params$data_incompletude$idademae)) {
+    infos_comp_imcompletude <- data.frame(
+      valores_comp = c(
+        round(100 - 100 * params$data_incompletude$idademae / 5, 1),
+        round(100 - 100 * params$data_incompletude$escmae / 5, 1),
+        round(100 - 100 * params$data_incompletude$racacor / 5, 1),
+        round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
+        round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
+        round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
+        round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
+        round(100 - 100 * params$data_incompletude$parto / 5, 1),
+        round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
+        round(100 - 100 * params$data_incompletude$peso / 5, 1),
+        round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
+      ),
+      invertido = c(
+        rep(FALSE, 11)
+      ),
+      tem_meta = c(
+        rep(TRUE, 11)
+      )
+    )
+  } else {
+    infos_comp_imcompletude <- data.frame(
+      valores_comp = c(
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN
+      ),
+      invertido = c(
+        rep(FALSE, 11)
+      ),
+      tem_meta = c(
+        rep(TRUE, 11)
+      )
+    )
+  }
+
 
 html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
 
@@ -1240,7 +1308,12 @@ data.frame(
     html_comp_imcompletude[11]
     
   )
-  ) |> reactable::reactable(
+  ) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -1276,34 +1349,58 @@ data.frame(
   
 } else  {
   #colocar todos os indicadores
-  infos_comp_imcompletude <- data.frame(
-  valores_comp = c(
-    round(100 - 100 * params$data_incompletude$cobertura_sinasc / 90, 1),
-    round(100 - 100 * params$data_incompletude$cobertura_sim / 90, 1),
-    round(100 - 100 * params$data_incompletude$idademae / 5, 1),
-    round(100 - 100 * params$data_incompletude$escmae / 5, 1),
-    round(100 - 100 * params$data_incompletude$racacor / 5, 1),
-    round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
-    round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
-    round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
-    round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
-    round(100 - 100 * params$data_incompletude$parto / 5, 1),
-    round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
-    round(100 - 100 * params$data_incompletude$peso / 5, 1),
-    round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
-    
-    ),
-  
-  invertido = c(
-    rep(TRUE, 2),
-    rep(FALSE, 11)
-  ),
-  
-  tem_meta = c(
-    rep(TRUE, 13)
-  )
-  
-)
+  if (isTruthy(params$data_incompletude$cobertura_sinasc)) {
+    infos_comp_imcompletude <- data.frame(
+      valores_comp = c(
+        round(100 - 100 * params$data_incompletude$cobertura_sinasc / 90, 1),
+        round(100 - 100 * params$data_incompletude$cobertura_sim / 90, 1),
+        round(100 - 100 * params$data_incompletude$idademae / 5, 1),
+        round(100 - 100 * params$data_incompletude$escmae / 5, 1),
+        round(100 - 100 * params$data_incompletude$racacor / 5, 1),
+        round(100 - 100 * params$data_incompletude$qtdpartnor/ 5, 1),
+        round(100 - 100 * params$data_incompletude$qtdpartces/ 5, 1),
+        round(100 - 100 * params$data_incompletude$consprenat / 5, 1),
+        round(100 - 100 * params$data_incompletude$mesprenat / 5, 1),
+        round(100 - 100 * params$data_incompletude$parto / 5, 1),
+        round(100 - 100 * params$data_incompletude$tprobson / 5, 1),
+        round(100 - 100 * params$data_incompletude$peso / 5, 1),
+        round(100 - 100 * params$data_incompletude$gestacao / 5, 1)
+      ),
+      invertido = c(
+        rep(TRUE, 2),
+        rep(FALSE, 11)
+      ),
+      tem_meta = c(
+        rep(TRUE, 13)
+      )
+    )
+  } else {
+    infos_comp_imcompletude <- data.frame(
+      valores_comp = c(
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN
+      ),
+      invertido = c(
+        rep(TRUE, 2),
+        rep(FALSE, 11)
+      ),
+      tem_meta = c(
+        rep(TRUE, 13)
+      )
+    )
+  }
+
 
 html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
 
@@ -1366,7 +1463,12 @@ data.frame(
     # html_comp_imcompletude[13]
     
   )
-  ) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
@@ -1431,7 +1533,12 @@ if (params$nivel != "Microrregião de saúde" & params$nivel != "Macrorregião d
     html_comp_imcompletude[13]
     
   )
-  ) |> reactable::reactable(
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
     defaultColDef = reactable::colDef(
       footerStyle = list(fontWeight = "bold"),
       align = "center"
