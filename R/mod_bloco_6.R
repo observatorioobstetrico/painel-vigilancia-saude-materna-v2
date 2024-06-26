@@ -859,7 +859,7 @@ mod_bloco_6_server <- function(id, filtros){
         }
       }
 
-      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")){
+      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         if (nivel_selecionado() == "Estadual"){
           rmm_corrigida |>
             dplyr::filter(
@@ -907,7 +907,7 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_resumo_rmm_corrigida <- reactive({
-      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional")) {
+      if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023) {
         dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
           dplyr::mutate(rmm_c = RMM_C)
       } else {
@@ -1203,7 +1203,7 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_correcao_rmm <- reactive({
-      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         if(filtros()$nivel == "Estadual"){
           rmm_corrigida |>
             dplyr::filter(
@@ -1230,7 +1230,7 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_rmm_corrigida <- reactive({
-      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
           dplyr::mutate(
             rmm_c=RMM
@@ -1268,7 +1268,7 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_comp_correcao_rmm <- reactive({
-      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         if(filtros()$nivel2 == "Estadual"){
           rmm_corrigida |>
             dplyr::filter(
@@ -1295,7 +1295,7 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_comp_rmm_corrigida <- reactive({
-      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")){
+      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
           dplyr::mutate(
             rmm_c = RMM
