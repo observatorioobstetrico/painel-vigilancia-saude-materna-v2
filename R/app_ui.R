@@ -581,6 +581,7 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos fetais por grupos de causas'",
                         "'Porcentagem de óbitos perinatais por grupos de causas'",
                         "'Porcentagem de óbitos neonatais por grupos de causas'",
+                        "'Porcentagem de nascidos vivos segundo local de ocorrência do parto'",
                         "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
                       )
 
