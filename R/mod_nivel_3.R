@@ -374,23 +374,20 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     base_bloco_selecionado <- reactive({
-      if (infos_indicador()$bloco != "bloco4_deslocamento") {
-      #if (infos_indicador()$bloco != "bloco4_deslocamento_parto") {
-        if (infos_indicador()$bloco == "bloco4_deslocamento_macro") {
-          bloco4_deslocamento_macrorregiao
-        } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
-          bloco8_grafico_evitaveis_neonatal
-        } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
-          bloco8_graficos
-        } else {
-          get(filtros()$bloco)
-        }
-      } else {
+      if (infos_indicador()$bloco %in% c("bloco4_deslocamento_parto", "bloco4_deslocamento_medianas")) {
         if (filtros()$nivel != "Estadual") {
           bloco4_deslocamento_muni
         } else {
           bloco4_deslocamento_uf
         }
+      } else if (infos_indicador()$bloco == "bloco4_deslocamento_macro") {
+        bloco4_deslocamento_macrorregiao
+      } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
+        bloco8_grafico_evitaveis_neonatal
+      } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
+        bloco8_graficos
+      } else {
+        get(filtros()$bloco)
       }
     })
 
