@@ -392,8 +392,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
-    observe(print(infos_indicador()$bloco == "bloco4_deslocamento_macro"))
-
     ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -414,7 +412,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
     })
 
-    observe(print(infos_indicador()$bloco))
     ## Criando alguns outputs de texto que precisam ser usados na UI ----------
     output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
     output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
