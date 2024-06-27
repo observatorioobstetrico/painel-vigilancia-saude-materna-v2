@@ -580,7 +580,8 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos neonatais por causas evitáveis'",
                         "'Porcentagem de óbitos fetais por grupos de causas'",
                         "'Porcentagem de óbitos perinatais por grupos de causas'",
-                        "'Porcentagem de óbitos neonatais por grupos de causas'"
+                        "'Porcentagem de óbitos neonatais por grupos de causas'",
+                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
                       )
 
                       glue::glue(

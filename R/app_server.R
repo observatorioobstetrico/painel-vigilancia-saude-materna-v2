@@ -378,6 +378,24 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         label = "Faixa de peso"
       )
     }
+
+    if (input$indicador_blocos4_6_7 == "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c("Prematuridade" = "prematuridade",
+                    "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI" = "na_macro_com_uti",
+                    "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI" = "na_macro_sem_uti",
+                    "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI" = "fora_macro_com_uti",
+                    "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI" = "fora_macro_sem_uti",
+                    "Na macrorregião de saúde, mas sem informação sobre leito de UTI" = "na_macro_sem_inf",
+                    "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI" = "fora_macro_sem_inf"
+                    ),
+        label = "Grupos de interesse"
+      )
+    }
+
+
   })
 
   filtros <- eventReactive(input$pesquisar, {

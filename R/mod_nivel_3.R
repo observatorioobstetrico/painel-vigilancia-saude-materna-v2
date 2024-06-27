@@ -311,7 +311,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de óbitos neonatais por causas evitáveis",
       "Porcentagem de óbitos fetais por grupos de causas",
       "Porcentagem de óbitos perinatais por grupos de causas",
-      "Porcentagem de óbitos neonatais por grupos de causas"
+      "Porcentagem de óbitos neonatais por grupos de causas",
+      "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
     )
 
     indicadores_duas_caixinhas_adicionais_bloco7 <- c(
