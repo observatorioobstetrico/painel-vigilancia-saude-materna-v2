@@ -377,6 +377,25 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         label = "Faixa de peso"
       )
     }
+    if (input$indicador_blocos4_6_7 == "Porcentagem de nascidos vivos segundo local de ocorrência do parto") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c("No município de residência" = "municipio_res",
+                    "Fora do município de residência" = "fora_municipio_res",
+                    "Fora do município, mas na microrregião de saúde de residência" = "rsaude_res",
+                    "Fora da microrregião de saúde, mas na macrorregião de saúde de residência" = "macro_rsaude_res",
+                    "Fora da macrorregião de saúde, mas dentro da UF de residência" = "macro_rsaude_res",
+                    "Fora da UF de residência" = "fora_uf_res",
+                    "Medianas de deslocamento para partos ocorridos fora do municipio de residência" = "fora_municipio",
+                    "Medianas de deslocamento para partos ocorridos fora do município, mas na microrregião de saúde de residência" = "na_regiao",
+                    "Medianas de deslocamento para partos ocorridos fora da microrregião de saúde, mas na macrorregião de saúde de residência" = "na_macrorregiao",
+                    "Medianas de deslocamento para partos ocorridos fora da macrorregião de saúde, mas na UF de residência" = "fora_macrorregiao",
+                    "Medianas de deslocamento do total de partos ocorridos fora da UF de residência" = "fora_uf"
+        ),
+        label = "Localidade e tipo de estabelecimento"
+      )
+    }
 
     if (input$indicador_blocos4_6_7 == "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto") {
       updateSelectizeInput(
