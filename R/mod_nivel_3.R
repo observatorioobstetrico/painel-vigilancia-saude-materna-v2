@@ -374,6 +374,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
+      #if (infos_indicador()$bloco != "bloco4_deslocamento_parto") {
         if (infos_indicador()$bloco == "bloco4_deslocamento_macro") {
           bloco4_deslocamento_macrorregiao
         } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
@@ -420,15 +421,15 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$escolha1 <- renderText({
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
-        infos_indicador()$bloco == "bloco4_deslocamento" | infos_indicador()$bloco == "bloco4_deslocamento_macro" ~ "DN sem CNES preenchido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN sem CNES preenchido",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco)  ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
       )
     })
     output$escolha2 <- renderText({
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        infos_indicador()$bloco == "bloco4_deslocamento" | infos_indicador()$bloco == "bloco4_deslocamento_macro" ~ "DN com CNES inválido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
       )
     })
 
@@ -630,19 +631,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           dplyr::group_by(ano) |>
           dplyr::summarise(
             numerador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
               sum(.data[[infos_indicador()$numerador_incompletude1]], na.rm = TRUE),
               NA
             ),
             denominador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
               sum(.data[[infos_indicador()$denominador_incompletude1]], na.rm = TRUE),
               NA
             ),
             proporcao = dplyr::case_when(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
               infos_indicador()$bloco == "bloco6" ~ round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 2),
-              infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -678,19 +679,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           dplyr::group_by(ano) |>
           dplyr::summarise(
             numerador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
               sum(.data[[infos_indicador()$numerador_incompletude2]], na.rm = TRUE),
               NA
             ),
             denominador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
               sum(.data[[infos_indicador()$denominador_incompletude2]], na.rm = TRUE),
               NA
             ),
             proporcao = dplyr::case_when(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
               infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 2),
-              infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -915,8 +916,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         nivel = 3,
         bloco = dplyr::case_when(
           infos_indicador()$bloco == "bloco6" ~ "bloco6",
-          infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ "deslocamento",
-          !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ "geral"
+          grepl("deslocamento", infos_indicador()$bloco) ~ "deslocamento",
+          infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ "geral"
         )
       )
     })
