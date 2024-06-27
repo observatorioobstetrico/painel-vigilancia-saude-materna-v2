@@ -323,8 +323,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     infos_indicador <- reactive({
       if (filtros()$bloco %in% c("bloco4", "bloco6")) {
-        tabela_indicadores |>
-          dplyr::filter(indicador == filtros()$indicador_blocos4_6_7)
+        if (filtros()$indicador_blocos4_6_7 %in% indicadores_uma_caixinha_adicional_bloco7) {
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+
+          tabela_indicadores |>
+            dplyr::filter(
+              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")
+            )
+        } else {
+          tabela_indicadores |>
+            dplyr::filter(indicador == filtros()$indicador_blocos4_6_7)
+        }
 
       } else if (filtros()$bloco == "bloco5") {
         if (filtros()$indicador %in% indicadores_caixinha_adicional_bloco5) {
@@ -363,10 +372,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     })
 
-
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco != "bloco4_deslocamento") {
-        if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
+        if (infos_indicador()$bloco == "bloco4_deslocamento_macro") {
+          bloco4_deslocamento_macrorregiao
+        } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
           bloco8_grafico_evitaveis_neonatal
         } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
           bloco8_graficos
@@ -381,6 +391,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         }
       }
     })
+
+    observe(print(infos_indicador()$bloco == "bloco4_deslocamento_macro"))
 
     ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
@@ -402,6 +414,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
     })
 
+    observe(print(infos_indicador()$bloco))
     ## Criando alguns outputs de texto que precisam ser usados na UI ----------
     output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
     output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
@@ -410,15 +423,15 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$escolha1 <- renderText({
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
-        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN sem CNES preenchido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+        infos_indicador()$bloco == "bloco4_deslocamento" | infos_indicador()$bloco == "bloco4_deslocamento_macro" ~ "DN sem CNES preenchido",
+        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
       )
     })
     output$escolha2 <- renderText({
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        infos_indicador()$bloco == "bloco4_deslocamento" ~ "DN com CNES inválido",
-        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
+        infos_indicador()$bloco == "bloco4_deslocamento" | infos_indicador()$bloco == "bloco4_deslocamento_macro" ~ "DN com CNES inválido",
+        !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
       )
     })
 
@@ -447,10 +460,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     )
 
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
-
-    indicadores_2020 <- c(
-      "porc_cobertura_esf"
-    )
 
     indicadores_2022 <- reactive({
       indicadores_2022_aux <-
@@ -485,9 +494,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         anos_disponiveis_aux <- filtros()$ano2[1]:filtros()$ano2[2]
       }
 
-      if (infos_indicador()$nome_abreviado %in% indicadores_2020) {
-        anos_disponiveis_aux[anos_disponiveis_aux <= 2020]
-      } else if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
+      if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
         anos_disponiveis_aux[anos_disponiveis_aux <= 2022]
       } else {
         anos_disponiveis_aux
@@ -626,19 +633,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           dplyr::group_by(ano) |>
           dplyr::summarise(
             numerador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
               sum(.data[[infos_indicador()$numerador_incompletude1]], na.rm = TRUE),
               NA
             ),
             denominador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
               sum(.data[[infos_indicador()$denominador_incompletude1]], na.rm = TRUE),
               NA
             ),
             proporcao = dplyr::case_when(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
               infos_indicador()$bloco == "bloco6" ~ round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 2),
-              infos_indicador()$bloco == "bloco4_deslocamento" ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -674,19 +681,19 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           dplyr::group_by(ano) |>
           dplyr::summarise(
             numerador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
               sum(.data[[infos_indicador()$numerador_incompletude2]], na.rm = TRUE),
               NA
             ),
             denominador := ifelse(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")),
               sum(.data[[infos_indicador()$denominador_incompletude2]], na.rm = TRUE),
               NA
             ),
             proporcao = dplyr::case_when(
-              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
+              !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
               infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 2),
-              infos_indicador()$bloco == "bloco4_deslocamento" ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -911,8 +918,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         nivel = 3,
         bloco = dplyr::case_when(
           infos_indicador()$bloco == "bloco6" ~ "bloco6",
-          infos_indicador()$bloco == "bloco4_deslocamento" ~ "deslocamento",
-          !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento")) ~ "geral"
+          infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco4_deslocamento_macro") ~ "deslocamento",
+          !(infos_indicador()$bloco %in% c("bloco6", "bloco4_deslocamento", "bloco4_deslocamento_macro")) ~ "geral"
         )
       )
     })
@@ -1219,11 +1226,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ) |>
         dplyr::ungroup()
 
-      if (infos_indicador()$nome_abreviado %in% indicadores_2020) {
-        data_grafico_serie_aux |>
-          tibble::add_row(ano = 2021, class = data_grafico_serie_aux$class[1]) |>
-          tibble::add_row(ano = 2022, class = data_grafico_serie_aux$class[1])
-      } else if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
+      if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
         data_grafico_serie_aux |>
           tibble::add_row(ano = 2022, class = data_grafico_serie_aux$class[1])
       } else {
@@ -1496,7 +1499,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                   ano <= ifelse(
                     infos_indicador()$nome_abreviado %in% indicadores_2022(),
                     2021,
-                    ifelse(infos_indicador()$nome_abreviado %in% indicadores_2020, 2020, 2022)
+                    2022
                   )
                 ),
               type = "line",

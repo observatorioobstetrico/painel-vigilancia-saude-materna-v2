@@ -585,7 +585,7 @@ app_ui <- function(request) {
                       )
 
                       glue::glue(
-                        "[{paste(indicadores_uma_caixinha_adicional_bloco7, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                        "[{paste(indicadores_uma_caixinha_adicional_bloco7, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7' | input.bloco == 'bloco4')"
                       )
                     },
                     selectizeInput(
