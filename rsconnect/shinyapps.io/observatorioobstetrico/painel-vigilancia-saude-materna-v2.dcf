@@ -5,10 +5,10 @@ account: observatorioobstetrico
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10197235
-bundleId: 8800603
+bundleId: 8830168
 url: https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/
-when: 1719586227.94378
-lastSyncTime: 1719586227.94379
+when: 1720218489.56835
+lastSyncTime: 1720218489.56836
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: data-raw
