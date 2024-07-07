@@ -22,7 +22,7 @@ Antes de começar a utilizar o painel localmente, instale os pré-requisitos nec
 - [R](https://www.r-project.org/)
 - [RStudio](https://www.rstudio.com/)
 
-### Passos para Instalação
+### Passos para a instalação
 
 1. Utilizando o shell de sua preferência, clone o repositório do projeto:
     ```bash
@@ -36,9 +36,9 @@ Antes de começar a utilizar o painel localmente, instale os pré-requisitos nec
     devtools::install_deps()
     ```
 
-## Como Usar
+## Como usar o aplicativo
 
-Instruções para rodar o aplicativo localmente.
+Para abrir o aplicativo, seja localmente ou virtualmente, siga as instruções abaixo.
 
 ### Executando o aplicativo localmente
 
