@@ -15,7 +15,7 @@ Este repositório contém todos os códigos utilizados para a extração dos dad
 
 ## Instalação
 
-Instruções para instalar configurar o ambiente do projeto.
+Antes de começar a utilizar o painel localmente, instale os pré-requisitos necessários e siga os passos abaixo para configurar o projeto em seu computador.
 
 ### Pré-requisitos
 
