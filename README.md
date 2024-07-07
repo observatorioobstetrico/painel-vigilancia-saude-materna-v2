@@ -13,4 +13,26 @@
 
 Este repositório contém todos os códigos utilizados para a extração dos dados e para a construção do Painel de Vigilância da Saúde Materna, um painel de visualização em Shiny construído a partir do framework golem, no R. O painel é formado por um conjunto de indicadores que expressam a vulnerabilidade das mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde recebida ao longo da sua vida reprodutiva. O objetivo do projeto é criar uma interface amigável para a visualização desses indicadores, de modo que eles possam ser explorados pelos gestores de saúde para identificar áreas prioritárias para investimento em seu município/estado. 
 
+## Instalação
+
+Instruções para instalar configurar o ambiente do projeto.
+
+### Pré-requisitos
+
+- [R](https://www.r-project.org/)
+- [RStudio](https://www.rstudio.com/)
+
+### Passos para Instalação
+
+1. Clone o repositório do projeto:
+    ```bash
+    git clone https://github.com/seu-usuario/seu-repositorio.git
+    cd seu-repositorio
+    ```
+
+2. Abra o arquivo `painel.indicadores.Rproj` e instale, no R, as dependências do projeto:
+    ```r
+    install.packages("devtools")
+    devtools::install_deps()
+    ```
 
