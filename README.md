@@ -52,3 +52,11 @@ Instruções para rodar o aplicativo localmente.
     run_app()
     ```
 
+### Acessando o aplicativo via shinyapps
+
+Para acessar a versão mais recente do aplicativo virtualmente, acesse o [link do shinyapps.io](https://observatorioobstetrico.shinyapps.io/painel-vigilancia-saude-materna-v2/) no qual o painel está hospedado.
+
+## Estrutura do Projeto
+
+Breve descrição da estrutura de diretórios e arquivos principais.
+
