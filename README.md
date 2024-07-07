@@ -24,7 +24,7 @@ Instruções para instalar configurar o ambiente do projeto.
 
 ### Passos para Instalação
 
-1. Clone o repositório do projeto:
+1. Utilizando o shell de sua preferência, clone o repositório do projeto:
     ```bash
     git clone https://github.com/seu-usuario/seu-repositorio.git
     cd seu-repositorio
@@ -34,5 +34,21 @@ Instruções para instalar configurar o ambiente do projeto.
     ```r
     install.packages("devtools")
     devtools::install_deps()
+    ```
+
+## Como Usar
+
+Instruções para rodar o aplicativo localmente.
+
+### Executando o aplicativo localmente
+
+1. Abra o projeto do R `painel.indicadores.Rproj` no RStudio.
+2. Aperte simultaneamente as teclas `ctrl + shift + L` ou execute o seguinte comando no console do R para carregar o conteúdo do aplicativo:
+    ```r
+    devtools::load_all(".")
+    ```
+3. Execute o seguinte comando no console do R para rodar o aplicativo Shiny:
+    ```r
+    run_app()
     ```
 
