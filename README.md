@@ -63,8 +63,11 @@ Por ser um aplicativo criado dentro do framework golem, o diretório principal d
 ### Pastas data-raw e data
 
 A pasta data-raw contém os códigos utilizados para se obter todas as bases de dados que alimentam o painel, bem como os arquivos `.csv` gerados ao final de cada processo. Essa pasta é composta por duas subpastas, denominadas `extracao-dos-dados` - na qual estão os códigos utilizados para a geração de cada base de dados - e `csv` - na qual estão os arquivos `.csv` gerados. Dentro de `extracao-dos-dados`, se encontram:
-    - Uma pasta denominada `blocos`, composta pelos scripts em R que baixam, tratam e salvam as bases utilizadas para o cálculo dos indicadores de cada bloco do painel. Essas bases contêm uma linha para cada combinação de município e ano considerados dentro do painel;
-    - Uma pasta denomidada `cobertura`, composta pelo script `cobertura.R`, responsável por ler e tratar as planilhas `.ods` que contêm os dados anuais de sub-registro do SIM e do SINASC. Como resultado, o script gera duas bases: uma com os dados de sub-registro dos municípios e outra com os dados de estados, regiões e Brasil. Cada base contém uma linha para cada combinação de município (ou estado/região/Brasil) e ano considerados dentro do painel;
-    - E uma pasta denominada `incompletude`, composta pelos scripts em R que geram uma base contendo dados referentes à incompletude de todas as variáveis do SINASC utilizadas para o cálculo de algum dos indicadores do painel. Assim como as bases anteriores, a base de incompletude contém uma linha para cada combinação de município e ano considerados dentro do painel.
+
+- Uma pasta denominada `blocos`, composta pelos scripts em R que baixam, tratam e salvam as bases utilizadas para o cálculo dos indicadores de cada bloco do painel. Essas bases contêm uma linha para cada combinação de município e ano considerados dentro do painel;
+
+- Uma pasta denomidada `cobertura`, composta pelo script `cobertura.R`, responsável por ler e tratar as planilhas `.ods` que contêm os dados anuais de sub-registro do SIM e do SINASC. Como resultado, o script gera duas bases: uma com os dados de sub-registro dos municípios e outra com os dados de estados, regiões e Brasil. Cada base contém uma linha para cada combinação de município (ou estado/região/Brasil) e ano considerados dentro do painel;
+
+- E uma pasta denominada `incompletude`, composta pelos scripts em R que geram uma base contendo dados referentes à incompletude de todas as variáveis do SINASC utilizadas para o cálculo de algum dos indicadores do painel. Assim como as bases anteriores, a base de incompletude contém uma linha para cada combinação de município e ano considerados dentro do painel.
 
 
