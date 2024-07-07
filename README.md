@@ -43,7 +43,7 @@ Instruções para rodar o aplicativo localmente.
 ### Executando o aplicativo localmente
 
 1. Abra o projeto do R `painel.indicadores.Rproj` no RStudio.
-2. Aperte simultaneamente as teclas `ctrl + shift + L` ou execute o seguinte comando no console do R para carregar o conteúdo do aplicativo:
+2. Aperte simultaneamente as teclas `ctrl + shift + L`, ou execute o seguinte comando no console do R, para carregar o conteúdo do aplicativo:
     ```r
     devtools::load_all(".")
     ```
