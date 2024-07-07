@@ -47,7 +47,7 @@ Instruções para rodar o aplicativo localmente.
     ```r
     devtools::load_all(".")
     ```
-3. Execute o seguinte comando no console do R para rodar o aplicativo Shiny:
+3. Rode o aplicativo Shiny executando o seguinte comando no console do R:
     ```r
     run_app()
     ```
