@@ -84,13 +84,15 @@ Todas as bases geradas pelos scripts citados acima são guardadas em formato `.c
 
 A pasta `R` contém os scripts que compõem, de fato, o aplicativo `{shiny}`. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é criada em um arquivo único, formando os diferentes módulos do `{shiny}` que existem dentro dessa pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote `{bs4Dash}` - e as opções de filtro que existem em cada aba do painel. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais de cada página do aplicativo. Mais especificamente,
 
+- os arquivos `mod_sobre.R` e `mod_documentacao.R` contêm as UIs e os servidores individuais das abas "Sobre o painel" e "Documentação dos indicadores", respectivamente;
+
 - o arquivo `mod_nivel_1.R` contém a UI e o servidor individuais do nível 1 do painel ("Resumo dos blocos de indicadores");
 
 - os arquivos que começam com `mod_bloco` contêm as UIs e os servidores individuais de cada um dos blocos do nível 2 do painel ("Séries históricas");
 
 - e o arquivo `mod_nivel_3.R` contém a UI e o servidor individuais do nível 3 do painel ("Visão detalhada dos indicadores").
 
-Além disso, a pasta `R` contém, também, os arquivos `mod_sobre.R` e `mod_documentacao.R`, que recebem as UIs e os servidores individuais utilizados para a criação do conteúdo das abas "Sobre o painel" e "Documentação dos indicadores", respectivamente. Por fim, o arquivo `funcoes_globais.R`, também encontrado nessa pasta, recebe  algumas funções do R utilizadas ao longo dos servidores de todo o painel, como a função que cria as caixinhas do "Resumo do período", a função que cria os modais de incompletude e a função que cria o relatório dos indicadores (disponível no nível 1 do painel).
+Por fim, a pasta `R` contém, também, o arquivo `funcoes_globais.R`, no qual são criadas funções do R utilizadas ao longo dos servidores de todo o painel, como a função que cria as caixinhas do "Resumo do período", a função que cria os modais de incompletude e a função que cria o relatório dos indicadores (disponível no nível 1 do painel).
 
 ### Pasta inst
 
