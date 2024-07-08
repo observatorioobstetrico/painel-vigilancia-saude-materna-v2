@@ -82,7 +82,7 @@ Todas as bases geradas pelos scripts citados acima são guardadas em formato `.c
 
 ### Pasta R
 
-A pasta `R` contém os scripts que compõem, de fato, o aplicativo `{shiny}`. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é criada em um arquivo único, formando os diferentes módulos do `{shiny}` que existem dentro dessa pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote {bs4Dash} - e as opções de filtro que existem em cada página. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais para cada página do aplicativo. Mais especificamente,
+A pasta `R` contém os scripts que compõem, de fato, o aplicativo `{shiny}`. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é criada em um arquivo único, formando os diferentes módulos do `{shiny}` que existem dentro dessa pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote `{bs4Dash}` - e as opções de filtro que existem em cada aba do painel. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais para cada página do aplicativo. Mais especificamente,
 
 - o arquivo `mod_nivel_1.R` contém a UI e o servidor individuais do nível 1 do painel ("Resumo dos blocos de indicadores");
 
