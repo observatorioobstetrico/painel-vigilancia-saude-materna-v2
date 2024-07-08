@@ -24,7 +24,7 @@ Antes de começar a utilizar o painel localmente, instale os pré-requisitos nec
 ### Pré-requisitos
 
 - [R](https://www.r-project.org/)
-- [RStudio](https://www.rstudio.com/)
+- [RStudio](https://posit.co/products/open-source/rstudio/)
 
 ### Passos para a instalação
 
