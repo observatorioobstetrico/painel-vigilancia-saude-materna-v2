@@ -70,6 +70,17 @@ A pasta data-raw contém os códigos utilizados para se obter todas as bases de 
 
 - E uma pasta denominada `incompletude`, composta pelos scripts em R que geram uma base contendo dados referentes à incompletude de todas as variáveis do SINASC utilizadas para o cálculo de algum dos indicadores do painel. Assim como as bases anteriores, a base de incompletude contém uma linha para cada combinação de município e ano considerados dentro do painel.
 
-Todas as bases geradas pelos scripts citados acima são guardadas em formato `.csv` dentro da pasta `csv`, que contém, também, um script em R denominado `blocos.R`. Esse script é responsável por ler os arquivos `.csv`, realizar quaisquer tratamentos adicionais necessários (como incluir colunas contendo informações adicionais sobre cada município) e gerar os arquivos `.rda` que se encontram dentro da pasta `data`, no diretório principal do projeto. Quando o usuário carrega o conteúdo do aplicativo (através do atalho `ctrl + shift + L`), os arquivos `.rda` podem ser acessados normalmente dentro do R, como se fossem data.frames do ambiente.
+Todas as bases geradas pelos scripts citados acima são guardadas em formato `.csv` dentro da pasta `csv`, que contém, também, um script em R denominado `blocos.R`. Esse script é responsável por ler os arquivos `.csv`, realizar quaisquer tratamentos adicionais necessários (como incluir colunas contendo informações adicionais sobre cada município) e gerar os arquivos `.rda` que se encontram dentro da pasta `data`, no diretório principal do projeto. Quando o usuário carrega o conteúdo do aplicativo (através do atalho `ctrl + shift + L`), os arquivos `.rda` podem ser acessados normalmente dentro do R, como se fossem data frames salvos no ambiente.
 
+### Pasta R
+
+A pasta R contém os scripts que compõem, de fato, o aplicativo Shiny. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é separada em um arquivo diferente, formando os diversos módulos do Shiny que existem dentro da pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote {bs4Dash} - e as opções de filtro que existem em cada página. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais para cada página do aplicativo. Mais especificamente,
+
+- o arquivo `mod_nivel_1.R` contém a UI e o servidor individuais do nível 1 do painel ("Resumo dos blocos de indicadores");
+
+- os arquivos que começam com `mod_bloco` contêm as UIs e os servidores individuais de cada um dos blocos do nível 2 do painel ("Séries históricas");
+
+- e o arquivo `mod_nivel_3.R` contém a UI e o servidor individuais do nível 3 do painel ("Visão detalhada dos indicadores").
+
+Por fim, a pasta R contém, também, os arquivos `mod_sobre.R` e `mod_documentacao.R`, que recebem as UIs e os servidores individuais utilizados para a criação do conteúdo das abas "Sobre o painel" e "Documentação dos indicadores", respectivamente; e o arquivo `funcoes_globais.R`, na qual são criadas algumas funções do R utilizadas ao longo de todo o painel, como a função que cria as caixinhas do "Resumo do período" e a função que cria os modais de incompletude.
 
