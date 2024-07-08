@@ -150,7 +150,7 @@ malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';')
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2022.csv", sep = ",") |>
+bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2023.csv", sep = ",") |>
   janitor::clean_names()
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
