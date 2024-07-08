@@ -85,6 +85,25 @@ mod_bloco_9_server <- function(id, filtros) {
 
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
+    # # Calcular valores máximos possíveis para cada indicador na base bruta
+    # max_values <- bloco2 |>
+    #   dplyr::left_join(bloco3) |>
+    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
+    #   dplyr::left_join(bloco5) |>
+    #   dplyr::left_join(bloco7) |>
+    #   dplyr::summarize(
+    #     max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
+    #     max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
+    #     max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
+    #                                   (partos_na_macro_com_uti + partos_na_macro_sem_uti +
+    #                                      partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
+    #     max_porc_consultas_inadequadas = max(100 - (mulheres_com_consultas_prenatal_adequadas / total_de_nascidos_vivos * 100), na.rm = TRUE),
+    #     max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
+    #   )
+
+
+
+
 
     bloco9_calcs <- data.frame(
       tipo = c("local", "referencia"),
@@ -96,69 +115,7 @@ mod_bloco_9_server <- function(id, filtros) {
 
     )
 
-    # data9_resumo <- reactive({
-    #   bloco2 |>
-    #     dplyr::left_join(bloco3) |>
-    #     dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-    #     dplyr::left_join(bloco5) |>
-    #     dplyr::left_join(bloco7) |>
-    #     dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    #                   mulheres_com_mais_de_tres_partos_anteriores,
-    #                   mulheres_com_consultas_prenatal_adequadas,
-    #                   partos_na_macro_sem_uti, partos_fora_macro_sem_uti, partos_na_macro_com_uti, partos_fora_macro_com_uti,
-    #                   nascidos_condicoes_ameacadoras,
-    #                   obitos_27dias,
-    #                   total_de_nascidos_vivos) |>
-    #     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-    #     dplyr::filter(
-    #       if (filtros()$comparar == "Não") {
-    #         if (filtros()$nivel == "Nacional")
-    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #         else if (filtros()$nivel == "Regional")
-    #           regiao == filtros()$regiao
-    #         else if (filtros()$nivel == "Estadual")
-    #           uf == filtros()$estado
-    #         else if (filtros()$nivel == "Macrorregião de saúde")
-    #           macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-    #         else if(filtros()$nivel == "Microrregião de saúde")
-    #           r_saude == filtros()$micro & uf == filtros()$estado_micro
-    #         else if(filtros()$nivel == "Municipal")
-    #           municipio == filtros()$municipio & uf == filtros()$estado_municipio
-    #       } else {
-    #         req(input$localidade_resumo)
-    #         if (input$localidade_resumo == "escolha1") {
-    #           if (filtros()$nivel == "Nacional")
-    #             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #           else if (filtros()$nivel == "Regional")
-    #             regiao == filtros()$regiao
-    #           else if (filtros()$nivel == "Estadual")
-    #             uf == filtros()$estado
-    #           else if (filtros()$nivel == "Macrorregião de saúde")
-    #             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-    #           else if(filtros()$nivel == "Microrregião de saúde")
-    #             r_saude == filtros()$micro & uf == filtros()$estado_micro
-    #           else if(filtros()$nivel == "Municipal")
-    #             municipio == filtros()$municipio & uf == filtros()$estado_municipio
-    #         } else {
-    #           if (filtros()$nivel2 == "Nacional")
-    #             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #           else if (filtros()$nivel2 == "Regional")
-    #             regiao == filtros()$regiao2
-    #           else if (filtros()$nivel2 == "Estadual")
-    #             uf == filtros()$estado2
-    #           else if (filtros()$nivel2 == "Macrorregião de saúde")
-    #             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-    #           else if(filtros()$nivel2 == "Microrregião de saúde")
-    #             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-    #           else if(filtros()$nivel2 == "Municipal")
-    #             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-    #           else if (filtros()$nivel2 == "Municípios semelhantes")
-    #             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-    #         }
-    #       }
-    #     ) |>
-    #     cria_indicadores(df_calcs = bloco9_calcs, filtros = filtros())
-    # })
+
 
 
 
@@ -325,7 +282,69 @@ mod_bloco_9_server <- function(id, filtros) {
 
 
 
-
+    # data9_resumo <- reactive({
+    #   bloco2 |>
+    #     dplyr::left_join(bloco3) |>
+    #     dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
+    #     dplyr::left_join(bloco5) |>
+    #     dplyr::left_join(bloco7) |>
+    #     dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    #                   mulheres_com_mais_de_tres_partos_anteriores,
+    #                   mulheres_com_consultas_prenatal_adequadas,
+    #                   partos_na_macro_sem_uti, partos_fora_macro_sem_uti, partos_na_macro_com_uti, partos_fora_macro_com_uti,
+    #                   nascidos_condicoes_ameacadoras,
+    #                   obitos_27dias,
+    #                   total_de_nascidos_vivos) |>
+    #     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+    #     dplyr::filter(
+    #       if (filtros()$comparar == "Não") {
+    #         if (filtros()$nivel == "Nacional")
+    #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #         else if (filtros()$nivel == "Regional")
+    #           regiao == filtros()$regiao
+    #         else if (filtros()$nivel == "Estadual")
+    #           uf == filtros()$estado
+    #         else if (filtros()$nivel == "Macrorregião de saúde")
+    #           macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #         else if(filtros()$nivel == "Microrregião de saúde")
+    #           r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #         else if(filtros()$nivel == "Municipal")
+    #           municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #       } else {
+    #         req(input$localidade_resumo)
+    #         if (input$localidade_resumo == "escolha1") {
+    #           if (filtros()$nivel == "Nacional")
+    #             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #           else if (filtros()$nivel == "Regional")
+    #             regiao == filtros()$regiao
+    #           else if (filtros()$nivel == "Estadual")
+    #             uf == filtros()$estado
+    #           else if (filtros()$nivel == "Macrorregião de saúde")
+    #             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #           else if(filtros()$nivel == "Microrregião de saúde")
+    #             r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #           else if(filtros()$nivel == "Municipal")
+    #             municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #         } else {
+    #           if (filtros()$nivel2 == "Nacional")
+    #             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #           else if (filtros()$nivel2 == "Regional")
+    #             regiao == filtros()$regiao2
+    #           else if (filtros()$nivel2 == "Estadual")
+    #             uf == filtros()$estado2
+    #           else if (filtros()$nivel2 == "Macrorregião de saúde")
+    #             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #           else if(filtros()$nivel2 == "Microrregião de saúde")
+    #             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #           else if(filtros()$nivel2 == "Municipal")
+    #             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #           else if (filtros()$nivel2 == "Municípios semelhantes")
+    #             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #         }
+    #       }
+    #     ) |>
+    #     cria_indicadores(df_calcs = bloco9_calcs, filtros = filtros())
+    # })
 
 
   })
