@@ -2,7 +2,7 @@ library(microdatasus)
 library(dplyr)
 library(readr)
 
-tabela_aux_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv")
+tabela_aux_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv")
 
 
 ############## INDICADORES DA ABA FETAL
@@ -264,7 +264,7 @@ df_fetais <- dados_fetais |>
     ) |>
   ungroup()
 
-codigos_municipios <- read_csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read_csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(municipio)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano

@@ -93,7 +93,7 @@ df2 <- df |>
   ungroup()
 
 #Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read_csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read_csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(municipio)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
@@ -110,11 +110,11 @@ df_bloco3[is.na(df_bloco3)] <- 0
 
 # Incidência de sífilis congênita por mil nascidos vivos ------------------
 ##Lendo a base de dados obtida pelo site http://indicadoressifilis.aids.gov.br/
-df_sifilis_excel1 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2022.xlsx",
+df_sifilis_excel1 <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/dados_painel_sifilis_2022.xlsx",
                                sheet = "DADOS CONTINUAÇÃO 2"
 )
 
-df_sifilis_excel2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/dados_painel_sifilis_2013_2023.xlsx",
+df_sifilis_excel2 <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/dados_painel_sifilis_2013_2023.xlsx",
                                 sheet = "DADOS CONTINUAÇÃO 2"
 )
 

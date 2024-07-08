@@ -30,7 +30,7 @@ aux_municipios_1$regiao[which(aux_municipios_1$regiao == "Centro-oeste")] <- "Ce
 aux_municipios_1$uf[which(aux_municipios_1$uf == "SAO PAULO")] <- "São Paulo"
 
 #Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde
-aux_r_saude <- readODS::read_ods("data-raw/ods/regioes_macrorregioes.ods") |>
+aux_r_saude <- readODS::read_ods("data-raw/extracao-dos-dados/cobertura/regioes_macrorregioes.ods") |>
   janitor::clean_names() |>
   dplyr::rename(
     codmunres = codmun,
@@ -493,7 +493,7 @@ tabela_indicadores <- read.csv("data-raw/csv/tabela_indicadores.csv")
 
 
 #Lendo a tabela contendo informações sobre as CIDs
-df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_cid10_completo.csv")
 
 usethis::use_data(bloco1, overwrite = TRUE)
 usethis::use_data(bloco2, overwrite = TRUE)

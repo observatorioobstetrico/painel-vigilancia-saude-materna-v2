@@ -11,7 +11,7 @@ library(ckanr)
 library(purrr)
 
 #Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
@@ -721,7 +721,7 @@ df_bloco2 <- left_join(df_bloco2, df_est_pop_fem_10_49_long)
 
 # Abortos SUS e ANS -------------------------------------------------------
 ##Lendo os arquivos com os dados de aborto atualizados e os juntando
-df_aborto_sih <- read.csv("data-raw/extracao-dos-dados/databases-antigas/dados_SIH_aborto_2015_2023_tabela.csv") |>
+df_aborto_sih <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/dados_SIH_aborto_2015_2023_tabela.csv") |>
   clean_names() |>
   rename(
     codmunres = munic_res,
@@ -731,7 +731,7 @@ df_aborto_sih <- read.csv("data-raw/extracao-dos-dados/databases-antigas/dados_S
   ) |>
   select(!sih_total)
 
-df_aborto_ans <- read.csv("data-raw/extracao-dos-dados/databases-antigas/dados_ANS_aborto_2015a2022_tabela.csv") |>
+df_aborto_ans <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/dados_ANS_aborto_2015a2022_tabela.csv") |>
   clean_names() |>
   rename(
     codmunres = cd_municipio_beneficiario,

@@ -111,7 +111,7 @@ df_causas_especificas <- df_causas_especif_aux |>
   )
 
 #Obtendo dados de nascidos vivos do SINASC de 2021 (foram usados os dados do github do painel de indicadores obstétricos)
-df_nascimentos <- read_delim("data-raw/extracao-dos-dados/databases-antigas/dados_sinasc.csv",
+df_nascimentos <- read_delim("data-raw/extracao-dos-dados/databases_auxiliares/dados_sinasc.csv",
                              delim = ",", escape_double = FALSE, trim_ws = TRUE) |>
   clean_names()
 
@@ -135,7 +135,7 @@ df_completo <- left_join(df_nascimentos_2021, df_causas_especificas, by = c("cod
 
 get_dupes(df_completo, codmunres, uf, ano)
 
-aux_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+aux_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   select(codmunres, municipio, uf, regiao)
 
 aux_municipios$codmunres <- as.character(aux_municipios$codmunres)
@@ -178,13 +178,13 @@ library(readr)
 
 #Carregando as tabelas pde 2012 a 2022
 
-rmm_brasil <- read_excel("data-raw/extracao-dos-dados/databases-antigas/analises_obitos_RMM_1996_2021.xlsx") %>%
+rmm_brasil <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/analises_obitos_RMM_1996_2021.xlsx") %>%
   filter(Ano >= 2012)
 
-rmm_regioes <- read_excel("data-raw/extracao-dos-dados/databases-antigas/RMM_Regioes.xlsx") %>%
+rmm_regioes <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/RMM_Regioes.xlsx") %>%
   filter(Ano>=2012)
 
-rmm_estados <- read_excel("data-raw/extracao-dos-dados/databases-antigas/RMM_Estados.xlsx") %>%
+rmm_estados <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/RMM_Estados.xlsx") %>%
   filter(Ano>=2012)
 
 dicionario_estados <- data.frame(

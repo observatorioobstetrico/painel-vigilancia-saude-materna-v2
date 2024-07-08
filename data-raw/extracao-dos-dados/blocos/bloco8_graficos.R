@@ -7,7 +7,7 @@ library(data.table)
 library(readr)
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
@@ -57,7 +57,7 @@ df_sim_domat <- df_sim_domat_aux |>
   )
 
 ## Lendo o dataframe que recebe as CIDs consideradas garbage codes
-df_garbage_codes <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_garbage_codes.csv")
+df_garbage_codes <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_garbage_codes.csv")
 
 ## Criando um data.frame com os óbitos maternos totais
 df_maternos_totais <- df_sim_domat |>
@@ -98,7 +98,7 @@ df_maternos_garbage[is.na(df_maternos_garbage)] <- 0
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_maternos_garbage)
 
 ## Para a tabela de garbage codes em óbitos maternos
-df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_cid10_completo.csv")
 
 df_maternos_garbage_tabela_aux <- df_sim_domat |>
   filter(causabas %in% df_garbage_codes$causabas) |>
@@ -1273,7 +1273,7 @@ write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_
 # Nova Referência de causas evitáveis --------------------------------------------------------
 ## Criando um vetor com as cids
 
-df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases-antigas/evitabilidade_fetal.xlsx", sheet = "Fetal")
+df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/evitabilidade_fetal.xlsx", sheet = "Fetal")
 colnames(df_cids_fetal_evitaveis2) <- c("nome", "cid")
 
 
@@ -1428,7 +1428,7 @@ grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", 
 
 ## Para a tabela de grupos de causa em óbitos fetais
 
-df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_cid10_completo.csv")
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_cid10_completo.csv")
 
 df_grupos_fetais_tabela <- df_sim_dofet |>
   filter(codmunres %in% codigos_municipios) |>

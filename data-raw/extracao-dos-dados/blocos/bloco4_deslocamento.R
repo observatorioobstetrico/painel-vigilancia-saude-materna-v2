@@ -153,12 +153,12 @@ rm(sinasc,cnes_unicos)
 
 # unindo com macro ---------------------------------------------------------
 
-mun_res <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+mun_res <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   janitor::clean_names() |>
   rename(macro_r_saude_res = macro_r_saude) |>
   select(codmunres, macro_r_saude_res)
 
-mun_nasc <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+mun_nasc <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   janitor::clean_names() |>
   rename(codmunnasc = codmunres,
          macro_r_saude_nasc = macro_r_saude) |>
@@ -210,7 +210,7 @@ dados <- dados |> group_by(codmunres, ano) |>
 
 ## Dados municipios
 
-mun <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+mun <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   janitor::clean_names() |>
   select(codmunres)
 
@@ -304,7 +304,7 @@ dados$CODMUNNASC <- as.numeric(dados$CODMUNNASC)
 # regioes_res <- data.table::fread("databases/rmr_res.csv")
 
 # Informações dos municípios, macro e micro de residência
-regioes_res <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+regioes_res <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   janitor::clean_names() |>
   dplyr::select(CODMUNRES = codmunres,
                 MUNRES = municipio,
@@ -314,7 +314,7 @@ regioes_res <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_au
                 MRRES = macro_r_saude)
 
 # Informações dos municípios, macro e micro de nascimento
-regioes_nasc <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+regioes_nasc <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   janitor::clean_names() |>
   dplyr::select(CODMUNNASC = codmunres,
                 MUNNASC = municipio,
@@ -327,7 +327,7 @@ regioes_nasc <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_a
 # Matriz de distâncias entre os municípios, disponivel em:
 # https://drive.google.com/uc?export=download&id=1VLQZBOccbbvIrC33WHFrZI6_H_gGr4ZK
 
-dist_mun <- data.table::fread("data-raw/extracao-dos-dados/databases-antigas/matriz_distancias.csv")
+dist_mun <- data.table::fread("data-raw/extracao-dos-dados/databases_auxiliares/matriz_distancias.csv")
 
 # Juntando as bases
 dados2 <- dplyr::left_join(dados, regioes_res, by = c("CODMUNRES"))
@@ -601,7 +601,7 @@ rm(dados8, dados9)
 
 ## Dados dos estabelecimentos do CNES
 
-dados_cnes_estabelecimento <- data.table::fread("data-raw/extracao-dos-dados/databases-antigas/cnes_estabelecimentos.csv")
+dados_cnes_estabelecimento <- data.table::fread("data-raw/extracao-dos-dados/databases_auxiliares/cnes_estabelecimentos.csv")
 
 ## Juntando os dados
 
@@ -611,7 +611,7 @@ rm(dados10, dados_cnes_estabelecimento)
 
 ## Dados dos municipios
 
-dados_muni2 <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+dados_muni2 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   select(codmunres) |> unique()
 
 anos <- data.frame(ano = c(2012:2023))
@@ -816,7 +816,7 @@ dados9_uf <- dados9_uf |> rename(cod_uf = uf)
 
 # Códigos das UFs
 
-codigos_uf2 <- data.table::fread("data-raw/extracao-dos-dados/databases-antigas/df_aux_municipios.csv") |>
+codigos_uf2 <- data.table::fread("data-raw/extracao-dos-dados/databases_auxiliares/df_aux_municipios.csv") |>
   select(uf, codmunres) |>
   mutate(cod_uf = floor(codmunres/10000)) |>
   select(!codmunres) |>

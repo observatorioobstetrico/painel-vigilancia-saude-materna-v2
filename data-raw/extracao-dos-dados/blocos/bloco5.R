@@ -10,7 +10,7 @@ library(readr)
 
 # Criando alguns objetos auxiliares ---------------------------------------
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres) |>
   as.character()
 
@@ -143,13 +143,13 @@ for (estado in estados) {
   # Salvando as bases da UF
   write.csv2(
     df_sih_rd_menores_28_uf,
-    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv.gz")),
+    gzfile(glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv.gz")),
     row.names = FALSE
   )
 
   write.csv2(
     df_sih_rd_partos_uf,
-    gzfile(glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv.gz")),
+    gzfile(glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv.gz")),
     row.names = FALSE
   )
 
@@ -164,7 +164,7 @@ df_sih_rd_partos <- data.frame()
 
 for (estado in estados) {
   df_sih_rd_menores_28_aux <- fread(
-    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
+    glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
     sep = ";"
   )
   df_sih_rd_menores_28 <- bind_rows(df_sih_rd_menores_28, df_sih_rd_menores_28_aux)
@@ -175,7 +175,7 @@ for (estado in estados) {
 
 for (estado in estados) {
   df_sih_rd_partos_aux <- fread(
-    glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_2012_2022.csv.gz"),
+    glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_2012_2022.csv.gz"),
     sep = ";"
   )
   df_sih_rd_partos <- bind_rows(df_sih_rd_partos, df_sih_rd_partos_aux)
@@ -187,20 +187,20 @@ for (estado in estados) {
 ## Salvando as bases completas
 write.csv2(
   df_sih_rd_menores_28,
-  glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv"),
+  glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_{anos[1]}_{anos[length(anos)]}.csv"),
   row.names = FALSE
 )
 
 write.csv2(
   df_sih_rd_partos,
-  glue("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv"),
+  glue("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_{anos[1]}_{anos[length(anos)]}.csv"),
   row.names = FALSE
 )
 
 
 ## Para os numeradores dos indicadores (número de internações/internações em UTI em menores de 28 dias) ----
 ### Lendo uma base com informações auxiliares dos municípios
-df_infos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/df_aux_municipios.csv") |>
+df_infos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_aux_municipios.csv") |>
   mutate_if(is.numeric, as.character)
 
 ### Rodando o algoritmo da Claudia na base completa de internações em menores de 28 dias
@@ -208,10 +208,10 @@ df_infos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/d
 diretorio_original <- getwd()
 
 #### Criando um vetor que contém o diretório das bases brutas do SIH-RD
-diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH")
+diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH")
 
 #### Mudando o diretório para a pasta que contém o algoritmo em C++
-setwd("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/")
+setwd("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de internações
 system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2012_2022.csv"))
@@ -220,7 +220,7 @@ system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_201
 setwd(diretorio_original)
 
 #### Criando a conexão com o arquivo .sqlite gerado como resultado do algoritmo em C++
-con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
+con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
 
 #### Selecionando a tabela "aih" com todas as suas variáveis, ordenadas por AIHREF e DT_INTER
 df_aih_internacoes_aux <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
@@ -316,7 +316,7 @@ sum(df_bloco5_sih_internacoes$internacoes_geral_7_a_27_dias_internado_uti, df_bl
 ## Para o denominador dos indicadores (total de partos públicos) -----------
 ### Rodando o algoritmo da Claudia na base completa de partos
 #### Mudando o diretório para a pasta que contém o algoritmo em C++
-setwd("data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/")
+setwd("data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de partos
 system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2012_2022.csv"))
@@ -325,7 +325,7 @@ system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2012_2022.cs
 setwd(diretorio_original)
 
 #### Criando a conexão com o arquivo .sqlite gerado como resultado do algoritmo em C++
-con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
+con <- dbConnect(SQLite(), "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite")
 
 #### Selecionando a tabela "aih" com todas as suas variáveis, ordenadas por AIHREF e DT_INTER
 df_aih_partos_aux <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
@@ -358,11 +358,11 @@ df_bloco5_sih_partos <- df_aih_partos |>
 
 ### Removendo arquivos já utilizados e que são maiores que o limite de 100 mb
 file.remove(c(
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2022.csv",
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2012_2022.csv",
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
-  "data-raw/extracao-dos-dados/databases-antigas/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite",
+  "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2022.csv",
+  "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2012_2022.csv",
+  "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
+  "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
+  "data-raw/extracao-dos-dados/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite",
 
 ))
 
@@ -404,7 +404,7 @@ for (col in names(df_bloco5)) {
 }
 
 ## Verificando se os dados novos e antigos estão batendo
-df_bloco5_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>
+df_bloco5_antigo <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/indicadores_bloco5_condicao_de_nascimento_2012-2020.csv") |>
   clean_names()
 
 sum(df_bloco5 |> filter(ano <= 2020) |> pull(total_de_nascidos_vivos)) - sum(df_bloco5_antigo$total_de_nascidos_vivos)

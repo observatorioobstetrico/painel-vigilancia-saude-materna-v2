@@ -5,7 +5,7 @@
 library(dplyr)
 library(readr)
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 # Ler o arquivo CSV baixado em https://sisaps.saude.gov.br/painelsaps/cobertura_pot_aps

@@ -571,11 +571,11 @@ pop_com_plano_saude_tabnet <- function (linha = "Município",
 }
 
 # Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases-antigas/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
+df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
   clean_names()
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases-antigas/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano

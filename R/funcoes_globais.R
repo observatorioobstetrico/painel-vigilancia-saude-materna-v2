@@ -884,9 +884,9 @@ minha_paged_windmill <- function(logo = "0",
                                  other_css = "inst/app/www/report/css_report.css") {
   # arguments
   main_css <-
-    "pagedreport/resources/css/minha_style_windmill.css"
+    "inst/app/www/report/minha_style_windmill.css"
   pandoc_html <-
-    "pagedreport/resources/html/template_paged.html"
+    "inst/app/www/report/template_paged.html"
 
   # default img
   if (front_img == "0") {
