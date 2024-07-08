@@ -9,6 +9,9 @@
 - [Como usar o aplicativo](#como-usar-o-aplicativo)
 - [Estrutura do projeto](#estrutura-do-projeto)
     - [Pastas data-raw e data](#pastas-data-raw-e-data)
+    - [Pasta R](#pasta-r)
+    - [Pasta inst](#pasta-inst)
+    - [Outros arquivos e pastas](#outros-arquivos-e-pastas)
 
 ## Descrição
 
