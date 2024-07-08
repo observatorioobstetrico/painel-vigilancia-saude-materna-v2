@@ -29,11 +29,13 @@ Antes de começar a utilizar o painel localmente, instale os pré-requisitos nec
 ### Passos para a instalação
 
 1. Utilizando o shell de sua preferência, clone o repositório do projeto:
+   
     ```bash
     git clone https://github.com/observatorioobstetrico/painel-vigilancia-saude-materna-v2.git
     ```
 
-2. Abra o arquivo `painel.indicadores.Rproj` e instale, no R, as dependências do projeto:
+3. Abra o arquivo `painel.indicadores.Rproj` e instale, no R, as dependências do projeto:
+   
     ```r
     install.packages("devtools")
     devtools::install_deps()
@@ -47,10 +49,13 @@ Para abrir o aplicativo, seja localmente ou virtualmente, siga as instruções a
 
 1. Abra o projeto do R `painel.indicadores.Rproj` no RStudio.
 2. Aperte simultaneamente as teclas `ctrl + shift + L`, ou execute o seguinte comando no console do R, para carregar o conteúdo do aplicativo:
+   
     ```r
     devtools::load_all(".")
     ```
-3. Rode o aplicativo Shiny executando o seguinte comando no console do R:
+    
+4. Rode o aplicativo `{shiny}` executando o seguinte comando no console do R:
+   
     ```r
     run_app()
     ```
@@ -77,7 +82,7 @@ Todas as bases geradas pelos scripts citados acima são guardadas em formato `.c
 
 ### Pasta R
 
-A pasta `R` contém os scripts que compõem, de fato, o aplicativo Shiny. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é separada em um arquivo diferente, formando os diversos módulos do Shiny que existem dentro da pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote {bs4Dash} - e as opções de filtro que existem em cada página. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais para cada página do aplicativo. Mais especificamente,
+A pasta `R` contém os scripts que compõem, de fato, o aplicativo `{shiny}`. Como o projeto utiliza o framework `{golem}`, cada "página" do aplicativo é separada em um arquivo diferente, formando os diversos módulos do `{shiny}` que existem dentro da pasta. Os arquivos `app_ui.R` e `app_server.R` recebem, respectivamente, os elementos que formam a UI e o servidor compartilhados entre todas as páginas do aplicativo, como a estrutura base do dashboard - criada a partir do pacote {bs4Dash} - e as opções de filtro que existem em cada página. Por outro lado, os arquivos que começam com "mod" contêm as UIs e os servidores individuais para cada página do aplicativo. Mais especificamente,
 
 - o arquivo `mod_nivel_1.R` contém a UI e o servidor individuais do nível 1 do painel ("Resumo dos blocos de indicadores");
 
