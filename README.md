@@ -66,7 +66,7 @@ Para acessar a versão mais recente do aplicativo virtualmente, acesse o [link d
 
 ## Estrutura do projeto
 
-Por ser um aplicativo criado dentro do framework golem, o diretório principal do projeto se assemelha ao que se encontraria em um pacote qualquer do R. Abaixo, pode ser vista uma breve descrição da estrutura de diretórios e dos arquivos principais utilizados pelo aplicativo. É importante citar que, para rodar qualquer um dos scripts citados, é necessário estar dentro do projeto do R `painel.indicadores.Rproj`.
+Por ser um aplicativo criado dentro do framework golem, o diretório principal do projeto se assemelha ao que se encontraria em um pacote qualquer do R. Abaixo, pode ser vista uma breve descrição da estrutura dos diretórios e arquivos principais utilizados dentro do aplicativo. É importante citar que, para rodar qualquer um dos scripts citados, é necessário estar dentro do projeto do R `painel.indicadores.Rproj`.
 
 ### Pastas data-raw e data
 
