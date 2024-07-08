@@ -92,7 +92,7 @@ A pasta `R` contém os scripts que compõem, de fato, o aplicativo `{shiny}`. Co
 
 - e o arquivo `mod_nivel_3.R` contém a UI e o servidor individuais do nível 3 do painel ("Visão detalhada dos indicadores").
 
-Por fim, a pasta `R` contém, também, o arquivo `funcoes_globais.R`, no qual são criadas funções do R utilizadas ao longo dos servidores de todo o painel, como a função que cria as caixinhas do "Resumo do período", a função que cria os modais de incompletude e a função que monta o relatório interativo dos indicadores (disponível no nível 1 do painel).
+Por fim, a pasta `R` contém, também, o arquivo `funcoes_globais.R`, no qual são criadas funções do R utilizadas ao longo dos servidores de todo o painel, como a função que cria as caixinhas do "Resumo do período", a função que cria os modais de incompletude e uma função que auxilia na montagem do relatório interativo dos indicadores (disponível no nível 1 do painel).
 
 ### Pasta inst
 
