@@ -6,9 +6,9 @@
 
 - [Descrição](#descrição)
 - [Instalação](#instalação)
-- [Como usar o aplicativo](#como-usar)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-    - [Pastas data-raw e data](##pastas-data-raw-e-data)
+- [Como usar o aplicativo](#como-usar-o-aplicativo)
+- [Estrutura do projeto](#estrutura-do-projeto)
+    - [Pastas data-raw e data](#pastas-data-raw-e-data)
 
 ## Descrição
 
