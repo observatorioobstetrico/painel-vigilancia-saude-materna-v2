@@ -83,28 +83,6 @@ mod_bloco_9_server <- function(id, filtros) {
     ns <- session$ns
 
 
-
-    # Criando um data.frame com os cálculos dos indicadores -------------------
-    # # Calcular valores máximos possíveis para cada indicador na base bruta
-    # max_values <- bloco2 |>
-    #   dplyr::left_join(bloco3) |>
-    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-    #   dplyr::left_join(bloco5) |>
-    #   dplyr::left_join(bloco7) |>
-    #   dplyr::summarize(
-    #     max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
-    #     max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
-    #     max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
-    #                                   (partos_na_macro_com_uti + partos_na_macro_sem_uti +
-    #                                      partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
-    #     max_porc_consultas_inadequadas = max(100 - (mulheres_com_consultas_prenatal_adequadas / total_de_nascidos_vivos * 100), na.rm = TRUE),
-    #     max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
-    #   )
-
-
-
-
-
     bloco9_calcs <- data.frame(
       tipo = c("local", "referencia"),
       mort_neonat = rep("round(sum(obitos_27dias)/sum(total_de_nascidos_vivos) *1000, 2)", 2),
@@ -114,8 +92,6 @@ mod_bloco_9_server <- function(id, filtros) {
       porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
     )
-
-
 
 
 
@@ -185,10 +161,94 @@ mod_bloco_9_server <- function(id, filtros) {
     })
 
 
-    output$spider_chart <- highcharter::renderHighchart({
+    # max_values <- bloco2 |>
+    #   dplyr::left_join(bloco3) |>
+    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
+    #   dplyr::left_join(bloco5) |>
+    #   dplyr::left_join(bloco7) |>
+    #   dplyr::summarise(
+    #     max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
+    #     max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
+    #     max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
+    #     max_porc_consultas_inadequadas = 100,  # Valor máximo possível
+    #     max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
+    #   )
+    #
+    #
+    #
+    #
+    # normalize_indicators <- function(df, max_values) {
+    #   df <- df |>
+    #     dplyr::mutate(
+    #       mort_neonat = mort_neonat / max_values$max_mort_neonat,
+    #       porc_condicoes_ameacadoras = porc_condicoes_ameacadoras / max_values$max_porc_condicoes_ameacadoras,
+    #       prop_1500_sem_uti = prop_1500_sem_uti / max_values$max_prop_1500_sem_uti,
+    #       porc_consultas_inadequadas = porc_consultas_inadequadas / max_values$max_porc_consultas_inadequadas,
+    #       porc_mais_3pt = porc_mais_3pt / max_values$max_porc_mais_3pt
+    #     )
+    #   return(df)
+    # }
+    #
+    # data9_normalized <- reactive({
+    #   df <- data9()
+    #   normalize_indicators(df, max_values)
+    # })
+    #
+    # data9_comp_normalized <- reactive({
+    #   df <- data9_comp()
+    #   normalize_indicators(df, max_values)
+    # })
 
+    max_values <- bloco2 |>
+      dplyr::left_join(bloco3) |>
+      dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
+      dplyr::left_join(bloco5) |>
+      dplyr::left_join(bloco7) |>
+      dplyr::summarise(
+        max_mort_neonat = ifelse(sum(total_de_nascidos_vivos, na.rm = TRUE) > 0,
+                                 max(obitos_27dias / total_de_nascidos_vivos * 100, na.rm = TRUE),
+                                 NA),
+        max_porc_condicoes_ameacadoras = ifelse(sum(total_de_nascidos_vivos, na.rm = TRUE) > 0,
+                                                max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
+                                                NA),
+        max_prop_1500_sem_uti = ifelse((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) > 0,
+                                       max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
+                                       NA),
+        max_porc_consultas_inadequadas = 100,  # Valor máximo possível
+        max_porc_mais_3pt = ifelse(sum(total_de_nascidos_vivos, na.rm = TRUE) > 0,
+                                   max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE),
+                                   NA)
+      )
+
+
+
+    normalize_indicators <- function(df, max_values) {
+      df <- df |>
+        dplyr::mutate(
+          mort_neonat = ifelse(!is.na(max_values$max_mort_neonat), mort_neonat / max_values$max_mort_neonat, NA),
+          porc_condicoes_ameacadoras = ifelse(!is.na(max_values$max_porc_condicoes_ameacadoras), porc_condicoes_ameacadoras / max_values$max_porc_condicoes_ameacadoras, NA),
+          prop_1500_sem_uti = ifelse(!is.na(max_values$max_prop_1500_sem_uti), prop_1500_sem_uti / max_values$max_prop_1500_sem_uti, NA),
+          porc_consultas_inadequadas = ifelse(!is.na(max_values$max_porc_consultas_inadequadas), porc_consultas_inadequadas / max_values$max_porc_consultas_inadequadas, NA),
+          porc_mais_3pt = ifelse(!is.na(max_values$max_porc_mais_3pt), porc_mais_3pt / max_values$max_porc_mais_3pt, NA)
+        )
+      return(df)
+    }
+
+
+    data9_normalized <- reactive({
       df <- data9()
+      normalize_indicators(df, max_values)
+    })
+
+    data9_comp_normalized <- reactive({
       df2 <- data9_comp()
+      normalize_indicators(df2, max_values)
+    })
+
+
+    output$spider_chart <- highcharter::renderHighchart({
+      df <- data9_normalized()
+      df2 <- data9_comp_normalized()
 
       print(df)
       print(df2)
@@ -199,26 +259,25 @@ mod_bloco_9_server <- function(id, filtros) {
                       'Porcentagem de mulheres com número inadequado de consultas de pré-natal',
                       'Porcentagem de mulheres com mais de 3 partos anteriores')
 
-
       if (filtros()$comparar == "Não") {
-        values <- as.numeric(df[1,c(1:5)])
+        values <- as.numeric(df[1, c(1:5)])
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
           highcharter::hc_pane(size = '80%') |>
           highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold'))) |>
-          highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = 75) |>
+          highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = 1) |>
           highcharter::hc_add_series(name = df$class, data = values, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
           highcharter::hc_tooltip(shared = TRUE, pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>')
       } else {
-        values1 <- as.numeric(df[1,c(1:5)])
-        values2 <- as.numeric(df2[1,c(1:5)])
+        values1 <- as.numeric(df[1, c(1:5)])
+        values2 <- as.numeric(df2[1, c(1:5)])
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
           highcharter::hc_pane(size = '80%') |>
           highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold'))) |>
-          highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = 75) |>
+          highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = 1) |>
           highcharter::hc_add_series(name = df$class, data = values1, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
           highcharter::hc_add_series(name = df2$class, data = values2, color = "#ff7f0e", lineWidth = 2, marker = list(enabled = TRUE, symbol = "diamond", radius = 4)) |>
           highcharter::hc_tooltip(shared = TRUE, useHTML = TRUE, headerFormat = '<span style="font-size: 10px">{point.key}</span><br/>', pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>')
@@ -226,33 +285,6 @@ mod_bloco_9_server <- function(id, filtros) {
     })
 
 
-
-
-
-    ### Porcentagem de nascidos vivos de mulheres com mais de 3 partos anteriores ----
-    output$caixa_b2_i2 <- renderUI({
-      cria_caixa_server(
-        dados = data9_resumo(),
-        indicador = "mort_neonat",
-        titulo = "Porcentagem de nascidos vivos de mulheres com mais de 3 partos anteriores",
-        tem_meta = FALSE,
-        valor_de_referencia = 10,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "300px",
-        fonte_titulo = "15px",
-        pagina = "bloco_9",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
 
 
 
