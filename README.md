@@ -6,7 +6,7 @@
 
 - [Descrição](#descrição)
 - [Instalação](#instalação)
-- [Como Usar](#como-usar)
+- [Como usar o aplicativo](#como-usar)
 - [Estrutura do Projeto](#estrutura-do-projeto)
     - [Pastas data-raw e data](##pastas-data-raw-e-data)
 
