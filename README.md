@@ -94,7 +94,7 @@ Por fim, a pasta R contém, também, os arquivos `mod_sobre.R` e `mod_documentac
 
 ### Pasta inst
 
-A pasta `inst` contém, em geral, arquivos relacionados ao visual do painel, como imagens e scripts `.css` e `.html`. No caminho `inst/app/www`, se encontram:
+A pasta `inst` contém, em geral, arquivos relacionados aos aspectos visuais do painel, como imagens e scripts `.css` e `.html`. No caminho `inst/app/www`, se encontram:
 
 - A pasta `global`, que contém um arquivo `.css` que define alguns elementos visuais do painel e um arquivo `.js` com algumas funções utilizadas em todo o aplicativo;
 
