@@ -15,7 +15,7 @@
 
 ## Descrição
 
-Este repositório contém todos os códigos utilizados para a extração dos dados e para a construção do Painel de Vigilância da Saúde Materna, um painel de visualização construído em `{shiny}` a partir do framework `{golem}`, no R. O painel é formado por um conjunto de indicadores que expressam a vulnerabilidade das mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde recebida ao longo da sua vida reprodutiva. O objetivo do projeto é criar uma interface amigável para a visualização desses indicadores, de modo que eles possam ser explorados pelos gestores de saúde para identificar áreas prioritárias para investimento em seu município/estado. 
+Este repositório contém todos os códigos utilizados para a extração dos dados e para a construção da versão de desenvolvimento do Painel de Vigilância da Saúde Materna, um painel de visualização construído em `{shiny}` a partir do framework `{golem}`, no R. O painel é formado por um conjunto de indicadores que expressam a vulnerabilidade das mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde recebida ao longo da sua vida reprodutiva. O objetivo do projeto é criar uma interface amigável para a visualização desses indicadores, de modo que eles possam ser explorados pelos gestores de saúde para identificar áreas prioritárias para investimento em seu município/estado. 
 
 ## Instalação
 
