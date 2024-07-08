@@ -12,7 +12,7 @@
 
 app_ui <- function(request) {
   tagList(
-    includeCSS("inst/app/www/custom.css"),
+    includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "funcoes_javascript.js")),
     tags$style(HTML("
       .shiny-output-error-validation {
@@ -782,7 +782,7 @@ golem_add_external_resources <- function() {
   tags$head(
     favicon(ext = "png"),
     bundle_resources(
-      path = app_sys("app/www"),
+      path = app_sys("app/www/global"),
       app_title = "Painel de Vigilância da Saúde Materna"
     )
     # Add here other external resources
