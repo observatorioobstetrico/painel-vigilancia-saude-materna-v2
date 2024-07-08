@@ -620,17 +620,7 @@ dados_muni4 <- cross_join(dados_muni2, anos)
 
 dados12 <- left_join(dados_muni4,dados11,  by = c("codmunres", "ano"))
 
-# Substituindo valores NA por zero
-
-dados12[is.na(dados12)] <- 0
-
 rm(dados11, dados_muni4, dados_muni2, anos)
-
-dados12$codmunnasc1[dados12$codmunnasc1 == 0] <- NA
-dados12$codmunnasc2[dados12$codmunnasc2 == 0] <- NA
-dados12$codmunnasc3[dados12$codmunnasc3 == 0] <- NA
-dados12$cnes[dados12$cnes == 0] <- NA
-dados12$nome_estabelecimento_fantasia[dados12$nome_estabelecimento_fantasia == 0] <- NA
 
 # Exportando os dados
 # data.table::fwrite(dados12, "databases/indicadores_bloco4_deslocamento_parto_municipio_2012_2023.csv")
@@ -643,11 +633,11 @@ dados_1500 <- data.table::fread("data-raw/csv/indicador_deslocamento_1500_2012_2
 
 dados_municipio <- full_join(dados12, dados_1500, by = c("codmunres","ano"))
 
+dados_municipio$km_partos_fora_uf <- as.numeric(dados_municipio$km_partos_fora_uf)
+
 data.table::fwrite(dados_municipio,"data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012_2023.csv")
 
-
 rm(dados12,dados_1500,dados_municipio)
-
 
 ##################### CÁLCULO DAS MEDIANAS E NASCIDOS PARA UF ##################
 
