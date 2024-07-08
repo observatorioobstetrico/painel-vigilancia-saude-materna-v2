@@ -30,8 +30,7 @@ Antes de começar a utilizar o painel localmente, instale os pré-requisitos nec
 
 1. Utilizando o shell de sua preferência, clone o repositório do projeto:
     ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    cd seu-repositorio
+    git clone https://github.com/observatorioobstetrico/painel-vigilancia-saude-materna-v2.git
     ```
 
 2. Abra o arquivo `painel.indicadores.Rproj` e instale, no R, as dependências do projeto:
