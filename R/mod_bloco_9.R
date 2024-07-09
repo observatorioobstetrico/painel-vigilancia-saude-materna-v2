@@ -164,43 +164,7 @@ mod_bloco_9_server <- function(id, filtros) {
     })
 
 
-    # max_values <- bloco2 |>
-    #   dplyr::left_join(bloco3) |>
-    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-    #   dplyr::left_join(bloco5) |>
-    #   dplyr::left_join(bloco7) |>
-    #   dplyr::summarise(
-    #     max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
-    #     max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
-    #     max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
-    #     max_porc_consultas_inadequadas = 100,  # Valor máximo possível
-    #     max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
-    #   )
-    #
-    #
-    #
-    #
-    # normalize_indicators <- function(df, max_values) {
-    #   df <- df |>
-    #     dplyr::mutate(
-    #       mort_neonat = mort_neonat / max_values$max_mort_neonat,
-    #       porc_condicoes_ameacadoras = porc_condicoes_ameacadoras / max_values$max_porc_condicoes_ameacadoras,
-    #       prop_1500_sem_uti = prop_1500_sem_uti / max_values$max_prop_1500_sem_uti,
-    #       porc_consultas_inadequadas = porc_consultas_inadequadas / max_values$max_porc_consultas_inadequadas,
-    #       porc_mais_3pt = porc_mais_3pt / max_values$max_porc_mais_3pt
-    #     )
-    #   return(df)
-    # }
-    #
-    # data9_normalized <- reactive({
-    #   df <- data9()
-    #   normalize_indicators(df, max_values)
-    # })
-    #
-    # data9_comp_normalized <- reactive({
-    #   df <- data9_comp()
-    #   normalize_indicators(df, max_values)
-    # })
+
 
 
     # teste <- bloco2 |>
@@ -299,7 +263,7 @@ mod_bloco_9_server <- function(id, filtros) {
 
 
       if (filtros()$comparar == "Não") {
-        values <- round(as.numeric(df[1, selected_indicators]), 2)
+        values <- round(as.numeric(df[1, selected_indicators]), 3)
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
@@ -309,8 +273,8 @@ mod_bloco_9_server <- function(id, filtros) {
           highcharter::hc_add_series(name = df$class, data = values, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
           highcharter::hc_tooltip(shared = TRUE, pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>')
       } else {
-        values1 <- round(as.numeric(df[1, selected_indicators]), 2)
-        values2 <- round(as.numeric(df2[1, selected_indicators]), 2)
+        values1 <- round(as.numeric(df[1, selected_indicators]), 3)
+        values2 <- round(as.numeric(df2[1, selected_indicators]), 3)
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
