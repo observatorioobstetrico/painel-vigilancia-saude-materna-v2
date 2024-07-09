@@ -206,7 +206,7 @@ mod_bloco_9_server <- function(id, filtros) {
       dplyr::left_join(bloco7) |>
       dplyr::summarise(
         max_mort_neonat = ifelse(sum(total_de_nascidos_vivos, na.rm = TRUE) > 0,
-                                 max(obitos_27dias / total_de_nascidos_vivos * 100, na.rm = TRUE),
+                                 max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
                                  NA),
         max_porc_condicoes_ameacadoras = ifelse(sum(total_de_nascidos_vivos, na.rm = TRUE) > 0,
                                                 max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
