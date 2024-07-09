@@ -116,7 +116,7 @@ app_ui <- function(request) {
               icon = icon("7")
             ),
             bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Grafico",
+              text = "- Gráfico de radar",
               tabName = "bloco_9",
               icon = icon("9")
             )
@@ -461,7 +461,7 @@ app_ui <- function(request) {
                 )
               ),
               conditionalPanel(
-                condition = "input.comparar == 'Sim' & input.abas != 'bloco_4'",
+                condition = "input.comparar == 'Sim' & input.abas != 'bloco_4' & input.abas != 'bloco_9'",
                 fluidRow(
                   column(
                     width = 12,

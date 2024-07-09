@@ -13,30 +13,30 @@ mod_bloco_9_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Planejamento Reprodutivo: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(tags$b(HTML("Resumo dos indicadores: gráfico de radar"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
-      column(
-        width = 4,
-        HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-        HTML("<b style='font-size:18px'> Resumo do período </b>"),
-        hr(),
-        fluidRow(
-          column(
-            width = 12,
-            HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-            uiOutput(ns("input_localidade_resumo")),
-            align = "center"
-          )
-        )
-        # fluidRow(
-        #   column(
-        #     width = 6,
-        #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b2_i2")), proxy.height = "300px")
-        #   )
-        # )
-      ),
+      # column(
+      #   width = 4,
+      #   HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+      #   HTML("<b style='font-size:18px'> Resumo do período </b>"),
+      #   hr(),
+      #   fluidRow(
+      #     column(
+      #       width = 12,
+      #       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      #       uiOutput(ns("input_localidade_resumo")),
+      #       align = "center"
+      #     )
+      #   )
+      #   fluidRow(
+      #     column(
+      #       width = 6,
+      #       shinycssloaders::withSpinner(uiOutput(ns("caixa_b2_i2")), proxy.height = "300px")
+      #     )
+      #   )
+      # ),
       column(
         width = 12,
         fluidRow(
@@ -47,24 +47,25 @@ mod_bloco_9_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 620px; padding-top: 0; padding-bottom: 0; overflow-y: auto",  # Aumentei a altura do card
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Resumo dos indicadores &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao1"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao1"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
+                HTML("<b style='font-size:18px'> Resumo dos indicadores &nbsp;</b>")
               ),
               hr(),
+              # Adicionando a seleção de indicadores
+              div(
+                style = "height: 20%; display: flex; align-items: center;",  # Altura ajustada para os checkboxes
+                checkboxGroupInput(ns("selected_indicators"), "Escolha os indicadores:",
+                                   choices = list(
+                                     'Taxa de mortalidade neonatal por 1000 nascidos vivos' = 'mort_neonat',
+                                     'Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida' = 'porc_condicoes_ameacadoras',
+                                     'Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal' = 'prop_1500_sem_uti',
+                                     'Porcentagem de mulheres com número inadequado de consultas de pré-natal' = 'porc_consultas_inadequadas',
+                                     'Porcentagem de mulheres com mais de 3 partos anteriores' = 'porc_mais_3pt'
+                                   ),
+                                   selected = c('mort_neonat', 'porc_condicoes_ameacadoras', 'prop_1500_sem_uti', 'porc_consultas_inadequadas', 'porc_mais_3pt'))
+              ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 400))
             )
           )
@@ -123,6 +124,7 @@ mod_bloco_9_server <- function(id, filtros) {
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
+        dplyr::mutate(obitos_27dias = ifelse(ano == 2012 & is.na(obitos_27dias), 0, obitos_27dias)) |>
         cria_indicadores(df_calcs = bloco9_calcs, filtros = filtros())
     })
 
@@ -157,6 +159,7 @@ mod_bloco_9_server <- function(id, filtros) {
           else if (filtros()$nivel2 == "Municípios semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
+        dplyr::mutate(obitos_27dias = ifelse(ano == 2012 & is.na(obitos_27dias), 0, obitos_27dias)) |>
         cria_indicadores(df_calcs = bloco9_calcs, filtros = filtros(), comp = TRUE)
     })
 
@@ -198,6 +201,32 @@ mod_bloco_9_server <- function(id, filtros) {
     #   df <- data9_comp()
     #   normalize_indicators(df, max_values)
     # })
+
+
+    # teste <- bloco2 |>
+    #   dplyr::left_join(bloco3) |>
+    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
+    #   dplyr::left_join(bloco5) |>
+    #   dplyr::left_join(bloco7) |>
+    #   dplyr::mutate(max_mort_neonat = (obitos_27dias / total_de_nascidos_vivos * 1000),
+    #                 max_porc_condicoes_ameacadoras = (nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100),
+    #                 max_prop_1500_sem_uti = ((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
+    #                                               (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100),
+    #                 max_porc_mais_3pt = (mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100)
+    #
+    #                 ) |>
+    #   dplyr::select(ano, uf, municipio, max_mort_neonat, max_porc_condicoes_ameacadoras, max_prop_1500_sem_uti, max_porc_mais_3pt)
+    #
+    #   dplyr::summarise(
+    #     max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
+    #     max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
+    #     max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
+    #                                   (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
+    #     max_porc_consultas_inadequadas = 100,  # Valor máximo possível
+    #     max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
+    #   ) |> tidyr::replace_na(list(max_mort_neonat = 0, max_porc_condicoes_ameacadoras = 0, max_prop_1500_sem_uti = 0, max_porc_mais_3pt = 0))
+
+
 
     max_values <- bloco2 |>
       dplyr::left_join(bloco3) |>
@@ -247,20 +276,30 @@ mod_bloco_9_server <- function(id, filtros) {
 
 
     output$spider_chart <- highcharter::renderHighchart({
+      req(input$selected_indicators)
       df <- data9_normalized()
       df2 <- data9_comp_normalized()
+
+      # Filtrar os indicadores selecionados
+      selected_indicators <- input$selected_indicators
+      df <- df[, c('class', selected_indicators)]
+      df2 <- df2[, c('class', selected_indicators)]
+
 
       print(df)
       print(df2)
 
-      categories <- c('Taxa de mortalidade neonatal por 1000 nascidos vivos',
-                      'Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida',
-                      'Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal',
-                      'Porcentagem de mulheres com número inadequado de consultas de pré-natal',
-                      'Porcentagem de mulheres com mais de 3 partos anteriores')
+      # Construir dinamicamente o vetor categories
+      categories <- c()
+      if ('mort_neonat' %in% selected_indicators) categories <- c(categories, 'Taxa de mortalidade neonatal por 1000 nascidos vivos')
+      if ('porc_condicoes_ameacadoras' %in% selected_indicators) categories <- c(categories, 'Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida')
+      if ('prop_1500_sem_uti' %in% selected_indicators) categories <- c(categories, 'Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal')
+      if ('porc_consultas_inadequadas' %in% selected_indicators) categories <- c(categories, 'Porcentagem de mulheres com número inadequado de consultas de pré-natal')
+      if ('porc_mais_3pt' %in% selected_indicators) categories <- c(categories, 'Porcentagem de mulheres com mais de 3 partos anteriores')
+
 
       if (filtros()$comparar == "Não") {
-        values <- as.numeric(df[1, c(1:5)])
+        values <- round(as.numeric(df[1, selected_indicators]), 2)
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
@@ -270,8 +309,8 @@ mod_bloco_9_server <- function(id, filtros) {
           highcharter::hc_add_series(name = df$class, data = values, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
           highcharter::hc_tooltip(shared = TRUE, pointFormat = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>')
       } else {
-        values1 <- as.numeric(df[1, c(1:5)])
-        values2 <- as.numeric(df2[1, c(1:5)])
+        values1 <- round(as.numeric(df[1, selected_indicators]), 2)
+        values2 <- round(as.numeric(df2[1, selected_indicators]), 2)
 
         highcharter::highchart() |>
           highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
