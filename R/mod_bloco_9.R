@@ -231,6 +231,12 @@ mod_bloco_9_server <- function(id, filtros) {
     output$spider_chart <- highcharter::renderHighchart({
       df <- data9_normalized()
       df2 <- data9_comp_normalized()
+
+      # Limpar a coluna 'class' para remover "(valor de referência)" apenas para Brasil
+      df$class <- ifelse(grepl("Brasil \\(valor de referência\\)", df$class), "Brasil", df$class)
+      df2$class <- ifelse(grepl("Brasil \\(valor de referência\\)", df2$class), "Brasil", df2$class)
+
+
       print(df)
       print(df2)
       categories <- c('Taxa de mortalidade neonatal por 1000 nascidos vivos',
