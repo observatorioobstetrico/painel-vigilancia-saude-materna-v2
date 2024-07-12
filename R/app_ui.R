@@ -118,7 +118,7 @@ app_ui <- function(request) {
             bs4Dash::bs4SidebarMenuSubItem(
               text = "- Gráfico de radar",
               tabName = "bloco_9",
-              icon = icon("9")
+              icon = icon("8")
             )
           ),
           bs4Dash::bs4SidebarMenuItem(
