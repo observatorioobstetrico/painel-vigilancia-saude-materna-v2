@@ -493,15 +493,15 @@ mod_bloco_6_server <- function(id, filtros){
       prop_obitos_hipertens = rep("round(sum(obitos_mat_hipertensao) / sum(obitos_mat_diretos) * 100, 1)", 2),
       prop_obitos_hemo = rep("round(sum(obitos_mat_hemorragia) / sum(obitos_mat_diretos) * 100, 1)", 2),
       prop_obitos_infec = rep("round(sum(obitos_mat_infec_puerperal) / sum(obitos_mat_diretos) * 100, 1)", 2),
-      soma_casos_mmg = rep("sum(casos_mmg[ano <= 2022])", 2),
-      prop_mmg_int_publicas = rep("round(sum(casos_mmg[ano <= 2022]) / sum(total_internacoes[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_hipertensao = rep("round(sum(casos_mmg_hipertensao[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_hemorragia = rep("round(sum(casos_mmg_hemorragia[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_infeccao = rep("round(sum(casos_mmg_infeccoes[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_uti = rep("round(sum(casos_mmg_uti[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_tmp = rep("round(sum(casos_mmg_tmp[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_transfusao = rep("round(sum(casos_mmg_transfusao[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2),
-      prop_mmg_cirurgia = rep("round(sum(casos_mmg_cirurgia[ano <= 2022]) / sum(casos_mmg[ano <= 2022]) * 100, 1)", 2)
+      soma_casos_mmg = rep("sum(casos_mmg)", 2),
+      prop_mmg_int_publicas = rep("round(sum(casos_mmg) / sum(total_internacoes) * 100, 1)", 2),
+      prop_mmg_hipertensao = rep("round(sum(casos_mmg_hipertensao) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_hemorragia = rep("round(sum(casos_mmg_hemorragia) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_infeccao = rep("round(sum(casos_mmg_infeccoes) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_uti = rep("round(sum(casos_mmg_uti) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_tmp = rep("round(sum(casos_mmg_tmp) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_transfusao = rep("round(sum(casos_mmg_transfusao) / sum(casos_mmg) * 100, 1)", 2),
+      prop_mmg_cirurgia = rep("round(sum(casos_mmg_cirurgia) / sum(casos_mmg) * 100, 1)", 2)
     )
 
 

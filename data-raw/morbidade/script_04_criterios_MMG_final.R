@@ -66,7 +66,7 @@ obs_cluster_sumario_total_uf <- tibble()
 
 for( estado in estados ) {
   # Ler o arquivo CSV relacionado ao SIH para um estado específico e período específico
-  arquivo <- glue("{arq_obs_cluster}/{estado}_sih_rd_tratado_long_2012_2022.csv")
+  arquivo <- glue("{arq_obs_cluster}/{estado}_sih_rd_tratado_long_2012_2023.csv")
   sp_obs_cluster_2012_atual <- fread(arquivo, sep = ",") |>
     mutate(PROC_REA = as.character(PROC_REA))
 
@@ -339,7 +339,7 @@ for( estado in estados ) {
     mutate(CPAV_INTER_CIRURGICA_SIH_BR = if_else(CURETAGEM == 1 | PROC_REA %in% proc_cirurgicos, 1L, NA_integer_))
 
   # Ler base SP
-  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_2012_2022.csv.gz"), sep = ",") |>
+  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_2012_2023.csv.gz"), sep = ",") |>
     mutate(SP_ATOPROF = as.character(SP_ATOPROF))
 
   # Limpar memória
@@ -545,7 +545,7 @@ for( estado in estados ) {
   # Filtrar apenas os anos de interesse
   sp_obs_cluster_2014_2019_grp <- sp_obs_cluster_2014_2019_grp |>
     mutate(ANO = year(DT_INTER)) |>
-    filter(between(ANO, 2012, 2022))
+    filter(between(ANO, 2012, 2023))
 
   # Criar sumário dos estados
   obs_cluster_sumario_total_uf <- obs_cluster_sumario_total_uf |>
@@ -560,8 +560,8 @@ for( estado in estados ) {
 
   # Gerar dataframe com todos os municípios e os anos
   obs_cluster_mun_ano <- tibble(
-    CODMUNRES = rep(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES), each = length(2012:2022)),
-    ANO = rep(2012:2022, length(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES)))
+    CODMUNRES = rep(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES), each = length(2012:2023)),
+    ANO = rep(2012:2023, length(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES)))
   )
 
   obs_cluster_mun_ano <- obs_cluster_mun_ano |> arrange(CODMUNRES, ANO)
@@ -621,9 +621,9 @@ obs_cluster_total_mun_ano <- obs_cluster_total_mun_ano |>
   )
 
 # salvar as bases
-write.csv( obs_cluster_total_mun_ano, "databases/03_bases_finais/obs_cluster_total_mun_ano.csv", row.names = FALSE)
+write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/obs_cluster_total_mun_ano.csv", row.names = FALSE)
 
-write.csv( obs_cluster_total_mun_ano, "databases/indicadores_bloco6_morbidade_materna_2012-2023.csv", row.names = FALSE)
+write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/indicadores_bloco6_morbidade_materna_2012-2023.csv", row.names = FALSE)
 
 
 write.csv( obs_cluster_sumario_total_uf, "databases/03_bases_finais/obs_cluster_sumario_total.csv", row.names = FALSE)
