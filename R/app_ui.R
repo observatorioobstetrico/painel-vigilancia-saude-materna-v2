@@ -12,7 +12,7 @@
 
 app_ui <- function(request) {
   tagList(
-    includeCSS("inst/app/www/custom.css"),
+    includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "funcoes_javascript.js")),
     tags$style(HTML("
       .shiny-output-error-validation {
@@ -114,6 +114,11 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal, perinatal e neonatal",
               tabName = "bloco_7",
               icon = icon("7")
+            ),
+            bs4Dash::bs4SidebarMenuSubItem(
+              text = "- Gráfico de radar",
+              tabName = "bloco_9",
+              icon = icon("9")
             )
           ),
           bs4Dash::bs4SidebarMenuItem(
@@ -456,7 +461,7 @@ app_ui <- function(request) {
                 )
               ),
               conditionalPanel(
-                condition = "input.comparar == 'Sim' & input.abas != 'bloco_4'",
+                condition = "input.comparar == 'Sim' & input.abas != 'bloco_4' & input.abas != 'bloco_9'",
                 fluidRow(
                   column(
                     width = 12,
@@ -580,11 +585,14 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos neonatais por causas evitáveis'",
                         "'Porcentagem de óbitos fetais por grupos de causas'",
                         "'Porcentagem de óbitos perinatais por grupos de causas'",
-                        "'Porcentagem de óbitos neonatais por grupos de causas'"
+                        "'Porcentagem de óbitos neonatais por grupos de causas'",
+                        "'Porcentagem de nascidos vivos segundo local de ocorrência do parto'",
+                        "'Medianas de deslocamento segundo o local de ocorrência do parto'",
+                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
                       )
 
                       glue::glue(
-                        "[{paste(indicadores_uma_caixinha_adicional_bloco7, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                        "[{paste(indicadores_uma_caixinha_adicional_bloco7, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7' | input.bloco == 'bloco4')"
                       )
                     },
                     selectizeInput(
@@ -705,6 +713,10 @@ app_ui <- function(request) {
           #   mod_bloco_8_ui("bloco_8_1")
           # ),
           bs4Dash::bs4TabItem(
+            tabName = "bloco_9",
+            mod_bloco_9_ui("bloco_9_1")
+          ),
+          bs4Dash::bs4TabItem(
             tabName = "nivel_3",
             mod_nivel_3_ui("nivel_3_1")
           ),
@@ -770,7 +782,7 @@ golem_add_external_resources <- function() {
   tags$head(
     favicon(ext = "png"),
     bundle_resources(
-      path = app_sys("app/www"),
+      path = app_sys("app/www/global"),
       app_title = "Painel de Vigilância da Saúde Materna"
     )
     # Add here other external resources

@@ -2173,8 +2173,7 @@ mod_nivel_1_server <- function(id, filtros){
       dplyr::summarise(nascidos_vivos_anomalia = sum(nascidos_vivos_anomalia))
 
     data5 <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      bloco5 |>
         dplyr::filter(ano == filtros()$ano) |>
         #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
@@ -2193,24 +2192,31 @@ mod_nivel_1_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso)/total_de_nascidos_vivos * 100, 1),
-          porc_premat = round(sum(nascidos_vivos_prematuros)/total_de_nascidos_vivos * 100, 1),
-          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce)/total_de_nascidos_vivos * 100, 1),
-          porc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
-          porc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
-          porc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499)/sum(nascidos_vivos_com_baixo_peso)  * 100, 1),
-          porc_menos_de_28_semanas= round(sum(nascidos_vivos_menos_de_28_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
-          porc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
-          porc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
-          porc_35_a_36_semanas= round(sum(nascidos_vivos_35_a_36_semanas)/sum(nascidos_vivos_prematuros)  * 100, 1),
-          porc_premat_faltantes =  round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
-                                                                                               nascidos_vivos_28_a_32_semanas,
-                                                                                               nascidos_vivos_33_a_34_semanas,
-                                                                                               nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
-          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
+          porc_nasc_baixo_peso = round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_peso_2000_a_2499= round(sum(nascidos_vivos_peso_2000_a_2499) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_baixo_peso_menor_1500 = round(sum(nascidos_vivos_peso_menor_1500) / sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_baixo_peso_1500_a_1999 = round(sum(nascidos_vivos_peso_1500_a_1999) / sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_baixo_peso_2000_a_2499 = round(sum(nascidos_vivos_peso_2000_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1),
+          porc_nasc_premat = round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_menos_de_28_semanas = round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_nasc_35_a_36_semanas = round(sum(nascidos_vivos_35_a_36_semanas) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_premat_menos_de_28_semanas = round(sum(nascidos_vivos_menos_de_28_semanas) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_premat_28_a_32_semanas = round(sum(nascidos_vivos_28_a_32_semanas) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_premat_33_a_34_semanas = round(sum(nascidos_vivos_33_a_34_semanas) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_premat_35_a_36_semanas = round(sum(nascidos_vivos_35_a_36_semanas) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_premat_faltantes = round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+                                                                                           nascidos_vivos_28_a_32_semanas,
+                                                                                           nascidos_vivos_33_a_34_semanas,
+                                                                                           nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1),
+          porc_termo_precoce = round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1)
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2218,13 +2224,12 @@ mod_nivel_1_server <- function(id, filtros){
 
     ##### Dados do quinto bloco de indicadores para a comparação com o Brasil #####
     data5_comp <- reactive({
-      dplyr::left_join(bloco5, asfixia) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
-        dplyr::left_join(malformacao2) |> dplyr::mutate_all(~ifelse(is.na(.), 0, .)) |>
+      bloco5 |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          porc_premat = 10,
+          porc_nasc_premat = 10,
           porc_termo_precoce = 20,
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
@@ -2251,7 +2256,7 @@ mod_nivel_1_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7
         )
     })
 
@@ -2260,10 +2265,10 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b5_i1 <- renderUI({
       cria_caixa_server(
         dados = data5(),
-        indicador = "porc_baixo_peso",
+        indicador = "porc_nasc_baixo_peso",
         titulo = "Porcentagem de baixo peso ao nascer (< 2500 g)",
         tem_meta = TRUE,
-        valor_de_referencia = data5_comp_baixo_peso()$porc_baixo_peso,
+        valor_de_referencia = data5_comp_baixo_peso()$porc_nasc_baixo_peso,
         tipo = "porcentagem",
         invertido = FALSE,
         pagina = "nivel_1",
@@ -2283,7 +2288,7 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b5_i3 <- renderUI({
       cria_caixa_server(
         dados = data5(),
-        indicador = "porc_premat",
+        indicador = "porc_nasc_premat",
         titulo = "Porcentagem de nascimentos prematuros",
         tem_meta = TRUE,
         valor_de_referencia = 10,
