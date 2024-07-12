@@ -256,7 +256,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 520))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 510))
                 )
               ),
               column(
@@ -328,7 +328,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 490))
                 )
               ),
               column(
@@ -396,7 +396,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 490))
                 )
               ),
               column(
@@ -459,7 +459,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                    ),
-                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 500))
+                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 490))
                  )
               )
             )
@@ -741,7 +741,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 460))
                 )
               ),
               column(
@@ -814,7 +814,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 460))
                 )
               ),
               column(
@@ -884,7 +884,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 460))
                 )
               )
             )
@@ -1174,7 +1174,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 460))
                 )
               ),
               # column(
@@ -1295,7 +1295,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 470))
                 )
               ),
               column(
@@ -1367,7 +1367,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 500))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 470))
                 )
               )
             )

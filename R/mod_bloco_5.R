@@ -395,7 +395,7 @@ mod_bloco_5_ui <- function(id) {
               headerBorder = FALSE,
               style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 10%; display: flex; align-items: center;",
+                style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
@@ -444,7 +444,7 @@ mod_bloco_5_ui <- function(id) {
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 370))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 350))
             )
           ),
           column(
@@ -456,7 +456,7 @@ mod_bloco_5_ui <- function(id) {
               headerBorder = FALSE,
               style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 10%; display: flex; align-items: center;",
+                style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
@@ -505,7 +505,7 @@ mod_bloco_5_ui <- function(id) {
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 370))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 350))
             )
           )
         )
@@ -520,7 +520,7 @@ mod_bloco_5_ui <- function(id) {
             headerBorder = FALSE,
             style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
             div(
-              style = "height: 10%; display: flex; align-items: center;",
+              style = "height: 15%; display: flex; align-items: center;",
               HTML("<b style='font-size:18px'> Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
               shinyjs::hidden(
                 span(
@@ -569,7 +569,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               )
             ),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 370))
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 360))
           )
         ),
         column(
@@ -597,7 +597,7 @@ mod_bloco_5_ui <- function(id) {
               )
             ),
             hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 430))
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
           )
         ),
         column(
@@ -637,7 +637,7 @@ mod_bloco_5_ui <- function(id) {
             headerBorder = FALSE,
             style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
             div(
-              style = "height: 18%; display: flex; align-items: center",
+              style = "height: 20%; display: flex; align-items: center",
               HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
               shinyjs::hidden(
                 span(
@@ -653,7 +653,7 @@ mod_bloco_5_ui <- function(id) {
               )
             ),
             hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 460))
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 450))
           )
         ),
         column(
