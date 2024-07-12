@@ -2081,7 +2081,7 @@ mod_bloco_4_server <- function(id, filtros){
             tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
             fonte_titulo = "15px",
             pagina = "bloco_4",
-            tipo_referencia = "HEALTHY PEOPLE 2020, 2020",
+            tipo_referencia = "HEALTHY PEOPLE 2020",
             nivel_de_analise = ifelse(
               filtros()$comparar == "Não",
               filtros()$nivel,
