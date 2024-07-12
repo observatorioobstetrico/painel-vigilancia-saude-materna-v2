@@ -2107,6 +2107,15 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
+    # Exibe a mensagem quando o botão for clicado
+    observeEvent(input$aviso_desloc, {
+      shinyalert::shinyalert(
+        title = "Atenção",
+        text = "Esse indicador é condicional a ter nascido vivo",
+        type = "info"
+      )
+    })
+
 
 
 

@@ -142,10 +142,11 @@ bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2
 #   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
 #   select(!total_de_nascidos_malformacao)
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2022.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
+  dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
+  dplyr::select(,-c(3:10))
 
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
