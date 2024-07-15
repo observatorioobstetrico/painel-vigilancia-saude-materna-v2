@@ -216,7 +216,7 @@ mod_bloco_2_server <- function(id, filtros){
     bloco2_calcs <- data.frame(
       tipo = c("local", "referencia"),
 
-      porc_menor20 = c("round(sum(nvm_menor_que_20) / sum(pop_feminina_10_a_19[ano <= 2021]) * 1000, 1)", "dplyr::first(20[ano <= 2021])"),
+      porc_menor20 = c("round(sum(nvm_menor_que_20[ano <= 2021]) / sum(pop_feminina_10_a_19[ano <= 2021]) * 1000, 1)", "dplyr::first(20[ano <= 2021])"),
       porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
 
       geral_tx_abortos_mil_mulheres_lim_inf = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2021]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2021]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2021]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2021]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2021]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2021]) * 0.75)) * 5)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2021]) * 1000, 1)", 2),
@@ -954,7 +954,7 @@ mod_bloco_2_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data2_razao_aborto() |> dplyr::filter(ano >= 2015 & ano <= 2022),
+            data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
             highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
@@ -978,7 +978,7 @@ mod_bloco_2_server <- function(id, filtros){
           grafico_base |>
             highcharter::hc_add_series(
               name = "Referência (média nacional)",
-              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015 & ano <= 2022),
+              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015),
               type = "line",
               highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio),
               tooltip = list(
@@ -991,7 +991,7 @@ mod_bloco_2_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data2_razao_aborto() |> dplyr::filter(ano >= 2015 & ano <= 2022),
+            data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
             highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
@@ -999,7 +999,7 @@ mod_bloco_2_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_add_series(
-            data = data2_razao_aborto_comp() |> dplyr::filter(ano >= 2015 & ano<= 2022),
+            data = data2_razao_aborto_comp() |> dplyr::filter(ano >= 2015),
             type = "line",
             highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
@@ -1024,7 +1024,7 @@ mod_bloco_2_server <- function(id, filtros){
           grafico_base |>
             highcharter::hc_add_series(
               name = "Referência (média nacional)",
-              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015 & ano <= 2022),
+              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015),
               type = "line",
               highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio),
               tooltip = list(
