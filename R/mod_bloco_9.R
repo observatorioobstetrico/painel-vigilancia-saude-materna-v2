@@ -75,20 +75,23 @@ mod_bloco_9_server <- function(id, filtros) {
     bloco9_calcs <- data.frame(
       tipo = c("local", "referencia"),
       mort_neonat = rep("round(sum(obitos_27dias)/sum(total_de_nascidos_vivos) *1000, 2)", 2),
-      porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos_bloco5) * 100, 1)", 2),
       prop_1500_sem_uti= rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
-      porc_consultas_inadequadas = rep("100 - round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", 2),
+      porc_consultas_inadequadas = rep("100 - round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos_bloco3[ano >= 2014]) * 100, 2)", 2),
       porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
     )
 
 
-
     data9 <- reactive({
       bloco2 |>
-        dplyr::left_join(bloco3) |>
+        dplyr::left_join(bloco3 |>
+                           dplyr::rename(total_de_nascidos_vivos_bloco3 = total_de_nascidos_vivos)
+        ) |>
         dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-        dplyr::left_join(bloco5) |>
+        dplyr::left_join(bloco5 |>
+                           dplyr::rename(total_de_nascidos_vivos_bloco5 = total_de_nascidos_vivos)
+        ) |>
         dplyr::left_join(bloco7) |>
         dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
                       mulheres_com_mais_de_tres_partos_anteriores,
@@ -96,7 +99,7 @@ mod_bloco_9_server <- function(id, filtros) {
                       partos_na_macro_sem_uti, partos_fora_macro_sem_uti, partos_na_macro_com_uti, partos_fora_macro_com_uti,
                       nascidos_condicoes_ameacadoras,
                       obitos_27dias,
-                      total_de_nascidos_vivos) |>
+                      total_de_nascidos_vivos, total_de_nascidos_vivos_bloco3, total_de_nascidos_vivos_bloco5) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
@@ -119,9 +122,13 @@ mod_bloco_9_server <- function(id, filtros) {
     ### Para a comparação selecionada -----------------------------------------
     data9_comp <- reactive({
       bloco2 |>
-        dplyr::left_join(bloco3) |>
+        dplyr::left_join(bloco3 |>
+                           dplyr::rename(total_de_nascidos_vivos_bloco3 = total_de_nascidos_vivos)
+        ) |>
         dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-        dplyr::left_join(bloco5) |>
+        dplyr::left_join(bloco5 |>
+                           dplyr::rename(total_de_nascidos_vivos_bloco5 = total_de_nascidos_vivos)
+        ) |>
         dplyr::left_join(bloco7) |>
         dplyr::select(ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
                       mulheres_com_mais_de_tres_partos_anteriores,
@@ -129,7 +136,7 @@ mod_bloco_9_server <- function(id, filtros) {
                       partos_na_macro_sem_uti, partos_fora_macro_sem_uti, partos_na_macro_com_uti, partos_fora_macro_com_uti,
                       nascidos_condicoes_ameacadoras,
                       obitos_27dias,
-                      total_de_nascidos_vivos) |>
+                      total_de_nascidos_vivos, total_de_nascidos_vivos_bloco3, total_de_nascidos_vivos_bloco5) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
@@ -152,33 +159,6 @@ mod_bloco_9_server <- function(id, filtros) {
     })
 
 
-
-
-
-    # teste <- bloco2 |>
-    #   dplyr::left_join(bloco3) |>
-    #   dplyr::left_join(bloco4_deslocamento_macrorregiao) |>
-    #   dplyr::left_join(bloco5) |>
-    #   dplyr::left_join(bloco7) |>
-    #   dplyr::mutate(max_mort_neonat = (obitos_27dias / total_de_nascidos_vivos * 1000),
-    #                 max_porc_condicoes_ameacadoras = (nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100),
-    #                 max_prop_1500_sem_uti = ((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
-    #                                               (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100),
-    #                 max_porc_mais_3pt = (mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100),
-    #                 porc_consultas_inadequadas = (((mulheres_com_consultas_prenatal_adequadas)) / (total_de_nascidos_vivos) * 100)
-    #
-    #                 ) |>
-    #   dplyr::select(ano, uf, municipio, max_mort_neonat, max_porc_condicoes_ameacadoras, max_prop_1500_sem_uti, max_porc_mais_3pt, porc_consultas_inadequadas)
-
-      # dplyr::summarise(
-      #   max_mort_neonat = max(obitos_27dias / total_de_nascidos_vivos * 1000, na.rm = TRUE),
-      #   max_porc_condicoes_ameacadoras = max(nascidos_condicoes_ameacadoras / total_de_nascidos_vivos * 100, na.rm = TRUE),
-      #   max_prop_1500_sem_uti = max((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) /
-      #                                 (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti) * 100, na.rm = TRUE),
-      #   max_porc_consultas_inadequadas = 100,  # Valor máximo possível
-      #   max_porc_mais_3pt = max(mulheres_com_mais_de_tres_partos_anteriores / total_de_nascidos_vivos * 100, na.rm = TRUE)
-      # ) |> tidyr::replace_na(list(max_mort_neonat = 0, max_porc_condicoes_ameacadoras = 0, max_prop_1500_sem_uti = 0, max_porc_mais_3pt = 0))
-      #
 
 
     max_values <- bloco2 |>
@@ -231,6 +211,8 @@ mod_bloco_9_server <- function(id, filtros) {
     output$spider_chart <- highcharter::renderHighchart({
       df <- data9_normalized()
       df2 <- data9_comp_normalized()
+      # df <- data9()
+      # df2 <- data9()
 
       # Limpar a coluna 'class' para remover "(valor de referência)" apenas para Brasil
       df$class <- ifelse(grepl("Brasil \\(valor de referência\\)", df$class), "Brasil", df$class)
@@ -281,21 +263,21 @@ mod_bloco_9_server <- function(id, filtros) {
 
 
 
-# bloco 7 Taxa de mortalidade neonatal por 1000 nascidos vivos,
-# mort_neonat = rep("round(sum(obitos_27dias)/sum(nascidos) *1000, 2)", 2)
+    # bloco 7 Taxa de mortalidade neonatal por 1000 nascidos vivos,
+    # mort_neonat = rep("round(sum(obitos_27dias)/sum(nascidos) *1000, 2)", 2)
 
-# bloco 5 Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida,
-# porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
+    # bloco 5 Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida,
+    # porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
-# bloco 4 Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal,
-# bloco4_deslocamento_macrorregiao
-# prop_1500_sem_uti= rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2)
+    # bloco 4 Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal,
+    # bloco4_deslocamento_macrorregiao
+    # prop_1500_sem_uti= rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2)
 
-# bloco 3 Porcentagem de mulheres com número inadequado (complementar do adequado) de consultas de pré-natal  e
-# porc_consultas_adequadas = rep("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", 2)
+    # bloco 3 Porcentagem de mulheres com número inadequado (complementar do adequado) de consultas de pré-natal  e
+    # porc_consultas_adequadas = rep("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", 2)
 
-# bloco 2 Porcentagem de mulheres com mais de 3 partos anteriores .
-# porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
+    # bloco 2 Porcentagem de mulheres com mais de 3 partos anteriores .
+    # porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
     # mort_neonat
     # porc_condicoes_ameacadoras
