@@ -1,0 +1,236 @@
+nome_abreviado,indicador,bloco,entra
+porc_nvm_menor_que_20_anos,Porcentagem de nascidos vivos de mães com idade inferior a 20 anos,bloco1,sim
+porc_nvm_entre_20_e_34_anos,Porcentagem de nascidos vivos de mães com idade entre 20 a 34 anos,bloco1,sim
+porc_nvm_maior_que_34_anos,Porcentagem de nascidos vivos de mães com idade de 35 ou mais anos,bloco1,sim
+porc_nvm_com_cor_da_pele_branca,Porcentagem de nascidos vivos de mães de raça/cor branca,bloco1,sim
+porc_nvm_com_cor_da_pele_preta,Porcentagem de nascidos vivos de mães de raça/cor preta,bloco1,sim
+porc_nvm_com_cor_da_pele_parda,Porcentagem de nascidos vivos de mães de raça/cor parda,bloco1,sim
+porc_nvm_com_cor_da_pele_amarela,Porcentagem de nascidos vivos de mães de raça/cor amarela,bloco1,sim
+porc_nvm_indigenas,Porcentagem de nascidos vivos de mães de raça/cor indígena,bloco1,sim
+porc_nvm_com_escolaridade_ate_3,Porcentagem de nascidos vivos de mães com menos de 4 anos de estudo,bloco1,sim
+porc_nvm_com_escolaridade_de_4_a_7,Porcentagem de nascidos vivos de mães com 4 a 7 anos de estudo,bloco1,sim
+porc_nvm_com_escolaridade_de_8_a_11,Porcentagem de nascidos vivos de mães com 8 a 11 anos de estudo,bloco1,sim
+porc_nvm_com_escolaridade_acima_de_11,Porcentagem de nascidos vivos de mães com mais de 11 anos de estudo,bloco1,sim
+porc_dependentes_sus,Porcentagem de mulheres com 10 a 49 anos usuárias exclusivas do SUS,bloco1,sim
+porc_cobertura_esf,Cobertura populacional da atenção básica,bloco1,sim
+porc_menor20,Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil),bloco2,sim
+porc_mais_3pt,Porcentagem de mulheres com mais de 3 partos anteriores,bloco2,sim
+geral_tx_abortos_mil_mulheres_valor_medio,Taxa de abortos inseguros por mil mulheres em idade fértil (geral),bloco2,sim
+sus_tx_abortos_mil_mulheres_valor_medio,Taxa de abortos inseguros por mil mulheres em idade fértil (apenas SUS),bloco2,sim
+ans_tx_abortos_mil_mulheres_valor_medio,Taxa de abortos inseguros por mil mulheres em idade fértil (apenas ANS),bloco2,sim
+geral_tx_abortos_cem_nascidos_vivos_valor_medio,Razão de abortos inseguros por 100 nascidos vivos (geral),bloco2,sim
+sus_tx_abortos_cem_nascidos_vivos_valor_medio,Razão de abortos inseguros por 100 nascidos vivos (apenas SUS),bloco2,sim
+ans_tx_abortos_cem_nascidos_vivos_valor_medio,Razão de abortos inseguros por 100 nascidos vivos (apenas ANS),bloco2,sim
+porc_1con,Cobertura de assistência pré-natal,bloco3,sim
+porc_inicio_prec,Porcentagem de mulheres com início precoce do pré-natal,bloco3,sim
+porc_7,Porcentagem de mulheres com mais de 7 consultas de pré-natal,bloco3,sim
+porc_sc,Incidência de sífilis congênita,bloco3,sim
+porc_consultas_adequadas,Porcentagem de mulheres com número adequado de consultas de pré-natal,bloco3,sim
+prop_tx_cesariana_geral,Porcentagem de nascidos vivos por cesariana,bloco4,sim
+prop_robson1_tx_cesariana,Porcentagem de nascidos vivos por cesariana no grupo 1 de Robson,bloco4,sim
+prop_robson2_tx_cesariana,Porcentagem de nascidos vivos por cesariana no grupo 2 de Robson,bloco4,sim
+prop_robson3_tx_cesariana,Porcentagem de nascidos vivos por cesarianas no grupo 3 de Robson,bloco4,sim
+prop_robson4_tx_cesariana,Porcentagem de nascidos vivos por cesariana no grupo 4 de Robson,bloco4,sim
+prop_robson5_tx_cesariana,Porcentagem de nascidos vivos por cesariana no grupo 5 de Robson,bloco4,sim
+prop_robson6_a_9_tx_cesariana,Porcentagem de nascidos vivos por cesariana nos grupos 6 a 9 de Robson,bloco4,sim
+prop_robson10_tx_cesariana,Porcentagem de nascidos vivos por cesariana no grupo 10 de Robson,bloco4,sim
+contrib_robson1_tx_cesariana,Contribuição relativa do grupo 1 de Robson para a taxa global de cesariana,bloco4,sim
+contrib_robson2_tx_cesariana,Contribuição relativa do grupo 2 de Robson para taxa global de cesariana,bloco4,sim
+contrib_robson3_tx_cesariana,Contribuição relativa do grupo 3 de Robson para taxa global de cesariana,bloco4,sim
+contrib_robson4_tx_cesariana,Contribuição relativa do grupo 4 de Robson para taxa global de cesariana,bloco4,sim
+contrib_robson5_tx_cesariana,Contribuição relativa do grupo 5 de Robson para taxa global de cesariana,bloco4,sim
+contrib_robson6_a_9_tx_cesariana,Contribuição relativa dos grupos 6 a 9 de Robson para taxa global de cesariana,bloco4,sim
+contrib_robson10_tx_cesariana,Contribuição relativa do grupo 10 de Robson para taxa global de cesariana,bloco4,sim
+prop_nasc_robson1,Porcentagem de nascidos vivos do grupo 1 de Robson,bloco4,sim
+prop_nasc_robson2,Porcentagem de nascidos vivos do grupo 2 de Robson,bloco4,sim
+prop_nasc_robson3,Porcentagem de nascidos vivos do grupo 3 de Robson,bloco4,sim
+prop_nasc_robson4,Porcentagem de nascidos vivos do grupo 4 de Robson,bloco4,sim
+prop_nasc_robson5,Porcentagem de nascidos vivos do grupo 5 de Robson,bloco4,sim
+prop_nasc_robson6_a_9,Porcentagem de nascidos vivos dos grupos 6 a 9 de Robson,bloco4,sim
+prop_nasc_robson10,Porcentagem de nascidos vivos do grupo 10 de Robson,bloco4,sim
+prop_partos_municipio_res,Porcentagem de partos ocorridos no município de residência da mulher,bloco4,sim
+prop_partos_fora_municipio_res,Porcentagem de partos ocorridos fora do município de residência da mulher,bloco4,sim
+prop_partos_rsaude_res,"Porcentagem de partos ocorridos fora do município, mas na microrregião de saúde de residência da mulher",bloco4,sim
+prop_partos_macro_rsaude_res,"Porcentagem de partos ocorridos fora da microrregião de saúde, mas na macrorregião de saúde de residência da mulher",bloco4,sim
+prop_partos_fora_macro_rsaude_res,"Porcentagem de partos ocorridos fora da macrorregião de saúde, mas dentro da UF de residência da mulher",bloco4,sim
+prop_partos_fora_uf_res,Porcentagem de partos ocorridos fora da UF de residência da mulher,bloco4,sim
+km_partos_fora_municipio,Medianas de deslocamento para partos ocorridos fora do municipio de residência da mulher,bloco4,nao
+km_partos_na_regiao,"Medianas de deslocamento para partos ocorridos fora do município, mas na microrregião de saúde de residência da mulher",bloco4,nao
+km_partos_na_macrorregiao,"Medianas de deslocamento para partos ocorridos fora da microrregião de saúde, mas na macrorregião de saúde de residência da mulher",bloco4,nao
+km_partos_fora_macrorregiao,"Medianas de deslocamento para partos ocorridos fora da macrorregião de saúde, mas na UF de residência da mulher",bloco4,nao
+km_partos_fora_uf,Medianas de deslocamento do total de partos ocorridos fora da UF de residência da mulher,bloco4,nao
+prop_partos_na_macro_com_uti,Porcentagem de partos com peso < 1500g ocorridos na macrorregião de saúde de residência da mulher e em estabelecimento que tem pelo menos um leito de UTI,bloco4,sim
+prop_partos_na_macro_sem_uti,"Porcentagem de partos com peso < 1500g ocorridos na macrorregião de saúde de residência da mulher, mas em estabelecimento que não tem leito de UTI",bloco4,sim
+prop_partos_fora_macro_com_uti,"Porcentagem de partos com peso < 1500g ocorridos fora da macrorregião de saúde de residência da mulher, mas em estabelecimento que tem pelo menos um leito de UTI",bloco4,sim
+prop_partos_fora_macro_sem_uti,Porcentagem de partos com peso < 1500g ocorridos fora da macrorregião de saúde de residência da mulher e em estabelecimento que não tem leito de UTI,bloco4,sim
+prop_partos_na_macro_sem_inf,"Porcentagem de partos com peso < 1500g ocorridos na macrorregião de saúde de residência da mulher, mas sem informação sobre leito de UTI",bloco4,sim
+prop_partos_fora_macro_sem_inf,"Porcentagem de partos com peso < 1500g ocorridos fora da macrorregião de saúde de residência da mulher, mas sem informação sobre leito de UTI",bloco4,sim
+prop_partos_sem_uti,Porcentagem de partos com peso < 1500g ocorridos em estabelecimento que não tem leito de UTI,bloco4,sim
+porc_nasc_baixo_peso,Porcentagem de nascidos vivos com baixo peso ao nascer (< 2500 g),bloco5,sim
+porc_nasc_peso_menor_1500,Porcentagem de nascidos vivos com peso menor que 1500g,bloco5,sim
+porc_nasc_peso_1500_a_1999,Porcentagem de nascidos vivos com peso de 1500 a 1999g,bloco5,sim
+porc_nasc_peso_2000_a_2499,Porcentagem de nascidos vivos com peso de 2000 a 2499g,bloco5,sim
+porc_nasc_premat,Porcentagem de nascidos vivos prematuros,bloco5,sim
+porc_nasc_menos_de_28_semanas,Porcentagem de nascidos vivos prematuros com menos de 28 semanas,bloco5,sim
+porc_nasc_28_a_32_semanas,Porcentagem de nascidos vivos prematuros de 28 a 32 semanas,bloco5,sim
+porc_nasc_33_a_34_semanas,Porcentagem de nascidos vivos prematuros de 33 a 34 semanas,bloco5,sim
+porc_nasc_35_a_36_semanas,Porcentagem de nascidos vivos prematuros de 35 a 36 semanas,bloco5,sim
+porc_termo_precoce,Porcentagem de nascidos vivos a termo precoce,bloco5,sim
+porc_condicoes_ameacadoras,Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida,bloco5,sim
+porc_nascidos_vivos_asfixia1,Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g,bloco5,sim
+porc_malformacao_geral,Porcentagem de nascidos vivos com malformações ,bloco5,sim
+porc_malformacao_vigilancia,"Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde
+",bloco5,sim
+porc_internacoes_menores_28_dias_vinc_sus_geral,Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS (geral),bloco5,sim
+porc_internacoes_menores_28_dias_sih_geral,Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos (geral),bloco5,sim
+porc_internacoes_uti_menores_28_dias_sih_geral,Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos (geral),bloco5,sim
+rmm,Razão de mortalidade materna,bloco6,sim
+prop_obitos_diretos,Porcentagem de óbitos maternos por causas obstétricas diretas,bloco6,sim
+prop_obitos_aborto,Porcentagem de óbitos maternos diretos por aborto,bloco6,sim
+prop_obitos_hipertens,Porcentagem de óbitos maternos diretos por hipertensão,bloco6,sim
+prop_obitos_hemo,Porcentagem de óbitos maternos diretos por hemorragia,bloco6,sim
+prop_obitos_infec,Porcentagem de óbitos maternos diretos por infecção puerperal,bloco6,sim
+prop_mmg_int_publicas,Porcentagem de casos de morbidade materna grave em internações obstétricas públicas,bloco6,sim
+prop_mmg_hipertensao,Porcentagem de casos de morbidade materna grave por hipertensão,bloco6,sim
+prop_mmg_hemorragia,Porcentagem de casos de morbidade materna grave por hemorragia,bloco6,sim
+prop_mmg_infeccao,Porcentagem de casos de morbidade materna grave por infecção,bloco6,sim
+prop_mmg_uti,Porcentagem de casos de morbidade materna grave com internação em UTI,bloco6,sim
+prop_mmg_tmp,Porcentagem de casos de morbidade materna grave com Tempo de Permanência Prolongada,bloco6,sim
+prop_mmg_transfusao,Porcentagem de casos de morbidade materna grave com transfusão sanguínea,bloco6,sim
+prop_mmg_cirurgia,Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas,bloco6,sim
+obitos_fetais,Número de óbitos fetais,bloco7,nao
+obitos_fetais_geral_geral,Número de óbitos fetais (geral),bloco7,nao
+obitos_fetais_geral_menos1500,Número de óbitos fetais com peso menor que 1500g,bloco7,nao
+obitos_fetais_geral_1500_1999,Número de óbitos fetais com peso de 1500g a 1999g,bloco7,nao
+obitos_fetais_geral_2000_2499,Número de óbitos fetais com peso de 2000g a 2499g,bloco7,nao
+obitos_fetais_geral_mais2500,Número de óbitos fetais com peso maior ou igual a 2500g,bloco7,nao
+obitos_fetais_antes_geral,Número de óbitos fetais antes do parto,bloco7,nao
+obitos_fetais_durante_geral,Número de óbitos fetais durante o parto,bloco7,nao
+obitos_fetais_antes_menos1500,Número de óbitos fetais antes do parto com peso menor que 1500g,bloco7,nao
+obitos_fetais_antes_1500_1999,Número de óbitos fetais antes do parto com peso de 1500g a 1999g,bloco7,nao
+obitos_fetais_antes_2000_2499,Número de óbitos fetais antes do parto com peso de 2000g a 2499g,bloco7,nao
+obitos_fetais_antes_mais2500,Número de óbitos fetais antes do parto com peso maior ou igual a 2500g,bloco7,nao
+obitos_fetais_durante_menos1500,Número de óbitos fetais durante o parto com peso menor que 1500g,bloco7,nao
+obitos_fetais_durante_1500_1999,Número de óbitos fetais durante o parto com peso de 1500g a 1999g,bloco7,nao
+obitos_fetais_durante_2000_2499,Número de óbitos fetais durante o parto com peso de 2000g a 2499g,bloco7,nao
+obitos_fetais_durante_mais2500,Número de óbitos fetais durante o parto com peso maior ou igual a 2500g,bloco7,nao
+taxa_mort_fetal,Taxa de mortalidade fetal por 1000 nascidos vivos (geral),bloco7,sim
+taxa_mort_fetal_peso_menos_1500,Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+taxa_mort_fetal_peso_1500_1999,Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+taxa_mort_fetal_peso_2000_2499,Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+taxa_mort_fetal_peso_mais_2500,Taxa de mortalidade fetal por 1000 nascidos vivos com peso maior ou igual a 2500g,bloco7,sim
+taxa_mort_fetal_antes,Taxa de mortalidade fetal antes do parto por 1000 nascidos vivos,bloco7,sim
+taxa_mort_fetal_durante,Taxa de mortalidade fetal durante o parto por 1000 nascidos vivos,bloco7,sim
+taxa_mort_fetal_depois,Taxa de mortalidade fetal depois do parto por 1000 nascidos vivos,bloco7,sim
+taxa_mort_fetal_antes_peso_menos_1500,Taxa de mortalidade fetal antes do parto por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+taxa_mort_fetal_antes_peso_1500_1999,Taxa de mortalidade fetal antes do parto por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+taxa_mort_fetal_antes_peso_2000_2499,Taxa de mortalidade fetal antes do parto por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+taxa_mort_fetal_antes_peso_mais_2500,Taxa de mortalidade fetal antes do parto por 1000 nascidos vivos com peso maior ou igual a 2500g,bloco7,sim
+taxa_mort_fetal_durante_peso_menos_1500,Taxa de mortalidade fetal durante o parto por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+taxa_mort_fetal_durante_peso_1500_1999,Taxa de mortalidade fetal durante o parto por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+taxa_mort_fetal_durante_peso_2000_2499,Taxa de mortalidade fetal durante o parto por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+taxa_mort_fetal_durante_peso_mais_2500,Taxa de mortalidade fetal durante o parto por 1000 nascidos vivos com peso maior ou igual a 2500g,bloco7,sim
+taxa_mort_fetal_depois_peso_menos_1500,Taxa de mortalidade fetal depois do parto por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+taxa_mort_fetal_depois_peso_1500_1999,Taxa de mortalidade fetal depois do parto por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+taxa_mort_fetal_depois_peso_2000_2499,Taxa de mortalidade fetal depois do parto por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+taxa_mort_fetal_depois_peso_mais_2500,Taxa de mortalidade fetal depois do parto por 1000 nascidos vivos com peso maior ou igual a 2500g,bloco7,sim
+obitos_neonat,Número de óbitos neonatais,bloco7,nao
+obitos_neonat_geral,Número de óbitos neonatais (geral),bloco7,nao
+obitos_neonat_menos1500,Número de óbitos neonatais com peso menor que 1500g,bloco7,nao
+obitos_neonat_1500_1999,Número de óbitos neonatais com peso de 1500g a 1999g,bloco7,nao
+obitos_neonat_2000_2499,Número de óbitos neonatais com peso de 2000g a 2499g,bloco7,nao
+obitos_neonat_mais2500,Número de óbitos neonatais com peso maior que 2500g,bloco7,nao
+mort_neonat,Taxa de mortalidade neonatal por 1000 nascidos vivos (geral),bloco7,sim
+mort_neonat_precoc,Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  (geral),bloco7,sim
+mort_neonat_tardia,Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  (geral),bloco7,sim
+mort_neonat_menos1500,Taxa de mortalidade neonatal por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+mort_neonat_precoc_menos1500,Taxa de mortalidade neonatal precoce por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+mort_neonat_tardia_menos1500,Taxa de mortalidade neonatal tardia por 1000 nascidos vivos com peso menor que 1500g,bloco7,sim
+mort_neonat_1500_1999,Taxa de mortalidade neonatal por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+mort_neonat_precoc_1500_1999,Taxa de mortalidade neonatal precoce por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+mort_neonat_tardia_1500_1999,Taxa de mortalidade neonatal tardia por 1000 nascidos vivos com peso de 1500g a 1999g,bloco7,sim
+mort_neonat_2000_2499,Taxa de mortalidade neonatal por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+mort_neonat_precoc_2000_2499,Taxa de mortalidade neonatal precoce por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+mort_neonat_tardia_2000_2499,Taxa de mortalidade neonatal tardia por 1000 nascidos vivos com peso de 2000g a 2499g,bloco7,sim
+mort_neonat_mais2500,Taxa de mortalidade neonatal por 1000 nascidos vivos com peso maior ou igual a 1500g,bloco7,sim
+mort_neonat_precoc_mais2500,Taxa de mortalidade neonatal precoce por 1000 nascidos vivos com peso maior ou igual a 1500g,bloco7,sim
+mort_neonat_tardia_mais2500,Taxa de mortalidade neonatal tardia por 1000 nascidos vivos com peso maior ou igual a 1500g,bloco7,sim
+obitos_perinatal_total,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida),bloco7,nao
+obitos_perinatal_total_geral,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) (geral),bloco7,nao
+obitos_perinatal_total_menos1500,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso menor que 1500g,bloco7,nao
+obitos_perinatal_total_1500_1999,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso de 1500g a 1999g,bloco7,nao
+obitos_perinatal_total_2000_2499,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso de 2000g a 2499g,bloco7,nao
+obitos_perinatal_total_mais2500,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso maior ou igual a 2500g,bloco7,nao
+obitos_perinatal_oms,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida),bloco7,nao
+obitos_perinatal_oms_geral,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) (geral),bloco7,nao
+obitos_perinatal_oms_menos1500,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso que 1500g,bloco7,nao
+obitos_perinatal_oms_1500_1999,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso de 1500g a 1999g,bloco7,nao
+obitos_perinatal_oms_2000_2499,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso de 2000g a 2499g,bloco7,nao
+obitos_perinatal_oms_mais2500,Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso maior ou igual a 2500g,bloco7,nao
+taxa_perinatal_total,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) (geral),bloco7,sim
+taxa_perinatal_total_menos1500,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso menor que 1500g,bloco7,sim
+taxa_perinatal_total_1500_1999,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso de 1500g a 1999g,bloco7,sim
+taxa_perinatal_total_2000_2499,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso de 2000g a 2499g,bloco7,sim
+taxa_perinatal_total_mais2500,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) com peso maior ou igual a 2500g,bloco7,sim
+taxa_perinatal_oms,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) (geral),bloco7,sim
+taxa_perinatal_oms_menos1500,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso menor que 1500g,bloco7,sim
+taxa_perinatal_oms_1500_1999,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso de 1500g a 1999g,bloco7,sim
+taxa_perinatal_oms_2000_2499,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso de 2000g a 2499g,bloco7,sim
+taxa_perinatal_oms_mais2500,Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida) com peso maior ou igual a 2500g,bloco7,sim
+porc_obitos_fetais_evitaveis,Porcentagem de óbitos fetais por causas evitáveis,bloco7,nao
+porc_obitos_fetais_evitaveis_imunoprevencao,Porcentagem de óbitos fetais evitáveis por ações de imunização,bloco7,nao
+porc_obitos_fetais_evitaveis_mulher_gestacao,Porcentagem de óbitos fetais evitáveis por adequada atenção à mulher na gestação,bloco7,nao
+porc_obitos_fetais_evitaveis_parto,Porcentagem de óbitos fetais evitáveis por adequada atenção à mulher no parto,bloco7,nao
+porc_obitos_fetais_evitaveis_recem_nascido,Porcentagem de óbitos fetais evitáveis por adequada atenção ao recém-nascido,bloco7,nao
+porc_obitos_fetais_evitaveis_saude,Porcentagem de óbitos fetais evitáveis por ações de promoção à saúde vinculadas a ações de atenção,bloco7,nao
+porc_obitos_fetais_evitaveis_tratamento,Porcentagem de óbitos fetais evitáveis por ações de diagnóstico e tratamento adequado,bloco7,nao
+porc_obitos_fetais_evitaveis_mal_definidas,Porcentagem de óbitos fetais evitáveis por causas mal definidas,bloco7,nao
+porc_obitos_fetais_evitaveis_outros,Porcentagem de óbitos fetais evitáveis por demais causas,bloco7,nao
+porc_obitos_perinatais_evitaveis,Porcentagem de óbitos perinatais por causas evitáveis,bloco7,nao
+porc_obitos_perinatais_evitaveis_imunoprevencao,Porcentagem de óbitos perinatais evitáveis por ações de imunização,bloco7,nao
+porc_obitos_perinatais_evitaveis_mulher_gestacao,Porcentagem de óbitos perinatais evitáveis por adequada atenção à mulher na gestação,bloco7,nao
+porc_obitos_perinatais_evitaveis_parto,Porcentagem de óbitos perinatais evitáveis por adequada atenção à mulher no parto,bloco7,nao
+porc_obitos_perinatais_evitaveis_recem_nascido,Porcentagem de óbitos perinatais evitáveis por adequada atenção ao recém-nascido,bloco7,nao
+porc_obitos_perinatais_evitaveis_saude,Porcentagem de óbitos perinatais evitáveis por ações de promoção à saúde vinculadas a ações de atenção,bloco7,nao
+porc_obitos_perinatais_evitaveis_tratamento,Porcentagem de óbitos perinatais evitáveis por ações de diagnóstico e tratamento adequado,bloco7,nao
+porc_obitos_neonatais_evitaveis,Porcentagem de óbitos neonatais por causas evitáveis,bloco7,nao
+porc_obitos_perinatais_evitaveis_mal_definidas,Porcentagem de óbitos perinatais evitáveis por causas mal definidas,bloco7,nao
+porc_obitos_perinatais_evitaveis_outros,Porcentagem de óbitos perinatais evitáveis por demais causas,bloco7,nao
+porc_obitos_neonatais_evitaveis_imunoprevencao,Porcentagem de óbitos neonatais evitáveis por ações de imunização,bloco7,nao
+porc_obitos_neonatais_evitaveis_mulher_gestacao,Porcentagem de óbitos neonatais evitáveis por adequada atenção à mulher na gestação,bloco7,nao
+porc_obitos_neonatais_evitaveis_parto,Porcentagem de óbitos neonatais evitáveis por adequada atenção à mulher no parto,bloco7,nao
+porc_obitos_neonatais_evitaveis_recem_nascido,Porcentagem de óbitos neonatais evitáveis por adequada atenção ao recém-nascido,bloco7,nao
+porc_obitos_neonatais_evitaveis_saude,Porcentagem de óbitos neonatais evitáveis por ações de promoção à saúde vinculadas a ações de atenção,bloco7,nao
+porc_obitos_neonatais_evitaveis_tratamento,Porcentagem de óbitos neonatais evitáveis por ações de diagnóstico e tratamento adequado,bloco7,nao
+porc_obitos_neonatais_evitaveis_mal_definidas,Porcentagem de óbitos neonatais evitáveis por causas mal definidas,bloco7,nao
+porc_obitos_neonatais_evitaveis_outros,Porcentagem de óbitos neonatais evitáveis por demais causas,bloco7,nao
+porc_obitos_fetais_grupos,Porcentagem de óbitos fetais por grupos de causas,bloco7,nao
+porc_obitos_fetais_grupos_prematuridade,Porcentagem de óbitos fetais pelo grupo de causas prematuridade,bloco7,nao
+porc_obitos_fetais_grupos_infeccoes,Porcentagem de óbitos fetais pelo grupo de causas infecções,bloco7,nao
+porc_obitos_fetais_grupos_asfixia,Porcentagem de óbitos fetais pelo grupo de causas asfixia/hipóxia,bloco7,nao
+porc_obitos_fetais_grupos_ma_formacao,Porcentagem de óbitos fetais pelo grupo de causas malformação,bloco7,nao
+porc_obitos_fetais_grupos_respiratorias,Porcentagem de óbitos fetais pelo grupo de causas afecções respiratorias dos recém-nascidos,bloco7,nao
+porc_obitos_fetais_grupos_gravidez,Porcentagem de óbitos fetais pelo grupo de causas fatores maternos relacionados à gravidez,bloco7,nao
+porc_obitos_fetais_grupos_afeccoes,Porcentagem de óbitos fetais pelo grupo de causas afecções originais no período perinatal,bloco7,nao
+porc_obitos_fetais_grupos_mal_definidas,Porcentagem de óbitos fetais pelo grupo de causas mal definidas,bloco7,nao
+porc_obitos_fetais_grupos_outros,Porcentagem de óbitos fetais por demais causas,bloco7,nao
+porc_obitos_perinatais_grupos,Porcentagem de óbitos perinatais por grupos de causas,bloco7,nao
+porc_obitos_perinatais_grupos_prematuridade,Porcentagem de óbitos perinatais pelo grupo de causas prematuridade,bloco7,nao
+porc_obitos_perinatais_grupos_infeccoes,Porcentagem de óbitos perinatais pelo grupo de causas infecções,bloco7,nao
+porc_obitos_perinatais_grupos_asfixia,Porcentagem de óbitos perinatais pelo grupo de causas asfixia/hipóxia,bloco7,nao
+porc_obitos_perinatais_grupos_ma_formacao,Porcentagem de óbitos perinatais pelo grupo de causas malformação,bloco7,nao
+porc_obitos_perinatais_grupos_respiratorias,Porcentagem de óbitos perinatais pelo grupo de causas afecções respiratorias dos recém-nascidos,bloco7,nao
+porc_obitos_perinatais_grupos_gravidez,Porcentagem de óbitos perinatais pelo grupo de causas fatores maternos relacionados à gravidez,bloco7,nao
+porc_obitos_perinatais_grupos_afeccoes,Porcentagem de óbitos perinatais pelo grupo de causas afecções originais no período perinatal,bloco7,nao
+porc_obitos_perinatais_grupos_mal_definidas,Porcentagem de óbitos perinatais pelo grupo de causas mal definidas,bloco7,nao
+porc_obitos_perinatais_grupos_outros,Porcentagem de óbitos perinatais por demais causas,bloco7,nao
+porc_obitos_neonatais_grupos,Porcentagem de óbitos neonatais por grupos de causas,bloco7,nao
+porc_obitos_neonatais_grupos_prematuridade,Porcentagem de óbitos neonatais pelo grupo de causas prematuridade,bloco7,nao
+porc_obitos_neonatais_grupos_infeccoes,Porcentagem de óbitos neonatais pelo grupo de causas infecções,bloco7,nao
+porc_obitos_neonatais_grupos_asfixia,Porcentagem de óbitos neonatais pelo grupo de causas asfixia/hipóxia,bloco7,nao
+porc_obitos_neonatais_grupos_ma_formacao,Porcentagem de óbitos neonatais pelo grupo de causas malformação,bloco7,nao
+porc_obitos_neonatais_grupos_respiratorias,Porcentagem de óbitos neonatais pelo grupo de causas afecções respiratorias dos recém-nascidos,bloco7,nao
+porc_obitos_neonatais_grupos_gravidez,Porcentagem de óbitos neonatais pelo grupo de causas fatores maternos relacionados à gravidez,bloco7,nao
+porc_obitos_neonatais_grupos_afeccoes,Porcentagem de óbitos neonatais pelo grupo de causas afecções originais no período perinatal,bloco7,nao
+porc_obitos_neonatais_grupos_mal_definidas,Porcentagem de óbitos neonatais pelo grupo de causas mal definidas,bloco7,nao
+porc_obitos_neonatais_grupos_outros,Porcentagem de óbitos neonatais por demais causas,bloco7,nao

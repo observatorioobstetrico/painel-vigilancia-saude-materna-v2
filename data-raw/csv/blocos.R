@@ -499,6 +499,9 @@ macro_r_saude_choices <- tabela_aux_municipios |>
 #Lendo a tabela contendo as informações sobre os indicadores
 tabela_indicadores <- read.csv("data-raw/csv/tabela_indicadores.csv")
 
+#Lendo a tabela contendo as informações para o grafico de radar
+tabela_radar <- read.csv("data-raw/csv/tabela_radar.csv")
+
 
 #Lendo a tabela contendo informações sobre as CIDs
 df_cid10 <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_cid10_completo.csv")
@@ -535,6 +538,7 @@ usethis::use_data(micro_r_saude_choices, overwrite = TRUE)
 usethis::use_data(macro_r_saude_choices, overwrite = TRUE)
 usethis::use_data(base_referencia_baixo_peso, overwrite = TRUE)
 usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
+usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
 
