@@ -47,14 +47,14 @@ mod_bloco_9_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 1000px; padding-top: 0; padding-bottom: 0; overflow-y: auto",  # Aumentei a altura do card
+              #style = "height: 1000px; padding-top: 0; padding-bottom: 0; overflow-y: auto",  # Aumentei a altura do card
               div(
-                style = "height: 10%; align-items: center; min-width: 2000px; max-width: 2000px;",
+                #style = "height: 10%; align-items: center; min-width: 2000px; max-width: 2000px;",
                 HTML("<b style='font-size:18px'> Resumo dos indicadores &nbsp;</b>")
               ),
               hr(),
               div(
-                style = "height: 20%; align-items: center;",  # Altura ajustada para os checkboxes
+                #style = "height: 20%; align-items: center;",  # Altura ajustada para os checkboxes
                 shinyWidgets::pickerInput(ns("selected_indicators"), "Escolha 5 indicadores:",
                                           choices = NULL,  # Inicialmente vazio, será atualizado no server
                                           options = list(
@@ -71,10 +71,10 @@ mod_bloco_9_ui <- function(id){
                ),
                style = "width: 100%; min-width: 2000px; max-width: 2000px;"
               ),
-              div(
-                style = "height: 80%; overflow-y: auto;",
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = "80%"))
-              )
+              #div(
+                #style = "height: 80%; overflow-y: auto;",
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 800))
+              #)
             )
           )
         )
@@ -1133,10 +1133,10 @@ output$spider_chart <- highcharter::renderHighchart({
     highcharter::highchart() |>
       highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent", marginBottom = 80) |>
       highcharter::hc_pane(size = '80%') |>
-      highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '9.75px'))) |>
+      highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '13px'))) |>
       highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
-      highcharter::hc_add_series(name = df$class[1], data = values, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
-      highcharter::hc_legend(align = 'right', verticalAlign = 'middle', layout = 'vertical', itemStyle = list(fontWeight = 'bold', fontSize = '20px')) |>
+      highcharter::hc_add_series(name = df$class[1], data = values, color = "#2c115f", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
+      highcharter::hc_legend(align = 'right', verticalAlign = 'middle', layout = 'vertical', itemStyle = list(fontWeight = 'bold', fontSize = '25px')) |>
       highcharter::hc_legend(itemMarginTop = 10)  # Ajustar a margem entre itens da legenda
   } else {
     # Obter valores para o gráfico
@@ -1154,11 +1154,11 @@ output$spider_chart <- highcharter::renderHighchart({
     highcharter::highchart() |>
       highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent", marginBottom = 0) |>
       highcharter::hc_pane(size = '80%') |>
-      highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '9.75px'))) |>
+      highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '13px'))) |>
       highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
-      highcharter::hc_add_series(name = df$class[1], data = values1, color = "#1f77b4", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
-      highcharter::hc_add_series(name = df2$class[1], data = values2, color = "#ff7f0e", lineWidth = 2, marker = list(enabled = TRUE, symbol = "diamond", radius = 4)) |>
-      highcharter::hc_legend(align = 'right', verticalAlign = 'middle', layout = 'vertical', itemStyle = list(fontWeight = 'bold', fontSize = '20px')) |>
+      highcharter::hc_add_series(name = df$class[1], data = values1, color = "#2c115f", lineWidth = 2, marker = list(enabled = TRUE, symbol = "circle", radius = 4)) |>
+      highcharter::hc_add_series(name = df2$class[1], data = values2, color = "#b73779", lineWidth = 2, marker = list(enabled = TRUE, symbol = "diamond", radius = 4)) |>
+      highcharter::hc_legend(align = 'right', verticalAlign = 'middle', layout = 'vertical', itemStyle = list(fontWeight = 'bold', fontSize = '25px')) |>
       highcharter::hc_legend(itemMarginTop = 10)  # Ajustar a margem entre itens da legenda
   }
 
