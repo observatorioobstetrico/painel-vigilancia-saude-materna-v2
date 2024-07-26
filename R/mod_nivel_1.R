@@ -1291,7 +1291,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data1(),
         indicador = "porc_cobertura_esf",
-        titulo = "Cobertura populacional com equipes de Saúde da Família",
+        titulo = "Cobertura populacional da Atenção Básica",
         tem_meta = TRUE,
         valor_de_referencia = 95,
         tipo = "porcentagem",

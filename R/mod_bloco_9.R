@@ -103,7 +103,7 @@ user_interacted <- reactiveVal(FALSE)
 observeEvent(input$selected_indicators, {
   if (user_interacted()) {
     if (length(input$selected_indicators) != 5) {
-      showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
+      showNotification("Selecione até 5 indicadores.", type = "warning")
     }
   } else {
     user_interacted(TRUE)
