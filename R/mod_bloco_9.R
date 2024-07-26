@@ -67,7 +67,10 @@ mod_bloco_9_ui <- function(id){
                                           multiple = TRUE,
                                           selected = c('porc_nvm_menor_que_20_anos',
                                                        'porc_nvm_entre_20_e_34_anos',
-                                                       'porc_nvm_maior_que_34_anos')
+                                                       'porc_nvm_maior_que_34_anos'
+                                                       # 'porc_nvm_com_cor_da_pele_branca',
+                                                       # 'porc_nvm_com_cor_da_pele_preta'
+                                                       )
                ),
                style = "width: 100%; min-width: 2000px; max-width: 2000px;"
               ),
@@ -116,14 +119,41 @@ shinyWidgets::updatePickerInput(session, "selected_indicators",
                   choices = setNames(tabela_radar$nome_abreviado, tabela_radar$indicador),
                   selected = c('porc_nvm_menor_que_20_anos',
                                'porc_nvm_entre_20_e_34_anos',
-                               'porc_nvm_maior_que_34_anos'))
+                               'porc_nvm_maior_que_34_anos'
+                               # 'porc_nvm_com_cor_da_pele_branca',
+                               # 'porc_nvm_com_cor_da_pele_preta'
+                               ))
+
+
+# Inicializa a flag para controle da notificação
+user_interacted <- reactiveVal(FALSE)
+
+# Observa mudanças nos indicadores selecionados e marca que o usuário interagiu
+observeEvent(input$selected_indicators, {
+  if (user_interacted()) {
+    if (length(input$selected_indicators) != 5) {
+      showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
+    }
+  } else {
+    user_interacted(TRUE)
+  }
+})
 
 # mensagem input -------------------------------------------
-    observe({
-      if (length(input$selected_indicators) != 5) {
-        showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
-      }
-    })
+    # observe({
+    #   if (length(input$selected_indicators) != 5) {
+    #     showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
+    #   }
+    # })
+
+# observe({
+#   # Adiciona um atraso de 500 milissegundos antes de executar o bloco de código
+#   invalidateLater(2000, session)
+#
+#   if (length(input$selected_indicators) != 5) {
+#     showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
+#   }
+# })
 
 
 # bloco 1 -----------------------------------------------------------------
