@@ -47,15 +47,12 @@ mod_bloco_9_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              #style = "height: 1000px; padding-top: 0; padding-bottom: 0; overflow-y: auto",  # Aumentei a altura do card
               div(
-                #style = "height: 10%; align-items: center; min-width: 2000px; max-width: 2000px;",
                 HTML("<b style='font-size:18px'> Resumo dos indicadores &nbsp;</b>")
               ),
               hr(),
               div(
-                #style = "height: 20%; align-items: center;",  # Altura ajustada para os checkboxes
-                shinyWidgets::pickerInput(ns("selected_indicators"), "Escolha 5 indicadores:",
+                shinyWidgets::pickerInput(ns("selected_indicators"), "Escolha até 5 indicadores:",
                                           choices = NULL,  # Inicialmente vazio, será atualizado no server
                                           options = list(
                                             `max-options` = 5,
@@ -71,8 +68,9 @@ mod_bloco_9_ui <- function(id){
                                                        # 'porc_nvm_com_cor_da_pele_branca',
                                                        # 'porc_nvm_com_cor_da_pele_preta'
                                                        )
-               ),
-               style = "width: 100%; min-width: 2000px; max-width: 2000px;"
+               )
+               # ,
+               # style = "width: 100%; min-width: 2000px; max-width: 2000px;"
               ),
               #div(
                 #style = "height: 80%; overflow-y: auto;",
@@ -125,10 +123,8 @@ shinyWidgets::updatePickerInput(session, "selected_indicators",
                                ))
 
 
-# Inicializa a flag para controle da notificação
 user_interacted <- reactiveVal(FALSE)
 
-# Observa mudanças nos indicadores selecionados e marca que o usuário interagiu
 observeEvent(input$selected_indicators, {
   if (user_interacted()) {
     if (length(input$selected_indicators) != 5) {
@@ -146,14 +142,6 @@ observeEvent(input$selected_indicators, {
     #   }
     # })
 
-# observe({
-#   # Adiciona um atraso de 500 milissegundos antes de executar o bloco de código
-#   invalidateLater(2000, session)
-#
-#   if (length(input$selected_indicators) != 5) {
-#     showNotification("Por favor, selecione exatamente 5 indicadores.", type = "error")
-#   }
-# })
 
 
 # bloco 1 -----------------------------------------------------------------
