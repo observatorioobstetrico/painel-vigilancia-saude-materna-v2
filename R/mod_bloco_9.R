@@ -17,26 +17,6 @@ mod_bloco_9_ui <- function(id){
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
-      # column(
-      #   width = 4,
-      #   HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-      #   HTML("<b style='font-size:18px'> Resumo do período </b>"),
-      #   hr(),
-      #   fluidRow(
-      #     column(
-      #       width = 12,
-      #       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      #       uiOutput(ns("input_localidade_resumo")),
-      #       align = "center"
-      #     )
-      #   )
-      #   fluidRow(
-      #     column(
-      #       width = 6,
-      #       shinycssloaders::withSpinner(uiOutput(ns("caixa_b2_i2")), proxy.height = "300px")
-      #     )
-      #   )
-      # ),
       column(
         width = 12,
         fluidRow(
@@ -69,13 +49,8 @@ mod_bloco_9_ui <- function(id){
                                                        # 'porc_nvm_com_cor_da_pele_preta'
                                                        )
                )
-               # ,
-               # style = "width: 100%; min-width: 2000px; max-width: 2000px;"
               ),
-              #div(
-                #style = "height: 80%; overflow-y: auto;",
                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 800))
-              #)
             )
           )
         )
