@@ -1272,13 +1272,13 @@ mod_bloco_6_server <- function(id, filtros){
         if(filtros()$nivel2 == "Estadual"){
           rmm_corrigida |>
             dplyr::filter(
-              localidade == filtros()$estado,
+              localidade == filtros()$estado2,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
         } else if(filtros()$nivel2 == "Regional"){
           rmm_corrigida |>
             dplyr::filter(
-              localidade == filtros()$regiao,
+              localidade == filtros()$regiao2,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
         } else if(filtros()$nivel2=="Nacional"){
@@ -1315,7 +1315,6 @@ mod_bloco_6_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), referencia = TRUE)
     })
-
 
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Para os indicadores de mortalidade materna ----------------------------
