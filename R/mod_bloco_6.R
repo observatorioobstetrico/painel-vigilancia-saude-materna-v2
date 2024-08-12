@@ -1316,6 +1316,7 @@ mod_bloco_6_server <- function(id, filtros){
         cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), referencia = TRUE)
     })
 
+
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Para os indicadores de mortalidade materna ----------------------------
     #### Número de óbitos maternos --------------------------------------------
