@@ -386,6 +386,67 @@ mod_bloco_5_ui <- function(id) {
           #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 370))
           #   )
           # ),
+          # column(
+          #   width = 6,
+          #   bs4Dash::bs4Card(
+          #     width = 12,
+          #     status = "primary",
+          #     collapsible = FALSE,
+          #     headerBorder = FALSE,
+          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     div(
+          #       style = "height: 15%; display: flex; align-items: center;",
+          #       HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
+          #       shinyjs::hidden(
+          #         span(
+          #           id = ns("mostrar_botao11"),
+          #           shinyWidgets::actionBttn(
+          #             inputId = ns("botao11"),
+          #             icon = icon("triangle-exclamation", style = "color: red"),
+          #             color = "warning",
+          #             style = "material-circle",
+          #             size = "xs"
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     hr(),
+          #     fluidRow(
+          #       column(
+          #         width = 6,
+          #         selectizeInput(
+          #           inputId = ns("local_internacao_sus"),
+          #           label = "Local da internação",
+          #           options = list(placeholder = "Selecione o local de internação"),
+          #           choices = c(
+          #             "Todos" = "geral",
+          #             "Dentro da macrorregião de saúde" = "na_macro",
+          #             "Fora da macrorregião de saúde" = "fora_macro"
+          #           ),
+          #           width = "100%"
+          #         )
+          #       ),
+          #       column(
+          #         width = 6,
+          #         strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+          #         tags$div(
+          #           align = 'left',
+          #           class = 'multicol',
+          #           checkboxGroupInput(
+          #             inputId = ns("idade_dias_sus"),
+          #             label = NULL,
+          #             choices = c(
+          #               "0 a 6 dias" = "menores_7_dias",
+          #               "7 a 27 dias" = "7_a_27_dias"
+          #             ),
+          #             selected = c("menores_7_dias", "7_a_27_dias")
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 350))
+          #   )
+          # ),
           column(
             width = 6,
             bs4Dash::bs4Card(
@@ -396,68 +457,8 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao11"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao11"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 6,
-                  selectizeInput(
-                    inputId = ns("local_internacao_sus"),
-                    label = "Local da internação",
-                    options = list(placeholder = "Selecione o local de internação"),
-                    choices = c(
-                      "Todos" = "geral",
-                      "Dentro da macrorregião de saúde" = "na_macro",
-                      "Fora da macrorregião de saúde" = "fora_macro"
-                    ),
-                    width = "100%"
-                  )
-                ),
-                column(
-                  width = 6,
-                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
-                  tags$div(
-                    align = 'left',
-                    class = 'multicol',
-                    checkboxGroupInput(
-                      inputId = ns("idade_dias_sus"),
-                      label = NULL,
-                      choices = c(
-                        "0 a 6 dias" = "menores_7_dias",
-                        "7 a 27 dias" = "7_a_27_dias"
-                      ),
-                      selected = c("menores_7_dias", "7_a_27_dias")
-                    )
-                  )
-                )
-              ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 350))
-            )
-          ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
+                # HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao10"),
