@@ -2420,7 +2420,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("mulher_gestacao2", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
               grepl("parto2", grupo_cid10) ~ "Adequada atenção à mulher no parto",
               grepl("mal_definidas2", grupo_cid10) ~ "Causas mal definidas",
-              grepl("nao_aplica2", grupo_cid10) ~ "Não se aplicam ao óbito fetal",
+              grepl("nao_aplica2", grupo_cid10) ~ "Causa básica não se aplica a um óbito fetal",
               grepl("outros2", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -2440,8 +2440,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação","Causa básica não se aplica a um óbito fetal", "Adequada atenção à mulher no parto",
+                                                                   "Causas mal definidas", "Grupos não selecionados","Imunoprevenção","Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2824,7 +2824,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("mulher_gestacao2", grupo_cid10) ~ "Adequada atenção à mulher na gestação",
               grepl("parto2", grupo_cid10) ~ "Adequada atenção à mulher no parto",
               grepl("mal_definidas2", grupo_cid10) ~ "Causas mal definidas",
-              grepl("nao_aplica2", grupo_cid10) ~ "Não se aplicam ao óbito fetal",
+              grepl("nao_aplica2", grupo_cid10) ~ "Causa básica não se aplica a um óbito fetal",
               grepl("outros2", grupo_cid10) ~ "Demais causas",
             ),
             "Grupos não selecionados"
@@ -2836,8 +2836,8 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas","Grupos não selecionados","Não se aplicam ao óbito fetal", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação","Causa básica não se aplica a um óbito fetal", "Adequada atenção à mulher no parto",
+                                                                   "Causas mal definidas", "Grupos não selecionados","Imunoprevenção","Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
