@@ -111,7 +111,7 @@ app_ui <- function(request) {
               icon = icon("6")
             ),
             bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Mortalidade fetal, perinatal, neonatal e morbidade neonatal",
+              text = "- Mortalidade fetal, perinatal e neonatal e morbidade neonatal",
               tabName = "bloco_7",
               icon = icon("7")
             ),

@@ -334,67 +334,6 @@ mod_bloco_5_ui <- function(id) {
           #     headerBorder = FALSE,
           #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           #     div(
-          #       style = "height: 10%; display: flex; align-items: center;",
-          #       HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida &nbsp;</b>"),
-          #       shinyjs::hidden(
-          #         span(
-          #           id = ns("mostrar_botao10"),
-          #           shinyWidgets::actionBttn(
-          #             inputId = ns("botao10"),
-          #             icon = icon("triangle-exclamation", style = "color: red"),
-          #             color = "warning",
-          #             style = "material-circle",
-          #             size = "xs"
-          #           )
-          #         )
-          #       )
-          #     ),
-          #     hr(),
-          #     fluidRow(
-          #       column(
-          #         width = 6,
-          #         selectizeInput(
-          #           inputId = ns("local_internacao"),
-          #           label = "Local da internação",
-          #           options = list(placeholder = "Selecione o local de internação"),
-          #           choices = c(
-          #             "Todos" = "geral",
-          #             "Dentro da macrorregião de saúde" = "na_macro",
-          #             "Fora da macrorregião de saúde" = "fora_macro"
-          #           ),
-          #           width = "100%"
-          #         )
-          #       ),
-          #       column(
-          #         width = 6,
-          #         strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
-          #         tags$div(
-          #           align = 'left',
-          #           class = 'multicol',
-          #           checkboxGroupInput(
-          #             inputId = ns("idade_dias"),
-          #             label = NULL,
-          #             choices = c(
-          #               "0 a 6 dias" = "menores_7_dias",
-          #               "7 a 27 dias" = "7_a_27_dias"
-          #             ),
-          #             selected = c("menores_7_dias", "7_a_27_dias")
-          #           )
-          #         )
-          #       )
-          #     ),
-          #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 370))
-          #   )
-          # ),
-          # column(
-          #   width = 6,
-          #   bs4Dash::bs4Card(
-          #     width = 12,
-          #     status = "primary",
-          #     collapsible = FALSE,
-          #     headerBorder = FALSE,
-          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-          #     div(
           #       style = "height: 15%; display: flex; align-items: center;",
           #       HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
           #       shinyjs::hidden(
@@ -508,127 +447,127 @@ mod_bloco_5_ui <- function(id) {
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 350))
             )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao12"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao12"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              fluidRow(
+                column(
+                  width = 6,
+                  selectizeInput(
+                    inputId = ns("local_internacao_uti_sih"),
+                    label = "Local da internação",
+                    options = list(placeholder = "Selecione o local de internação"),
+                    choices = c(
+                      "Todos" = "geral",
+                      "Dentro da macrorregião de saúde" = "na_macro",
+                      "Fora da macrorregião de saúde" = "fora_macro"
+                    ),
+                    width = "100%"
+                  )
+                ),
+                column(
+                  width = 6,
+                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                  tags$div(
+                    align = 'left',
+                    class = 'multicol',
+                    checkboxGroupInput(
+                      inputId = ns("idade_dias_uti_sih"),
+                      label = NULL,
+                      choices = c(
+                        "0 a 6 dias" = "menores_7_dias",
+                        "7 a 27 dias" = "7_a_27_dias"
+                      ),
+                      selected = c("menores_7_dias", "7_a_27_dias")
+                    )
+                  )
+                )
+              ),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 360))
+            )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao6"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao6"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
+            )
+          ),
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao8"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao8"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 450))
+            )
           )
         )
       ),
       fluidRow(
-        column(
-          width = 4,
-          bs4Dash::bs4Card(
-            width = 12,
-            status = "primary",
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-            div(
-              style = "height: 15%; display: flex; align-items: center;",
-              HTML("<b style='font-size:18px'> Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
-              shinyjs::hidden(
-                span(
-                  id = ns("mostrar_botao12"),
-                  shinyWidgets::actionBttn(
-                    inputId = ns("botao12"),
-                    icon = icon("triangle-exclamation", style = "color: red"),
-                    color = "warning",
-                    style = "material-circle",
-                    size = "xs"
-                  )
-                )
-              )
-            ),
-            hr(),
-            fluidRow(
-              column(
-                width = 6,
-                selectizeInput(
-                  inputId = ns("local_internacao_uti_sih"),
-                  label = "Local da internação",
-                  options = list(placeholder = "Selecione o local de internação"),
-                  choices = c(
-                    "Todos" = "geral",
-                    "Dentro da macrorregião de saúde" = "na_macro",
-                    "Fora da macrorregião de saúde" = "fora_macro"
-                  ),
-                  width = "100%"
-                )
-              ),
-              column(
-                width = 6,
-                strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
-                tags$div(
-                  align = 'left',
-                  class = 'multicol',
-                  checkboxGroupInput(
-                    inputId = ns("idade_dias_uti_sih"),
-                    label = NULL,
-                    choices = c(
-                      "0 a 6 dias" = "menores_7_dias",
-                      "7 a 27 dias" = "7_a_27_dias"
-                    ),
-                    selected = c("menores_7_dias", "7_a_27_dias")
-                  )
-                )
-              )
-            ),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 360))
-          )
-        ),
-        column(
-          width = 4,
-          bs4Dash::bs4Card(
-            width = 12,
-            status = "primary",
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-            div(
-              style = "height: 15%; display: flex; align-items: center;",
-              HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
-              shinyjs::hidden(
-                span(
-                  id = ns("mostrar_botao6"),
-                  shinyWidgets::actionBttn(
-                    inputId = ns("botao6"),
-                    icon = icon("triangle-exclamation", style = "color: red"),
-                    color = "warning",
-                    style = "material-circle",
-                    size = "xs"
-                  )
-                )
-              )
-            ),
-            hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
-          )
-        ),
-        column(
-          width = 4,
-          bs4Dash::bs4Card(
-            width = 12,
-            status = "primary",
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-            div(
-              style = "height: 15%; display: flex; align-items: center",
-              HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
-              shinyjs::hidden(
-                span(
-                  id = ns("mostrar_botao8"),
-                  shinyWidgets::actionBttn(
-                    inputId = ns("botao8"),
-                    icon = icon("triangle-exclamation", style = "color: red"),
-                    color = "warning",
-                    style = "material-circle",
-                    size = "xs"
-                  )
-                )
-              )
-            ),
-            hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 450))
-          )
-        ),
         column(
           width = 4,
           bs4Dash::bs4Card(
@@ -1482,12 +1421,12 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
-    ### Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos -----------
+    ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS -----------
     output$b5_i12 <- renderUI({
       cria_caixa_server(
         dados = data5_resumo(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos (geral)",
+        titulo = "Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data5_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -2247,7 +2186,7 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
-    ### Porcentagem de internações em UTI em bebês com até 27 dias de vida nascidos em estabelecimentos públicos ----
+    ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS ----
     output$plot12 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
