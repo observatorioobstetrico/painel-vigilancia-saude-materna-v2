@@ -332,74 +332,6 @@ mod_bloco_7_ui <- function(id) {
                 )
               ),
               column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 6,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_evitaveis_fetal"),
-                        label = "Selecione, aqui, os grupos de interesse:",
-                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "Reduzível pelas ações de imunização" = "imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
-                          "Causas mal definidas" = "mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "outros"
-                        ),
-                        selected = c(
-                          "imunoprevencao",
-                          "mulher_gestacao",
-                          "parto",
-                          "recem_nascido",
-                          "tratamento",
-                          "saude",
-                          "mal_definidas",
-                          "outros"
-                        ),
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    ),
-                    column(
-                      width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_evitaveis"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes",
-                            "Durante o parto" = "evitaveis_fetal_durante"#,
-                            #"Faltante" = "evitaveis_fetal_faltantes"
-                          ),
-                          selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
-                          )
-                        )
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 490))
-                )
-              ),
-              column(
                  width = 12,
                 bs4Dash::bs4Card(
                    width = 12 ,
@@ -420,20 +352,20 @@ mod_bloco_7_ui <- function(id) {
                         label = "Selecione, aqui, os grupos de interesse:",
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
-                          "Imunoprevenção" = "imunoprevencao2",
                           "Mortes reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao2",
                           "Mortes reduzíveis por adequada atenção à mulher no parto" = "parto2",
                           "Causas de morte mal-definidas" = "mal_definidas2",
                           "Não se aplicam ao óbito fetal" = "nao_aplica2",
-                          "Demais causas (não claramente evitáveis)" = "outros2"
+                          "Demais causas (não claramente evitáveis)" = "outros2",
+                          "Imunoprevenção" = "imunoprevencao2"
                         ),
                         selected = c(
-                          "imunoprevencao2",
                           "mulher_gestacao2",
                           "parto2",
-                          "nao_aplica2",
                           "mal_definidas2",
-                          "outros2"
+                          "nao_aplica2",
+                          "outros2",
+                          "imunoprevencao2"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -2391,11 +2323,8 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = factor(
             grupo_cid10,
-            levels = c(
-              "Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-              "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-              "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas"
-            )
+            levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto","Causas mal definidas",
+                       "Não se aplicam ao óbito fetal", "Imunoprevenção","Demais causas"),
           ),
           ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
         )
@@ -2486,9 +2415,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
                       ano = factor(ano, filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2533,9 +2462,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas"),
+                                           ))
     })
 
     #### Para a comparação selecionada ----------------------------------------
@@ -2656,8 +2586,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto","Causas mal definidas",
+                                                                   "Não se aplicam ao óbito fetal", "Imunoprevenção", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2703,9 +2633,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2751,9 +2681,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")))
     })
 
     #### Para a referência selecionada ----------------------------------------
@@ -2878,9 +2808,9 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2921,9 +2851,9 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
-                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
-                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
+                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
+                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")))
     })
 
     #### Juntando as informações da localidade/comparação com a referência ----
