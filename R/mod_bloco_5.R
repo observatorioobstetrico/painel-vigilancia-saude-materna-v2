@@ -71,31 +71,30 @@ mod_bloco_5_ui <- function(id) {
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i5")), proxy.height = "325px")
           ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
-          ),
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i11")), proxy.height = "325px")
-          )
-        ),
-        fluidRow(
-          column(
-            width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("b5_i12")), proxy.height = "325px")
-          ),
+          # column(
+          #   width = 6,
+          #   shinycssloaders::withSpinner(uiOutput(ns("b5_i7")), proxy.height = "325px")
+          # )
+          # column(
+          #   width = 6,
+          #   shinycssloaders::withSpinner(uiOutput(ns("b5_i10")), proxy.height = "325px")
+          # ),
+          # column(
+          #   width = 6,
+          #   shinycssloaders::withSpinner(uiOutput(ns("b5_i11")), proxy.height = "325px")
+          # )
           column(
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i6")), proxy.height = "325px")
           )
         ),
+        # fluidRow(
+        #   # column(
+        #   #   width = 6,
+        #   #   shinycssloaders::withSpinner(uiOutput(ns("b5_i12")), proxy.height = "325px")
+        #   # ),
+        #
+        # ),
         fluidRow(
           column(
             width = 6,
@@ -297,34 +296,34 @@ mod_bloco_5_ui <- function(id) {
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 450))
             )
           ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao7"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao7"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 450))
-            )
-          ),
+          # column(
+          #   width = 6,
+          #   bs4Dash::bs4Card(
+          #     width = 12,
+          #     status = "primary",
+          #     collapsible = FALSE,
+          #     headerBorder = FALSE,
+          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     div(
+          #       style = "height: 15%; display: flex; align-items: center;",
+          #       HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+          #       shinyjs::hidden(
+          #         span(
+          #           id = ns("mostrar_botao7"),
+          #           shinyWidgets::actionBttn(
+          #             inputId = ns("botao7"),
+          #             icon = icon("triangle-exclamation", style = "color: red"),
+          #             color = "warning",
+          #             style = "material-circle",
+          #             size = "xs"
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     hr(),
+          #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 450))
+          #   )
+          # ),
           # column(
           #   width = 6,
           #   bs4Dash::bs4Card(
@@ -386,129 +385,129 @@ mod_bloco_5_ui <- function(id) {
           #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot11"), height = 350))
           #   )
           # ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                # HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
-                HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao10"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao10"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 6,
-                  selectizeInput(
-                    inputId = ns("local_internacao_sih"),
-                    label = "Local da internação",
-                    options = list(placeholder = "Selecione o local de internação"),
-                    choices = c(
-                      "Todos" = "geral",
-                      "Dentro da macrorregião de saúde" = "na_macro",
-                      "Fora da macrorregião de saúde" = "fora_macro"
-                    ),
-                    width = "100%"
-                  )
-                ),
-                column(
-                  width = 6,
-                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
-                  tags$div(
-                    align = 'left',
-                    class = 'multicol',
-                    checkboxGroupInput(
-                      inputId = ns("idade_dias_sih"),
-                      label = NULL,
-                      choices = c(
-                        "0 a 6 dias" = "menores_7_dias",
-                        "7 a 27 dias" = "7_a_27_dias"
-                      ),
-                      selected = c("menores_7_dias", "7_a_27_dias")
-                    )
-                  )
-                )
-              ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 350))
-            )
-          ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao12"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao12"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 6,
-                  selectizeInput(
-                    inputId = ns("local_internacao_uti_sih"),
-                    label = "Local da internação",
-                    options = list(placeholder = "Selecione o local de internação"),
-                    choices = c(
-                      "Todos" = "geral",
-                      "Dentro da macrorregião de saúde" = "na_macro",
-                      "Fora da macrorregião de saúde" = "fora_macro"
-                    ),
-                    width = "100%"
-                  )
-                ),
-                column(
-                  width = 6,
-                  strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
-                  tags$div(
-                    align = 'left',
-                    class = 'multicol',
-                    checkboxGroupInput(
-                      inputId = ns("idade_dias_uti_sih"),
-                      label = NULL,
-                      choices = c(
-                        "0 a 6 dias" = "menores_7_dias",
-                        "7 a 27 dias" = "7_a_27_dias"
-                      ),
-                      selected = c("menores_7_dias", "7_a_27_dias")
-                    )
-                  )
-                )
-              ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 360))
-            )
-          ),
+          # column(
+          #   width = 6,
+          #   bs4Dash::bs4Card(
+          #     width = 12,
+          #     status = "primary",
+          #     collapsible = FALSE,
+          #     headerBorder = FALSE,
+          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     div(
+          #       style = "height: 15%; display: flex; align-items: center;",
+          #       # HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
+          #       HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+          #       shinyjs::hidden(
+          #         span(
+          #           id = ns("mostrar_botao10"),
+          #           shinyWidgets::actionBttn(
+          #             inputId = ns("botao10"),
+          #             icon = icon("triangle-exclamation", style = "color: red"),
+          #             color = "warning",
+          #             style = "material-circle",
+          #             size = "xs"
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     hr(),
+          #     fluidRow(
+          #       column(
+          #         width = 6,
+          #         selectizeInput(
+          #           inputId = ns("local_internacao_sih"),
+          #           label = "Local da internação",
+          #           options = list(placeholder = "Selecione o local de internação"),
+          #           choices = c(
+          #             "Todos" = "geral",
+          #             "Dentro da macrorregião de saúde" = "na_macro",
+          #             "Fora da macrorregião de saúde" = "fora_macro"
+          #           ),
+          #           width = "100%"
+          #         )
+          #       ),
+          #       column(
+          #         width = 6,
+          #         strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+          #         tags$div(
+          #           align = 'left',
+          #           class = 'multicol',
+          #           checkboxGroupInput(
+          #             inputId = ns("idade_dias_sih"),
+          #             label = NULL,
+          #             choices = c(
+          #               "0 a 6 dias" = "menores_7_dias",
+          #               "7 a 27 dias" = "7_a_27_dias"
+          #             ),
+          #             selected = c("menores_7_dias", "7_a_27_dias")
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot10"), height = 350))
+          #   )
+          # ),
+          # column(
+          #   width = 6,
+          #   bs4Dash::bs4Card(
+          #     width = 12,
+          #     status = "primary",
+          #     collapsible = FALSE,
+          #     headerBorder = FALSE,
+          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     div(
+          #       style = "height: 15%; display: flex; align-items: center;",
+          #       HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+          #       shinyjs::hidden(
+          #         span(
+          #           id = ns("mostrar_botao12"),
+          #           shinyWidgets::actionBttn(
+          #             inputId = ns("botao12"),
+          #             icon = icon("triangle-exclamation", style = "color: red"),
+          #             color = "warning",
+          #             style = "material-circle",
+          #             size = "xs"
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     hr(),
+          #     fluidRow(
+          #       column(
+          #         width = 6,
+          #         selectizeInput(
+          #           inputId = ns("local_internacao_uti_sih"),
+          #           label = "Local da internação",
+          #           options = list(placeholder = "Selecione o local de internação"),
+          #           choices = c(
+          #             "Todos" = "geral",
+          #             "Dentro da macrorregião de saúde" = "na_macro",
+          #             "Fora da macrorregião de saúde" = "fora_macro"
+          #           ),
+          #           width = "100%"
+          #         )
+          #       ),
+          #       column(
+          #         width = 6,
+          #         strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+          #         tags$div(
+          #           align = 'left',
+          #           class = 'multicol',
+          #           checkboxGroupInput(
+          #             inputId = ns("idade_dias_uti_sih"),
+          #             label = NULL,
+          #             choices = c(
+          #               "0 a 6 dias" = "menores_7_dias",
+          #               "7 a 27 dias" = "7_a_27_dias"
+          #             ),
+          #             selected = c("menores_7_dias", "7_a_27_dias")
+          #           )
+          #         )
+          #       )
+          #     ),
+          #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot12"), height = 360))
+          #   )
+          # ),
           column(
             width = 6,
             bs4Dash::bs4Card(
@@ -564,40 +563,41 @@ mod_bloco_5_ui <- function(id) {
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 450))
             )
+          ),
+
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 20%; display: flex; align-items: center",
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao9"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao9"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 450))
+            )
           )
         )
       ),
       fluidRow(
         column(
-          width = 4,
-          bs4Dash::bs4Card(
-            width = 12,
-            status = "primary",
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-            div(
-              style = "height: 20%; display: flex; align-items: center",
-              HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>"),
-              shinyjs::hidden(
-                span(
-                  id = ns("mostrar_botao9"),
-                  shinyWidgets::actionBttn(
-                    inputId = ns("botao9"),
-                    icon = icon("triangle-exclamation", style = "color: red"),
-                    color = "warning",
-                    style = "material-circle",
-                    size = "xs"
-                  )
-                )
-              )
-            ),
-            hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 450))
-          )
-        ),
-        column(
-          width = 8,
+          width = 12,
           bs4Dash::bs4Card(
             width = 12,
             status = "primary",
@@ -626,7 +626,8 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco5_calcs <- reactive({
-      df_calcs_aux1 <- data.frame(
+
+      data.frame(
         tipo = c("local", "referencia"),
         porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nasc_peso_menor_1500 = rep("round(sum(nascidos_vivos_peso_menor_1500) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -649,74 +650,76 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                            nascidos_vivos_33_a_34_semanas,
                                                                                            nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
         porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
-        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        #porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
         porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_vinc_sus_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
+        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
+        # porc_internacoes_menores_28_dias_vinc_sus_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)", 2),
+        # porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
+        # porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
       )
 
-      if (is.null(input$idade_dias_sus[1])) {
-        df_calcs_aux2 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_vinc_sus = "NA"
-        )
-      } else {
-        df_calcs_aux2 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_vinc_sus = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sus) == 2,
-              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
+      # if (is.null(input$idade_dias_sus[1])) {
+      #   df_calcs_aux2 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_menores_28_dias_vinc_sus = "NA"
+      #   )
+      # } else {
+      #   df_calcs_aux2 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_menores_28_dias_vinc_sus = rep(glue::glue(
+      #       "ifelse(
+      #         length(input$idade_dias_sus) == 2,
+      #         round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1),
+      #         round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
+      #       )"
+      #     ), 2)
+      #   )
+      # }
+      #
+      # if (is.null(input$idade_dias_sih[1])) {
+      #   df_calcs_aux3 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_menores_28_dias_sih = "NA"
+      #   )
+      # } else {
+      #   df_calcs_aux3 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_menores_28_dias_sih = rep(glue::glue(
+      #       "ifelse(
+      #         length(input$idade_dias_sih) == 2,
+      #         round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+      #         round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+      #       )"
+      #     ), 2)
+      #   )
+      # }
+      #
+      # if (is.null(input$idade_dias_uti_sih[1])) {
+      #   df_calcs_aux4 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_uti_menores_28_dias_sih = "NA"
+      #   )
+      # } else {
+      #   df_calcs_aux4 <- data.frame(
+      #     tipo = c("local", "referencia"),
+      #     porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
+      #       "ifelse(
+      #         length(input$idade_dias_sih) == 2,
+      #         round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+      #         round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+      #       )"
+      #     ), 2)
+      #   )
+      # }
+      #
+      # dplyr::full_join(
+      #   df_calcs_aux1,
+      #   dplyr::full_join(df_calcs_aux2, dplyr::full_join(df_calcs_aux3, df_calcs_aux4))
+      # )
 
-      if (is.null(input$idade_dias_sih[1])) {
-        df_calcs_aux3 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_sih = "NA"
-        )
-      } else {
-        df_calcs_aux3 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sih) == 2,
-              round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
-
-      if (is.null(input$idade_dias_uti_sih[1])) {
-        df_calcs_aux4 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_uti_menores_28_dias_sih = "NA"
-        )
-      } else {
-        df_calcs_aux4 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sih) == 2,
-              round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
-
-      dplyr::full_join(
-        df_calcs_aux1,
-        dplyr::full_join(df_calcs_aux2, dplyr::full_join(df_calcs_aux3, df_calcs_aux4))
-      )
     })
+
 
     # Criando alguns outputs para a UI ----------------------------------------
     ## Criando o output que diz se há ou não comparação -----------------------
@@ -995,28 +998,28 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     #### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
-    observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$gestacao > 5, na.rm = TRUE) |
-            any(data_incompletude()$peso > 5, na.rm = TRUE) |
-            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-      shinyjs::show(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
-    },
-    ignoreNULL = FALSE
-    )
-
-    observeEvent(input$botao7, {
-      cria_modal_incompletude(
-        incompletude1 = data_incompletude()$peso,
-        variavel_incompletude1 = "PESO",
-        descricao_incompletude1 = "em branco ou ignorados",
-        incompletude2 = data_incompletude()$gestacao,
-        variavel_incompletude2 = "GESTACAO",
-        descricao_incompletude2 = "em branco ou ignorados",
-        df = data_incompletude(),
-        cobertura = data_incompletude()$cobertura
-      )
-    })
+    # observeEvent(filtros()$pesquisar, {
+    #   shinyjs::hide(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+    #   req(any(data_incompletude()$gestacao > 5, na.rm = TRUE) |
+    #         any(data_incompletude()$peso > 5, na.rm = TRUE) |
+    #         any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+    #   shinyjs::show(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+    # },
+    # ignoreNULL = FALSE
+    # )
+    #
+    # observeEvent(input$botao7, {
+    #   cria_modal_incompletude(
+    #     incompletude1 = data_incompletude()$peso,
+    #     variavel_incompletude1 = "PESO",
+    #     descricao_incompletude1 = "em branco ou ignorados",
+    #     incompletude2 = data_incompletude()$gestacao,
+    #     variavel_incompletude2 = "GESTACAO",
+    #     descricao_incompletude2 = "em branco ou ignorados",
+    #     df = data_incompletude(),
+    #     cobertura = data_incompletude()$cobertura
+    #   )
+    # })
 
     #### Porcentagem de nascidos vivos com malformações -----------------------
     observeEvent(filtros()$pesquisar, {
@@ -1292,30 +1295,30 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
-    output$b5_i7 <- renderUI({
-      cria_caixa_server(
-        dados = data5_resumo(),
-        indicador = "porc_condicoes_ameacadoras",
-        titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
-        tem_meta = TRUE,
-        valor_de_referencia = data5_resumo_referencia()$porc_condicoes_ameacadoras,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "320px",
-        fonte_titulo = "15px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
+    # output$b5_i7 <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data5_resumo(),
+    #     indicador = "porc_condicoes_ameacadoras",
+    #     titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
+    #     tem_meta = TRUE,
+    #     valor_de_referencia = data5_resumo_referencia()$porc_condicoes_ameacadoras,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = "320px",
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_5",
+    #     tipo_referencia = "média nacional",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         input$localidade_resumo == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
 
     ### Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo MS ---
     output$b5_i8 <- renderUI({
@@ -1370,82 +1373,82 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos -----------
-    output$b5_i11 <- renderUI({
-      cria_caixa_server(
-        dados = data5_resumo(),
-        indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos (geral)",
-        tem_meta = TRUE,
-        valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "320px",
-        fonte_titulo = "15px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
+    # output$b5_i11 <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data5_resumo(),
+    #     indicador = "porc_internacoes_menores_28_dias_sih_geral",
+    #     titulo = "Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos (geral)",
+    #     tem_meta = TRUE,
+    #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = "320px",
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_5",
+    #     tipo_referencia = "média nacional",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         input$localidade_resumo == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
 
     ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS ----
-    output$b5_i10 <- renderUI({
-      cria_caixa_server(
-        dados = data5_resumo(),
-        indicador = "porc_internacoes_menores_28_dias_vinc_sus_geral",
-        titulo = "Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS (geral)",
-        tem_meta = TRUE,
-        valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_vinc_sus_geral,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "320px",
-        fonte_titulo = "15px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
+    # output$b5_i10 <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data5_resumo(),
+    #     indicador = "porc_internacoes_menores_28_dias_vinc_sus_geral",
+    #     titulo = "Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS (geral)",
+    #     tem_meta = TRUE,
+    #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_vinc_sus_geral,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = "320px",
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_5",
+    #     tipo_referencia = "média nacional",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         input$localidade_resumo == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
 
     ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS -----------
-    output$b5_i12 <- renderUI({
-      cria_caixa_server(
-        dados = data5_resumo(),
-        indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS (geral)",
-        tem_meta = TRUE,
-        valor_de_referencia = data5_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        tamanho_caixa = "320px",
-        fonte_titulo = "15px",
-        pagina = "bloco_5",
-        tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
-      )
-    })
+    # output$b5_i12 <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data5_resumo(),
+    #     indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
+    #     titulo = "Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS (geral)",
+    #     tem_meta = TRUE,
+    #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     tamanho_caixa = "320px",
+    #     fonte_titulo = "15px",
+    #     pagina = "bloco_5",
+    #     tipo_referencia = "média nacional",
+    #     nivel_de_analise = ifelse(
+    #       filtros()$comparar == "Não",
+    #       filtros()$nivel,
+    #       ifelse(
+    #         input$localidade_resumo == "escolha1",
+    #         filtros()$nivel,
+    #         filtros()$nivel2
+    #       )
+    #     )
+    #   )
+    # })
 
 
     # Para os gráficos --------------------------------------------------------
@@ -1529,9 +1532,9 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5 <- eventReactive(c(filtros()$pesquisar), data5_aux(), ignoreNULL = FALSE)
-    data5_internacoes_vinc_sus <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_aux(), ignoreNULL = FALSE)
-    data5_internacoes_publicos_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_aux(), ignoreNULL = FALSE)
-    data5_internacoes_uti_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_vinc_sus <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_publicos_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_uti_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
     data5_baixo_peso <- reactive(
@@ -1579,9 +1582,9 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5_comp <- eventReactive(c(filtros()$pesquisar), data5_comp_aux(), ignoreNULL = FALSE)
-    data5_internacoes_vinc_sus_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_comp_aux(), ignoreNULL = FALSE)
-    data5_internacoes_publicos_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_comp_aux(), ignoreNULL = FALSE)
-    data5_internacoes_uti_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_comp_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_vinc_sus_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_comp_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_publicos_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_comp_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_uti_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_comp_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
     data5_comp_baixo_peso <- reactive(
@@ -1617,9 +1620,9 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5_referencia <- eventReactive(c(filtros()$pesquisar), data5_referencia_aux(), ignoreNULL = FALSE)
-    data5_internacoes_vinc_sus_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_referencia_aux(), ignoreNULL = FALSE)
-    data5_internacoes_publicos_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_referencia_aux(), ignoreNULL = FALSE)
-    data5_internacoes_uti_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_referencia_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_vinc_sus_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_referencia_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_publicos_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_referencia_aux(), ignoreNULL = FALSE)
+    # data5_internacoes_uti_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_referencia_aux(), ignoreNULL = FALSE)
 
     data5_referencia_baixo_peso <- reactive({
       data5_referencia_baixo_peso_aux <- reactive({
@@ -1990,262 +1993,262 @@ mod_bloco_5_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
-    output$plot5 <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
-            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
-            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data5_comp(),
-            type = "line",
-            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp()$class),
-            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
-      }
-    })
+    # output$plot5 <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
+    #         highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5()$class),
+    #         highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data5_comp(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_comp()$class),
+    #         highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
     ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos ----
-    output$plot10 <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_publicos_sih(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_publicos_sih()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
-            c(data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
-          ), na.rm = TRUE) + 1) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_publicos_sih_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_publicos_sih(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_publicos_sih()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_publicos_sih_comp(),
-            type = "line",
-            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_publicos_sih_comp()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
-            c(data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
-          ), na.rm = TRUE) + 1) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_publicos_sih_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
-      }
-    })
+    # output$plot10 <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_publicos_sih(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_publicos_sih()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+    #         c(data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
+    #       ), na.rm = TRUE) + 1) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_publicos_sih_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_publicos_sih(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_publicos_sih()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_publicos_sih_comp(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_publicos_sih_comp()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+    #         c(data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
+    #       ), na.rm = TRUE) + 1) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_publicos_sih_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
     ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS ----
-    output$plot11 <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_vinc_sus(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_vinc_sus()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
-            c(data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
-          ), na.rm = TRUE) + 1) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_vinc_sus_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_vinc_sus(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_vinc_sus()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_vinc_sus_comp(),
-            type = "line",
-            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_vinc_sus_comp()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
-            c(data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_vinc_sus_comp()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_comp()$porc_internacoes_menores_28_dias_vinc_sus),
-            c(data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
-          ), na.rm = TRUE) + 1) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_vinc_sus_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
-      }
-    })
+    # output$plot11 <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_vinc_sus(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_vinc_sus()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+    #         c(data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
+    #       ), na.rm = TRUE) + 1) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_vinc_sus_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_vinc_sus(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_vinc_sus()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_vinc_sus_comp(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_vinc_sus_comp()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+    #         c(data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_vinc_sus_comp()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_comp()$porc_internacoes_menores_28_dias_vinc_sus),
+    #         c(data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_sih, data5_internacoes_vinc_sus_referencia()$porc_internacoes_menores_28_dias_vinc_sus)
+    #       ), na.rm = TRUE) + 1) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_vinc_sus_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_vinc_sus, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
     ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS ----
-    output$plot12 <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_uti_sih(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_uti_sih()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_uti_sih_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_uti_sih(),
-            type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_uti_sih()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data5_internacoes_uti_sih_comp(),
-            type = "line",
-            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_uti_sih_comp()$class),
-            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_internacoes_uti_sih_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
-        }
-      }
-    })
+    # output$plot12 <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_uti_sih(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_uti_sih()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_uti_sih_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_uti_sih(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data5_internacoes_uti_sih()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data5_internacoes_uti_sih_comp(),
+    #         type = "line",
+    #         name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data5_internacoes_uti_sih_comp()$class),
+    #         highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data5_internacoes_uti_sih_referencia(),
+    #           type = "line",
+    #           name = "Referência (média nacional)",
+    #           highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
 
     ### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g ----
     output$plot4 <- highcharter::renderHighchart({

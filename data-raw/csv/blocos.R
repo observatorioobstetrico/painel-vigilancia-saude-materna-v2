@@ -161,6 +161,8 @@ bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neo
 
 bloco7_neonatal_aux[is.na(bloco7_neonatal_aux)] <- 0
 
+bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2023.csv") #|>
+
 
 bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2023.csv") #|>
   #dplyr::select(!(nascidos)
@@ -174,8 +176,9 @@ bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 bloco7_perinatal_aux[is.na(bloco7_perinatal_aux)] <- 0
 
 
-juncao_bloco7_aux <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
-bloco7_aux <- dplyr::left_join(juncao_bloco7_aux, bloco7_perinatal_aux, by = c("ano", "codmunres"))
+juncao_bloco7_aux1 <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
+juncao_bloco7_aux2 <- dplyr::left_join(juncao_bloco7_aux1, bloco7_morbidade_neonatal_aux, by = c("ano", "codmunres"))
+bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
 bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv") |>
   janitor::clean_names()

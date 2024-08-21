@@ -30,7 +30,7 @@ mod_bloco_7_ui <- function(id) {
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Mortalidade fetal, perinatal e neonatal e morbidade fetal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(tags$b(HTML("Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -332,6 +332,74 @@ mod_bloco_7_ui <- function(id) {
                 )
               ),
               column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_evitaveis_fetal"),
+                        label = "Selecione, aqui, os grupos de interesse:",
+                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Reduzível pelas ações de imunização" = "imunoprevencao",
+                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
+                          "Causas mal definidas" = "mal_definidas",
+                          "Demais causas (não claramente evitáveis)" = "outros"
+                        ),
+                        selected = c(
+                          "imunoprevencao",
+                          "mulher_gestacao",
+                          "parto",
+                          "recem_nascido",
+                          "tratamento",
+                          "saude",
+                          "mal_definidas",
+                          "outros"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_obito_fetal_evitaveis"),
+                          label    = NULL,
+                          choices = c(
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                            #"Faltante" = "evitaveis_fetal_faltantes"
+                          ),
+                          selected = c(
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                          )
+                        )
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 490))
+                )
+              ),
+              column(
                  width = 12,
                 bs4Dash::bs4Card(
                    width = 12 ,
@@ -341,8 +409,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")
-                    ),
+                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
@@ -352,20 +419,20 @@ mod_bloco_7_ui <- function(id) {
                         label = "Selecione, aqui, os grupos de interesse:",
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
+                          "Imunoprevenção" = "imunoprevencao2",
                           "Mortes reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao2",
                           "Mortes reduzíveis por adequada atenção à mulher no parto" = "parto2",
                           "Causas de morte mal-definidas" = "mal_definidas2",
                           "Não se aplicam ao óbito fetal" = "nao_aplica2",
-                          "Demais causas (não claramente evitáveis)" = "outros2",
-                          "Imunoprevenção" = "imunoprevencao2"
+                          "Demais causas (não claramente evitáveis)" = "outros2"
                         ),
                         selected = c(
+                          "imunoprevencao2",
                           "mulher_gestacao2",
                           "parto2",
-                          "mal_definidas2",
                           "nao_aplica2",
-                          "outros2",
-                          "imunoprevencao2"
+                          "mal_definidas2",
+                          "outros2"
                         ),
                         multiple = TRUE,
                         width = "100%"
@@ -398,6 +465,7 @@ mod_bloco_7_ui <- function(id) {
           )
         )
       ),
+      #),
 
       tabPanel(
         HTML("<b>Indicadores relacionados à mortalidade perinatal </b>"),
@@ -1305,9 +1373,219 @@ mod_bloco_7_ui <- function(id) {
             )
           )
         )
-      )
-    )
-  )
+      ),
+
+
+      tabPanel(
+        HTML("<b>Indicadores relacionados à morbidade neonatal</b>"),
+        value = "tabpanel_morbidade_neonatal",
+        fluidRow(
+          column(
+            width = 12,
+            HTML(
+              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                </b> </div>"
+            ),
+            hr(),
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+          )
+        ),
+        fluidRow(
+          column(
+            width = 4,
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+            HTML("<b style='font-size:19px'> Resumo do período </b>"),
+            hr(),
+            fluidRow(
+              column(
+                width = 12,
+                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                uiOutput(ns("input_localidade_resumo_morbidade_neonatal")),
+                align = "center"
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_neonatal_i1")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_neonatal_i2")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_neonatal_i3")), proxy.height = "300px")
+              )
+            ),
+          ),
+          column(
+            width = 8,
+            fluidRow(
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao7"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao7"),
+                          icon = icon("triangle-exclamation", style = "color: red"),
+                          color = "warning",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
+                  ),
+                  hr(),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_morbidade_neonatal"), height = 450))
+                )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao10"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao10"),
+                          icon = icon("triangle-exclamation", style = "color: red"),
+                          color = "warning",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      selectizeInput(
+                        inputId = ns("local_internacao_sih"),
+                        label = "Local da internação",
+                        options = list(placeholder = "Selecione o local de internação"),
+                        choices = c(
+                          "Todos" = "geral",
+                          "Dentro da macrorregião de saúde" = "na_macro",
+                          "Fora da macrorregião de saúde" = "fora_macro"
+                        ),
+                        width = "100%"
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("idade_dias_sih"),
+                          label = NULL,
+                          choices = c(
+                            "0 dias" = "0_dias",
+                            "1 a 6 dias" = "1_a_6_dias",
+                            "7 a 27 dias" = "7_a_27_dias"
+                          ),
+                          selected = c("0_dias", "1_a_6_dias", "7_a_27_dias")
+                        )
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_morbidade_neonatal"), height = 350))
+                )
+              ),
+
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao12"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao12"),
+                          icon = icon("triangle-exclamation", style = "color: red"),
+                          color = "warning",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      selectizeInput(
+                        inputId = ns("local_internacao_uti_sih"),
+                        label = "Local da internação",
+                        options = list(placeholder = "Selecione o local de internação"),
+                        choices = c(
+                          "Todos" = "geral",
+                          "Dentro da macrorregião de saúde" = "na_macro",
+                          "Fora da macrorregião de saúde" = "fora_macro"
+                        ),
+                        width = "100%"
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("idade_dias_uti_sih"),
+                          label = NULL,
+                          choices = c(
+                            "0 dias" = "0_dias",
+                            "1 a 6 dias" = "1_a_6_dias",
+                            "7 a 27 dias" = "7_a_27_dias"
+                          ),
+                          selected = c("0_dias", "1_a_6_dias", "7_a_27_dias")
+                        )
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 360))
+                )
+              )
+
+
+            )
+          )
+        )
+      ) #fim do tabpanel morbidade neonatal
+
+
+
+  ) )
 }
 
 #' bloco_7 Server Functions
@@ -1320,7 +1598,7 @@ mod_bloco_7_server <- function(id, filtros){
     # Criando um data.frame com os cálculos dos indicadores -------------------
     ## Tive que fazer um tratamento especial para algumas variáveis. Ver no arquivo funcoes_globais.R
     bloco7_calcs <- reactive({
-      data.frame(
+      df_calcs_aux1 <- data.frame(
         tipo = c("local", "referencia"),
         obitos_neonat = rep("sum(obitos_27dias)", 2),
         obitos_neonat_menos1500 = rep("sum(obitos_27dias_menos1500)", 2),
@@ -1545,8 +1823,84 @@ mod_bloco_7_server <- function(id, filtros){
           sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
         *100, 2)", 2),
 
-        faltante_dist_peso_neonat = rep("round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)", 2)
+        faltante_dist_peso_neonat = rep("round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)", 2),
+
+
+        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(nascidos) * 100, 1)", 2),
+        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
+        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
       )
+
+
+       if (is.null(input$idade_dias_sih[1])) {
+         df_calcs_aux3 <- data.frame(
+           tipo = c("local", "referencia"),
+           porc_internacoes_menores_28_dias_sih = "NA"
+         )
+       } else {
+         df_calcs_aux3 <- data.frame(
+           tipo = c("local", "referencia"),
+           porc_internacoes_menores_28_dias_sih = rep(glue::glue(
+           #   " if(length(input$idade_dias_sih) == 1){
+           #   round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+           #   }
+           #   else if(length(input$idade_dias_sih) == 2){
+           #   round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+           #   } else{
+           #   round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+           # } "
+
+             "ifelse(
+               length(input$idade_dias_sih) == 3,
+               round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+               ifelse(
+               length(input$idade_dias_sih == 2),
+               round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+
+               )
+             )"
+           ), 2)
+         )
+       }
+
+       if (is.null(input$idade_dias_uti_sih[1])) {
+         df_calcs_aux4 <- data.frame(
+           tipo = c("local", "referencia"),
+           porc_internacoes_uti_menores_28_dias_sih = "NA"
+         )
+       } else {
+         df_calcs_aux4 <- data.frame(
+           tipo = c("local", "referencia"),
+           porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
+
+             # "if(length(input$idade_dias_sih) == 1){
+             # round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+             # } else if(length(input$idade_dias_sih) == 2){
+             # round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+             # } else{
+             # round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+             #
+             # }
+             # "
+              "ifelse(
+                length(input$idade_dias_sih) == 3,
+                round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+                ifelse(
+                length(input$idade_dias_sih) == 2,
+                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+                )
+              )"
+           ), 2)
+         )
+       }
+
+       dplyr::full_join(
+         df_calcs_aux1,
+         dplyr::full_join(df_calcs_aux3, df_calcs_aux4)
+       )
+
     })
 
 
@@ -1701,6 +2055,42 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
+
+    output$input_localidade_resumo_morbidade_neonatal <- renderUI({
+      localidade_original <- dplyr::case_when(
+        filtros()$nivel == "Nacional" ~ "Brasil",
+        filtros()$nivel == "Regional" ~ filtros()$regiao,
+        filtros()$nivel == "Estadual" ~ filtros()$estado,
+        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+        filtros()$nivel == "Municipal" ~ filtros()$municipio
+      )
+
+      localidade_comparacao <- dplyr::case_when(
+        filtros()$nivel2 == "Nacional" ~ "Brasil",
+        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+      )
+
+      if (filtros()$comparar == "Sim") {
+        radioButtons(
+          inputId = ns("localidade_resumo_morbidade_neonatal"),
+          label = NULL,
+          choiceNames = list(
+            localidade_original,
+            localidade_comparacao
+          ),
+          choiceValues = list("escolha1", "escolha2"),
+          selected = "escolha1",
+          inline = TRUE
+        )
+      }
+    })
+
     ## Criando o output que receberá o nível selecionado ----------------------
     nivel_selecionado <- reactive({
       if (filtros()$comparar == "Não") {
@@ -1720,9 +2110,16 @@ mod_bloco_7_server <- function(id, filtros){
           } else {
             filtros()$nivel2
           }
-        } else {
+        } else if (input$tabset1 == "tabpanel_perinatal"){
           req(input$localidade_resumo_perinatal)
           if (input$localidade_resumo_perinatal == "escolha1") {
+            filtros()$nivel
+          } else {
+            filtros()$nivel2
+          }
+        } else {
+          req(input$localidade_resumo_morbidade_neonatal)
+          if (input$localidade_resumo_morbidade_neonatal == "escolha1") {
             filtros()$nivel
           } else {
             filtros()$nivel2
@@ -1732,7 +2129,116 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     ## Para os botões de alerta quanto à incompletude e cobertura --------------
-    ### Não existem para esse bloco ainda
+
+    ### Calculando os indicadores de incompletude ------------------------------
+    data_incompletude_aux <- reactive({
+      base_incompletude |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 2),
+          gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 2),
+          semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 2),
+          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 2),
+          localidade = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
+    ### Calculando os indicadores de cobertura --------------------------------
+    data_cobertura <- reactive({
+      if (filtros()$nivel == "Municipal") {
+        sub_registro_sinasc_muni_2015_2021 |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+            municipio == filtros()$municipio,
+            uf == filtros()$estado_municipio
+          ) |>
+          dplyr::rename(
+            localidade = municipio
+          )
+      } else if (filtros()$nivel == "Estadual") {
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+            localidade == filtros()$estado
+          )
+      } else if (filtros()$nivel == "Regional") {
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+            localidade == filtros()$regiao
+          )
+      } else if (filtros()$nivel == "Nacional") {
+        sub_registro_sinasc_uf_regioes_2015_2021 |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+            localidade == "Brasil"
+          )
+      } else {
+        data.frame(
+          ano = filtros()$ano2[1]:filtros()$ano2[2],
+          localidade = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          ),
+          cobertura = 100
+        )
+      }
+    })
+
+    ### Juntando os dados de incompletude e cobertura -------------------------
+    data_incompletude <- reactive({dplyr::full_join(data_incompletude_aux(), data_cobertura(), by = c("ano", "localidade"))})
+
+
+    #### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$gestacao > 5, na.rm = TRUE) |
+            any(data_incompletude()$peso > 5, na.rm = TRUE) |
+            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+    observeEvent(input$botao7, {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$peso,
+        variavel_incompletude1 = "PESO",
+        descricao_incompletude1 = "em branco ou ignorados",
+        incompletude2 = data_incompletude()$gestacao,
+        variavel_incompletude2 = "GESTACAO",
+        descricao_incompletude2 = "em branco ou ignorados",
+        df = data_incompletude(),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
 
 
     # Para o resumo do período ------------------------------------------------
@@ -1756,9 +2262,16 @@ mod_bloco_7_server <- function(id, filtros){
           } else {
             sufixo_inputs <- "2"
           }
-        } else  {
+        } else if (input$tabset1 == "tabpanel_perinatal"){
           req(input$localidade_resumo_perinatal)
           if (input$localidade_resumo_perinatal == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else {
+          req(input$localidade_resumo_morbidade_neonatal)
+          if (input$localidade_resumo_morbidade_neonatal == "escolha1") {
             sufixo_inputs <- ""
           } else {
             sufixo_inputs <- "2"
@@ -1799,7 +2312,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_resumo <- eventReactive(
-      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal),
+      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal),
       data7_resumo_aux(),
       ignoreNULL = FALSE
     )
@@ -1813,7 +2326,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_resumo_referencia <- eventReactive(
-      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal),
+      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal),
       data7_resumo_referencia_aux(),
       ignoreNULL = FALSE
     )
@@ -2252,6 +2765,86 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
+    ############ Para os de morbidade neonatal
+
+    ### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
+    output$caixa_b7_morbidade_neonatal_i1 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = "porc_condicoes_ameacadoras",
+        titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
+        tem_meta = TRUE,
+        valor_de_referencia = data7_resumo_referencia()$porc_condicoes_ameacadoras,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "320px",
+        fonte_titulo = "15px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+    ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS  -----------
+    output$caixa_b7_morbidade_neonatal_i3 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
+        titulo = "Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS (geral)",
+        tem_meta = TRUE,
+        valor_de_referencia = data7_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "320px",
+        fonte_titulo = "15px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+
+    ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS ----
+    output$caixa_b7_morbidade_neonatal_i2 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = "porc_internacoes_menores_28_dias_sih_geral",
+        titulo = "Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS (geral)",
+        tem_meta = TRUE,
+        valor_de_referencia = data7_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = "320px",
+        fonte_titulo = "15px",
+        pagina = "bloco_5",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
 
     # Para os gráficos --------------------------------------------------------
     cols <- c("#2c115f", "#b73779", "#fc8961")
@@ -2323,8 +2916,11 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(
           grupo_cid10 = factor(
             grupo_cid10,
-            levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto","Causas mal definidas",
-                       "Não se aplicam ao óbito fetal", "Imunoprevenção","Demais causas"),
+            levels = c(
+              "Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+              "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+              "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas"
+            )
           ),
           ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
         )
@@ -2415,9 +3011,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2462,10 +3058,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas"),
-                                           ))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     #### Para a comparação selecionada ----------------------------------------
@@ -2586,8 +3181,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto","Causas mal definidas",
-                                                                   "Não se aplicam ao óbito fetal", "Imunoprevenção", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Causas mal definidas","Não se aplicam ao óbito fetal", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2633,9 +3228,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2681,9 +3276,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     #### Para a referência selecionada ----------------------------------------
@@ -2808,9 +3403,9 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -2851,9 +3446,9 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Adequada atenção ao recém nascido",
-                                                                   "Causas mal definidas","Ações de diagnóstico e tratamento adequado","Ações de promoção à saúde vinculadas a ações de atenção",
-                                                                   "Imunoprevenção", "Grupos não selecionados","Demais causas")))
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
+                                                                   "Adequada atenção ao recém nascido", "Ações de diagnóstico e tratamento adequado",
+                                                                   "Ações de promoção à saúde vinculadas a ações de atenção", "Causas mal definidas","Grupos não selecionados", "Demais causas")))
     })
 
     #### Juntando as informações da localidade/comparação com a referência ----
@@ -3448,6 +4043,9 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que os gráficos de números de óbitos e taxas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7 <- eventReactive(filtros()$pesquisar, data7_aux(), ignoreNULL = FALSE)
+    data7_internacoes_vinc_sus <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data7_aux(), ignoreNULL = FALSE)
+    data7_internacoes_publicos_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data7_aux(), ignoreNULL = FALSE)
+    data7_internacoes_uti_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data7_aux(), ignoreNULL = FALSE)
 
     # Queremos que os gráficos de distribuição percentual do momento do óbito por faixa de peso se atualizem quando os inputs de faixa de peso mudarem
     data7_plot_dist1 <- eventReactive(
@@ -3489,6 +4087,9 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que os gráficos de números de óbitos e taxas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_comp <- eventReactive(filtros()$pesquisar, data7_comp_aux(), ignoreNULL = FALSE)
+    data7_internacoes_vinc_sus_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data7_comp_aux(), ignoreNULL = FALSE)
+    data7_internacoes_publicos_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data7_comp_aux(), ignoreNULL = FALSE)
+    data7_internacoes_uti_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data7_comp_aux(), ignoreNULL = FALSE)
 
     # Queremos que os gráficos de distribuição percentual do momento do óbito por faixa de peso se atualizem quando os inputs de faixa de peso mudarem
     data7_plot_dist1_comp <- eventReactive(
@@ -3519,6 +4120,9 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que os gráficos de números de óbitos e taxas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_referencia <- eventReactive(filtros()$pesquisar, data7_referencia_aux(), ignoreNULL = FALSE)
+    data7_internacoes_vinc_sus_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data7_referencia_aux(), ignoreNULL = FALSE)
+    data7_internacoes_publicos_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data7_referencia_aux(), ignoreNULL = FALSE)
+    data7_internacoes_uti_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data7_referencia_aux(), ignoreNULL = FALSE)
 
     # Queremos que os gráficos de distribuição percentual do momento do óbito por faixa de peso se atualizem quando os inputs de faixa de peso mudarem
     data7_plot_dist1_referencia <- eventReactive(
@@ -4943,6 +5547,202 @@ mod_bloco_7_server <- function(id, filtros){
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por grupos de causas"), min = 0, max = 100)
 
     })
+
+
+
+    ### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
+    output$plot1_morbidade_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7()$class),
+            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7()$class),
+            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_comp(),
+            type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_comp()$class),
+            highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
+
+    ### Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS
+
+    output$plot2_morbidade_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_publicos_sih(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data7_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih),
+            c(data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih)
+          ), na.rm = TRUE) + 1) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_internacoes_publicos_sih_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_publicos_sih(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_publicos_sih_comp(),
+            type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_internacoes_publicos_sih_comp()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = max(c(
+            c(data7_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih()$porc_internacoes_menores_28_dias_sih),
+            c(data7_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih_comp()$porc_internacoes_menores_28_dias_sih),
+            c(data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih)
+          ), na.rm = TRUE) + 1) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_internacoes_publicos_sih_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
+
+    ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS
+    output$plot3_morbidade_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_uti_sih(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_internacoes_uti_sih_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_uti_sih(),
+            type = "line",
+            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_internacoes_uti_sih_comp(),
+            type = "line",
+            name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_internacoes_uti_sih_comp()$class),
+            highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_internacoes_uti_sih_referencia(),
+              type = "line",
+              name = "Referência (média nacional)",
+              highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
+        }
+      }
+    })
+
 
  })
 }
