@@ -7,11 +7,11 @@ library(data.table)
 library(readr)
 
 # Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2022:2023)), ano = 2022:2023)
+df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2022:2024)), ano = 2022:2024)
 
 # Criando o data.frame que irá receber todos os dados dos gráficos do bloco 8
 df_bloco8_graficos <- df_aux_municipios
@@ -31,110 +31,129 @@ df_sim_domat_aux1 <- df_sim_domat_aux1 |> select(-c(estabdescr, nudiasobin,
 
 sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv")
 
-sim_mat2023 <- sim_2023 |>
-  filter(
-    SEXO == "2",
-    ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
-       (CAUSABAS >= "O980"  &  CAUSABAS <= "O999") |
-       (CAUSABAS == "A34" & OBITOPUERP != "2") |
-       ((CAUSABAS >= "B200"  &  CAUSABAS <= "B249") & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       (CAUSABAS == "D392" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       (CAUSABAS == "E230" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       ((CAUSABAS >= "F530"  &  CAUSABAS <= "F539") & (OBITOPUERP != "2")) |
-       (CAUSABAS == "M830" & OBITOPUERP != "2"))
-  ) |>
-  clean_names()
+# sim_mat2023 <- sim_2023 |>
+#   filter(
+#     SEXO == "2",
+#     ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
+#        (CAUSABAS >= "O980"  &  CAUSABAS <= "O999") |
+#        (CAUSABAS == "A34" & OBITOPUERP != "2") |
+#        ((CAUSABAS >= "B200"  &  CAUSABAS <= "B249") & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        (CAUSABAS == "D392" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        (CAUSABAS == "E230" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        ((CAUSABAS >= "F530"  &  CAUSABAS <= "F539") & (OBITOPUERP != "2")) |
+#        (CAUSABAS == "M830" & OBITOPUERP != "2"))
+#   ) |>
+#   clean_names()
+#
+# sim_mat2023 <- sim_mat2023 |> select(-c(opor_do, tp_altera, cb_alt))
 
-sim_mat2023 <- sim_mat2023 |> select(-c(opor_do, tp_altera, cb_alt))
+sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
 
-df_sim_domat_aux <- rbind(df_sim_domat_aux1, sim_mat2023)
+# sim_mat2024 <- sim_2024 |>
+#   filter(
+#     SEXO == "2",
+#     ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
+#        (CAUSABAS >= "O980"  &  CAUSABAS <= "O999") |
+#        (CAUSABAS == "A34" & OBITOPUERP != "2") |
+#        ((CAUSABAS >= "B200"  &  CAUSABAS <= "B249") & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        (CAUSABAS == "D392" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        (CAUSABAS == "E230" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
+#        ((CAUSABAS >= "F530"  &  CAUSABAS <= "F539") & (OBITOPUERP != "2")) |
+#        (CAUSABAS == "M830" & OBITOPUERP != "2"))
+#   ) |>
+#   clean_names()
+
+# sim_mat2024 <- sim_mat2024 |> select(-c(opor_do, tp_altera, cb_alt))
+#
+# df_sim_domat_aux <- rbind(df_sim_domat_aux1, sim_mat2023) |>
+#   rbind(sim_mat2024)
 
 ## Criando a variável de ano e limitando a variável 'causabas' a três caracteres
-df_sim_domat <- df_sim_domat_aux |>
-  mutate_if(is.numeric, as.character) |>
-  mutate(
-    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
-  )
+# df_sim_domat <- df_sim_domat_aux |>
+#   mutate_if(is.numeric, as.character) |>
+#   mutate(
+#     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
+#   )
 
-## Lendo o dataframe que recebe as CIDs consideradas garbage codes
-df_garbage_codes <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_garbage_codes.csv")
-
-## Criando um data.frame com os óbitos maternos totais
-df_maternos_totais <- df_sim_domat |>
-  select(codmunres, ano) |>
-  mutate(obitos_maternos_totais = 1) |>
-  group_by(across(!obitos_maternos_totais)) |>
-  summarise(obitos_maternos_totais = sum(obitos_maternos_totais)) |>
-  ungroup() |>
-  right_join(df_aux_municipios) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_maternos_totais[is.na(df_maternos_totais)] <- 0
-
-## Criando um data.frame com os óbitos maternos preenchidos com garbage codes
-df_maternos_garbage <- df_sim_domat |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = causabas,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  clean_names() |>
-  rename_with(.fn = ~ paste0('garbage_materno_', .), .cols = -c(ano, codmunres)) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_maternos_totais) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_maternos_garbage[is.na(df_maternos_garbage)] <- 0
-
-## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_maternos_garbage)
+# ## Lendo o dataframe que recebe as CIDs consideradas garbage codes
+# df_garbage_codes <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_garbage_codes.csv")
+#
+# ## Criando um data.frame com os óbitos maternos totais
+# df_maternos_totais <- df_sim_domat |>
+#   select(codmunres, ano) |>
+#   mutate(obitos_maternos_totais = 1) |>
+#   group_by(across(!obitos_maternos_totais)) |>
+#   summarise(obitos_maternos_totais = sum(obitos_maternos_totais)) |>
+#   ungroup() |>
+#   right_join(df_aux_municipios) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_maternos_totais[is.na(df_maternos_totais)] <- 0
+#
+# ## Criando um data.frame com os óbitos maternos preenchidos com garbage codes
+# df_maternos_garbage <- df_sim_domat |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = causabas,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   clean_names() |>
+#   rename_with(.fn = ~ paste0('garbage_materno_', .), .cols = -c(ano, codmunres)) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_maternos_totais) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_maternos_garbage[is.na(df_maternos_garbage)] <- 0
+#
+# ## Juntando com o restante da base do bloco 8
+# df_bloco8_graficos <- left_join(df_bloco8_graficos, df_maternos_garbage)
 
 ## Para a tabela de garbage codes em óbitos maternos
-df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_cid10_completo.csv")
-
-df_maternos_garbage_tabela_aux <- df_sim_domat |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  left_join(df_cid10 |> select(causabas, causabas_subcategoria)) |>
-  select(!causabas) |>
-  pivot_wider(
-    names_from = causabas_subcategoria,
-    values_from = obitos,
-    values_fill = 0
-  )
-
-df_maternos_garbage_tabela <- df_maternos_garbage_tabela_aux |>
-  right_join(df_aux_municipios |> filter(codmunres %in% df_maternos_garbage_tabela_aux$codmunres)) |>
-  mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
-  pivot_longer(
-    cols = !c(codmunres, ano),
-    names_to = "causabas_subcategoria",
-    values_to = "obitos"
-  ) |>
-  left_join(df_cid10 |> select(capitulo_cid10, grupo_cid10, causabas_subcategoria)) |>
-  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
-  arrange(codmunres, ano)
-
-get_dupes(df_maternos_garbage_tabela)
-
-df_maternos_garbage_tabela_antigo <-read_csv("data-raw/csv/garbage_materno_2012_2022.csv.gz")
-
-write.csv(df_maternos_garbage_tabela, gzfile("data-raw/csv/garbage_materno_2022_2023.csv.gz"), row.names = FALSE)
+# df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_cid10_completo.csv")
+#
+# df_maternos_garbage_tabela_aux <- df_sim_domat |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   left_join(df_cid10 |> select(causabas, causabas_subcategoria)) |>
+#   select(!causabas) |>
+#   pivot_wider(
+#     names_from = causabas_subcategoria,
+#     values_from = obitos,
+#     values_fill = 0
+#   )
+#
+# df_maternos_garbage_tabela <- df_maternos_garbage_tabela_aux |>
+#   right_join(df_aux_municipios |> filter(codmunres %in% df_maternos_garbage_tabela_aux$codmunres)) |>
+#   mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
+#   pivot_longer(
+#     cols = !c(codmunres, ano),
+#     names_to = "causabas_subcategoria",
+#     values_to = "obitos"
+#   ) |>
+#   left_join(df_cid10 |> select(capitulo_cid10, grupo_cid10, causabas_subcategoria)) |>
+#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
+#   arrange(codmunres, ano)
+#
+# get_dupes(df_maternos_garbage_tabela)
+#
+# df_maternos_garbage_tabela_antigo <-read_csv("data-raw/csv/garbage_materno_2012_2022.csv.gz")
+#
+# write.csv(df_maternos_garbage_tabela, gzfile("data-raw/csv/garbage_materno_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
-rm(df_maternos_garbage, df_maternos_totais, df_maternos_garbage_tabela_aux, df_maternos_garbage_tabela)
+#rm(df_maternos_garbage, df_maternos_totais, df_maternos_garbage_tabela_aux, df_maternos_garbage_tabela)
 
 
 # Garbage codes para óbitos fetais ----------------------------------------
@@ -154,8 +173,12 @@ sim_dofet2023 <- sim_2023 |> filter(TIPOBITO == 1) |>
   clean_names() |>
   select(-c(opor_do, tp_altera, cb_alt))
 
+sim_dofet2024 <- sim_2024 |> filter(TIPOBITO == 1) |>
+  clean_names() |>
+  select(-c(opor_do, tp_altera, cb_alt))
 
-df_sim_dofet_aux <- rbind(df_sim_dofet_aux1, sim_dofet2023)
+df_sim_dofet_aux <- rbind(df_sim_dofet_aux1, sim_dofet2023)|>
+  rbind(sim_dofet2024)
 
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas pelos óbitos fetais que consideramos
 df_sim_dofet <- df_sim_dofet_aux |>
@@ -224,67 +247,67 @@ df_fetais_totais_durante <- df_sim_dofet |>
 df_fetais_totais_durante[is.na(df_fetais_totais_durante)] <- 0
 
 ## Criando um data.frame com os óbitos fetais preenchidos com garbage codes
-df_fetais_garbage <- df_sim_dofet |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = causabas,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  clean_names() |>
-  rename_with(.fn = ~ paste0('garbage_fetal_', .), .cols = -c(ano, codmunres)) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_fetais_totais) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_fetais_garbage[is.na(df_fetais_garbage)] <- 0
+# df_fetais_garbage <- df_sim_dofet |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = causabas,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   clean_names() |>
+#   rename_with(.fn = ~ paste0('garbage_fetal_', .), .cols = -c(ano, codmunres)) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_fetais_totais) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_fetais_garbage[is.na(df_fetais_garbage)] <- 0
 
 ## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_garbage)
+#df_bloco8_graficos <- left_join(df_bloco8_graficos, df_fetais_garbage)
 
 ## Removendo objetos já utilizados
-rm(df_fetais_garbage)
+#rm(df_fetais_garbage)
 
 ## Para a tabela de garbage codes em óbitos fetais
-df_garbage_fetais_tabela_aux <- df_sim_dofet |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  left_join(df_cid10 |> select(causabas, causabas_subcategoria)) |>
-  select(!causabas) |>
-  pivot_wider(
-    names_from = causabas_subcategoria,
-    values_from = obitos,
-    values_fill = 0
-  )
+# df_garbage_fetais_tabela_aux <- df_sim_dofet |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   left_join(df_cid10 |> select(causabas, causabas_subcategoria)) |>
+#   select(!causabas) |>
+#   pivot_wider(
+#     names_from = causabas_subcategoria,
+#     values_from = obitos,
+#     values_fill = 0
+#   )
+#
+# df_garbage_fetais_tabela <- df_garbage_fetais_tabela_aux |>
+#   right_join(df_aux_municipios |> filter(codmunres %in% df_garbage_fetais_tabela_aux$codmunres)) |>
+#   mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
+#   pivot_longer(
+#     cols = !c(codmunres, ano),
+#     names_to = "causabas_subcategoria",
+#     values_to = "obitos"
+#   ) |>
+#   left_join(df_cid10 |> select(capitulo_cid10, grupo_cid10, causabas_subcategoria)) |>
+#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
+#   arrange(codmunres, ano)
+#
+# get_dupes(df_garbage_fetais_tabela)
 
-df_garbage_fetais_tabela <- df_garbage_fetais_tabela_aux |>
-  right_join(df_aux_municipios |> filter(codmunres %in% df_garbage_fetais_tabela_aux$codmunres)) |>
-  mutate(across(everything(), ~ifelse(is.na(.), 0, .))) |>
-  pivot_longer(
-    cols = !c(codmunres, ano),
-    names_to = "causabas_subcategoria",
-    values_to = "obitos"
-  ) |>
-  left_join(df_cid10 |> select(capitulo_cid10, grupo_cid10, causabas_subcategoria)) |>
-  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
-  arrange(codmunres, ano)
-
-get_dupes(df_garbage_fetais_tabela)
-
-write.csv(df_garbage_fetais_tabela, gzfile("data-raw/csv/garbage_fetal_2022_2023.csv.gz"), row.names = FALSE)
+#write.csv(df_garbage_fetais_tabela, gzfile("data-raw/csv/garbage_fetal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
-rm(df_garbage_fetais_tabela_aux, df_garbage_fetais_tabela)
+#rm(df_garbage_fetais_tabela_aux, df_garbage_fetais_tabela)
 
 
 # Garbage codes para óbitos neonatais -------------------------------------
@@ -302,9 +325,13 @@ sim_2023 <- sim_2023 |>
   clean_names() |>
   select(-c(opor_do, tp_altera, cb_alt))
 
+sim_2024 <- sim_2024 |>
+  clean_names() |>
+  select(-c(opor_do, tp_altera, cb_alt))
 
 
-df_sim_doinf_aux <- rbind(df_sim_doinf_aux1, sim_2023)
+df_sim_doinf_aux <- rbind(df_sim_doinf_aux1, sim_2023) |>
+  rbind(sim_2024)
 
 
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas os óbitos neonatais
@@ -411,40 +438,40 @@ df_neonatais_totais_7_27_dias[is.na(df_neonatais_totais_7_27_dias)] <- 0
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
 
 ## Criando um data.frame com os óbitos neonatais preenchidos com garbage codes
-df_sim_doinf |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
-  pull(capitulo_cid10) |>
-  unique()
-
-df_neonatais_garbage <- df_sim_doinf |>
-  filter(causabas %in% df_garbage_codes$causabas) |>
-  select(codmunres, ano, causabas) |>
-  left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
-  mutate(obitos = 1) |>
-  group_by(across(!c(causabas, obitos))) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = capitulo_cid10,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  clean_names() |>
-  rename_with(.fn = ~ paste0('garbage_neonatal_', .), .cols = -c(ano, codmunres)) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_neonatais_totais) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_neonatais_garbage[is.na(df_neonatais_garbage)] <- 0
-
-## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_garbage)
-
-## Removendo objetos já utilizados
-rm(df_neonatais_garbage)
+# df_sim_doinf |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
+#   pull(capitulo_cid10) |>
+#   unique()
+#
+# df_neonatais_garbage <- df_sim_doinf |>
+#   filter(causabas %in% df_garbage_codes$causabas) |>
+#   select(codmunres, ano, causabas) |>
+#   left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!c(causabas, obitos))) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = capitulo_cid10,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   clean_names() |>
+#   rename_with(.fn = ~ paste0('garbage_neonatal_', .), .cols = -c(ano, codmunres)) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_neonatais_totais) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_neonatais_garbage[is.na(df_neonatais_garbage)] <- 0
+#
+# ## Juntando com o restante da base do bloco 8
+# df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_garbage)
+#
+# ## Removendo objetos já utilizados
+# rm(df_neonatais_garbage)
 
 ## Para a tabela de garbage codes em óbitos neonatais
 # df_garbage_neonatais_tabela_aux <- df_sim_doinf |>
@@ -506,89 +533,89 @@ rm(df_neonatais_garbage)
 ## Removendo objetos já utilizados
 #rm(df_garbage_neonatais_tabela_aux, df_garbage_neonatais_tabela)
 
-df_garbage_neonatais_tabela <- df_sim_doinf |>
-  filter(causabas %in% df_garbage_codes$causabas, codmunres %in% codigos_municipios) |>
-  left_join(df_cid10) |>
-  mutate(
-    idade = as.numeric(idade),
-    peso = as.numeric(peso),
-    faixa_de_peso = factor(
-      case_when(
-        is.na(peso) ~ "Sem informação",
-        peso < 1500 ~ "< 1500 g",
-        peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
-        peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-        peso >= 2500 ~ "\U2265 2500 g"
-      ),
-      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
-    ),
-    faixa_de_idade = factor(
-      case_when(
-        idade <= 206 ~ "0 a 6 dias",
-        idade > 206 & idade <= 227 ~ "7 a 27 dias"
-      ),
-      levels = c("0 a 6 dias", "7 a 27 dias")
-    ),
-    obitos = 1
-  ) |>
-  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  arrange(codmunres, ano)
-
-get_dupes(df_garbage_neonatais_tabela)
-
-write.csv(df_garbage_neonatais_tabela, gzfile("data-raw/csv/garbage_neonatal_2022_2023.csv.gz"), row.names = FALSE)
+# df_garbage_neonatais_tabela <- df_sim_doinf |>
+#   filter(causabas %in% df_garbage_codes$causabas, codmunres %in% codigos_municipios) |>
+#   left_join(df_cid10) |>
+#   mutate(
+#     idade = as.numeric(idade),
+#     peso = as.numeric(peso),
+#     faixa_de_peso = factor(
+#       case_when(
+#         is.na(peso) ~ "Sem informação",
+#         peso < 1500 ~ "< 1500 g",
+#         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+#         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+#         peso >= 2500 ~ "\U2265 2500 g"
+#       ),
+#       levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
+#     ),
+#     faixa_de_idade = factor(
+#       case_when(
+#         idade <= 206 ~ "0 a 6 dias",
+#         idade > 206 & idade <= 227 ~ "7 a 27 dias"
+#       ),
+#       levels = c("0 a 6 dias", "7 a 27 dias")
+#     ),
+#     obitos = 1
+#   ) |>
+#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   arrange(codmunres, ano)
+#
+# get_dupes(df_garbage_neonatais_tabela)
+#
+# write.csv(df_garbage_neonatais_tabela, gzfile("data-raw/csv/garbage_neonatal_2022_2023.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
-rm(df_garbage_neonatais_tabela)
+#rm(df_garbage_neonatais_tabela)
 
 
 # Causas principais para óbitos fetais -------------------------------------------------------
-df_principais_fetal <- df_sim_dofet |>
-  mutate(
-    causabas = substr(causabas, 1, 3),
-    grupo_cid = case_when(
-      causabas >= "P00" & causabas <= "P04" ~ "principais_fetal_p00_p04",
-      causabas >= "P05" & causabas <= "P08" ~ "principais_fetal_p05_p08",
-      causabas >= "P10" & causabas <= "P15" ~ "principais_fetal_p10_p15",
-      causabas >= "P20" & causabas <= "P29" ~ "principais_fetal_p20_p29",
-      causabas >= "P35" & causabas <= "P39" ~ "principais_fetal_p35_p39",
-      causabas >= "P50" & causabas <= "P61" ~ "principais_fetal_p50_p61",
-      causabas >= "P70" & causabas <= "P74" ~ "principais_fetal_p70_p74",
-      causabas >= "P75" & causabas <= "P78" ~ "principais_fetal_p75_p78",
-      causabas >= "P80" & causabas <= "P83" ~ "principais_fetal_p80_p83",
-      causabas >= "P90" & causabas <= "P96" ~ "principais_fetal_p90_p96",
-      causabas >= "Q00" & causabas <= "Q99" ~ "principais_fetal_q00_q99",
-      #causabas >= "J00" & causabas <= "J99" ~ "principais_fetal_j00_j99",
-      causabas >= "A00" & causabas <= "A99" |
-        causabas >= "B00" & causabas <= "B99" ~ "principais_fetal_a00_b99"
-    ),
-    grupo_cid = ifelse(is.na(grupo_cid), "principais_fetal_outros", grupo_cid)
-  ) |>
-  select(codmunres, ano, grupo_cid) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = grupo_cid,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_fetais_totais) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_principais_fetal[is.na(df_principais_fetal)] <- 0
-
-## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_fetal)
-
-## Removendo objetos já utilizados
-rm(df_principais_fetal)
+# df_principais_fetal <- df_sim_dofet |>
+#   mutate(
+#     causabas = substr(causabas, 1, 3),
+#     grupo_cid = case_when(
+#       causabas >= "P00" & causabas <= "P04" ~ "principais_fetal_p00_p04",
+#       causabas >= "P05" & causabas <= "P08" ~ "principais_fetal_p05_p08",
+#       causabas >= "P10" & causabas <= "P15" ~ "principais_fetal_p10_p15",
+#       causabas >= "P20" & causabas <= "P29" ~ "principais_fetal_p20_p29",
+#       causabas >= "P35" & causabas <= "P39" ~ "principais_fetal_p35_p39",
+#       causabas >= "P50" & causabas <= "P61" ~ "principais_fetal_p50_p61",
+#       causabas >= "P70" & causabas <= "P74" ~ "principais_fetal_p70_p74",
+#       causabas >= "P75" & causabas <= "P78" ~ "principais_fetal_p75_p78",
+#       causabas >= "P80" & causabas <= "P83" ~ "principais_fetal_p80_p83",
+#       causabas >= "P90" & causabas <= "P96" ~ "principais_fetal_p90_p96",
+#       causabas >= "Q00" & causabas <= "Q99" ~ "principais_fetal_q00_q99",
+#       #causabas >= "J00" & causabas <= "J99" ~ "principais_fetal_j00_j99",
+#       causabas >= "A00" & causabas <= "A99" |
+#         causabas >= "B00" & causabas <= "B99" ~ "principais_fetal_a00_b99"
+#     ),
+#     grupo_cid = ifelse(is.na(grupo_cid), "principais_fetal_outros", grupo_cid)
+#   ) |>
+#   select(codmunres, ano, grupo_cid) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = grupo_cid,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_fetais_totais) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_principais_fetal[is.na(df_principais_fetal)] <- 0
+#
+# ## Juntando com o restante da base do bloco 8
+# df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_fetal)
+#
+# ## Removendo objetos já utilizados
+# rm(df_principais_fetal)
 
 ## Para a tabela de causas principais em óbitos fetais
 # df_principais_fetais_tabela_aux <- df_sim_dofet |>
@@ -627,168 +654,168 @@ rm(df_principais_fetal)
 #   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
 #   arrange(codmunres, ano)
 
-df_principais_fetais_tabela <- df_sim_dofet |>
-  filter(codmunres %in% codigos_municipios) |>
-  left_join(df_cid10) |>
-  mutate(
-    causabas = substr(causabas, 1, 3),
-    grupo_cid10 = case_when(
-      causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
-      #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
-      causabas >= "A00" & causabas <= "A99" |
-        causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
-      causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
-      TRUE ~ "Outros"
-    ),
-    obitos = 1
-  ) |>
-  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  arrange(codmunres, ano)
-
-get_dupes(df_principais_fetais_tabela)
-
-write.csv(df_principais_fetais_tabela, gzfile("data-raw/csv/principais_fetal_2022_2023.csv.gz"), row.names = FALSE)
+# df_principais_fetais_tabela <- df_sim_dofet |>
+#   filter(codmunres %in% codigos_municipios) |>
+#   left_join(df_cid10) |>
+#   mutate(
+#     causabas = substr(causabas, 1, 3),
+#     grupo_cid10 = case_when(
+#       causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
+#       #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
+#       causabas >= "A00" & causabas <= "A99" |
+#         causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
+#       causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
+#       TRUE ~ "Outros"
+#     ),
+#     obitos = 1
+#   ) |>
+#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, obitos) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   arrange(codmunres, ano)
+#
+# get_dupes(df_principais_fetais_tabela)
+#
+# write.csv(df_principais_fetais_tabela, gzfile("data-raw/csv/principais_fetal_2022_2024.csv.gz"), row.names = FALSE)
 
 ## Removendo objetos já utilizados
-rm(df_principais_fetais_tabela)
+#rm(df_principais_fetais_tabela)
 
 
 # Causas principais para óbitos neonatais ---------------------------------
-df_principais_neonatal <- df_sim_doinf |>
-  mutate(
-    causabas = substr(causabas, 1, 3),
-    grupo_cid = case_when(
-      causabas >= "P00" & causabas <= "P04" ~ "principais_neonatal_p00_p04",
-      causabas >= "P05" & causabas <= "P08" ~ "principais_neonatal_p05_p08",
-      causabas >= "P10" & causabas <= "P15" ~ "principais_neonatal_p10_p15",
-      causabas >= "P20" & causabas <= "P29" ~ "principais_neonatal_p20_p29",
-      causabas >= "P35" & causabas <= "P39" ~ "principais_neonatal_p35_p39",
-      causabas >= "P50" & causabas <= "P61" ~ "principais_neonatal_p50_p61",
-      causabas >= "P70" & causabas <= "P74" ~ "principais_neonatal_p70_p74",
-      causabas >= "P75" & causabas <= "P78" ~ "principais_neonatal_p75_p78",
-      causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_p80_p83",
-      causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_p90_p96",
-      causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_q00_q99",
-      #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_j00_j99",
-      causabas >= "A00" & causabas <= "A99" |
-        causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_a00_b99"
-    ),
-    grupo_cid = ifelse(is.na(grupo_cid), "principais_neonatal_outros", grupo_cid)
-  ) |>
-  select(codmunres, ano, grupo_cid) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = grupo_cid,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_neonatais_totais) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_principais_neonatal[is.na(df_principais_neonatal)] <- 0
-
-## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_neonatal)
-
-# Causas principais para óbitos neonatais precoces ---------------------------------
-df_principais_neonatal_precoce <- df_sim_doinf |>
-  mutate(
-    causabas = substr(causabas, 1, 3),
-    grupo_cid = case_when(
-      causabas >= "P00" & causabas <= "P04" ~ "principais_neonatal_precoce_p00_p04",
-      causabas >= "P05" & causabas <= "P08" ~ "principais_neonatal_precoce_p05_p08",
-      causabas >= "P10" & causabas <= "P15" ~ "principais_neonatal_precoce_p10_p15",
-      causabas >= "P20" & causabas <= "P29" ~ "principais_neonatal_precoce_p20_p29",
-      causabas >= "P35" & causabas <= "P39" ~ "principais_neonatal_precoce_p35_p39",
-      causabas >= "P50" & causabas <= "P61" ~ "principais_neonatal_precoce_p50_p61",
-      causabas >= "P70" & causabas <= "P74" ~ "principais_neonatal_precoce_p70_p74",
-      causabas >= "P75" & causabas <= "P78" ~ "principais_neonatal_precoce_p75_p78",
-      causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_precoce_p80_p83",
-      causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_precoce_p90_p96",
-      causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_precoce_q00_q99",
-      #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_precoce_j00_j99",
-      causabas >= "A00" & causabas <= "A99" |
-        causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_precoce_a00_b99"
-    ),
-    grupo_cid = ifelse(is.na(grupo_cid), "principais_neonatal_precoce_outros", grupo_cid)
-  ) |>
-  filter(idade < 207 | as.numeric(peso) < 1000) |>
-  select(codmunres, ano, grupo_cid) |>
-  mutate(obitos = 1) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  pivot_wider(
-    names_from = grupo_cid,
-    values_from = obitos,
-    values_fill = 0
-  ) |>
-  right_join(df_aux_municipios) |>
-  right_join(df_neonatais_totais_precoce) |>
-  arrange(codmunres)
-
-## Substituindo todos os NAs por 0 (gerados após o right join)
-df_principais_neonatal_precoce[is.na(df_principais_neonatal_precoce)] <- 0
-
-## Juntando com o restante da base do bloco 8
-df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_neonatal_precoce)
-
-
-## Para a tabela de causas principais em óbitos neonatais
-df_principais_neonatais_tabela <- df_sim_doinf |>
-  filter(codmunres %in% codigos_municipios) |>
-  left_join(df_cid10) |>
-  mutate(
-    idade = as.numeric(idade),
-    peso = as.numeric(peso),
-    faixa_de_peso = factor(
-      case_when(
-        is.na(peso) ~ "Sem informação",
-        peso < 1500 ~ "< 1500 g",
-        peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
-        peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-        peso >= 2500 ~ "\U2265 2500 g"
-      ),
-      levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
-    ),
-    faixa_de_idade = factor(
-      case_when(
-        idade <= 206 ~ "0 a 6 dias",
-        idade > 206 & idade <= 227 ~ "7 a 27 dias"
-      ),
-      levels = c("0 a 6 dias", "7 a 27 dias")
-    ),
-    causabas = substr(causabas, 1, 3),
-    grupo_cid10 = case_when(
-      causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
-      #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
-      causabas >= "A00" & causabas <= "A99" |
-        causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
-      causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
-      TRUE ~ "Outros"
-    ),
-    obitos = 1
-  ) |>
-  select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
-  group_by(across(!obitos)) |>
-  summarise(obitos = sum(obitos)) |>
-  ungroup() |>
-  arrange(codmunres, ano)
-
-get_dupes(df_principais_neonatais_tabela)
-
-write.csv(df_principais_neonatais_tabela, gzfile("data-raw/csv/principais_neonatal_2022_2023.csv.gz"), row.names = FALSE)
-
-## Removendo objetos já utilizados
-rm(df_principais_neonatais_tabela)
+# df_principais_neonatal <- df_sim_doinf |>
+#   mutate(
+#     causabas = substr(causabas, 1, 3),
+#     grupo_cid = case_when(
+#       causabas >= "P00" & causabas <= "P04" ~ "principais_neonatal_p00_p04",
+#       causabas >= "P05" & causabas <= "P08" ~ "principais_neonatal_p05_p08",
+#       causabas >= "P10" & causabas <= "P15" ~ "principais_neonatal_p10_p15",
+#       causabas >= "P20" & causabas <= "P29" ~ "principais_neonatal_p20_p29",
+#       causabas >= "P35" & causabas <= "P39" ~ "principais_neonatal_p35_p39",
+#       causabas >= "P50" & causabas <= "P61" ~ "principais_neonatal_p50_p61",
+#       causabas >= "P70" & causabas <= "P74" ~ "principais_neonatal_p70_p74",
+#       causabas >= "P75" & causabas <= "P78" ~ "principais_neonatal_p75_p78",
+#       causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_p80_p83",
+#       causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_p90_p96",
+#       causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_q00_q99",
+#       #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_j00_j99",
+#       causabas >= "A00" & causabas <= "A99" |
+#         causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_a00_b99"
+#     ),
+#     grupo_cid = ifelse(is.na(grupo_cid), "principais_neonatal_outros", grupo_cid)
+#   ) |>
+#   select(codmunres, ano, grupo_cid) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = grupo_cid,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_neonatais_totais) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_principais_neonatal[is.na(df_principais_neonatal)] <- 0
+#
+# ## Juntando com o restante da base do bloco 8
+# df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_neonatal)
+#
+# # Causas principais para óbitos neonatais precoces ---------------------------------
+# df_principais_neonatal_precoce <- df_sim_doinf |>
+#   mutate(
+#     causabas = substr(causabas, 1, 3),
+#     grupo_cid = case_when(
+#       causabas >= "P00" & causabas <= "P04" ~ "principais_neonatal_precoce_p00_p04",
+#       causabas >= "P05" & causabas <= "P08" ~ "principais_neonatal_precoce_p05_p08",
+#       causabas >= "P10" & causabas <= "P15" ~ "principais_neonatal_precoce_p10_p15",
+#       causabas >= "P20" & causabas <= "P29" ~ "principais_neonatal_precoce_p20_p29",
+#       causabas >= "P35" & causabas <= "P39" ~ "principais_neonatal_precoce_p35_p39",
+#       causabas >= "P50" & causabas <= "P61" ~ "principais_neonatal_precoce_p50_p61",
+#       causabas >= "P70" & causabas <= "P74" ~ "principais_neonatal_precoce_p70_p74",
+#       causabas >= "P75" & causabas <= "P78" ~ "principais_neonatal_precoce_p75_p78",
+#       causabas >= "P80" & causabas <= "P83" ~ "principais_neonatal_precoce_p80_p83",
+#       causabas >= "P90" & causabas <= "P96" ~ "principais_neonatal_precoce_p90_p96",
+#       causabas >= "Q00" & causabas <= "Q99" ~ "principais_neonatal_precoce_q00_q99",
+#       #causabas >= "J00" & causabas <= "J99" ~ "principais_neonatal_precoce_j00_j99",
+#       causabas >= "A00" & causabas <= "A99" |
+#         causabas >= "B00" & causabas <= "B99" ~ "principais_neonatal_precoce_a00_b99"
+#     ),
+#     grupo_cid = ifelse(is.na(grupo_cid), "principais_neonatal_precoce_outros", grupo_cid)
+#   ) |>
+#   filter(idade < 207 | as.numeric(peso) < 1000) |>
+#   select(codmunres, ano, grupo_cid) |>
+#   mutate(obitos = 1) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = grupo_cid,
+#     values_from = obitos,
+#     values_fill = 0
+#   ) |>
+#   right_join(df_aux_municipios) |>
+#   right_join(df_neonatais_totais_precoce) |>
+#   arrange(codmunres)
+#
+# ## Substituindo todos os NAs por 0 (gerados após o right join)
+# df_principais_neonatal_precoce[is.na(df_principais_neonatal_precoce)] <- 0
+#
+# ## Juntando com o restante da base do bloco 8
+# df_bloco8_graficos <- left_join(df_bloco8_graficos, df_principais_neonatal_precoce)
+#
+#
+# ## Para a tabela de causas principais em óbitos neonatais
+# df_principais_neonatais_tabela <- df_sim_doinf |>
+#   filter(codmunres %in% codigos_municipios) |>
+#   left_join(df_cid10) |>
+#   mutate(
+#     idade = as.numeric(idade),
+#     peso = as.numeric(peso),
+#     faixa_de_peso = factor(
+#       case_when(
+#         is.na(peso) ~ "Sem informação",
+#         peso < 1500 ~ "< 1500 g",
+#         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+#         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+#         peso >= 2500 ~ "\U2265 2500 g"
+#       ),
+#       levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
+#     ),
+#     faixa_de_idade = factor(
+#       case_when(
+#         idade <= 206 ~ "0 a 6 dias",
+#         idade > 206 & idade <= 227 ~ "7 a 27 dias"
+#       ),
+#       levels = c("0 a 6 dias", "7 a 27 dias")
+#     ),
+#     causabas = substr(causabas, 1, 3),
+#     grupo_cid10 = case_when(
+#       causabas >= "Q00" & causabas <= "Q99" ~ "(Q00-Q99) Anomalias congênitas",
+#       #causabas >= "J00" & causabas <= "J99" ~ "(J00-J99) Respiratórias",
+#       causabas >= "A00" & causabas <= "A99" |
+#         causabas >= "B00" & causabas <= "B99" ~ "(A00-B99) Infecciosas",
+#       causabas >= "P00" & causabas <= "P96" ~ grupo_cid10,
+#       TRUE ~ "Outros"
+#     ),
+#     obitos = 1
+#   ) |>
+#   select(codmunres, ano, capitulo_cid10, grupo_cid10, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
+#   group_by(across(!obitos)) |>
+#   summarise(obitos = sum(obitos)) |>
+#   ungroup() |>
+#   arrange(codmunres, ano)
+#
+# get_dupes(df_principais_neonatais_tabela)
+#
+# write.csv(df_principais_neonatais_tabela, gzfile("data-raw/csv/principais_neonatal_2022_2024.csv.gz"), row.names = FALSE)
+#
+# ## Removendo objetos já utilizados
+# rm(df_principais_neonatais_tabela)
 
 
 # Causas evitáveis --------------------------------------------------------
@@ -980,7 +1007,7 @@ df_evitaveis_fetal_tabela <- df_sim_dofet |>
   select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, obitos) |>
   arrange(codmunres)
 
-write.csv(df_evitaveis_fetal_tabela, gzfile("data-raw/csv/evitaveis_fetal_2022_2023.csv.gz"), row.names = FALSE)
+write.csv(df_evitaveis_fetal_tabela, gzfile("data-raw/csv/evitaveis_fetal_2022_2024.csv.gz"), row.names = FALSE)
 
 
 ## Causas evitáveis para óbitos neonatais ------------------------------------------------------
@@ -1265,7 +1292,7 @@ df_evitaveis_neonatal_tabela <- df_sim_doinf |>
   select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
   arrange(codmunres)
 
-write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2022_2023.csv.gz"), row.names = FALSE)
+write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2022_2024.csv.gz"), row.names = FALSE)
 
 
 
@@ -1273,7 +1300,7 @@ write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_
 # Nova Referência de causas evitáveis --------------------------------------------------------
 ## Criando um vetor com as cids
 
-df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/databases_auxiliares/evitabilidade_fetal.xlsx", sheet = "Fetal")
+df_cids_fetal_evitaveis2 <- read_excel("data-raw/extracao-dos-dados/blocos/databases_auxiliares/evitabilidade_fetal.xlsx", sheet = "Fetal")
 colnames(df_cids_fetal_evitaveis2) <- c("nome", "cid")
 
 
@@ -1428,7 +1455,7 @@ grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", 
 
 ## Para a tabela de grupos de causa em óbitos fetais
 
-df_cid10 <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/df_cid10_completo.csv")
+df_cid10 <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_cid10_completo.csv")
 
 df_grupos_fetais_tabela <- df_sim_dofet |>
   filter(codmunres %in% codigos_municipios) |>
@@ -1458,7 +1485,7 @@ df_grupos_fetais_tabela <- df_sim_dofet |>
 
 get_dupes(df_grupos_fetais_tabela)
 
-write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2022_2023.csv.gz"), row.names = FALSE)
+write.csv(df_grupos_fetais_tabela, gzfile("data-raw/csv/grupos_fetal_2022_2024.csv.gz"), row.names = FALSE)
 
 # dados organizados para os gráficos de grupos de causa fetal
 
@@ -1633,7 +1660,7 @@ df_grupos_neonatais_tabela <- df_sim_doinf |>
 
 get_dupes(df_grupos_neonatais_tabela)
 
-write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2022_2023.csv.gz"), row.names = FALSE)
+write.csv(df_grupos_neonatais_tabela, gzfile("data-raw/csv/grupos_neonatal_2022_2024.csv.gz"), row.names = FALSE)
 
 
 #gráfico grupos de causa para óbitos neonatais
@@ -1842,20 +1869,20 @@ df_bloco8_graficos[is.na(df_bloco8_graficos)] <- 0
 df_bloco8_graficos <- df_bloco8_graficos |>
   mutate(
     obitos_perinatais_totais = obitos_neonatais_precoce_totais + obitos_fetais_totais,
-    principais_perinatal_a00_b99 = principais_neonatal_precoce_a00_b99 + principais_fetal_a00_b99,
-    #principais_perinatal_j00_j99 = principais_neonatal_precoce_j00_j99, #não temos essa categoria para fetal,
-    principais_perinatal_p00_p04 = principais_neonatal_precoce_p00_p04 + principais_fetal_p00_p04,
-    principais_perinatal_p05_p08 = principais_neonatal_precoce_p05_p08 + principais_fetal_p05_p08,
-    principais_perinatal_p10_p15 = principais_neonatal_precoce_p10_p15 + principais_fetal_p10_p15,
-    principais_perinatal_p20_p29 = principais_neonatal_precoce_p20_p29 + principais_fetal_p20_p29,
-    principais_perinatal_p35_p39 = principais_neonatal_precoce_p35_p39 + principais_fetal_p35_p39,
-    principais_perinatal_p50_p61 = principais_neonatal_precoce_p50_p61 + principais_fetal_p50_p61,
-    principais_perinatal_p70_p74 = principais_neonatal_precoce_p70_p74 + principais_fetal_p70_p74,
-    principais_perinatal_p75_p78 = principais_neonatal_precoce_p75_p78 + principais_fetal_p75_p78,
-    principais_perinatal_p80_p83 = principais_neonatal_precoce_p80_p83 + principais_fetal_p80_p83,
-    principais_perinatal_p90_p96 = principais_neonatal_precoce_p90_p96 + principais_fetal_p90_p96,
-    principais_perinatal_q00_q99 = principais_neonatal_precoce_q00_q99 + principais_fetal_q00_q99,
-    principais_perinatal_outros = principais_neonatal_precoce_outros,
+    # principais_perinatal_a00_b99 = principais_neonatal_precoce_a00_b99 + principais_fetal_a00_b99,
+    # #principais_perinatal_j00_j99 = principais_neonatal_precoce_j00_j99, #não temos essa categoria para fetal,
+    # principais_perinatal_p00_p04 = principais_neonatal_precoce_p00_p04 + principais_fetal_p00_p04,
+    # principais_perinatal_p05_p08 = principais_neonatal_precoce_p05_p08 + principais_fetal_p05_p08,
+    # principais_perinatal_p10_p15 = principais_neonatal_precoce_p10_p15 + principais_fetal_p10_p15,
+    # principais_perinatal_p20_p29 = principais_neonatal_precoce_p20_p29 + principais_fetal_p20_p29,
+    # principais_perinatal_p35_p39 = principais_neonatal_precoce_p35_p39 + principais_fetal_p35_p39,
+    # principais_perinatal_p50_p61 = principais_neonatal_precoce_p50_p61 + principais_fetal_p50_p61,
+    # principais_perinatal_p70_p74 = principais_neonatal_precoce_p70_p74 + principais_fetal_p70_p74,
+    # principais_perinatal_p75_p78 = principais_neonatal_precoce_p75_p78 + principais_fetal_p75_p78,
+    # principais_perinatal_p80_p83 = principais_neonatal_precoce_p80_p83 + principais_fetal_p80_p83,
+    # principais_perinatal_p90_p96 = principais_neonatal_precoce_p90_p96 + principais_fetal_p90_p96,
+    # principais_perinatal_q00_q99 = principais_neonatal_precoce_q00_q99 + principais_fetal_q00_q99,
+    # principais_perinatal_outros = principais_neonatal_precoce_outros,
     #evitaveis_perinatal_imunoprevencao = evitaveis_neonatal_precoce_imunoprevencao + evitaveis_fetal_imunoprevencao,
     evitaveis_perinatal_mulher_gestacao = evitaveis_neonatal_precoce_mulher_gestacao + evitaveis_fetal_mulher_gestacao,
     evitaveis_perinatal_parto = evitaveis_neonatal_precoce_parto + evitaveis_fetal_parto,
@@ -1956,28 +1983,31 @@ df_bloco8_graficos <- df_bloco8_graficos |>
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 
-write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2022-2023.csv", row.names = FALSE)
+write.csv(df_bloco8_graficos, "data-raw/csv/indicadores_bloco8_graficos_2022-2024.csv", row.names = FALSE)
 
-df_bloco8_graficos_antigo <- read_csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv")
-df_bloco8_graficos_2023 <- df_bloco8_graficos |> filter(ano == 2023)
+df_bloco8_graficos_2023 <- df_bloco8_graficos
+
+df_bloco8_graficos_antigo <- read_csv("data-raw/csv/indicadores_bloco8_graficos_2012-2022.csv") |>
+  filter(ano <= 2021) |>
+  select(all_of(names(df_bloco8_graficos_2023)))
+
 
 df_bloco8_graficos_2023$codmunres <- as.numeric(df_bloco8_graficos_2023$codmunres)
-df_bloco8_graficos_total <- full_join(df_bloco8_graficos_antigo, df_bloco8_graficos_2023)
+df_bloco8_graficos_total <- rbind(df_bloco8_graficos_antigo, df_bloco8_graficos_2023)
 df_bloco8_graficos_total[is.na(df_bloco8_graficos_total)] <- 0
 
-write.csv(df_bloco8_graficos_total, "data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv", row.names = FALSE)
+write.csv(df_bloco8_graficos_total, "data-raw/csv/indicadores_bloco8_graficos_2012-2024.csv", row.names = FALSE)
 
-df_neonatais_evitaveis_antigo <- read_csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv")
+df_neonatais_evitaveis_2023 <- df_neonatais_evitaveis
 
-df_neonatais_evitaveis_2023 <- df_neonatais_evitaveis |> filter(ano==2023)
-
-write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2022-2023.csv", row.names = FALSE)
-
+df_neonatais_evitaveis_antigo <- read_csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv") |>
+  filter(ano <= 2021) |>
+  select(all_of(names(df_neonatais_evitaveis_2023)))
 
 df_neonatais_evitaveis_2023$codmunres <- as.numeric(df_neonatais_evitaveis_2023$codmunres)
-df_neonatais_evitaveis_total <- full_join(df_neonatais_evitaveis_antigo, df_neonatais_evitaveis_2023)
+df_neonatais_evitaveis_total <- rbind(df_neonatais_evitaveis_antigo, df_neonatais_evitaveis_2023)
 
-write.csv(df_neonatais_evitaveis_total, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv", row.names = FALSE)
+write.csv(df_neonatais_evitaveis_total, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv", row.names = FALSE)
 
 
 #write.csv(df_neonatais_precoce_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_precoce_2012-2022.csv", row.names = FALSE)

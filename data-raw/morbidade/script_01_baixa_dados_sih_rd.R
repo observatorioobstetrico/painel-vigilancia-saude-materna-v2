@@ -9,7 +9,7 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
              "RS", "RO", "RR", "SC", "SP", "SE", "TO")
 
 # Criando um vetor com os anos considerados (2012 a 2023)
-anos <- c(2012:2023)
+anos <- c(2022:2024)
 
 # Criando um vetor com os procedimentos de interesse
 procedimentos <- c(
@@ -101,7 +101,7 @@ for (estado in estados) {
   }
 
   # Salvando a base completa contendo apenas internações obstétricas para a dada UF
-  output_dir <- glue("databases/01_sih_rd/01_arquivos_brutos/")
+  output_dir <- glue("databases/")
   if (!dir.exists(output_dir)) {dir.create(output_dir)}
 
   write.csv2(

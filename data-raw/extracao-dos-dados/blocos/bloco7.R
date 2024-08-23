@@ -19,12 +19,20 @@ df_fetais_totais1 <- fetch_datasus(
   information_system = "SIM-DOFET"
 )
 
+options(timeout = 600)
+
 sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv")
 
 sim_dofet2023 <- sim_2023 |> filter(TIPOBITO == 1) |>
   select(c(CODMUNRES, DTOBITO, PESO, GESTACAO, SEMAGESTAC, OBITOPARTO))
 
-df_fetais_totais <- rbind(df_fetais_totais1, sim_dofet2023)
+sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
+
+sim_dofet2024 <- sim_2024 |> filter(TIPOBITO == 1) |>
+  select(c(CODMUNRES, DTOBITO, PESO, GESTACAO, SEMAGESTAC, OBITOPARTO))
+
+df_fetais_totais <- rbind(df_fetais_totais1, sim_dofet2023) |>
+  rbind(sim_dofet2024)
 
 df_fetais_totais2 <- process_sim(df_fetais_totais, municipality_data = TRUE)
 
@@ -269,7 +277,7 @@ codigos_municipios <- read_csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(municipio)
 
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2022:2023)), ano = 2022:2023)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2022:2024)), ano = 2022:2024)
 
 df_fetais <- df_fetais |> mutate_if(is.character, as.numeric)
 
@@ -363,12 +371,15 @@ df_obitos_fetais$fetal_depois_peso_mais_2500[is.na(df_obitos_fetais$fetal_depois
 # df_obitos_fetais$fetal_sem_33_34[is.na(df_obitos_fetais$fetal_sem_33_34)] <- 0
 # df_obitos_fetais$fetal_sem_35_36[is.na(df_obitos_fetais$fetal_sem_35_36)] <- 0
 
+# Juntando dados antigos e novos
 
+df_obitos_fetais_antigo <- read_csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2023.csv") |>
+  filter(ano <= 2021) |>
+  select(-c(`...1`))
 
-#write.table(df_obitos_fetais, 'Bloco_7/indicadores_bloco7_mortalidade_fetal_2021-2022.csv', sep = ",", dec = ".", row.names = FALSE)
+df_obitos_fetais_novo <- rbind(df_obitos_fetais_antigo, df_obitos_fetais)
 
-
-write.csv(df_obitos_fetais, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2022.csv', sep = ",", dec = ".", row.names = FALSE)
+write.csv(df_obitos_fetais_novo, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ######### INDICADORES DA ABA PERINATAL
@@ -437,8 +448,13 @@ df_obitos_perinatais <- juncao %>%
     peso_mais_2500_mais_28sem
   )
 
+df_obitos_perinatais_antigo <- read_csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2023.csv") |>
+  filter(ano <= 2021) |>
+  select(-c(`...1`))
 
-write.table(df_obitos_perinatais, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2023.csv', sep = ",", dec = ".", row.names = FALSE)
+df_obitos_perinatais_novo <- rbind(df_obitos_perinatais_antigo, df_obitos_perinatais)
+
+write.table(df_obitos_perinatais_novo, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ######### INDICADORES DA ABA A NEONATAL
@@ -454,157 +470,165 @@ sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23
 
 sim23 <- sim_2023 |> select(-c(contador, OPOR_DO, TP_ALTERA, CB_ALT))
 
+sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
+
+sim24 <- sim_2024 |> select(-c(contador, OPOR_DO, TP_ALTERA, CB_ALT))
+
 df_neonat_total <- df_neonat_total |> select(-c(ESTABDESCR, NUDIASOBIN,
                                                               NUDIASINF, FONTESINF,
                                                               CONTADOR))
 
-df_sim_total2 <- process_sim(rbind(df_neonat_total, sim23), municipality_data = T) |>
-  select(
-    CODMUNRES, DTOBITO, IDADEminutos, IDADEhoras, IDADEdias, PESO
-  )
+preliminares <- rbind(sim23, sim24)
 
-#write.csv(df_neonat_total2, file="Bloco_7/Databases/dados_sim_neonatal.csv")
+# df_sim_total2 <- process_sim(rbind(df_neonat_total, preliminares), municipality_data = T) |>
+#   select(
+#     CODMUNRES, DTOBITO, IDADEminutos, IDADEhoras, IDADEdias, PESO
+#   )
+
+df_sim_total2 <- rbind(df_neonat_total, preliminares) |>
+  select(
+    CODMUNRES, DTOBITO, IDADE, PESO
+  )
 
 df_neonat_total3 <- df_sim_total2  |>
   mutate(
-    ano1 = substr(DTOBITO, 1, 4),
+    ano1 = substr(DTOBITO, 5, 8),
     codmunres = as.numeric(CODMUNRES),
-    IDADEminutos = as.numeric(IDADEminutos),
-    IDADEhoras = as.numeric(IDADEhoras),
-    IDADEdias = as.numeric(IDADEdias),
+    IDADE = as.numeric(IDADE),
     PESO = as.numeric(PESO)
   ) |>
   mutate(
-    ano = case_when(
-      ano1 == "23" ~ "2023",
-      TRUE ~ ano1
-    ),
+     ano = case_when(
+       ano1 == "023" ~ "2023",
+       ano1 == "024" ~ "2024",
+       TRUE ~ ano1
+     ),
     obitos_27dias = case_when(
-      (IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) ~ 1,
-      !(IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) ~ 0
+      (IDADE <= 227) ~ 1,
+      !(IDADE <= 227) ~ 0
     ),
     obitos_27dias_menos1500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO <1500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO < 1500) ~ 0
+      ((IDADE <= 227) & PESO <1500)  ~ 1,
+      !((IDADE <= 227) & PESO < 1500) ~ 0
     ),
 
     obitos_27dias_1500_1999 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 1500 & PESO <= 1999)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 1500 & PESO <= 1999) ~ 0
+      ((IDADE <= 227) & PESO >= 1500 & PESO <= 1999)  ~ 1,
+      !((IDADE <= 227) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
 
     obitos_27dias_2000_2499 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2000 & PESO <= 2499)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2000 & PESO <= 2499) ~ 0
+      ((IDADE <= 227) & PESO >= 2000 & PESO <= 2499)  ~ 1,
+      !((IDADE <= 227) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
 
     obitos_27dias_mais2500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 27) & PESO >= 2500) ~ 0
+      ((IDADE <= 227) & PESO >= 2500)  ~ 1,
+      !((IDADE <= 227) & PESO >= 2500) ~ 0
     ),
 
     obitos_6dias = case_when(
 
-      (IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) ~ 1,
-      !(IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) ~ 0
+      (IDADE <= 206) ~ 1,
+      !(IDADE <= 206) ~ 0
     ),
 
     obitos_6dias_menos1500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO <1500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO < 1500) ~ 0
+      ((IDADE <= 206) & PESO <1500)  ~ 1,
+      !((IDADE <= 206) & PESO < 1500) ~ 0
     ),
 
     obitos_6dias_1500_1999 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 1500 & PESO <= 1999)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 1500 & PESO <= 1999) ~ 0
+      ((IDADE <= 206) & PESO >= 1500 & PESO <= 1999)  ~ 1,
+      !((IDADE <= 206) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
 
     obitos_6dias_2000_2499 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2000 & PESO <= 2499)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2000 & PESO <= 2499) ~ 0
+      ((IDADE <= 206) & PESO >= 2000 & PESO <= 2499)  ~ 1,
+      !((IDADE <= 206) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
 
     obitos_6dias_mais2500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 | IDADEdias <= 6) & PESO >= 2500) ~ 0
+      ((IDADE <= 206) & PESO >= 2500)  ~ 1,
+      !((IDADE <= 206) & PESO >= 2500) ~ 0
     ),
 
     obitos_0dias = case_when(
 
-      (IDADEminutos <= 59| IDADEhoras <= 23 ) ~ 1,
-      !(IDADEminutos <= 59| IDADEhoras <= 23 ) ~ 0
+      (IDADE <= 200 ) ~ 1,
+      !(IDADE <= 200 ) ~ 0
     ),
 
     obitos_0dias_menos1500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO <1500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO < 1500) ~ 0
+      ((IDADE <= 200 ) & PESO <1500)  ~ 1,
+      !((IDADE <= 200 ) & PESO < 1500) ~ 0
     ),
 
     obitos_0dias_1500_1999 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 1500 & PESO <= 1999)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 1500 & PESO <= 1999) ~ 0
+      ((IDADE <= 200 ) & PESO >= 1500 & PESO <= 1999)  ~ 1,
+      !((IDADE <= 200 ) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
 
     obitos_0dias_2000_2499 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2000 & PESO <= 2499)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2000 & PESO <= 2499) ~ 0
+      ((IDADE <= 200 ) & PESO >= 2000 & PESO <= 2499)  ~ 1,
+      !((IDADE <= 200 ) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
 
     obitos_0dias_mais2500 = case_when(
-      ((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2500)  ~ 1,
-      !((IDADEminutos <= 59| IDADEhoras <= 23 ) & PESO >= 2500) ~ 0
+      ((IDADE <= 200 ) & PESO >= 2500)  ~ 1,
+      !((IDADE <= 200 ) & PESO >= 2500) ~ 0
     ),
 
     obitos_1_6dias = case_when(
 
-      (IDADEdias <= 6 & IDADEdias >= 1) ~ 1,
-      !(IDADEdias <= 6 & IDADEdias >= 1) ~ 0
+      (IDADE <= 206 & IDADE >= 201) ~ 1,
+      !(IDADE <= 206 & IDADE >= 201) ~ 0
     ),
 
     obitos_1_6dias_menos1500 = case_when(
-      ((IDADEdias <= 6 & IDADEdias >= 1) & PESO <1500)  ~ 1,
-      !((IDADEdias <= 6 & IDADEdias >= 1) & PESO < 1500) ~ 0
+      ((IDADE <= 206 & IDADE >= 201) & PESO <1500)  ~ 1,
+      !((IDADE <= 206 & IDADE >= 201) & PESO < 1500) ~ 0
     ),
 
     obitos_1_6dias_1500_1999 = case_when(
-      ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 1500 & PESO <= 1999)  ~ 1,
-      !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 1500 & PESO <= 1999) ~ 0
+      ((IDADE <= 206 & IDADE >= 201) & PESO >= 1500 & PESO <= 1999)  ~ 1,
+      !((IDADE <= 206 & IDADE >= 201) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
 
     obitos_1_6dias_2000_2499 = case_when(
-      ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2000 & PESO <= 2499)  ~ 1,
-      !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2000 & PESO <= 2499) ~ 0
+      ((IDADE <= 206 & IDADE >= 201) & PESO >= 2000 & PESO <= 2499)  ~ 1,
+      !((IDADE <= 206 & IDADE >= 201) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
 
     obitos_1_6dias_mais2500 = case_when(
-      ((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2500)  ~ 1,
-      !((IDADEdias <= 6 & IDADEdias >= 1) & PESO >= 2500) ~ 0
+      ((IDADE <= 206 & IDADE >= 201) & PESO >= 2500)  ~ 1,
+      !((IDADE <= 206 & IDADE >= 201) & PESO >= 2500) ~ 0
     ),
 
     obitos_7_27dias = case_when(
 
-      (IDADEdias <= 27 & IDADEdias >= 7) ~ 1,
-      !(IDADEdias <= 27 & IDADEdias >= 7) ~ 0
+      (IDADE <= 227 & IDADE >= 207) ~ 1,
+      !(IDADE <= 227 & IDADE >= 207) ~ 0
     ),
 
     obitos_7_27dias_menos1500 = case_when(
-      ((IDADEdias <= 27 & IDADEdias >= 7) & PESO <1500)  ~ 1,
-      !((IDADEdias <= 27 & IDADEdias >= 7) & PESO < 1500) ~ 0
+      ((IDADE <= 227 & IDADE >= 207) & PESO <1500)  ~ 1,
+      !((IDADE <= 227 & IDADE >= 207) & PESO < 1500) ~ 0
     ),
 
     obitos_7_27dias_1500_1999 = case_when(
-      ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 1500 & PESO <= 1999)  ~ 1,
-      !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 1500 & PESO <= 1999) ~ 0
+      ((IDADE <= 227 & IDADE >= 207) & PESO >= 1500 & PESO <= 1999)  ~ 1,
+      !((IDADE <= 227 & IDADE >= 207) & PESO >= 1500 & PESO <= 1999) ~ 0
     ),
 
     obitos_7_27dias_2000_2499 = case_when(
-      ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2000 & PESO <= 2499)  ~ 1,
-      !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2000 & PESO <= 2499) ~ 0
+      ((IDADE <= 227 & IDADE >= 207) & PESO >= 2000 & PESO <= 2499)  ~ 1,
+      !((IDADE <= 227 & IDADE >= 207) & PESO >= 2000 & PESO <= 2499) ~ 0
     ),
 
     obitos_7_27dias_mais2500 = case_when(
-      ((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2500)  ~ 1,
-      !((IDADEdias <= 27 & IDADEdias >= 7) & PESO >= 2500) ~ 0
+      ((IDADE <= 227 & IDADE >= 207) & PESO >= 2500)  ~ 1,
+      !((IDADE <= 227 & IDADE >= 207) & PESO >= 2500) ~ 0
     )
 
   ) |>
@@ -642,7 +666,7 @@ df_neonat_total3 <- df_sim_total2  |>
 
 
 df_nascidos_total1_aux <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2022,
   year_end = 2022,
   vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5"),
   information_system = "SINASC"
@@ -659,7 +683,15 @@ sinasc23_aux <- sinasc23 |>
 sinasc23 <- sinasc23 |>
   select(CODMUNRES, DTNASC, PESO)
 
-df_nascidos_total <- rbind(df_nascidos_total1, sinasc23)
+sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
+sinasc24_aux <- sinasc24 |>
+  select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5)
+
+sinasc24 <- sinasc24 |>
+  select(CODMUNRES, DTNASC, PESO)
+
+df_nascidos_total <- rbind(df_nascidos_total1, sinasc23) |>
+  rbind(sinasc24)
 
 df_nascidos_total2 <- process_sinasc(df_nascidos_total, municipality_data = T)
 
@@ -745,7 +777,13 @@ df_neonat <- left_join(df_aux_municipios, df_juncao, by=c("codmunres", "ano")) |
     obitos_1_6dias_mais2500
   )
 
-write.csv(df_neonat, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2023.csv', sep = ",", dec = ".", row.names = FALSE)
+df_neonat_antigo <- read_csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2023.csv") |>
+  filter(ano <= 2021) |>
+  select(-c(`...1`))
+
+df_neonat_novo <- rbind(df_neonat_antigo, df_neonat)
+
+write.csv(df_neonat_novo, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ######### INDICADORES DE MORBIDADE NEONATAL
@@ -757,7 +795,8 @@ library(tidyr)
 library(data.table)
 library(readr)
 
-df_nascidos_total_aux <- rbind(df_nascidos_total1_aux, sinasc23_aux)
+df_nascidos_total_aux <- rbind(df_nascidos_total1_aux, sinasc23_aux) |>
+  rbind(sinasc24_aux)
 
 
 df_ameacadoras <- df_nascidos_total_aux |>
@@ -780,7 +819,7 @@ df_ameacadoras <- df_nascidos_total_aux |>
 
 # Para os indicadores provenientes do SIH ---------------------------------
 ## Criando um vetor com os anos considerados
-anos <- c(2012:2022)
+anos <- c(2022:2024)
 
 ## Criando um vetor com as siglas de todos os estados do Brasil
 estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -874,7 +913,7 @@ df_sih_rd_partos <- data.frame()
 
 for (estado in estados) {
   df_sih_rd_menores_28_aux <- fread(
-    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2022.csv.gz"),
+    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2022_2024.csv.gz"),
     sep = ";"
   )
   df_sih_rd_menores_28 <- bind_rows(df_sih_rd_menores_28, df_sih_rd_menores_28_aux)
@@ -885,7 +924,7 @@ for (estado in estados) {
 
 for (estado in estados) {
   df_sih_rd_partos_aux <- fread(
-    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_2012_2022.csv.gz"),
+    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_partos_2022_2024.csv.gz"),
     sep = ";"
   )
   df_sih_rd_partos <- bind_rows(df_sih_rd_partos, df_sih_rd_partos_aux)
@@ -924,7 +963,7 @@ diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/blocos/dat
 setwd("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de internações
-system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2012_2022.csv"))
+system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2022_2024.csv"))
 
 #### Voltando para o diretório original do projeto
 setwd(diretorio_original)
@@ -993,7 +1032,7 @@ df_bloco5_sih_internacoes <- df_aih_internacoes_wide_macros |>
     values_fill = 0,
     names_prefix = "internacoes_"
   ) |>
-  right_join(data.frame(codmunres = rep(df_infos_municipios$codmunres, each = length(2012:2022)), ano = 2012:2022)) |>
+  right_join(data.frame(codmunres = rep(df_infos_municipios$codmunres, each = length(2022:2024)), ano = 2022:2024)) |>
   arrange(codmunres, ano) |>
   mutate(across(.cols = -c(codmunres, ano), .fns = ~ replace_na(., 0))) |>
   rowwise() |>
@@ -1039,7 +1078,7 @@ sum(df_bloco5_sih_internacoes$internacoes_geral_7_a_27_dias_internado_uti, df_bl
 setwd("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de partos
-system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2012_2022.csv"))
+system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2022_2024.csv"))
 
  #### Voltando para o diretório original do projeto
 setwd(diretorio_original)
@@ -1078,8 +1117,8 @@ df_bloco5_sih_partos <- df_aih_partos |>
 
 ### Removendo arquivos já utilizados e que são maiores que o limite de 100 mb
 file.remove(c(
-  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2022.csv",
-  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2012_2022.csv",
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2022_2024.csv",
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2022_2024.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite"
@@ -1094,7 +1133,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2022:2024)), ano = 2022:2024)
 
 df_bloco7_morbidade_neonatal <- left_join(df_aux_municipios, df_ameacadoras, by = c("codmunres", "ano")) |>
   left_join(df_bloco5_sih_partos) |>
@@ -1106,14 +1145,19 @@ internacoes_cols <- grep("^internacoes|sih$", names(df_bloco7_morbidade_neonatal
 for (col in names(df_bloco7_morbidade_neonatal)) {
   if (col %in% internacoes_cols) {
     # Nas colunas que começam com "internacoes" ou que terminam com "sih", substituir os NAs por 0 apenas se o ano não for 2023
-    df_bloco7_morbidade_neonatal[[col]][is.na(df_bloco7_morbidade_neonatal[[col]]) & df_bloco7_morbidade_neonatal$ano != 2023] <- 0
+    df_bloco7_morbidade_neonatal[[col]][is.na(df_bloco7_morbidade_neonatal[[col]])] <- 0 #& df_bloco7_morbidade_neonatal$ano != 2023
   } else {
     # Nas outras colunas, substituir todos os NAs por 0
     df_bloco7_morbidade_neonatal[[col]][is.na(df_bloco7_morbidade_neonatal[[col]])] <- 0
   }
 }
 
-write.csv(df_bloco7_morbidade_neonatal, 'data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2023.csv', sep = ",", dec = ".", row.names = FALSE)
+df_bloco7_morbidade_neonatal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2023.csv") |>
+  filter(ano <= 2021)
+
+df_bloco7_morbidade_neonatal_novo <- rbind(df_bloco7_morbidade_neonatal_antigo, df_bloco7_morbidade_neonatal)
+
+write.csv(df_bloco7_morbidade_neonatal_novo, 'data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 

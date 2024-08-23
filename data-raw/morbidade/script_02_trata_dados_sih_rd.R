@@ -24,12 +24,12 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
 diretorio_original <- getwd()
 
 # Criando um vetor que contém o diretório das bases brutas do SIH-RD
-diretorio_bases_brutas <- glue("{getwd()}/databases/01_sih_rd/01_arquivos_brutos")
+diretorio_bases_brutas <- glue("{getwd()}/databases")
 
 # Tratando os dados de cada UF
 for (estado in estados) {
   # Mudando o diretório para a pasta que contém o algoritmo em C++
-  setwd("algorithm_episode_of_care/")
+  #setwd("algorithm_episode_of_care/")
 
   # Rodando o algoritmo em C++ na base do SIH-RD com os dados brutos
   system(glue("./processaih {diretorio_bases_brutas}/{estado}_sih_rd_bruto_2012_2023.csv"))
@@ -38,13 +38,13 @@ for (estado in estados) {
   setwd(diretorio_original)
 
   # Criando a conexão com o arquivo .sqlite gerado como resultado do algoritmo em C++
-  con <- dbConnect(SQLite(), "algorithm_episode_of_care/work.sqlite")
+  con <- dbConnect(SQLite(), "data-raw/morbidade/algorithm_episode_of_care/work.sqlite")
 
   # Selecionando a tabela "aih" com todas as suas variáveis, ordenadas por AIHREF e DT_INTER
   df_aih <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
 
   # Lendo a base do SIH-RD com os dados brutos e seleciobnando as variáveis adicionais de diagnóstico
-  df_aih_bruto <- fread(glue("databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_2012_2023.csv"), sep = ";") |>
+  df_aih_bruto <- fread(glue("databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_2022_2024.csv"), sep = ";") |>
     select(
       N_AIH, ANO_CMPT, DIAG_SECUN, DIAGSEC1, DIAGSEC2, DIAGSEC3, DIAGSEC4,
       DIAGSEC5, DIAGSEC6, DIAGSEC7, DIAGSEC8, DIAGSEC9, CID_MORTE,
@@ -62,7 +62,7 @@ for (estado in estados) {
   output_dir <- "databases/01_sih_rd/02_arquivos_tratados_long"
   if (!dir.exists(output_dir)) {dir.create(output_dir)}
 
-  write.csv(df_aih, glue("{output_dir}/{estado}_sih_rd_tratado_long_2012_2023.csv"), row.names = FALSE)
+  write.csv(df_aih, glue("{output_dir}/{estado}_sih_rd_tratado_long_2022_2024.csv"), row.names = FALSE)
 
   # # Passando a base para o formato wide (cada linha corresponderá a uma pessoa única)
   # df_aih_wide <- df_aih |>

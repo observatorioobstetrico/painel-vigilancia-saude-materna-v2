@@ -9,8 +9,8 @@ library(glue)
 
 # Diretórios dos arquivos
 
-arq_obs_cluster <- "databases/01_sih_rd/02_arquivos_tratados_long"
-arq_SP <- "databases/02_sih_sp"
+arq_obs_cluster <- "databases"
+arq_SP <- "databases"
 
 # Listas de códigos CID e procedimentos
 
@@ -66,7 +66,7 @@ obs_cluster_sumario_total_uf <- tibble()
 
 for( estado in estados ) {
   # Ler o arquivo CSV relacionado ao SIH para um estado específico e período específico
-  arquivo <- glue("{arq_obs_cluster}/{estado}_sih_rd_tratado_long_2012_2023.csv")
+  arquivo <- glue("{arq_obs_cluster}/{estado}_sih_rd_tratado_long_2022_2024.csv")
   sp_obs_cluster_2012_atual <- fread(arquivo, sep = ",") |>
     mutate(PROC_REA = as.character(PROC_REA))
 
@@ -339,7 +339,7 @@ for( estado in estados ) {
     mutate(CPAV_INTER_CIRURGICA_SIH_BR = if_else(CURETAGEM == 1 | PROC_REA %in% proc_cirurgicos, 1L, NA_integer_))
 
   # Ler base SP
-  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_2012_2023.csv.gz"), sep = ",") |>
+  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_2022_2024.csv.gz"), sep = ",") |>
     mutate(SP_ATOPROF = as.character(SP_ATOPROF))
 
   # Limpar memória
@@ -621,11 +621,16 @@ obs_cluster_total_mun_ano <- obs_cluster_total_mun_ano |>
   )
 
 # salvar as bases
-write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/obs_cluster_total_mun_ano.csv", row.names = FALSE)
+write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/obs_cluster_total_mun_ano_2022_2024.csv", row.names = FALSE)
 
-write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/indicadores_bloco6_morbidade_materna_2012-2023.csv", row.names = FALSE)
+obs_cluster_total_mun_ano_antigo <- read_csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2023.csv") |>
+  filter(ano == 2021)
+
+obs_cluster_total_mun_ano_novo <- rbind(obs_cluster_total_mun_ano_antigo, obs_cluster_total_mun_ano)
+
+write.csv(obs_cluster_total_mun_ano_novo, "databases/03_bases_finais/indicadores_bloco6_morbidade_materna_2012-2024.csv", row.names = FALSE)
 
 
-write.csv( obs_cluster_sumario_total_uf, "databases/03_bases_finais/obs_cluster_sumario_total.csv", row.names = FALSE)
+write.csv( obs_cluster_sumario_total_uf, "databases/03_bases_finais/obs_cluster_sumario_total_2022_2024.csv", row.names = FALSE)
 
 

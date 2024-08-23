@@ -331,74 +331,74 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 490))
                 )
               ),
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 6,
-                      shinyWidgets::pickerInput(
-                        inputId = ns("cids_evitaveis_fetal"),
-                        label = "Selecione, aqui, os grupos de interesse:",
-                        options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
-                        choices = c(
-                          "Reduzível pelas ações de imunização" = "imunoprevencao",
-                          "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
-                          "Reduzíveis por adequada atenção à mulher no parto" = "parto",
-                          "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
-                          "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
-                          "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
-                          "Causas mal definidas" = "mal_definidas",
-                          "Demais causas (não claramente evitáveis)" = "outros"
-                        ),
-                        selected = c(
-                          "imunoprevencao",
-                          "mulher_gestacao",
-                          "parto",
-                          "recem_nascido",
-                          "tratamento",
-                          "saude",
-                          "mal_definidas",
-                          "outros"
-                        ),
-                        multiple = TRUE,
-                        width = "100%"
-                      )
-                    ),
-                    column(
-                      width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_evitaveis"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes",
-                            "Durante o parto" = "evitaveis_fetal_durante"#,
-                            #"Faltante" = "evitaveis_fetal_faltantes"
-                          ),
-                          selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
-                          )
-                        )
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 490))
-                )
-              ),
+              # column(
+              #   width = 12,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 10%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 6,
+              #         shinyWidgets::pickerInput(
+              #           inputId = ns("cids_evitaveis_fetal"),
+              #           label = "Selecione, aqui, os grupos de interesse:",
+              #           options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+              #           choices = c(
+              #             "Reduzível pelas ações de imunização" = "imunoprevencao",
+              #             "Reduzíveis por adequada atenção à mulher na gestação" = "mulher_gestacao",
+              #             "Reduzíveis por adequada atenção à mulher no parto" = "parto",
+              #             "Reduzíveis por adequada atenção ao recém-nascido" = "recem_nascido",
+              #             "Reduzíveis por ações de diagnóstico e tratamento adequado" = "tratamento",
+              #             "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção " = "saude",
+              #             "Causas mal definidas" = "mal_definidas",
+              #             "Demais causas (não claramente evitáveis)" = "outros"
+              #           ),
+              #           selected = c(
+              #             "imunoprevencao",
+              #             "mulher_gestacao",
+              #             "parto",
+              #             "recem_nascido",
+              #             "tratamento",
+              #             "saude",
+              #             "mal_definidas",
+              #             "outros"
+              #           ),
+              #           multiple = TRUE,
+              #           width = "100%"
+              #         )
+              #       ),
+              #       column(
+              #         width = 6,
+              #         strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+              #         tags$div(
+              #           align = 'left',
+              #           class = 'multicol',
+              #           checkboxGroupInput(
+              #             inputId = ns("momento_obito_fetal_evitaveis"),
+              #             label    = NULL,
+              #             choices = c(
+              #               "Antes do parto" = "evitaveis_fetal_antes",
+              #               "Durante o parto" = "evitaveis_fetal_durante"#,
+              #               #"Faltante" = "evitaveis_fetal_faltantes"
+              #             ),
+              #             selected = c(
+              #               "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+              #             )
+              #           )
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal"), height = 490))
+              #   )
+              # ),
               column(
                  width = 12,
                 bs4Dash::bs4Card(
@@ -1827,8 +1827,9 @@ mod_bloco_7_server <- function(id, filtros){
 
 
         porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(nascidos) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
+        #porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
+        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2),
+        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2)
       )
 
 
@@ -1852,11 +1853,11 @@ mod_bloco_7_server <- function(id, filtros){
 
              "ifelse(
                length(input$idade_dias_sih) == 3,
-               round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+               round(sum(internacoes_{input$local_internacao_sih}_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                ifelse(
                length(input$idade_dias_sih == 2),
-               round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+               round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
                )
              )"
@@ -1885,11 +1886,11 @@ mod_bloco_7_server <- function(id, filtros){
              # "
               "ifelse(
                 length(input$idade_dias_sih) == 3,
-                round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+                round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                 ifelse(
                 length(input$idade_dias_sih) == 2,
-                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti)) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
                 )
               )"
            ), 2)
