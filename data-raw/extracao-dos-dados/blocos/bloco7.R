@@ -819,7 +819,7 @@ df_ameacadoras <- df_nascidos_total_aux |>
 
 # Para os indicadores provenientes do SIH ---------------------------------
 ## Criando um vetor com os anos considerados
-anos <- c(2022:2024)
+anos <- c(2012:2024)
 
 ## Criando um vetor com as siglas de todos os estados do Brasil
 estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -866,12 +866,12 @@ for (estado in estados) {
           )
 
         # Criando um data.frame que contém apenas os partos
-        df_sih_rd_aux_partos <- df_sih_rd_aux |>
-          dplyr::filter(
-            ((DIAG_PRINC >= "O32" & DIAG_PRINC <= "O36") | (DIAG_PRINC >= "O60" & DIAG_PRINC <= "O69") |
-               (DIAG_PRINC >= "O75" & DIAG_PRINC < "O76") | (DIAG_PRINC >= "O80" & DIAG_PRINC <= "O84") |
-               DIAG_PRINC == "P95") | (PROC_REA %in% procedimentos_parto)
-          )
+         df_sih_rd_aux_partos <- df_sih_rd_aux |>
+           dplyr::filter(
+             ((DIAG_PRINC >= "O32" & DIAG_PRINC <= "O36") | (DIAG_PRINC >= "O60" & DIAG_PRINC <= "O69") |
+                (DIAG_PRINC >= "O75" & DIAG_PRINC < "O76") | (DIAG_PRINC >= "O80" & DIAG_PRINC <= "O84") |
+                DIAG_PRINC == "P95") | (PROC_REA %in% procedimentos_parto)
+           )
 
         erro_rd <- FALSE
       },
@@ -881,11 +881,12 @@ for (estado in estados) {
 
     # Juntando com os dados dos anos anteriores para a dada UF
     df_sih_rd_menores_28_uf <- bind_rows(df_sih_rd_menores_28_uf, df_sih_rd_aux_menores_28)
-    df_sih_rd_partos_uf <- bind_rows(df_sih_rd_partos_uf, df_sih_rd_aux_partos)
+    #df_sih_rd_partos_uf <- bind_rows(df_sih_rd_partos_uf, df_sih_rd_aux_partos)
 
 
     # Limpando a memória
-    rm(df_sih_rd_aux_menores_28, df_sih_rd_aux_partos)
+    rm(df_sih_rd_aux_menores_28#, df_sih_rd_aux_partos
+       )
     gc()
   }
 
@@ -913,7 +914,7 @@ df_sih_rd_partos <- data.frame()
 
 for (estado in estados) {
   df_sih_rd_menores_28_aux <- fread(
-    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2022_2024.csv.gz"),
+    glue("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/{estado}_sih_rd_menores_28_dias_2012_2024.csv.gz"),
     sep = ";"
   )
   df_sih_rd_menores_28 <- bind_rows(df_sih_rd_menores_28, df_sih_rd_menores_28_aux)
@@ -963,7 +964,7 @@ diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/blocos/dat
 setwd("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de internações
-system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2022_2024.csv"))
+system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2012_2024.csv"))
 
 #### Voltando para o diretório original do projeto
 setwd(diretorio_original)
@@ -997,10 +998,12 @@ df_aih_internacoes_wide <- df_aih_internacoes |>
     MUNIC_RES = first(MUNIC_RES),  # Município de residência da primeira internação
     MUNIC_MOV = first(MUNIC_MOV),  # Município do estabelecimento da primeira internação
     idade_dias = first(idade_dias),  # Idade, em dias, na data da primeira internação
-    SOMA_UTI = sum(as.integer(UTI_MES_TO))  # Total de dias na UTI
+    SOMA_UTI = sum(as.integer(UTI_MES_TO)),  # Total de dias na UTI
+    PDIAG = first(DIAG_PRINC),  # Diagnóstico principal da primeira internação
+    PPROC = first(PROC_REA)
   ) |>
   ungroup() |>
-  select(ano = ANO_CMPT, codmunres = MUNIC_RES, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias, soma_uti_mes_to = SOMA_UTI) |>
+  select(ano = ANO_CMPT, codmunres = MUNIC_RES, causabas = PDIAG, codmunocor = MUNIC_MOV, cnes = CNES, aihref = AIHREF, idade_dias, soma_uti_mes_to = SOMA_UTI) |>
   # Filtrando apenas pelos casos em que os municípios de residência e ocorrência são considerados no painel
   filter(codmunres %in% df_infos_municipios$codmunres & codmunocor %in% df_infos_municipios$codmunres)
 
@@ -1117,15 +1120,13 @@ df_bloco5_sih_partos <- df_aih_partos |>
 
 ### Removendo arquivos já utilizados e que são maiores que o limite de 100 mb
 file.remove(c(
-  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2022_2024.csv",
-  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2022_2024.csv",
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_menores_28_dias_2012_2024.csv",
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/SIH/BR_sih_rd_partos_2012_2024.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihperm.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/aihpermtransf.csv",
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/work.sqlite"
 
 ))
-
-# Juntandos os dados para a aba de morbidade
 
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
@@ -1133,7 +1134,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2022:2024)), ano = 2022:2024)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
 df_bloco7_morbidade_neonatal <- left_join(df_aux_municipios, df_ameacadoras, by = c("codmunres", "ano")) |>
   left_join(df_bloco5_sih_partos) |>
@@ -1160,6 +1161,186 @@ df_bloco7_morbidade_neonatal_novo <- rbind(df_bloco7_morbidade_neonatal_antigo, 
 write.csv(df_bloco7_morbidade_neonatal_novo, 'data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
+############ Dados para a distribuição de internações neonatais
+
+grupos_prematuridade <- c("P07", "P220", "P25", "P26", "P52", "P77")
+
+grupos_infeccoes <- c("P35", "P36", "P37", "P38", "P39", "A40", "A41", "P23",
+                      "J12", "J13", "J14", "J15", "J16", "J17", "J18", "A00", "A01",
+                      "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A33",
+                      "A50", "B20", "B21", "B22", "B23", "B24", "G00", "G03", "G04")
+
+grupos_asfixia <- c("P017", "P020", "P021", "P024", "P025", "P026", "P03",
+                    "P10", "P11", "P12", "P13", "P14", "P15", "P20", "P21", "P24")
+
+grupos_respiratorias <- c("P221", "P228", "P229", "P28")
+
+grupos_gravidez <- c("P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
+                     "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P04",
+                     "P05", "P964")
+
+grupos_cardiorrespiratoria <- c("P221", "P228", "P229", "P28")
+
+grupos_afeccoes_perinatal <- c("P969")
+
+grupos_ma_formacao <- c(paste0("Q", sprintf("%02d", 0:99)))
+
+grupos_mal_definida <- c(paste0("R", sprintf("%02d", 0:99)))
+
+
+grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", "P221", "P228", "P229",
+                                "P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
+                                "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P964", "P969")
+
+internacoes_neonatais_grupos <- df_aih_internacoes_wide |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_mal_definida",
+      TRUE ~ "morbidade_neonatal_grupos_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(internacoes = 1) |>
+  group_by(across(!internacoes)) |>
+  summarise(internacoes = sum(internacoes)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = internacoes,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+internacoes_neonatais_grupos[is.na(internacoes_neonatais_grupos)] <- 0
+
+
+internacoes_neonatais_grupos_0_dias <- df_aih_internacoes_wide|>
+  filter(idade_dias == 0) |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_0_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_0_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_0_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_0_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_0_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_0_dias_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_0_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_0_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_0_dias_mal_definida",
+      TRUE ~ "morbidade_neonatal_grupos_0_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(internacoes = 1) |>
+  group_by(across(!internacoes)) |>
+  summarise(internacoes = sum(internacoes)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = internacoes,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+internacoes_neonatais_grupos_0_dias[is.na(internacoes_neonatais_grupos_0_dias)] <- 0
+
+
+internacoes_neonatais_grupos_7_27_dias <- df_aih_internacoes_wide |>
+  filter(idade_dias >= 7 & idade_dias <= 27)|>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_7_27_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_7_27_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_7_27_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_7_27_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_7_27_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_7_27_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_7_27_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_7_27_dias_mal_definida",
+      TRUE ~ "morbidade_neonatal_grupos_7_27_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(internacoes = 1) |>
+  group_by(across(!internacoes)) |>
+  summarise(internacoes = sum(internacoes)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = internacoes,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+internacoes_neonatais_grupos_7_27_dias[is.na(internacoes_neonatais_grupos_7_27_dias)] <- 0
+
+internacoes_neonatais_grupos_1_6_dias <- df_aih_internacoes_wide |>
+  filter(idade_dias >= 1 & idade_dias <= 6)|>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_1_6_dias_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_1_6_dias_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_1_6_dias_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_1_6_dias_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_1_6_dias_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_1_6_dias_afeccoes_perinatal",
+      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_1_6_dias_ma_formacao",
+      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_1_6_dias_mal_definida",
+      TRUE ~ "morbidade_neonatal_grupos_1_6_dias_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid) |>
+  mutate(internacoes = 1) |>
+  group_by(across(!internacoes)) |>
+  summarise(internacoes = sum(internacoes)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = grupo_cid,
+    values_from = internacoes,
+    values_fill = 0
+  ) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+internacoes_neonatais_grupos_1_6_dias[is.na(internacoes_neonatais_grupos_1_6_dias)] <- 0
+
+############ Juntandos os dados para a aba de morbidade
+
+
+df_distribuicao_morbidade <- left_join(internacoes_neonatais_grupos, internacoes_neonatais_grupos_0_dias, by=c("codmunres", "ano"))|>
+  left_join(internacoes_neonatais_grupos_1_6_dias, by=c("codmunres", "ano")) |>
+  left_join(internacoes_neonatais_grupos_7_27_dias, by=c("codmunres", "ano"))
+
+write.csv(df_distribuicao_morbidade, 'data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 

@@ -180,6 +180,9 @@ juncao_bloco7_aux1 <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by
 juncao_bloco7_aux2 <- dplyr::left_join(juncao_bloco7_aux1, bloco7_morbidade_neonatal_aux, by = c("ano", "codmunres"))
 bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
+bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") #|>
+
+
 bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv") |>
   janitor::clean_names()
 
@@ -336,6 +339,8 @@ bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
 #     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
 #     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
 #   )
+
+bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres")
 
 bloco8_graficos <- dplyr::left_join(bloco8_graficos_aux, aux_municipios, by = "codmunres")
 bloco8_graficos <- bloco8_graficos |>
@@ -521,6 +526,7 @@ usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
 usethis::use_data(bloco7, overwrite = TRUE)
+usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
 usethis::use_data(bloco8_garbage_materno, overwrite = TRUE)
 usethis::use_data(bloco8_garbage_fetal, overwrite = TRUE)
 usethis::use_data(bloco8_garbage_neonatal, overwrite = TRUE)

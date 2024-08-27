@@ -1575,6 +1575,80 @@ mod_bloco_7_ui <- function(id) {
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 360))
                 )
+              ),
+
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("cids_grupos_morbidade_neonatal"),
+                        label = "Selecione os grupos de causas:",
+                        options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Prematuridade" = "prematuridade",
+                          "Infecções" = "infeccoes",
+                          "Asfixia/Hipóxia" = "asfixia",
+                          "Malformação congênita" = "ma_formacao",
+                          "Afecções respiratórias dos recém nascidos" = "respiratorias",
+                          "Fatores maternos relacionados à gravidez " = "gravidez",
+                          "Afecções originais no período perinatal" = "afeccoes",
+                          "Mal definidas" = "mal_definida",
+                          "Demais causas" = "outros"
+
+                        ),
+                        selected = c(
+                          "prematuridade",
+                          "infeccoes",
+                          "asfixia",
+                          "ma_formacao",
+                          "respiratorias",
+                          "gravidez",
+                          "afeccoes",
+                          "mal_definida",
+                          "outros"
+                        ),
+                        multiple = TRUE,
+                        width = "100%"
+                      )
+                    ),
+                    column(
+                      width = 6,
+                      strong(p("Selecione, aqui, os momentos de internação considerados:", style = "margin-bottom: 0.5rem")),
+                      tags$div(
+                        align = 'left',
+                        class = 'multicol',
+                        checkboxGroupInput(
+                          inputId = ns("momento_internacao_neonatal_grupos"),
+                          label    = NULL,
+                          choices = c(
+                            "Dia 0 de vida" = "morbidade_neonatal_grupos_0_dias",
+                            "De 1 a 6 dias de vida" = "morbidade_neonatal_grupos_1_6_dias",
+                            "De 7 a 27 dias de vida" = "morbidade_neonatal_grupos_7_27_dias"
+                          ),
+                          selected = c(
+                            "morbidade_neonatal_grupos_0_dias",
+                            "morbidade_neonatal_grupos_1_6_dias",
+                            "morbidade_neonatal_grupos_7_27_dias"
+                          )
+                        )
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 470))
+                )
               )
 
 
@@ -2849,6 +2923,210 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Para os gráficos --------------------------------------------------------
     cols <- c("#2c115f", "#b73779", "#fc8961")
+
+    ### Para a distribuição de internações por grupos de causas
+
+    data_filtrada_morbidade_aux <- reactive({
+      bloco7_dist_morbidade |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_filtrada_comp_morbidade_aux <- reactive({
+      bloco7_dist_morbidade |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          if (filtros()$nivel2 == "Nacional")
+            regiao %in% unique(tabela_aux_municipios$regiao)
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    data_plot_grupos_morbidade_neonatal <- reactive({
+      data_filtrada_morbidade_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            (grepl(paste(input$cids_grupos_morbidade_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_morbidade_neonatal)),
+            dplyr::case_when(
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup()|>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
+    })
+
+    data_plot_grupos_morbidade_neonatal_comp <- reactive({
+      data_filtrada_comp_morbidade_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            (grepl(paste(input$cids_grupos_morbidade_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_morbidade_neonatal)),
+            dplyr::case_when(
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
+            ),
+            "Grupos não selecionados"
+          ),
+          class = dplyr::case_when(
+            filtros()$nivel2 == "Nacional" ~ "Brasil",
+            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
+            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
+            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
+        dplyr::summarise(
+          porc_obitos = round(sum(porc_obitos), 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
+    })
+
+    data_plot_grupos_morbidade_neonatal_referencia <- reactive({
+      bloco7_dist_morbidade |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::mutate(
+          grupo_cid10 = ifelse(
+            (grepl(paste(input$cids_grupos_morbidade_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_morbidade_neonatal)),
+            dplyr::case_when(
+              grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+              grepl("infeccoes", grupo_cid10) ~ "Infecções",
+              grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+              grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+              grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período neonatal",
+              grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+              grepl("outros", grupo_cid10) ~ "Demais causas",
+            ),
+            "Grupos não selecionados"
+          )
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::group_by(ano, grupo_cid10) |>
+        dplyr::summarise(
+          br_porc_obitos = round(sum(br_porc_obitos), 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                      ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
+    })
+
+    data_plot_grupos_morbidade_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_morbidade_neonatal()) != 0,
+          "Não existem ocorrências de internações neonatais por grupos de causas para a localidade, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_morbidade_neonatal(), data_plot_grupos_morbidade_neonatal_referencia())
+    })
+
+    data_plot_grupos_morbidade_neonatal_comp_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_grupos_morbidade_neonatal_comp()) != 0,
+          "Não existem ocorrências de internações neonatais por grupos de causas para a localidade de comparação, período e grupos CID-10 selecionados."
+        )
+      )
+      dplyr::full_join(data_plot_grupos_morbidade_neonatal_comp(), data_plot_grupos_morbidade_neonatal_referencia())
+    })
+
+
 
     ## Calculando os indicadores para cada ano do período selecionado ---------
     ### Para os gráficos de causas evitáveis ----------------------------------
@@ -5742,6 +6020,55 @@ mod_bloco_7_server <- function(id, filtros){
             )
         }
       }
+    })
+
+    # Distribuição das internações neonatais por grupos de causas
+
+    output$plot_grupos_morbidade_neonatal <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_morbidade_neonatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            )
+          )
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_morbidade_neonatal_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data_plot_grupos_morbidade_neonatal_comp_completo(),
+            highcharter::hcaes(x = ano, y = porc_obitos, group = grupo_cid10),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_porc_obitos:,f}% </b>"
+            ),
+            stack = 1
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_grupos_morbidade_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_grupos_neonatal()$grupo_cid10)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_grupos_morbidade_neonatal()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de internações neonatais por grupos de causas"), min = 0, max = 100)
+
     })
 
 

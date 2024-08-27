@@ -1139,3 +1139,12 @@ momento_obitos <- function(aba, grafico, input){
     }
   }
 }
+
+momento_internacoes <- function(input){
+  if(length(input) < 3){
+    return(paste(input, collapse = "|"))
+  } else {
+    return("morbidade_neonatal_grupos_prematuridade|morbidade_neonatal_grupos_infeccoes|morbidade_neonatal_grupos_asfixia|morbidade_neonatal_grupos_ma_formacao|morbidade_neonatal_grupos_respiratorias|morbidade_neonatal_grupos_gravidez|morbidade_neonatal_grupos_afeccoes_perinatal|morbidade_neonatal_grupos_mal_definida|morbidade_neonatal_grupos_outros")
+
+  }
+}
