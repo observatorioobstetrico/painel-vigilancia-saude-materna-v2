@@ -3,8 +3,9 @@ library(dplyr)
 library(glue)
 
 # Criando um vetor com as siglas de todos os estados do Brasil
-estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO","MA","MT",
-             "MS", "MG", "PA", "PB", "PR", "PE", "PI","RJ", "RN", "RS","RO",
+ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO","MA","MT",
+              "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+   "RJ", "RN", "RS","RO",
              "RR", "SC", "SP", "SE", "TO")
 
 # Criando um vetor com os anos considerados (2012 a 2023)
@@ -16,7 +17,7 @@ for (estado in estados) {
   df_sih_sp_uf <- data.frame()
 
   # Criando um vetor que contém todos os N_AIHs de interesse na respectiva base do SIH-RD
-  naih_sih_rd <- read.csv2(glue("databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_2022_2024.csv")) |>
+  naih_sih_rd <- read.csv2(glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_2022_2024.csv")) |>
     pull(N_AIH)
 
   for (ano in anos) {
@@ -46,9 +47,12 @@ for (estado in estados) {
   }
 
   # Salvando a base do completa para a dada UF
+  output_dir <- "data-raw/morbidade/databases/02_sih_sp"
+  if (!dir.exists(output_dir)) {dir.create(output_dir)}
+
   write.csv(
     df_sih_sp_uf,
-    gzfile(glue("databases/02_sih_sp/{estado}_sih_sp_filtrado_{anos[1]}_{anos[length(anos)]}.csv.gz")),
+    gzfile(glue("{output_dir}/{estado}_sih_sp_filtrado_{anos[1]}_{anos[length(anos)]}.csv.gz")),
     row.names = FALSE
   )
 

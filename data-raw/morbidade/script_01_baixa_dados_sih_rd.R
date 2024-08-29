@@ -101,7 +101,7 @@ for (estado in estados) {
   }
 
   # Salvando a base completa contendo apenas internações obstétricas para a dada UF
-  output_dir <- glue("databases/")
+  output_dir <- glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos")
   if (!dir.exists(output_dir)) {dir.create(output_dir)}
 
   write.csv2(

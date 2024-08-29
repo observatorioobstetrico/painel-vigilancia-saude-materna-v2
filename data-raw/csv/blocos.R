@@ -134,7 +134,7 @@ bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicadores_bloco4_de
 
 ################################################################################
 
-bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
+bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2024.csv") |>
   janitor::clean_names()
 
 # asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
@@ -142,34 +142,34 @@ bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2
 #   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
 #   select(!total_de_nascidos_malformacao)
 
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2023.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2024.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
   dplyr::select(-c(3:10))
 
-bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
+bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv") |>
   dplyr::select(!c(uf, municipio, regiao))
 
-bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2023.csv", sep = ",") |>
+bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv", sep = ",") |>
   janitor::clean_names()
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2023.csv") #|>
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv") #|>
   #dplyr::select(!c(uf, municipio, regiao))
 
 bloco7_neonatal_aux[is.na(bloco7_neonatal_aux)] <- 0
 
-bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2023.csv") #|>
+bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv") #|>
 
 
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2023.csv") #|>
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv") #|>
   #dplyr::select(!(nascidos)
   #) |>
  # dplyr::select(!c(uf, municipio, regiao))
 
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2023.csv") #|>
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv") #|>
   #dplyr::select(!c(uf, municipio, regiao))
 bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
 
@@ -183,10 +183,10 @@ bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c(
 bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") #|>
 
 
-bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2023.csv") |>
+bloco8_graficos_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2024.csv") |>
   janitor::clean_names()
 
-bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2023.csv") |>
+bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
   janitor::clean_names()
 
 bloco8_garbage_materno_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>

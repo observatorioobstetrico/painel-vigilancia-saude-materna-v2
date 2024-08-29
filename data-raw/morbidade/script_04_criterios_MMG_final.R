@@ -9,8 +9,8 @@ library(glue)
 
 # Diretórios dos arquivos
 
-arq_obs_cluster <- "databases"
-arq_SP <- "databases"
+arq_obs_cluster <- "data-raw/morbidade/databases/01_sih_rd/02_arquivos_tratados_long"
+arq_SP <- "data-raw/morbidade/databases/02_sih_sp"
 
 # Listas de códigos CID e procedimentos
 
@@ -545,7 +545,7 @@ for( estado in estados ) {
   # Filtrar apenas os anos de interesse
   sp_obs_cluster_2014_2019_grp <- sp_obs_cluster_2014_2019_grp |>
     mutate(ANO = year(DT_INTER)) |>
-    filter(between(ANO, 2012, 2023))
+    filter(between(ANO, 2022, 2024))
 
   # Criar sumário dos estados
   obs_cluster_sumario_total_uf <- obs_cluster_sumario_total_uf |>
@@ -560,8 +560,8 @@ for( estado in estados ) {
 
   # Gerar dataframe com todos os municípios e os anos
   obs_cluster_mun_ano <- tibble(
-    CODMUNRES = rep(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES), each = length(2012:2023)),
-    ANO = rep(2012:2023, length(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES)))
+    CODMUNRES = rep(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES), each = length(2022:2024)),
+    ANO = rep(2022:2024, length(unique(sp_obs_cluster_2014_2019_grp$CODMUNRES)))
   )
 
   obs_cluster_mun_ano <- obs_cluster_mun_ano |> arrange(CODMUNRES, ANO)
@@ -621,16 +621,16 @@ obs_cluster_total_mun_ano <- obs_cluster_total_mun_ano |>
   )
 
 # salvar as bases
-write.csv(obs_cluster_total_mun_ano, "databases/03_bases_finais/obs_cluster_total_mun_ano_2022_2024.csv", row.names = FALSE)
+write.csv(obs_cluster_total_mun_ano, "data-raw/morbidade/databases/03_bases_finais/obs_cluster_total_mun_ano_2022_2024.csv", row.names = FALSE)
 
 obs_cluster_total_mun_ano_antigo <- read_csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2023.csv") |>
-  filter(ano == 2021)
+  filter(ANO <= 2021)
 
 obs_cluster_total_mun_ano_novo <- rbind(obs_cluster_total_mun_ano_antigo, obs_cluster_total_mun_ano)
 
-write.csv(obs_cluster_total_mun_ano_novo, "databases/03_bases_finais/indicadores_bloco6_morbidade_materna_2012-2024.csv", row.names = FALSE)
+write.csv(obs_cluster_total_mun_ano_novo, "data-raw/morbidade/databases//03_bases_finais/indicadores_bloco6_morbidade_materna_2012-2024.csv", row.names = FALSE)
 
+write.csv(obs_cluster_total_mun_ano_novo, "data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv", row.names = FALSE)
 
-write.csv( obs_cluster_sumario_total_uf, "databases/03_bases_finais/obs_cluster_sumario_total_2022_2024.csv", row.names = FALSE)
 
 
