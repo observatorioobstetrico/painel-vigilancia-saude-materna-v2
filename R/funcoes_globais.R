@@ -19,7 +19,13 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
         perinatal_total_menos1500 = fetal_peso_menos_1500 + obitos_6dias_menos1500,
         perinatal_total_1500_1999 = fetal_peso_1500_1999 + obitos_6dias_1500_1999,
         perinatal_total_2000_2499 = fetal_peso_2000_2499 + obitos_6dias_2000_2499,
-        perinatal_total_mais2500 = fetal_peso_mais_2500 + obitos_6dias_mais2500
+        perinatal_total_mais2500 = fetal_peso_mais_2500 + obitos_6dias_mais2500,
+        obitos_perinatal_oms = obitos_fetais_mais_28sem + obitos_6dias,
+        perinatal_oms_menos1500 = peso_menos_1500_mais_28sem + obitos_6dias_menos1500,
+        perinatal_oms_1500_1999 = peso_1500_1999_mais_28sem + obitos_6dias_1500_1999,
+        perinatal_oms_2000_2499 = peso_2000_2499_mais_28sem + obitos_6dias_2000_2499,
+        perinatal_oms_mais2500 = peso_mais_2500_mais_28sem + obitos_6dias_mais2500,
+
       )
 
     colunas_summarise <- names(df_calcs)[!startsWith(names(df_calcs), "faltante")]

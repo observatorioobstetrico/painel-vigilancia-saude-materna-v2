@@ -11,7 +11,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2022:2024)), ano = 2022:2024)
+df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2012:2024)), ano = 2012:2024)
 
 # Criando o data.frame que irá receber todos os dados dos gráficos do bloco 8
 df_bloco8_graficos <- df_aux_municipios
@@ -159,8 +159,8 @@ sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24
 # Garbage codes para óbitos fetais ----------------------------------------
 ## Baixando os dados do SIM-DOFET de 2012 a 2022
 df_sim_dofet_aux1 <- fetch_datasus(
-  year_start = 2022,
-  year_end = 2022,
+  year_start = 2012,
+  year_end = 2024,
   information_system = "SIM-DOFET"
 ) |>
   clean_names()

@@ -43,12 +43,13 @@ mod_bloco_3_ui <- function(id) {
         fluidRow(
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i3")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i5")), proxy.height = "325px")
           ),
           column(
             width = 6,
-            shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i5")), proxy.height = "325px")
+            shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i3")), proxy.height = "325px")
           )
+
         ),
         fluidRow(
           column(
@@ -117,6 +118,37 @@ mod_bloco_3_ui <- function(id) {
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 410))
             )
           ),
+
+          column(
+            width = 6,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 530px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML(
+                  "<b style='font-size:19px'> Porcentagem de mulheres com oito ou mais consultas de pré-natal &nbsp;</b>"
+                ),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao3"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao3"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
+                    )
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 410))
+            )
+          ),
           column(
             width = 6,
             bs4Dash::bs4Card(
@@ -145,36 +177,6 @@ mod_bloco_3_ui <- function(id) {
               ),
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 410))
-            )
-          ),
-          column(
-            width = 6,
-            bs4Dash::bs4Card(
-              width = 12,
-              status = "primary",
-              collapsible = FALSE,
-              headerBorder = FALSE,
-              style = "height: 530px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com mais de sete consultas de pré-natal &nbsp;</b>"
-                ),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao3"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao3"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                )
-              ),
-              hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 410))
             )
           ),
           column(
@@ -228,7 +230,7 @@ mod_bloco_3_server <- function(id, filtros){
       porc_sc = c("round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)", "0.5"),
       porc_1con = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
       porc_7 = c("round(sum(mulheres_com_mais_de_sete_consultas_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
-      porc_consultas_adequadas = rep("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", 2)
+      porc_consultas_adequadas = c("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", "dplyr::first(95[ano >= 2014])")
     )
 
 
@@ -578,12 +580,12 @@ mod_bloco_3_server <- function(id, filtros){
         indicador = "porc_consultas_adequadas",
         titulo = "Porcentagem de mulheres com número adequado de consultas de pré-natal",
         tem_meta = TRUE,
-        valor_de_referencia = data_resumo_referencia()$porc_consultas_adequadas,
+        valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = "300px",
         pagina = "bloco_3",
-        tipo_referencia = "média nacional",
+        tipo_referencia = "recomendações OMS",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -625,7 +627,7 @@ mod_bloco_3_server <- function(id, filtros){
       cria_caixa_server(
         dados = data3_resumo(),
         indicador = "porc_7",
-        titulo = "Porcentagem de mulheres com mais de sete consultas de pré-natal",
+        titulo = "Porcentagem de mulheres com oito ou mais consultas de pré-natal",
         tem_meta = TRUE,
         valor_de_referencia = 95,
         tipo = "porcentagem",
@@ -819,6 +821,72 @@ mod_bloco_3_server <- function(id, filtros){
     })
 
     ### Porcentagem de mulheres com número adequado de consultas de pré-natal -----------------
+    # output$plot3 <- highcharter::renderHighchart({
+    #   validate(
+    #     need(
+    #       filtros()$ano2[2] >= 2014,
+    #       "Este indicador só está disponível a partir de 2014."
+    #     )
+    #   )
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data3_referencia() |> dplyr::filter(ano >= 2014),
+    #         name = "Referência (recomendações OMS)",
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
+    #       highcharter::hc_colors(cols)
+    #     if (filtros()$nivel == "Nacional") {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data3_referencia() |> dplyr::filter(ano >= 2014),
+    #           type = "line",
+    #           name = "Referência (recomendações OMS)",
+    #           highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.8
+    #         )
+    #     }
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data3_referencia() |> dplyr::filter(ano >= 2014),
+    #         name = "Referência (recomendações OMS)",
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data3_comp() |> dplyr::filter(ano >= 2014),
+    #         name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil", unique(data3_comp()$class)),
+    #         type = "line",
+    #         highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
+    #       ) |>
+    #       highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+    #       highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
+    #       highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+    #       highcharter::hc_colors(cols)
+    #     if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+    #       grafico_base
+    #     } else {
+    #       grafico_base |>
+    #         highcharter::hc_add_series(
+    #           data = data3_referencia() |> dplyr::filter(ano >= 2014),
+    #           type = "line",
+    #           name = "Referência (recomendações OMS)",
+    #           highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+    #           dashStyle = "ShortDot",
+    #           opacity = 0.7
+    #         )
+    #     }
+    #   }
+    # })
+
     output$plot3 <- highcharter::renderHighchart({
       validate(
         need(
@@ -827,60 +895,51 @@ mod_bloco_3_server <- function(id, filtros){
         )
       )
       if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
+        highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data3() |> dplyr::filter(ano >= 2014),
-            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data3()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
+          highcharter::hc_add_series(
+            data = data3_referencia() |> dplyr::filter(ano >= 2014),
+            type = "line",
+            name = "Referência (recomendações OMS)",
+            highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+            dashStyle = "ShortDot",
+            opacity = 0.8
+          ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data3_referencia() |> dplyr::filter(ano >= 2014),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.8
-            )
-        }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data3() |> dplyr::filter(ano >= 2014),
-            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil (valor de referência)", unique(data3()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data3_comp() |> dplyr::filter(ano >= 2014),
-            name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil (valor de referência)", unique(data3_comp()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
           grafico_base
         } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data3_referencia() |> dplyr::filter(ano >= 2014),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.7
-            )
+          grafico_base |> highcharter::hc_add_series(
+            data = data3_referencia() |> dplyr::filter(ano >= 2014),
+            type = "line",
+            name = "Referência (recomendações OMS)",
+            highcharter::hcaes(x = ano, y = porc_consultas_adequadas, group = class, colour = class),
+            dashStyle = "ShortDot",
+            opacity = 0.7
+          )
         }
       }
     })

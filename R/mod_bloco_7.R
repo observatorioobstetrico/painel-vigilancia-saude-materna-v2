@@ -497,18 +497,18 @@ mod_bloco_7_ui <- function(id) {
               )
             ),
             fluidRow(
-              column(
-                width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
-              ),
+              # column(
+              #   width = 6,
+              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
+              # ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "300px")
               ),
-              column(
-                width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
-              ),
+              # column(
+              #   width = 6,
+              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
+              # ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "300px")
@@ -526,42 +526,42 @@ mod_bloco_7_ui <- function(id) {
           column(
             width = 8,
             fluidRow(
-              column(
-                width = 6,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      selectizeInput(
-                        inputId = ns("faixa_peso_perinatal_total"),
-                        label = "Faixa de peso",
-                        options = list(placeholder = "Selecione o intervalo de peso"),
-                        choices = c(
-                          "Geral" = "obitos_perinatal_total",
-                          "Menor que 1500 g" = "perinatal_total_menos1500",
-                          "De 1500 g a 1999 g" = "perinatal_total_1500_1999",
-                          "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
-                          "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
-                        ),
-                        selected = c("obitos_perinatal_total", "perinatal_total_menos1500", "perinatal_total_1500_1999",
-                                     "perinatal_total_2000_2499", "perinatal_total_mais2500"),
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
-                )
-              ),
+              # column(
+              #   width = 6,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 15%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 12,
+              #         selectizeInput(
+              #           inputId = ns("faixa_peso_perinatal_total"),
+              #           label = "Faixa de peso",
+              #           options = list(placeholder = "Selecione o intervalo de peso"),
+              #           choices = c(
+              #             "Geral" = "obitos_perinatal_total",
+              #             "Menor que 1500 g" = "perinatal_total_menos1500",
+              #             "De 1500 g a 1999 g" = "perinatal_total_1500_1999",
+              #             "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
+              #             "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
+              #           ),
+              #           selected = c("obitos_perinatal_total", "perinatal_total_menos1500", "perinatal_total_1500_1999",
+              #                        "perinatal_total_2000_2499", "perinatal_total_mais2500"),
+              #           width = "100%"
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
+              #   )
+              # ),
               column(
                 width = 6,
                 bs4Dash::bs4Card(
@@ -596,40 +596,40 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 410))
                 )
               ),
-              column(
-                width = 6,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
-                  ),
-                  hr(),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      selectizeInput(
-                        inputId = ns("faixa_peso_perinatal_taxa_total"),
-                        label = "Faixa de peso",
-                        options = list(placeholder = "Selecione o intervalo de peso"),
-                        choices = c(
-                          "Geral" = "taxa_perinatal_total",
-                          "Menor que 1500 g" = "taxa_perinatal_total_menos1500",
-                          "De 1500 g a 1999 g" = "taxa_perinatal_total_1500_1999",
-                          "De 2000 g a 2499 g" = "taxa_perinatal_total_2000_2499",
-                          "Maior ou igual a 2500 g" = "taxa_perinatal_total_mais2500"
-                        ),
-                        width = "100%"
-                      )
-                    )
-                  ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
-                )
-              ),
+              # column(
+              #   width = 6,
+              #   bs4Dash::bs4Card(
+              #     width = 12,
+              #     status = "primary",
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     div(
+              #       style = "height: 15%; display: flex; align-items: center;",
+              #       HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+              #     ),
+              #     hr(),
+              #     fluidRow(
+              #       column(
+              #         width = 12,
+              #         selectizeInput(
+              #           inputId = ns("faixa_peso_perinatal_taxa_total"),
+              #           label = "Faixa de peso",
+              #           options = list(placeholder = "Selecione o intervalo de peso"),
+              #           choices = c(
+              #             "Geral" = "taxa_perinatal_total",
+              #             "Menor que 1500 g" = "taxa_perinatal_total_menos1500",
+              #             "De 1500 g a 1999 g" = "taxa_perinatal_total_1500_1999",
+              #             "De 2000 g a 2499 g" = "taxa_perinatal_total_2000_2499",
+              #             "Maior ou igual a 2500 g" = "taxa_perinatal_total_mais2500"
+              #           ),
+              #           width = "100%"
+              #         )
+              #       )
+              #     ),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
+              #   )
+              # ),
               column(
                 width = 6,
                 bs4Dash::bs4Card(
@@ -1461,7 +1461,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais no SUS ocorridas até o 27º dia de vida &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao10"),
@@ -1524,7 +1524,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais em UTI no SUS ocorridas até o 27º dia de vida &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao12"),
@@ -1734,26 +1734,29 @@ mod_bloco_7_server <- function(id, filtros){
         taxa_mort_fetal_depois_peso_1500_1999 = rep("round(sum(fetal_depois_peso_1500_1999)/(sum(nascidos_1500_1999)+sum(fetal_depois_peso_1500_1999)) *1000, 2)", 2),
         taxa_mort_fetal_depois_peso_2000_2499 = rep("round(sum(fetal_depois_peso_2000_2499)/(sum(nascidos_2000_2499)+sum(fetal_depois_peso_2000_2499)) *1000, 2)", 2),
         taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 2)", 2),
+
+
         obitos_perinatal_total = rep("sum(obitos_fetais_mais_22sem) + sum(obitos_6dias)", 2),
-        perinatal_total_menos1500 = rep("sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500)", 2),
-        perinatal_total_1500_1999 = rep("sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999)", 2),
-        perinatal_total_2000_2499 = rep("sum(fetal_peso_2000_2499) + sum(obitos_6dias_2000_2499)", 2),
-        perinatal_total_mais2500 = rep("sum(fetal_peso_mais_2500) + sum(obitos_6dias_mais2500)", 2),
-        obitos_perinatal_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias)", 2),
-        perinatal_oms_menos1500 = rep("sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500)", 2),
-        perinatal_oms_1500_1999 = rep("sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999)", 2),
-        perinatal_oms_2000_2499 = rep("sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499)", 2),
-        perinatal_oms_mais2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500)", 2),
-        taxa_perinatal_total = rep("round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2)", 2),
-        taxa_perinatal_total_menos1500 = rep("round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(nascidos_menos1500))*1000, 2)", 2),
-        taxa_perinatal_total_1500_1999 = rep("round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2)", 2),
-        taxa_perinatal_total_2000_2499 = rep("round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2)", 2),
-        taxa_perinatal_total_mais2500 = rep("round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2)", 2),
+         perinatal_total_menos1500 = rep("sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500)", 2),
+         perinatal_total_1500_1999 = rep("sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999)", 2),
+         perinatal_total_2000_2499 = rep("sum(fetal_peso_2000_2499) + sum(obitos_6dias_2000_2499)", 2),
+         perinatal_total_mais2500 = rep("sum(fetal_peso_mais_2500) + sum(obitos_6dias_mais2500)", 2),
+         obitos_perinatal_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias)", 2),
+         perinatal_oms_menos1500 = rep("sum(peso_menos_1500_mais_28sem, na.rm = T) + sum(obitos_6dias_menos1500)", 2),
+         perinatal_oms_1500_1999 = rep("sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999)", 2),
+         perinatal_oms_2000_2499 = rep("sum(peso_2000_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_2000_2499)", 2),
+         perinatal_oms_mais2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500)", 2),
+         taxa_perinatal_total = rep("round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 2)", 2),
+         taxa_perinatal_total_menos1500 = rep("round((sum(fetal_peso_menos_1500) + sum(obitos_6dias_menos1500))/(sum(fetal_peso_menos_1500)+ sum(nascidos_menos1500))*1000, 2)", 2),
+         taxa_perinatal_total_1500_1999 = rep("round((sum(fetal_peso_1500_1999) + sum(obitos_6dias_1500_1999))/(sum(fetal_peso_1500_1999)+sum(nascidos_1500_1999))*1000, 2)", 2),
+         taxa_perinatal_total_2000_2499 = rep("round((sum(fetal_peso_2000_2499)+sum(obitos_6dias_2000_2499))/(sum(fetal_peso_2000_2499)+sum(nascidos_2000_2499))*1000, 2)", 2),
+         taxa_perinatal_total_mais2500 = rep("round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 2)", 2),
         taxa_perinatal_oms = rep("round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 2)", 2),
         taxa_perinatal_oms_menos1500 = rep("round((sum(peso_menos_1500_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1500))/(sum(peso_menos_1500_mais_28sem, na.rm=T)+ sum(nascidos_menos1500))*1000, 2)", 2),
         taxa_perinatal_oms_1500_1999 = rep("round((sum(peso_1500_1999_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_1999))/(sum(peso_1500_1999_mais_28sem, na.rm=T)+sum(nascidos_1500_1999))*1000, 2)", 2),
         taxa_perinatal_oms_2000_2499 = rep("round((sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_2000_2499))/(sum(peso_2000_2499_mais_28sem, na.rm=T)+sum(nascidos_2000_2499))*1000, 2)", 2),
         taxa_perinatal_oms_mais2500 = rep("round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 2)", 2),
+
         obitos_0dias = rep("sum(obitos_0dias)", 2),
         obitos_0dias_menos1500 = rep("sum(obitos_0dias_menos1500)", 2),
         obitos_0dias_1500_1999 = rep("sum(obitos_0dias_1500_1999)", 2),
@@ -1793,23 +1796,23 @@ mod_bloco_7_server <- function(id, filtros){
         faltante_dist_moment_obito_fetal = rep("round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2)", 2),
 
         antes_dist_moment_obito_perinat = rep("round(
-        sum(c(fetal_antes_peso_menos_1500, fetal_antes_peso_1500_1999, fetal_antes_peso_2000_2499, fetal_antes_peso_mais_2500, fetal_antes)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_total_menos1500, perinatal_total_1500_1999, perinatal_total_2000_2499, perinatal_total_mais2500, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(perinatal_antes_peso_menos_1500, perinatal_antes_peso_1500_1999, perinatal_antes_peso_2000_2499, perinatal_antes_peso_mais_2500, perinatal_antes)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+          sum(c(perinatal_oms_menos1500, perinatal_oms_1500_1999, perinatal_oms_2000_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
         *100, 2)", 2),
 
         durante_dist_moment_obito_perinat = rep("round(
-        sum(c(fetal_durante_peso_menos_1500, fetal_durante_peso_1500_1999, fetal_durante_peso_2000_2499, fetal_durante_peso_mais_2500, fetal_durante)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_total_menos1500, perinatal_total_1500_1999, perinatal_total_2000_2499, perinatal_total_mais2500, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(perinatal_durante_peso_menos_1500, perinatal_durante_peso_1500_1999, perinatal_durante_peso_2000_2499, perinatal_durante_peso_mais_2500, perinatal_durante)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+          sum(c(perinatal_oms_menos1500, perinatal_oms_1500_1999, perinatal_oms_2000_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
         *100, 2)", 2),
 
         dia_0_dist_moment_obito_perinat = rep("round(
         sum(c(obitos_0dias_menos1500, obitos_0dias_1500_1999, obitos_0dias_2000_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_total_menos1500, perinatal_total_1500_1999, perinatal_total_2000_2499, perinatal_total_mais2500, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+          sum(c(perinatal_oms_menos1500, perinatal_oms_1500_1999, perinatal_oms_2000_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
         *100, 2)", 2),
 
         dia_1_6_dist_moment_obito_perinat = rep("round(
         sum(c(obitos_1_6dias_menos1500, obitos_0dias_1500_1999, obitos_1_6dias_2000_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_total_menos1500, perinatal_total_1500_1999, perinatal_total_2000_2499, perinatal_total_mais2500, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+          sum(c(perinatal_oms_menos1500, perinatal_oms_1500_1999, perinatal_oms_2000_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
         *100, 2)", 2),
 
         faltante_dist_moment_obito_perinat = rep("round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 2)", 2),
@@ -1854,24 +1857,24 @@ mod_bloco_7_server <- function(id, filtros){
         faltante_dist_peso_fetal = rep("round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2)", 2),
 
         menos_1500_dist_peso_perinat = rep("round(
-        sum(c(fetal_antes_peso_menos_1500, fetal_durante_peso_menos_1500, obitos_0dias_menos1500, obitos_1_6dias_menos1500, perinatal_total_menos1500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(fetal_antes, fetal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_antes_peso_menos_1500, perinatal_durante_peso_menos_1500, obitos_0dias_menos1500, obitos_1_6dias_menos1500, perinatal_oms_menos1500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
+          sum(c(perinatal_antes, perinatal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
         *100, 2)", 2),
 
         de_1500_1999_dist_peso_perinat = rep("round(
-        sum(c(fetal_antes_peso_1500_1999, fetal_durante_peso_1500_1999, obitos_0dias_1500_1999, obitos_1_6dias_1500_1999, perinatal_total_1500_1999)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(fetal_antes, fetal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_antes_peso_1500_1999, perinatal_durante_peso_1500_1999, obitos_0dias_1500_1999, obitos_1_6dias_1500_1999, perinatal_oms_1500_1999)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
+          sum(c(perinatal_antes, perinatal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
         *100, 2)", 2),
 
 
         de_2000_2499_dist_peso_perinat = rep("round(
-        sum(c(fetal_antes_peso_2000_2499, fetal_durante_peso_2000_2499, obitos_0dias_2000_2499, obitos_1_6dias_2000_2499, perinatal_total_2000_2499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(fetal_antes, fetal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_antes_peso_2000_2499, perinatal_durante_peso_2000_2499, obitos_0dias_2000_2499, obitos_1_6dias_2000_2499, perinatal_oms_2000_2499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
+          sum(c(perinatal_antes, perinatal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
         *100, 2)", 2),
 
         mais_2500_dist_peso_perinat = rep("round(
-        sum(c(fetal_antes_peso_mais_2500 , fetal_durante_peso_mais_2500, obitos_0dias_mais2500, obitos_1_6dias_mais2500, perinatal_total_mais2500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(fetal_antes, fetal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_antes_peso_mais_2500 , perinatal_durante_peso_mais_2500, obitos_0dias_mais2500, obitos_1_6dias_mais2500, perinatal_oms_mais2500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
+          sum(c(perinatal_antes, perinatal_durante, obitos_0dias, obitos_1_6dias, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
         *100, 2)", 2),
 
         faltante_dist_peso_perinat = rep("round(100 -menos_1500_dist_peso_perinat -de_1500_1999_dist_peso_perinat -de_2000_2499_dist_peso_perinat -mais_2500_dist_peso_perinat, 2)", 2),
@@ -2873,7 +2876,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS (geral)",
+        titulo = "Porcentagem de internações neonatais em UTI no SUS ocorridas até o 27º dia de vida (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -2900,7 +2903,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS (geral)",
+        titulo = "Porcentagem de internações neonatais no SUS ocorridas até o 27º dia de vida (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
