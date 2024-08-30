@@ -1,15 +1,16 @@
+
 library(tidyverse)
 library(data.table)
 library(dplyr)
 
-#Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
+# Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 
-#Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
+# Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
-#Criando o data.frame que irá receber todos os dados do bloco 4
+# Criando o data.frame que irá receber todos os dados do bloco 4
 df_bloco4 <- data.frame()
 
 # Baixar os dados ano a ano
@@ -17,290 +18,7 @@ df_bloco4 <- data.frame()
 df_list <- list()
 
 # Baixar os dados ano a ano
-for (ano in 2012:2022) {
-  df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
-                                        information_system = "SINASC",
-                                        vars = c("CODMUNRES"))
-
-  # Adicionar a variável ANO ao dataframe
-  df_ano$ano <- ano
-
-  # Adicionar o dataframe à lista
-  df_list[[ano - 2011]] <- df_ano
-}
-
-# Juntar os dataframes da lista em um único dataframe
-df1 <- bind_rows(df_list)
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  mutate(ano = 2023) |>
-  select(CODMUNRES, ano)
-
-df <- rbind(df1, sinasc23)
-
-df <- df %>%
-  group_by(ano, CODMUNRES) %>%
-  summarise(total_de_nascidos_vivos = n()) %>%
-  rename(codmunres = CODMUNRES)
-
-df <- df %>%
-  mutate_if(is.character, as.numeric)
-
-
-
-##Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
-df_bloco4 <- left_join(df_aux_municipios, df)
-
-##Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
-df_bloco4$total_de_nascidos_vivos[is.na(df_bloco4$total_de_nascidos_vivos)] <- 0
-
-
-### Proporção de nascimentos por cesariana
-df <- dataframe <- data.frame()
-
-# Baixar os dados ano a ano
-for (ano in 2012:2022) {
-  df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
-                                        information_system = "SINASC",
-                                        vars = c("CODMUNRES", "PARTO"))
-
-  # Adicionar a variável ANO ao dataframe
-  df_ano$ano <- ano
-
-  # Adicionar o dataframe à lista
-  df_list[[ano - 2011]] <- df_ano
-}
-
-# Juntar os dataframes da lista em um único dataframe
-df1 <- bind_rows(df_list)
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, PARTO) |>
-  mutate(ano = 2023)
-
-df <- rbind(df1, sinasc23)
-
-
-df <- df |>
-  filter(PARTO == 2) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_com_parto_cesariana = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_com_parto_cesariana' por 0 (gerados após o left_join)
-df_bloco4$mulheres_com_parto_cesariana[is.na(df_bloco4$mulheres_com_parto_cesariana)] <- 0
-
-
-
-### df_robson
-
-# Baixar os dados ano a ano
-for (ano in 2012:2022) {
-  df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
-                                        information_system = "SINASC",
-                                        vars = c("CODMUNRES", "TPROBSON"))
-
-  # Adicionar a variável ANO ao dataframe
-  df_ano$ano <- ano
-
-  # Adicionar o dataframe à lista
-  df_list[[ano - 2011]] <- df_ano
-}
-
-# Juntar os dataframes da lista em um único dataframe
-df_robson1 <- bind_rows(df_list)
-
-df_robson1$TPROBSON <- as.numeric(df_robson1$TPROBSON)
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  mutate(ano = 2023) |>
-  select(CODMUNRES, TPROBSON, ano)
-
-#sinasc23$TPROBSON <- as.character(sinasc23$TPROBSON)
-
-df_robson <- rbind(df_robson1, sinasc23)
-
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 1 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == 1) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_1 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_1' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_1[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_1)] <- 0
-
-
-
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 2 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == 2) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_2 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_2' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_2[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_2)] <- 0
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 3 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == 3) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_3 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_3' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_3[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_3)] <- 0
-
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 4 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == 4) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_4 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_4' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_4[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_4)] <- 0
-
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 5 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == 5) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_5 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_5' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_5[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_5)] <- 0
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo  de Robson de 6 ao 9
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON <= 9 & TPROBSON >= 6) |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_6_ao_9 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_6_ao_9' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_6_ao_9[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_6_ao_9)] <- 0
-
-# Número de nascidos vivos de mulheres pertencentes ao grupo 10 de Robson
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON"))
-
-df <- df_robson |>
-  filter(TPROBSON == "10") |>
-  group_by(ano, CODMUNRES) |>
-  summarise(mulheres_dentro_do_grupo_de_robson_10 = n()) |>
-  rename(codmunres = CODMUNRES)
-
-
-##Transformando as colunas que estão em caracter para numéricas
-df <- df |> mutate_if(is.character, as.numeric)
-
-##Juntando com o restante da base do bloco 4
-df_bloco4 <- left_join(df_bloco4, df)
-
-##Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_10' por 0 (gerados após o left_join)
-df_bloco4$mulheres_dentro_do_grupo_de_robson_10[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_10)] <- 0
-
-
-# Contribuição relativa de cada grupo de Robson na taxa global de cesariana
-
-# Baixar os dados ano a ano
-for (ano in 2012:2022) {
+for (ano in c(2012,2014:2022)) {
   df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
                                         information_system = "SINASC",
                                         vars = c("CODMUNRES", "TPROBSON", "PARTO"))
@@ -312,184 +30,331 @@ for (ano in 2012:2022) {
   df_list[[ano - 2011]] <- df_ano
 }
 
-# Juntar os dataframes da lista em um único dataframe
-df_cesariana1 <- bind_rows(df_list)
+# TPROBSON não é definada para o ano de 2013 então a forma de baixar vai ser diferente
+df_ano <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2013,
+                                      information_system = "SINASC",
+                                      vars = c("CODMUNRES", "PARTO"))
+df_ano$TPROBSON <- rep("NA", nrow(df_ano))
+df_ano$ano <- 2013
+df_list[[2]] <- df_ano
 
-df_cesariana1$TPROBSON <- as.numeric(df_cesariana1$TPROBSON)
+# Juntar os dataframes da lista em um único dataframe
+df <- bind_rows(df_list)
+rm(df_list)
+
+df$TPROBSON <- as.numeric(df$TPROBSON)
+
+# Dados ainda não consolidados
+options(timeout=99999)
 
 sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 sinasc23 <- sinasc23 |>
   mutate(ano = 2023) |>
-  select(ano, CODMUNRES, TPROBSON, PARTO)
+  select(CODMUNRES, TPROBSON, PARTO, ano)
 
-df_cesariana <- rbind(df_cesariana1, sinasc23)
+sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
+sinasc24 <- sinasc24 |>
+  mutate(ano = 2024) |>
+  select(CODMUNRES, TPROBSON, PARTO, ano)
 
-## Número de nascidos vivos de mães do grupo 1
+df_aux <- rbind(df, sinasc23, sinasc24)
 
-df <- dataframe <- data.frame()
+rm(df, df_ano, sinasc23, sinasc24, codigos_municipios)
 
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
+################################################################################
+### Total de nascidos vivos
+################################################################################
 
-df <- df_cesariana |>
+df <- df_aux |>
+  select(ano, CODMUNRES) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(total_de_nascidos_vivos = n()) |>
+  rename(codmunres = CODMUNRES)
+
+df <- df |>
+  mutate_if(is.character, as.numeric)
+
+# Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
+df_bloco4 <- left_join(df_aux_municipios, df)
+rm(df_aux_municipios)
+
+# Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
+df_bloco4$total_de_nascidos_vivos[is.na(df_bloco4$total_de_nascidos_vivos)] <- 0
+
+################################################################################
+### Proporção de nascimentos por cesariana
+################################################################################
+
+df <- df_aux |>
+  select(ano, CODMUNRES, PARTO) |>
+  filter(PARTO == 2) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_com_parto_cesariana = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_com_parto_cesariana' por 0 (gerados após o left_join)
+df_bloco4$mulheres_com_parto_cesariana[is.na(df_bloco4$mulheres_com_parto_cesariana)] <- 0
+
+################################################################################
+### df_robson
+################################################################################
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 1 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == 1) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_1 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_1' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_1[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_1)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 2 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == 2) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_2 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_2' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_2[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_2)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 3 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == 3) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_3 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_3' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_3[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_3)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 4 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == 4) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_4 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_4' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_4[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_4)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 5 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == 5) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_5 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_5' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_5[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_5)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo  de Robson de 6 ao 9
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON <= 9 & TPROBSON >= 6) |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_6_ao_9 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_6_ao_9' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_6_ao_9[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_6_ao_9)] <- 0
+
+### Número de nascidos vivos de mulheres pertencentes ao grupo 10 de Robson
+
+df <- df_aux |>
+  select(ano, CODMUNRES, TPROBSON) |>
+  filter(TPROBSON == "10") |>
+  group_by(ano, CODMUNRES) |>
+  summarise(mulheres_dentro_do_grupo_de_robson_10 = n()) |>
+  rename(codmunres = CODMUNRES)
+
+# Transformando as colunas que estão em caracter para numéricas
+df <- df |> mutate_if(is.character, as.numeric)
+
+# Juntando com o restante da base do bloco 4
+df_bloco4 <- left_join(df_bloco4, df)
+
+# Substituindo os NA's da coluna 'mulheres_dentro_do_grupo_de_robson_10' por 0 (gerados após o left_join)
+df_bloco4$mulheres_dentro_do_grupo_de_robson_10[is.na(df_bloco4$mulheres_dentro_do_grupo_de_robson_10)] <- 0
+
+################################################################################
+### Contribuição relativa de cada grupo de Robson na taxa global de cesariana
+################################################################################
+
+### Número de nascidos vivos de mães do grupo 1
+
+df <- df_aux |>
   filter((TPROBSON == 1) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_1 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_1' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_1' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_1[is.na(df_bloco4$total_cesariana_grupo_robson_1)] <- 0
 
+### Número de nascidos vivos de mães do grupo 2
 
-## Número de nascidos vivos de mães do grupo 2
-
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter((TPROBSON == 2) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_2 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_2' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_2' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_2[is.na(df_bloco4$total_cesariana_grupo_robson_2)] <- 0
 
+### Número de nascidos vivos de mães do grupo 3
 
-## Número de nascidos vivos de mães do grupo 3
-
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter((TPROBSON == 3) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_3 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_3' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_3' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_3[is.na(df_bloco4$total_cesariana_grupo_robson_3)] <- 0
 
+### Número de nascidos vivos de mães do grupo 4
 
-## Número de nascidos vivos de mães do grupo 4
-
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter((TPROBSON == 4) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_4 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_4[is.na(df_bloco4$total_cesariana_grupo_robson_4)] <- 0
 
+### Número de nascidos vivos de mães do grupo 5
 
-## Número de nascidos vivos de mães do grupo 5
-
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter((TPROBSON == 5) & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_5 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_5[is.na(df_bloco4$total_cesariana_grupo_robson_5)] <- 0
 
-## Número de nascidos vivos de mães dos grupos 6 a 9 conjuntamente
-df <- dataframe <- data.frame()
+### Número de nascidos vivos de mães dos grupos 6 a 9 conjuntamente
 
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter(TPROBSON >= 6 & TPROBSON <= 9 & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_6_ao_9 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_6_ao_9' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_6_ao_9' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_6_ao_9[is.na(df_bloco4$total_cesariana_grupo_robson_6_ao_9)] <- 0
 
-## Número de nascidos vivos de mães do grupo 10
+### Número de nascidos vivos de mães do grupo 10
 
-df <- dataframe <- data.frame()
-
-# df <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022,
-#                                   information_system = "SINASC",
-#                                   vars = c("CODMUNRES", "TPROBSON", "PARTO"))
-
-df <- df_cesariana |>
+df <- df_aux |>
   filter(TPROBSON == 10 & PARTO == 2) |>
   group_by(ano, CODMUNRES) |>
   summarise(total_cesariana_grupo_robson_10 = n()) |>
   rename(codmunres = CODMUNRES)
 
-##Transformando as colunas que estão em caracter para numéricas
+# Transformando as colunas que estão em caracter para numéricas
 df <- df |> mutate_if(is.character, as.numeric)
 
-##Juntando com o restante da base do bloco 4
+# Juntando com o restante da base do bloco 4
 df_bloco4 <- left_join(df_bloco4, df)
 
-##Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
+# Substituindo os NA's da coluna 'total_cesariana_grupo_robson_4' por 0 (gerados após o left_join)
 df_bloco4$total_cesariana_grupo_robson_10[is.na(df_bloco4$total_cesariana_grupo_robson_10)] <- 0
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2023.csv", row.names = FALSE)
-
+write.csv(df_bloco4, "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2024.csv", row.names = FALSE)
 
 

@@ -68,10 +68,10 @@ bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-202
 bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2024.csv") |>
   janitor::clean_names()
 
-bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2023.csv") |>
+bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2024.csv") |>
   janitor::clean_names()
 
-bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2023.csv") |>
+bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2024.csv") |>
   janitor::clean_names()
 
 # bloco4_deslocamento_muni_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2020.csv") |>
