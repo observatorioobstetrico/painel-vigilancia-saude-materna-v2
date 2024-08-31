@@ -8,26 +8,97 @@ library(readr)
 library(openxlsx)
 library(tidyr)
 
-token = getPass()  #Token de acesso à API da PCDaS (todos os arquivos gerados se encontram na pasta "Databases", no Google Drive)
+# Criando alguns objetos auxiliares ---------------------------------------
+## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
+  pull(codmunres) |>
+  as.character()
 
-url_base = "https://bigdata-api.fiocruz.br"
+## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
-convertRequestToDF <- function(request){
-  variables = unlist(content(request)$columns)
-  variables = variables[names(variables) == "name"]
-  column_names <- unname(variables)
-  values = content(request)$rows
-  df <- as.data.frame(do.call(rbind,lapply(values,function(r) {
-    row <- r
-    row[sapply(row, is.null)] <- NA
-    rbind(unlist(row))
-  } )))
-  names(df) <- column_names
-  return(df)
-}
+df_aux_municipios <- df_aux_municipios %>%
+  mutate_if(is.character, as.numeric)
 
-estados <- c('RO','AC','AM','RR','PA','AP','TO','MA','PI','CE','RN','PB','PE','AL','SE','BA','MG','ES','RJ','SP','PR','SC','RS','MS','MT','GO','DF')
-endpoint <- paste0(url_base,"/","sql_query")
+# Lendo o arquivo com os dados de 2012 a 2023, que utilizamos no painel original
+df_bloco1_antigo <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2022.csv") |>
+  clean_names()
+
+# Para os indicadores provenientes do SINASC ------------------------------
+## Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
+
+df_sinasc_consolidados <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2022,
+  vars = c("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE"),
+           information_system = "SINASC"
+  )
+
+df_sinasc_consolidados <- df_sinasc_consolidados %>%
+  mutate_if(is.character, as.numeric) %>%
+  select(-'...1')
+
+## Baixando os dados preliminares do SINASC de 2023 e selecionando as variáveis de interesse
+df_sinasc_preliminares_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";") |>
+  select("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE")
+
+## Baixando os dados preliminares do SINASC de 2024 e selecionando as variáveis de interesse
+df_sinasc_preliminares_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
+  select("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE")
+
+## Juntando os dados consolidados com os dados preliminares
+df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares_2023)
+
+df_sinasc <- full_join(df_sinasc, df_sinasc_preliminares_2024)
+
+df_sinasc <- df_sinasc |> clean_names()
+
+## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
+
+df_bloco1_sinasc <- df_sinasc |>
+  filter(codmunres %in% codigos_municipios) %>%
+  mutate(
+    ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc))),
+    nvm_menor_que_20_anos = if_else(idademae < 20, 1, 0, missing = 0),
+    nvm_entre_20_e_34_anos = if_else(idademae >= 20 & idademae < 35, 1, 0, missing = 0),
+    nvm_maior_que_34_anos = if_else(idademae >= 35 & idademae <= 55, 1, 0, missing = 0),
+    nvm_com_cor_da_pele_branca = if_else(racacormae == 1, 1, 0, missing = 0),
+    nvm_com_cor_da_pele_preta = if_else(racacormae == 2, 1, 0, missing = 0),
+    nvm_com_cor_da_pele_parda = if_else(racacormae == 4, 1, 0, missing = 0),
+    nvm_com_cor_da_pele_amarela = if_else(racacormae == 3, 1, 0, missing = 0),
+    nvm_indigenas = if_else(racacormae == 5, 1, 0, missing = 0),
+    nvm_com_escolaridade_ate_3 = if_else(escmae == 1 | escmae == 2, 1, 0, missing = 0),
+    nvm_com_escolaridade_de_4_a_7 = if_else(escmae == 3, 1, 0, missing = 0),
+    nvm_com_escolaridade_de_8_a_11 = if_else(escmae == 4, 1, 0, missing = 0),
+    nvm_com_escolaridade_acima_de_11 = if_else(escmae == 5, 1, 0, missing = 0)
+  ) %>%
+  group_by(codmunres, ano) %>%
+  summarise(
+    total_de_nascidos_vivos = n(),
+    nvm_menor_que_20_anos = sum(nvm_menor_que_20_anos),
+    nvm_entre_20_e_34_anos = sum(nvm_entre_20_e_34_anos),
+    nvm_maior_que_34_anos = sum(nvm_maior_que_34_anos),
+    nvm_com_cor_da_pele_branca = sum(nvm_com_cor_da_pele_branca),
+    nvm_com_cor_da_pele_preta = sum(nvm_com_cor_da_pele_preta),
+    nvm_com_cor_da_pele_parda = sum(nvm_com_cor_da_pele_parda),
+    nvm_com_cor_da_pele_amarela = sum(nvm_com_cor_da_pele_amarela),
+    nvm_indigenas = sum(nvm_indigenas),
+    nvm_com_escolaridade_ate_3 = sum(nvm_com_escolaridade_ate_3),
+    nvm_com_escolaridade_de_4_a_7 = sum(nvm_com_escolaridade_de_4_a_7),
+    nvm_com_escolaridade_de_8_a_11 = sum(nvm_com_escolaridade_de_8_a_11),
+    nvm_com_escolaridade_acima_de_11 = sum(nvm_com_escolaridade_acima_de_11)
+  ) %>%
+  mutate_if(is.character, as.numeric)
+
+# Incluindo dados de municipios
+df_bloco1_sinasc <- left_join(df_aux_municipios, df_bloco1_sinasc)
+
+# Todos os NA's transformam em 0
+
+df_bloco1_sinasc[is.na(df_bloco1_sinasc)] <- 0
+
+# Para os indicadores provenientes do Tabnet ------------------------------
+## Observação: Tabnet foi atualizado até 2021.
 
 # Criando a função que utiliza web scrapping para baixar dados de estimativas populacionais do Tabnet DATASUS
 est_pop_tabnet <- function (linha = "Município", coluna = "Ano", conteudo = 1, periodo = 2012:2021, regiao = "Todas as categorias",
@@ -570,376 +641,12 @@ pop_com_plano_saude_tabnet <- function (linha = "Município",
 
 }
 
-# Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
-  clean_names()
-
-# Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
-codigos_municipios <- read.csv("data-raw/extracao-dos-dados/databases_auxiliares/tabela_aux_municipios.csv") |>
-  pull(codmunres)
-
-# Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
-
-# Criando o data.frame que irá receber todos os dados do bloco 1
-df_bloco1 <- data.frame()
-
-# Total de nascidos vivos -------------------------------------------------
-# Baixar os dados ano a ano
-df_microdatasus_aux1 <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, DTNASC) |>
-  clean_names()
-
-df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
-
-df <- df_microdatasus_aux %>%
-  mutate(ano = as.numeric(substr(dtnasc, 5, 8))) %>%
-  group_by(ano, codmunres) %>%
-  summarise(total_de_nascidos_vivos = n()) %>%
-  rename(codmunres = codmunres)
-
-## Transformando as colunas que estão em caracter para numéricas
-df <- df %>%
-  mutate_if(is.character, as.numeric)
-
-## Fazendo um left_join da base auxiliar de municípios com o data.frame que contém o total de nascidos vivos
-df_bloco1 <- left_join(df_aux_municipios, df)
-
-## Substituindo os NA's da coluna 'total_de_nascidos_vivos' por 0 (os NA's surgem quando um município não apresentou nascidos vivos num dado ano)
-df_bloco1$total_de_nascidos_vivos[is.na(df_bloco1$total_de_nascidos_vivos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade inferior a 20 anos (gestação na adolescência) ----------------------
-## Os dados da PCDaS e do microdatasus diferem; optamos por deixar os do microdatasus nos dois
-df_microdatasus_aux1 <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC","IDADEMAE"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-
-# dados preliminares  SINASC 2023
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, DTNASC, IDADEMAE) |>
-  clean_names()
-
-df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
-
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_menor_que_20_anos = 1,
-    .keep = "unused"
-  ) |>
-  filter(idademae < 20) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_menor_que_20_anos = sum(nvm_menor_que_20_anos)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_menor_que_20_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_menor_que_20_anos[is.na(df_bloco1$nvm_menor_que_20_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade de 20 a 34 anos -------------------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_entre_20_e_34_anos = 1,
-    .keep = "unused"
-  ) |>
-  filter(idademae >= 20 &  idademae < 35) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_entre_20_e_34_anos = sum(nvm_entre_20_e_34_anos)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 2
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_entre_20_e_34_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_entre_20_e_34_anos[is.na(df_bloco1$nvm_entre_20_e_34_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com idade de 35 ou mais anos -------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_maior_que_34_anos = 1,
-    .keep = "unused"
-  ) |>
-  filter(idademae >= 35 & idademae <= 55) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_maior_que_34_anos = sum(nvm_maior_que_34_anos))
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 2
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_maior_que_34_anos' por 0 (gerados após o left_join)
-df_bloco1$nvm_maior_que_34_anos[is.na(df_bloco1$nvm_maior_que_34_anos)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres brancas -------------------------
-df_microdatasus_aux1 <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC","RACACORMAE"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-
-# dados preliminares  SINASC 2023
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, DTNASC, RACACORMAE) |>
-  clean_names()
-
-df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
-
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_cor_da_pele_branca = 1,
-    .keep = "unused"
-  ) |>
-  filter(racacormae == 1) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_cor_da_pele_branca = sum(nvm_com_cor_da_pele_branca)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_branca' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_branca[is.na(df_bloco1$nvm_com_cor_da_pele_branca)] <- 0
-
-
-#Proporção de nascidos vivos de mulheres pretas ------------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_cor_da_pele_preta = 1,
-    .keep = "unused"
-  ) |>
-  filter(racacormae == 2) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_cor_da_pele_preta = sum(nvm_com_cor_da_pele_preta)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_preta' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_preta[is.na(df_bloco1$nvm_com_cor_da_pele_preta)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres pardas ------------------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_cor_da_pele_parda = 1,
-    .keep = "unused"
-  ) |>
-  filter(racacormae == 4) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_cor_da_pele_parda = sum(nvm_com_cor_da_pele_parda)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_parda' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_parda[is.na(df_bloco1$nvm_com_cor_da_pele_parda)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres amarelas ------------------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_cor_da_pele_amarela = 1,
-    .keep = "unused"
-  ) |>
-  filter(racacormae == 3) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_cor_da_pele_amarela = sum(nvm_com_cor_da_pele_amarela)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_cor_da_pele_amarela' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_cor_da_pele_amarela[is.na(df_bloco1$nvm_com_cor_da_pele_amarela)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres indígenas -------------------------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_indigenas = 1,
-    .keep = "unused"
-  ) |>
-  filter(racacormae == 5) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_indigenas = sum(nvm_indigenas)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_indigenas' por 0 (gerados após o left_join)
-df_bloco1$nvm_indigenas[is.na(df_bloco1$nvm_indigenas)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com menos de 4 anos de estudo -------------------
-df_microdatasus_aux1 <- microdatasus::fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "DTNASC","ESCMAE"),
-  information_system = "SINASC"
-) |>
-  clean_names()
-
-# dados preliminares  SINASC 2023
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, DTNASC, ESCMAE) |>
-  clean_names()
-
-df_microdatasus_aux <- rbind(df_microdatasus_aux1, sinasc23)
-
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_escolaridade_ate_3 = 1,
-    .keep = "unused"
-  ) |>
-  filter(escmae == 1 | escmae == 2) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_escolaridade_ate_3 = sum(nvm_com_escolaridade_ate_3)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_escolaridade_ate_3' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_ate_3[is.na(df_bloco1$nvm_com_escolaridade_ate_3)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com 4 a 7 anos de estudo -----------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_escolaridade_de_4_a_7 = 1,
-    .keep = "unused"
-  ) |>
-  filter(escmae ==3) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_escolaridade_de_4_a_7 = sum(nvm_com_escolaridade_de_4_a_7)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_escolaridade_de_4_a_7' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_de_4_a_7[is.na(df_bloco1$nvm_com_escolaridade_de_4_a_7)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com 8 a 11 anos de estudo -----------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_escolaridade_de_8_a_11 = 1,
-    .keep = "unused"
-  ) |>
-  filter(escmae ==4) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_escolaridade_de_8_a_11 = sum(nvm_com_escolaridade_de_8_a_11)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_escolaridade_de_8_a_11' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_de_8_a_11[is.na(df_bloco1$nvm_com_escolaridade_de_8_a_11)] <- 0
-
-
-# Proporção de nascidos vivos de mulheres com mais de 11 anos de estudo  ------------
-df_microdatasus <- df_microdatasus_aux |>
-  filter(codmunres %in% codigos_municipios) |>
-  mutate(
-    ano = as.numeric(substr(dtnasc, 5, 8)),
-    nvm_com_escolaridade_acima_de_11 = 1,
-    .keep = "unused"
-  ) |>
-  filter(escmae ==5) |>
-  group_by(codmunres, ano) |>
-  summarise(nvm_com_escolaridade_acima_de_11 = sum(nvm_com_escolaridade_acima_de_11)) |>
-  mutate_if(is.character, as.numeric)
-
-df_microdatasus$codmunres <- df_microdatasus$codmunres %>% as.numeric()
-
-## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_microdatasus)
-
-## Substituindo os NA's da coluna 'nvm_com_escolaridade_acima_de_11' por 0 (gerados após o left_join)
-df_bloco1$nvm_com_escolaridade_acima_de_11[is.na(df_bloco1$nvm_com_escolaridade_acima_de_11)] <- 0
-
-
-# Cobertura populacional com equipes de saúde da família ------------------
-##Ainda não disponíveis para o ano de 2021
+## Selecinanddo dados
 df_cobertura_esf <- df_bloco1_antigo |>
   select(codmunres, ano, media_cobertura_esf, populacao_total,populacao_feminina_10_a_49,pop_fem_10_49_com_plano_saude)
 
 ## Juntando com o restante da base do bloco 1
-df_bloco1 <- left_join(df_bloco1, df_cobertura_esf)
+df_bloco1 <- left_join(df_bloco1_sinasc, df_cobertura_esf)
 
 
 # População total ---------------------------------------------------------
@@ -1061,47 +768,26 @@ df_bloco1$pop_fem_10_49_com_plano_saude[is.na(df_bloco1$pop_fem_10_49_com_plano_
 
 
 # Verificando se os dados novos e antigos estão batendo -------------------
-sum(df_bloco1 |> filter(ano < 2021) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos) #Não está batendo
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
-sum(df_bloco1 |> filter(ano < 2021) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
+## Considerando que 2023 e 2024 são dados preliminares, só sera considerado 2012 até 2022
+
+sum(df_bloco1 |> filter(ano < 2023) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos) #Não está batendo
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
+sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
+# as variáveis que utilizam tabnet devem ser comparadas antes de 2021
 sum(df_bloco1 |> filter(ano < 2021) |> pull(media_cobertura_esf)) - sum(df_bloco1_antigo$media_cobertura_esf)
 sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total) #Não está batendo, mas são dados de lugares diferentes
 #sum(df_bloco1 |> filter(ano < 2021) |> pull(pop_fem_10_49_com_plano_saude), na.rm = TRUE) - sum(df_bloco1_antigo$pop_fem_10_49_com_plano_saude, na.rm = TRUE) #Metodologias diferentes
 sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49)
-
-## Para os nascidos vivos de mães com menos de 20 anos, utilizaremos os dados do microdatasus (batem com os que estavam
-## no bloco 2 mas não batem com os que estavam no bloco 1)
-
-## Para a população total, utilizaremos os dados antigos por enquanto (essa variável só entra no indicador de cobertura com ESF)
-# df_bloco1 <- df_bloco1 |>
-#   select(!populacao_total)
-#
-# df_est_pop_total_antigo <- df_bloco1_antigo |>
-#   select(codmunres, ano, populacao_total)
-#
-# ## Juntando com o restante da base do bloco 1
-# df_bloco1 <- left_join(df_bloco1, df_est_pop_total_antigo)
-
-# ## Para o número de beneficiárias, considerar os dados antigos por enquanto
-# df_bloco1 <- df_bloco1 |>
-#   select(!pop_fem_10_49_com_plano_saude)
-#
-# df_befeciarias_antigo <- df_bloco1_antigo |>
-#   select(codmunres, ano, pop_fem_10_49_com_plano_saude)
-#
-# ## Juntando com o restante da base do bloco 1
-# df_bloco1 <- left_join(df_bloco1, df_befeciarias_antigo)
-
 
 # novo indicador cobertura -----------------------------------------------------
 
@@ -1180,16 +866,4 @@ df_bloco1 <- df_bloco1 |>
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv", row.names = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
+write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv", row.names = FALSE)
