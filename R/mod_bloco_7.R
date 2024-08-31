@@ -409,7 +409,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por causas evitáveis segundo o <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
+                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por análise de evitabilidade segundo o <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
@@ -827,7 +827,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1308,7 +1308,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas evitáveis (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -4604,7 +4604,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot3_fetal <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "Faltante",
+          name = "Sem informação",
           data =  data7_juncao_barras_dist1(),
           highcharter::hcaes(x = ano, y = faltante_dist_moment_obito_fetal),
           type = "bar",
@@ -4645,7 +4645,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot4_fetal <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "Faltante",
+          name = "Sem informação",
           data =  data7_juncao_barras_dist2(),
           highcharter::hcaes(x = ano, y = faltante_dist_peso_fetal),
           type = "bar",
@@ -5142,7 +5142,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot5_neonat <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "Faltante",
+          name = "Sem informação",
           data =  data7_juncao_barras_dist1(),
           highcharter::hcaes(x = ano, y = faltante_moment_obito_neonat),
           type = "bar",
@@ -5193,7 +5193,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot6_neonat <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name =  "Faltante",
+          name =  "Sem informação",
           data =  data7_juncao_barras_dist2(),
           highcharter::hcaes(x = ano, y = faltante_dist_peso_neonat),
           type = "bar",
@@ -5616,7 +5616,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot5_perinatal <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "Faltante",
+          name = "Sem informação",
           data =  data7_juncao_barras_dist1(),
           highcharter::hcaes(x = ano, y = faltante_dist_moment_obito_perinat),
           type = "bar",
@@ -5677,7 +5677,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot6_perinatal <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "Faltante",
+          name = "Sem informação",
           data =  data7_juncao_barras_dist2(),
           highcharter::hcaes(x = ano, y = faltante_dist_peso_perinat),
           type = "bar",
