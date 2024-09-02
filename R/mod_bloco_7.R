@@ -3013,8 +3013,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
+                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados","Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3061,8 +3062,9 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
+                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3104,8 +3106,9 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
+                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3862,8 +3865,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período fetal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3909,8 +3914,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período neonatal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3956,8 +3963,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período perinatal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4006,8 +4015,10 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
-                                           levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                      "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                      "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                      "Afecções originais no período fetal", "Mal definidas",
+                                                      "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4054,8 +4065,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período neonatal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4102,8 +4115,10 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período perinatal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4146,8 +4161,10 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período fetal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4189,8 +4206,10 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                  "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                  "Afecções originais no período neonatal", "Mal definidas",
+                                                                  "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4232,8 +4251,10 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                                                   "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
+                                                                   "Afecções originais no período perinatal", "Mal definidas",
+                                                                   "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
