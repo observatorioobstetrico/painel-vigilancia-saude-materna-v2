@@ -4810,12 +4810,12 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo por análise de evitabilidade")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_fetal2()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_fetal2()$grupo_cid10)) + 2)]
         ) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_fetal2()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais por causas evitáveis"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais"), min = 0, max = 100)
 
     })
 
@@ -5310,12 +5310,12 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo por análise de evitabilidade")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_neonatal()$grupo_cid10)) + 2)]
         ) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_neonatal()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais por causas evitáveis"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais"), min = 0, max = 100)
 
     })
 
@@ -5794,12 +5794,12 @@ mod_bloco_7_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo de causas evitáveis")) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Grupo por análise de evitabilidade")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2, direction = 1)[-c(1, length(unique(data_plot_evitaveis_perinatal()$grupo_cid10)) + 2)]
         ) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_evitaveis_perinatal()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais por causas evitáveis"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais"), min = 0, max = 100)
 
     })
 
