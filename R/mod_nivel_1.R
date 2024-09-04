@@ -240,8 +240,9 @@ mod_nivel_1_ui <- function(id) {
 
                 <p align='justify' style = 'font-size: 17px'>
                 Neste bloco, o gestor pode acompanhar a porcentagem de mulheres que receberam assistência pré-natal, a porcentagem
-                de mulheres com início precoce do acompanhamento pré-natal e a porcentagem de mulheres que recebeu o número mínimo
-                de consultas recomendado pela Organização Mundial de Saúde. Pode também avaliar a incidência de sífilis congênita,
+                de mulheres com início precoce do acompanhamento pré-natal, a porcentagem de mulheres que recebeu o número mínimo
+                de 8 consultas recomendado pela Organização Mundial de Saúde, e a porcentagem de mulheres que recebeu o número
+                adequado de consultas, considerando a idade gestacional no parto. Pode também avaliar a incidência de sífilis congênita,
                 que é considerado um evento sentinela da qualidade da assistência pré-natal, por ser um desfecho negativo evitável
                 com ações realizadas exclusivamente durante essa assistência.
                 </p>
@@ -320,7 +321,15 @@ mod_nivel_1_ui <- function(id) {
                 distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
                 Robson e a contribuição de cada grupo para a taxa global de cesariana. Apresentamos, também,
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
-                assistência ao parto, e a distância percorrida para chegar nos serviços de saúde.
+                assistência ao parto, e a distância percorrida para chegar nos serviços de saúde de alta e
+                baixa complexidade e a porcentagem de nascidos vivos com peso < 1500g segundo local de
+                ocorrência do parto. Para o nível de análise municipal, apresentamos duas informações adicionais:
+                município com primeira, segunda e terceira maior ocorrência de partos fora do município de
+                residência da mulher (% de partos) e hospital com maior número de partos ocorridos fora do
+                município de residência da mulher. Essas informações podem auxiliar os gestores municipais
+                e estaduais a verificar se a regionalização da atenção ao parto está ocorrendo conforme o
+                planejado.
+
                 </p>
                 "
               ),
@@ -431,14 +440,19 @@ mod_nivel_1_ui <- function(id) {
               HTML(
                 "
                 <p align='justify' style = 'font-size: 17px'>
-                As condições de nascimento do recém-nato dependem da saúde materna. Embora sejam indicadores relacionados ao bebê,
-                devem ser monitorados por também refletirem a qualidade dos cuidados recebidos pela gestante durante a assistência
-                pré-natal e ao parto.
+                As condições de nascimento do recém-nato dependem da saúde materna e devem ser monitoradas porque refletem a
+                qualidade dos cuidados recebidos pela gestante durante a assistência pré-natal e ao parto. Além disso, seu
+                monitoramento é importante para o planejamento da atenção à saúde do recém-nascido. Embora sejam indicadores
+                relacionados ao bebê, devem ser monitorados por também refletirem a qualidade dos cuidados recebidos pela
+                gestante durante a assistência pré-natal e ao parto.
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Neste bloco apresentamos a porcentagem de nascimentos prematuros (com menos de 37 semanas gestacionais) e com baixo
                 peso ao nascer (<2500g), principais determinantes da mortalidade infantil. Apresentamos também os nascimentos a termo
                 precoce (bebês nascidos com 37 e 38 semanas gestacionais), que apresentam maior risco de complicações e que são mais
-                frequentes em locais com taxa elevada de cesariana.
+                frequentes em locais com taxa elevada de cesariana; a porcentagem de nascidos com anomalias congênitas (total e as
+                definidas pelo Ministério da Saúde como de relevância para a vigilância); e a porcentagem de recém-nascidos sem
+                baixo peso ao nascer e sem anomalias que apresentaram asfixia no quinto minuto de vida (Apgar <7).
+
                 </p>
                 "
               ),
