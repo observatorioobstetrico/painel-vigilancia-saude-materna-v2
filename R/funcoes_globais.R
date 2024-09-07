@@ -1154,3 +1154,44 @@ momento_internacoes <- function(input){
 
   }
 }
+
+cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa = "330px", fonte_titulo = "16px", width_caixa = 12) {
+
+  grupo_1 <- (dados$grupo)[1]
+  grupo_2 <- (dados$grupo)[2]
+  grupo_3 <- (dados$grupo)[3]
+
+  porc_obitos_1 <- (dados$porc_obitos)[1]
+  porc_1 <- "{formatC(porc_obitos_1, big.mark = '.', decimal.mark = ',')}%"
+  porc_obitos_2 <- (dados$porc_obitos)[2]
+  porc_2 <- "{formatC(porc_obitos_2, big.mark = '.', decimal.mark = ',')}%"
+  porc_obitos_3 <- (dados$porc_obitos)[3]
+  porc_3 <- "{formatC(porc_obitos_3, big.mark = '.', decimal.mark = ',')}%"
+
+  style_porc <- "font-size: 22px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+  style_grupo <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
+
+  bs4Dash::box(
+    style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+    width = width_caixa,
+    collapsible = FALSE,
+    headerBorder = FALSE,
+    div(style = glue::glue("font-size: {fonte_titulo}; height: 27%; padding: 0 5px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+    div(
+      style = "height: 73%; overflow: auto; padding-bottom: 5px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+      div(
+        p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_1)} </b>"))),
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_1)}")))
+      ),
+      div(
+        p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_2)} </b>"))),
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_2)}")))
+      ),
+      div(
+        p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_3)} </b>"))),
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_3)}")))
+      )
+    )
+  )
+
+}
