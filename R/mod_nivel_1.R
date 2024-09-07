@@ -274,25 +274,31 @@ mod_nivel_1_ui <- function(id) {
             column(
               width = 7,
               fluidRow(
-                column(
-                  offset = 2,
-                  width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i1")), proxy.height = "270px")
-                ),
-                column(
-                  width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i2")), proxy.height = "270px")
-                ),
-                column(
-                  offset = 2,
-                  width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i3")), proxy.height = "280px")
-                ),
-                column(
-                  width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i4")), proxy.height = "280px")
-                )
+              column(
+                #offset = 2,
+                width = 4,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i1")), proxy.height = "270px")
+              ),
+              column(
+                width = 4,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i2")), proxy.height = "270px")
+              ),
+              column(
+                #offset = 2,
+                width = 4,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i3")), proxy.height = "280px")
               )
+              ),
+              fluidRow(
+              column(
+                width = 4,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i5")), proxy.height = "280px")
+              ),
+              column(
+                width = 4,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i4")), proxy.height = "280px")
+              )
+             )
             )
           )
         )
@@ -419,8 +425,7 @@ mod_nivel_1_ui <- function(id) {
                     width = 3,
                     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_muni_uf")), proxy.height = "280px")
                   )
-                )
-              )
+               )
             )
           )
         )
@@ -652,6 +657,7 @@ mod_nivel_1_ui <- function(id) {
                 )
               )
             )
+           )
           )
         )
       )
@@ -1688,6 +1694,22 @@ mod_nivel_1_server <- function(id, filtros){
         nivel_de_analise = filtros()$nivel
       )
     })
+
+    output$caixa_b3_i5 <- renderUI({
+      cria_caixa_server(
+        dados = data3(),
+        indicador = "porc_7",
+        titulo = "Porcentagem de mulheres com oito ou mais consultas de pré-natal",
+        tem_meta = TRUE,
+        valor_de_referencia = 0.5,
+        tipo = "taxa",
+        invertido = FALSE,
+        pagina = "nivel_1",
+        tipo_referencia = "meta OMS",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
+
 
 
     ##### Dados do quarto bloco de indicadores para a localidade escolhida #####
