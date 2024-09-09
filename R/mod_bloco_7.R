@@ -1742,6 +1742,19 @@ mod_bloco_7_server <- function(id, filtros){
         taxa_mort_fetal_depois_peso_1500_1999 = rep("round(sum(fetal_depois_peso_1500_1999)/(sum(nascidos_1500_1999)+sum(fetal_depois_peso_1500_1999)) *1000, 2)", 2),
         taxa_mort_fetal_depois_peso_2000_2499 = rep("round(sum(fetal_depois_peso_2000_2499)/(sum(nascidos_2000_2499)+sum(fetal_depois_peso_2000_2499)) *1000, 2)", 2),
         taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 2)", 2),
+        # Variáveis óbitos fetais mais de 28 semanas
+        obitos_fetais_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T)",2),
+        fetal_oms_peso_menos_1500 = rep("sum(peso_menos_1500_mais_28sem, na.rm = T)",2),
+        fetal_oms_peso_1500_1999 = rep("sum(peso_1500_1999_mais_28sem, na.rm=T)",2),
+        fetal_oms_peso_2000_2499 = rep("sum(peso_2000_2499_mais_28sem, na.rm=T)",2),
+        fetal_oms_peso_mais2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T)", 2),
+        fetal_oms_antes = rep("sum(perinatal_antes)",2),
+        fetal_oms_durante = rep("sum(perinatal_durante)",2),
+        fetal_oms_antes_peso_menos_1500 = rep("sum(perinatal_antes_peso_menos_1500)",2),
+        fetal_oms_antes_peso_1500_1999 = rep("sum(perinatal_antes_peso_1500_1999)",2),
+        fetal_oms_antes_peso_2000_2499 = rep("sum(perinatal_antes_peso_2000_2499)",2),
+        fetal_oms_antes_peso_mais_2500 = rep("sum(perinatal_antes_peso_mais_2500)",2),
+        #fetal_oms_durante_peso_menos_1500 = rep()
 
 
         obitos_perinatal_total = rep("sum(obitos_fetais_mais_22sem) + sum(obitos_6dias)", 2),
