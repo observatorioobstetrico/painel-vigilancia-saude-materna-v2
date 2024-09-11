@@ -21,8 +21,9 @@ df_aux_municipios <- df_aux_municipios %>%
   mutate_if(is.character, as.numeric)
 
 # Lendo o arquivo com os dados de 2012 a 2023, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2022.csv") |>
-  clean_names()
+df_bloco1_antigo <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv") |>
+  clean_names() |>
+  filter(ano <= 2022)
 
 # Para os indicadores provenientes do SINASC ------------------------------
 ## Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
@@ -641,7 +642,7 @@ pop_com_plano_saude_tabnet <- function (linha = "Município",
 
 }
 
-## Selecinanddo dados
+## Selecinando dados
 df_cobertura_esf <- df_bloco1_antigo |>
   select(codmunres, ano, media_cobertura_esf, populacao_total,populacao_feminina_10_a_49,pop_fem_10_49_com_plano_saude)
 
@@ -846,16 +847,16 @@ dados_ab_municipios$qt_cobertura_ab <- pmin(dados_ab_municipios$qt_cobertura_ab,
 
 ## importando base antiga
 
-df_bloco1 <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv", row.names = 1)
+df_bloco1 <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv")
 ## Fazendo um left_join da base auxiliar de municípios com a base de cobertura
 df_bloco1 <- left_join(df_bloco1, dados_ab_municipios)
 
 
 ### Substituindo os NA's da coluna 'qt_cobertura_ab' por 0 (gerados após o left_join)
-df_bloco1$qt_cobertura_ab[is.na(df_bloco1$qt_cobertura_ab)] <- 0
+df_bloco1$qt_cobertura_ab[is.na(df_bloco1$qt_cobertura_ab) & df_bloco1$ano < 2023] <- 0
 
 ### Substituindo os NA's da coluna 'qt_populacao' por 0 (gerados após o left_join)
-df_bloco1$qt_populacao[is.na(df_bloco1$qt_populacao)] <- 0
+df_bloco1$qt_populacao[is.na(df_bloco1$qt_populacao) & df_bloco1$ano < 2023] <- 0
 
 
 
