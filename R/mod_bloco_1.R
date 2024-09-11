@@ -34,6 +34,15 @@ mod_bloco_1_ui <- function(id){
           )
         ),
         fluidRow(
+          bs4Dash::box(
+            width = 12,
+            collapsible = FALSE,
+            headerBorder = FALSE,
+            HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
+          )
+        ),
+        fluidRow(
           column(
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("caixa_b1_i2")), proxy.height = "293px")
@@ -571,7 +580,7 @@ mod_bloco_1_server <- function(id, filtros){
             }
           }
         ) |>
-        cria_indicadores(df_calcs = bloco1_calcs, filtros = filtros())
+        cria_indicadores(df_calcs = bloco1_calcs, filtros = filtros(), localidade_resumo = input$localidade_resumo)
     })
 
     ### Para a referência -----------------------------------------------------
@@ -579,6 +588,96 @@ mod_bloco_1_server <- function(id, filtros){
       bloco1 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco1_calcs, filtros = filtros(), referencia = TRUE, adicionar_localidade = FALSE)
+    })
+
+
+    ## Criando o output do gráfico de radar -----------------------------------
+    ### Definindo os indicadores que aparecerão no gráfico
+    selected_indicators <- c(
+      "porc_nvm_menor_que_20_anos",
+      "porc_nvm_maior_que_34_anos",
+      "porc_nvm_com_escolaridade_acima_de_11",
+      "porc_dependentes_sus",
+      "porc_cobertura_esf"
+    )
+
+    ### Selecionando colunas relevantes nos dataframes de resumo e arrumando seus formatos
+    df <- reactive({
+      data1_resumo()[, c('class', selected_indicators)] |>
+        dplyr::mutate(
+          class = ifelse(grepl("Brasil \\(valor de referência\\)", class), "Brasil", class)
+        ) |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values1"
+        ) |>
+        dplyr::mutate(
+          sufixo = rep("%", 5)
+        )
+    })
+
+    df2 <- reactive({
+      data1_resumo_referencia()[, selected_indicators] |>
+        dplyr::mutate(class = "Referência") |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values2"
+        ) |>
+        dplyr::mutate(
+          tipo_de_referencia = lapply(selected_indicators, function(indicador_abrev) tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]) |> unlist(),
+          sufixo = rep("%", 5)
+        )
+    })
+
+    ### Criando o output
+    output$spider_chart <- highcharter::renderHighchart({
+      # Categorias para o eixo x
+      categories <- lapply(selected_indicators, function(indicador_abrev) tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]) |> unlist()
+
+      # Obter valores para o gráfico
+      values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
+      values2 <- round(as.numeric(unlist(df2()[, "values2"])), 3)
+
+      # Encontrar o valor máximo dos dados
+      max_value1 <- max(values1, na.rm = TRUE)
+      max_value2 <- max(values2, na.rm = TRUE)
+
+      # Definir o valor máximo do eixo y como o próximo múltiplo de 100 maior que o valor máximo
+      yAxis_max <- ceiling(max(max_value1, max_value2) / 100) * 100
+
+      # Criar gráfico
+      highcharter::highchart() |>
+        highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
+        highcharter::hc_pane(size = '65%') |>
+        highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '12px'))) |>
+        highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
+        highcharter::hc_add_series(
+          name = df()$class[1],
+          data = df() |> dplyr::select(y = values1, sufixo),
+          color = "#2c115f",
+          lineWidth = 2,
+          marker = list(enabled = FALSE, symbol = "circle", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9679 </span> {series.name}: <b> {point.y}{point.sufixo} </b><br>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = df2()$class[1],
+          data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
+          color = "#b73779",
+          lineWidth = 2,
+          opacity = 0.7,
+          dashStyle = "ShortDash",
+          marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9670 </span> {series.name} ({point.tipo_de_referencia}): <b> {point.y}{point.sufixo} </b>"
+          )
+        ) |>
+        highcharter::hc_legend(align = 'center', layout = 'horizontal', itemStyle = list(fontWeight = 'bold', fontSize = '14px')) |>
+        highcharter::hc_tooltip(shared = TRUE) |>
+        highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
     })
 
 
@@ -1274,6 +1373,7 @@ mod_bloco_1_server <- function(id, filtros){
         highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data1(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data1()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_cobertura_esf, group = class, colour = class)
           ) |>

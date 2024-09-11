@@ -31,6 +31,15 @@ mod_bloco_3_ui <- function(id) {
           )
         ),
         fluidRow(
+          bs4Dash::box(
+            width = 12,
+            collapsible = FALSE,
+            headerBorder = FALSE,
+            HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
+          )
+        ),
+        fluidRow(
           column(
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i1")), proxy.height = "300px")
@@ -53,6 +62,7 @@ mod_bloco_3_ui <- function(id) {
         ),
         fluidRow(
           column(
+            offset = 3,
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i4")), proxy.height = "325px")
           )
@@ -180,6 +190,7 @@ mod_bloco_3_ui <- function(id) {
             )
           ),
           column(
+            offset = 3,
             width = 6,
             bs4Dash::bs4Card(
               width = 12,
@@ -226,11 +237,11 @@ mod_bloco_3_server <- function(id, filtros){
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco3_calcs <- data.frame(
       tipo = c("local", "referencia"),
-      porc_inicio_prec = c("round(sum(mulheres_com_inicio_precoce_do_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)", "95"),
-      porc_sc = c("round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)", "0.5"),
-      porc_1con = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
-      porc_7 = c("round(sum(mulheres_com_mais_de_sete_consultas_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
-      porc_consultas_adequadas = c("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", "dplyr::first(95[ano >= 2014])")
+      porc_inicio_prec = c("round(sum(mulheres_com_inicio_precoce_do_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)", "dplyr::first(95)"),
+      porc_sc = c("round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)", "dplyr::first(0.5)"),
+      cobertura_pre_natal = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95)"),
+      porc_7 = c("round(sum(mulheres_com_mais_de_sete_consultas_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95)"),
+      porc_consultas_adequadas = c("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", "dplyr::first(95)")
     )
 
 
@@ -510,15 +521,106 @@ mod_bloco_3_server <- function(id, filtros){
             }
           }
         ) |>
-        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros())
+        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros(), localidade_resumo = input$localidade_resumo)
     })
 
     ### Para a referência -----------------------------------------------------
-    data_resumo_referencia <- reactive({
+    data3_resumo_referencia <- reactive({
       bloco3 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros(), referencia = TRUE)
     })
+
+
+    ## Criando o output do gráfico de radar -----------------------------------
+    ### Definindo os indicadores que aparecerão no gráfico
+    selected_indicators <- c(
+      "cobertura_pre_natal",
+      "porc_inicio_prec",
+      "porc_7",
+      "porc_consultas_adequadas",
+      "porc_sc"
+    )
+
+    ### Selecionando colunas relevantes nos dataframes de resumo e arrumando seus formatos
+    df <- reactive({
+      data3_resumo()[, c('class', selected_indicators)] |>
+        dplyr::mutate(
+          class = ifelse(grepl("Brasil \\(valor de referência\\)", class), "Brasil", class)
+        ) |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values1"
+        ) |>
+        dplyr::mutate(
+          sufixo = c(rep("%", 4), "")
+        )
+    })
+
+    df2 <- reactive({
+      data3_resumo_referencia()[, selected_indicators] |>
+        dplyr::mutate(class = "Referência") |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values2"
+        ) |>
+        dplyr::mutate(
+          tipo_de_referencia = lapply(selected_indicators, function(indicador_abrev) tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]) |> unlist(),
+          sufixo = c(rep("%", 4), "")
+        )
+    })
+
+    ### Criando o output
+    output$spider_chart <- highcharter::renderHighchart({
+      # Categorias para o eixo x
+      categories <- lapply(selected_indicators, function(indicador_abrev) tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]) |> unlist()
+
+      # Obter valores para o gráfico
+      values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
+      values2 <- round(as.numeric(unlist(df2()[, "values2"])), 3)
+
+      # Encontrar o valor máximo dos dados
+      max_value1 <- max(values1, na.rm = TRUE)
+      max_value2 <- max(values2, na.rm = TRUE)
+
+      # Definir o valor máximo do eixo y como o próximo múltiplo de 100 maior que o valor máximo
+      yAxis_max <- ceiling(max(max_value1, max_value2) / 100) * 100
+
+      # Criar gráfico
+      highcharter::highchart() |>
+        highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
+        highcharter::hc_pane(size = '65%') |>
+        highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '12px'))) |>
+        highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
+        highcharter::hc_add_series(
+          name = df()$class[1],
+          data = df() |> dplyr::select(y = values1, sufixo),
+          color = "#2c115f",
+          lineWidth = 2,
+          marker = list(enabled = FALSE, symbol = "circle", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9679 </span> {series.name}: <b> {point.y}{point.sufixo} </b><br>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = df2()$class[1],
+          data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
+          color = "#b73779",
+          lineWidth = 2,
+          opacity = 0.7,
+          dashStyle = "ShortDash",
+          marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9670 </span> {series.name} ({point.tipo_de_referencia}): <b> {point.y}{point.sufixo} </b>"
+          )
+        ) |>
+        highcharter::hc_legend(align = 'center', layout = 'horizontal', itemStyle = list(fontWeight = 'bold', fontSize = '14px')) |>
+        highcharter::hc_tooltip(shared = TRUE) |>
+        highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
+    })
+
 
 
     ## Criando os outputs das caixinhas ---------------------------------------
@@ -526,7 +628,7 @@ mod_bloco_3_server <- function(id, filtros){
     output$caixa_b3_i1 <- renderUI({
       cria_caixa_server(
         dados = data3_resumo(),
-        indicador = "porc_1con",
+        indicador = "cobertura_pre_natal",
         titulo = "Cobertura de assistência pré-natal",
         tem_meta = TRUE,
         valor_de_referencia = 95,
@@ -721,13 +823,13 @@ mod_bloco_3_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data3() |> dplyr::filter(ano >= 2014),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_1con, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data3_referencia() |> dplyr::filter(ano >= 2014),
             type = "line",
             name = "Referência (recomendações OMS)",
-            highcharter::hcaes(x = ano, y = porc_1con, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class),
             dashStyle = "ShortDot",
             opacity = 0.8
           ) |>
@@ -740,12 +842,12 @@ mod_bloco_3_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data3() |> dplyr::filter(ano >= 2014),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_1con, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data3_comp() |> dplyr::filter(ano >= 2014),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_1con, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -759,7 +861,7 @@ mod_bloco_3_server <- function(id, filtros){
              data = data3_referencia() |> dplyr::filter(ano >= 2014),
              type = "line",
              name = "Referência (recomendações OMS)",
-             highcharter::hcaes(x = ano, y = porc_1con, group = class, colour = class),
+             highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7
            )

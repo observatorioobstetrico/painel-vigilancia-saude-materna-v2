@@ -47,6 +47,15 @@ mod_bloco_5_ui <- function(id) {
           )
         ),
         fluidRow(
+          bs4Dash::box(
+            width = 12,
+            collapsible = FALSE,
+            headerBorder = FALSE,
+            HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
+          )
+        ),
+        fluidRow(
           column(
             width = 6,
             shinycssloaders::withSpinner(uiOutput(ns("b5_i1")), proxy.height = "300px")
@@ -543,7 +552,7 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center",
                 HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
@@ -592,24 +601,22 @@ mod_bloco_5_ui <- function(id) {
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 450))
             )
-          )
-        )
-      ),
-      fluidRow(
-        column(
-          width = 12,
-          bs4Dash::bs4Card(
+          ),
+          column(
             width = 12,
-            status = "primary",
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-            div(
-              style = "height: 15%; display: flex; align-items: center;",
-              HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritárias para vigilância definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
-            ),
-            hr(),
-            shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "height: 15%; display: flex; align-items: center;",
+                HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritárias para vigilância definidos pelo Ministério da Saúde (<a href = http://dx.doi.org/10.1590/s1679-49742021000100030 , target = _blank>http://dx.doi.org/10.1590/s1679-49742021000100030</a>). &nbsp;</b>")
+              ),
+              hr(),
+              shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
+            )
           )
         )
       )
@@ -625,9 +632,7 @@ mod_bloco_5_server <- function(id, filtros){
     ns <- session$ns
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
-    bloco5_calcs <- reactive({
-
-      data.frame(
+    bloco5_calcs <- data.frame(
         tipo = c("local", "referencia"),
         porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nasc_peso_menor_1500 = rep("round(sum(nascidos_vivos_peso_menor_1500) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -650,75 +655,11 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                            nascidos_vivos_33_a_34_semanas,
                                                                                            nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
         porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
-        #porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
         porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
-        # porc_internacoes_menores_28_dias_vinc_sus_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)", 2),
-        # porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
-        # porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
       )
 
-      # if (is.null(input$idade_dias_sus[1])) {
-      #   df_calcs_aux2 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_menores_28_dias_vinc_sus = "NA"
-      #   )
-      # } else {
-      #   df_calcs_aux2 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_menores_28_dias_vinc_sus = rep(glue::glue(
-      #       "ifelse(
-      #         length(input$idade_dias_sus) == 2,
-      #         round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1),
-      #         round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
-      #       )"
-      #     ), 2)
-      #   )
-      # }
-      #
-      # if (is.null(input$idade_dias_sih[1])) {
-      #   df_calcs_aux3 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_menores_28_dias_sih = "NA"
-      #   )
-      # } else {
-      #   df_calcs_aux3 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-      #       "ifelse(
-      #         length(input$idade_dias_sih) == 2,
-      #         round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-      #         round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-      #       )"
-      #     ), 2)
-      #   )
-      # }
-      #
-      # if (is.null(input$idade_dias_uti_sih[1])) {
-      #   df_calcs_aux4 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_uti_menores_28_dias_sih = "NA"
-      #   )
-      # } else {
-      #   df_calcs_aux4 <- data.frame(
-      #     tipo = c("local", "referencia"),
-      #     porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
-      #       "ifelse(
-      #         length(input$idade_dias_sih) == 2,
-      #         round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-      #         round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-      #       )"
-      #     ), 2)
-      #   )
-      # }
-      #
-      # dplyr::full_join(
-      #   df_calcs_aux1,
-      #   dplyr::full_join(df_calcs_aux2, dplyr::full_join(df_calcs_aux3, df_calcs_aux4))
-      # )
-
-    })
 
 
     # Criando alguns outputs para a UI ----------------------------------------
@@ -1097,7 +1038,7 @@ mod_bloco_5_server <- function(id, filtros){
             }
           }
         ) |>
-        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros())
+        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), localidade_resumo = input$localidade_resumo)
     })
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos mudarem
@@ -1107,7 +1048,8 @@ mod_bloco_5_server <- function(id, filtros){
     data5_resumo_referencia_aux <- reactive({
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros(), referencia = TRUE)
+        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), referencia = TRUE) |>
+        dplyr::select(!porc_nasc_baixo_peso)
     })
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos mudarem
@@ -1165,9 +1107,110 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1)
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+          class = dplyr::if_else(
+            filtros()$mostrar_referencia == "nao_mostrar_referencia",
+            "Brasil",
+            "Brasil (valor de referência)"
+          )
         )
 
+    })
+
+    ## Criando o output do gráfico de radar -----------------------------------
+    ### Definindo os indicadores que aparecerão no gráfico
+    selected_indicators <- c(
+      "porc_nasc_baixo_peso",
+      "porc_nasc_premat",
+      "porc_termo_precoce",
+      "porc_nascidos_vivos_asfixia1",
+      "porc_malformacao_vigilancia"
+    )
+
+    ### Selecionando colunas relevantes nos dataframes de resumo e arrumando seus formatos
+    df <- reactive({
+      data5_resumo_aux()[, c('class', selected_indicators)] |>
+        dplyr::mutate(
+          class = ifelse(grepl("Brasil \\(valor de referência\\)", class), "Brasil", class)
+        ) |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values1"
+        ) |>
+        dplyr::mutate(
+          sufixo = rep("%", 5)
+        )
+    })
+
+    data5_resumo_referencia_juncao <- reactive({
+      dplyr::full_join(
+        data5_resumo_referencia_aux(),
+        data5_resumo_referencia_baixo_peso()
+      )
+    })
+
+    df2 <- reactive({
+      data5_resumo_referencia_juncao()[, selected_indicators] |>
+        dplyr::mutate(class = "Referência") |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values2"
+        ) |>
+        dplyr::mutate(
+          tipo_de_referencia = lapply(selected_indicators, function(indicador_abrev) tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]) |> unlist(),
+          sufixo = rep("%", 5)
+        )
+    })
+
+    ## Criando o output
+    output$spider_chart <- highcharter::renderHighchart({
+      # Categorias para o eixo x
+      categories <- lapply(selected_indicators, function(indicador_abrev) tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]) |> unlist()
+
+      # Obter valores para o gráfico
+      values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
+      values2 <- round(as.numeric(unlist(df2()[, "values2"])), 3)
+
+      # Encontrar o valor máximo dos dados
+      max_value1 <- max(values1, na.rm = TRUE)
+      max_value2 <- max(values2, na.rm = TRUE)
+
+      # Definir o valor máximo do eixo y como o próximo múltiplo de 100 maior que o valor máximo
+      yAxis_max <- ceiling(max(max_value1, max_value2) / 100) * 100
+
+      # Criar gráfico
+      highcharter::highchart() |>
+        highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
+        highcharter::hc_pane(size = '65%') |>
+        highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '12px'))) |>
+        highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
+        highcharter::hc_add_series(
+          name = df()$class[1],
+          data = df() |> dplyr::select(y = values1, sufixo),
+          color = "#2c115f",
+          lineWidth = 2,
+          marker = list(enabled = FALSE, symbol = "circle", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9679 </span> {series.name}: <b> {point.y}{point.sufixo} </b><br>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = df2()$class[1],
+          data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
+          color = "#b73779",
+          lineWidth = 2,
+          opacity = 0.7,
+          dashStyle = "ShortDash",
+          marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9670 </span> {series.name} ({point.tipo_de_referencia}): <b> {point.y}{point.sufixo} </b>"
+          )
+        ) |>
+        highcharter::hc_legend(align = 'center', layout = 'horizontal', itemStyle = list(fontWeight = 'bold', fontSize = '14px')) |>
+        highcharter::hc_tooltip(shared = TRUE) |>
+        highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
     })
 
 
@@ -1527,7 +1570,7 @@ mod_bloco_5_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros())
+        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros())
     })
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
@@ -1577,7 +1620,7 @@ mod_bloco_5_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros(), comp = TRUE)
+        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), comp = TRUE)
     })
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
@@ -1611,7 +1654,7 @@ mod_bloco_5_server <- function(id, filtros){
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs(), filtros = filtros(), input = input, referencia = TRUE, adicionar_localidade = FALSE) |>
+        cria_indicadores(df_calcs = bloco5_calcs, filtros = filtros(), input = input, referencia = TRUE, adicionar_localidade = FALSE) |>
         dplyr::mutate(
           localidade_comparacao = "Média nacional"
         ) |>

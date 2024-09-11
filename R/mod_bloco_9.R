@@ -275,7 +275,7 @@ observeEvent(input$selected_indicators, {
       tipo = c("local", "referencia"),
       porc_inicio_prec = c("round(sum(mulheres_com_inicio_precoce_do_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)", "95"),
       porc_sc = c("round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)", "0.5"),
-      porc_1con = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
+      cobertura_pre_natal = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
       porc_7 = c("round(sum(mulheres_com_mais_de_sete_consultas_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95[ano >= 2014])"),
       porc_consultas_adequadas = rep("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 2)", 2)
     )
@@ -519,7 +519,7 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco5_calcs <- reactive({
-      df_calcs_aux1 <- data.frame(
+      data.frame(
         tipo = c("local", "referencia"),
         porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nasc_peso_menor_1500 = rep("round(sum(nascidos_vivos_peso_menor_1500) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -542,72 +542,9 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
                                                                                            nascidos_vivos_33_a_34_semanas,
                                                                                            nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
         porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
-        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
         porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_vinc_sus_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2)
-      )
-
-      if (is.null(input$idade_dias_sus[1])) {
-        df_calcs_aux2 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_vinc_sus = "NA"
-        )
-      } else {
-        df_calcs_aux2 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_vinc_sus = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sus) == 2,
-              round(sum(internacoes_{input$local_internacao_sus}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sus}_{input$idade_dias_sus[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_sus[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
-
-      if (is.null(input$idade_dias_sih[1])) {
-        df_calcs_aux3 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_sih = "NA"
-        )
-      } else {
-        df_calcs_aux3 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sih) == 2,
-              round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
-
-      if (is.null(input$idade_dias_uti_sih[1])) {
-        df_calcs_aux4 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_uti_menores_28_dias_sih = "NA"
-        )
-      } else {
-        df_calcs_aux4 <- data.frame(
-          tipo = c("local", "referencia"),
-          porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
-            "ifelse(
-              length(input$idade_dias_sih) == 2,
-              round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-              round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-            )"
-          ), 2)
-        )
-      }
-
-      dplyr::full_join(
-        df_calcs_aux1,
-        dplyr::full_join(df_calcs_aux2, dplyr::full_join(df_calcs_aux3, df_calcs_aux4))
+        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
       )
     })
 
@@ -815,7 +752,7 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
     # bloco 7 -----------------------------------------------------------------
 
     bloco7_calcs <- reactive({
-      data.frame(
+      df_calcs_aux1 <- data.frame(
         tipo = c("local", "referencia"),
         obitos_neonat = rep("sum(obitos_27dias)", 2),
         obitos_neonat_menos1500 = rep("sum(obitos_27dias_menos1500)", 2),
@@ -1040,7 +977,81 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
           sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
         *100, 2)", 2),
 
-        faltante_dist_peso_neonat = rep("round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)", 2)
+        faltante_dist_peso_neonat = rep("round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)", 2),
+
+        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(nascidos) * 100, 1)", 2),
+        #porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
+        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2),
+        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2)
+      )
+
+      if (is.null(input$idade_dias_sih[1])) {
+        df_calcs_aux3 <- data.frame(
+          tipo = c("local", "referencia"),
+          porc_internacoes_menores_28_dias_sih = "NA"
+        )
+      } else {
+        df_calcs_aux3 <- data.frame(
+          tipo = c("local", "referencia"),
+          porc_internacoes_menores_28_dias_sih = rep(glue::glue(
+            #   " if(length(input$idade_dias_sih) == 1){
+            #   round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+            #   }
+            #   else if(length(input$idade_dias_sih) == 2){
+            #   round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+            #   } else{
+            #   round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+            # } "
+
+            "ifelse(
+               length(input$idade_dias_sih) == 3,
+               round(sum(internacoes_{input$local_internacao_sih}_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+               ifelse(
+               length(input$idade_dias_sih == 2),
+               round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
+
+               )
+             )"
+          ), 2)
+        )
+      }
+
+      if (is.null(input$idade_dias_uti_sih[1])) {
+        df_calcs_aux4 <- data.frame(
+          tipo = c("local", "referencia"),
+          porc_internacoes_uti_menores_28_dias_sih = "NA"
+        )
+      } else {
+        df_calcs_aux4 <- data.frame(
+          tipo = c("local", "referencia"),
+          porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
+
+            # "if(length(input$idade_dias_sih) == 1){
+            # round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+            # } else if(length(input$idade_dias_sih) == 2){
+            # round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
+            # } else{
+            # round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
+            #
+            # }
+            # "
+            "ifelse(
+                length(input$idade_dias_sih) == 3,
+                round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+                ifelse(
+                length(input$idade_dias_sih) == 2,
+                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti)) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
+                )
+              )"
+          ), 2)
+        )
+      }
+
+      dplyr::full_join(
+        df_calcs_aux1,
+        dplyr::full_join(df_calcs_aux3, df_calcs_aux4)
       )
     })
 
