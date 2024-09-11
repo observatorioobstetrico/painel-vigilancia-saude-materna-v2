@@ -508,7 +508,20 @@ macro_r_saude_choices <- tabela_aux_municipios |>
 tabela_indicadores <- read.csv("data-raw/csv/tabela_indicadores.csv")
 
 #Lendo a tabela contendo as informações para o grafico de radar
-tabela_radar <- read.csv("data-raw/csv/tabela_radar.csv")
+tabela_radar <- read.csv("data-raw/csv/tabela_radar.csv") |>
+  dplyr::mutate(
+    nome_abreviado = dplyr::case_when(
+      nome_abreviado == "porc_1con" ~ "cobertura_pre_natal",
+      nome_abreviado == "porc_baixo_peso" ~ "porc_nasc_baixo_peso",
+      nome_abreviado == "porc_baixo_peso_menos_1500" ~ "porc_nasc_baixo_peso_menos_1500",
+      nome_abreviado == "porc_baixo_peso_menos_2500" ~ "porc_nasc_baixo_peso_menos_2500",
+      nome_abreviado == "porc_premat" ~ "porc_nasc_premat",
+      nome_abreviado == "porc_premat_menos_28" ~ "porc_nasc_premat_menos_28",
+      nome_abreviado == "porc_premat_menos_32" ~ "porc_nasc_premat_menos_32",
+      nome_abreviado == "porc_premat_menos_37" ~ "porc_nasc_premat_menos_37",
+      .default = nome_abreviado
+    )
+  )
 
 
 #Lendo a tabela contendo informações sobre as CIDs
