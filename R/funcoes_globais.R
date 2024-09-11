@@ -72,7 +72,7 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
     df_localidade_aux |>
       dplyr::mutate(
         class = dplyr::case_when(
-          filtros[[paste0("nivel", sufixo)]] == "Nacional" ~ dplyr::if_else(
+          filtros[[paste0("nivel", sufixo)]] == "Nacional" | referencia == TRUE ~ dplyr::if_else(
             filtros$comparar == "Não",
             "Brasil (valor de referência)",
             dplyr::if_else(
