@@ -1,5 +1,5 @@
 #' @exportS3Method pkg::generic
-cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros") {
+cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros", localidade_resumo = "escolha1") {
 
   if (referencia == FALSE) {
     df_calcs <- df_calcs |>
@@ -67,7 +67,7 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
   }
 
   if (adicionar_localidade == TRUE) {
-    sufixo <- ifelse(comp == TRUE, "2", "")
+    sufixo <- ifelse(comp == TRUE | localidade_resumo == "escolha2", "2", "")
 
     df_localidade_aux |>
       dplyr::mutate(
