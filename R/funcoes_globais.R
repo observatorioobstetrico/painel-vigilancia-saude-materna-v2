@@ -1181,15 +1181,15 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
       style = "height: 73%; overflow: auto; padding-bottom: 5px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_1)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_1)}")))
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_1)}")))
       ),
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_2)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_2)}")))
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_2)}")))
       ),
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_3)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de evitabilidade {glue::glue(grupo_3)}")))
+        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_3)}")))
       )
     )
   )
