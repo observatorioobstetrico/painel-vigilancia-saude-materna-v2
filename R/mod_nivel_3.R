@@ -1289,7 +1289,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             infos_indicador()$referencia == "Nacional",
             !!rlang::parse_expr(infos_indicador()$calculo),
             ifelse(
-              infos_indicador()$nome_abreviado != "porc_baixo_peso_menos_1500",
+              infos_indicador()$nome_abreviado != "porc_nasc_baixo_peso_menos_1500",
               {as.numeric(infos_indicador()$referencia)},
               NA
             )
@@ -1353,7 +1353,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -1362,7 +1362,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     data_referencia_baixo_peso <- reactive({
       data.frame(
         ano = anos_disponiveis(),
-        porc_baixo_peso = data_referencia_baixo_peso_aux()$porc_baixo_peso,
+        porc_nasc_baixo_peso = data_referencia_baixo_peso_aux()$porc_nasc_baixo_peso,
         class = "Referência"
       )
     })
@@ -1478,12 +1478,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             fillOpacity = 0.2,
             enableMouseTracking = TRUE
           )
-        } else if (infos_indicador()$nome_abreviado == "porc_baixo_peso_menos_2500") {
+        } else if (infos_indicador()$nome_abreviado == "porc_nasc_baixo_peso_menos_2500") {
           grafico_base |>
             highcharter::hc_add_series(
               data = data_referencia_baixo_peso(),
               type = "line",
-              highcharter::hcaes(x = ano, y = porc_baixo_peso, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso, group = class, colour = class),
               name = "Referência para a localidade (meta de redução global)",
               dashStyle = "ShortDot",
               opacity = 0.8
