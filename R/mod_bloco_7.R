@@ -513,7 +513,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por análise de evitabilidade segundo o <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
+                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
@@ -1537,6 +1537,10 @@ mod_bloco_7_ui <- function(id) {
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_neonatal_i3")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_principais_morbidade_neonatal")), proxy.height = "300px")
               )
             ),
           ),
@@ -1581,7 +1585,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais no SUS ocorridas até o 27º dia de vida &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao10"),
@@ -1644,7 +1648,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais em UTI no SUS ocorridas até o 27º dia de vida &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao12"),
@@ -2772,6 +2776,15 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
+    ### Aba morbidade neonatal
+
+    output$caixa_b7_principais_morbidade_neonatal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_internacoes_neonatal(),
+        titulo = "Dentre as internações neonatais (geral),"
+      )
+    })
+
     #### Taxa de mortalidade fetal (definição 1) -------------------------------
     taxa_mortalidade_fetal <- reactive({
       dplyr::case_when(
@@ -3215,7 +3228,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais em UTI no SUS ocorridas até o 27º dia de vida (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -3242,7 +3255,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais no SUS ocorridas até o 27º dia de vida (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) no SUS (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -4394,6 +4407,111 @@ mod_bloco_7_server <- function(id, filtros){
     bloco7_principais_obito_neonatal <- eventReactive(
       c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_neonat),
       bloco7_principais_obito_neonatal_aux(),
+      ignoreNULL = FALSE
+    )
+
+    ### Aba morbidade neonatal
+
+    data_filtrada_morbidade_aux <- reactive({
+      if (filtros()$comparar == "Não") {
+        sufixo_inputs <- ""
+      } else {
+        if (input$tabset1 == "tabpanel_neonatal") {
+          req(input$localidade_resumo_neonat)
+          if (input$localidade_resumo_neonat == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else if (input$tabset1 == "tabpanel_fetal") {
+          req(input$localidade_resumo_fetal)
+          if (input$localidade_resumo_fetal == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else if (input$tabset1 == "tabpanel_perinatal"){
+          req(input$localidade_resumo_perinatal)
+          if (input$localidade_resumo_perinatal == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        } else {
+          req(input$localidade_resumo_morbidade_neonatal)
+          if (input$localidade_resumo_morbidade_neonatal == "escolha1") {
+            sufixo_inputs <- ""
+          } else {
+            sufixo_inputs <- "2"
+          }
+        }
+      }
+      bloco7_dist_morbidade |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (nivel_selecionado() == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (nivel_selecionado() == "Regional")
+            regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Estadual")
+            uf == filtros()[[paste0("estado", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Macrorregião de saúde")
+            macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
+          else if(nivel_selecionado() == "Microrregião de saúde")
+            r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
+          else if(nivel_selecionado() == "Municipal")
+            municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
+          else if (nivel_selecionado() == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        )
+    })
+
+    bloco7_principais_internacoes_neonatal_aux <- reactive({
+      data_filtrada_morbidade_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = c(
+          "morbidade_neonatal_grupos_0_dias",
+          "morbidade_neonatal_grupos_1_6_dias",
+          "morbidade_neonatal_grupos_7_27_dias"
+        )))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = c(
+          "morbidade_neonatal_grupos_0_dias",
+          "morbidade_neonatal_grupos_1_6_dias",
+          "morbidade_neonatal_grupos_7_27_dias"
+        )))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_internacoes(input = c(
+            "morbidade_neonatal_grupos_0_dias",
+            "morbidade_neonatal_grupos_1_6_dias",
+            "morbidade_neonatal_grupos_7_27_dias"
+          ))),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::select(grupo_cid10, br_porc_obitos) |>
+        dplyr::mutate(
+          grupo = dplyr::case_when(
+            grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+            grepl("infeccoes", grupo_cid10) ~ "Infecções",
+            grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+            grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+            grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+            grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+            grepl("outros", grupo_cid10) ~ "Demais causas"
+          ),
+          porc_obitos = round(br_porc_obitos, 2)) |>
+        dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
+        dplyr::select(grupo, porc_obitos) |>
+        dplyr::arrange(desc(porc_obitos)) |>
+        dplyr::slice(1:3)
+    })
+
+    bloco7_principais_internacoes_neonatal <- eventReactive(
+      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_neonat),
+      bloco7_principais_internacoes_neonatal_aux(),
       ignoreNULL = FALSE
     )
 
