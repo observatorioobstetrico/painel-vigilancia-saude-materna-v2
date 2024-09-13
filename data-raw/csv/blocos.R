@@ -115,7 +115,7 @@ bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_desloca
     uf = sub('.', '', uf)
   )
 
-bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2023.csv") |>
+bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2024.csv") |>
   janitor::clean_names()
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
@@ -127,9 +127,9 @@ bloco4_deslocamento_uf_aux <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocam
 
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
 
-# bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2023.csv")
+ #bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2023.csv")
 
-bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2023.csv") |>
+bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv") |>
   dplyr::select(c(1:2, 38:44))
 
 ################################################################################
