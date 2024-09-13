@@ -364,72 +364,56 @@ mod_nivel_1_ui <- function(id) {
             ),
             column(
               width = 7,
-              status = "primary",
-              collapsible = FALSE,
-              #style = "height: 360px; overflow-y: auto",
-              shinycssloaders::withSpinner(reactable::reactableOutput(ns("table4")), proxy.height = "320px"),
-              HTML("<span style='display: block; margin-bottom: 10px;'> </span>"),
-              shinyjs::hidden(
-                fluidRow(
-                  id = ns("caixa_bloco4_resto"),
-                  # column(
-                  #   offset = 4,
-                  #   width = 4,
-                  #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_resto")), proxy.height = "280px")
-                  # ),
-                  column(
-                    offset = 4,
-                    width = 4,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_resto")), proxy.height = "280px")
+              bs4Dash::bs4TabCard(
+                id = ns("tabset1"),
+                width = 12,
+                collapsible = FALSE,
+                tabPanel(
+                  HTML("<b>Grupo de Robson</b>"),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      status = "primary",
+                      collapsible = FALSE,
+                      #style = "height: 360px; overflow-y: auto",
+                      shinycssloaders::withSpinner(reactable::reactableOutput(ns("table4")), proxy.height = "320px"),
+                    ),
+                  ),
+                ),
+                  tabPanel(
+                    HTML("<b>Deslocamento para parto</b>"),
+                    fluidRow(
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_deslocamento_muni")), proxy.height = "280px")
+                      ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_deslocamento_muni")), proxy.height = "280px")
+                      ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_deslocamento_muni")), proxy.height = "280px")
+                      ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_deslocamento_muni")), proxy.height = "280px")
+                      ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "280px")
+                      ),
+                     # column(
+                      #  width = 4,
+                      #  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_muni")), proxy.height = "280px")
+                      #),
+                    )
                   )
                 )
               )
             )
-          ),
-          shinyjs::hidden(
-            fluidRow(
-              id = ns("caixa_bloco4_muni_uf"),
-              column(
-                offset = 1,
-                width = 10,
-                fluidRow(
-                  # column(
-                  #   width = 3,
-                  #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_muni_uf")), proxy.height = "280px")
-                  # ),
-                  # column(
-                  #   width = 3,
-                  #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2")), proxy.height = "280px")
-                  # ),
-                  # column(
-                  #   width = 3,
-                  #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3")), proxy.height = "280px")
-                  # ),
-                  # column(
-                  #   width = 3,
-                  #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4")), proxy.height = "280px")
-                  # ),
-                  column(
-                    width = 3,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_muni_uf")), proxy.height = "280px")
-                  ),
-                  column(
-                    width = 3,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_muni_uf")), proxy.height = "280px")
-                  ),
-                  column(
-                    width = 3,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_muni_uf")), proxy.height = "280px")
-                  ),
-                  column(
-                    width = 3,
-                    shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_muni_uf")), proxy.height = "280px")
-                  )
-               )
-            )
           )
-        )
-      )
+      #)
     ),
     fluidRow(
       column(
@@ -509,12 +493,12 @@ mod_nivel_1_ui <- function(id) {
                 ),
                 column(
                   width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i6")), proxy.height = "270px")
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i7")), proxy.height = "270px")
                 ),
                 column(
                   offset = 2,
                   width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i7")), proxy.height = "270px")
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b5_i9")), proxy.height = "270px")
                 ),
                 column(
                   width = 4,
@@ -2028,9 +2012,13 @@ mod_nivel_1_server <- function(id, filtros){
           ) |>
           dplyr::group_by(ano) |>
           dplyr::mutate(
-            prop_partos_fora_macro_rsaude_res = round(fora_macrorregiao_saude/destino_total * 100, 1),
-            prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
-
+            prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            #prop_partos_sem_uti = round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
             localidade = filtros()$municipio,
             .keep = "unused"
           ) |>
@@ -2043,8 +2031,13 @@ mod_nivel_1_server <- function(id, filtros){
           ) |>
           dplyr::group_by(ano) |>
           dplyr::mutate(
-            prop_partos_fora_macro_rsaude_res = round(fora_macrorregiao_saude/destino_total * 100, 1),
-            prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            #prop_partos_sem_uti = round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
             localidade = filtros()$estado,
             .keep = "unused"
           ) |>
@@ -2075,8 +2068,12 @@ mod_nivel_1_server <- function(id, filtros){
       bloco4_deslocamento_muni |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::summarise(
+          prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+          prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+          prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-          prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+          prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+          #prop_partos_sem_uti = round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
         )
     })
 
@@ -2410,6 +2407,137 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
+    output$caixa_b4_i1_deslocamento_muni <- output$caixa_b4_i1_deslocamento_resto <- renderUI({
+      cria_caixa_server(
+        dados = data4_deslocamento(),
+        indicador = "prop_partos_municipio_res",
+        titulo = "Porcentagem de partos ocorridos no município de residência",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_deslocamento()$prop_partos_municipio_res,
+        tipo = "porcentagem",
+        invertido = TRUE,
+        pagina = "nivel_1",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        ),
+        width_caixa = 11
+      )
+    })
+
+    output$caixa_b4_i2_deslocamento_muni <- output$caixa_b4_i2_deslocamento_resto <- renderUI({
+      cria_caixa_server(
+        dados = data4_deslocamento(),
+        indicador = "prop_partos_rsaude_res",
+        titulo = "Porcentagem de partos ocorridos na microrregião de saúde, mas fora do município de residência",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_deslocamento()$prop_partos_rsaude_res,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        pagina = "nivel_1",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        ),
+        width_caixa = 11
+      )
+    })
+
+    output$caixa_b4_i3_deslocamento_muni <- output$caixa_b4_i3_deslocamento_resto <- renderUI({
+      cria_caixa_server(
+        dados = data4_deslocamento(),
+        indicador = "prop_partos_macro_rsaude_res",
+        titulo = "Porcentagem de partos ocorridos na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_deslocamento()$prop_partos_macro_rsaude_res,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        pagina = "nivel_1",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        ),
+        width_caixa = 11
+      )
+    })
+
+    output$caixa_b4_i4_deslocamento_muni <- output$caixa_b4_i4_deslocamento_resto <- renderUI({
+      cria_caixa_server(
+        dados = data4_deslocamento(),
+        indicador = "prop_partos_fora_macro_rsaude_res",
+        titulo = "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_deslocamento()$prop_partos_fora_macro_rsaude_res,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        pagina = "nivel_1",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        ),
+        width_caixa = 11
+      )
+    })
+
+    output$caixa_b4_i5_deslocamento_muni <- output$caixa_b4_i5_deslocamento_resto <- renderUI({
+      cria_caixa_server(
+        dados = data4_deslocamento(),
+        indicador = "prop_partos_fora_uf_res",
+        titulo = "Porcentagem de partos ocorridos fora da UF de residência",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_deslocamento()$prop_partos_fora_uf_res,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        pagina = "nivel_1",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        ),
+        width_caixa = 11
+      )
+    })
+
+    #output$caixa_b4_i9_deslocamento_muni <- output$caixa_b4_i9_deslocamento_resto <- renderUI({
+    #   cria_caixa_server(
+    #     dados = data4_deslocamento(),
+    #     indicador = "prop_partos_sem_uti",
+    #     titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+    #     tem_meta = FALSE,
+    #     valor_de_referencia = 16.3,
+    #     #data4_deslocamento_resumo_referencia()$prop_partos_sem_uti,
+    #     tipo = "porcentagem",
+    #     invertido = FALSE,
+    #     pagina = "nivel_1",
+    #     nivel_de_analise = filtros()$nivel,
+    #     width_caixa = 11
+    #   )
+    # })
+
     observeEvent(filtros()$pesquisar, {
       if (filtros()$nivel != "Municipal" & filtros()$nivel != "Estadual") {
         shinyjs::hide(id = "caixa_bloco4_muni_uf", anim = TRUE, animType = "fade", time = 0.001)
@@ -2490,7 +2618,7 @@ mod_nivel_1_server <- function(id, filtros){
           porc_termo_precoce = 20,
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1)
+          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
         ) |>
         dplyr::ungroup()
     })
@@ -2513,7 +2641,7 @@ mod_nivel_1_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7,
         )
     })
 
@@ -2619,6 +2747,22 @@ mod_nivel_1_server <- function(id, filtros){
         titulo = "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde",
         tem_meta = FALSE,
         valor_de_referencia = data5_comp()$porc_malformacao,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        fonte_titulo = "15px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
+
+    output$caixa_b5_i9 <- renderUI({
+      cria_caixa_server(
+        dados = data5(),
+        indicador = "porc_malformacao_geral",
+        titulo = "Porcentagem de nascidos vivos com malformações",
+        tem_meta = FALSE,
+        valor_de_referencia = data5_comp_baixo_peso()$porc_malformacao_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         fonte_titulo = "15px",
