@@ -3281,6 +3281,8 @@ mod_bloco_7_server <- function(id, filtros){
 
     ### Para a distribuição de internações por grupos de causas
 
+    ### Para a distribuição de internações por grupos de causas
+
     data_filtrada_morbidade_aux <- reactive({
       bloco7_dist_morbidade |>
         dplyr::filter(
@@ -3365,9 +3367,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
-                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados","Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3414,9 +3415,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
-                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3458,9 +3458,8 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Infecções", "Prematuridade", "Afecções respiratórias do recém-nascido",
-                                                                   "Fatores maternos relacionados à gravidez", "Afecções originais no período neonatal",
-                                                                   "Malformação congênita","Asfixia/Hipóxia","Mal definidas", "Grupos não selecionados", "Demais causas")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Malformação congênita","Afecções respiratórias do recém-nascido",
+                                                                   "Fatores maternos relacionados à gravidez","Afecções originais no período neonatal","Mal definidas", "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -3483,8 +3482,6 @@ mod_bloco_7_server <- function(id, filtros){
       )
       dplyr::full_join(data_plot_grupos_morbidade_neonatal_comp(), data_plot_grupos_morbidade_neonatal_referencia())
     })
-
-
 
     ## Calculando os indicadores para cada ano do período selecionado ---------
     ### Para os gráficos de causas evitáveis ----------------------------------
@@ -4412,7 +4409,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     ### Aba morbidade neonatal
 
-    data_filtrada_morbidade_aux <- reactive({
+    data_filtrada_morbidade_aux2 <- reactive({
       if (filtros()$comparar == "Não") {
         sufixo_inputs <- ""
       } else {
@@ -4467,7 +4464,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     bloco7_principais_internacoes_neonatal_aux <- reactive({
-      data_filtrada_morbidade_aux() |>
+      data_filtrada_morbidade_aux2() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = c(
