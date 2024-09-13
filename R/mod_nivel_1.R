@@ -729,111 +729,119 @@ mod_nivel_1_ui <- function(id) {
                 tabPanel(
                   HTML("<b>Mortalidade fetal</b>"),
                   fluidRow(
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i1")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i2")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i3")), proxy.height = "270px")
-                    # ),#,
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "280px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "280px")
-                    # )
-                  )
-                ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i1")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i2")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i3")), proxy.height = "270px")
+                     ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i4")), proxy.height = "280px")
+                      ),
+                      column(
+                        width = 4,
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "280px")
+                      ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "280px")
+                     )
+
+                ) ),
                 tabPanel(
                   HTML("<b>Mortalidade perinatal</b>"),
                   fluidRow(
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "280px")
-                    # )#,
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i5")), proxy.height = "280px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i6")), proxy.height = "280px")
-                    # )
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "280px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i5")), proxy.height = "280px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i6")), proxy.height = "280px")
+                     )
                   )
                 ),
 
                 tabPanel(
                   HTML("<b>Mortalidade neonatal</b>"),
                   fluidRow(
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i1")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i2")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i3")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i4")), proxy.height = "280px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i5")), proxy.height = "280px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i6")), proxy.height = "280px")
-                    #  )#,
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i7")), proxy.height = "280px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i8")), proxy.height = "280px")
-                    # ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i1")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i2")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i3")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i4")), proxy.height = "280px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i5")), proxy.height = "280px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i6")), proxy.height = "280px")
+                      ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i7")), proxy.height = "280px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i8")), proxy.height = "280px")
+                     )
                   )
                 ),
 
                 tabPanel(
                   HTML("<b>Morbidade neonatal</b>"),
                   fluidRow(
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i1")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i2")), proxy.height = "270px")
-                    # ),
-                    # column(
-                    #   width = 4,
-                    #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i3")), proxy.height = "270px")
-                    # )
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i1")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i2")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i3")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_principais_morbidade_neonatal")), proxy.height = "270px")
+                     )
                   )
                 )
 
@@ -1116,17 +1124,7 @@ mod_nivel_1_server <- function(id, filtros){
               data_plot_grupos_perinatal_completo = data_plot_grupos_perinatal_completo(),
               data_plot_grupos_perinatal_comp_completo = data_plot_grupos_perinatal_comp_completo(),
               data7 = data7(),
-              data7_internacoes_vinc_sus = data7_internacoes_vinc_sus(),
-              data7_internacoes_publicos_sih = data7_internacoes_publicos_sih(),
-              data7_internacoes_uti_sih = data7_internacoes_uti_sih(),
-              data7_plot_dist1 = data7_plot_dist1(),
-              data7_plot_dist2 = data7_plot_dist2(),
-              data7_comp = data7_comp(),
-              data7_internacoes_vinc_sus_comp(),
-              data7_internacoes_publicos_sih_comp(),
-              data7_internacoes_uti_sih_comp(),
-              data7_plot_dist1_comp(),
-              data7_plot_dist2_comp()
+              data7_comp = data7_comp()
 
             )
           )
@@ -3143,63 +3141,59 @@ mod_nivel_1_server <- function(id, filtros){
           obitos_7_27dias_2000_2499 =  sum(obitos_7_27dias_2000_2499) ,
           obitos_7_27dias_mais2500 =  sum(obitos_7_27dias_mais2500) ,
 
-          antes_dist_moment_obito_fetal =  round(
-        sum(c(fetal_antes))/
-          sum(c(obitos_fetais))
-        *100, 2) ,
+          antes_dist_moment_obito_fetal =  round(sum(fetal_antes)/sum(obitos_fetais) *100, 2),
 
-          durante_dist_moment_obito_fetal =
-        round(fetal_durante/obitos_fetais *100, 2) ,
+          durante_dist_moment_obito_fetal = round(sum(fetal_durante)/sum(obitos_fetais) *100, 2),
 
-          faltante_dist_moment_obito_fetal =  round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2) ,
+          faltante_dist_moment_obito_fetal =  round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2),
 
-          antes_dist_moment_obito_perinat =  round(perinatal_antes/obitos_perinatal_oms *100, 2) ,
+          antes_dist_moment_obito_perinat =  round(sum(perinatal_antes)/sum(obitos_perinatal_oms) *100, 2),
 
-          durante_dist_moment_obito_perinat =  round( perinatal_durante/obitos_perinatal_oms *100, 2) ,
+          durante_dist_moment_obito_perinat =  round(sum(perinatal_durante)/sum(obitos_perinatal_oms) *100, 2),
 
-          dia_0_dist_moment_obito_perinat =  round(obitos_0dias/obitos_perinatal_oms *100, 2) ,
+          dia_0_dist_moment_obito_perinat =  round(sum(obitos_0dias)/sum(obitos_perinatal_oms) *100, 2) ,
 
-          dia_1_6_dist_moment_obito_perinat =  round(obitos_1_6dias/obitos_perinatal_oms *100, 2) ,
+          dia_1_6_dist_moment_obito_perinat =  round(sum(obitos_1_6dias)/sum(obitos_perinatal_oms) *100, 2) ,
 
           faltante_dist_moment_obito_perinat =  round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 2) ,
 
-          dia_0_dist_moment_obito_neonat =  round( obitos_0dias/obitos_27dias *100, 2) ,
+          dia_0_dist_moment_obito_neonat =  round( sum(obitos_0dias)/sum(obitos_27dias) *100, 2) ,
 
-          dia_1_6dist_moment_obito_neonat =  round( obitos_1_6dias/obitos_27dias *100, 2) ,
+          dia_1_6dist_moment_obito_neonat =  round( sum(obitos_1_6dias)/sum(obitos_27dias) *100, 2) ,
 
-          dia_7_27dist_moment_obito_neonat =  round(obitos_7_27dias/obitos_27dias *100, 2) ,
+          dia_7_27dist_moment_obito_neonat =  round(sum(obitos_7_27dias)/sum(obitos_27dias) *100, 2) ,
 
           faltante_moment_obito_neonat =  round(100 -dia_0_dist_moment_obito_neonat -dia_1_6dist_moment_obito_neonat -dia_7_27dist_moment_obito_neonat, 2) ,
 
-          menos_1500_dist_peso_fetal =  round( fetal_peso_menos_1500/obitos_fetais *100, 2) ,
+          menos_1500_dist_peso_fetal =  round( sum(fetal_peso_menos_1500)/sum(obitos_fetais) *100, 2) ,
 
-          de_1500_1999_dist_peso_fetal =  round( fetal_peso_1500_1999/obitos_fetais *100, 2) ,
+          de_1500_1999_dist_peso_fetal =  round( sum(fetal_peso_1500_1999)/sum(obitos_fetais) *100, 2) ,
 
-          de_2000_2499_dist_peso_fetal =  round( fetal_peso_2000_2499/obitos_fetais *100, 2) ,
+          de_2000_2499_dist_peso_fetal =  round( sum(fetal_peso_2000_2499)/sum(obitos_fetais) *100, 2) ,
 
-          mais_2500_dist_peso_fetal =  round( fetal_peso_mais_2500/obitos_fetais *100, 2) ,
+          mais_2500_dist_peso_fetal =  round( sum(fetal_peso_mais_2500)/sum(obitos_fetais) *100, 2) ,
 
           faltante_dist_peso_fetal =  round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2) ,
 
-          menos_1500_dist_peso_perinat =  round( perinatal_oms_menos1500/obitos_perinatal_oms *100, 2) ,
+          menos_1500_dist_peso_perinat =  round( sum(perinatal_oms_menos1500)/sum(obitos_perinatal_oms) *100, 2) ,
 
-          de_1500_1999_dist_peso_perinat =  round( perinatal_oms_1500_1999/obitos_perinatal_oms *100, 2) ,
+          de_1500_1999_dist_peso_perinat =  round( sum(perinatal_oms_1500_1999)/sum(obitos_perinatal_oms) *100, 2) ,
 
 
-          de_2000_2499_dist_peso_perinat =  round( perinatal_oms_2000_2499/obitos_perinatal_oms *100, 2) ,
+          de_2000_2499_dist_peso_perinat =  round( sum(perinatal_oms_2000_2499)/sum(obitos_perinatal_oms) *100, 2) ,
 
-          mais_2500_dist_peso_perinat =  round(perinatal_oms_mais2500/obitos_perinatal_oms *100, 2) ,
+          mais_2500_dist_peso_perinat =  round(sum(perinatal_oms_mais2500)/sum(obitos_perinatal_oms) *100, 2) ,
 
           faltante_dist_peso_perinat =  round(100 -menos_1500_dist_peso_perinat -de_1500_1999_dist_peso_perinat -de_2000_2499_dist_peso_perinat -mais_2500_dist_peso_perinat, 2) ,
 
 
-          menos_1500_dist_peso_neonat =  round( obitos_27dias_menos1500/obitos_27dias *100, 2) ,
+          menos_1500_dist_peso_neonat =  round( sum(obitos_27dias_menos1500)/sum(obitos_27dias) *100, 2) ,
 
-          de_1500_1999_dist_peso_neonat =  round( obitos_27dias_1500_1999/obitos_27dias *100, 2) ,
+          de_1500_1999_dist_peso_neonat =  round( sum(obitos_27dias_1500_1999)/sum(obitos_27dias) *100, 2) ,
 
-          de_2000_2499_dist_peso_neonat =  round( obitos_27dias_2000_2499/obitos_27dias *100, 2) ,
+          de_2000_2499_dist_peso_neonat =  round( sum(obitos_27dias_2000_2499)/sum(obitos_27dias) *100, 2) ,
 
-          mais_2500_dist_peso_neonat =  round( obitos_27dias_mais2500/obitos_27dias *100, 2) ,
+          mais_2500_dist_peso_neonat =  round( sum(obitos_27dias_mais2500)/sum(obitos_27dias) *100, 2) ,
 
           faltante_dist_peso_neonat =  round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2) ,
 
@@ -3210,11 +3204,12 @@ mod_nivel_1_server <- function(id, filtros){
           porc_internacoes_uti_menores_28_dias_sih_geral =  round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup() |>
+        dplyr::distinct(ano, .keep_all = T)
     })
 
 
-    ##### Dados do sexto bloco para a comparação com o Brasil #####
+    ##### Dados do sétimo bloco para a comparação com o Brasil #####
     data7_comp <- reactive({
       bloco7 |>
         dplyr::filter(ano == filtros()$ano) |>
@@ -3419,111 +3414,380 @@ mod_nivel_1_server <- function(id, filtros){
           porc_internacoes_menores_28_dias_sih_geral =  round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1) ,
           porc_internacoes_uti_menores_28_dias_sih_geral =  round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
         ) |>
-        dplyr::ungroup()
+        dplyr::ungroup()|>
+        dplyr::distinct(ano, .keep_all = T)
     })
+
+
+
+    ### Caixas para obitos potencialmente evitaveis ############################ [zzz]
+
+    ### Dados Fetal, neonatal e perinatal
+
+    data_filtrada_evitaveis_aux <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(ano == filtros()$ano) |>
+        #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano == filtros()$ano
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    ##### Dados caixas
+    bloco7_evitaveis_resumo <- reactive({
+      data_filtrada_evitaveis_aux() |>
+        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | (dplyr::contains("evitaveis_neonatal")) |
+                                          (dplyr::contains("evitaveis_perinatal")) | "obitos_fetais_totais" | "obitos_neonatais_totais" |
+                                          "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
+          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
+        dplyr::mutate(
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))
+        )
+    })
+
+
+    ### Dados para a referencia nacional
+    bloco7_evitaveis_resumo_comp <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(ano == filtros()$ano) |>
+        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | (dplyr::contains("evitaveis_neonatal")) |
+                                          (dplyr::contains("evitaveis_perinatal")) | "obitos_fetais_totais" | "obitos_neonatais_totais" |
+                                          "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
+          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
+        dplyr::mutate(
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))
+        )
+    })
+
+
+    ### Caixas paras as 3 maiores causas de obitos ############################
+
+    ### Aba fetal
+
+    bloco7_principais_obito_fetal <- reactive({
+      data_filtrada_evitaveis_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos") | "obitos_fetais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = c("fetal_grupos_antes","fetal_grupos_durante")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = c("fetal_grupos_antes","fetal_grupos_durante")))), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = c("fetal_grupos_antes","fetal_grupos_durante"))),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::select(grupo_cid10, porc_obitos) |>
+        dplyr::mutate(
+          grupo = dplyr::case_when(
+            grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+            grepl("infeccoes", grupo_cid10) ~ "Infecções",
+            grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+            grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+            grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+            grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+            grepl("outros", grupo_cid10) ~ "Demais causas"
+          ),
+          porc_obitos = round(porc_obitos, 2)) |>
+        dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
+        dplyr::select(grupo, porc_obitos) |>
+        dplyr::arrange(desc(porc_obitos)) |>
+        dplyr::slice(1:3)
+    })
+
+
+    ### Aba perinatal
+
+    bloco7_principais_obito_perinatal <- reactive({
+      data_filtrada_evitaveis_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = c("perinatal_grupos_antes", "perinatal_grupos_durante","perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = c("perinatal_grupos_antes", "perinatal_grupos_durante","perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias")))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input =  c("perinatal_grupos_antes", "perinatal_grupos_durante","perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"))),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::select(grupo_cid10, porc_obitos) |>
+        dplyr::mutate(
+          grupo = dplyr::case_when(
+            grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+            grepl("infeccoes", grupo_cid10) ~ "Infecções",
+            grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+            grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+            grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+            grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+            grepl("outros", grupo_cid10) ~ "Demais causas"
+          ),
+          porc_obitos = round(porc_obitos, 2)) |>
+        dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
+        dplyr::select(grupo, porc_obitos) |>
+        dplyr::arrange(desc(porc_obitos)) |>
+        dplyr::slice(1:3)
+    })
+
+    ### Aba neonatal
+
+    bloco7_principais_obito_neonatal <- reactive({
+      data_filtrada_evitaveis_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias"))),
+          names_to = "grupo_cid10",
+          values_to = "porc_obitos"
+        ) |>
+        dplyr::select(grupo_cid10, porc_obitos) |>
+        dplyr::mutate(
+          grupo = dplyr::case_when(
+            grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+            grepl("infeccoes", grupo_cid10) ~ "Infecções",
+            grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+            grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+            grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+            grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+            grepl("outros", grupo_cid10) ~ "Demais causas"
+          ),
+          porc_obitos = round(porc_obitos, 2)) |>
+        dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
+        dplyr::select(grupo, porc_obitos) |>
+        dplyr::arrange(desc(porc_obitos)) |>
+        dplyr::slice(1:3)
+    })
+
+    # Aba morbidade neonatal
+
+    ### Aba morbidade neonatal
+
+    data_filtrada_morbidade_aux <- reactive({
+      bloco7_dist_morbidade |>
+        dplyr::filter(ano == filtros()$ano) |>
+        #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano == filtros()$ano
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano)
+    })
+
+    bloco7_principais_internacoes_neonatal <- reactive({
+      data_filtrada_morbidade_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = c(
+          "morbidade_neonatal_grupos_0_dias",
+          "morbidade_neonatal_grupos_1_6_dias",
+          "morbidade_neonatal_grupos_7_27_dias"
+        )))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = c(
+          "morbidade_neonatal_grupos_0_dias",
+          "morbidade_neonatal_grupos_1_6_dias",
+          "morbidade_neonatal_grupos_7_27_dias"
+        )))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        tidyr::pivot_longer(
+          cols = dplyr::matches(momento_internacoes(input = c(
+            "morbidade_neonatal_grupos_0_dias",
+            "morbidade_neonatal_grupos_1_6_dias",
+            "morbidade_neonatal_grupos_7_27_dias"
+          ))),
+          names_to = "grupo_cid10",
+          values_to = "br_porc_obitos"
+        ) |>
+        dplyr::select(grupo_cid10, br_porc_obitos) |>
+        dplyr::mutate(
+          grupo = dplyr::case_when(
+            grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
+            grepl("infeccoes", grupo_cid10) ~ "Infecções",
+            grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
+            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
+            grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
+            grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
+            grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
+            grepl("outros", grupo_cid10) ~ "Demais causas"
+          ),
+          porc_obitos = round(br_porc_obitos, 2)) |>
+        dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
+        dplyr::select(grupo, porc_obitos) |>
+        dplyr::arrange(desc(porc_obitos)) |>
+        dplyr::slice(1:3)
+    })
+
 
     # Criando as caixinhas
 
 
-    # output$caixa_b7_fetal_i6 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = bloco7_evitaveis_resumo(),
-    #     indicador = "porc_evitavel_fetal",
-    #     titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (geral)",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
-    #     tipo = "porcentagem",
-    #     invertido = FALSE,
-    #     cor = "lightgrey",
-    #     tamanho_caixa = "330px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = filtros()$nivel
-    #   )
-    # })
+     output$caixa_b7_fetal_i6 <- renderUI({
+       cria_caixa_server(
+         dados = bloco7_evitaveis_resumo(),
+         indicador = "porc_evitavel_fetal",
+         titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (geral)",
+         tem_meta = FALSE,
+         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
+         tipo = "porcentagem",
+         invertido = FALSE,
+         cor = "lightgrey",
+         tamanho_caixa = "330px",
+         pagina = "nivel_1",
+         nivel_de_analise = filtros()$nivel
+       )
+     })
 
     ### Aba perinatal
 
-    # output$caixa_b7_perinatal_i6 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = bloco7_evitaveis_resumo(),
-    #     indicador = "porc_evitavel_perinatal",
-    #     titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis (geral)",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
-    #     tipo = "porcentagem",
-    #     invertido = FALSE,
-    #     cor = "lightgrey",
-    #     tamanho_caixa = "330px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = filtros()$nivel
-    #   )
-    # })
+     output$caixa_b7_perinatal_i6 <- renderUI({
+       cria_caixa_server(
+         dados = bloco7_evitaveis_resumo(),
+         indicador = "porc_evitavel_perinatal",
+         titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis (geral)",
+         tem_meta = FALSE,
+         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
+         tipo = "porcentagem",
+         invertido = FALSE,
+         cor = "lightgrey",
+         tamanho_caixa = "330px",
+         pagina = "nivel_1",
+         nivel_de_analise = filtros()$nivel
+       )
+     })
 
     ### Aba neonatal
 
-    # output$caixa_b7_neonatal_i8 <- renderUI({
-    #   cria_caixa_server(
-    #     dados = bloco7_evitaveis_resumo(),
-    #     indicador = "porc_evitavel_neonatal",
-    #     titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
-    #     tem_meta = FALSE,
-    #     valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
-    #     tipo = "porcentagem",
-    #     invertido = FALSE,
-    #     cor = "lightgrey",
-    #     tamanho_caixa = "330px",
-    #     pagina = "bloco_7",
-    #     nivel_de_analise = filtros()$nivel
-    #   )
-    # })
+     output$caixa_b7_neonatal_i8 <- renderUI({
+       cria_caixa_server(
+         dados = bloco7_evitaveis_resumo(),
+         indicador = "porc_evitavel_neonatal",
+         titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
+         tem_meta = FALSE,
+         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
+         tipo = "porcentagem",
+         invertido = FALSE,
+         cor = "lightgrey",
+         tamanho_caixa = "330px",
+         pagina = "nivel_1",
+         nivel_de_analise = filtros()$nivel
+       )
+     })
 
     ### Caixas principais causas de obito ######################################
 
     ### Aba fetal
 
-    # output$caixa_b7_fetal_i5 <- renderUI({
-    #   cria_caixa_principais_evitaveis_bloco7(
-    #     dados = bloco7_principais_obito_fetal(),
-    #     titulo = "Dentre os óbitos fetais (geral),"
-    #   )
-    # })
+     output$caixa_b7_fetal_i5 <- renderUI({
+       cria_caixa_principais_evitaveis_bloco7(
+         dados = bloco7_principais_obito_fetal(),
+         titulo = "Dentre os óbitos fetais (geral),"
+       )
+     })
 
     ### Aba perinatal
 
-    # output$caixa_b7_perinatal_i5 <- renderUI({
-    #   cria_caixa_principais_evitaveis_bloco7(
-    #     dados = bloco7_principais_obito_perinatal(),
-    #     titulo = "Dentre os óbitos perinatais (geral),"
-    #   )
-    # })
+     output$caixa_b7_perinatal_i5 <- renderUI({
+       cria_caixa_principais_evitaveis_bloco7(
+         dados = bloco7_principais_obito_perinatal(),
+         titulo = "Dentre os óbitos perinatais (geral),"
+      )
+     })
 
     ### Aba neonatal
 
-    # output$caixa_b7_neonatal_i7 <- renderUI({
-    #   cria_caixa_principais_evitaveis_bloco7(
-    #     dados = bloco7_principais_obito_neonatal(),
-    #     titulo = "Dentre os óbitos neonatais (geral),"
-    #   )
-    # })
+     output$caixa_b7_neonatal_i7 <- renderUI({
+       cria_caixa_principais_evitaveis_bloco7(
+         dados = bloco7_principais_obito_neonatal(),
+         titulo = "Dentre os óbitos neonatais (geral),"
+       )
+     })
 
     output$caixa_b7_fetal_i1 <- renderUI({
+      cria_caixa_server(
+        dados = data7(),
+        indicador = "obitos_fetais",
+        titulo = "Número de óbitos fetais (geral)",
+        tem_meta = FALSE,
+        valor_de_referencia = data7_comp()$obitos_fetais,
+        tipo = "número",
+        invertido = FALSE,
+        cor = "lightgrey",
+        # texto_footer = dplyr::if_else(
+        #   nivel_selecionado() == "Nacional",
+        #   "Comparação não aplicável (o total nacional é o valor de referência)",
+        #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+        # ),
+        tamanho_caixa = "330px",
+        pagina = "nivel_1",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
+
+    output$caixa_b7_fetal_i2 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_mort_fetal",
         titulo = "Taxa de mortalidade fetal (geral)",
         tem_meta = FALSE,
         valor_de_referencia = #dplyr::ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
-                                             data7_comp()[[taxa_mort_fetal]],#, NaN),
+                                             data7_comp()$taxa_mort_fetal,#, NaN),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+
         nivel_de_analise = filtros()$nivel
       )
     })
 
     #### Distribuição percentual do momento do óbito por faixa de peso --------
-    output$caixa_b7_fetal_i2 <- renderUI({
+    output$caixa_b7_fetal_i3 <- renderUI({
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal peso por idade gestacional",
@@ -3533,7 +3797,7 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     #### Distribuição percentual das faixas de peso por momento do óbito ------
-    output$caixa_b7_fetal_i3 <- renderUI({
+    output$caixa_b7_fetal_i4 <- renderUI({
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal momento do obito por peso",
@@ -3544,80 +3808,86 @@ mod_nivel_1_server <- function(id, filtros){
 
 
 
-    output$caixa_b7_neonat_i1 <- renderUI({
+    output$caixa_b7_neonatal_i1 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "mort_neonat",
         titulo = "Taxa de mortalidade neonatal por 1000 nascidos vivos",
         tem_meta = FALSE,
-        valor_de_referencia = data7_comp()[[mort_neonat]],
+        valor_de_referencia = data7_comp()$mort_neonat,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+
         nivel_de_analise = filtros()$nivel
       )
     })
 
     #### Taxa de mortalidade neonatal precoce por 1000 nascidos vivos ---------
 
-    output$caixa_b7_neonat_i2 <- renderUI({
+    output$caixa_b7_neonatal_i2 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "mort_neonat_precoc",
         titulo = "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos",
         tem_meta = FALSE,
-        valor_de_referencia = data7_comp()[[mort_neonat_precoc]],
+        valor_de_referencia = data7_comp()$mort_neonat_precoc,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+
         nivel_de_analise = filtros()$nivel
       )
     })
 
 
 
-    output$caixa_b7_neonat_i3 <- renderUI({
+    output$caixa_b7_neonatal_i3 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "mort_neonat_tardia",
         titulo = "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos",
         tem_meta = FALSE,
-        valor_de_referencia = data7_comp()[[mort_neonat_tardia]],
+        valor_de_referencia = data7_comp()$mort_neonat_tardia,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
 
 
 
-    output$caixa_b7_neonat_i4 <- renderUI({
+    output$caixa_b7_neonatal_i4 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_neonat",
         titulo = "Número de óbitos neonatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_comp()[[obitos_neonat]],
+        valor_de_referencia = data7_comp()$obitos_neonat,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        texto_footer = dplyr::ifelse(
-          filtros()$nivel == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-        ),
+         # texto_footer = dplyr::ifelse(
+         #   filtros()$nivel == "Nacional",
+         #   "Comparação não aplicável (o total nacional é o valor de referência)",
+         #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+         # ),
         tamanho_caixa = "330px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
 
     #### Distribuição percentual do momento do óbito por faixa de peso --------
-    output$caixa_b7_neonat_i5 <- renderUI({
+    output$caixa_b7_neonatal_i5 <- renderUI({
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "neonatal momento do obito por peso",
@@ -3627,7 +3897,7 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     #### Distribuição percentual das faixas de peso por momento do óbito ------
-    output$caixa_b7_neonat_i6 <- renderUI({
+    output$caixa_b7_neonatal_i6 <- renderUI({
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "neonatal peso por momento do obito",
@@ -3647,17 +3917,18 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "obitos_perinatal_oms",
         titulo = "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
-        valor_de_referencia = data7_comp()[[obitos_perinatal_oms]],
+        valor_de_referencia = data7_comp()$obitos_perinatal_oms,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        texto_footer = dplyr::ifelse(
-          filtros()$nivel == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-        ),
+        # texto_footer = dplyr::ifelse(
+        #   filtros()$nivel == "Nacional",
+        #   "Comparação não aplicável (o total nacional é o valor de referência)",
+        #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+        # ),
         tamanho_caixa = "350px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
@@ -3669,12 +3940,13 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "taxa_perinatal_oms",
         titulo = "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
-        valor_de_referencia = dplyr::ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
-                                             data7_comp()[[taxa_perinatal_oms]], NaN),
+        valor_de_referencia = #dplyr::ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
+                                             data7_comp()$taxa_perinatal_oms, #, NaN),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "350px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
@@ -3702,7 +3974,7 @@ mod_nivel_1_server <- function(id, filtros){
     ############ Para os de morbidade neonatal
 
     ### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
-    output$caixa_b7_morbidade_neonatal_i1 <- renderUI({
+    output$caixa_b7_morbidade_i1 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "porc_condicoes_ameacadoras",
@@ -3713,25 +3985,25 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
 
     ### Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS  -----------
-    output$caixa_b7_morbidade_neonatal_i3 <- renderUI({
+    output$caixa_b7_morbidade_i3 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais em UTI no SUS ocorridas até o 27º dia de vida (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
@@ -3739,21 +4011,28 @@ mod_nivel_1_server <- function(id, filtros){
 
 
     ### Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS ----
-    output$caixa_b7_morbidade_neonatal_i2 <- renderUI({
+    output$caixa_b7_morbidade_i2 <- renderUI({
       cria_caixa_server(
         dados = data7(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais no SUS ocorridas até o 27º dia de vida (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS (geral)",
         tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
-        pagina = "bloco_7",
+        pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
         )
+    })
+
+    output$caixa_b7_principais_morbidade_neonatal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_internacoes_neonatal(),
+        titulo = "Dentre as internações neonatais (geral),"
+      )
     })
 
 
