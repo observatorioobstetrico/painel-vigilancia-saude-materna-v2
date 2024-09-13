@@ -130,17 +130,17 @@ mod_bloco_4_ui <- function(id){
                 fluidRow(
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 415))
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 450))
                   ),
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 415)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 415))
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 450)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 450))
                   )
                 )
               )

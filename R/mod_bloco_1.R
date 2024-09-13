@@ -90,7 +90,7 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por faixa etária da mãe &nbsp;</b>"),
@@ -124,7 +124,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 345))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 365))
             )
           ),
           column(
@@ -134,7 +134,7 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por raça/cor da mãe &nbsp;</b>"),
@@ -170,7 +170,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 345))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 365))
             )
           ),
           column(
@@ -180,7 +180,7 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por escolaridade da mãe &nbsp;</b>"),
@@ -215,7 +215,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 345))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 365))
             )
           ),
           column(
@@ -225,7 +225,7 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:19px'> Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS &nbsp;</b>"),
@@ -243,7 +243,7 @@ mod_bloco_1_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 420))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
             )
           ),
           column(
@@ -254,7 +254,7 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:19px'> Cobertura populacional da atenção básica &nbsp;</b>"),
@@ -272,7 +272,7 @@ mod_bloco_1_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 420))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 450))
             )
           )
         )
