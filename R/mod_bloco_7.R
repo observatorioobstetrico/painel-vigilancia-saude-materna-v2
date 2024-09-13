@@ -103,7 +103,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 13%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
@@ -151,7 +151,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 13%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
@@ -199,7 +199,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 13%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
@@ -247,7 +247,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 13%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
@@ -3211,15 +3211,16 @@ mod_bloco_7_server <- function(id, filtros){
         fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
+        nivel_de_analise = nivel_selecionado()
+        # nivel_de_analise = ifelse(
+        #   filtros()$comparar == "Não",
+        #   filtros()$nivel,
+        #   ifelse(
+        #     input$localidade_resumo == "escolha1",
+        #     filtros()$nivel,
+        #     filtros()$nivel2
+        #   )
+        # )
       )
     })
 
@@ -3237,15 +3238,16 @@ mod_bloco_7_server <- function(id, filtros){
         fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
+        nivel_de_analise = nivel_selecionado()
+        # nivel_de_analise = ifelse(
+        #   filtros()$comparar == "Não",
+        #   filtros()$nivel,
+        #   ifelse(
+        #     input$localidade_resumo == "escolha1",
+        #     filtros()$nivel,
+        #     filtros()$nivel2
+        #   )
+        # )
       )
     })
 
@@ -3264,15 +3266,16 @@ mod_bloco_7_server <- function(id, filtros){
         fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
-        nivel_de_analise = ifelse(
-          filtros()$comparar == "Não",
-          filtros()$nivel,
-          ifelse(
-            input$localidade_resumo == "escolha1",
-            filtros()$nivel,
-            filtros()$nivel2
-          )
-        )
+        nivel_de_analise = nivel_selecionado()
+        # nivel_de_analise = ifelse(
+        #   filtros()$comparar == "Não",
+        #   filtros()$nivel,
+        #   ifelse(
+        #     input$localidade_resumo == "escolha1",
+        #     filtros()$nivel,
+        #     filtros()$nivel2
+        #   )
+        # )
       )
     })
 
@@ -3377,7 +3380,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
           names_to = "grupo_cid10",
@@ -4507,7 +4510,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     bloco7_principais_internacoes_neonatal <- eventReactive(
-      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_neonat),
+      c(filtros()$pesquisar, input$tabset1, input$tabset2, input$tabset3, input$tabset4, input$localidade_resumo_morbidade_neonatal),
       bloco7_principais_internacoes_neonatal_aux(),
       ignoreNULL = FALSE
     )
@@ -6726,7 +6729,7 @@ mod_bloco_7_server <- function(id, filtros){
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data5_referencia(),
+              data = data7_referencia(),
               type = "line",
               name = "Referência (média nacional)",
               highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = localidade_comparacao, colour = localidade_comparacao),

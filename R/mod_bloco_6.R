@@ -49,6 +49,15 @@ mod_bloco_6_ui <- function(id) {
               )
             ),
             fluidRow(
+              bs4Dash::box(
+                width = 12,
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mort"), height = 530))
+              )
+            ),
+            fluidRow(
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b6_mort_i1")), proxy.height = "300px")
@@ -96,7 +105,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos maternos &nbsp;</b>"),
@@ -114,7 +123,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mort"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mort"), height = 450))
                 )
               ),
               column(
@@ -124,7 +133,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Razão de mortalidade materna por 100.000 nascidos vivos &nbsp;</b>"),
@@ -142,7 +151,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mort"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mort"), height = 450))
                 )
               ),
               column(
@@ -152,7 +161,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de óbitos maternos por causas obstétricas diretas &nbsp;</b>"),
@@ -170,7 +179,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mort"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mort"), height = 450))
                 )
               ),
               column(
@@ -180,7 +189,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de óbitos maternos diretos por causas específicas &nbsp;</b>"),
@@ -215,7 +224,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 345))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 365))
                 )
               )
             )
@@ -237,6 +246,15 @@ mod_bloco_6_ui <- function(id) {
                 HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
                 uiOutput(ns("input_localidade_resumo_morb")),
                 align = "center"
+              )
+            ),
+            fluidRow(
+              bs4Dash::box(
+                width = 12,
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mmg"), height = 530))
               )
             ),
             fluidRow(
@@ -290,7 +308,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave em internações obstétricas públicas &nbsp;</b>"),
@@ -308,7 +326,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 450))
                 )
               ),
               column(
@@ -319,7 +337,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave por causas específicas &nbsp;</b>"),
@@ -353,7 +371,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 345))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 365))
                 )
               ),
               column(
@@ -363,7 +381,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com internação em UTI &nbsp;</b>"),
@@ -381,7 +399,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 450))
                 )
               ),
               column(
@@ -391,7 +409,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com tempo de permanência prolongado &nbsp;</b>"),
@@ -409,7 +427,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 450))
                 )
               ),
               column(
@@ -419,7 +437,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com transfusão sanguínea &nbsp;</b>"),
@@ -437,7 +455,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 450))
                 )
               ),
               column(
@@ -447,7 +465,7 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
@@ -465,7 +483,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 450))
                 )
               )
             )
@@ -504,6 +522,11 @@ mod_bloco_6_server <- function(id, filtros){
       prop_mmg_cirurgia = rep("round(sum(casos_mmg_cirurgia) / sum(casos_mmg) * 100, 1)", 2)
     )
 
+    bloco6_calcs_resumo <- bloco6_calcs |>
+      dplyr::mutate(
+        prop_mif_investigado = c("round((sum(obito_mif_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil[ano <= 2020], na.rm = TRUE) * 100, 2)", "100"),
+        prop_obito_materno_investigado = c("round((sum(obito_materno_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_maternos[ano <= 2020], na.rm = TRUE) * 100, 2)", "100")
+      )
 
     # Criando alguns outputs para a UI ----------------------------------------
     ## Criando o output que recebe a localidade e o ano escolhidos ------------
@@ -806,7 +829,7 @@ mod_bloco_6_server <- function(id, filtros){
           }
         }
       }
-      bloco6 |>
+      dplyr::left_join(bloco6, base_incompletude) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (nivel_selecionado() == "Nacional")
@@ -824,7 +847,12 @@ mod_bloco_6_server <- function(id, filtros){
           else if (nivel_selecionado() == "Municípios semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
-        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), adicionar_localidade = FALSE) |>
+        cria_indicadores(
+          df_calcs = bloco6_calcs_resumo,
+          filtros = filtros(),
+          adicionar_localidade = TRUE,
+          localidade_resumo = get('input')[[glue::glue("localidade_resumo_{ifelse(grepl('mortalidade', input$tabset1), 'mort', 'morb')}")]]
+        ) |>
         dplyr::mutate(
           localidade = dplyr::case_when(
             nivel_selecionado() == "Nacional" ~ "Brasil",
@@ -909,18 +937,128 @@ mod_bloco_6_server <- function(id, filtros){
     data6_resumo_rmm_corrigida <- reactive({
       if (nivel_selecionado() %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023) {
         dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
-          dplyr::mutate(rmm_c = RMM_C)
+          dplyr::select(!rmm) |>
+          dplyr::mutate(rmm = RMM_C)
       } else {
-        dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade") |>
-          dplyr::mutate(rmm_c = rmm)
+        dplyr::full_join(data6_resumo(), data6_resumo_correcao_rmm(), by = "localidade")
       }
     })
 
     ### Para a referência -----------------------------------------------------
     data6_resumo_referencia <- reactive({
-      bloco6 |>
+      dplyr::left_join(bloco6, base_incompletude) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), referencia = TRUE)
+        cria_indicadores(df_calcs = bloco6_calcs_resumo, filtros = filtros(), referencia = TRUE)
+    })
+
+
+    ## Criando o output do gráfico de radar -----------------------------------
+    ### Definindo os indicadores que aparecerão no gráfico
+    selected_indicators <- c(
+      "rmm",
+      "prop_obitos_diretos",
+      "prop_mmg_int_publicas",
+      "prop_mif_investigado",
+      "prop_obito_materno_investigado"
+    )
+
+    ## Selecionando colunas relevantes nos dataframes de resumo e arrumando seus formatos
+    df <- reactive({
+      data6_resumo_rmm_corrigida()[, c('class', selected_indicators)] |>
+        dplyr::mutate(
+          class = ifelse(grepl("Brasil \\(valor de referência\\)", class), "Brasil", class)
+        ) |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values1"
+        ) |>
+        dplyr::mutate(
+          values1 = round(values1, 1),
+          sufixo = c("", rep("%", 4))
+        )
+    })
+
+    df2 <- reactive({
+      data6_resumo_referencia()[, selected_indicators] |>
+        dplyr::mutate(class = "Referência") |>
+        tidyr::pivot_longer(
+          !class,
+          names_to = "indicador",
+          values_to = "values2"
+        ) |>
+        dplyr::mutate(
+          tipo_de_referencia = lapply(
+            selected_indicators,
+            function(indicador_abrev) {
+              if (indicador_abrev %in% c("prop_mif_investigado", "prop_obito_materno_investigado")) {
+                "incompletude"
+              } else {
+                tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]
+              }
+            }
+          ) |> unlist(),
+          sufixo = c("", rep("%", 4))
+        )
+    })
+
+    ### Criando o output
+    output$spider_chart_mort <- output$spider_chart_mmg <- highcharter::renderHighchart({
+      # Categorias para o eixo x
+      categories <- lapply(
+        selected_indicators,
+        function(indicador_abrev) {
+          if (indicador_abrev == "prop_mif_investigado") {
+            "Porcentagem de óbitos de mulheres em idade fértil investigados"
+          } else if (indicador_abrev == "prop_obito_materno_investigado") {
+            "Porcentagem de óbitos maternos investigados"
+          } else {
+            tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]
+          }
+        }) |> unlist()
+
+      # Obter valores para o gráfico
+      values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
+      values2 <- round(as.numeric(unlist(df2()[, "values2"])), 3)
+
+      # Encontrar o valor máximo dos dados
+      max_value1 <- max(values1, na.rm = TRUE)
+      max_value2 <- max(values2, na.rm = TRUE)
+
+      # Definir o valor máximo do eixo y como o próximo múltiplo de 100 maior que o valor máximo
+      yAxis_max <- ceiling(max(max_value1, max_value2) / 100) * 100
+
+      # Criar gráfico
+      highcharter::highchart() |>
+        highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
+        highcharter::hc_pane(size = '65%') |>
+        highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '12px'))) |>
+        highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
+        highcharter::hc_add_series(
+          name = df()$class[1],
+          data = df() |> dplyr::select(y = values1, sufixo),
+          color = "#2c115f",
+          lineWidth = 2,
+          marker = list(enabled = FALSE, symbol = "circle", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9679 </span> {series.name}: <b> {point.y}{point.sufixo} </b><br>"
+          )
+        ) |>
+        highcharter::hc_add_series(
+          name = df2()$class[1],
+          data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
+          color = "#b73779",
+          lineWidth = 2,
+          opacity = 0.7,
+          dashStyle = "ShortDash",
+          marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'>&#9670 </span> {series.name} ({point.tipo_de_referencia}): <b> {point.y}{point.sufixo} </b>"
+          )
+        ) |>
+        highcharter::hc_legend(align = 'center', layout = 'horizontal', itemStyle = list(fontWeight = 'bold', fontSize = '14px')) |>
+        highcharter::hc_tooltip(shared = TRUE) |>
+        highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
     })
 
 
@@ -952,7 +1090,7 @@ mod_bloco_6_server <- function(id, filtros){
     output$caixa_b6_mort_i2 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo_rmm_corrigida(),
-        indicador = "rmm_c",
+        indicador = "rmm",
         titulo = "Razão de mortalidade materna por 100.000 nascidos vivos",
         tem_meta = TRUE,
         valor_de_referencia = data6_resumo_referencia()$rmm,
@@ -1232,14 +1370,10 @@ mod_bloco_6_server <- function(id, filtros){
     data6_rmm_corrigida <- reactive({
       if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
-          dplyr::mutate(
-            rmm_c=RMM
-          )
+          dplyr::select(!rmm) |>
+          dplyr::mutate(rmm = RMM)
       } else{
-        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
-          dplyr::mutate(
-            rmm_c=rmm
-          )
+        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano")
       }
     })
 
@@ -1297,14 +1431,10 @@ mod_bloco_6_server <- function(id, filtros){
     data6_comp_rmm_corrigida <- reactive({
       if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
         dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
-          dplyr::mutate(
-            rmm_c = RMM
-          )
+          dplyr::select(!rmm) |>
+          dplyr::mutate(rmm = RMM)
       } else{
-        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
-          dplyr::mutate(
-            rmm_c = rmm
-          )
+        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano")
       }
     })
 
@@ -1359,7 +1489,7 @@ mod_bloco_6_server <- function(id, filtros){
             data = data6_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
-            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_referencia(),
@@ -1379,13 +1509,13 @@ mod_bloco_6_server <- function(id, filtros){
             data = data6_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
-            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_comp_rmm_corrigida(),
             type = "line",
             name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil", unique(data6_comp()$class)),
-            highcharter::hcaes(x = ano, y = rmm_c, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>

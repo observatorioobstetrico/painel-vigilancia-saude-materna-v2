@@ -70,7 +70,7 @@ mod_bloco_2_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) &nbsp;</b>"),
@@ -88,7 +88,7 @@ mod_bloco_2_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 400))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 450))
             )
           ),
           column(
@@ -98,7 +98,7 @@ mod_bloco_2_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 520px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Porcentagem de mulheres com mais de 3 partos anteriores &nbsp;</b>"),
@@ -116,7 +116,7 @@ mod_bloco_2_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 400))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 450))
             )
           ),
           column(
@@ -126,7 +126,7 @@ mod_bloco_2_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Taxa de abortos inseguros por mil mulheres em idade fértil &nbsp;</b>"),
@@ -160,7 +160,7 @@ mod_bloco_2_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 345))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 365))
             )
           ),
           column(
@@ -170,7 +170,7 @@ mod_bloco_2_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML("<b style='font-size:18px'> Razão de abortos inseguros por 100 nascidos vivos &nbsp;</b>"),
@@ -204,7 +204,7 @@ mod_bloco_2_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 345))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 365))
             )
           )
         )
