@@ -1472,9 +1472,10 @@ mod_bloco_4_server <- function(id, filtros){
               } else {
                 tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]
               }
-          }) |> unlist(),
-          sufixo = rep("%", 5)
-        )
+          }
+        ) |> unlist(),
+        sufixo = rep("%", 5)
+      )
     })
 
     ### Criando o output
@@ -1490,7 +1491,8 @@ mod_bloco_4_server <- function(id, filtros){
           } else {
             tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]
           }
-        }) |> unlist()
+        }
+      ) |> unlist()
 
       # Obter valores para o gráfico
       values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
