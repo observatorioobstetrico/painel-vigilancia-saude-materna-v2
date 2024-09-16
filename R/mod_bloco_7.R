@@ -77,6 +77,14 @@ mod_bloco_7_ui <- function(id) {
               ),
               column(
                 width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i4")), proxy.height = "300px")
               ),
               column(
@@ -105,7 +113,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
@@ -153,7 +161,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
@@ -201,7 +209,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
@@ -249,7 +257,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
@@ -1970,20 +1978,11 @@ mod_bloco_7_server <- function(id, filtros){
          df_calcs_aux3 <- data.frame(
            tipo = c("local", "referencia"),
            porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-           #   " if(length(input$idade_dias_sih) == 1){
-           #   round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   }
-           #   else if(length(input$idade_dias_sih) == 2){
-           #   round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   } else{
-           #   round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-           # } "
-
              "ifelse(
                length(input$idade_dias_sih) == 3,
                round(sum(internacoes_{input$local_internacao_sih}_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                ifelse(
-               length(input$idade_dias_sih == 2),
+               length(input$idade_dias_sih) == 2,
                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
@@ -2610,7 +2609,7 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
-    titulo_obitos_fetais <- reactive({
+    titulo_obitos_fetais_aux <- reactive({
       dplyr::case_when(
         (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais (geral)",
         (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_menos1500") ~ "Número de óbitos fetais com peso menor que 1500 g",
@@ -2632,6 +2631,31 @@ mod_bloco_7_server <- function(id, filtros){
         (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_1500_1999") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 1500 a 1999 g",
         (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_2000_2499") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 2000 a 2499 g",
         (input$parto_fetal == "depois" & input$faixa_peso_fetal == "fetal_mais2500") ~ "Número de óbitos fetais depois do trabalho de parto com peso maior ou igual a 2500 g",
+      )
+    })
+
+    titulo_obitos_fetais <- reactive({
+      paste0(titulo_obitos_fetais_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+    })
+
+    output$caixa_b7_fetal_i1 <- renderUI({ #[vvv]
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = numero_obitos_fetais(),
+        titulo = titulo_obitos_fetais(),
+        tem_meta = FALSE,
+        valor_de_referencia = data7_resumo_referencia()[[numero_obitos_fetais()]],
+        tipo = "número",
+        invertido = FALSE,
+        cor = "lightgrey",
+        texto_footer = dplyr::if_else(
+          nivel_selecionado() == "Nacional",
+          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+        ),
+        tamanho_caixa = "330px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
       )
     })
 
@@ -2662,38 +2686,67 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
-    titulo_obitos_fetais_oms <- reactive({
+    # titulo_obitos_fetais_oms_aux <- reactive({
+    #   dplyr::case_when(
+    #     (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas)",
+    #     (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) com peso menor que 1500 g",
+    #     (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) com peso de 1500 a 1999 g",
+    #     (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) com peso de 2000 a 2499 g",
+    #     (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto",
+    #     (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto",
+    #     (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto",
+    #     (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso maior ou igual a 2500 g",
+    #   )
+    # })
+
+    titulo_obitos_fetais_oms_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas)",
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) com peso menor que 1500 g",
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) com peso de 1500 a 1999 g",
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) com peso de 2000 a 2499 g",
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) com peso maior ou igual a 2500 g",
-        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto",
-        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) antes do trabalho de parto com peso maior ou igual a 2500 g",
-        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto",
-        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) durante o trabalho de parto com peso maior ou igual a 2500 g",
-        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto",
-        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais (mais de 28 semanas) depois do trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (geral)",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais com peso menor que 1500 g",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais com peso de 1500 a 1999 g",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais com peso de 2000 a 2499 g",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais com peso maior ou igual a 2500 g",
+        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais antes do trabalho de parto",
+        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais antes do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais antes do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal_oms == "antes" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais antes do trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais durante o trabalho de parto",
+        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais durante o trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais durante o trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal_oms == "durante" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais durante o trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais depois do trabalho de parto",
+        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_menos1500") ~ "Número de óbitos fetais depois do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_1500_1999") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_2000_2499") ~ "Número de óbitos fetais depois do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal_oms == "depois" & input$faixa_peso_fetal_oms == "fetal_mais2500") ~ "Número de óbitos fetais depois do trabalho de parto com peso maior ou igual a 2500 g",
       )
     })
 
-    output$caixa_b7_fetal_i1 <- renderUI({
+    titulo_obitos_fetais_oms <- reactive({
+      paste0(titulo_obitos_fetais_oms_aux(), " (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)")
+    })
+
+    output$caixa_b7_fetal_i5 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = numero_obitos_fetais(),
-        titulo = titulo_obitos_fetais(),
+        indicador = numero_obitos_fetais_oms(),
+        titulo = titulo_obitos_fetais_oms(),
         tem_meta = FALSE,
-        valor_de_referencia = data7_resumo_referencia()[[numero_obitos_fetais()]],
+        valor_de_referencia = data7_resumo_referencia()[[numero_obitos_fetais_oms()]],
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -2705,100 +2758,6 @@ mod_bloco_7_server <- function(id, filtros){
         tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    ### Caixas para obitos potencialmente evitaveis ############################ [zzz]
-
-    ### Aba fetal
-
-    output$caixa_b7_evitaveis_fetal <- renderUI({
-      cria_caixa_server(
-        dados = bloco7_evitaveis_resumo(),
-        indicador = "porc_evitavel_fetal",
-        titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (geral)",
-        tem_meta = FALSE,
-        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        cor = "lightgrey",
-        tamanho_caixa = "330px",
-        pagina = "bloco_7",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    ### Aba perinatal
-
-    output$caixa_b7_evitaveis_perinatal <- renderUI({
-      cria_caixa_server(
-        dados = bloco7_evitaveis_resumo(),
-        indicador = "porc_evitavel_perinatal",
-        titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis (geral)",
-        tem_meta = FALSE,
-        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        cor = "lightgrey",
-        tamanho_caixa = "330px",
-        pagina = "bloco_7",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    ### Aba neonatal
-
-    output$caixa_b7_evitaveis_neonatal <- renderUI({
-      cria_caixa_server(
-        dados = bloco7_evitaveis_resumo(),
-        indicador = "porc_evitavel_neonatal",
-        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
-        tem_meta = FALSE,
-        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
-        tipo = "porcentagem",
-        invertido = FALSE,
-        cor = "lightgrey",
-        tamanho_caixa = "330px",
-        pagina = "bloco_7",
-        nivel_de_analise = nivel_selecionado()
-      )
-    })
-
-    ### Caixas principais causas de obito ######################################
-
-    ### Aba fetal
-
-    output$caixa_b7_principais_fetal <- renderUI({
-      cria_caixa_principais_evitaveis_bloco7(
-        dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais (geral),"
-      )
-    })
-
-    ### Aba perinatal
-
-    output$caixa_b7_principais_perinatal <- renderUI({
-      cria_caixa_principais_evitaveis_bloco7(
-        dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais (geral),"
-      )
-    })
-
-    ### Aba neonatal
-
-    output$caixa_b7_principais_neonatal <- renderUI({
-      cria_caixa_principais_evitaveis_bloco7(
-        dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais (geral),"
-      )
-    })
-
-    ### Aba morbidade neonatal
-
-    output$caixa_b7_principais_morbidade_neonatal <- renderUI({
-      cria_caixa_principais_evitaveis_bloco7(
-        dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais (geral),"
       )
     })
 
@@ -2828,7 +2787,7 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
-    titulo_taxa_mortalidade_fetal <- reactive({
+    titulo_taxa_mortalidade_fetal_aux <- reactive({
       dplyr::case_when(
         (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
         (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
@@ -2850,6 +2809,26 @@ mod_bloco_7_server <- function(id, filtros){
         (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 1500 a 1999 g",
         (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 2000 a 2499 g",
         (input$parto_fetal2 == "depois" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso maior ou igual a 2500 g",
+      )
+    })
+
+    titulo_taxa_mortalidade_fetal <- reactive({
+      paste0(titulo_taxa_mortalidade_fetal_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+    })
+
+    output$caixa_b7_fetal_i2 <- renderUI({
+      cria_caixa_server(
+        dados = data7_resumo(),
+        indicador = taxa_mortalidade_fetal(),
+        titulo = titulo_taxa_mortalidade_fetal(),
+        tem_meta = FALSE,
+        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal()]] >0 ,
+                                             data7_resumo_referencia()[[taxa_mortalidade_fetal()]], NaN),
+        tipo = "taxa",
+        invertido = FALSE,
+        tamanho_caixa = "330px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
       )
     })
 
@@ -2879,39 +2858,68 @@ mod_bloco_7_server <- function(id, filtros){
       )
     })
 
-    titulo_taxa_mortalidade_fetal_oms <- reactive({
+    # titulo_taxa_mortalidade_fetal_oms_aux <- reactive({
+    #   dplyr::case_when(
+    #     (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas)",
+    #     (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso menor que 1500 g",
+    #     (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso de 1500 a 1999 g",
+    #     (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso de 2000 a 2499 g",
+    #     (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto",
+    #     (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto",
+    #     (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso maior ou igual a 2500 g",
+    #     (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto",
+    #     (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso menor que 1500 g",
+    #     (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso de 1500 a 1999 g",
+    #     (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso de 2000 a 2499 g",
+    #     (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso maior ou igual a 2500 g",
+    #   )
+    # })
+
+    titulo_taxa_mortalidade_fetal_oms_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas)",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) com peso maior ou igual a 2500 g",
-        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto",
-        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) antes do trabalho de parto com peso maior ou igual a 2500 g",
-        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto",
-        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) durante o trabalho de parto com peso maior ou igual a 2500 g",
-        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto",
-        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal (mais de 28 semanas) depois do trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
+        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal durante o trabalho de parto",
+        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "durante" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal durante o trabalho de parto com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal depois do trabalho de parto",
+        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "depois" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal depois do trabalho de parto com peso maior ou igual a 2500 g",
       )
     })
 
-    output$caixa_b7_fetal_i2 <- renderUI({
+    titulo_taxa_mortalidade_fetal_oms <- reactive({
+      paste0(titulo_taxa_mortalidade_fetal_oms_aux(), " (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)")
+    })
+
+    output$caixa_b7_fetal_i6 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = taxa_mortalidade_fetal(),
-        titulo = titulo_taxa_mortalidade_fetal(),
+        indicador = taxa_mortalidade_fetal_oms(),
+        titulo = titulo_taxa_mortalidade_fetal_oms(),
         tem_meta = FALSE,
-        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal()]] >0 ,
-                                             data7_resumo_referencia()[[taxa_mortalidade_fetal()]], NaN),
+        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]] >0 ,
+                                             data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]], NaN),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
@@ -3293,6 +3301,100 @@ mod_bloco_7_server <- function(id, filtros){
         #     filtros()$nivel2
         #   )
         # )
+      )
+    })
+
+    ### Caixas para obitos potencialmente evitaveis ############################ [zzz]
+
+    ### Aba fetal
+
+    output$caixa_b7_evitaveis_fetal <- renderUI({
+      cria_caixa_server(
+        dados = bloco7_evitaveis_resumo(),
+        indicador = "porc_evitavel_fetal",
+        titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (geral)",
+        tem_meta = FALSE,
+        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        cor = "lightgrey",
+        tamanho_caixa = "330px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    ### Aba perinatal
+
+    output$caixa_b7_evitaveis_perinatal <- renderUI({
+      cria_caixa_server(
+        dados = bloco7_evitaveis_resumo(),
+        indicador = "porc_evitavel_perinatal",
+        titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis (geral)",
+        tem_meta = FALSE,
+        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        cor = "lightgrey",
+        tamanho_caixa = "330px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    ### Aba neonatal
+
+    output$caixa_b7_evitaveis_neonatal <- renderUI({
+      cria_caixa_server(
+        dados = bloco7_evitaveis_resumo(),
+        indicador = "porc_evitavel_neonatal",
+        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
+        tem_meta = FALSE,
+        valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        cor = "lightgrey",
+        tamanho_caixa = "330px",
+        pagina = "bloco_7",
+        nivel_de_analise = nivel_selecionado()
+      )
+    })
+
+    ### Caixas principais causas de obito ######################################
+
+    ### Aba fetal
+
+    output$caixa_b7_principais_fetal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_obito_fetal(),
+        titulo = "Dentre os óbitos fetais (geral),"
+      )
+    })
+
+    ### Aba perinatal
+
+    output$caixa_b7_principais_perinatal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_obito_perinatal(),
+        titulo = "Dentre os óbitos perinatais (geral),"
+      )
+    })
+
+    ### Aba neonatal
+
+    output$caixa_b7_principais_neonatal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_obito_neonatal(),
+        titulo = "Dentre os óbitos neonatais (geral),"
+      )
+    })
+
+    ### Aba morbidade neonatal
+
+    output$caixa_b7_principais_morbidade_neonatal <- renderUI({
+      cria_caixa_principais_evitaveis_bloco7(
+        dados = bloco7_principais_internacoes_neonatal(),
+        titulo = "Dentre as internações neonatais (geral),"
       )
     })
 
