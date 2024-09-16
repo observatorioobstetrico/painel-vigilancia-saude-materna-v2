@@ -3463,7 +3463,7 @@ mod_nivel_1_server <- function(id, filtros){
 
           menos_1500_dist_peso_neonat =  round(
             sum(c(obitos_0dias_menos1500, obitos_1_6dias_menos1500, obitos_7_27dias_menos1500, obitos_27dias_menos1500)[c(rep(F, 3), T)])/
-              sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[c(rep(F, 4), T)])
+              sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[c(rep(F, 3), T)])
             * 100, 1) ,
 
           de_1500_1999_dist_peso_neonat =  round(
@@ -3793,7 +3793,7 @@ mod_nivel_1_server <- function(id, filtros){
 
           menos_1500_dist_peso_neonat =  round(
             sum(c(obitos_0dias_menos1500, obitos_1_6dias_menos1500, obitos_7_27dias_menos1500, obitos_27dias_menos1500)[c(rep(F, 3), T)])/
-              sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[c(rep(F, 4), T)])
+              sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[c(rep(F, 3), T)])
             * 100, 1) ,
 
           de_1500_1999_dist_peso_neonat =  round(
