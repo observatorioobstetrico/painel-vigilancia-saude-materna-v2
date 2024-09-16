@@ -1,37 +1,29 @@
 #' @exportS3Method pkg::generic
-cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros", localidade_resumo = "escolha1") {
+cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NULL, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros", localidade_resumo = "escolha1") {
 
   if (referencia == FALSE) {
     df_calcs <- df_calcs |>
       dplyr::filter(tipo == "local") |>
       dplyr::select(!tipo)
+
+    if (bloco == "bloco7") {
+      df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
+        dplyr::filter(tipo == "local") |>
+        dplyr::select(!tipo)
+    }
   } else {
     df_calcs <- df_calcs |>
       dplyr::filter(tipo == "referencia") |>
       dplyr::select(!tipo)
+
+    if (bloco == "bloco7") {
+      df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
+        dplyr::filter(tipo == "referencia") |>
+        dplyr::select(!tipo)
+    }
   }
 
-  if (bloco == "bloco7") {
-    df_localidade <- df_localidade |>
-      dplyr::mutate(
-        obitos_fetais = obitos_fetais_mais_22sem,
-        obitos_perinatal_total = obitos_fetais_mais_22sem + obitos_6dias,
-        perinatal_total_menos1500 = fetal_peso_menos_1500 + obitos_6dias_menos1500,
-        perinatal_total_1500_1999 = fetal_peso_1500_1999 + obitos_6dias_1500_1999,
-        perinatal_total_2000_2499 = fetal_peso_2000_2499 + obitos_6dias_2000_2499,
-        perinatal_total_mais2500 = fetal_peso_mais_2500 + obitos_6dias_mais2500,
-        obitos_perinatal_oms = obitos_fetais_mais_28sem + obitos_6dias,
-        perinatal_oms_menos1500 = peso_menos_1500_mais_28sem + obitos_6dias_menos1500,
-        perinatal_oms_1500_1999 = peso_1500_1999_mais_28sem + obitos_6dias_1500_1999,
-        perinatal_oms_2000_2499 = peso_2000_2499_mais_28sem + obitos_6dias_2000_2499,
-        perinatal_oms_mais2500 = peso_mais_2500_mais_28sem + obitos_6dias_mais2500,
-
-      )
-
-    colunas_summarise <- names(df_calcs)[!startsWith(names(df_calcs), "faltante")]
-  } else {
-    colunas_summarise <- names(df_calcs)
-  }
+  colunas_summarise <- names(df_calcs)
 
   df_localidade_aux <- df_localidade |>
     dplyr::summarise() |>
@@ -55,15 +47,23 @@ cria_indicadores <- function(df_localidade, df_calcs, filtros, referencia = FALS
   }
 
   if (bloco == "bloco7") {
-    df_localidade_aux <- df_localidade_aux |>
-      dplyr::mutate(
-        faltante_dist_moment_obito_fetal = round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 2),
-        faltante_dist_moment_obito_perinat = round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 2),
-        faltante_moment_obito_neonat = round(100 -dia_0_dist_moment_obito_neonat -dia_1_6dist_moment_obito_neonat -dia_7_27dist_moment_obito_neonat, 2),
-        faltante_dist_peso_fetal = round(100 -menos_1500_dist_peso_fetal-de_1500_1999_dist_peso_fetal-de_2000_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 2),
-        faltante_dist_peso_perinat = round(100 -menos_1500_dist_peso_perinat -de_1500_1999_dist_peso_perinat -de_2000_2499_dist_peso_perinat -mais_2500_dist_peso_perinat, 2),
-        faltante_dist_peso_neonat = round(100 -menos_1500_dist_peso_neonat -de_1500_1999_dist_peso_neonat -de_2000_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 2)
-      )
+    colunas_summarise_dist_bloco7 <- names(df_calcs_dist_bloco7)
+    if (nrow(df_localidade_aux) == 1) {
+      for (coluna in colunas_summarise_dist_bloco7) {
+        df_localidade_aux <- cbind(
+          df_localidade_aux,
+          dplyr::summarise(df_localidade_aux, !!coluna := !!rlang::parse_expr(df_calcs_dist_bloco7[[coluna]]))
+        )
+      }
+    } else {
+      for (coluna in colunas_summarise_dist_bloco7) {
+        df_localidade_aux <- dplyr::full_join(
+          df_localidade_aux,
+          dplyr::summarise(df_localidade_aux |> dplyr::group_by(ano), !!coluna := !!rlang::parse_expr(df_calcs_dist_bloco7[[coluna]])),
+          by = dplyr::join_by(ano)
+        )
+      }
+    }
   }
 
   if (adicionar_localidade == TRUE) {
@@ -376,9 +376,10 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 80%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso < 1500 g")
@@ -399,9 +400,10 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 80%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "nasceram com menos de 28 semanas")
@@ -508,9 +510,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso menor que 1500 g")
@@ -535,9 +538,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "ocorreram antes do parto")
@@ -559,9 +563,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "ocorreram antes do parto")
@@ -587,9 +592,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso menor que 1500 g")
@@ -614,9 +620,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "ocorreram no dia 0 de vida")
@@ -638,9 +645,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      hr(),
       div(
-        style = "height: 85%; overflow: auto; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso menor que 1500 g")
@@ -1168,7 +1176,7 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
   porc_obitos_3 <- (dados$porc_obitos)[3]
   porc_3 <- "{formatC(porc_obitos_3, big.mark = '.', decimal.mark = ',')}%"
 
-  style_porc <- "font-size: 22px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+  style_porc <- "font-size: 30px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
   style_grupo <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
 
   bs4Dash::box(
@@ -1176,20 +1184,21 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
     width = width_caixa,
     collapsible = FALSE,
     headerBorder = FALSE,
-    div(style = glue::glue("font-size: {fonte_titulo}; height: 27%; padding: 0 5px;"), HTML(glue::glue("<b> {titulo} </b>")), hr()),
+    div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 5px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+    hr(),
     div(
-      style = "height: 73%; overflow: auto; padding-bottom: 5px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+      style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_1)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_1)}")))
+        p(style = style_grupo, HTML(glue::glue('pertencem ao grupo de causa "{glue::glue(grupo_1)}"')))
       ),
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_2)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_2)}")))
+        p(style = style_grupo, HTML(glue::glue('pertencem ao grupo de causa "{glue::glue(grupo_2)}"')))
       ),
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_3)} </b>"))),
-        p(style = style_grupo, HTML(glue::glue("Pertencem ao grupo de causa {glue::glue(grupo_3)}")))
+        p(style = style_grupo, HTML(glue::glue('pertencem ao grupo de causa "{glue::glue(grupo_3)}"')))
       )
     )
   )
