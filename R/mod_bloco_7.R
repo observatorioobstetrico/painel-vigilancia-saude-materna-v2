@@ -113,7 +113,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
@@ -161,7 +161,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
@@ -209,7 +209,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
@@ -257,7 +257,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 13%; display: flex; align-items: center;",
+                    style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
@@ -2083,20 +2083,11 @@ mod_bloco_7_server <- function(id, filtros){
          df_calcs_aux3 <- data.frame(
            tipo = c("local", "referencia"),
            porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-           #   " if(length(input$idade_dias_sih) == 1){
-           #   round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   }
-           #   else if(length(input$idade_dias_sih) == 2){
-           #   round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]}[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   } else{
-           #   round(sum(internacoes_{input$local_internacao_sih}_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-           # } "
-
              "ifelse(
                length(input$idade_dias_sih) == 3,
                round(sum(internacoes_{input$local_internacao_sih}_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                ifelse(
-               length(input$idade_dias_sih == 2),
+               length(input$idade_dias_sih) == 2,
                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
