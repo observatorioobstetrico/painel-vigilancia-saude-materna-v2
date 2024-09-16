@@ -741,6 +741,7 @@ mod_nivel_1_ui <- function(id) {
                         shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i4")), proxy.height = "280px")
                       ),
                       column(
+                        offset = 2,
                         width = 4,
                         shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "280px")
                       ),
@@ -808,6 +809,7 @@ mod_nivel_1_ui <- function(id) {
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i6")), proxy.height = "280px")
                       ),
                      column(
+                       offset = 2,
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i7")), proxy.height = "280px")
                      ),
@@ -834,6 +836,7 @@ mod_nivel_1_ui <- function(id) {
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_morbidade_i3")), proxy.height = "270px")
                      ),
                      column(
+                       offset = 4,
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_principais_morbidade_neonatal")), proxy.height = "270px")
                      )
@@ -4077,7 +4080,7 @@ mod_nivel_1_server <- function(id, filtros){
        cria_caixa_server(
          dados = bloco7_evitaveis_resumo(),
          indicador = "porc_evitavel_fetal",
-         titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (geral)",
+         titulo = "Porcentagem de óbitos fetais potencialmente evitáveis",
          tem_meta = FALSE,
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
          tipo = "porcentagem",
@@ -4095,7 +4098,7 @@ mod_nivel_1_server <- function(id, filtros){
        cria_caixa_server(
          dados = bloco7_evitaveis_resumo(),
          indicador = "porc_evitavel_perinatal",
-         titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis (geral)",
+         titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis",
          tem_meta = FALSE,
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
          tipo = "porcentagem",
@@ -4113,7 +4116,7 @@ mod_nivel_1_server <- function(id, filtros){
        cria_caixa_server(
          dados = bloco7_evitaveis_resumo(),
          indicador = "porc_evitavel_neonatal",
-         titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
+         titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis",
          tem_meta = FALSE,
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
          tipo = "porcentagem",
@@ -4132,7 +4135,7 @@ mod_nivel_1_server <- function(id, filtros){
      output$caixa_b7_fetal_i5 <- renderUI({
        cria_caixa_principais_evitaveis_bloco7(
          dados = bloco7_principais_obito_fetal(),
-         titulo = "Dentre os óbitos fetais (geral),"
+         titulo = "Dentre os óbitos fetais,"
        )
      })
 
@@ -4141,7 +4144,7 @@ mod_nivel_1_server <- function(id, filtros){
      output$caixa_b7_perinatal_i5 <- renderUI({
        cria_caixa_principais_evitaveis_bloco7(
          dados = bloco7_principais_obito_perinatal(),
-         titulo = "Dentre os óbitos perinatais (geral),"
+         titulo = "Dentre os óbitos perinatais,"
       )
      })
 
@@ -4150,7 +4153,7 @@ mod_nivel_1_server <- function(id, filtros){
      output$caixa_b7_neonatal_i7 <- renderUI({
        cria_caixa_principais_evitaveis_bloco7(
          dados = bloco7_principais_obito_neonatal(),
-         titulo = "Dentre os óbitos neonatais (geral),"
+         titulo = "Dentre os óbitos neonatais,"
        )
      })
 
@@ -4237,7 +4240,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais (geral),",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4247,7 +4250,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais (geral),",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4337,7 +4340,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre os óbitos neonatais (geral),",
+        titulo = "Dentre os óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4347,7 +4350,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre os óbitos neonatais (geral),",
+        titulo = "Dentre os óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4372,7 +4375,7 @@ mod_nivel_1_server <- function(id, filtros){
         #   "Comparação não aplicável (o total nacional é o valor de referência)",
         #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         # ),
-        tamanho_caixa = "350px",
+        tamanho_caixa = "330px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -4390,7 +4393,7 @@ mod_nivel_1_server <- function(id, filtros){
                                              data7_comp()$taxa_perinatal_oms, #, NaN),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "350px",
+        tamanho_caixa = "330px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -4403,7 +4406,7 @@ mod_nivel_1_server <- function(id, filtros){
         dados = data7(),
         indicador = "perinatal momento do obito por peso",
         titulo = "Dentre os óbitos perinatais,",
-        tamanho_caixa = "350px",
+        tamanho_caixa = "330px",
       )
     })
 
@@ -4413,7 +4416,7 @@ mod_nivel_1_server <- function(id, filtros){
         dados = data7(),
         indicador = "perinatal peso por momento do obito",
         titulo = "Dentre os óbitos perinatais,",
-        tamanho_caixa = "350px",
+        tamanho_caixa = "330px",
       )
     })
 
@@ -4442,7 +4445,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS",
         tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -4461,7 +4464,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS",
         tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -4477,7 +4480,7 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais (geral),"
+        titulo = "Dentre as internações neonatais,"
       )
     })
 

@@ -1009,11 +1009,11 @@ mod_bloco_6_server <- function(id, filtros){
         selected_indicators,
         function(indicador_abrev) {
           if (indicador_abrev == "prop_mif_investigado") {
-            "Porcentagem de óbitos de mulheres em idade fértil investigados"
+            "% de óbitos de mulheres em idade fértil investigados"
           } else if (indicador_abrev == "prop_obito_materno_investigado") {
-            "Porcentagem de óbitos maternos investigados"
+            "% de óbitos maternos investigados"
           } else {
-            tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]
+            gsub("Porcentagem", "%", tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev])
           }
         }) |> unlist()
 

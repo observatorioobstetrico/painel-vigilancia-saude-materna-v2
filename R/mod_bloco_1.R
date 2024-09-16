@@ -634,7 +634,7 @@ mod_bloco_1_server <- function(id, filtros){
     ### Criando o output
     output$spider_chart <- highcharter::renderHighchart({
       # Categorias para o eixo x
-      categories <- lapply(selected_indicators, function(indicador_abrev) tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]) |> unlist()
+      categories <- lapply(selected_indicators, function(indicador_abrev) gsub("Porcentagem", "%", tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev])) |> unlist()
 
       # Obter valores para o gráfico
       values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)

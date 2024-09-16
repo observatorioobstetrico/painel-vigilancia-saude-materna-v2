@@ -130,17 +130,17 @@ mod_bloco_4_ui <- function(id){
                 fluidRow(
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 450))
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
                   ),
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 450)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 450))
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
                   )
                 )
               )
@@ -168,7 +168,7 @@ mod_bloco_4_ui <- function(id){
           ),
           fluidRow(
             column(
-              width = 6,
+              width = 4,
               HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
               HTML("<b style='font-size:19px'> Resumo do período </b>"),
               hr(),
@@ -186,53 +186,49 @@ mod_bloco_4_ui <- function(id){
                   collapsible = FALSE,
                   headerBorder = FALSE,
                   HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 530))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
                 )
               ),
               fluidRow(
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador2")), proxy.height = "293px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador2")), proxy.height = "293px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador2")), proxy.height = "293px")
-                )
-              ),
-              fluidRow(
+                ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador2")), proxy.height = "325px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador2")), proxy.height = "325px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador2")), proxy.height = "325px")
-                )
-              ),
-              fluidRow(
+                ),
                 column(
-                  offset = 4,
-                  width = 4,
+                  offset = 3,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador2")), proxy.height = "325px")
                 )
               )
             ),
             column(
-              width = 6,
+              width = 8,
               bs4Dash::bs4Card(
                 width = 12,
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
@@ -273,7 +269,7 @@ mod_bloco_4_ui <- function(id){
           ),
           fluidRow(
             column(
-              width = 6,
+              width = 4,
               HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
               HTML("<b style='font-size:19px'> Resumo do período </b>"),
               hr(),
@@ -291,53 +287,49 @@ mod_bloco_4_ui <- function(id){
                   collapsible = FALSE,
                   headerBorder = FALSE,
                   HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 530))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
                 )
               ),
               fluidRow(
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador3")), proxy.height = "293px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador3")), proxy.height = "293px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador3")), proxy.height = "293px")
-                )
-              ),
-              fluidRow(
+                ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador3")), proxy.height = "325px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador3")), proxy.height = "325px")
                 ),
                 column(
-                  width = 4,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador3")), proxy.height = "325px")
-                )
-              ),
-              fluidRow(
+                ),
                 column(
-                  offset = 4,
-                  width = 4,
+                  offset = 3,
+                  width = 6,
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador3")), proxy.height = "325px")
                 )
               )
             ),
             column(
-              width = 6,
+              width = 8,
               bs4Dash::bs4Card(
                 width = 12,
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
@@ -1485,11 +1477,11 @@ mod_bloco_4_server <- function(id, filtros){
         selected_indicators,
         function(indicador_abrev) {
           if (indicador_abrev == "prop_obitos_fetais_durante") {
-            "Porcentagem de óbitos fetais ocorridos durante o parto"
+            "% de óbitos fetais ocorridos durante o parto"
           } else if (indicador_abrev == "prop_partos_sem_uti") {
-            "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal"
+            "% de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal"
           } else {
-            tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev]
+            gsub("Porcentagem", "%", tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev])
           }
         }
       ) |> unlist()

@@ -1564,7 +1564,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 12%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
@@ -1592,7 +1592,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 12%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
@@ -1655,7 +1655,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 12%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(

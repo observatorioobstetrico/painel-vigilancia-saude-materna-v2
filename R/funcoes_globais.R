@@ -98,7 +98,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
 }
 
 
-cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = "300px", fonte_titulo = "16px", pagina, width_caixa = 12) {
+cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = "300px", fonte_titulo = "16px", fonte_comparacao = "14px", pagina, width_caixa = 12) {
 
   if (is.null(valor_indicador)) {
     if (isTruthy(dados[[indicador]])) {
@@ -312,7 +312,7 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
     div(style = glue::glue("font-size: {fonte_titulo}; height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
     div(style = "height: 3%"),
     div(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
-    div(style = glue::glue("font-size: {fonte_titulo}; overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
+    div(style = glue::glue("font-size: {fonte_comparacao}; overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
   )
 
 
