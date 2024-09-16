@@ -1107,17 +1107,17 @@ mod_nivel_1_server <- function(id, filtros){
               data6 = data6(),
               data6_rmm_corrigida = data6_rmm_corrigida(),
               data6_comp = data6_comp(),
-              data_incompletude = data_incompletude(),
-              data_plot_grupos_morbidade_neonatal_completo = data_plot_grupos_morbidade_neonatal_completo(),
-              data_plot_grupos_morbidade_neonatal_comp_completo = data_plot_grupos_morbidade_neonatal_comp_completo(),
-              data_plot_grupos_fetal_completo = data_plot_grupos_fetal_completo(),
-              data_plot_grupos_fetal_comp_completo = data_plot_grupos_fetal_comp_completo(),
-              data_plot_grupos_neonatal_completo = data_plot_grupos_neonatal_completo(),
-              data_plot_grupos_neonatal_comp_completo = data_plot_grupos_neonatal_comp_completo(),
-              data_plot_grupos_perinatal_completo = data_plot_grupos_perinatal_completo(),
-              data_plot_grupos_perinatal_comp_completo = data_plot_grupos_perinatal_comp_completo(),
-              data7 = data7(),
-              data7_comp = data7_comp()
+              data_incompletude = data_incompletude()
+              # data_plot_grupos_morbidade_neonatal_completo = data_plot_grupos_morbidade_neonatal_completo(),
+              # data_plot_grupos_morbidade_neonatal_comp_completo = data_plot_grupos_morbidade_neonatal_comp_completo(),
+              # data_plot_grupos_fetal_completo = data_plot_grupos_fetal_completo(),
+              # data_plot_grupos_fetal_comp_completo = data_plot_grupos_fetal_comp_completo(),
+              # data_plot_grupos_neonatal_completo = data_plot_grupos_neonatal_completo(),
+              # data_plot_grupos_neonatal_comp_completo = data_plot_grupos_neonatal_comp_completo(),
+              # data_plot_grupos_perinatal_completo = data_plot_grupos_perinatal_completo(),
+              # data_plot_grupos_perinatal_comp_completo = data_plot_grupos_perinatal_comp_completo(),
+              # data7 = data7(),
+              # data7_comp = data7_comp()
 
             )
           )
@@ -1189,7 +1189,7 @@ mod_nivel_1_server <- function(id, filtros){
       if (filtros()$nivel == "Municipal") {
         base_cobertura_muni_2015_2021 |>
           dplyr::filter(
-            ano == dplyr::ifelse(
+            ano == ifelse(
               filtros()$ano %in% c(2012, 2013, 2014),
               2015,
               filtros()$ano
@@ -1206,7 +1206,7 @@ mod_nivel_1_server <- function(id, filtros){
       } else if (filtros()$nivel == "Estadual") {
         base_cobertura_uf_regioes_2015_2021 |>
           dplyr::filter(
-            ano == dplyr::ifelse(
+            ano == ifelse(
               filtros()$ano %in% c(2012, 2013, 2014),
               2015,
               filtros()$ano
@@ -1219,7 +1219,7 @@ mod_nivel_1_server <- function(id, filtros){
       } else if (filtros()$nivel == "Regional") {
         base_cobertura_uf_regioes_2015_2021 |>
           dplyr::filter(
-            ano == dplyr::ifelse(
+            ano == ifelse(
               filtros()$ano %in% c(2012, 2013, 2014),
               2015,
               filtros()$ano
@@ -1232,7 +1232,7 @@ mod_nivel_1_server <- function(id, filtros){
       } else if (filtros()$nivel == "Nacional") {
         base_cobertura_uf_regioes_2015_2021 |>
           dplyr::filter(
-            ano == dplyr::ifelse(
+            ano == ifelse(
               filtros()$ano %in% c(2012, 2013, 2014),
               2015,
               filtros()$ano
@@ -4201,7 +4201,7 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "taxa_mort_fetal",
         titulo = "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
         tem_meta = FALSE,
-        valor_de_referencia = #dplyr::ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
+        valor_de_referencia = #ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
                                              data7_comp()$taxa_mort_fetal,#, NaN),
         tipo = "taxa",
         invertido = FALSE,
@@ -4318,7 +4318,7 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-         # texto_footer = dplyr::ifelse(
+         # texto_footer = ifelse(
          #   filtros()$nivel == "Nacional",
          #   "Comparação não aplicável (o total nacional é o valor de referência)",
          #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
@@ -4365,7 +4365,7 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        # texto_footer = dplyr::ifelse(
+        # texto_footer = ifelse(
         #   filtros()$nivel == "Nacional",
         #   "Comparação não aplicável (o total nacional é o valor de referência)",
         #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
@@ -4384,7 +4384,7 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "taxa_perinatal_oms",
         titulo = "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
-        valor_de_referencia = #dplyr::ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
+        valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
                                              data7_comp()$taxa_perinatal_oms, #, NaN),
         tipo = "taxa",
         invertido = FALSE,
