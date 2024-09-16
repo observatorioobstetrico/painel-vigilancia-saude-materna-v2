@@ -330,7 +330,9 @@ mod_nivel_1_ui <- function(id) {
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
                 assistência ao parto, e a distância percorrida para chegar nos serviços de saúde de alta e
                 baixa complexidade e a porcentagem de nascidos vivos com peso < 1500g segundo local de
-                ocorrência do parto. Para o nível de análise municipal, apresentamos duas informações adicionais:
+                ocorrência do parto.
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Para o nível de análise municipal, apresentamos duas informações adicionais:
                 município com primeira, segunda e terceira maior ocorrência de partos fora do município de
                 residência da mulher (% de partos) e hospital com maior número de partos ocorridos fora do
                 município de residência da mulher. Essas informações podem auxiliar os gestores municipais
@@ -2641,7 +2643,7 @@ mod_nivel_1_server <- function(id, filtros){
           porc_termo_precoce = 20,
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao = round(sum(nascidos_vivos_anomalia) / total_de_nascidos_vivos * 100, 1),
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2766,10 +2768,10 @@ mod_nivel_1_server <- function(id, filtros){
     output$caixa_b5_i8 <- renderUI({
       cria_caixa_server(
         dados = data5(),
-        indicador = "porc_malformacao",
+        indicador = "porc_malformacao_vigilancia",
         titulo = "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde",
-        tem_meta = FALSE,
-        valor_de_referencia = data5_comp()$porc_malformacao,
+        tem_meta = TRUE,
+        valor_de_referencia = data5_comp()$porc_malformacao_vigilancia,
         tipo = "porcentagem",
         invertido = FALSE,
         fonte_titulo = "15px",
