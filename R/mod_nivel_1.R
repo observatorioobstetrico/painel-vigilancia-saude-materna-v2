@@ -403,10 +403,10 @@ mod_nivel_1_ui <- function(id) {
                         width = 4,
                         shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "280px")
                       ),
-                      #column(
-                      # width = 4,
-                      # shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_muni")), proxy.height = "280px")
-                     #),
+                     column(
+                     width = 4,
+                     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_muni")), proxy.height = "280px") #[fff]
+                     ),
                     )
                   )
                 )
@@ -2059,6 +2059,54 @@ mod_nivel_1_server <- function(id, filtros){
 
     })
 
+    data4_deslocamento_macrorregiao <- reactive({
+      # if (filtros()$nivel != "Estadual" & filtros()$nivel != "Municipal") {
+        bloco4_deslocamento_macrorregiao |>
+          dplyr::filter(
+            ano == filtros()$ano
+          ) |>
+          dplyr::filter(
+            if (filtros()$nivel == "Nacional")
+              ano == filtros()$ano
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::summarise(
+            prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+            localidade = dplyr::case_when(
+              filtros()$nivel == "Nacional" ~ "Brasil",
+              filtros()$nivel == "Regional" ~ filtros()$regiao,
+              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro
+            )
+          ) |>
+          dplyr::ungroup()
+      # } else if (filtros()$nivel == "Municipal") {
+      #   bloco4_deslocamento_macrorregiao |>
+      #     dplyr::filter(
+      #       ano == filtros()$ano,
+      #       municipio == filtros()$municipio & uf == filtros()$estado_municipio
+      #     ) |>
+      #     dplyr::group_by(ano) |>
+      #     dplyr::mutate(
+      #       prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+      #       localidade = filtros()$municipio,
+      #       .keep = "unused"
+      #     ) |>
+      #     dplyr::ungroup()
+      #   }
+
+    })
+
     ##### Dados do quarto bloco de indicadores para a comparação com o Brasil #####
     data4_comp <- reactive({
       bloco4 |>
@@ -2090,7 +2138,6 @@ mod_nivel_1_server <- function(id, filtros){
           #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1)
         )
     })
-
 
     ##### Criando a tabela para os indicadores do quarto bloco #####
     output$table4 <- reactable::renderReactable({
@@ -2496,21 +2543,22 @@ mod_nivel_1_server <- function(id, filtros){
       )
     })
 
-    #output$caixa_b4_i9_deslocamento_muni <- output$caixa_b4_i9_deslocamento_resto <- renderUI({
-    #   cria_caixa_server(
-   #      dados = data4_deslocamento(),
-    #     indicador = "prop_partos_sem_uti",
-     #    titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
-      #   tem_meta = FALSE,
-     #    valor_de_referencia = 16.3,
-      #   #data4_deslocamento_resumo_referencia()$prop_partos_sem_uti,
-       #  tipo = "porcentagem",
-      #   invertido = FALSE,
-      # pagina = "nivel_1",
-      #  nivel_de_analise = filtros()$nivel,
-      #  width_caixa = 11
-      #)
-     #})
+   output$caixa_b4_i9_deslocamento_muni <- output$caixa_b4_i9_deslocamento_resto <- renderUI({ #[fff]
+     cria_caixa_server(
+       dados = data4_deslocamento_macrorregiao(),
+       indicador = "prop_partos_sem_uti",
+       titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+       tem_meta = TRUE,
+       valor_de_referencia = 16.3,
+       # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
+       tipo = "porcentagem",
+       tipo_referencia = "HEALTHY PEOPLE, 2020",
+       invertido = FALSE,
+       pagina = "nivel_1",
+       nivel_de_analise = filtros()$nivel,
+       width_caixa = 11
+   )
+   })
 
     observeEvent(filtros()$pesquisar, {
       if (filtros()$nivel != "Municipal" & filtros()$nivel != "Estadual") {
