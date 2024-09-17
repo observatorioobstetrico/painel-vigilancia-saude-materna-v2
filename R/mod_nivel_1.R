@@ -4167,11 +4167,11 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        # texto_footer = dplyr::if_else(
-        #   nivel_selecionado() == "Nacional",
-        #   "Comparação não aplicável (o total nacional é o valor de referência)",
-        #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-        # ),
+         texto_footer = dplyr::if_else(
+           filtros()$nivel == "Nacional",
+           "Comparação não aplicável (o total nacional é o valor de referência)",
+           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+         ),
         tamanho_caixa = "330px",
         pagina = "nivel_1",
         nivel_de_analise = filtros()$nivel
@@ -4188,11 +4188,11 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        # texto_footer = dplyr::if_else(
-        #   nivel_selecionado() == "Nacional",
-        #   "Comparação não aplicável (o total nacional é o valor de referência)",
-        #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-        # ),
+         texto_footer = dplyr::if_else(
+           filtros()$nivel == "Nacional",
+           "Comparação não aplicável (o total nacional é o valor de referência)",
+           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+         ),
         tamanho_caixa = "330px",
         pagina = "nivel_1",
         nivel_de_analise = filtros()$nivel
@@ -4323,11 +4323,11 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-         # texto_footer = ifelse(
-         #   filtros()$nivel == "Nacional",
-         #   "Comparação não aplicável (o total nacional é o valor de referência)",
-         #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-         # ),
+          texto_footer = ifelse(
+            filtros()$nivel == "Nacional",
+            "Comparação não aplicável (o total nacional é o valor de referência)",
+            "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          ),
         tamanho_caixa = "330px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
@@ -4370,11 +4370,11 @@ mod_nivel_1_server <- function(id, filtros){
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
-        # texto_footer = ifelse(
-        #   filtros()$nivel == "Nacional",
-        #   "Comparação não aplicável (o total nacional é o valor de referência)",
-        #   "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
-        # ),
+         texto_footer = ifelse(
+           filtros()$nivel == "Nacional",
+           "Comparação não aplicável (o total nacional é o valor de referência)",
+           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+         ),
         tamanho_caixa = "330px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
