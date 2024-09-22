@@ -150,22 +150,6 @@ mod_bloco_4_ui <- function(id){
         conditionalPanel(
           ns = ns,
           condition = "input.indicador_robson == 'indicador2'",
-          conditionalPanel(
-            ns = ns,
-            condition = "output.comparar == 'Sim'",
-            column(
-              width = 12,
-              HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-              HTML(
-                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada,
-                passe o cursor do mouse sobre a barra que contém a categoria de interesse.
-                </b> </div>"
-              ),
-              hr(),
-              HTML("<span style='display: block; margin-bottom: 25px;'> </span>"),
-            )
-          ),
           fluidRow(
             column(
               width = 4,
@@ -251,22 +235,6 @@ mod_bloco_4_ui <- function(id){
         conditionalPanel(
           ns = ns,
           condition = "input.indicador_robson == 'indicador3'",
-          conditionalPanel(
-            ns = ns,
-            condition = "output.comparar == 'Sim'",
-            column(
-              width = 12,
-              HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-              HTML(
-                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada,
-                passe o cursor do mouse sobre a barra que contém a categoria de interesse.
-                </b> </div>"
-              ),
-              hr(),
-              HTML("<span style='display: block; margin-bottom: 25px;'> </span>"),
-            )
-          ),
           fluidRow(
             column(
               width = 4,
@@ -360,22 +328,10 @@ mod_bloco_4_ui <- function(id){
             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
             conditionalPanel(
               ns = ns,
-              condition = "output.nivel != 'Estadual' & output.nivel != 'Municipal'",
-              HTML(
-                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada,
-                passe o cursor do mouse sobre a barra que contém a categoria de interesse.
-                </b> </div>"
-              )
-            ),
-            conditionalPanel(
-              ns = ns,
               condition = "output.nivel == 'Estadual' | output.nivel == 'Municipal'",
               HTML(
                 "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada,
-                passe o cursor do mouse sobre a barra que contém a categoria de interesse. Para os indicadores de medianas de deslocamento,
-                a comparação não está disponível.
+                <i class='fa-solid fa-circle-info'></i> &nbsp; A função de comparação não está disponível para os indicadores de medianas de deslocamento.
                 </b> </div>"
               )
             ),
@@ -850,22 +806,21 @@ mod_bloco_4_server <- function(id, filtros){
     bloco4_deslocamento_calcs <- data.frame(
       tipo = c("local", "referencia"),
       prop_partos_municipio_res = rep("round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
-      prop_partos_fora_municipio_res = rep("round(sum(nao_local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
       prop_partos_rsaude_res = rep("round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
       prop_partos_macro_rsaude_res = rep("round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
       prop_partos_fora_macro_rsaude_res = rep("round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
-      prop_partos_fora_uf_res = rep("round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
-      prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-      prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2)
+      prop_partos_fora_uf_res = rep("round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2)
     )
 
     bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
       dplyr::mutate(
+        prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
         prop_obitos_fetais_durante = rep("round(sum(fetal_durante) / sum(obitos_fetais_mais_22sem) * 100, 1)", 2),
         porc_obitos_fetais_evitaveis_parto = rep("round(sum(evitaveis_fetal_parto) / sum(obitos_fetais_totais) * 100, 1)", 2)
       )
@@ -2278,19 +2233,8 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    data4_deslocamento <- reactive({
-      if (filtros()$nivel == "Estadual") {
-        data_aux <- bloco4_deslocamento_uf
-      } else {
-        data_aux <- dplyr::left_join(
-          bloco4_deslocamento_muni,
-          dplyr::left_join(
-            bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-            bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-          )
-        ) |> dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0)))
-      }
-      data_aux |>
+    data4_deslocamento_parto <- reactive({
+      bloco4_deslocamento_muni |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -2309,15 +2253,27 @@ mod_bloco_4_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), adicionar_localidade = FALSE) |>
+        cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
         dplyr::mutate(
-          localidade = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          indicador = factor(
+              dplyr::case_when(
+              indicador == "prop_partos_municipio_res" ~ "No município de residência",
+              indicador == "prop_partos_rsaude_res" ~ "Na microrregião de saúde, mas fora do município de residência",
+              indicador == "prop_partos_macro_rsaude_res" ~ "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              indicador == "prop_partos_fora_macro_rsaude_res" ~ "Fora da macrorregião de saúde, mas na UF de residência",
+              indicador == "prop_partos_fora_uf_res" ~ "Fora da UF de residência"
+            ),
+            levels = c(
+              "No município de residência", "Na microrregião de saúde, mas fora do município de residência",
+              "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              "Fora da macrorregião de saúde, mas na UF de residência",
+              "Fora da UF de residência"
+            )
           )
         )
     })
@@ -2453,14 +2409,8 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    data4_deslocamento_comp <- reactive({
-      dplyr::left_join(
-        bloco4_deslocamento_muni,
-        dplyr::left_join(
-          bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-          bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        )
-      ) |> dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
+    data4_deslocamento_parto_comp <- reactive({
+      bloco4_deslocamento_muni |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -2481,22 +2431,30 @@ mod_bloco_4_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), comp = TRUE, adicionar_localidade = FALSE) |>
-        dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("prop")) |>
+        cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
         dplyr::mutate(
-          localidade_comparacao = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Média nacional",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes",
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "prop_partos_municipio_res" ~ "No município de residência",
+              indicador == "prop_partos_rsaude_res" ~ "Na microrregião de saúde, mas fora do município de residência",
+              indicador == "prop_partos_macro_rsaude_res" ~ "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              indicador == "prop_partos_fora_macro_rsaude_res" ~ "Fora da macrorregião de saúde, mas na UF de residência",
+              indicador == "prop_partos_fora_uf_res" ~ "Fora da UF de residência"
+            ),
+            levels = c(
+              "No município de residência", "Na microrregião de saúde, mas fora do município de residência",
+              "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              "Fora da macrorregião de saúde, mas na UF de residência",
+              "Fora da UF de residência"
+            )
           )
         )
     })
-
-    data4_deslocamento_juncao <- reactive({dplyr::full_join(data4_deslocamento(), data4_deslocamento_comp(), by = "ano")})
 
     data4_deslocamento_macro_comp <- reactive({
       bloco4_deslocamento_muni |>
@@ -2579,6 +2537,45 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           localidade_comparacao = "Média nacional"
         )
+    })
+
+    data4_deslocamento_parto_referencia <- reactive({
+      bloco4_deslocamento_muni |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), referencia = TRUE, adicionar_localidade = FALSE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop"),
+          names_to = "indicador",
+          values_to = "br_prop_indicador"
+        ) |>
+        dplyr::mutate(
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "prop_partos_municipio_res" ~ "No município de residência",
+              indicador == "prop_partos_rsaude_res" ~ "Na microrregião de saúde, mas fora do município de residência",
+              indicador == "prop_partos_macro_rsaude_res" ~ "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              indicador == "prop_partos_fora_macro_rsaude_res" ~ "Fora da macrorregião de saúde, mas na UF de residência",
+              indicador == "prop_partos_fora_uf_res" ~ "Fora da UF de residência"
+            ),
+            levels = c(
+              "No município de residência", "Na microrregião de saúde, mas fora do município de residência",
+              "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+              "Fora da macrorregião de saúde, mas na UF de residência",
+              "Fora da UF de residência"
+            )
+          )
+        )
+    })
+
+    data4_deslocamento_parto_completo <- reactive({
+      dplyr::full_join(data4_deslocamento_parto(), data4_deslocamento_parto_referencia())
+    })
+
+    data4_deslocamento_parto_comp_completo <- reactive({
+      dplyr::full_join(data4_deslocamento_parto_comp(), data4_deslocamento_parto_referencia())
     })
 
     data4_deslocamento_macro_referencia <- reactive({
@@ -3029,7 +3026,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
 
-    #### Porcentagem de nascidos vivos por grupo de Robson --------------------
+    ### Porcentagem de nascidos vivos por grupo de Robson --------------------
     data4_juncao_aux <- reactive({
       if (filtros()$comparar == "Sim") {
         dplyr::full_join(
@@ -3228,57 +3225,96 @@ mod_bloco_4_server <- function(id, filtros){
 
     ### Porcentagem de nascidos vivos segundo local de ocorrência do parto ----
     output$grafico_deslocamento_muni_prop1 <- output$grafico_deslocamento_resto_prop1 <- output$grafico_deslocamento_uf_prop1 <- highcharter::renderHighchart({
-      highcharter::highchart() |>
-        highcharter::hc_add_series(
-          name = "No município de residência",
-          data = data4_deslocamento_juncao(),
-          type = "column",
-          highcharter::hcaes(x = ano, y = prop_partos_municipio_res),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_partos_municipio_res:,f}% </b>"
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_parto_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            )
           )
-        ) |>
-        highcharter::hc_add_series(
-          name = "Na microrregião de saúde, mas fora do município de residência",
-          data = data4_deslocamento_juncao(),
-          type = "column",
-          highcharter::hcaes(x = ano, y = prop_partos_rsaude_res),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_partos_rsaude_res:,f}% </b>"
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_parto_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_parto_comp_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1
           )
-        ) |>
-        highcharter::hc_add_series(
-          name = "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
-          data = data4_deslocamento_juncao(),
-          type = "column",
-          highcharter::hcaes(x = ano, y = prop_partos_macro_rsaude_res),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_partos_macro_rsaude_res:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          name = "Fora da macrorregião de saúde, mas na UF de residência",
-          data = data4_deslocamento_juncao(),
-          type = "column",
-          highcharter::hcaes(x = ano, y = prop_partos_fora_macro_rsaude_res),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_partos_fora_macro_rsaude_res:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          name = "Fora da UF de residência",
-          data = data4_deslocamento_juncao(),
-          type = "column",
-          highcharter::hcaes(x = ano, y = prop_partos_fora_uf_res),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_partos_fora_uf_res:,f}% </b>"
-          )
-        ) |>
+      }
+
+      grafico_base |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
+
+    ### Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto ----
+    output$grafico_deslocamento_macrorregiao_1 <- output$grafico_deslocamento_macrorregiao_2 <-
+      output$grafico_deslocamento_macrorregiao_3 <- highcharter::renderHighchart({
+        if (filtros()$comparar == "Não") {
+          grafico_base <- highcharter::highchart() |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo(),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              )
+            )
+        } else {
+          grafico_base <- highcharter::highchart() |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo(),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo(),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1
+            )
+        }
+
+        grafico_base |>
+          highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)]) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_deslocamento_macro_completo()$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = "% de nascidos vivos com peso < 1500g"), min = 0, max = 100)
+      })
 
     ### Mediana de deslocamento para o destino, segundo destinos --------------
     output$grafico_deslocamento_muni_med1 <- output$grafico_deslocamento_uf_med1 <- highcharter::renderHighchart({
@@ -3417,53 +3453,6 @@ mod_bloco_4_server <- function(id, filtros){
             height = 600
           )
       }
-    })
-
-    ### Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto ----
-    output$grafico_deslocamento_macrorregiao_1 <- output$grafico_deslocamento_macrorregiao_2 <-
-      output$grafico_deslocamento_macrorregiao_3 <- highcharter::renderHighchart({
-      if (filtros()$comparar == "Não") {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo(),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-            type = "column",
-            showInLegend = TRUE,
-            tooltip = list(
-
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-            )
-          )
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo(),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-            type = "column",
-            showInLegend = TRUE,
-            tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-            ),
-            stack = 0
-          ) |>
-          highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo(),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-            type = "column",
-            showInLegend = FALSE,
-            tooltip = list(
-
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-            ),
-            stack = 1
-          )
-      }
-
-      grafico_base |>
-        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_deslocamento_macro_completo()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos com peso < 1500g"), min = 0, max = 100)
     })
 
   })
