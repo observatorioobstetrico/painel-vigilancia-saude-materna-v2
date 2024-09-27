@@ -406,9 +406,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
       "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  ",
       "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  ",
-      "Porcentagem de óbitos fetais por causas evitáveis",
-      "Porcentagem de óbitos perinatais por causas evitáveis",
-      "Porcentagem de óbitos neonatais por causas evitáveis",
+      "Porcentagem de óbitos fetais por grupos de causas evitáveis",
+      "Porcentagem de óbitos perinatais por grupos de causas evitáveis",
+      "Porcentagem de óbitos neonatais por grupos de causas evitáveis",
       "Porcentagem de óbitos fetais por grupos de causas",
       "Porcentagem de óbitos perinatais por grupos de causas",
       "Porcentagem de óbitos neonatais por grupos de causas",
@@ -418,8 +418,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     )
 
     indicadores_duas_caixinhas_adicionais_bloco7 <- c(
-      "Número de óbitos fetais",
-      "Taxa de mortalidade fetal por 1000 nascidos vivos"
+      "Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+      "Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
+      "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+      "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)"
     )
 
 
@@ -452,19 +454,27 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
       } else if (filtros()$bloco == "bloco7") {
         if (filtros()$indicador_blocos4_6_7 %in% indicadores_uma_caixinha_adicional_bloco7) {
-          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
 
           tabela_indicadores |>
             dplyr::filter(
               nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")
-            )
+            ) |>
+            dplyr::mutate(indicador = trimws(indicador))
+
         } else if (filtros()$indicador_blocos4_6_7 %in% indicadores_duas_caixinhas_adicionais_bloco7) {
-          nome_abreviado <- tabela_indicadores |> dplyr::filter(indicador == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
 
           tabela_indicadores |>
             dplyr::filter(
               nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_duas_caixinhas_adicionais1}_{filtros()$indicador_duas_caixinhas_adicionais2}")
-            )
+            ) |>
+            dplyr::mutate(indicador = trimws(indicador))
+
+        } else {
+          tabela_indicadores |>
+            dplyr::filter(trimws(indicador) == filtros()$indicador) |>
+            dplyr::mutate(indicador = trimws(indicador))
         }
 
       } else {
@@ -1209,7 +1219,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     data_plot_garbage_fetal <- reactive({
       data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_fetak")), sum) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_fetal")), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_fetal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_fetal")))) |>
         dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_fetal")), ~ round((. / obitos_fetal_garbage * 100), 1)) |>
@@ -2176,7 +2186,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1440),
+            height = ifelse(infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco), 730, 1440),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -2222,7 +2232,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = ifelse(infos_indicador()$bloco != "bloco6", 730, 1440),
+            height = ifelse(infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco), 730, 1440),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -2234,9 +2244,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
+    observe(print(infos_indicador()$bloco))
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
-      if (infos_indicador()$bloco != "bloco6") {
+      if (infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco)) {
         tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else {
         req(filtros()$indicador)

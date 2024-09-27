@@ -195,14 +195,14 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         updateSelectizeInput(
           session,
           inputId = "indicador_blocos4_6_7",
-          choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento")],
+          choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento")]),
           server = FALSE
         )
       } else {
         updateSelectizeInput(
           session,
           inputId = "indicador_blocos4_6_7",
-          choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento" & !base::startsWith(tabela_indicadores$indicador, "Medianas"))],
+          choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_deslocamento" & !base::startsWith(tabela_indicadores$indicador, "Medianas"))]),
           server = FALSE
         )
       }
@@ -210,42 +210,42 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6")]),
         server = FALSE
       )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6_morbidade")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco6_morbidade")]),
         server = FALSE
       )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "fetal") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_fetal")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_fetal")]),
         server = FALSE
       )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "perinatal") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_perinatal")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_perinatal")]),
         server = FALSE
       )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "neonatal") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")]),
         server = FALSE
       )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade neonatal") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
-        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_morbidade_neonatal")],
+        choices = trimws(tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_morbidade_neonatal")]),
         server = FALSE
       )
     }
@@ -294,9 +294,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       )
     }
 
-    if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos fetais por causas evitáveis",
-                                           "Porcentagem de óbitos perinatais por causas evitáveis",
-                                           "Porcentagem de óbitos neonatais por causas evitáveis"
+    if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos perinatais por grupos de causas evitáveis",
+                                           "Porcentagem de óbitos neonatais por grupos de causas evitáveis"
                                            )) {
       updateSelectizeInput(
         session,
@@ -313,8 +312,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       )
     }
 
-    if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos fetais por grupos de causas",
-                                           "Porcentagem de óbitos perinatais por grupos de causas",
+    if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos perinatais por grupos de causas",
                                            "Porcentagem de óbitos neonatais por grupos de causas",
                                            "Porcentagem de internações neonatais por grupos de causas"
     )) {
@@ -335,7 +333,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     }
 
 
-    if (input$indicador_blocos4_6_7 == "Porcentagem de óbitos fetais por causas evitáveis") {
+    if (input$indicador_blocos4_6_7 == "Porcentagem de óbitos fetais por grupos de causas evitáveis") {
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
@@ -368,7 +366,10 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       )
     }
 
-    if (input$indicador_blocos4_6_7 %in% c("Número de óbitos fetais", "Taxa de mortalidade fetal")) {
+    if (input$indicador_blocos4_6_7 %in% c("Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+                                           "Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
+                                           "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+                                           "Taxa de mortalidade fetal (eto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)")) {
       updateSelectizeInput(
         session,
         inputId = "indicador_duas_caixinhas_adicionais1",
@@ -434,6 +435,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
 
   })
+
+  observe(print(input$indicador_blocos4_6_7))
 
   filtros <- eventReactive(input$pesquisar, {
     list(
