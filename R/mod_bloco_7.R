@@ -3609,7 +3609,7 @@ mod_bloco_7_server <- function(id, filtros){
     ### Para os gráficos por análise de evitabilidade ----------------------------------
     #### Para a localidade selecionada ----------------------------------------
     data_filtrada_aux <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
           if (filtros()$nivel == "Nacional")
@@ -3822,7 +3822,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a comparação selecionada ----------------------------------------
     data_filtrada_comp_aux <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
           if (filtros()$nivel2 == "Nacional")
@@ -4041,7 +4041,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a referência selecionada ----------------------------------------
     # data_plot_evitaveis_fetal_referencia <- reactive({
-    #   bloco8_graficos |>
+    #   bloco7_distribuicao_cids |>
     #     dplyr::filter(
     #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
     #     ) |>
@@ -4085,7 +4085,7 @@ mod_bloco_7_server <- function(id, filtros){
     # })
 
     data_plot_evitaveis_fetal_referencia2 <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -4125,7 +4125,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_evitaveis_neonatal_referencia <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -4169,7 +4169,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_evitaveis_perinatal_referencia <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -4332,7 +4332,7 @@ mod_bloco_7_server <- function(id, filtros){
           }
         }
       }
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (nivel_selecionado() == "Nacional")
@@ -4383,7 +4383,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     ### Dados para a referencia nacional
     bloco7_evitaveis_resumo_comp_aux <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | (dplyr::contains("evitaveis_neonatal")) |
                                           (dplyr::contains("evitaveis_perinatal")) | "obitos_fetais_totais" | "obitos_neonatais_totais" |
@@ -4938,7 +4938,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a referência ----------------------------------------------------
     data_plot_grupos_fetal_referencia <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -4983,7 +4983,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_grupos_neonatal_referencia <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -5028,7 +5028,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_grupos_perinatal_referencia <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>

@@ -498,7 +498,7 @@ app_ui <- function(request) {
                       "4 - Assistência ao parto" = "bloco4",
                       "5 - Condições de nascimento" = "bloco5",
                       "6 - Mortalidade e morbidade materna" = "bloco6",
-                      "7 - Mortalidade fetal, perinatal e neonatal" = "bloco7"
+                      "7 - Mortalidade fetal, perinatal e neonatal e morbidade neonatal" = "bloco7"
                     ),
                     width = "98%"
                   )
@@ -573,9 +573,7 @@ app_ui <- function(request) {
                     condition = {
                       indicadores_uma_caixinha_adicional_bloco7 <- c(
                         "'Número de óbitos neonatais'",
-                        "'Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)'",
                         "'Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)'",
-                        "'Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)'",
                         "'Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)'",
                         "'Taxa de mortalidade neonatal por 1000 nascidos vivos '",
                         "'Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  '",
@@ -588,7 +586,9 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos neonatais por grupos de causas'",
                         "'Porcentagem de nascidos vivos segundo local de ocorrência do parto'",
                         "'Medianas de deslocamento segundo o local de ocorrência do parto'",
-                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
+                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
+                        "'Porcentagem de internações neonatais por grupos de causas'"
+
                       )
 
                       glue::glue(
@@ -609,8 +609,10 @@ app_ui <- function(request) {
                   conditionalPanel(
                     condition = {
                       indicadores_duas_caixinhas_adicionais <- c(
-                        "'Número de óbitos fetais'",
-                        "'Taxa de mortalidade fetal por 1000 nascidos vivos'"
+                        "'Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)'",
+                        "'Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)'",
+                        "'Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)'",
+                        "'Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)'"
                       )
 
                       glue::glue(

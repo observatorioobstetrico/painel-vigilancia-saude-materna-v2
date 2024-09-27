@@ -158,6 +158,106 @@ mod_nivel_3_ui <- function(id){
             fluidRow(
               column(
                 width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_fetal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos fetais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_fetal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_perinatal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos perinatais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_perinatal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_neonatal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos neonatais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_neonatal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_morbidade_neonatal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nas internações neonatais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_morbidade_neonatal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
@@ -416,6 +516,20 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
     output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
     output$bloco_selecionado <- renderText({infos_indicador()$bloco})
+
+
+    output$bloco7_selecionado <- renderText({
+      dplyr::case_when(
+        grepl("bloco7_fetal", infos_indicador()$bloco) ~ "bloco7_fetal",
+        grepl("bloco7_perinatal", infos_indicador()$bloco) ~ "bloco7_perinatal",
+        grepl("bloco7_morbidade_neonatal", infos_indicador()$bloco) ~ "bloco7_morbidade_neonatal",
+        grepl("bloco7_neonatal", infos_indicador()$bloco) ~ "bloco7_neonatal",
+        TRUE ~ "NA"
+
+      )
+    })
+
+
     output$num_indicadores_incompletude <- renderText({infos_indicador()$num_indicadores_incompletude})
     output$escolha1 <- renderText({
       dplyr::case_when(
@@ -434,6 +548,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     outputOptions(output, "nome_abreviado", suspendWhenHidden = FALSE)
     outputOptions(output, "bloco_selecionado", suspendWhenHidden = FALSE)
+    outputOptions(output, "bloco7_selecionado", suspendWhenHidden = FALSE)
     outputOptions(output, "num_indicadores_incompletude", suspendWhenHidden = FALSE)
     outputOptions(output, "escolha1", suspendWhenHidden = FALSE)
     outputOptions(output, "escolha2", suspendWhenHidden = FALSE)
@@ -1088,6 +1203,417 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos maternos preenchidos com garbage codes"), min = 0, max = 100)
     })
+
+    ####### Distribuição de garbage code para óbitos fetais
+
+
+    data_plot_garbage_fetal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_fetak")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_fetal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_fetal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_fetal")), ~ round((. / obitos_fetal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_fetal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_fetal"),
+          names_to = "cid",
+          values_to = "prop_garbage_code_fetal"
+        ) |>
+        dplyr::filter(prop_garbage_code_fetal != 0) |>
+        dplyr::mutate(
+          prop_garbage_code = round(prop_garbage_code_fetal, 1),
+          cid = toupper(substr(cid, nchar("garbage_fetal_") + 1, nchar(cid))),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_fetal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_fetal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_fetal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_fetal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_fetal")), ~ round((. / obitos_fetal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_fetal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_fetal"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code_fetal"
+        ) |>
+        dplyr::filter(br_prop_garbage_code_fetal != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code_fetal = round(br_prop_garbage_code_fetal, 1),
+          cid = toupper(substr(cid, nchar("garbage_fetal_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_fetal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_fetal()) != 0,
+          "Não existem ocorrências de óbitos fetais preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_fetal(), data_plot_garbage_fetal_referencia())
+    })
+
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    output$plot_garbage_fetal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_fetal_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code_fetal, group = causabas_subcategoria),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_fetal:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_fetal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_fetal_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_fetal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
+    ########## Distribuição de óbitos perinatais preenchidos com garbage code
+
+
+    data_plot_garbage_perinatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_perinatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_perinatal")), ~ round((. / obitos_perinatal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_perinatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_perinatal"),
+          names_to = "cid",
+          values_to = "prop_garbage_code_perinatal"
+        ) |>
+        dplyr::filter(prop_garbage_code_perinatal != 0) |>
+        dplyr::mutate(
+          prop_garbage_code_perinatal = round(prop_garbage_code_perinatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_perinatal_") + 1, nchar(cid))),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_perinatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_perinatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_perinatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_perinatal")), ~ round((. / obitos_perinatal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_perinatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_perinatal"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code_perinatal"
+        ) |>
+        dplyr::filter(br_prop_garbage_code_perinatal != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code_perinatal = round(br_prop_garbage_code_perinatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_perinatal_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_perinatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_perinatal()) != 0,
+          "Não existem ocorrências de óbitos perinatais preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_perinatal(), data_plot_garbage_perinatal_referencia())
+    })
+
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    output$plot_garbage_perinatal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_perinatal_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code_perinatal, group = causabas_subcategoria),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_perinatal:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_perinatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
+
+    ########## Distribuição de óbitos neonatais preenchidos com garbage code
+
+
+    data_plot_garbage_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_neonatal")), ~ round((. / obitos_neonatal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_neonatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_neonatal"),
+          names_to = "cid",
+          values_to = "prop_garbage_code_neonatal"
+        ) |>
+        dplyr::filter(prop_garbage_code_neonatal != 0) |>
+        dplyr::mutate(
+          prop_garbage_code_neonatal = round(prop_garbage_code_neonatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_neonatal_") + 1, nchar(cid))),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_neonatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(obitos_neonatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_neonatal")), ~ round((. / obitos_neonatal_garbage * 100), 1)) |>
+        dplyr::select(!obitos_neonatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_neonatal"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code_neonatal"
+        ) |>
+        dplyr::filter(br_prop_garbage_code_neonatal != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code_neonatal = round(br_prop_garbage_code_neonatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_neonatal_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_neonatal()) != 0,
+          "Não existem ocorrências de óbitos neonatais preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_neonatal(), data_plot_garbage_neonatal_referencia())
+    })
+
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    output$plot_garbage_neonatal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_neonatal_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code_neonatal, group = causabas_subcategoria),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_neonatal:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_neonatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
+
+    ########## Distribuição de internações neonatais preenchidos com garbage code
+
+
+    data_plot_garbage_morbidade_neonatal <- reactive({
+      data_filtrada_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_morbidade_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_morbidade_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_morbidade_neonatal")), ~ round((. / internacoes_neonatal_garbage * 100), 1)) |>
+        dplyr::select(!internacoes_neonatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_morbidade_neonatal"),
+          names_to = "cid",
+          values_to = "prop_garbage_code_morbidade_neonatal"
+        ) |>
+        dplyr::filter(prop_garbage_code_morbidade_neonatal != 0) |>
+        dplyr::mutate(
+          prop_garbage_code_morbidade_neonatal = round(prop_garbage_code_morbidade_neonatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_morbidade_neonatal_") + 1, nchar(cid))),
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_morbidade_neonatal_referencia <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_morbidade_neonatal")), sum) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(internacoes_neonatal_garbage = sum(dplyr::c_across(dplyr::starts_with("garbage_morbidade_neonatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::starts_with("garbage_morbidade_neonatal")), ~ round((. / internacoes_neonatal_garbage * 100), 1)) |>
+        dplyr::select(!internacoes_neonatal_garbage) |>
+        dplyr::ungroup() |>
+        tidyr::pivot_longer(
+          cols = dplyr::starts_with("garbage_morbidade_neonatal"),
+          names_to = "cid",
+          values_to = "br_prop_garbage_code_morbidade_neonatal"
+        ) |>
+        dplyr::filter(br_prop_garbage_code_morbidade_neonatal != 0) |>
+        dplyr::mutate(
+          br_prop_garbage_code_morbidade_neonatal = round(br_prop_garbage_code_morbidade_neonatal, 1),
+          cid = toupper(substr(cid, nchar("garbage_morbidade_neonatal_") + 1, nchar(cid)))
+        ) |>
+        dplyr::left_join(df_cid10 |> dplyr::select(cid = causabas, causabas_subcategoria)) |>
+        dplyr::mutate(
+          cid = ifelse(
+            nchar(cid) == 4,
+            paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
+            cid
+          )
+        )
+    })
+
+    data_plot_garbage_morbidade_neonatal_completo <- reactive({
+      validate(
+        need(
+          nrow(data_plot_garbage_neonatal()) != 0,
+          "Não existem ocorrências de internações neonatais preenchidos com garbage codes para a localidade e períodos selecionados."
+        )
+      )
+      dplyr::left_join(data_plot_garbage_morbidade_neonatal(), data_plot_garbage_morbidade_neonatal_referencia())
+    })
+
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    output$plot_garbage_morbidade_neonatal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = data_plot_garbage_morbidade_neonatal_completo(),
+          highcharter::hcaes(x = ano, y = prop_garbage_code_morbidade_neonatal, group = causabas_subcategoria),
+          type = "bar",
+          showInLegend = TRUE,
+          tooltip = list(
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_morbidade_neonatal:,f}% </b>"
+          )
+        ) |>
+        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_colors(
+          viridis::magma(length(unique(data_plot_garbage_morbidade_neonatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_morbidade_neonatal_completo()$cid)) + 2)]
+        ) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_morbidade_neonatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_yAxis(title = list(text = "% relativo ao total de internações neonatais preenchidos com garbage codes"), min = 0, max = 100)
+    })
+
 
 
     # Gráfico de barras das regiões -------------------------------------------

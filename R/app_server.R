@@ -170,7 +170,9 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         choices = c(
           "Relacionados à mortalidade fetal" = "fetal",
           "Relacionados à mortalidade perinatal" = "perinatal",
-          "Relacionados à mortalidade neonatal" = "neonatal"
+          "Relacionados à mortalidade neonatal" = "neonatal",
+          "Relacionados à morbidade neonatal" = "morbidade neonatal"
+
         )
       )
     }
@@ -239,6 +241,13 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_neonatal")],
         server = FALSE
       )
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade neonatal") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6_7",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco7_morbidade_neonatal")],
+        server = FALSE
+      )
     }
   })
 
@@ -263,9 +272,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
   observeEvent(input$indicador_blocos4_6_7, {
     if (input$indicador_blocos4_6_7 %in% c("Número de óbitos neonatais",
-                                           "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
                                            "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-                                           "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
                                            "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
                                            "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
                                            "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  ",
@@ -308,7 +315,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
     if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos fetais por grupos de causas",
                                            "Porcentagem de óbitos perinatais por grupos de causas",
-                                           "Porcentagem de óbitos neonatais por grupos de causas"
+                                           "Porcentagem de óbitos neonatais por grupos de causas",
+                                           "Porcentagem de internações neonatais por grupos de causas"
     )) {
       updateSelectizeInput(
         session,
