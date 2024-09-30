@@ -473,7 +473,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
         } else {
           tabela_indicadores |>
-            dplyr::filter(trimws(indicador) == filtros()$indicador) |>
+            dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |>
             dplyr::mutate(indicador = trimws(indicador))
         }
 
@@ -2249,7 +2249,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
-    observe(print(infos_indicador()$bloco))
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
       if (infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco)) {

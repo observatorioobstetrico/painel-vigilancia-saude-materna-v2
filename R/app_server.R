@@ -436,8 +436,6 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
   })
 
-  observe(print(input$indicador_blocos4_6_7))
-
   filtros <- eventReactive(input$pesquisar, {
     list(
       ano = input$ano,
