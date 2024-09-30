@@ -195,7 +195,7 @@ bloco7_distribuicao_cids_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafic
 bloco8_garbage_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_2012-2024.csv") |>
   janitor::clean_names()
 
-bloco8_garbage_morbidade_aux <- read_csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv") |>
+bloco8_garbage_morbidade_aux <- read_csv(gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv")) |>
   clean_names()
 
 bloco8_garbage_aux <- full_join(bloco8_garbage_mortalidade_aux, bloco8_garbage_morbidade_aux)
