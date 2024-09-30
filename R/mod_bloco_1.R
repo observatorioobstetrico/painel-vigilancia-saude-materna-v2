@@ -293,7 +293,7 @@ mod_bloco_1_server <- function(id, filtros){
       tipo = c("local", "referencia"),
       sum_total_de_nascidos_vivos = rep("sum(total_de_nascidos_vivos)", 2),
       porc_dependentes_sus = rep("round((sum(populacao_feminina_10_a_49[ano <= 2021]) - sum(pop_fem_10_49_com_plano_saude[ano <= 2021]))/sum(populacao_feminina_10_a_49[ano <= 2021]) * 100, 1)", 2),
-      porc_cobertura_esf = c("round(sum(media_cobertura_esf[ano <= 2022])/sum(populacao_total[ano <= 2022]) * 100, 1)", "dplyr::first(95[ano <= 2022])"),
+      porc_cobertura_esf = c("round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1)", "dplyr::first(95)"),
       porc_nvm_menor_que_20_anos = rep("round(sum(nvm_menor_que_20_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_entre_20_e_34_anos = rep("round(sum(nvm_entre_20_e_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_maior_que_34_anos = rep("round(sum(nvm_maior_que_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),

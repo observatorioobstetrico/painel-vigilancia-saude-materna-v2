@@ -794,40 +794,62 @@ sum(df_bloco1 |> filter(ano < 2021) |> pull(populacao_feminina_10_a_49)) - sum(d
 
 # importando as bases com as variaveis que serao utilizadas
 
+# anos de 2012 até 2020
 historico_ab_municipios <- read_delim("data-raw/csv/Historico_AB_MUNICIPIOS_2007_202012.csv") |>
   janitor::clean_names() |>
   dplyr::select(nu_competencia, co_municipio_ibge, qt_cobertura_ab, qt_populacao)
 
+# anos de 2021 até set/2023
+cobertura_potencial_aps_municipio1 <- read_excel("data-raw/csv/cobertura_potencial_aps_municipio3.xlsx") |>
+  dplyr::select(c("Comp. CNES", "Código IBGE", "Qt. Capacidade da equipe",
+                  "População")) |>
+  janitor::clean_names()
 
-cobertura_potencial_aps_municipio <- read_delim("data-raw/csv/cobertura_potencial_aps_municipio2.csv",
-                                                delim = ";", escape_double = FALSE, locale = locale(encoding = "ISO-8859-1"),
-                                                trim_ws = TRUE) |>
-  janitor::clean_names() |>
-  dplyr::select(co_municipio_ibge, mes_ano, qt_capacidade_equipe_mun, qt_pop_municipio)
+# meses de out/2023 até abr/2024
+cobertura_potencial_aps_municipio2 <- read_excel("data-raw/csv/cobertura_potencial_aps_municipio4.xls") |>
+  dplyr::select(c("Competência CNES", "IBGE", "Qt. Capacidade da equipe",
+                  "População")) |>
+  janitor::clean_names()
 
-
-# fazendo tratamento na variavel ano e renomeando as variaveis
+# tratando os dados
 
 historico_ab_municipios <- historico_ab_municipios |>
   mutate(ano = substr(historico_ab_municipios$nu_competencia, 1, 4)) |>
   rename(codmunres = co_municipio_ibge) |>
   select(ano, codmunres, qt_cobertura_ab, qt_populacao)
 
-cobertura_potencial_aps_municipio <- cobertura_potencial_aps_municipio |>
-  mutate(ano = substr(cobertura_potencial_aps_municipio$mes_ano, nchar(cobertura_potencial_aps_municipio$mes_ano) - 3, nchar(cobertura_potencial_aps_municipio$mes_ano))) |>
-  rename(codmunres = co_municipio_ibge,
-         qt_cobertura_ab = qt_capacidade_equipe_mun,
-         qt_populacao = qt_pop_municipio) |>
+cobertura_potencial_aps_municipio1 <- cobertura_potencial_aps_municipio1 %>%
+  mutate(ano = substr(comp_cnes, 1, 4)) %>%
+  rename(codmunres = codigo_ibge,
+         qt_cobertura_ab = qt_capacidade_da_equipe,
+         qt_populacao = populacao) %>%
   select(ano, codmunres, qt_cobertura_ab, qt_populacao)
+
+cobertura_potencial_aps_municipio2 <- cobertura_potencial_aps_municipio2 %>%
+  mutate(ano = substr(competencia_cnes, 4, 7)) %>%
+  rename(codmunres = ibge,
+         qt_cobertura_ab = qt_capacidade_da_equipe,
+         qt_populacao = populacao) %>%
+  select(ano, codmunres, qt_cobertura_ab, qt_populacao)
+
+# juntando dados de 2021 até abr/2024
+
+cobertura_potencial_aps_municipio <- rbind(cobertura_potencial_aps_municipio1,
+                                           cobertura_potencial_aps_municipio2)
 
 # trasformando as variaveis qt_cobertura_ab e qt_populacao para numerico
 
 historico_ab_municipios[, 3:4] <- lapply(historico_ab_municipios[, 3:4], function(x) as.numeric(str_replace_all(x, "\\.", "") %>% str_replace_all("\\,", "\\.")))
 
+cobertura_potencial_aps_municipio[, 3:4] <- lapply(cobertura_potencial_aps_municipio[, 3:4], function(x) as.numeric(str_replace_all(x, "\\.", "") %>% str_replace_all("\\,", "\\.")))
+
 # juntando as bases e transformando ano em numerica
 dados_ab_municipios <- rbind(historico_ab_municipios, cobertura_potencial_aps_municipio)
-dados_ab_municipios$ano <- as.numeric(dados_ab_municipios$ano)
 
+dados_ab_municipios$ano <- as.numeric(dados_ab_municipios$ano)
+dados_ab_municipios$codmunres <- as.numeric(dados_ab_municipios$codmunres)
+
+#dados_ab_municipios[, 3:4] <- lapply(dados_ab_municipios[, 3:4], function(x) as.numeric(str_replace_all(x, "\\.", "") %>% str_replace_all("\\,", "\\.")))
 
 # fazendo a media dos registros para qt_cobertura_ab e qt_populacao
 
@@ -839,24 +861,31 @@ dados_ab_municipios <- dados_ab_municipios |>
 # Remover o ponto da variavel qt_populacao
 dados_ab_municipios$qt_populacao <- as.numeric(str_replace(dados_ab_municipios$qt_populacao, "\\..*$", ""))
 
-
 # Vamos garantir que qt_cobertura_ab não seja maior que qt_populacao
 
 dados_ab_municipios$qt_cobertura_ab <- pmin(dados_ab_municipios$qt_cobertura_ab, dados_ab_municipios$qt_populacao)
 
-
 ## importando base antiga
+df_bloco1 <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv") |>
+  select(!c(media_cobertura_esf, populacao_total))
 
-df_bloco1 <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv")
 ## Fazendo um left_join da base auxiliar de municípios com a base de cobertura
 df_bloco1 <- left_join(df_bloco1, dados_ab_municipios)
 
+## Retirando coluna ID X
+df_bloco1 <- df_bloco1 %>%
+  select(c(-X))
 
 ### Substituindo os NA's da coluna 'qt_cobertura_ab' por 0 (gerados após o left_join)
 df_bloco1$qt_cobertura_ab[is.na(df_bloco1$qt_cobertura_ab) & df_bloco1$ano < 2023] <- 0
 
 ### Substituindo os NA's da coluna 'qt_populacao' por 0 (gerados após o left_join)
 df_bloco1$qt_populacao[is.na(df_bloco1$qt_populacao) & df_bloco1$ano < 2023] <- 0
+
+## Juntando com o restante da base do bloco 1
+df_bloco1 <- df_bloco1 |>
+  #select(!c(media_cobertura_esf, populacao_total)) |>
+  rename(media_cobertura_esf = qt_cobertura_ab, populacao_total = qt_populacao)
 
 
 
@@ -867,4 +896,5 @@ df_bloco1 <- df_bloco1 |>
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
-write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv", row.names = FALSE)
+write.csv(df_bloco1, "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv",
+          row.names = FALSE)
