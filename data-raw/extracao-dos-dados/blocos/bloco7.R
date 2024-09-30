@@ -1252,6 +1252,14 @@ grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", 
                                 "P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
                                 "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P964", "P969")
 
+
+df_internacoes_neonatais_totais <- df_aih_internacoes_wide |>
+  select(codmunres, ano) |>
+  mutate(internacoes_neonatais_totais = 1) |>
+  group_by(across(!internacoes_neonatais_totais)) |>
+  summarise(internacoes_neonatais_totais = sum(internacoes_neonatais_totais)) |>
+  ungroup()
+
 internacoes_neonatais_grupos <- df_aih_internacoes_wide |>
   mutate(
     causabas = causabas,
@@ -1398,7 +1406,9 @@ internacoes_neonatais_grupos_1_6_dias[is.na(internacoes_neonatais_grupos_1_6_dia
 
 df_distribuicao_morbidade <- left_join(internacoes_neonatais_grupos, internacoes_neonatais_grupos_0_dias, by=c("codmunres", "ano"))|>
   left_join(internacoes_neonatais_grupos_1_6_dias, by=c("codmunres", "ano")) |>
-  left_join(internacoes_neonatais_grupos_7_27_dias, by=c("codmunres", "ano"))
+  left_join(internacoes_neonatais_grupos_7_27_dias, by=c("codmunres", "ano")) |>
+  left_join(df_internacoes_neonatais_totais, by = c("codmunres", "ano"))
+
 
 write.csv(df_distribuicao_morbidade, 'data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 

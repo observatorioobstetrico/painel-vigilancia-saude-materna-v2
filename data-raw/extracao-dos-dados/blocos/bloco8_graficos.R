@@ -2268,7 +2268,7 @@ library(readr)
 
 # Para os indicadores provenientes do SIH ---------------------------------
 ## Criando um vetor com os anos considerados
-anos <- c(2024)
+anos <- c(2012:2024)
 
 ## Criando um vetor com as siglas de todos os estados do Brasil
 estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -2379,7 +2379,7 @@ diretorio_bases_brutas <- glue("{getwd()}/data-raw/extracao-dos-dados/blocos/dat
 setwd("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menores_28_dias/algorithm_episode_of_care/")
 
 #### Rodando o algoritmo em C++ na base de internações
-system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2024.csv"))
+system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_menores_28_dias_2012-2024.csv"))
 
 #### Voltando para o diretório original do projeto
 setwd(diretorio_original)
@@ -2436,13 +2436,13 @@ df_internacoes_neonatais_totais <- df_aih_internacoes_wide |>
 df_neonatais_morbidade_garbage <- df_aih_internacoes_wide |>
   filter(causabas %in% df_garbage_codes$causabas) |>
   select(codmunres, ano, causabas) |>
-  left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
+  #left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
   mutate(internacoes = 1) |>
-  group_by(across(!c(causabas, internacoes))) |>
+  group_by(across(!c(internacoes))) |>
   summarise(internacoes = sum(internacoes)) |>
   ungroup() |>
   pivot_wider(
-    names_from = capitulo_cid10,
+    names_from = causabas,
     values_from = internacoes,
     values_fill = 0
   ) |>
@@ -2455,7 +2455,7 @@ df_neonatais_morbidade_garbage <- df_aih_internacoes_wide |>
 # ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_neonatais_morbidade_garbage[is.na(df_neonatais_morbidade_garbage)] <- 0
 
-write.csv(df_neonatais_morbidade_garbage, "data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2024.csv", row.names = FALSE)
+write.csv(df_neonatais_morbidade_garbage, "data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv", row.names = FALSE)
 
 df_neonatais_morbidade_garbage_antigo <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2023.csv")
 
