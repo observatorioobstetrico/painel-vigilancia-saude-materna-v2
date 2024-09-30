@@ -42,6 +42,9 @@ df_ano <- df_ano |> select(CODMUNRES, DTNASC, MESPRENAT, SEMAGESTAC)
 df_ano$ano <- 2013
 df_ano$CONSPRENAT <- NA
 
+df_list[[2013 - 2011]] <- df_ano
+
+# Unificando a lista de data frames em um unico
 df <- bind_rows(df_list)
 rm(df_list, df_ano)
 
@@ -215,6 +218,10 @@ df_bloco3 <- left_join(df_bloco3, df_sifilis_long)
 
 # Substituindo os NA's da coluna 'casos_sc' por 0 (gerados após o left_join)
 df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
+
+# Não temos dados para a Incidência de sífilis congênita para o ano de 2024 --(provisorio remover quando a base for atualizada para 2024)--
+# Substituindo os 0 da coluna 'casos_sc' por NA para o ano de 2024
+df_bloco3$casos_sc[df_bloco3$ano == 2024] <- NA
 
 # Salvando a base de dados completa -----------------
 write.csv(df_bloco3, "data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2024.csv", row.names = FALSE)
