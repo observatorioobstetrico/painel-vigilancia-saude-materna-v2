@@ -2455,11 +2455,10 @@ df_neonatais_morbidade_garbage <- df_aih_internacoes_wide |>
 # ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_neonatais_morbidade_garbage[is.na(df_neonatais_morbidade_garbage)] <- 0
 
-write.csv(df_neonatais_morbidade_garbage, "data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv", row.names = FALSE)
-
+write.csv(df_neonatais_morbidade_garbage_antigo, gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv.gz"), row.names = FALSE)
 df_neonatais_morbidade_garbage_antigo <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2023.csv")
 
 df_neonatais_morbidade_garbage_novo <- rbind(df_neonatais_morbidade_garbage_antigo, df_neonatais_morbidade_garbage)
 
-write.csv(df_neonatais_morbidade_garbage_novo, "data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv", row.names = FALSE)
+write.csv(df_neonatais_morbidade_garbage_novo, gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv.gz", row.names = FALSE))
 
