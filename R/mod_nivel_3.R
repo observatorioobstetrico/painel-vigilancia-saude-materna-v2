@@ -495,8 +495,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         bloco4_deslocamento_macrorregiao
       } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
         bloco8_grafico_evitaveis_neonatal
+      } else if(infos_indicador()$bloco == "bloco7_morbidade_neonatal_grupos"){
+        bloco7_dist_morbidade
       } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
-        bloco8_graficos
+        bloco7_distribuicao_cids
       } else {
         get(filtros()$bloco)
       }

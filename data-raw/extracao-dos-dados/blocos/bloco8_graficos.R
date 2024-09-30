@@ -11,7 +11,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2024:2024)), ano = 2024:2024)
+df_aux_municipios <- data.frame(codmunres = rep(as.character(codigos_municipios), each = length(2012:2024)), ano = 2012:2024)
 
 # Criando o data.frame que irá receber todos os dados dos gráficos do bloco 8
 df_bloco8_graficos <- df_aux_municipios
@@ -47,7 +47,7 @@ sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23
    ) |>
    clean_names()
 
- sim_mat2023 <- sim_mat2023 |> select(-c(opor_do, tp_altera, cb_alt))
+sim_mat2023 <- sim_mat2023 |> select(-c(opor_do, tp_altera, cb_alt))
 
 sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
 
@@ -449,23 +449,41 @@ df_neonatais_totais_7_27_dias[is.na(df_neonatais_totais_7_27_dias)] <- 0
 df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
 
 ## Criando um data.frame com os óbitos neonatais preenchidos com garbage codes
- df_sim_doinf |>
-   filter(causabas %in% df_garbage_codes$causabas) |>
-   select(codmunres, ano, causabas) |>
-   left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
-   pull(capitulo_cid10) |>
-   unique()
+  # df_sim_doinf_garbage <- df_sim_doinf |>
+  #  filter(causabas %in% df_garbage_codes$causabas) |>
+  #  select(codmunres, ano, causabas) |>
+  #  left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
+  #  pull(capitulo_cid10) |>
+  #  unique()
+
+df_fetais_garbage <- df_sim_dofet |>
+  filter(causabas %in% df_garbage_codes$causabas) |>
+  select(codmunres, ano, causabas) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = causabas,
+    values_from = obitos,
+    values_fill = 0
+  ) |>
+  clean_names() |>
+  rename_with(.fn = ~ paste0('garbage_fetal_', .), .cols = -c(ano, codmunres)) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_fetais_totais) |>
+  arrange(codmunres)
 
  df_neonatais_garbage <- df_sim_doinf |>
    filter(causabas %in% df_garbage_codes$causabas) |>
    select(codmunres, ano, causabas) |>
-   left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
+   #left_join(df_cid10 |> select(causabas, capitulo_cid10)) |>
    mutate(obitos = 1) |>
-   group_by(across(!c(causabas, obitos))) |>
+   group_by(across(!c(obitos))) |>
    summarise(obitos = sum(obitos)) |>
    ungroup() |>
    pivot_wider(
-     names_from = capitulo_cid10,
+     names_from = causabas,
      values_from = obitos,
      values_fill = 0
    ) |>
@@ -1124,22 +1142,22 @@ df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
 #
 #
 # ## Causas evitáveis para óbitos neonatais ------------------------------------------------------
-# df_neonatais_totais_peso <- df_sim_doinf |>
-#   mutate(
-#     faixa_de_peso = case_when(
-#       as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
-#       as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
-#       as.numeric(peso) > 1500 ~ "> 1500 g"
-#     )
-#   ) |>
-#   select(codmunres, ano, faixa_de_peso) |>
-#   mutate(obitos_neonatais_totais = 1) |>
-#   group_by(across(!obitos_neonatais_totais)) |>
-#   summarise(obitos_neonatais_totais = sum(obitos_neonatais_totais)) |>
-#   ungroup() |>
-#   right_join(df_aux_municipios) |>
-#   arrange(codmunres)
-#
+ df_neonatais_totais_peso <- df_sim_doinf |>
+   mutate(
+     faixa_de_peso = case_when(
+       as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
+       as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
+       as.numeric(peso) > 1500 ~ "> 1500 g"
+     )
+   ) |>
+   select(codmunres, ano, faixa_de_peso) |>
+   mutate(obitos_neonatais_totais = 1) |>
+   group_by(across(!obitos_neonatais_totais)) |>
+   summarise(obitos_neonatais_totais = sum(obitos_neonatais_totais)) |>
+   ungroup() |>
+   right_join(df_aux_municipios) |>
+   arrange(codmunres)
+
 # df_neonatais_precoce_totais_peso <- df_sim_doinf |>
 #   mutate(
 #     faixa_de_peso = case_when(
@@ -1157,45 +1175,103 @@ df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
 #   right_join(df_aux_municipios) |>
 #   arrange(codmunres)
 #
-# df_neonatais_evitaveis <- df_sim_doinf |>
-#   mutate(
-#     causabas = causabas,
-#     causabas2 = substr(causabas, 1 , 3)
-#   ) |>
-#   mutate(
-#     grupo_cid = case_when(
-#       causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_imunoprevencao",
-#       causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_mulher_gestacao",
-#       causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_parto",
-#       causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_recem_nascido",
-#       causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_tratamento",
-#       causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_saude",
-#       causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_mal_definidas"
-#     ),
-#     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_outros", grupo_cid),
-#     faixa_de_peso = case_when(
-#       as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
-#       as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
-#       as.numeric(peso) > 1500 ~ "> 1500 g"
-#     )
-#   ) |>
-#   select(codmunres, ano, grupo_cid, faixa_de_peso) |>
-#   mutate(obitos = 1) |>
-#   group_by(across(!obitos)) |>
-#   summarise(obitos = sum(obitos)) |>
-#   ungroup() |>
-#   pivot_wider(
-#     names_from = grupo_cid,
-#     values_from = obitos,
-#     values_fill = 0
-#   ) |>
-#   right_join(df_neonatais_totais_peso) |>
-#   right_join(df_aux_municipios) |>
-#   arrange(codmunres) |>
-#   mutate(faixa_de_peso = ifelse(is.na(faixa_de_peso), "não se aplica", faixa_de_peso))
-#
-# ## Substituindo todos os NAs por 0 (gerados após o right join)
-# df_neonatais_evitaveis[is.na(df_neonatais_evitaveis)] <- 0
+
+ # Causas evitáveis --------------------------------------------------------
+ # ## Criando um vetor com as cids
+ imunoprevencao <- c(
+   "A17", "A19", "A33", "A35", "A36", "A37", "A80", "B05", "B06",
+   "B16", "B260", "G000", "P350", "P353"
+ )
+
+ mulher_gestacao <- c(
+   "A50", sprintf("B2%d", 0:4), "P022", "P023", "P027", "P028",
+   "P029", "P00", "P04", "P01", "P05", "P07", "P220", "P26",
+   "P52", "P550", "P551", "P558", "P559", "P56", "P57", "P77"
+ )
+
+ evitaveis_parto <- c(
+   "P020", "P021", "P024", "P025", "P026", "P03", "P08", sprintf("P1%d", 0:5),
+   "P20", "P21", "P24"
+ )
+
+ recem_nascido <- c(
+   "P221", "P228", "P229", "P23", "P25", "P27", "P28",
+   sprintf("P3%d", 51:53), sprintf("P3%d", 58:59), sprintf("P3%d", 6:9), sprintf("P5%d", 0:1), sprintf("P5%d", 3:4), "P58", "P59",
+   sprintf("P7%d", 0:4), "P60", "P61",  sprintf("P7%d", 5:6), "P78",
+   sprintf("P8%d", 0:3),  sprintf("P9%d", 0:4),
+   sprintf("P9%d", 60:68)
+ )
+
+ tratamento <- c(
+   "A15", "A16", "A18", sprintf("G0%d", 0:4), sprintf("J0%d", 0:6),
+   sprintf("J1%d", 2:8), sprintf("J1%d", 2:8), sprintf("J2%d", 0:2),
+   "J384", sprintf("J4%d", 0:2), sprintf("J4%d", 5:7), sprintf("J6%d", 8:9),
+   sprintf("A7%d", 0:4), "A30", "A31", "A32", "A38", "A39", "A40", "A41",
+   "A46", "A49", "E030", "E031", sprintf("E1%d", 0:4), "E700", "E730",
+   "G40", "G41", "Q90", "N390", sprintf("I0%d", 0:9)
+ )
+
+ saude <- c(
+   sprintf("A0%d", 0:9), sprintf("A2%d", 0:8), sprintf("A9%d", 0:9),
+   sprintf("A7%d", 5:9), "A82", sprintf("B5%d", 0:9), sprintf("B6%d", 0:4),
+   sprintf("B6%d", 5:9), sprintf("B7%d", 0:9), sprintf("B8%d", 0:3),
+   "B99", sprintf("D5%d", 0:3), sprintf("E4%d", 0:9), sprintf("E5%d", 0:9),
+   sprintf("E6%d", 0:4), "E86", c(sprintf("V%02d", 1:99)), sprintf("X4%d", 0:4),
+   sprintf("X4%d", 5:9), "R95", c(sprintf("W%02d", 0:19)), sprintf("X0%d", 0:9),
+   sprintf("X3%d", 0:9), c(sprintf("W%02d", 65:74)), c(sprintf("W%02d", 75:84)),
+   c(sprintf("W%02d", 85:99)), c(sprintf("X%02d", 85:99)),
+   c(sprintf("Y%02d", 00:09)), c(sprintf("Y%02d", 10:34)), c(sprintf("W%02d", 20:49)),
+   c(sprintf("Y%02d", 60:69)), c(sprintf("Y%02d", 83:84)), c(sprintf("Y%02d", 40:59))
+ )
+
+ mal_definidas <- c(
+   c(sprintf("R%02d", 00:94)), c(sprintf("R%02d", 96:99)),
+   "P95", "P969"
+ )
+
+ df_neonatais_evitaveis <- df_sim_doinf |>
+   mutate(
+     causabas = causabas,
+     causabas2 = substr(causabas, 1 , 3)
+   ) |>
+   mutate(
+     grupo_cid = case_when(
+       causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_neonatal_imunoprevencao",
+       causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao ~ "evitaveis_neonatal_mulher_gestacao",
+       causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_neonatal_parto",
+       causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_neonatal_recem_nascido",
+       causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_neonatal_tratamento",
+       causabas %in% saude | causabas2 %in% saude~ "evitaveis_neonatal_saude",
+       causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_neonatal_mal_definidas"
+     ),
+     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_neonatal_outros", grupo_cid),
+     faixa_de_peso = case_when(
+       as.numeric(peso) <= 1000 | is.na(peso) ~ "outros",
+       as.numeric(peso) > 1000 & as.numeric(peso) <= 1500 ~ "> 1000 g",
+       as.numeric(peso) > 1500 ~ "> 1500 g"
+     )
+   ) |>
+   select(codmunres, ano, grupo_cid, faixa_de_peso) |>
+   mutate(obitos = 1) |>
+   group_by(across(!obitos)) |>
+   summarise(obitos = sum(obitos)) |>
+   ungroup() |>
+   pivot_wider(
+     names_from = grupo_cid,
+     values_from = obitos,
+     values_fill = 0
+   ) |>
+   right_join(df_neonatais_totais_peso) |>
+   right_join(df_aux_municipios) |>
+   arrange(codmunres) |>
+   mutate(faixa_de_peso = ifelse(is.na(faixa_de_peso), "não se aplica", faixa_de_peso))
+
+ ## Substituindo todos os NAs por 0 (gerados após o right join)
+df_neonatais_evitaveis[is.na(df_neonatais_evitaveis)] <- 0
+
+
+write.csv(df_neonatais_evitaveis, "data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv", row.names = FALSE)
+
 #
 #
 # df_neonatais_precoce_evitaveis <- df_sim_doinf |>
@@ -1363,49 +1439,102 @@ df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_totais_precoce)
 # df_bloco8_graficos <- left_join(df_bloco8_graficos, df_neonatais_evitaveis_7_27_dias)
 #
 #
-# ## Para a tabela de causas evitáveis em óbitos neonatais
-# df_evitaveis_neonatal_tabela <- df_sim_doinf |>
-#   filter(codmunres %in% codigos_municipios) |>
-#   left_join(df_cid10) |>
-#   mutate(
-#     idade = as.numeric(idade),
-#     peso = as.numeric(peso),
-#     faixa_de_peso = factor(
-#       case_when(
-#         is.na(peso) ~ "Sem informação",
-#         peso < 1500 ~ "< 1500 g",
-#         peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
-#         peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
-#         peso >= 2500 ~ "\U2265 2500 g"
-#       ),
-#       levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
-#     ),
-#     faixa_de_idade = factor(
-#       case_when(
-#         idade <= 206 ~ "0 a 6 dias",
-#         idade > 206 & idade <= 227 ~ "7 a 27 dias"
-#       ),
-#       levels = c("0 a 6 dias", "7 a 27 dias")
-#     ),
-#     grupo_cid = case_when(
-#       causabas %in% imunoprevencao ~ "Reduzível pelas ações de imunização",
-#       causabas %in% mulher_gestacao ~ "Reduzíveis por adequada atenção à mulher na gestação",
-#       causabas %in% evitaveis_parto ~ "Reduzíveis por adequada atenção à mulher no parto",
-#       causabas %in% recem_nascido ~ "Reduzíveis por adequada atenção ao recém-nascido",
-#       causabas %in% tratamento ~ "Reduzíveis por ações de diagnóstico e tratamento adequado",
-#       causabas %in% saude ~ "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção",
-#       causabas %in% mal_definidas ~ "Causas mal definidas",
-#       TRUE ~ "Demais causas (não claramente evitáveis)"
-#     ),
-#     obitos = 1
-#   ) |>
-#   group_by(across(!obitos)) |>
-#   summarise(obitos = sum(obitos)) |>
-#   ungroup() |>
-#   select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
-#   arrange(codmunres)
+
+ # Causas evitáveis --------------------------------------------------------
+ # ## Criando um vetor com as cids
+#   imunoprevencao <- c(
+#       "A17", "A19", "A33", "A35", "A36", "A37", "A80", "B05", "B06",
+#       "B16", "B260", "G000", "P350", "P353"
+#     )
 #
-# write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2022_2024.csv.gz"), row.names = FALSE)
+#   mulher_gestacao <- c(
+#       "A50", sprintf("B2%d", 0:4), "P022", "P023", "P027", "P028",
+#       "P029", "P00", "P04", "P01", "P05", "P07", "P220", "P26",
+#       "P52", "P550", "P551", "P558", "P559", "P56", "P57", "P77"
+#     )
+#
+#   evitaveis_parto <- c(
+#       "P020", "P021", "P024", "P025", "P026", "P03", "P08", sprintf("P1%d", 0:5),
+#       "P20", "P21", "P24"
+#     )
+#
+#   recem_nascido <- c(
+#       "P221", "P228", "P229", "P23", "P25", "P27", "P28",
+#       sprintf("P3%d", 51:53), sprintf("P3%d", 58:59), sprintf("P3%d", 6:9), sprintf("P5%d", 0:1), sprintf("P5%d", 3:4), "P58", "P59",
+#       sprintf("P7%d", 0:4), "P60", "P61",  sprintf("P7%d", 5:6), "P78",
+#       sprintf("P8%d", 0:3),  sprintf("P9%d", 0:4),
+#       sprintf("P9%d", 60:68)
+#     )
+#
+#   tratamento <- c(
+#       "A15", "A16", "A18", sprintf("G0%d", 0:4), sprintf("J0%d", 0:6),
+#       sprintf("J1%d", 2:8), sprintf("J1%d", 2:8), sprintf("J2%d", 0:2),
+#       "J384", sprintf("J4%d", 0:2), sprintf("J4%d", 5:7), sprintf("J6%d", 8:9),
+#      sprintf("A7%d", 0:4), "A30", "A31", "A32", "A38", "A39", "A40", "A41",
+#    "A46", "A49", "E030", "E031", sprintf("E1%d", 0:4), "E700", "E730",
+#       "G40", "G41", "Q90", "N390", sprintf("I0%d", 0:9)
+#     )
+#
+#   saude <- c(
+#       sprintf("A0%d", 0:9), sprintf("A2%d", 0:8), sprintf("A9%d", 0:9),
+#       sprintf("A7%d", 5:9), "A82", sprintf("B5%d", 0:9), sprintf("B6%d", 0:4),
+#       sprintf("B6%d", 5:9), sprintf("B7%d", 0:9), sprintf("B8%d", 0:3),
+#       "B99", sprintf("D5%d", 0:3), sprintf("E4%d", 0:9), sprintf("E5%d", 0:9),
+#       sprintf("E6%d", 0:4), "E86", c(sprintf("V%02d", 1:99)), sprintf("X4%d", 0:4),
+#       sprintf("X4%d", 5:9), "R95", c(sprintf("W%02d", 0:19)), sprintf("X0%d", 0:9),
+#       sprintf("X3%d", 0:9), c(sprintf("W%02d", 65:74)), c(sprintf("W%02d", 75:84)),
+#       c(sprintf("W%02d", 85:99)), c(sprintf("X%02d", 85:99)),
+#     c(sprintf("Y%02d", 00:09)), c(sprintf("Y%02d", 10:34)), c(sprintf("W%02d", 20:49)),
+#       c(sprintf("Y%02d", 60:69)), c(sprintf("Y%02d", 83:84)), c(sprintf("Y%02d", 40:59))
+#     )
+#
+#   mal_definidas <- c(
+#       c(sprintf("R%02d", 00:94)), c(sprintf("R%02d", 96:99)),
+#       "P95", "P969"
+#     )
+# ### Para a tabela de causas evitáveis em óbitos neonatais
+#  df_evitaveis_neonatal_tabela <- df_sim_doinf |>
+#    filter(codmunres %in% codigos_municipios) |>
+#    left_join(df_cid10) |>
+#    mutate(
+#      idade = as.numeric(idade),
+#      peso = as.numeric(peso),
+#      faixa_de_peso = factor(
+#        case_when(
+#          is.na(peso) ~ "Sem informação",
+#          peso < 1500 ~ "< 1500 g",
+#          peso >= 1500 & peso < 2000 ~ "1500 a 1999 g",
+#          peso >= 2000 & peso < 2500 ~ "2000 a 2499 g",
+#          peso >= 2500 ~ "\U2265 2500 g"
+#        ),
+#        levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")
+#      ),
+#      faixa_de_idade = factor(
+#        case_when(
+#          idade <= 206 ~ "0 a 6 dias",
+#          idade > 206 & idade <= 227 ~ "7 a 27 dias"
+#      ),
+#        levels = c("0 a 6 dias", "7 a 27 dias")
+#      ),
+#      grupo_cid = case_when(
+#        causabas %in% imunoprevencao ~ "Reduzível pelas ações de imunização",
+#        causabas %in% mulher_gestacao ~ "Reduzíveis por adequada atenção à mulher na gestação",
+#        causabas %in% evitaveis_parto ~ "Reduzíveis por adequada atenção à mulher no parto",
+#        causabas %in% recem_nascido ~ "Reduzíveis por adequada atenção ao recém-nascido",
+#        causabas %in% tratamento ~ "Reduzíveis por ações de diagnóstico e tratamento adequado",
+#        causabas %in% saude ~ "Reduzíveis por ações promoção à saúde vinculadas a ações de atenção",
+#        causabas %in% mal_definidas ~ "Causas mal definidas",
+#        TRUE ~ "Demais causas (não claramente evitáveis)"
+#      ),
+#      obitos = 1
+#    ) |>
+#    group_by(across(!obitos)) |>
+#    summarise(obitos = sum(obitos)) |>
+#    ungroup() |>
+#    select(codmunres, ano, capitulo_cid10, grupo_cid, causabas_subcategoria, faixa_de_peso, faixa_de_idade, obitos) |>
+#    arrange(codmunres)
+#
+#  write.csv(df_evitaveis_neonatal_tabela, gzfile("data-raw/csv/evitaveis_neonatal_2012_2024.csv.gz"), row.names = FALSE)
 #
 #
 #
@@ -2111,9 +2240,12 @@ df_bloco8_graficos_total[is.na(df_bloco8_graficos_total)] <- 0
 
 write.csv(df_bloco8_graficos_total, "data-raw/csv/indicadores_bloco8_graficos_garbage_code_2012-2024.csv", row.names = FALSE)
 
+
+
+
 # df_neonatais_evitaveis_2023 <- df_neonatais_evitaveis
 #
-# df_neonatais_evitaveis_antigo <- read_csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2022.csv") |>
+# df_neonatais_evitaveis_antigo <- read_csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
 #   filter(ano <= 2021) |>
 #   select(all_of(names(df_neonatais_evitaveis_2023)))
 #
