@@ -412,6 +412,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de óbitos fetais por grupos de causas",
       "Porcentagem de óbitos perinatais por grupos de causas",
       "Porcentagem de óbitos neonatais por grupos de causas",
+      "Porcentagem de internações neonatais por grupos de causas",
       "Porcentagem de nascidos vivos segundo local de ocorrência do parto",
       "Medianas de deslocamento segundo o local de ocorrência do parto",
       "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
@@ -499,9 +500,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         bloco7_dist_morbidade
       } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
         bloco7_distribuicao_cids
-      } else if(infos_indicador()$bloco == "bloco7_morbidade_neonatal"){
-          bloco7
-        } else {
+      } else {
         get(filtros()$bloco)
       }
     })
@@ -1601,7 +1600,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     data_plot_garbage_morbidade_neonatal_completo <- reactive({
       validate(
         need(
-          nrow(data_plot_garbage_neonatal()) != 0,
+          nrow(data_plot_garbage_morbidade_neonatal()) != 0,
           "Não existem ocorrências de internações neonatais preenchidos com garbage codes para a localidade e períodos selecionados."
         )
       )
@@ -1647,6 +1646,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           indicador = !!rlang::parse_expr(infos_indicador()$calculo)
         ) |>
         dplyr::ungroup()
+
     })
 
     ## Criando o gráfico de barras --------------------------------------------
