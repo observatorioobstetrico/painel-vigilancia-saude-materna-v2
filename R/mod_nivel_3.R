@@ -499,7 +499,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         bloco7_dist_morbidade
       } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
         bloco7_distribuicao_cids
-      } else {
+      } else if(infos_indicador()$bloco == "bloco7_morbidade_neonatal"){
+          bloco7
+        } else {
         get(filtros()$bloco)
       }
     })
@@ -692,10 +694,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando o gráfico de linhas para a cobertura ---------------------------
     output$grafico_cobertura <- highcharter::renderHighchart({
-      base <- dplyr::if_else(
-        infos_indicador()$bloco == "bloco6" | startsWith(infos_indicador()$bloco, "bloco7"),
-        dplyr::if_else(infos_indicador()$nome_abreviado == "rmm", input$sistema_cobertura, "SIM"),
-        "SINASC"
+      base <- dplyr::case_when(
+        (infos_indicador()$bloco == "bloco6" & infos_indicador()$nome_abreviado != "rmm") | (startsWith(infos_indicador()$bloco, "bloco7") & !grepl("bloco7_morbidade_neonatal", infos_indicador()$bloco)) ~ "SIM",
+        infos_indicador()$nome_abreviado == "rmm" ~ input$sistema_cobertura,
+        grepl("bloco7_morbidade_neonatal", infos_indicador()$bloco) ~ "SIH",
+        T ~ "SINASC"
       )
 
       validate(
