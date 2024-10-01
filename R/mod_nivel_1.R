@@ -3835,7 +3835,7 @@ mod_nivel_1_server <- function(id, filtros){
     ### Dados Fetal, neonatal e perinatal
 
     data_filtrada_evitaveis_aux <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(ano == filtros()$ano) |>
         #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
@@ -3880,7 +3880,7 @@ mod_nivel_1_server <- function(id, filtros){
 
     ### Dados para a referencia nacional
     bloco7_evitaveis_resumo_comp <- reactive({
-      bloco8_graficos |>
+      bloco7_distribuicao_cids |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | (dplyr::contains("evitaveis_neonatal")) |
                                           (dplyr::contains("evitaveis_perinatal")) | "obitos_fetais_totais" | "obitos_neonatais_totais" |
