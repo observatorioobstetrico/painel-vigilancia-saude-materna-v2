@@ -55,15 +55,15 @@ mod_bloco_4_ui <- function(id){
                   align = "center"
                 )
               ),
-              fluidRow(
-                bs4Dash::box(
-                  width = 12,
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart1"), height = 530))
-                )
-              ),
+              # fluidRow(
+              #   bs4Dash::box(
+              #     width = 12,
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart1"), height = 530))
+              #   )
+              # ),
               fluidRow(
                 column(
                   width = 6,
@@ -164,15 +164,15 @@ mod_bloco_4_ui <- function(id){
                   align = "center"
                 )
               ),
-              fluidRow(
-                bs4Dash::box(
-                  width = 12,
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
-                )
-              ),
+              # fluidRow(
+              #   bs4Dash::box(
+              #     width = 12,
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
+              #   )
+              # ),
               fluidRow(
                 column(
                   width = 6,
@@ -249,15 +249,15 @@ mod_bloco_4_ui <- function(id){
                   align = "center"
                 )
               ),
-              fluidRow(
-                bs4Dash::box(
-                  width = 12,
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
-                )
-              ),
+              # fluidRow(
+              #   bs4Dash::box(
+              #     width = 12,
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
+              #   )
+              # ),
               fluidRow(
                 column(
                   width = 6,
@@ -355,15 +355,15 @@ mod_bloco_4_ui <- function(id){
                   align = "center"
                 )
               ),
-              fluidRow(
-                bs4Dash::box(
-                  width = 12,
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart4"), height = 530))
-                )
-              ),
+              # fluidRow(
+              #   bs4Dash::box(
+              #     width = 12,
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart4"), height = 530))
+              #   )
+              # ),
               fluidRow(
                 column(
                   width = 6,
@@ -477,15 +477,15 @@ mod_bloco_4_ui <- function(id){
                   align = "center"
                 )
               ),
-              fluidRow(
-                bs4Dash::box(
-                  width = 12,
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart5"), height = 530))
-                )
-              ),
+              # fluidRow(
+              #   bs4Dash::box(
+              #     width = 12,
+              #     collapsible = FALSE,
+              #     headerBorder = FALSE,
+              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart5"), height = 530))
+              #   )
+              # ),
               fluidRow(
                 column(
                   width = 6,
@@ -812,18 +812,20 @@ mod_bloco_4_server <- function(id, filtros){
       prop_partos_fora_uf_res = rep("round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2)
     )
 
-    bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
-      dplyr::mutate(
-        prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
-        prop_obitos_fetais_durante = rep("round(sum(fetal_durante) / sum(obitos_fetais_mais_22sem) * 100, 1)", 2),
-        porc_obitos_fetais_evitaveis_parto = rep("round(sum(evitaveis_fetal_parto) / sum(obitos_fetais_totais) * 100, 1)", 2)
-      )
+    bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs)
+
+    # bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
+    #   dplyr::mutate(
+    #     prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
+    #     prop_obitos_fetais_durante = rep("round(sum(fetal_durante) / sum(obitos_fetais_mais_22sem) * 100, 1)", 2),
+    #     porc_obitos_fetais_evitaveis_parto = rep("round(sum(evitaveis_fetal_parto) / sum(obitos_fetais_totais) * 100, 1)", 2)
+    #   )
 
     # Juntando as bases de deslocamento ---------------------------------------
     ## Isso deveria ter sido feito na parte de extração
@@ -1207,13 +1209,14 @@ mod_bloco_4_server <- function(id, filtros){
     ## Calculando uma média dos indicadores para o período selecionado --------
     ### Para a localidade selecionada -----------------------------------------
     data4_resumo <- reactive({
-      dplyr::left_join(
-        dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        dplyr::left_join(
-          bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-          bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        )
-      ) |>
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+      # dplyr::left_join(
+      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+      #   dplyr::left_join(
+      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+      #   )
+      # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
@@ -1274,13 +1277,14 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_deslocamento_resumo <- reactive({
-      dplyr::left_join(
-        dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        dplyr::left_join(
-          bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-          bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        )
-      ) |>
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+      # dplyr::left_join(
+      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+      #   dplyr::left_join(
+      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+      #   )
+      # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
@@ -1341,25 +1345,28 @@ mod_bloco_4_server <- function(id, filtros){
 
     ### Para a referência -----------------------------------------------------
     data4_resumo_referencia <- reactive({
-      dplyr::left_join(
-        dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        dplyr::left_join(
-          bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-          bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        )
-      ) |> dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+      # dplyr::left_join(
+      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+      #   dplyr::left_join(
+      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+      #   )
+      # ) |>
+        dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)
     })
 
     data4_deslocamento_resumo_referencia <- reactive({
-      dplyr::left_join(
-        dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        dplyr::left_join(
-          bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-          bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        )
-      ) |>
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+      # dplyr::left_join(
+      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+      #   dplyr::left_join(
+      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+      #   )
+      # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)

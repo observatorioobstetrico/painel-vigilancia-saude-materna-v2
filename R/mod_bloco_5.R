@@ -46,15 +46,15 @@ mod_bloco_5_ui <- function(id) {
             align = "center"
           )
         ),
-        fluidRow(
-          bs4Dash::box(
-            width = 12,
-            collapsible = FALSE,
-            headerBorder = FALSE,
-            HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
-          )
-        ),
+        # fluidRow(
+        #   bs4Dash::box(
+        #     width = 12,
+        #     collapsible = FALSE,
+        #     headerBorder = FALSE,
+        #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+        #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
+        #   )
+        # ),
         fluidRow(
           column(
             width = 6,

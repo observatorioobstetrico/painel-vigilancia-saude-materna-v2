@@ -48,15 +48,15 @@ mod_bloco_6_ui <- function(id) {
                 align = "center"
               )
             ),
-            fluidRow(
-              bs4Dash::box(
-                width = 12,
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mort"), height = 530))
-              )
-            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mort"), height = 530))
+            #   )
+            # ),
             fluidRow(
               column(
                 width = 6,
@@ -248,15 +248,15 @@ mod_bloco_6_ui <- function(id) {
                 align = "center"
               )
             ),
-            fluidRow(
-              bs4Dash::box(
-                width = 12,
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mmg"), height = 530))
-              )
-            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart_mmg"), height = 530))
+            #   )
+            # ),
             fluidRow(
               column(
                 width = 6,
