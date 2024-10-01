@@ -2646,7 +2646,8 @@ mod_nivel_1_server <- function(id, filtros){
           porc_termo_precoce = 20,
           porc_condicoes_ameacadoras = round(sum(nascidos_condicoes_ameacadoras) / total_de_nascidos_vivos * 100, 1),
           porc_nascidos_vivos_asfixia1 = round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1),
-          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)
+          porc_malformacao_vigilancia = round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1),
+          porc_malformacao_geral = round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)
         ) |>
         dplyr::ungroup()
     })
@@ -2790,7 +2791,7 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "porc_malformacao_geral",
         titulo = "Porcentagem de nascidos vivos com malformações",
         tem_meta = FALSE,
-        valor_de_referencia = data5_comp_baixo_peso()$porc_malformacao_geral,
+        valor_de_referencia = data5_comp()$porc_malformacao_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         fonte_titulo = "15px",

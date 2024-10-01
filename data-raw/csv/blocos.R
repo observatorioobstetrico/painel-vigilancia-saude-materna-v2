@@ -64,6 +64,7 @@ tabela_aux_municipios <- dplyr::left_join(dplyr::left_join(aux_municipios, aux_i
 #Lendo os arquivos originais
 bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv") |>
   janitor::clean_names()
+bloco1_aux$media_cobertura_esf <- pmin(bloco1_aux$media_cobertura_esf, bloco1_aux$populacao_total)
 
 bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2024.csv") |>
   janitor::clean_names()
