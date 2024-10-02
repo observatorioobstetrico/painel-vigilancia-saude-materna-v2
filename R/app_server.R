@@ -257,14 +257,17 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco5",
-        choices = c("< 1500 g" = "menos_1500", "< 2500 g" = "menos_2500"),
+        choices = c("Menor que 1500 g" = "menos_1500", "De 1500 a 1999 g" = "1500_a_1999",
+                    "De 2000 a 2499 g" = "2000_a_2499", "Menor que 2500 g" = "menos_2500"),
         label = "Faixa de peso"
       )
     } else if (input$indicador == "Porcentagem de nascidos vivos prematuros") {
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco5",
-        choices = c("< 28 semanas" = "menos_28", "< 32 semanas" = "menos_32", "< 37 semanas" = "menos_37"),
+        choices = c("Menos que 28 semanas" = "menos_28", "De 28 a 32 semanas" = "28_a_32",
+                    "De 33 a 34 semans" = "33_a_34", "De 35 a 36 semanas" = "35_a_36",
+                    "Menos que 37 semanas" = "menos_37"),
         label = "Idade gestacional"
       )
     }
