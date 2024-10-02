@@ -581,6 +581,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "ans_tx_abortos_cem_nascidos_vivos_valor_medio",
       "cobertura_pre_natal",
       "porc_7",
+      "porc_consultas_adequadas",
       tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4"][-1]
     )
 

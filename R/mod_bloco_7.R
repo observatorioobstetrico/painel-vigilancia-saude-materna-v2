@@ -646,42 +646,76 @@ mod_bloco_7_ui <- function(id) {
           column(
             width = 8,
             fluidRow(
-              # column(
-              #   width = 6,
-              #   bs4Dash::bs4Card(
-              #     width = 12,
-              #     status = "primary",
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              #     div(
-              #       style = "height: 15%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
-              #     ),
-              #     hr(),
-              #     fluidRow(
-              #       column(
-              #         width = 12,
-              #         selectizeInput(
-              #           inputId = ns("faixa_peso_perinatal_total"),
-              #           label = "Faixa de peso",
-              #           options = list(placeholder = "Selecione o intervalo de peso"),
-              #           choices = c(
-              #             "Geral" = "obitos_perinatal_total",
-              #             "Menor que 1500 g" = "perinatal_total_menos1500",
-              #             "De 1500 g a 1999 g" = "perinatal_total_1500_1999",
-              #             "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
-              #             "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
-              #           ),
-              #           selected = c("obitos_perinatal_total", "perinatal_total_menos1500", "perinatal_total_1500_1999",
-              #                        "perinatal_total_2000_2499", "perinatal_total_mais2500"),
-              #           width = "100%"
-              #         )
-              #       )
-              #     ),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
-              #   )
-              # ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("faixa_peso_perinatal_total"),
+                        label = "Faixa de peso",
+                        options = list(placeholder = "Selecione o intervalo de peso"),
+                        choices = c(
+                          "Geral" = "obitos_perinatal_total",
+                          "Menor que 1500 g" = "perinatal_total_menos1500",
+                          "De 1500 g a 1999 g" = "perinatal_total_1500_1999",
+                          "De 2000 g a 2499 g" = "perinatal_total_2000_2499",
+                          "Maior ou igual a 2500 g" = "perinatal_total_mais2500"
+                        ),
+                        # selected = c("obitos_perinatal_total", "perinatal_total_menos1500", "perinatal_total_1500_1999",
+                        #              "perinatal_total_2000_2499", "perinatal_total_mais2500"),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
+                )
+              ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                  ),
+                  hr(),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("faixa_peso_perinatal_taxa_total"),
+                        label = "Faixa de peso",
+                        options = list(placeholder = "Selecione o intervalo de peso"),
+                        choices = c(
+                          "Geral" = "taxa_perinatal_total",
+                          "Menor que 1500 g" = "taxa_perinatal_total_menos1500",
+                          "De 1500 g a 1999 g" = "taxa_perinatal_total_1500_1999",
+                          "De 2000 g a 2499 g" = "taxa_perinatal_total_2000_2499",
+                          "Maior ou igual a 2500 g" = "taxa_perinatal_total_mais2500"
+                        ),
+                        width = "100%"
+                      )
+                    )
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
+                )
+              ),
               column(
                 width = 6,
                 bs4Dash::bs4Card(
@@ -716,40 +750,6 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 410))
                 )
               ),
-              # column(
-              #   width = 6,
-              #   bs4Dash::bs4Card(
-              #     width = 12,
-              #     status = "primary",
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              #     div(
-              #       style = "height: 15%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
-              #     ),
-              #     hr(),
-              #     fluidRow(
-              #       column(
-              #         width = 12,
-              #         selectizeInput(
-              #           inputId = ns("faixa_peso_perinatal_taxa_total"),
-              #           label = "Faixa de peso",
-              #           options = list(placeholder = "Selecione o intervalo de peso"),
-              #           choices = c(
-              #             "Geral" = "taxa_perinatal_total",
-              #             "Menor que 1500 g" = "taxa_perinatal_total_menos1500",
-              #             "De 1500 g a 1999 g" = "taxa_perinatal_total_1500_1999",
-              #             "De 2000 g a 2499 g" = "taxa_perinatal_total_2000_2499",
-              #             "Maior ou igual a 2500 g" = "taxa_perinatal_total_mais2500"
-              #           ),
-              #           width = "100%"
-              #         )
-              #       )
-              #     ),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
-              #   )
-              # ),
               column(
                 width = 6,
                 bs4Dash::bs4Card(
