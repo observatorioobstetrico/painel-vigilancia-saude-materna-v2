@@ -834,7 +834,8 @@ mod_bloco_4_server <- function(id, filtros){
 
     # Juntando as bases de deslocamento ---------------------------------------
     ## Isso deveria ter sido feito na parte de extração
-    bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni, bloco4_deslocamento_macrorregiao)
+    bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni, bloco4_deslocamento_macrorregiao) |>
+      dplyr::arrange(desc(ano))
 
     bloco4_deslocamento_uf <- dplyr::left_join(
       # Algumas gambiarras por conta do gráfico de radar
@@ -3382,7 +3383,7 @@ mod_bloco_4_server <- function(id, filtros){
 
         municipio1 <- municipio2 <- municipio3 <- NULL
 
-        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2023))) {
+        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2024))) {
           municipio1[i] <- ifelse(
             !is.na(data_infos_deslocamento$codmunnasc1[i]),
             tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento$codmunnasc1[i])],
@@ -3409,7 +3410,7 @@ mod_bloco_4_server <- function(id, filtros){
         estabelecimento <- data_infos_deslocamento$nome_estabelecimento_fantasia
         partos_estabelecimento <- data_infos_deslocamento$nasc_estab
 
-        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2023)
+        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2024)
         infos_municipio1 <- dplyr::if_else(
           glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
           glue::glue("---"),
