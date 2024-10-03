@@ -186,18 +186,23 @@ bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribui
 
 ## Lendo os dados dos indicadores de causas evitáveis e grupos de causas para os óbitos fetais
 bloco7_distribuicao_cids_fetais_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv")
+bloco7_distribuicao_cids_neonatais_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
+
 
 ## Lendo os dados dos indicadores de causas evitáveis e grupos de causas para os outros tipos de óbito
 ### OBS.: essa parte vai ser substituída conforme vocês forem salvando os arquivos específicos pra cada tipo de óbito
 bloco7_distribuicao_cids_outros_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2024.csv") |>
   janitor::clean_names() |>
-  dplyr::select(!dplyr::contains("fetal"))
+  dplyr::select(!dplyr::contains("fetal")) |>
+  dplyr::select(!dplyr::contains("fetais")) |>
+  dplyr::select(!dplyr::contains("neonat"))
 
 ## Juntando todos os dados dos indicadores de causas evitáveis e grupos de causas
 bloco7_distribuicao_cids_aux <- dplyr::full_join(
   bloco7_distribuicao_cids_fetais_aux,
   bloco7_distribuicao_cids_outros_aux
-)
+) |>
+  full_join(bloco7_distribuicao_cids_neonatais_aux)
 
 
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
