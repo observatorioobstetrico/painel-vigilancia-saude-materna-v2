@@ -4741,6 +4741,7 @@ mod_bloco_7_server <- function(id, filtros){
     ### Para os gráficos de grupos de causas ----------------------------------
     #### Para a localidade selecionada ----------------------------------------
     data_plot_grupos_fetal <- reactive({
+
       if (length(input$momento_obito_fetal_grupos) == 2) {
         data_plot_grupos_fetal_aux <- data_filtrada_aux() |>
             dplyr::select(
@@ -4905,6 +4906,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a comparação selecionada ----------------------------------------
     data_plot_grupos_fetal_comp <- reactive({
+
       if (length(input$momento_obito_fetal_grupos) == 2) {
         data_plot_grupos_fetal_comp_aux <- data_filtrada_comp_aux() |>
             dplyr::select(
