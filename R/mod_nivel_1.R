@@ -756,6 +756,18 @@ mod_nivel_1_ui <- function(id) {
                   fluidRow(
                      column(
                        width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i7")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i8")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "270px")
                      ),
                      column(
@@ -764,19 +776,16 @@ mod_nivel_1_ui <- function(id) {
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "280px")
                      ),
                      column(
+                       offset = 2,
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "280px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i6")), proxy.height = "280px")
                      ),
                      column(
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i5")), proxy.height = "280px")
-                     ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i6")), proxy.height = "280px")
                      )
                   )
                 ),
@@ -4362,6 +4371,48 @@ mod_nivel_1_server <- function(id, filtros){
 
 
     ### Para os indicadores de mortalidade perinatal --------------------------
+
+    #### Número de óbitos perinatais (definição 1) ----------------------------
+
+    output$caixa_b7_perinatal_i7 <- renderUI({
+      cria_caixa_server(
+        dados = data7(),
+        indicador = "obitos_perinatal_total",
+        titulo = "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        tem_meta = FALSE,
+        valor_de_referencia = data7_comp()$obitos_perinatal_total,
+        tipo = "número",
+        invertido = FALSE,
+        cor = "lightgrey",
+        texto_footer = ifelse(
+          filtros()$nivel == "Nacional",
+          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+        ),
+        tamanho_caixa = "330px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
+
+
+    output$caixa_b7_perinatal_i8 <- renderUI({
+      cria_caixa_server(
+        dados = data7(),
+        indicador = "taxa_perinatal_total",
+        titulo = "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        tem_meta = FALSE,
+        valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
+          data7_comp()$taxa_perinatal_total, #, NaN),
+        tipo = "taxa",
+        invertido = FALSE,
+        tamanho_caixa = "330px",
+        pagina = "nivel_1",
+        tipo_referencia = "média nacional",
+        nivel_de_analise = filtros()$nivel
+      )
+    })
 
     #### Número de óbitos perinatais (definição 2) ----------------------------
 

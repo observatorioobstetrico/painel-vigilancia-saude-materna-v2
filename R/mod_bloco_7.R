@@ -657,18 +657,18 @@ mod_bloco_7_ui <- function(id) {
               )
             ),
             fluidRow(
-              # column(
-              #   width = 6,
-              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
-              # ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
+              ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "300px")
               ),
-              # column(
-              #   width = 6,
-              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
-              # ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "300px")
