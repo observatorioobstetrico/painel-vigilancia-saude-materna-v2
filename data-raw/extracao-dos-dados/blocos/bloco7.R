@@ -1521,42 +1521,91 @@ write.csv(df_bloco7_morbidade_neonatal_novo, 'data-raw/csv/indicadores_bloco7_mo
 
 ############ Dados para a distribuição de internações neonatais
 
-grupos_prematuridade <- c("P07", "P220", "P25", "P26", "P52", "P77")
+# grupos_prematuridade <- c("P07", "P220", "P25", "P26", "P52", "P77")
+#
+# grupos_infeccoes <- c("P35", "P36", "P37", "P38", "P39", "A40", "A41", "P23",
+#                       "J12", "J13", "J14", "J15", "J16", "J17", "J18", "A00", "A01",
+#                       "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A33",
+#                       "A50", "B20", "B21", "B22", "B23", "B24", "G00", "G03", "G04")
+#
+# grupos_asfixia <- c("P017", "P020", "P021", "P024", "P025", "P026", "P03",
+#                     "P10", "P11", "P12", "P13", "P14", "P15", "P20", "P21", "P24")
+#
+# grupos_respiratorias <- c("P221", "P228", "P229", "P28")
+#
+# grupos_gravidez <- c("P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
+#                      "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P04",
+#                      "P05", "P964")
+#
+# grupos_cardiorrespiratoria <- c("P221", "P228", "P229", "P28")
+#
+# grupos_afeccoes_perinatal <- c("P969")
+#
+# grupos_ma_formacao <- c(paste0("Q", sprintf("%02d", 0:99)))
+#
+# grupos_mal_definida <- c(paste0("R", sprintf("%02d", 0:99)))
+#
+#
+# grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", "P221", "P228", "P229",
+#                                 "P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
+#                                 "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P964", "P969")
 
-grupos_infeccoes <- c("P35", "P36", "P37", "P38", "P39", "A40", "A41", "P23",
-                      "J12", "J13", "J14", "J15", "J16", "J17", "J18", "A00", "A01",
-                      "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A33",
-                      "A50", "B20", "B21", "B22", "B23", "B24", "G00", "G03", "G04")
+# Novo agrupamento para a distribuição de morbidade
 
-grupos_asfixia <- c("P017", "P020", "P021", "P024", "P025", "P026", "P03",
-                    "P10", "P11", "P12", "P13", "P14", "P15", "P20", "P21", "P24")
+cids_internacoes_neonatais <- read_csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cids_internacoes_neonatais.csv") |>
+  select(causabas = CID,
+         grupos = `CONSIDERAR ESTA  COLUNA -REVISÃO COM CINTIA E TATIANE EM 1/10/2024 Grupo da rede interagencial moficado para causa de internação neonatal (fluxograma na aba 'orientacoes')`)
 
-grupos_respiratorias <- c("P221", "P228", "P229", "P28")
-
-grupos_gravidez <- c("P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
-                     "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P04",
-                     "P05", "P964")
-
-grupos_cardiorrespiratoria <- c("P221", "P228", "P229", "P28")
-
-grupos_afeccoes_perinatal <- c("P969")
-
-grupos_ma_formacao <- c(paste0("Q", sprintf("%02d", 0:99)))
-
-grupos_mal_definida <- c(paste0("R", sprintf("%02d", 0:99)))
-
-
-grupos_todas_subcategorias <- c("P017", "P020", "P021", "P024", "P025", "P026", "P221", "P228", "P229",
-                                "P00", "P010", "P011", "P012", "P013", "P014", "P015", "P016",
-                                "P018", "P019", "P022", "P023", "P027", "P028", "P029", "P964", "P969")
+for(i in unique(cids_internacoes_neonatais$grupos)){
+  nome_variavel <- tolower(i)
+  nome_variavel <- gsub(" ", "_", nome_variavel)
+  assign(nome_variavel, filter(cids_internacoes_neonatais, grupos == i)$causabas)
+}
 
 
 df_internacoes_neonatais_totais <- df_aih_internacoes_wide |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3)
+  ) |>
+  filter(!(causabas %in% excluir | causabas2 %in% excluir)) |>
   select(codmunres, ano) |>
   mutate(internacoes_neonatais_totais = 1) |>
   group_by(across(!internacoes_neonatais_totais)) |>
   summarise(internacoes_neonatais_totais = sum(internacoes_neonatais_totais)) |>
   ungroup()
+
+# internacoes_neonatais_grupos <- df_aih_internacoes_wide |>
+#   mutate(
+#     causabas = causabas,
+#     causabas2 = substr(causabas, 1 , 3)
+#   ) |>
+#   mutate(
+#     grupo_cid = case_when(
+#       causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_prematuridade",
+#       causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_infeccoes",
+#       causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_asfixia",
+#       causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_respiratorias",
+#       causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_gravidez",
+#       #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
+#       causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_afeccoes_perinatal",
+#       causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_ma_formacao",
+#       causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_mal_definida",
+#       TRUE ~ "morbidade_neonatal_grupos_outros"
+#     )
+#   ) |>
+#   select(codmunres, ano, grupo_cid) |>
+#   mutate(internacoes = 1) |>
+#   group_by(across(!internacoes)) |>
+#   summarise(internacoes = sum(internacoes)) |>
+#   ungroup() |>
+#   pivot_wider(
+#     names_from = grupo_cid,
+#     values_from = internacoes,
+#     values_fill = 0
+#   ) |>
+#   right_join(df_aux_municipios) |>
+#   arrange(codmunres)
 
 internacoes_neonatais_grupos <- df_aih_internacoes_wide |>
   mutate(
@@ -1565,15 +1614,18 @@ internacoes_neonatais_grupos <- df_aih_internacoes_wide |>
   ) |>
   mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_prematuridade",
-      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_infeccoes",
-      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_asfixia",
-      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_respiratorias",
-      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_gravidez",
-      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_afeccoes_perinatal",
-      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_ma_formacao",
-      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_mal_definida",
+      causabas %in% infecções | causabas2 %in% infecções | causabas %in% infecção | causabas2 %in% infecção ~ "morbidade_neonatal_grupos_infeccoes",
+      causabas %in% `afecções_respiratórias_do_recém-nascido` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` | causabas %in% `afecções_respiratórias_dos_recém-nascidos` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` ~ "morbidade_neonatal_grupos_afeccoes_respiratorias",
+      causabas %in% fatores_maternos_relacionados_à_gravidez | causabas2 %in% fatores_maternos_relacionados_à_gravidez~ "morbidade_neonatal_grupos_fatores_maternos",
+      causabas %in% `asfixia_/_hipóxia` | causabas2 %in% `asfixia_/_hipóxia` ~ "morbidade_neonatal_grupos_asfixia",
+      causabas %in% prematuridade | causabas2 %in% prematuridade ~ "morbidade_neonatal_grupos_prematuridade",
+      causabas %in% afecções_não_especificadas_do_período_perinatal | causabas %in% afecções_originais_no_período_perinatal| causabas %in% afecções_não_especificadas_originadas_no_período_perinatal |  causabas2 %in% afecções_não_especificadas_do_período_perinatal | causabas2 %in% afecções_originais_no_período_perinatal | causabas2 %in% causabas %in% afecções_não_especificadas_originadas_no_período_perinatal ~ "morbidade_neonatal_grupos_afeccoes_perinatal",
+      causabas %in% transtornos_cardíacos_originados_no_período_perinatal | causabas2 %in% transtornos_cardíacos_originados_no_período_perinatal ~ "morbidade_neonatal_grupos_cardiacos_perinatal",
+      causabas %in% icterícia_neonatal | causabas2 %in% icterícia_neonatal ~ "morbidade_neonatal_grupos_ictericia",
+      causabas %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido`| causabas2 %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido` ~ "morbidade_neonatal_grupos_endocrinos",
+      causabas %in% problemas_de_alimentação_do_rn | causabas2 %in% problemas_de_alimentação_do_rn ~ "morbidade_neonatal_grupos_alimentacao",
+      causabas %in% má_formação_congênita | causabas2 %in% má_formação_congênita ~ "morbidade_neonatal_grupos_ma_formacao",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "morbidade_neonatal_grupos_mal_definidas",
       TRUE ~ "morbidade_neonatal_grupos_outros"
     )
   ) |>
@@ -1601,15 +1653,18 @@ internacoes_neonatais_grupos_0_dias <- df_aih_internacoes_wide|>
   ) |>
   mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_0_dias_prematuridade",
-      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_0_dias_infeccoes",
-      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_0_dias_asfixia",
-      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_0_dias_respiratorias",
-      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_0_dias_gravidez",
-      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_0_dias_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_0_dias_afeccoes_perinatal",
-      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_0_dias_ma_formacao",
-      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_0_dias_mal_definida",
+      causabas %in% infecções | causabas2 %in% infecções | causabas %in% infecção | causabas2 %in% infecção ~ "morbidade_neonatal_grupos_0_dias_infeccoes",
+      causabas %in% `afecções_respiratórias_do_recém-nascido` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` | causabas %in% `afecções_respiratórias_dos_recém-nascidos` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` ~ "morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias",
+      causabas %in% fatores_maternos_relacionados_à_gravidez | causabas2 %in% fatores_maternos_relacionados_à_gravidez~ "morbidade_neonatal_grupos_0_dias_fatores_maternos",
+      causabas %in% `asfixia_/_hipóxia` | causabas2 %in% `asfixia_/_hipóxia` ~ "morbidade_neonatal_grupos_0_dias_asfixia",
+      causabas %in% prematuridade | causabas2 %in% prematuridade ~ "morbidade_neonatal_grupos_0_dias_prematuridade",
+      causabas %in% afecções_não_especificadas_do_período_perinatal | causabas %in% afecções_originais_no_período_perinatal| causabas %in% afecções_não_especificadas_originadas_no_período_perinatal |  causabas2 %in% afecções_não_especificadas_do_período_perinatal | causabas2 %in% afecções_originais_no_período_perinatal | causabas2 %in% causabas %in% afecções_não_especificadas_originadas_no_período_perinatal ~ "morbidade_neonatal_grupos_0_dias_afeccoes_perinatal",
+      causabas %in% transtornos_cardíacos_originados_no_período_perinatal | causabas2 %in% transtornos_cardíacos_originados_no_período_perinatal ~ "morbidade_neonatal_grupos_0_dias_cardiacos_perinatal",
+      causabas %in% icterícia_neonatal | causabas2 %in% icterícia_neonatal ~ "morbidade_neonatal_grupos_0_dias_ictericia",
+      causabas %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido`| causabas2 %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido` ~ "morbidade_neonatal_grupos_0_dias_endocrinos",
+      causabas %in% problemas_de_alimentação_do_rn | causabas2 %in% problemas_de_alimentação_do_rn ~ "morbidade_neonatal_grupos_0_dias_alimentacao",
+      causabas %in% má_formação_congênita | causabas2 %in% má_formação_congênita ~ "morbidade_neonatal_grupos_0_dias_ma_formacao",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "morbidade_neonatal_grupos_0_dias_mal_definidas",
       TRUE ~ "morbidade_neonatal_grupos_0_dias_outros"
     )
   ) |>
@@ -1637,15 +1692,18 @@ internacoes_neonatais_grupos_7_27_dias <- df_aih_internacoes_wide |>
   ) |>
   mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_7_27_dias_prematuridade",
-      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_7_27_dias_infeccoes",
-      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_7_27_dias_asfixia",
-      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_7_27_dias_respiratorias",
-      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_7_27_dias_gravidez",
-      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_7_27_dias_afeccoes_perinatal",
-      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_7_27_dias_ma_formacao",
-      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_7_27_dias_mal_definida",
+      causabas %in% infecções | causabas2 %in% infecções | causabas %in% infecção | causabas2 %in% infecção ~ "morbidade_neonatal_grupos_7_27_dias_infeccoes",
+      causabas %in% `afecções_respiratórias_do_recém-nascido` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` | causabas %in% `afecções_respiratórias_dos_recém-nascidos` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` ~ "morbidade_neonatal_grupos_7_27_dias_afeccoes_respiratorias",
+      causabas %in% fatores_maternos_relacionados_à_gravidez | causabas2 %in% fatores_maternos_relacionados_à_gravidez~ "morbidade_neonatal_grupos_7_27_dias_fatores_maternos",
+      causabas %in% `asfixia_/_hipóxia` | causabas2 %in% `asfixia_/_hipóxia` ~ "morbidade_neonatal_grupos_7_27_dias_asfixia",
+      causabas %in% prematuridade | causabas2 %in% prematuridade ~ "morbidade_neonatal_grupos_7_27_dias_prematuridade",
+      causabas %in% afecções_não_especificadas_do_período_perinatal | causabas %in% afecções_originais_no_período_perinatal| causabas %in% afecções_não_especificadas_originadas_no_período_perinatal |  causabas2 %in% afecções_não_especificadas_do_período_perinatal | causabas2 %in% afecções_originais_no_período_perinatal | causabas2 %in% causabas %in% afecções_não_especificadas_originadas_no_período_perinatal ~ "morbidade_neonatal_grupos_7_27_dias_afeccoes_perinatal",
+      causabas %in% transtornos_cardíacos_originados_no_período_perinatal | causabas2 %in% transtornos_cardíacos_originados_no_período_perinatal ~ "morbidade_neonatal_grupos_7_27_dias_cardiacos_perinatal",
+      causabas %in% icterícia_neonatal | causabas2 %in% icterícia_neonatal ~ "morbidade_neonatal_grupos_7_27_dias_ictericia",
+      causabas %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido`| causabas2 %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido` ~ "morbidade_neonatal_grupos_7_27_dias_endocrinos",
+      causabas %in% problemas_de_alimentação_do_rn | causabas2 %in% problemas_de_alimentação_do_rn ~ "morbidade_neonatal_grupos_7_27_dias_alimentacao",
+      causabas %in% má_formação_congênita | causabas2 %in% má_formação_congênita ~ "morbidade_neonatal_grupos_7_27_dias_ma_formacao",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "morbidade_neonatal_grupos_7_27_dias_mal_definidas",
       TRUE ~ "morbidade_neonatal_grupos_7_27_dias_outros"
     )
   ) |>
@@ -1672,15 +1730,18 @@ internacoes_neonatais_grupos_1_6_dias <- df_aih_internacoes_wide |>
   ) |>
   mutate(
     grupo_cid = case_when(
-      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "morbidade_neonatal_grupos_1_6_dias_prematuridade",
-      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes~ "morbidade_neonatal_grupos_1_6_dias_infeccoes",
-      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia~ "morbidade_neonatal_grupos_1_6_dias_asfixia",
-      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "morbidade_neonatal_grupos_1_6_dias_respiratorias",
-      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "morbidade_neonatal_grupos_1_6_dias_gravidez",
-      #causabas %in% grupos_cardiorrespiratoria ~ "neonat_grupos_cardiorrespiratoria",
-      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal ~ "morbidade_neonatal_grupos_1_6_dias_afeccoes_perinatal",
-      causabas >= "Q00" & causabas <= "Q99" ~ "morbidade_neonatal_grupos_1_6_dias_ma_formacao",
-      causabas >= "R00" & causabas <= "R99" ~ "morbidade_neonatal_grupos_1_6_dias_mal_definida",
+      causabas %in% infecções | causabas2 %in% infecções | causabas %in% infecção | causabas2 %in% infecção ~ "morbidade_neonatal_grupos_1_6_dias_infeccoes",
+      causabas %in% `afecções_respiratórias_do_recém-nascido` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` | causabas %in% `afecções_respiratórias_dos_recém-nascidos` | causabas2 %in% `afecções_respiratórias_do_recém-nascido` ~ "morbidade_neonatal_grupos_1_6_dias_afeccoes_respiratorias",
+      causabas %in% fatores_maternos_relacionados_à_gravidez | causabas2 %in% fatores_maternos_relacionados_à_gravidez~ "morbidade_neonatal_grupos_1_6_dias_fatores_maternos",
+      causabas %in% `asfixia_/_hipóxia` | causabas2 %in% `asfixia_/_hipóxia` ~ "morbidade_neonatal_grupos_1_6_dias_asfixia",
+      causabas %in% prematuridade | causabas2 %in% prematuridade ~ "morbidade_neonatal_grupos_1_6_dias_prematuridade",
+      causabas %in% afecções_não_especificadas_do_período_perinatal | causabas %in% afecções_originais_no_período_perinatal| causabas %in% afecções_não_especificadas_originadas_no_período_perinatal |  causabas2 %in% afecções_não_especificadas_do_período_perinatal | causabas2 %in% afecções_originais_no_período_perinatal | causabas2 %in% causabas %in% afecções_não_especificadas_originadas_no_período_perinatal ~ "morbidade_neonatal_grupos_1_6_dias_afeccoes_perinatal",
+      causabas %in% transtornos_cardíacos_originados_no_período_perinatal | causabas2 %in% transtornos_cardíacos_originados_no_período_perinatal ~ "morbidade_neonatal_grupos_1_6_dias_cardiacos_perinatal",
+      causabas %in% icterícia_neonatal | causabas2 %in% icterícia_neonatal ~ "morbidade_neonatal_grupos_1_6_dias_ictericia",
+      causabas %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido`| causabas2 %in% `transtornos_endócrinos_e_metabólicos_transitórios_específicos_do_feto_e_do_recém-nascido` ~ "morbidade_neonatal_grupos_1_6_dias_endocrinos",
+      causabas %in% problemas_de_alimentação_do_rn | causabas2 %in% problemas_de_alimentação_do_rn ~ "morbidade_neonatal_grupos_1_6_dias_alimentacao",
+      causabas %in% má_formação_congênita | causabas2 %in% má_formação_congênita ~ "morbidade_neonatal_grupos_1_6_dias_ma_formacao",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas ~ "morbidade_neonatal_grupos_1_6_dias_mal_definidas",
       TRUE ~ "morbidade_neonatal_grupos_1_6_dias_outros"
     )
   ) |>

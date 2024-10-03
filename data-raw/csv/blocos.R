@@ -365,7 +365,10 @@ bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
 #     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
 #   )
 
-bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres")
+bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres") |>
+  rename(morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias = morbidade_neonatal_grupos_afeccoes_0_dias_respiratorias)
+
+bloco7_dist_morbidade[is.na(bloco7_dist_morbidade)] <- 0
 
 bloco7_distribuicao_cids <- dplyr::left_join(bloco7_distribuicao_cids_aux, aux_municipios, by = "codmunres")
 

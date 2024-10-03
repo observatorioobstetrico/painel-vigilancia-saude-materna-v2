@@ -316,9 +316,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     }
 
     if (input$indicador_blocos4_6_7 %in% c("Porcentagem de óbitos perinatais por grupos de causas",
-                                           "Porcentagem de óbitos neonatais por grupos de causas",
-                                           "Porcentagem de internações neonatais por grupos de causas"
-    )) {
+                                           "Porcentagem de óbitos neonatais por grupos de causas"    )) {
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
@@ -331,6 +329,28 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
                               "Afecções originais no período perinatal" = "afeccoes",
                               "Causas mal definidas" = "mal_definidas",
                               "Demais causas" = "outros"),
+        label = "Grupos de interesse"
+      )
+    }
+
+    if (input$indicador_blocos4_6_7 == "Porcentagem de internações neonatais por grupos de causas"
+    ) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c("Prematuridade" = "prematuridade",
+                    "Infecções" = "infeccoes",
+                    "Asfixia/Hipóxia" = "asfixia",
+                    "Má formação congênita" = "ma_formacao",
+                    "Afecções respiratórias do recém-nascido" = "afeccoes_respiratorias",
+                    "Fatores maternos relacionados à gravidez" = "fatores_maternos",
+                    "Afecções originais no período perinatal" = "afeccoes_perinatal",
+                    "Mal definidas" = "mal_definidas",
+                    "Icterícia neonatal" = "ictericia",
+                    "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido" = "endocrinos",
+                    "Problemas de alimentação do recém-nascido"= "alimentacao",
+                    "Transtornos cardíacos originados no período perinatal" = "cardiacos_perinatal",
+                    "Demais causas" = "outros"),
         label = "Grupos de interesse"
       )
     }
