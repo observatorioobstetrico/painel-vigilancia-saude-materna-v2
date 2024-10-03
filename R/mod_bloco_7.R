@@ -378,7 +378,7 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
@@ -386,7 +386,7 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
                         label = "Selecione, aqui, os grupos de interesse:",
@@ -419,24 +419,49 @@ mod_bloco_7_ui <- function(id) {
                           "outros"
                         ),
                         multiple = TRUE,
-                        width = "100%"
+                        width = "99%"
+                      )
+                    )
+                  ),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("faixa_peso_fetal_grupos"),
+                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Menor que 1500 g" = "menor_1500",
+                          "De 1500 g a 2500 g" = "1500_a_2500",
+                          "Maior ou igual a 2500 g" = "2500_mais",
+                          "Sem informação" = "sem_informacao"
+                        ),
+                        selected = c("menor_1500","1500_a_2500", "2500_mais", "sem_informacao"),
+                        multiple = TRUE,
+                        width = "98%"
                       )
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
-                      tags$div(
-                        align = 'left',
-                        class = 'multicol',
-                        checkboxGroupInput(
-                          inputId = ns("momento_obito_fetal_grupos"),
-                          label    = NULL,
-                          choices = c(
-                            "Antes do parto" = "fetal_grupos_antes",
-                            "Durante o parto" = "fetal_grupos_durante"
-                          ),
-                          selected = c("fetal_grupos_antes","fetal_grupos_durante"),
-                        )
+                      shinyWidgets::pickerInput(
+                        inputId = ns("momento_obito_fetal_grupos"),
+                        label = "Selecione, aqui, os momentos de óbito considerados:",
+                        options = list(placeholder = "Selecione, aqui, os momentos de óbito considerados",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Antes do parto" = "fetal_grupos_antes",
+                          "Durante o parto" = "fetal_grupos_durante"
+                        ),
+                        selected = c("fetal_grupos_antes", "fetal_grupos_durante"),
+                        multiple = TRUE,
+                        width = "98%"
                       )
                     )
                   ),
@@ -518,14 +543,14 @@ mod_bloco_7_ui <- function(id) {
                    status = "primary",
                    collapsible = FALSE,
                    headerBorder = FALSE,
-                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal2"),
                         label = "Selecione, aqui, os grupos de interesse:",
@@ -547,7 +572,30 @@ mod_bloco_7_ui <- function(id) {
                           "outros2"
                         ),
                         multiple = TRUE,
-                        width = "100%"
+                        width = "99%"
+                      )
+                    )
+                  ),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("faixa_peso_fetal_evitaveis2"),
+                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Menor que 1500 g" = "menor_1500",
+                          "De 1500 g a 2500 g" = "1500_a_2500",
+                          "Maior ou igual a 2500 g" = "2500_mais",
+                          "Sem informação" = "sem_informacao"
+                        ),
+                        selected = c("menor_1500","1500_a_2500", "2500_mais", "sem_informacao"),
+                        multiple = TRUE,
+                        width = "98%"
                       )
                     ),
                     column(
@@ -569,8 +617,8 @@ mod_bloco_7_ui <- function(id) {
                         )
                       )
                     )
-                   ),
-                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 490))
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 490))
                  )
               )
             )
@@ -3683,13 +3731,30 @@ mod_bloco_7_server <- function(id, filtros){
     # })
 
     data_plot_evitaveis_fetal2 <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | "obitos_fetais_totais"), sum) |>
+
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_evitaveis_fetal2_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              !dplyr::matches("antes|durante") &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_fetal2_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              dplyr::contains(input$momento_obito_fetal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_fetal2_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+          cols = dplyr::contains("evitaveis_fetal"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -3899,13 +3964,30 @@ mod_bloco_7_server <- function(id, filtros){
     # })
 
     data_plot_evitaveis_fetal_comp2 <- reactive({
-      data_filtrada_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars((dplyr::contains("evitaveis_fetal") & dplyr::contains("2")) | "obitos_fetais_totais"), sum) |>
+
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              !dplyr::matches("antes|durante") &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              dplyr::contains(input$momento_obito_fetal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_fetal2_comp_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+          cols = dplyr::contains("evitaveis_fetal"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -4085,17 +4167,38 @@ mod_bloco_7_server <- function(id, filtros){
     # })
 
     data_plot_evitaveis_fetal_referencia2 <- reactive({
-      bloco7_distribuicao_cids |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal") & dplyr::contains("2")), sum) |>
+
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_evitaveis_fetal2_referencia_aux <- bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              !dplyr::matches("antes|durante") &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_fetal2_referencia_aux <- bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              dplyr::contains(input$momento_obito_fetal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_fetal2_referencia_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = input$momento_obito_fetal_evitaveis2)),
+          cols = dplyr::contains("evitaveis_fetal"),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
@@ -4211,25 +4314,25 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     #### Juntando as informações da localidade/comparação com a referência ----
-    data_plot_evitaveis_fetal_completo <- reactive({
-      validate(
-        need(
-          nrow(data_plot_evitaveis_fetal()) != 0,
-          "Não existem ocorrências de óbitos fetais segundo análise de evitabilidade para a localidade, período e grupos CID-10 selecionados."
-        )
-      )
-      dplyr::full_join(data_plot_evitaveis_fetal(), data_plot_evitaveis_fetal_referencia())
-    })
-
-    data_plot_evitaveis_fetal_comp_completo <- reactive({
-      validate(
-        need(
-          nrow(data_plot_evitaveis_fetal_comp()) != 0,
-          "Não existem ocorrências de óbitos fetais segundo análise de evitabilidade para a localidade de comparação, período e grupos CID-10 selecionados."
-        )
-      )
-      dplyr::full_join(data_plot_evitaveis_fetal_comp(), data_plot_evitaveis_fetal_referencia())
-    })
+    # data_plot_evitaveis_fetal_completo <- reactive({
+    #   validate(
+    #     need(
+    #       nrow(data_plot_evitaveis_fetal()) != 0,
+    #       "Não existem ocorrências de óbitos fetais segundo análise de evitabilidade para a localidade, período e grupos CID-10 selecionados."
+    #     )
+    #   )
+    #   dplyr::full_join(data_plot_evitaveis_fetal(), data_plot_evitaveis_fetal_referencia())
+    # })
+    #
+    # data_plot_evitaveis_fetal_comp_completo <- reactive({
+    #   validate(
+    #     need(
+    #       nrow(data_plot_evitaveis_fetal_comp()) != 0,
+    #       "Não existem ocorrências de óbitos fetais segundo análise de evitabilidade para a localidade de comparação, período e grupos CID-10 selecionados."
+    #     )
+    #   )
+    #   dplyr::full_join(data_plot_evitaveis_fetal_comp(), data_plot_evitaveis_fetal_referencia())
+    # })
 
 
     data_plot_evitaveis_fetal_completo2 <- reactive({
@@ -4638,13 +4741,29 @@ mod_bloco_7_server <- function(id, filtros){
     ### Para os gráficos de grupos de causas ----------------------------------
     #### Para a localidade selecionada ----------------------------------------
     data_plot_grupos_fetal <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos") | "obitos_fetais_totais"), sum) |>
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_grupos_fetal_aux <- data_filtrada_aux() |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                !dplyr::matches("antes|durante") &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+      } else {
+        data_plot_grupos_fetal_aux <- data_filtrada_aux() |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                dplyr::contains(input$momento_obito_fetal_grupos) &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+      }
+
+      data_plot_grupos_fetal_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::across(dplyr::contains("fetal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
+          cols = dplyr::contains("fetal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -4786,13 +4905,29 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a comparação selecionada ----------------------------------------
     data_plot_grupos_fetal_comp <- reactive({
-      data_filtrada_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos") | "obitos_fetais_totais"), sum) |>
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_grupos_fetal_comp_aux <- data_filtrada_comp_aux() |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                !dplyr::matches("antes|durante") &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+      } else {
+        data_plot_grupos_fetal_comp_aux <- data_filtrada_comp_aux() |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                dplyr::contains(input$momento_obito_fetal_grupos) &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+      }
+
+      data_plot_grupos_fetal_comp_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::across(dplyr::contains("fetal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
+          cols = dplyr::contains("fetal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -4938,17 +5073,42 @@ mod_bloco_7_server <- function(id, filtros){
 
     #### Para a referência ----------------------------------------------------
     data_plot_grupos_fetal_referencia <- reactive({
-      bloco7_distribuicao_cids |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
+
+      if (length(input$momento_obito_fetal_grupos) == 2) {
+        data_plot_grupos_fetal_referencia_aux <-
+          bloco7_distribuicao_cids |>
+            dplyr::filter(
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            ) |>
+            dplyr::group_by(ano) |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                !dplyr::matches("antes|durante") &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+
+      } else {
+        data_plot_grupos_fetal_referencia_aux <-
+          bloco7_distribuicao_cids |>
+            dplyr::filter(
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            ) |>
+            dplyr::group_by(ano) |>
+            dplyr::select(
+              dplyr::contains("fetal_grupos") &
+                dplyr::contains(input$momento_obito_fetal_grupos) &
+                dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
+            )
+
+      }
+
+      data_plot_grupos_fetal_referencia_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("fetal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos))), ~ (. / obitos_fetais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_fetais_grupos_total = sum(dplyr::across(dplyr::contains("fetal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("fetal_grupos")), ~ (. / obitos_fetais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="fetal", grafico = "grupos", input = input$momento_obito_fetal_grupos)),
+          cols = dplyr::contains("fetal_grupos"),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
