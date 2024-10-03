@@ -162,7 +162,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -258,7 +258,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -740,7 +740,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -808,7 +808,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -2888,11 +2888,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_taxa_mortalidade_fetal_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos (geral)",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1500 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso maior ou igual a 2500 g",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
@@ -2985,10 +2985,10 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_taxa_mortalidade_fetal_oms_aux <- reactive({
       dplyr::case_when(
         (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso maior ou igual a 2500 g",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
@@ -3053,7 +3053,7 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_caixa_neonat <- reactive({
       dplyr::case_when(
         input$faixa_peso == "mort_neonat" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos",
-        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatatl por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
+        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
         input$faixa_peso == "mort_neonat_1500_1999" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1500 a 1999 g",
         input$faixa_peso == "mort_neonat_2000_2499" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 2000 a 2499 g",
         input$faixa_peso == "mort_neonat_mais2500" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
@@ -3248,11 +3248,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade perinatal (definição 1) --------------------------
     titulo_caixa_taxa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -3275,11 +3275,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade perinatal (definição 2) --------------------------
     titulo_caixa_taxa_perinatal_oms <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -6814,7 +6814,7 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    #### Taxa de óbitos perinatais (definição 1) ------------------------------
+    #### Taxa de mortalidade perinatal (definição 1) ------------------------------
     output$plot3_perinatal <- highcharter::renderHighchart({
       data7_plot_aux <- data7() |>
         dplyr::select(
@@ -6893,7 +6893,7 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    #### Taxa de óbitos perinatais (definição 2) ------------------------------
+    #### Taxa de mortalidade perinatal (definição 2) ------------------------------
     output$plot4_perinatal <- highcharter::renderHighchart({
       data7_plot_aux <- data7() |>
         dplyr::select(
