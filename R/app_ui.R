@@ -114,12 +114,12 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal, perinatal e neonatal e morbidade neonatal",
               tabName = "bloco_7",
               icon = icon("7")
-            ),
-            bs4Dash::bs4SidebarMenuSubItem(
-              text = "- Gráfico de radar",
-              tabName = "bloco_9",
-              icon = icon("8")
-            )
+            )#,
+            # bs4Dash::bs4SidebarMenuSubItem(
+            #   text = "- Gráfico de radar",
+            #   tabName = "bloco_9",
+            #   icon = icon("8")
+            # )
           ),
           bs4Dash::bs4SidebarMenuItem(
             text = HTML("<b> Visão detalhada dos indicadores </b>"),
