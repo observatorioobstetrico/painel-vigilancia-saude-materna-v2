@@ -1486,7 +1486,7 @@ mod_bloco_7_ui <- function(id) {
                           selected = c(
                             "0_dias",
                             "1_6_dias",
-                            "_7_27_dias"
+                            "7_27_dias"
                           )
                         )
                       )
@@ -4719,12 +4719,17 @@ mod_bloco_7_server <- function(id, filtros){
 
     bloco7_principais_obito_neonatal_aux <- reactive({
       data_filtrada_evitaveis_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::select(
+          dplyr::contains("neonatal_grupos") &
+            !dplyr::matches("0_dias|1_6_dias|7_27_dias") &
+            dplyr::matches(paste(input$faixa_peso_neonatal_grupos, collapse = "|"))
+        ) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::across(dplyr::contains("neonatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("neonatal_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias"))),
+          cols = dplyr::contains("neonatal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
