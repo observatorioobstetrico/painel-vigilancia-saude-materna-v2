@@ -1810,7 +1810,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas baseado na Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -3594,7 +3594,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
-                                                                   "Mal definidas", "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal",
+                                                                    "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
@@ -3649,7 +3649,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
-                                                                   "Mal definidas", "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal",
+                                                                    "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
@@ -3699,7 +3699,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
-                                                                   "Mal definidas", "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal",
+                                                                   "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
