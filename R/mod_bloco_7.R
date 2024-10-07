@@ -45,7 +45,7 @@ mod_bloco_7_ui <- function(id) {
             width=12,
             HTML(
               "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
             hr(),
@@ -162,7 +162,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -258,7 +258,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -657,18 +657,18 @@ mod_bloco_7_ui <- function(id) {
               )
             ),
             fluidRow(
-              # column(
-              #   width = 6,
-              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
-              # ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
+              ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i2")), proxy.height = "300px")
               ),
-              # column(
-              #   width = 6,
-              #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "300px")
-              # ),
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "300px")
@@ -740,7 +740,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -808,7 +808,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1414,8 +1414,7 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_neonatal"),
                         label = "Selecione os grupos de causas:",
@@ -1444,7 +1443,7 @@ mod_bloco_7_ui <- function(id) {
                           "outros"
                         ),
                         multiple = TRUE,
-                        width = "100%"
+                        width = "99%"
                       )
                     )
                   ),
@@ -1487,7 +1486,7 @@ mod_bloco_7_ui <- function(id) {
                           selected = c(
                             "0_dias",
                             "1_6_dias",
-                            "_7_27_dias"
+                            "7_27_dias"
                           )
                         )
                       )
@@ -1511,7 +1510,7 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_neonatal"),
                         label = "Selecione os grupos por análise de evitabilidade:",
@@ -1537,7 +1536,7 @@ mod_bloco_7_ui <- function(id) {
                           "outros"
                         ),
                         multiple = TRUE,
-                        width = "100%"
+                        width = "99%"
                       )
                     )
                   ),
@@ -1911,7 +1910,7 @@ mod_bloco_7_server <- function(id, filtros){
         obitos_neonat_1500_1999 = rep("sum(obitos_27dias_1500_1999)", 2),
         obitos_neonat_2000_2499 = rep("sum(obitos_27dias_2000_2499)", 2),
         obitos_neonat_mais2500 = rep("sum(obitos_27dias_mais2500)", 2),
-        mort_neonat = rep("round(sum(obitos_27dias)/sum(nascidos) *1000, 1)", 2),
+        mort_neonat = c("round(sum(obitos_27dias)/sum(nascidos) *1000, 1)", "5"),
         mort_neonat_precoc = rep("round(sum(obitos_6dias)/sum(nascidos) *1000, 1)", 2),
         mort_neonat_tardia = rep("round(sum(obitos_7_27dias)/sum(nascidos) *1000, 1)", 2),
         mort_neonat_menos1500 = rep("round(sum(obitos_27dias_menos1500)/sum(nascidos_menos1500) *1000, 1)", 2),
@@ -1948,7 +1947,7 @@ mod_bloco_7_server <- function(id, filtros){
         fetal_depois_peso_2000_2499 = rep("sum(fetal_depois_peso_2000_2499)", 2),
         fetal_depois_peso_mais_2500 = rep("sum(fetal_depois_peso_mais_2500)", 2),
 
-        taxa_mort_fetal = rep("round(sum(obitos_fetais_mais_22sem)/(sum(nascidos)+sum(obitos_fetais_mais_22sem)) *1000, 1)", 2),
+        taxa_mort_fetal = c("round(sum(obitos_fetais_mais_22sem)/(sum(nascidos)+sum(obitos_fetais_mais_22sem)) *1000, 1)", "5"),
         taxa_mort_fetal_peso_menos_1500 = rep("round(sum(fetal_peso_menos_1500)/(sum(nascidos_menos1500)+sum(fetal_peso_menos_1500)) *1000, 1)", 2),
         taxa_mort_fetal_peso_1500_1999 = rep("round(sum(fetal_peso_1500_1999)/(sum(nascidos_1500_1999)+sum(fetal_peso_1500_1999)) *1000, 1)", 2),
         taxa_mort_fetal_peso_2000_2499 = rep("round(sum(fetal_peso_2000_2499)/(sum(nascidos_2000_2499)+sum(fetal_peso_2000_2499)) *1000, 1)", 2),
@@ -2888,11 +2887,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_taxa_mortalidade_fetal_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos (geral)",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1500 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 1999 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_2000_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 2000 a 2499 g",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_mais2500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso maior ou igual a 2500 g",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
         (input$parto_fetal2 == "antes" & input$faixa_peso_fetal2 == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
@@ -2985,10 +2984,10 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_taxa_mortalidade_fetal_oms_aux <- reactive({
       dplyr::case_when(
         (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal com peso menor que 1500 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal com peso de 1500 a 1999 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal com peso de 2000 a 2499 g",
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal com peso maior ou igual a 2500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1500 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 1999 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_2000_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 2000 a 2499 g",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_mais2500") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso maior ou igual a 2500 g",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal antes do trabalho de parto",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_menos1500") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso menor que 1500 g",
         (input$parto_fetal2_oms == "antes" & input$faixa_peso_fetal2_oms == "fetal_1500_1999") ~ "Taxa de mortalidade fetal antes do trabalho de parto com peso de 1500 a 1999 g",
@@ -3053,7 +3052,7 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_caixa_neonat <- reactive({
       dplyr::case_when(
         input$faixa_peso == "mort_neonat" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos",
-        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatatl por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
+        input$faixa_peso == "mort_neonat_menos1500" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer menor que 1500 g",
         input$faixa_peso == "mort_neonat_1500_1999" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1500 a 1999 g",
         input$faixa_peso == "mort_neonat_2000_2499" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 2000 a 2499 g",
         input$faixa_peso == "mort_neonat_mais2500" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
@@ -3248,11 +3247,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade perinatal (definição 1) --------------------------
     titulo_caixa_taxa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_1999" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_2000_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -3275,11 +3274,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade perinatal (definição 2) --------------------------
     titulo_caixa_taxa_perinatal_oms <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_menos1500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_1500_1999" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 1999 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_2000_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 2000 a 2499 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
       )
     })
 
@@ -4720,12 +4719,17 @@ mod_bloco_7_server <- function(id, filtros){
 
     bloco7_principais_obito_neonatal_aux <- reactive({
       data_filtrada_evitaveis_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::select(
+          dplyr::contains("neonatal_grupos") &
+            !dplyr::matches("0_dias|1_6_dias|7_27_dias") &
+            dplyr::matches(paste(input$faixa_peso_neonatal_grupos, collapse = "|"))
+        ) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::across(dplyr::contains("neonatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("neonatal_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias"))),
+          cols = dplyr::contains("neonatal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -5629,6 +5633,62 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::rename_with(~paste0("br_", .x), dplyr::contains("moment_obito") | dplyr::contains("dist_peso"))
     })
 
+    data7_referencia_perinatal <- reactive({
+      bloco7 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::summarise(
+          ano = filtros()$ano2[1]:filtros()$ano2[2],
+          obitos_perinatal_oms = sum(obitos_fetais_mais_28sem, na.rm = T) + sum(obitos_6dias),
+          obitos_neonat = sum(obitos_27dias),
+          taxa_perinatal_oms = round(obitos_perinatal_oms/obitos_neonat * 5, 1),
+          class = "Referência"
+        ) |>
+        dplyr::ungroup()
+    })
+
+    data7_referencia_perinatal_comp <- reactive({
+      bloco7 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::summarise(
+          ano = filtros()$ano2[1]:filtros()$ano2[2],
+          obitos_perinatal_oms = sum(obitos_fetais_mais_28sem, na.rm = T) + sum(obitos_6dias),
+          obitos_neonat = sum(obitos_27dias),
+          taxa_perinatal_oms = round(obitos_perinatal_oms/obitos_neonat * 5, 1),
+          class = "Referência"
+        ) |>
+        dplyr::ungroup()
+    })
+
     # Não queremos que os gráficos de números de óbitos e taxas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_referencia <- eventReactive(filtros()$pesquisar, data7_referencia_aux(), ignoreNULL = FALSE)
     data7_internacoes_vinc_sus_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data7_referencia_aux(), ignoreNULL = FALSE)
@@ -5778,20 +5838,21 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "Nacional" & taxa_mortalidade_fetal() != "taxa_mort_fetal") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta de redução)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -5802,25 +5863,27 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data7_plot_comp_aux,
             type = "line",
+            name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & taxa_mortalidade_fetal() != "taxa_mort_fetal") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta de redução)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -6289,22 +6352,23 @@ mod_bloco_7_server <- function(id, filtros){
          highcharter::hc_add_series(
            data = data7_plot_aux,
            type = "line",
+           name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
          highcharter::hc_colors(cols)
-       if (filtros()$nivel == "Nacional") {
+       if (filtros()$nivel == "Nacional" & input$faixa_peso != "mort_neonat") {
          grafico_base
        } else {
          grafico_base |>
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = "Referência (média nacional)",
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta de redução)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            dashStyle = "ShortDot",
+             dashStyle = "ShortDot",
              opacity = 0.8
            )
        }
@@ -6313,25 +6377,27 @@ mod_bloco_7_server <- function(id, filtros){
          highcharter::hc_add_series(
            data = data7_plot_aux,
            type = "line",
+           name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
           highcharter::hc_add_series(
           data = data7_plot_comp_aux,
           type = "line",
+          name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
           highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
          highcharter::hc_colors(cols)
-       if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+       if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso != "mort_neonat") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
          grafico_base
        } else {
          grafico_base |>
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = "Referência (média nacional)",
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta de redução)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7
@@ -6814,7 +6880,7 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    #### Taxa de óbitos perinatais (definição 1) ------------------------------
+    #### Taxa de mortalidade perinatal (definição 1) ------------------------------
     output$plot3_perinatal <- highcharter::renderHighchart({
       data7_plot_aux <- data7() |>
         dplyr::select(
@@ -6893,7 +6959,8 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    #### Taxa de óbitos perinatais (definição 2) ------------------------------
+
+    #### Taxa de mortalidade perinatal (definição 2) ------------------------------
     output$plot4_perinatal <- highcharter::renderHighchart({
       data7_plot_aux <- data7() |>
         dplyr::select(
@@ -6909,32 +6976,50 @@ mod_bloco_7_server <- function(id, filtros){
           class
         )
 
-      data7_plot_referencia_aux <- data7_referencia() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_oms),
-          class
-        )
+      if (input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms") {
+        data7_plot_referencia_aux <- data7_referencia_perinatal() |>
+          dplyr::select(
+            ano,
+            eixo_y = taxa_perinatal_oms,
+            class
+          )
+
+        data7_plot_referencia_comp_aux <- data7_referencia_perinatal_comp() |>
+          dplyr::select(
+            ano,
+            eixo_y = taxa_perinatal_oms,
+            class
+          )
+      } else {
+        data7_plot_referencia_aux <- data7_referencia() |>
+          dplyr::select(
+            ano,
+            eixo_y = dplyr::all_of(input$faixa_peso_perinatal_taxa_oms),
+            class
+          )
+      }
+
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "Nacional" & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", "Referência (média nacional)", "Referência (meta adaptada para a localidade)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -6945,10 +7030,12 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data7_plot_comp_aux,
+            name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
@@ -6956,8 +7043,27 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") |
+            (filtros()$mostrar_referencia == "nao_mostrar_referencia") ) {
           grafico_base
+        } else if (input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms") {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_aux,
+              type = "line",
+              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_aux$class)})"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            ) |>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_comp_aux,
+              type = "line",
+              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_comp_aux$class)})"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.7
+            )
         } else {
           grafico_base |>
             highcharter::hc_add_series(

@@ -16,7 +16,7 @@ app_server <- function(input, output, session) {
   mod_bloco_6_server("bloco_6_1", filtros = filtros)
   mod_bloco_7_server("bloco_7_1", filtros = filtros)
   #mod_bloco_8_server("bloco_8_1", filtros = filtros)
-  mod_bloco_9_server("bloco_9_1", filtros = filtros)
+  #mod_bloco_9_server("bloco_9_1", filtros = filtros)
   mod_nivel_3_server("nivel_3_1", filtros = filtros)
 
 
@@ -275,6 +275,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
   observeEvent(input$indicador_blocos4_6_7, {
     if (input$indicador_blocos4_6_7 %in% c("Número de óbitos neonatais",
+                                           "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+                                           "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
                                            "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
                                            "Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
                                            "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
