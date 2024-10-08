@@ -703,7 +703,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 20%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
                   ),
                   hr(),
@@ -727,7 +727,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 390))
                 )
               ),
               column(
@@ -739,8 +739,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    style = "height: 20%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -761,7 +761,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 390))
                 )
               ),
               column(
@@ -773,7 +773,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
+                    style = "height: 20%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
@@ -795,7 +795,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_perinatal"), height = 390))
                 )
               ),
               column(
@@ -807,8 +807,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    style = "height: 20%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -829,7 +829,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_perinatal"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_perinatal"), height = 390))
                 )
               ),
               column(
@@ -2919,9 +2919,13 @@ mod_bloco_7_server <- function(id, filtros){
         dados = data7_resumo(),
         indicador = taxa_mortalidade_fetal(),
         titulo = titulo_taxa_mortalidade_fetal(),
-        tem_meta = FALSE,
-        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal()]] >0 ,
-                                             data7_resumo_referencia()[[taxa_mortalidade_fetal()]], NaN),
+        tem_meta = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", TRUE, FALSE),
+        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta brasileira", ""),
+        valor_de_referencia = ifelse(
+          data7_resumo_referencia()[[taxa_mortalidade_fetal()]] > 0,
+          data7_resumo_referencia()[[taxa_mortalidade_fetal()]],
+          NaN
+        ),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
@@ -3064,7 +3068,8 @@ mod_bloco_7_server <- function(id, filtros){
         dados = data7_resumo(),
         indicador = input$faixa_peso,
         titulo = titulo_caixa_neonat(),
-        tem_meta = FALSE,
+        tem_meta = ifelse(input$faixa_peso == "mort_neonat", TRUE, FALSE),
+        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta brasileira", ""),
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
         tipo = "taxa",
         invertido = FALSE,
@@ -3261,8 +3266,11 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso_perinatal_taxa_total,
         titulo = titulo_caixa_taxa_perinatal_total(),
         tem_meta = FALSE,
-        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]] >0 ,
-                                             data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]], NaN),
+        valor_de_referencia = ifelse(
+          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]] > 0,
+          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]],
+          NaN
+        ),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "350px",
@@ -3287,9 +3295,17 @@ mod_bloco_7_server <- function(id, filtros){
         dados = data7_resumo(),
         indicador = input$faixa_peso_perinatal_taxa_oms,
         titulo = titulo_caixa_taxa_perinatal_oms(),
-        tem_meta = FALSE,
-        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]] >0 ,
-                                             data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]], NaN),
+        tem_meta = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", TRUE, FALSE),
+        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta brasileira adaptada para a localidade", FALSE),
+        valor_de_referencia = ifelse(
+          input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms",
+          data7_referencia_perinatal()$taxa_perinatal_oms,
+          ifelse(
+            data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]] > 0,
+            data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]],
+            NaN
+          )
+        ),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "350px",
@@ -5650,11 +5666,9 @@ mod_bloco_7_server <- function(id, filtros){
           else if(filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
-        dplyr::summarise(
+        dplyr::reframe(
           ano = filtros()$ano2[1]:filtros()$ano2[2],
-          obitos_perinatal_oms = sum(obitos_fetais_mais_28sem, na.rm = T) + sum(obitos_6dias),
-          obitos_neonat = sum(obitos_27dias),
-          taxa_perinatal_oms = round(obitos_perinatal_oms/obitos_neonat * 5, 1),
+          taxa_perinatal_oms = round(sum(obitos_6dias)/sum(obitos_27dias) * 5, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -5679,11 +5693,9 @@ mod_bloco_7_server <- function(id, filtros){
           else if (filtros()$nivel2 == "Municípios semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
-        dplyr::summarise(
+        dplyr::reframe(
           ano = filtros()$ano2[1]:filtros()$ano2[2],
-          obitos_perinatal_oms = sum(obitos_fetais_mais_28sem, na.rm = T) + sum(obitos_6dias),
-          obitos_neonat = sum(obitos_27dias),
-          taxa_perinatal_oms = round(obitos_perinatal_oms/obitos_neonat * 5, 1),
+          taxa_perinatal_oms = round(sum(obitos_6dias)/sum(obitos_27dias) * 5, 1),
           class = "Referência"
         ) |>
         dplyr::ungroup()
@@ -5852,7 +5864,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta de redução)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -5883,7 +5895,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta de redução)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -6366,7 +6378,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta de redução)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.8
@@ -6397,7 +6409,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta de redução)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7
