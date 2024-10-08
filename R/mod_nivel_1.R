@@ -527,7 +527,7 @@ mod_nivel_1_ui <- function(id) {
                 width=12,
                 HTML(
                   "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
+                <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
                 </b> </div>"
                 ),
                 hr(),
