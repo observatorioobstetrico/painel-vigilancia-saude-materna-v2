@@ -130,17 +130,98 @@ mod_bloco_4_ui <- function(id){
                 fluidRow(
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Geral </b>"),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson2'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson4'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson6_a_9'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
+                    )
                   ),
                   column(
                     width = 6,
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson1'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson3'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson5'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
+                    ),
+                    div(
+                      style = "text-align: center;",
+                      HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns('texto_robson10'),
+                        icon = icon('question'),
+                        style = 'material-circle',
+                        color = "primary",
+                        size = 'xs'
+                      ),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
+                    )
                   )
                 )
               )
@@ -1510,7 +1591,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 25,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1534,7 +1615,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 10,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1558,7 +1639,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(20, 35),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1582,7 +1663,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 3,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1606,7 +1687,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1630,7 +1711,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(50, 60),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1654,7 +1735,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
         pagina = "bloco_4",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1678,7 +1759,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 30,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "287px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "314px", "328px"),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2887,7 +2968,7 @@ mod_bloco_4_server <- function(id, filtros){
               showInLegend = TRUE
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
+            # highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
             highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
 
@@ -2907,7 +2988,7 @@ mod_bloco_4_server <- function(id, filtros){
               showInLegend = TRUE
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
+            # highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
             highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
         }
@@ -2937,6 +3018,28 @@ mod_bloco_4_server <- function(id, filtros){
           showInLegend = TRUE,
           opacity = 0.8
         )
+
+    })
+
+
+    observeEvent(input$texto_robson1, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 1 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 1 de Robson é formado por nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e em trabalho de parto espontâneo.
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
     })
 
     output$plot2_indicador1 <- highcharter::renderHighchart({
@@ -2953,6 +3056,27 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+
+    observeEvent(input$texto_robson2, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 2 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 2 de Robson é formado por nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e cujo parto é induzido ou que são submetidas à cesárea antes do início do trabalho de parto.
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    })
+
     output$plot3_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[3]] |>
         highcharter::hc_add_series(
@@ -2965,6 +3089,27 @@ mod_bloco_4_server <- function(id, filtros){
           fillOpacity = 0.2,
           enableMouseTracking = TRUE
         )
+    })
+
+
+    observeEvent(input$texto_robson3, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 3 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 3 de Robson é formado por multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) sem cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e em trabalho de parto espontâneo.
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
     })
 
     output$plot4_indicador1 <- highcharter::renderHighchart({
@@ -2981,6 +3126,28 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+
+
+    observeEvent(input$texto_robson4, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 4 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 4 de Robson é formado por multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) sem cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e cujo parto é induzido ou que são submetidas à cesárea antes do início do trabalho de parto.
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    })
+
     output$plot5_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[5]] |>
         highcharter::hc_add_series(
@@ -2993,6 +3160,27 @@ mod_bloco_4_server <- function(id, filtros){
           showInLegend = TRUE,
           opacity = 0.8
         )
+    })
+
+
+    observeEvent(input$texto_robson5, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 5 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 5 de Robson é formado por todas as multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com pelo menos uma cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo) e com idade gestacional de pelo menos 37 semanas.
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
     })
 
     output$plot6_indicador1 <- highcharter::renderHighchart({
@@ -3009,6 +3197,36 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+
+    observeEvent(input$texto_robson6_a_9, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre os grupos 6 a 9 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 6 de Robson é formado por todas as nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único em apresentação pélvica (o feto está posicionado com a cabeça para cima).
+            <br>
+            <br>
+            O grupo 7 de Robson é formado por todas as multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único em apresentação pélvica (o feto está posicionado com a cabeça para cima), incluindo aquelas com cesárea(s) anterior(es).
+            <br>
+            <br>
+            O grupo 8 de Robson é formado por todas as mulheres com gestação múltipla, incluindo aquelas com cesárea(s) anterior(es).
+            <br>
+            <br>
+            O grupo 9 de Robson é formado por todas as gestantes com feto em situação transversa ou oblíqua (o feto está posicionado com a cabeça para um dos lados), incluindo aquelas com cesárea(s) anterior(es).
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    })
+
     output$plot7_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[7]] |>
         highcharter::hc_add_series(
@@ -3021,6 +3239,27 @@ mod_bloco_4_server <- function(id, filtros){
           showInLegend = TRUE,
           opacity = 0.8
         )
+    })
+
+
+    observeEvent(input$texto_robson10, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 10 de Robson </div>",
+        text = "
+          <div style = 'text-align: justify; text-justify: inter-word;'>
+            O grupo 10 de Robson é formado por todas as gestantes com feto único e cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional menor que 37 semanas, incluindo aquelas com cesárea(s) anterior(es).
+          </div>",
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
     })
 
     output$plot8_indicador1 <- highcharter::renderHighchart({
