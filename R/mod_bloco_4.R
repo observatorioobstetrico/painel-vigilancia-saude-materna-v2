@@ -2315,6 +2315,11 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), adicionar_localidade = FALSE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop") | starts_with("contrib"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
         dplyr::mutate(
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
@@ -2323,6 +2328,37 @@ mod_bloco_4_server <- function(id, filtros){
             filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
             filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
             filtros()$nivel == "Municipal" ~ filtros()$municipio
+          ),
+          tipo_indicador = as.factor(
+            dplyr::case_when(
+              stringr::str_detect(indicador, "^prop_nasc") ~ "indicador2",
+              stringr::str_detect(indicador, "^prop_tx") | stringr::str_detect(indicador, "^prop_robson") ~ "indicador1",
+              stringr::str_detect(indicador, "^contrib") ~ "indicador3"
+            )
+          ),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "prop_tx_cesariana_geral" ~ "Geral",
+              grepl("faltante", indicador) ~ "Sem informação",
+              grepl("robson1", indicador) & !grepl("robson10", indicador) ~ "Grupo 1 de Robson",
+              grepl("robson2", indicador) ~ "Grupo 2 de Robson",
+              grepl("robson3", indicador) ~ "Grupo 3 de Robson",
+              grepl("robson4", indicador) ~ "Grupo 4 de Robson",
+              grepl("robson5", indicador) ~ "Grupo 5 de Robson",
+              grepl("robson6_a_9", indicador) ~ "Grupos 6 a 9 de Robson",
+              grepl("robson10", indicador) ~ "Grupo 10 de Robson"
+            ),
+            levels = c(
+              "Geral",
+              "Grupo 1 de Robson",
+              "Grupo 2 de Robson",
+              "Grupo 3 de Robson",
+              "Grupo 4 de Robson",
+              "Grupo 5 de Robson",
+              "Grupos 6 a 9 de Robson",
+              "Grupo 10 de Robson",
+              "Sem informação"
+            )
           )
         )
     })
@@ -2490,6 +2526,11 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), comp = TRUE, adicionar_localidade = FALSE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop") | starts_with("contrib"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
         dplyr::mutate(
           localidade = dplyr::case_when(
             filtros()$nivel2 == "Nacional" ~ "Brasil",
@@ -2499,8 +2540,40 @@ mod_bloco_4_server <- function(id, filtros){
             filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
             filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
             filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          ),
+          tipo_indicador = as.factor(
+            dplyr::case_when(
+              stringr::str_detect(indicador, "^prop_nasc") ~ "indicador2",
+              stringr::str_detect(indicador, "^prop_tx") | stringr::str_detect(indicador, "^prop_robson") ~ "indicador1",
+              stringr::str_detect(indicador, "^contrib") ~ "indicador3"
+            )
+          ),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "prop_tx_cesariana_geral" ~ "Geral",
+              grepl("faltante", indicador) ~ "Sem informação",
+              grepl("robson1", indicador) & !grepl("robson10", indicador) ~ "Grupo 1 de Robson",
+              grepl("robson2", indicador) ~ "Grupo 2 de Robson",
+              grepl("robson3", indicador) ~ "Grupo 3 de Robson",
+              grepl("robson4", indicador) ~ "Grupo 4 de Robson",
+              grepl("robson5", indicador) ~ "Grupo 5 de Robson",
+              grepl("robson6_a_9", indicador) ~ "Grupos 6 a 9 de Robson",
+              grepl("robson10", indicador) ~ "Grupo 10 de Robson"
+            ),
+            levels = c(
+              "Geral",
+              "Grupo 1 de Robson",
+              "Grupo 2 de Robson",
+              "Grupo 3 de Robson",
+              "Grupo 4 de Robson",
+              "Grupo 5 de Robson",
+              "Grupos 6 a 9 de Robson",
+              "Grupo 10 de Robson",
+              "Sem informação"
+            )
           )
         )
+
     })
 
     data4_deslocamento_parto_comp <- reactive({
@@ -2627,11 +2700,55 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::filter(ano >= max(filtros()$ano2[1], 2014) & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), adicionar_localidade = FALSE, referencia = TRUE) |>
-        dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("prop") | dplyr::starts_with("contrib")) |>
+        tidyr::pivot_longer(
+          cols = starts_with("prop") | starts_with("contrib"),
+          names_to = "indicador",
+          values_to = "br_prop_indicador"
+        ) |>
         dplyr::mutate(
-          localidade_comparacao = "Média nacional"
+          localidade_comparacao = "Média nacional",
+          tipo_indicador = as.factor(
+            dplyr::case_when(
+              stringr::str_detect(indicador, "^prop_nasc") ~ "indicador2",
+              stringr::str_detect(indicador, "^prop_tx") | stringr::str_detect(indicador, "^prop_robson") ~ "indicador1",
+              stringr::str_detect(indicador, "^contrib") ~ "indicador3"
+            )
+          ),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "prop_tx_cesariana_geral" ~ "Geral",
+              grepl("faltante", indicador) ~ "Sem informação",
+              grepl("robson1", indicador) & !grepl("robson10", indicador) ~ "Grupo 1 de Robson",
+              grepl("robson2", indicador) ~ "Grupo 2 de Robson",
+              grepl("robson3", indicador) ~ "Grupo 3 de Robson",
+              grepl("robson4", indicador) ~ "Grupo 4 de Robson",
+              grepl("robson5", indicador) ~ "Grupo 5 de Robson",
+              grepl("robson6_a_9", indicador) ~ "Grupos 6 a 9 de Robson",
+              grepl("robson10", indicador) ~ "Grupo 10 de Robson"
+            ),
+            levels = c(
+              "Geral",
+              "Grupo 1 de Robson",
+              "Grupo 2 de Robson",
+              "Grupo 3 de Robson",
+              "Grupo 4 de Robson",
+              "Grupo 5 de Robson",
+              "Grupos 6 a 9 de Robson",
+              "Grupo 10 de Robson",
+              "Sem informação"
+            )
+          )
         )
     })
+
+    data4_completo <- reactive({
+      dplyr::full_join(data4(), data4_referencia())
+    })
+
+    data4_comp_completo <- reactive({
+      dplyr::full_join(data4_comp(), data4_referencia())
+    })
+
 
     data4_deslocamento_parto_referencia <- reactive({
       bloco4_deslocamento_muni |>
@@ -2671,6 +2788,7 @@ mod_bloco_4_server <- function(id, filtros){
     data4_deslocamento_parto_comp_completo <- reactive({
       dplyr::full_join(data4_deslocamento_parto_comp(), data4_deslocamento_parto_referencia())
     })
+
 
     data4_deslocamento_macro_referencia <- reactive({
       bloco4_deslocamento_muni |>
@@ -2728,278 +2846,45 @@ mod_bloco_4_server <- function(id, filtros){
       dplyr::full_join(data4_deslocamento_macro_comp(), data4_deslocamento_macro_referencia())
     })
 
-    ### Passando os dados da localidade escolhida para o formato long ---------
-    data4_long <- reactive({
-      data4() |>
-        tidyr::pivot_longer(
-          cols = c(
-            "prop_nasc_robson1",
-            "prop_nasc_robson2",
-            "prop_nasc_robson3",
-            "prop_nasc_robson4",
-            "prop_nasc_robson5",
-            "prop_nasc_robson6_a_9",
-            "prop_nasc_robson10",
-            "prop_nasc_robson_faltante",
-            "prop_tx_cesariana_geral",
-            "prop_robson1_tx_cesariana",
-            "prop_robson2_tx_cesariana",
-            "prop_robson3_tx_cesariana",
-            "prop_robson4_tx_cesariana",
-            "prop_robson5_tx_cesariana",
-            "prop_robson6_a_9_tx_cesariana",
-            "prop_robson10_tx_cesariana",
-            "contrib_robson1_tx_cesariana",
-            "contrib_robson2_tx_cesariana",
-            "contrib_robson3_tx_cesariana",
-            "contrib_robson4_tx_cesariana",
-            "contrib_robson5_tx_cesariana",
-            "contrib_robson6_a_9_tx_cesariana",
-            "contrib_robson10_tx_cesariana",
-            "contrib_robson_faltante_tx_cesariana"
-          ),
-          names_to = "grupo_robson",
-          values_to = "value"
-        ) |>
-        dplyr::mutate(
-          indicador = as.factor(
-            dplyr::case_when(
-              stringr::str_detect(grupo_robson, "^prop_nasc") ~ "indicador2",
-              stringr::str_detect(grupo_robson, "^prop_tx") | stringr::str_detect(grupo_robson, "^prop_robson") ~ "indicador1",
-              stringr::str_detect(grupo_robson, "^contrib") ~ "indicador3"
-            )
-          ),
-          grupo_robson = as.factor(
-            dplyr::case_when(
-              grupo_robson == "prop_tx_cesariana_geral" ~ "Geral",
-              stringr::str_detect(grupo_robson, "faltante") ~ "Sem informação",
-              stringr::str_detect(grupo_robson, "robson1") & !stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 1",
-              stringr::str_detect(grupo_robson, "robson2") ~ "Grupo de Robson 2",
-              stringr::str_detect(grupo_robson, "robson3") ~ "Grupo de Robson 3",
-              stringr::str_detect(grupo_robson, "robson4") ~ "Grupo de Robson 4",
-              stringr::str_detect(grupo_robson, "robson5") ~ "Grupo de Robson 5",
-              stringr::str_detect(grupo_robson, "robson6") ~ "Grupos de Robson 6 a 9",
-              stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 10"
-            )
-          )
-        ) |>
-        dplyr::mutate(
-          grupo_robson = factor(
-            grupo_robson,
-            levels = c(
-              "Geral",
-              "Sem informação",
-              "Grupo de Robson 1",
-              "Grupo de Robson 2",
-              "Grupo de Robson 3",
-              "Grupo de Robson 4",
-              "Grupo de Robson 5",
-              "Grupos de Robson 6 a 9",
-              "Grupo de Robson 10"
-            )
-          )
-        )
-    })
-
-    ### Passando os dados da comparação para o formato long -------------------
-    data4_comp_long <- reactive({
-      data4_comp() |>
-        tidyr::pivot_longer(
-          cols = c(
-            "prop_nasc_robson1",
-            "prop_nasc_robson2",
-            "prop_nasc_robson3",
-            "prop_nasc_robson4",
-            "prop_nasc_robson5",
-            "prop_nasc_robson6_a_9",
-            "prop_nasc_robson10",
-            "prop_nasc_robson_faltante",
-            "prop_tx_cesariana_geral",
-            "prop_robson1_tx_cesariana",
-            "prop_robson2_tx_cesariana",
-            "prop_robson3_tx_cesariana",
-            "prop_robson4_tx_cesariana",
-            "prop_robson5_tx_cesariana",
-            "prop_robson6_a_9_tx_cesariana",
-            "prop_robson10_tx_cesariana",
-            "contrib_robson1_tx_cesariana",
-            "contrib_robson2_tx_cesariana",
-            "contrib_robson3_tx_cesariana",
-            "contrib_robson4_tx_cesariana",
-            "contrib_robson5_tx_cesariana",
-            "contrib_robson6_a_9_tx_cesariana",
-            "contrib_robson10_tx_cesariana",
-            "contrib_robson_faltante_tx_cesariana"
-          ),
-          names_to = "grupo_robson",
-          values_to = "value"
-        ) |>
-        dplyr::mutate(
-          indicador = as.factor(
-            dplyr::case_when(
-              stringr::str_detect(grupo_robson, "^prop_nasc") ~ "indicador2",
-              stringr::str_detect(grupo_robson, "^prop_tx") | stringr::str_detect(grupo_robson, "^prop_robson") ~ "indicador1",
-              stringr::str_detect(grupo_robson, "^contrib") ~ "indicador3"
-            )
-          ),
-          grupo_robson = as.factor(
-            dplyr::case_when(
-              grupo_robson == "prop_tx_cesariana_geral" ~ "Geral",
-              stringr::str_detect(grupo_robson, "faltante") ~ "Sem informação",
-              stringr::str_detect(grupo_robson, "robson1") & !stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 1",
-              stringr::str_detect(grupo_robson, "robson2") ~ "Grupo de Robson 2",
-              stringr::str_detect(grupo_robson, "robson3") ~ "Grupo de Robson 3",
-              stringr::str_detect(grupo_robson, "robson4") ~ "Grupo de Robson 4",
-              stringr::str_detect(grupo_robson, "robson5") ~ "Grupo de Robson 5",
-              stringr::str_detect(grupo_robson, "robson6") ~ "Grupos de Robson 6 a 9",
-              stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 10"
-            )
-          )
-        ) |>
-        dplyr::mutate(
-          grupo_robson = factor(
-            grupo_robson,
-            levels = c(
-              "Geral",
-              "Sem informação",
-              "Grupo de Robson 1",
-              "Grupo de Robson 2",
-              "Grupo de Robson 3",
-              "Grupo de Robson 4",
-              "Grupo de Robson 5",
-              "Grupos de Robson 6 a 9",
-              "Grupo de Robson 10"
-            )
-          )
-        )
-    })
-
-    ### Passando os dados da junção entre as localidades para o formato long -------------------
-    data4_long_juncao <- reactive({
-      rbind(data4(), data4_comp()) |>
-        tidyr::pivot_longer(
-          cols = c(
-            "prop_nasc_robson1",
-            "prop_nasc_robson2",
-            "prop_nasc_robson3",
-            "prop_nasc_robson4",
-            "prop_nasc_robson5",
-            "prop_nasc_robson6_a_9",
-            "prop_nasc_robson10",
-            "prop_nasc_robson_faltante",
-            "prop_tx_cesariana_geral",
-            "prop_robson1_tx_cesariana",
-            "prop_robson2_tx_cesariana",
-            "prop_robson3_tx_cesariana",
-            "prop_robson4_tx_cesariana",
-            "prop_robson5_tx_cesariana",
-            "prop_robson6_a_9_tx_cesariana",
-            "prop_robson10_tx_cesariana",
-            "contrib_robson1_tx_cesariana",
-            "contrib_robson2_tx_cesariana",
-            "contrib_robson3_tx_cesariana",
-            "contrib_robson4_tx_cesariana",
-            "contrib_robson5_tx_cesariana",
-            "contrib_robson6_a_9_tx_cesariana",
-            "contrib_robson10_tx_cesariana",
-            "contrib_robson_faltante_tx_cesariana"
-          ),
-          names_to = "grupo_robson",
-          values_to = "value"
-        ) |>
-        dplyr::mutate(
-          indicador = as.factor(
-            dplyr::case_when(
-              stringr::str_detect(grupo_robson, "^prop_nasc") ~ "indicador2",
-              stringr::str_detect(grupo_robson, "^prop_tx") | stringr::str_detect(grupo_robson, "^prop_robson") ~ "indicador1",
-              stringr::str_detect(grupo_robson, "^contrib") ~ "indicador3"
-            )
-          ),
-          grupo_robson = as.factor(
-            dplyr::case_when(
-              grupo_robson == "prop_tx_cesariana_geral" ~ "Geral",
-              stringr::str_detect(grupo_robson, "faltante") ~ "Sem informação",
-              stringr::str_detect(grupo_robson, "robson1") & !stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 1",
-              stringr::str_detect(grupo_robson, "robson2") ~ "Grupo de Robson 2",
-              stringr::str_detect(grupo_robson, "robson3") ~ "Grupo de Robson 3",
-              stringr::str_detect(grupo_robson, "robson4") ~ "Grupo de Robson 4",
-              stringr::str_detect(grupo_robson, "robson5") ~ "Grupo de Robson 5",
-              stringr::str_detect(grupo_robson, "robson6") ~ "Grupos de Robson 6 a 9",
-              stringr::str_detect(grupo_robson, "robson10") ~ "Grupo de Robson 10"
-            )
-          )
-        ) |>
-        dplyr::mutate(
-          grupo_robson = factor(
-            grupo_robson,
-            levels = c(
-              "Geral",
-              "Sem informação",
-              "Grupo de Robson 1",
-              "Grupo de Robson 2",
-              "Grupo de Robson 3",
-              "Grupo de Robson 4",
-              "Grupo de Robson 5",
-              "Grupos de Robson 6 a 9",
-              "Grupo de Robson 10"
-            )
-          )
-        )
-    })
-
 
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Porcentagem de cesarianas por grupo de Robson -------------------------
     list_of_plots <- reactive({
-      purrr::map(as.vector(unique(data4_long()$grupo_robson[which(data4_long()$indicador == "indicador1")])), function(x) {
-        if (filtros()$comparar == "Não") {
+      purrr::map(as.vector(unique(data4()$indicador[which(data4()$tipo_indicador == "indicador1")])), function(x) {
 
-          filtered <- reactive({
-            data4_long() |>
-              dplyr::filter(grupo_robson == x, indicador == "indicador1")
-          })
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4() |> dplyr::filter(indicador == x, tipo_indicador == "indicador1"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = localidade),
+            type = "column",
+            color = c("#2c115f"),
+            showInLegend = TRUE
+          )
 
-          highcharter::highchart() |>
+        if (filtros()$comparar == "Sim") {
+          grafico_base |>
             highcharter::hc_add_series(
-              data = filtered(),
-              highcharter::hcaes(x = ano, y = value, group = localidade),
+              data = data4_comp() |> dplyr::filter(indicador == x, tipo_indicador == "indicador1"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = localidade),
               type = "column",
-              color = c("#2c115f"),
+              color = c("#b73779"),
               showInLegend = TRUE
             ) |>
             highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            # highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
             highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
             highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
-
-        } else if (filtros()$comparar == "Sim") {
-
-          filtered <- reactive({
-            data4_long_juncao() |>
-              dplyr::filter(grupo_robson == x, indicador == "indicador1")
-          })
-
-          highcharter::highchart() |>
-            highcharter::hc_add_series(
-              data = filtered(),
-              highcharter::hcaes(x = ano, y = value, group = localidade),
-              type = "column",
-              color = c("#2c115f", "#b73779"),
-              showInLegend = TRUE
-            ) |>
-            highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-            # highcharter::hc_title(text = HTML(glue::glue("<b style='font-size:16px'> {x} </b>"))) |>
-            highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-            highcharter::hc_yAxis(title = list(text = "% de nascidos vivos por cesariana"), min = 0, max = 100)
+        } else {
+          grafico_base
         }
 
       })
     })
 
+    #### Criando os gráficos
     output$plot1_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[1]] |>
         highcharter::hc_add_series(
-          data = data4_referencia(),
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("Geral", indicador)),
           type = "line",
           name = "Referência (meta OMS)",
           dashStyle = "ShortDot",
@@ -3009,7 +2894,7 @@ mod_bloco_4_server <- function(id, filtros){
           opacity = 0.8
         ) |>
         highcharter::hc_add_series(
-          data = data4_referencia(),
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("Geral", indicador)),
           type = "line",
           name = "Referência (meta ajustada para o Brasil)",
           dashStyle = "ShortDot",
@@ -3018,10 +2903,108 @@ mod_bloco_4_server <- function(id, filtros){
           showInLegend = TRUE,
           opacity = 0.8
         )
-
     })
 
+    output$plot2_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[2]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("1 de Robson", indicador)),
+          type = "line",
+          name = "Referência (meta OMS)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        )
+    })
 
+    output$plot3_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[3]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("2 de Robson", indicador)),
+          name = "Referência (meta OMS)",
+          highcharter::hcaes(x = ano, low = 20, high = 35),
+          type = "arearange",
+          dashStyle = "ShortDot",
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          fillOpacity = 0.2,
+          enableMouseTracking = TRUE
+        )
+    })
+
+    output$plot4_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[4]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("3 de Robson", indicador)),
+          type = "line",
+          name = "Referência (meta OMS)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        )
+    })
+
+    output$plot5_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[5]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("4 de Robson", indicador)),
+          type = "line",
+          name = "Referência (meta OMS)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        )
+    })
+
+    output$plot6_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[6]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("5 de Robson", indicador)),
+          name = "Referência (meta OMS)",
+          highcharter::hcaes(x = ano, low = 50, high = 60),
+          type = "arearange",
+          dashStyle = "ShortDot",
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          fillOpacity = 0.2,
+          enableMouseTracking = TRUE
+        )
+    })
+
+    output$plot7_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[7]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("6 a 9 de Robson", indicador)),
+          type = "line",
+          name = "Referência (média nacional)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        )
+    })
+
+    output$plot8_indicador1 <- highcharter::renderHighchart({
+      list_of_plots()[[8]] |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador1", grepl("10 de Robson", indicador)),
+          type = "line",
+          name = "Referência (meta OMS)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+
+        )
+    })
+
+    #### Ativando os pop-ups com a descrição de cada grupo de Robson
     observeEvent(input$texto_robson1, {
       shinyalert::shinyalert(
         html = TRUE,
@@ -3041,21 +3024,6 @@ mod_bloco_4_server <- function(id, filtros){
         immediate = TRUE
       )
     })
-
-    output$plot2_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[2]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          type = "line",
-          name = "Referência (meta OMS)",
-          dashStyle = "ShortDot",
-          highcharter::hcaes(x = ano, y = br_prop_robson1_tx_cesariana, group = localidade_comparacao),
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          showInLegend = TRUE,
-          opacity = 0.8
-        )
-    })
-
 
     observeEvent(input$texto_robson2, {
       shinyalert::shinyalert(
@@ -3077,21 +3045,6 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$plot3_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[3]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          name = "Referência (meta OMS)",
-          highcharter::hcaes(x = ano, low = 20, high = 35),
-          type = "arearange",
-          dashStyle = "ShortDot",
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          fillOpacity = 0.2,
-          enableMouseTracking = TRUE
-        )
-    })
-
-
     observeEvent(input$texto_robson3, {
       shinyalert::shinyalert(
         html = TRUE,
@@ -3111,22 +3064,6 @@ mod_bloco_4_server <- function(id, filtros){
         immediate = TRUE
       )
     })
-
-    output$plot4_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[4]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          type = "line",
-          name = "Referência (meta OMS)",
-          dashStyle = "ShortDot",
-          highcharter::hcaes(x = ano, y = br_prop_robson3_tx_cesariana, group = localidade_comparacao),
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          showInLegend = TRUE,
-          opacity = 0.8
-        )
-    })
-
-
 
     observeEvent(input$texto_robson4, {
       shinyalert::shinyalert(
@@ -3148,21 +3085,6 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$plot5_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[5]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          type = "line",
-          name = "Referência (meta OMS)",
-          dashStyle = "ShortDot",
-          highcharter::hcaes(x = ano, y = br_prop_robson4_tx_cesariana, group = localidade_comparacao),
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          showInLegend = TRUE,
-          opacity = 0.8
-        )
-    })
-
-
     observeEvent(input$texto_robson5, {
       shinyalert::shinyalert(
         html = TRUE,
@@ -3182,21 +3104,6 @@ mod_bloco_4_server <- function(id, filtros){
         immediate = TRUE
       )
     })
-
-    output$plot6_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[6]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          name = "Referência (meta OMS)",
-          highcharter::hcaes(x = ano, low = 50, high = 60),
-          type = "arearange",
-          dashStyle = "ShortDot",
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          fillOpacity = 0.2,
-          enableMouseTracking = TRUE
-        )
-    })
-
 
     observeEvent(input$texto_robson6_a_9, {
       shinyalert::shinyalert(
@@ -3227,21 +3134,6 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$plot7_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[7]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          type = "line",
-          name = "Referência (média nacional)",
-          dashStyle = "ShortDot",
-          highcharter::hcaes(x = ano, y = br_prop_robson6_a_9_tx_cesariana, group = localidade_comparacao),
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          showInLegend = TRUE,
-          opacity = 0.8
-        )
-    })
-
-
     observeEvent(input$texto_robson10, {
       shinyalert::shinyalert(
         html = TRUE,
@@ -3262,217 +3154,94 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$plot8_indicador1 <- highcharter::renderHighchart({
-      list_of_plots()[[8]] |>
-        highcharter::hc_add_series(
-          data = data4_referencia(),
-          type = "line",
-          name = "Referência (meta OMS)",
-          dashStyle = "ShortDot",
-          highcharter::hcaes(x = ano, y = br_prop_robson10_tx_cesariana, group = localidade_comparacao),
-          color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
-          showInLegend = TRUE,
-          opacity = 0.8
-
-        )
-    })
-
 
     ### Porcentagem de nascidos vivos por grupo de Robson --------------------
-    data4_juncao_aux <- reactive({
-      if (filtros()$comparar == "Sim") {
-        dplyr::full_join(
-          data4(),
-          data4_comp() |>
-            dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("prop") | dplyr::starts_with("contrib")) |>
-            dplyr::rename(localidade_comparacao = localidade),
-          by = "ano"
-        )
-      } else {
-        dplyr::full_join(data4(), data4_referencia(), by = "ano")
-      }
-    })
-
     output$plot1_indicador2 <- highcharter::renderHighchart({
-      highcharter::highchart() |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Sem informação",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson_faltante),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson_faltante:,f}% </b>"
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            )
           )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 1 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson1),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson1:,f}% </b>"
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1
           )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 2 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson2),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson2:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 3 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson3),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson3:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 4 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson4),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson4:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 5 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson5),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson5:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupos 6 a 9 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson6_a_9),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson6_a_9:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 10 de Robson",
-          highcharter::hcaes(x = ano, y = prop_nasc_robson10),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_prop_nasc_robson10:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_completo()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
-
-
     })
 
 
     ### Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas ----
     output$plot1_indicador3 <- highcharter::renderHighchart({
-      highcharter::highchart() |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Sem informação",
-          highcharter::hcaes(x = ano, y = contrib_robson_faltante_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson_faltante_tx_cesariana:,f}% </b>"
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador3"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            )
           )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 1 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson1_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson1_tx_cesariana:,f}% </b>"
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador3"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador3"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1
           )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 2 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson2_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson2_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 3 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson3_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson3_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 4 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson4_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson4_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 5 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson5_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson5_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupos 6 a 9 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson6_a_9_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson6_a_9_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          data = data4_juncao_aux(),
-          name = "Grupo 10 de Robson",
-          highcharter::hcaes(x = ano, y = contrib_robson10_tx_cesariana),
-          type = "column",
-          showInLegend = TRUE,
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_contrib_robson10_tx_cesariana:,f}% </b>"
-          )
-        ) |>
-        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "Contribuição % para a taxa global de cesarianas"), min = 0, max = 100)
-
-
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_completo()$ano), allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
 
     ### Porcentagem de nascidos vivos segundo local de ocorrência do parto ----
