@@ -28,7 +28,7 @@ df_sim_dofet_consolidados <- fetch_datasus(
   year_end = 2022,
   vars = c("CODMUNRES", "DTOBITO", "PESO", "GESTACAO", "SEMAGESTAC", "OBITOPARTO", "CAUSABAS"),
   information_system = "SIM-DOFET",
-  timeout = 600
+  #timeout = 600
 ) |>
   mutate(
     ano = as.numeric(substr(DTOBITO, nchar(DTOBITO) - 3, nchar(DTOBITO))),
@@ -288,7 +288,7 @@ df_bloco7_fetais_aux <- df_fetais_totais |>
     # fetal_sem_28_32 = sum(fetal_sem_28_32, na.rm=T),
     # fetal_sem_33_34 = sum(fetal_sem_33_34, na.rm=T),
     # fetal_sem_35_36 = sum(fetal_sem_35_36, na.rm=T)
-    ) |>
+  ) |>
   ungroup()
 
 ### Juntando com a base auxiliar de municípios e preenchendo os NAs gerados com 0
@@ -834,7 +834,7 @@ df_sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/D
 
 sim23 <- df_sim_2023 |> select(-c(contador
                                   , OPOR_DO, TP_ALTERA, CB_ALT
-                                  ))
+))
 
 df_sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
 
@@ -1728,12 +1728,12 @@ for (estado in estados) {
           )
 
         # Criando um data.frame que contém apenas os partos
-         df_sih_rd_aux_partos <- df_sih_rd_aux |>
-           dplyr::filter(
-             ((DIAG_PRINC >= "O32" & DIAG_PRINC <= "O36") | (DIAG_PRINC >= "O60" & DIAG_PRINC <= "O69") |
-                (DIAG_PRINC >= "O75" & DIAG_PRINC < "O76") | (DIAG_PRINC >= "O80" & DIAG_PRINC <= "O84") |
-                DIAG_PRINC == "P95") | (PROC_REA %in% procedimentos_parto)
-           )
+        df_sih_rd_aux_partos <- df_sih_rd_aux |>
+          dplyr::filter(
+            ((DIAG_PRINC >= "O32" & DIAG_PRINC <= "O36") | (DIAG_PRINC >= "O60" & DIAG_PRINC <= "O69") |
+               (DIAG_PRINC >= "O75" & DIAG_PRINC < "O76") | (DIAG_PRINC >= "O80" & DIAG_PRINC <= "O84") |
+               DIAG_PRINC == "P95") | (PROC_REA %in% procedimentos_parto)
+          )
 
         erro_rd <- FALSE
       },
@@ -1748,7 +1748,7 @@ for (estado in estados) {
 
     # Limpando a memória
     rm(df_sih_rd_aux_menores_28#, df_sih_rd_aux_partos
-       )
+    )
     gc()
   }
 
@@ -1880,7 +1880,7 @@ df_aih_internacoes_wide_macros <- df_aih_internacoes_wide |>
       idade_dias >= 7 & idade_dias <= 27 ~ "7_a_27_dias",
       TRUE ~ NA_character_
     )        #ifelse(idade_dias < 7, "menores_7_dias", "7_a_27_dias"),
-,
+    ,
     indicadora_mesma_macro = ifelse(macro_r_saude_res == macro_r_saude_ocor, "na_macro", "fora_macro"),
     indicadora_uti = ifelse(soma_uti_mes_to > 0, "internado_uti", "nao_internado_uti")
   ) |>
@@ -1945,7 +1945,7 @@ setwd("data-raw/extracao-dos-dados/blocos/databases_auxiliares/internacoes_menor
 #### Rodando o algoritmo em C++ na base de partos
 system(glue("./processaih {diretorio_bases_brutas}/BR_sih_rd_partos_2022_2024.csv"))
 
- #### Voltando para o diretório original do projeto
+#### Voltando para o diretório original do projeto
 setwd(diretorio_original)
 
 #### Criando a conexão com o arquivo .sqlite gerado como resultado do algoritmo em C++
@@ -2278,7 +2278,8 @@ write.csv(df_distribuicao_morbidade, 'data-raw/csv/indicadores_bloco7_distribuic
 ############ ABA PERINATAL - DISTRIBUIÇÃO DE ÓBITOS #############
 
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas pelos óbitos fetais que consideramos
-df_perinat <- df_sim_dofet_aux |>
+df_perinat <- df_fetais_totais |>
+  clean_names() |>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
   ) |>
@@ -2286,7 +2287,8 @@ df_perinat <- df_sim_dofet_aux |>
     ((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)
   )
 
-df_sim_perinat_antes <- df_sim_dofet_aux |>
+df_sim_perinat_antes <- df_fetais_totais |>
+  clean_names() |>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
     obitoparto = as.numeric(obitoparto)
@@ -2295,7 +2297,8 @@ df_sim_perinat_antes <- df_sim_dofet_aux |>
     (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & obitoparto == 1
   )
 
-df_sim_perinat_durante <- df_sim_dofet_aux |>
+df_sim_perinat_durante <- df_fetais_totais |>
+  clean_names() |>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
     obitoparto = as.numeric(obitoparto)
@@ -2401,8 +2404,14 @@ mal_definidas <- c(
 df_evitaveis_perinat <- df_perinat |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
-  ) |>
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+      )
+    ) |>
   mutate(
     grupo_cid = case_when(
       causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_fetal_28sem_imunoprevencao",
@@ -2415,15 +2424,16 @@ df_evitaveis_perinat <- df_perinat |>
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_28sem_outros", grupo_cid)
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais) |>
@@ -2438,7 +2448,13 @@ df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_p
 df_evitaveis_perinat_antes <- df_sim_perinat_antes |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
   ) |>
   mutate(
     grupo_cid = case_when(
@@ -2452,15 +2468,16 @@ df_evitaveis_perinat_antes <- df_sim_perinat_antes |>
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_28sem_antes_outros", grupo_cid)
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais_antes) |>
@@ -2475,7 +2492,13 @@ df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_p
 df_evitaveis_perinat_durante <- df_sim_perinat_durante |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
   ) |>
   mutate(
     grupo_cid = case_when(
@@ -2489,15 +2512,16 @@ df_evitaveis_perinat_durante <- df_sim_perinat_durante |>
     ),
     grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_28sem_durante_outros", grupo_cid)
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais_durante) |>
@@ -2512,7 +2536,13 @@ df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_p
 df_perinat_grupos <- df_perinat |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
   ) |>
   mutate(
     grupo_cid = case_when(
@@ -2528,15 +2558,16 @@ df_perinat_grupos <- df_perinat |>
       TRUE ~ "fetal_28sem_grupos_outros"
     )
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais) |>
@@ -2551,7 +2582,13 @@ df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_p
 df_perinat_grupos_antes <- df_sim_perinat_antes |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
   ) |>
   mutate(
     grupo_cid = case_when(
@@ -2567,15 +2604,16 @@ df_perinat_grupos_antes <- df_sim_perinat_antes |>
       TRUE ~ "fetal_28sem_grupos_antes_outros"
     )
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais_antes) |>
@@ -2591,7 +2629,13 @@ df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_p
 df_perinat_grupos_durante <- df_sim_perinat_durante |>
   mutate(
     causabas = causabas,
-    causabas2 = substr(causabas, 1 , 3)
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
   ) |>
   mutate(
     grupo_cid = case_when(
@@ -2607,188 +2651,838 @@ df_perinat_grupos_durante <- df_sim_perinat_durante |>
       TRUE ~ "fetal_28sem_grupos_durante_outros"
     )
   ) |>
-  select(codmunres, ano, grupo_cid) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
   mutate(obitos = 1) |>
   group_by(across(!obitos)) |>
   summarise(obitos = sum(obitos)) |>
   ungroup() |>
   pivot_wider(
-    names_from = grupo_cid,
+    names_from = c(grupo_cid, faixa_de_peso),
     values_from = obitos,
-    values_fill = 0
+    values_fill = 0,
+    names_sort = TRUE
   ) |>
   right_join(df_aux_municipios) |>
   right_join(df_perinat_totais_durante) |>
   arrange(codmunres)
 
 ## Substituindo todos os NAs por 0 (gerados após o right join)
-df_perinat_grupos_durante[is.na(df_fetais_grupos_durante)] <- 0
+df_perinat_grupos_durante[is.na(df_perinat_grupos_durante)] <- 0
 
 ## Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_perinat_grupos_durante)
 
 
-
-df_bloco7_distribuicao_cids_perinatal <- full_join(
-    df_bloco7_distribuicao_cids_perinatal,
-    df_bloco7_distribuicao_cids_neonatal
-  ) |>
+df_bloco7_distribuicao_cids_perinatal1 <- full_join(
+  df_bloco7_distribuicao_cids_perinatal,
+  df_bloco7_distribuicao_cids_neonatal
+) |>
   mutate(
-    obitos_perinatais_totais = obitos_neonatais_precoce_totais + obitos_perinat_totais,
-    evitaveis_perinatal_mulher_gestacao = evitaveis_neonatal_precoce_mulher_gestacao + evitaveis_fetal_28sem_mulher_gestacao,
-    evitaveis_perinatal_parto = evitaveis_neonatal_precoce_parto + evitaveis_fetal_28sem_parto,
-    evitaveis_perinatal_recem_nascido = evitaveis_neonatal_precoce_recem_nascido + evitaveis_fetal_28sem_recem_nascido,
-    evitaveis_perinatal_tratamento = evitaveis_neonatal_precoce_tratamento,
-    evitaveis_perinatal_saude = evitaveis_neonatal_precoce_saude ,
-    evitaveis_perinatal_mal_definidas = evitaveis_neonatal_precoce_mal_definidas + evitaveis_fetal_28sem_mal_definidas,
-    evitaveis_perinatal_outros = evitaveis_neonatal_precoce_outros + evitaveis_fetal_28sem_outros,
-    perinatal_grupos_prematuridade = neonat_precoce_grupos_prematuridade + fetal_28sem_grupos_prematuridade,
-    perinatal_grupos_infeccoes = neonat_precoce_grupos_infeccoes,
-    perinatal_grupos_asfixia = neonat_precoce_grupos_asfixia + fetal_28sem_grupos_asfixia,
-    perinatal_grupos_ma_formacao = neonat_precoce_grupos_ma_formacao + fetal_28sem_grupos_ma_formacao,
-    perinatal_grupos_respiratorias = neonat_precoce_grupos_respiratorias,
-    perinatal_grupos_gravidez = neonat_precoce_grupos_gravidez + fetal_28sem_grupos_gravidez,
-    perinatal_grupos_afeccoes_perinatal = neonat_precoce_grupos_afeccoes_perinatal + fetal_28sem_grupos_afeccoes_perinatal,
-    perinatal_grupos_mal_definida = neonat_precoce_grupos_mal_definida,
-    perinatal_grupos_outros = neonat_precoce_grupos_outros + fetal_28sem_grupos_outros,
-    evitaveis_perinatal_antes_mulher_gestacao = evitaveis_fetal_28sem_antes_mulher_gestacao,
-    evitaveis_perinatal_antes_parto = evitaveis_fetal_28sem_antes_parto,
-    evitaveis_perinatal_antes_recem_nascido = evitaveis_fetal_28sem_antes_recem_nascido,
-    #evitaveis_perinatal_antes_tratamento = evitaveis_neonatal_precoce_tratamento,
-    #evitaveis_perinatal_antes_saude = evitaveis_neonatal_precoce_saude ,
-    evitaveis_perinatal_antes_mal_definidas = evitaveis_fetal_28sem_antes_mal_definidas,
-    evitaveis_perinatal_antes_outros = evitaveis_fetal_28sem_antes_outros,
-    perinatal_grupos_antes_prematuridade = fetal_28sem_grupos_antes_prematuridade,
-    #perinatal_grupos_antes_infeccoes = neonat_precoce_grupos_infeccoes,
-    perinatal_grupos_antes_asfixia = fetal_28sem_grupos_antes_asfixia,
-    perinatal_grupos_antes_ma_formacao = fetal_28sem_grupos_antes_ma_formacao,
-    #perinatal_grupos_antes_respiratorias = neonat_precoce_grupos_respiratorias,
-    perinatal_grupos_antes_gravidez = fetal_28sem_grupos_antes_gravidez,
-    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
-    perinatal_grupos_antes_afeccoes_perinatal = fetal_28sem_grupos_antes_afeccoes_perinatal,
-    #perinatal_grupos_antes_mal_definida = neonat_precoce_grupos_mal_definida,
-    perinatal_grupos_antes_outros = fetal_28sem_grupos_antes_outros,
+    obitos_perinatais_totais = obitos_neonatais_totais + obitos_perinat_totais,
 
-    #evitaveis_perinatal_durante_imunoprevencao = evitaveis_fetal_durante_imunoprevencao,
-    evitaveis_perinatal_durante_mulher_gestacao = evitaveis_fetal_28sem_durante_mulher_gestacao,
-    evitaveis_perinatal_durante_parto = evitaveis_fetal_28sem_durante_parto,
-    evitaveis_perinatal_durante_recem_nascido = evitaveis_fetal_28sem_durante_recem_nascido,
-    #evitaveis_perinatal_antes_tratamento = evitaveis_neonatal_precoce_tratamento,
-    #evitaveis_perinatal_antes_saude = evitaveis_neonatal_precoce_saude ,
-    evitaveis_perinatal_durante_mal_definidas = evitaveis_fetal_28sem_durante_mal_definidas,
-    evitaveis_perinatal_durante_outros = evitaveis_fetal_28sem_durante_outros,
-    perinatal_grupos_durante_prematuridade = fetal_28sem_grupos_durante_prematuridade,
-    #perinatal_grupos_antes_infeccoes = neonat_precoce_grupos_infeccoes,
-    perinatal_grupos_durante_asfixia = fetal_28sem_grupos_durante_asfixia,
-    perinatal_grupos_durante_ma_formacao = fetal_28sem_grupos_durante_ma_formacao,
-    #perinatal_grupos_antes_respiratorias = neonat_precoce_grupos_respiratorias,
-    perinatal_grupos_durante_gravidez = fetal_28sem_grupos_durante_gravidez,
-    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
-    perinatal_grupos_durante_afeccoes_perinatal = fetal_28sem_grupos_durante_afeccoes_perinatal,
-    #perinatal_grupos_antes_mal_definida = neonat_precoce_grupos_mal_definida,
-    perinatal_grupos_durante_outros = fetal_28sem_grupos_durante_outros,
+    # Causas evitáveis por faixa de peso
+
+    evitaveis_perinatal_imunoprevencao_menor_1500 = evitaveis_neonatal_imunoprevencao_menor_1500 + evitaveis_fetal_28sem_imunoprevencao_menor_1500,
+    evitaveis_perinatal_imunoprevencao_1500_a_2500 = evitaveis_neonatal_imunoprevencao_1500_a_2500 + evitaveis_fetal_28sem_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_imunoprevencao_2500_mais = evitaveis_neonatal_imunoprevencao_2500_mais + evitaveis_fetal_28sem_imunoprevencao_2500_mais,
+    evitaveis_perinatal_imunoprevencao_sem_informacao = evitaveis_neonatal_imunoprevencao_sem_informacao, #+ evitaveis_fetal_28sem_imunoprevencao_sem_informacao
+
+    evitaveis_perinatal_mulher_gestacao_menor_1500 = evitaveis_neonatal_mulher_gestacao_menor_1500 + evitaveis_fetal_28sem_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_mulher_gestacao_1500_a_2500 = evitaveis_neonatal_mulher_gestacao_1500_a_2500 + evitaveis_fetal_28sem_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_mulher_gestacao_2500_mais = evitaveis_neonatal_mulher_gestacao_2500_mais + evitaveis_fetal_28sem_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_mulher_gestacao_sem_informacao = evitaveis_neonatal_mulher_gestacao_sem_informacao + evitaveis_fetal_28sem_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_parto_menor_1500 = evitaveis_neonatal_parto_menor_1500 + evitaveis_fetal_28sem_parto_menor_1500,
+    evitaveis_perinatal_parto_1500_a_2500 = evitaveis_neonatal_parto_1500_a_2500 + evitaveis_fetal_28sem_parto_1500_a_2500,
+    evitaveis_perinatal_parto_2500_mais = evitaveis_neonatal_parto_2500_mais + evitaveis_fetal_28sem_parto_2500_mais,
+    evitaveis_perinatal_parto_sem_informacao = evitaveis_neonatal_parto_sem_informacao + evitaveis_fetal_28sem_parto_sem_informacao,
+
+    evitaveis_perinatal_recem_nascido_menor_1500 = evitaveis_neonatal_recem_nascido_menor_1500 + evitaveis_fetal_28sem_recem_nascido_menor_1500,
+    evitaveis_perinatal_recem_nascido_1500_a_2500 = evitaveis_neonatal_recem_nascido_1500_a_2500 + evitaveis_fetal_28sem_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_recem_nascido_2500_mais = evitaveis_neonatal_recem_nascido_2500_mais + evitaveis_fetal_28sem_recem_nascido_2500_mais,
+    evitaveis_perinatal_recem_nascido_sem_informacao = evitaveis_neonatal_recem_nascido_sem_informacao + evitaveis_fetal_28sem_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_tratamento_menor_1500 = evitaveis_neonatal_tratamento_menor_1500 + evitaveis_fetal_28sem_tratamento_menor_1500,
+    evitaveis_perinatal_tratamento_1500_a_2500 = evitaveis_neonatal_tratamento_1500_a_2500 + evitaveis_fetal_28sem_tratamento_1500_a_2500,
+    evitaveis_perinatal_tratamento_2500_mais = evitaveis_neonatal_tratamento_2500_mais + evitaveis_fetal_28sem_tratamento_2500_mais,
+    evitaveis_perinatal_tratamento_sem_informacao = evitaveis_neonatal_tratamento_sem_informacao + evitaveis_fetal_28sem_tratamento_sem_informacao,
+
+    evitaveis_perinatal_saude_menor_1500 = evitaveis_neonatal_saude_menor_1500,
+    evitaveis_perinatal_saude_1500_a_2500 = evitaveis_neonatal_saude_1500_a_2500,
+    evitaveis_perinatal_saude_2500_mais = evitaveis_neonatal_saude_2500_mais,
+    evitaveis_perinatal_saude_sem_informacao = evitaveis_neonatal_saude_sem_informacao,
+
+    evitaveis_perinatal_mal_definidas_menor_1500 = evitaveis_neonatal_mal_definidas_menor_1500 + evitaveis_fetal_28sem_mal_definidas_menor_1500,
+    evitaveis_perinatal_mal_definidas_1500_a_2500 = evitaveis_neonatal_mal_definidas_1500_a_2500 + evitaveis_fetal_28sem_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_mal_definidas_2500_mais = evitaveis_neonatal_mal_definidas_2500_mais + evitaveis_fetal_28sem_mal_definidas_2500_mais,
+    evitaveis_perinatal_mal_definidas_sem_informacao = evitaveis_neonatal_mal_definidas_sem_informacao + evitaveis_fetal_28sem_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_outros_menor_1500 = evitaveis_neonatal_outros_menor_1500 + evitaveis_fetal_28sem_outros_menor_1500,
+    evitaveis_perinatal_outros_1500_a_2500 = evitaveis_neonatal_outros_1500_a_2500 + evitaveis_fetal_28sem_outros_1500_a_2500,
+    evitaveis_perinatal_outros_2500_mais = evitaveis_neonatal_outros_2500_mais + evitaveis_fetal_28sem_outros_2500_mais,
+    evitaveis_perinatal_outros_sem_informacao  = evitaveis_neonatal_outros_sem_informacao  + evitaveis_fetal_28sem_outros_sem_informacao,
+
+    # Grupos de causas por faixa de peso
+
+    perinatal_grupos_prematuridade_menor_1500 = neonatal_grupos_prematuridade_menor_1500 + fetal_28sem_grupos_prematuridade_menor_1500,
+    perinatal_grupos_prematuridade_1500_a_2500 = neonatal_grupos_prematuridade_1500_a_2500 + fetal_28sem_grupos_prematuridade_1500_a_2500,
+    perinatal_grupos_prematuridade_2500_mais = neonatal_grupos_prematuridade_2500_mais + fetal_28sem_grupos_prematuridade_2500_mais,
+    perinatal_grupos_prematuridade_sem_informacao = neonatal_grupos_prematuridade_sem_informacao + fetal_28sem_grupos_prematuridade_sem_informacao,
+
+    perinatal_grupos_infeccoes_menor_1500 = neonatal_grupos_infeccoes_menor_1500 + fetal_28sem_grupos_infeccoes_menor_1500,
+    perinatal_grupos_infeccoes_1500_a_2500 = neonatal_grupos_infeccoes_1500_a_2500 + fetal_28sem_grupos_infeccoes_1500_a_2500,
+    perinatal_grupos_infeccoes_2500_mais = neonatal_grupos_infeccoes_2500_mais + fetal_28sem_grupos_infeccoes_2500_mais,
+    perinatal_grupos_infeccoes_sem_informacao = neonatal_grupos_infeccoes_sem_informacao + fetal_28sem_grupos_infeccoes_sem_informacao,
+
+    perinatal_grupos_asfixia_menor_1500 = neonatal_grupos_asfixia_menor_1500 + fetal_28sem_grupos_asfixia_menor_1500,
+    perinatal_grupos_asfixia_1500_a_2500 = neonatal_grupos_asfixia_1500_a_2500 + fetal_28sem_grupos_asfixia_1500_a_2500,
+    perinatal_grupos_asfixia_2500_mais = neonatal_grupos_asfixia_2500_mais + fetal_28sem_grupos_asfixia_2500_mais,
+    perinatal_grupos_asfixia_sem_informacao = neonatal_grupos_asfixia_sem_informacao + fetal_28sem_grupos_asfixia_sem_informacao,
+
+    perinatal_grupos_ma_formacao_menor_1500 = neonatal_grupos_ma_formacao_menor_1500 + fetal_28sem_grupos_ma_formacao_menor_1500,
+    perinatal_grupos_ma_formacao_1500_a_2500 = neonatal_grupos_ma_formacao_1500_a_2500 + fetal_28sem_grupos_ma_formacao_1500_a_2500,
+    perinatal_grupos_ma_formacao_2500_mais = neonatal_grupos_ma_formacao_menor_1500 + fetal_28sem_grupos_ma_formacao_menor_1500,
+    perinatal_grupos_ma_formacao_sem_informacao = neonatal_grupos_ma_formacao_sem_informacao + fetal_28sem_grupos_ma_formacao_sem_informacao,
+
+    perinatal_grupos_respiratorias_menor_1500 = neonatal_grupos_respiratorias_menor_1500,
+    perinatal_grupos_respiratorias_1500_a_2500 = neonatal_grupos_respiratorias_1500_a_2500,
+    perinatal_grupos_respiratorias_2500_mais = neonatal_grupos_respiratorias_2500_mais,
+    perinatal_grupos_respiratorias_sem_informacao = neonatal_grupos_respiratorias_sem_informacao,
+
+    perinatal_grupos_gravidez_menor_1500 = neonatal_grupos_gravidez_menor_1500 + fetal_28sem_grupos_gravidez_menor_1500,
+    perinatal_grupos_gravidez_1500_a_2500 = neonatal_grupos_gravidez_1500_a_2500 + fetal_28sem_grupos_gravidez_1500_a_2500,
+    perinatal_grupos_gravidez_2500_mais = neonatal_grupos_gravidez_2500_mais + fetal_28sem_grupos_gravidez_2500_mais,
+    perinatal_grupos_gravidez_sem_informacao = neonatal_grupos_gravidez_sem_informacao + fetal_28sem_grupos_gravidez_sem_informacao,
+
+    perinatal_grupos_afeccoes_perinatal_menor_1500 = neonatal_grupos_afeccoes_perinatal_menor_1500 + fetal_28sem_grupos_durante_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_afeccoes_perinatal_1500_a_2500 = neonatal_grupos_afeccoes_perinatal_1500_a_2500 + fetal_28sem_grupos_durante_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_afeccoes_perinatal_2500_mais = neonatal_grupos_afeccoes_perinatal_2500_mais + fetal_28sem_grupos_durante_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_afeccoes_perinatal_sem_informacao = neonatal_grupos_afeccoes_perinatal_sem_informacao + fetal_28sem_grupos_durante_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_mal_definida_menor_1500 = neonatal_grupos_mal_definida_menor_1500,
+    perinatal_grupos_mal_definida_1500_a_2500 = neonatal_grupos_mal_definida_1500_a_2500,
+    perinatal_grupos_mal_definida_2500_mais = neonatal_grupos_mal_definida_2500_mais,
+    perinatal_grupos_mal_definida_sem_informacao = neonatal_grupos_mal_definida_sem_informacao,
+
+    perinatal_grupos_outros_menor_1500 = neonatal_grupos_outros_menor_1500 + fetal_28sem_grupos_outros_menor_1500,
+    perinatal_grupos_outros_1500_a_2500 = neonatal_grupos_outros_1500_a_2500 + fetal_28sem_grupos_outros_1500_a_2500,
+    perinatal_grupos_outros_2500_mais = neonatal_grupos_outros_2500_mais + fetal_28sem_grupos_outros_2500_mais,
+    perinatal_grupos_outros_sem_informacao = neonatal_grupos_outros_sem_informacao + fetal_28sem_grupos_outros_sem_informacao,
+
+    # Causas evitáveis por faixa de peso e antes do parto
+
+    evitaveis_perinatal_antes_imunoprevencao_menor_1500 = evitaveis_fetal_28sem_antes_imunoprevencao_menor_1500,
+    evitaveis_perinatal_antes_imunoprevencao_1500_a_2500 = evitaveis_fetal_28sem_antes_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_antes_imunoprevencao_2500_mais = evitaveis_fetal_28sem_antes_imunoprevencao_2500_mais,
+    #evitaveis_perinatal_antes_imunoprevencao_sem_informacao = evitaveis_fetal_28sem_antes_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_antes_mulher_gestacao_menor_1500 = evitaveis_fetal_28sem_antes_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_antes_mulher_gestacao_1500_a_2500 = evitaveis_fetal_28sem_antes_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_antes_mulher_gestacao_2500_mais = evitaveis_fetal_28sem_antes_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_antes_mulher_gestacao_sem_informacao = evitaveis_fetal_28sem_antes_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_antes_parto_menor_1500 = evitaveis_fetal_28sem_antes_parto_menor_1500,
+    evitaveis_perinatal_antes_parto_1500_a_2500 = evitaveis_fetal_28sem_antes_parto_1500_a_2500,
+    evitaveis_perinatal_antes_parto_2500_mais = evitaveis_fetal_28sem_antes_parto_2500_mais,
+    evitaveis_perinatal_antes_parto_sem_informacao = evitaveis_fetal_28sem_antes_parto_sem_informacao,
+
+    evitaveis_perinatal_antes_recem_nascido_menor_1500 = evitaveis_fetal_28sem_antes_recem_nascido_menor_1500,
+    evitaveis_perinatal_antes_recem_nascido_1500_a_2500 = evitaveis_fetal_28sem_antes_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_antes_recem_nascido_2500_mais = evitaveis_fetal_28sem_antes_recem_nascido_2500_mais,
+    evitaveis_perinatal_antes_recem_nascido_sem_informacao = evitaveis_fetal_28sem_antes_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_antes_tratamento_menor_1500 = evitaveis_fetal_28sem_antes_tratamento_menor_1500,
+    evitaveis_perinatal_antes_tratamento_1500_a_2500 = evitaveis_fetal_28sem_antes_tratamento_1500_a_2500,
+    evitaveis_perinatal_antes_tratamento_2500_mais = evitaveis_fetal_28sem_antes_tratamento_2500_mais,
+    evitaveis_perinatal_antes_tratamento_sem_informacao = evitaveis_fetal_28sem_antes_tratamento_sem_informacao,
+
+    evitaveis_perinatal_antes_mal_definidas_menor_1500 = evitaveis_fetal_28sem_antes_mal_definidas_menor_1500,
+    evitaveis_perinatal_antes_mal_definidas_1500_a_2500 = evitaveis_fetal_28sem_antes_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_antes_mal_definidas_2500_mais = evitaveis_fetal_28sem_antes_mal_definidas_2500_mais,
+    evitaveis_perinatal_antes_mal_definidas_sem_informacao = evitaveis_fetal_28sem_antes_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_antes_outros_menor_1500 = evitaveis_fetal_28sem_antes_outros_menor_1500,
+    evitaveis_perinatal_antes_outros_1500_a_2500 = evitaveis_fetal_28sem_antes_outros_1500_a_2500,
+    evitaveis_perinatal_antes_outros_2500_mais = evitaveis_fetal_28sem_antes_outros_2500_mais,
+    evitaveis_perinatal_antes_outros_sem_informacao  = evitaveis_fetal_28sem_antes_outros_sem_informacao,
+
+    # Grupos de causas por faixa de peso e antes do parto
+
+    perinatal_grupos_antes_prematuridade_menor_1500 = fetal_28sem_grupos_antes_prematuridade_menor_1500,
+    perinatal_grupos_antes_prematuridade_1500_a_2500 = fetal_28sem_grupos_antes_prematuridade_1500_a_2500,
+    perinatal_grupos_antes_prematuridade_2500_mais = fetal_28sem_grupos_antes_prematuridade_2500_mais,
+    perinatal_grupos_antes_prematuridade_sem_informacao = fetal_28sem_grupos_antes_prematuridade_sem_informacao,
+
+    perinatal_grupos_antes_infeccoes_menor_1500 = fetal_28sem_grupos_antes_infeccoes_menor_1500,
+    perinatal_grupos_antes_infeccoes_1500_a_2500 = fetal_28sem_grupos_antes_infeccoes_1500_a_2500,
+    perinatal_grupos_antes_infeccoes_2500_mais = fetal_28sem_grupos_antes_infeccoes_2500_mais,
+    perinatal_grupos_antes_infeccoes_sem_informacao = fetal_28sem_grupos_antes_infeccoes_sem_informacao,
+
+    perinatal_grupos_antes_asfixia_menor_1500 = fetal_28sem_grupos_antes_asfixia_menor_1500,
+    perinatal_grupos_antes_asfixia_1500_a_2500 = fetal_28sem_grupos_antes_asfixia_1500_a_2500,
+    perinatal_grupos_antes_asfixia_2500_mais = fetal_28sem_grupos_antes_asfixia_2500_mais,
+    perinatal_grupos_antes_asfixia_sem_informacao = fetal_28sem_grupos_antes_asfixia_sem_informacao,
+
+    perinatal_grupos_antes_ma_formacao_menor_1500 = fetal_28sem_grupos_antes_ma_formacao_menor_1500,
+    perinatal_grupos_antes_ma_formacao_1500_a_2500 = fetal_28sem_grupos_antes_ma_formacao_1500_a_2500,
+    perinatal_grupos_antes_ma_formacao_2500_mais = fetal_28sem_grupos_antes_ma_formacao_menor_1500,
+    perinatal_grupos_antes_ma_formacao_sem_informacao = fetal_28sem_grupos_antes_ma_formacao_sem_informacao,
+
+    perinatal_grupos_antes_gravidez_menor_1500 = fetal_28sem_grupos_antes_gravidez_menor_1500,
+    perinatal_grupos_antes_gravidez_1500_a_2500 = fetal_28sem_grupos_antes_gravidez_1500_a_2500,
+    perinatal_grupos_antes_gravidez_2500_mais = fetal_28sem_grupos_antes_gravidez_2500_mais,
+    perinatal_grupos_antes_gravidez_sem_informacao = fetal_28sem_grupos_antes_gravidez_sem_informacao,
+
+    perinatal_grupos_antes_afeccoes_perinatal_menor_1500 = fetal_28sem_grupos_antes_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_antes_afeccoes_perinatal_1500_a_2500 = fetal_28sem_grupos_antes_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_antes_afeccoes_perinatal_2500_mais = fetal_28sem_grupos_antes_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_antes_afeccoes_perinatal_sem_informacao = fetal_28sem_grupos_antes_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_antes_outros_menor_1500 = fetal_28sem_grupos_antes_outros_menor_1500,
+    perinatal_grupos_antes_outros_1500_a_2500 = fetal_28sem_grupos_antes_outros_1500_a_2500,
+    perinatal_grupos_antes_outros_2500_mais = fetal_28sem_grupos_antes_outros_2500_mais,
+    perinatal_grupos_antes_outros_sem_informacao = fetal_28sem_grupos_antes_outros_sem_informacao,
 
 
-    #evitaveis_perinatal_0_dias_imunoprevencao = evitaveis_neonatal_0_dias_imunoprevencao,
-    evitaveis_perinatal_0_dias_mulher_gestacao = evitaveis_neonatal_0_dias_mulher_gestacao ,
-    evitaveis_perinatal_0_dias_parto = evitaveis_neonatal_0_dias_parto,
-    evitaveis_perinatal_0_dias_recem_nascido = evitaveis_neonatal_0_dias_recem_nascido,
-    evitaveis_perinatal_0_dias_tratamento = evitaveis_neonatal_0_dias_tratamento,
-    evitaveis_perinatal_0_dias_saude = evitaveis_neonatal_0_dias_saude ,
-    evitaveis_perinatal_0_dias_mal_definidas = evitaveis_neonatal_0_dias_mal_definidas,
-    evitaveis_perinatal_0_dias_outros = evitaveis_neonatal_0_dias_outros,
-    perinatal_grupos_0_dias_prematuridade = neonat_grupos_0_dias_prematuridade,
-    perinatal_grupos_0_dias_infeccoes = neonat_grupos_0_dias_infeccoes,
-    perinatal_grupos_0_dias_asfixia = neonat_grupos_0_dias_asfixia,
-    perinatal_grupos_0_dias_ma_formacao = neonat_grupos_0_dias_ma_formacao,
-    perinatal_grupos_0_dias_respiratorias = neonat_grupos_0_dias_respiratorias,
-    perinatal_grupos_0_dias_gravidez = neonat_grupos_0_dias_gravidez,
-    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
-    perinatal_grupos_0_dias_afeccoes_perinatal = neonat_grupos_0_dias_afeccoes_perinatal,
-    perinatal_grupos_0_dias_mal_definida = neonat_grupos_0_dias_mal_definida,
-    perinatal_grupos_0_dias_outros = neonat_grupos_0_dias_outros,
+    # Causas evitáveis por faixa de peso e durante o parto
 
-    evitaveis_perinatal_1_6_dias_imunoprevencao = evitaveis_neonatal_1_6_dias_imunoprevencao,
-    evitaveis_perinatal_1_6_dias_mulher_gestacao = evitaveis_neonatal_1_6_dias_mulher_gestacao ,
-    evitaveis_perinatal_1_6_dias_parto = evitaveis_neonatal_1_6_dias_parto,
-    evitaveis_perinatal_1_6_dias_recem_nascido = evitaveis_neonatal_1_6_dias_recem_nascido,
-    evitaveis_perinatal_1_6_dias_tratamento = evitaveis_neonatal_1_6_dias_tratamento,
-    evitaveis_perinatal_1_6_dias_saude = evitaveis_neonatal_1_6_dias_saude ,
-    evitaveis_perinatal_1_6_dias_mal_definidas = evitaveis_neonatal_1_6_dias_mal_definidas,
-    evitaveis_perinatal_1_6_dias_outros = evitaveis_neonatal_1_6_dias_outros,
-    perinatal_grupos_1_6_dias_prematuridade = neonat_grupos_1_6_dias_prematuridade,
-    perinatal_grupos_1_6_dias_infeccoes = neonat_grupos_1_6_dias_infeccoes,
-    perinatal_grupos_1_6_dias_asfixia = neonat_grupos_1_6_dias_asfixia,
-    perinatal_grupos_1_6_dias_ma_formacao = neonat_grupos_1_6_dias_ma_formacao,
-    perinatal_grupos_1_6_dias_respiratorias = neonat_grupos_1_6_dias_respiratorias,
-    perinatal_grupos_1_6_dias_gravidez = neonat_grupos_1_6_dias_gravidez,
-    #perinatal_grupos_cardiorrespiratorias = neonat_precoce_grupos_cardiorrespiratorias + fetal_grupos_cardiorrespiratorias,
-    perinatal_grupos_afeccoes_perinatal = neonat_grupos_1_6_dias_afeccoes_perinatal,
-    perinatal_grupos_1_6_dias_mal_definida = neonat_grupos_1_6_dias_mal_definida,
-    perinatal_grupos_1_6_dias_outros = neonat_grupos_1_6_dias_outros
+    evitaveis_perinatal_durante_mulher_gestacao_menor_1500 = evitaveis_fetal_28sem_durante_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_durante_mulher_gestacao_1500_a_2500 = evitaveis_fetal_28sem_durante_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_durante_mulher_gestacao_2500_mais = evitaveis_fetal_28sem_durante_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_durante_mulher_gestacao_sem_informacao = evitaveis_fetal_28sem_durante_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_durante_parto_menor_1500 = evitaveis_fetal_28sem_durante_parto_menor_1500,
+    evitaveis_perinatal_durante_parto_1500_a_2500 = evitaveis_fetal_28sem_durante_parto_1500_a_2500,
+    evitaveis_perinatal_durante_parto_2500_mais = evitaveis_fetal_28sem_durante_parto_2500_mais,
+    evitaveis_perinatal_durante_parto_sem_informacao = evitaveis_fetal_28sem_durante_parto_sem_informacao,
+
+    evitaveis_perinatal_durante_recem_nascido_menor_1500 = evitaveis_fetal_28sem_durante_recem_nascido_menor_1500,
+    evitaveis_perinatal_durante_recem_nascido_1500_a_2500 = evitaveis_fetal_28sem_durante_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_durante_recem_nascido_2500_mais = evitaveis_fetal_28sem_durante_recem_nascido_2500_mais,
+    evitaveis_perinatal_durante_recem_nascido_sem_informacao = evitaveis_fetal_28sem_durante_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_durante_tratamento_menor_1500 = evitaveis_fetal_28sem_durante_tratamento_menor_1500,
+    evitaveis_perinatal_durante_tratamento_1500_a_2500 = evitaveis_fetal_28sem_durante_tratamento_1500_a_2500,
+    evitaveis_perinatal_durante_tratamento_2500_mais = evitaveis_fetal_28sem_durante_tratamento_2500_mais,
+    #evitaveis_perinatal_durante_tratamento_sem_informacao = evitaveis_fetal_28sem_durante_tratamento_sem_informacao,
+
+    evitaveis_perinatal_durante_mal_definidas_menor_1500 = evitaveis_fetal_28sem_durante_mal_definidas_menor_1500,
+    evitaveis_perinatal_durante_mal_definidas_1500_a_2500 = evitaveis_fetal_28sem_durante_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_durante_mal_definidas_2500_mais = evitaveis_fetal_28sem_durante_mal_definidas_2500_mais,
+    evitaveis_perinatal_durante_mal_definidas_sem_informacao = evitaveis_fetal_28sem_durante_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_durante_outros_menor_1500 = evitaveis_fetal_28sem_durante_outros_menor_1500,
+    evitaveis_perinatal_durante_outros_1500_a_2500 = evitaveis_fetal_28sem_durante_outros_1500_a_2500,
+    evitaveis_perinatal_durante_outros_2500_mais = evitaveis_fetal_28sem_durante_outros_2500_mais,
+    evitaveis_perinatal_durante_outros_sem_informacao = evitaveis_fetal_28sem_durante_outros_sem_informacao,
+
+    # Grupos de causas por faixa de peso e durante o parto
+
+    perinatal_grupos_durante_prematuridade_menor_1500 = fetal_28sem_grupos_durante_prematuridade_menor_1500,
+    perinatal_grupos_durante_prematuridade_1500_a_2500 = fetal_28sem_grupos_durante_prematuridade_1500_a_2500,
+    perinatal_grupos_durante_prematuridade_2500_mais = fetal_28sem_grupos_durante_prematuridade_2500_mais,
+    perinatal_grupos_durante_prematuridade_sem_informacao = fetal_28sem_grupos_durante_prematuridade_sem_informacao,
+
+    perinatal_grupos_durante_infeccoes_menor_1500 = fetal_28sem_grupos_durante_infeccoes_menor_1500,
+    perinatal_grupos_durante_infeccoes_1500_a_2500 = fetal_28sem_grupos_durante_infeccoes_1500_a_2500,
+    perinatal_grupos_durante_infeccoes_2500_mais = fetal_28sem_grupos_durante_infeccoes_2500_mais,
+    perinatal_grupos_durante_infeccoes_sem_informacao = fetal_28sem_grupos_durante_infeccoes_sem_informacao,
+
+    perinatal_grupos_durante_asfixia_menor_1500 = fetal_28sem_grupos_durante_asfixia_menor_1500,
+    perinatal_grupos_durante_asfixia_1500_a_2500 = fetal_28sem_grupos_durante_asfixia_1500_a_2500,
+    perinatal_grupos_durante_asfixia_2500_mais = fetal_28sem_grupos_durante_asfixia_2500_mais,
+    perinatal_grupos_durante_asfixia_sem_informacao = fetal_28sem_grupos_durante_asfixia_sem_informacao,
+
+    perinatal_grupos_durante_ma_formacao_menor_1500 = fetal_28sem_grupos_durante_ma_formacao_menor_1500,
+    perinatal_grupos_durante_ma_formacao_1500_a_2500 = fetal_28sem_grupos_durante_ma_formacao_1500_a_2500,
+    perinatal_grupos_durante_ma_formacao_2500_mais = fetal_28sem_grupos_durante_ma_formacao_2500_mais,
+    perinatal_grupos_durante_ma_formacao_sem_informacao = fetal_28sem_grupos_durante_ma_formacao_sem_informacao,
+
+    perinatal_grupos_durante_gravidez_menor_1500 = fetal_28sem_grupos_durante_gravidez_menor_1500,
+    perinatal_grupos_durante_gravidez_1500_a_2500 = fetal_28sem_grupos_durante_gravidez_1500_a_2500,
+    perinatal_grupos_durante_gravidez_2500_mais = fetal_28sem_grupos_durante_gravidez_2500_mais,
+    perinatal_grupos_durante_gravidez_sem_informacao = fetal_28sem_grupos_durante_gravidez_sem_informacao,
+
+    perinatal_grupos_durante_afeccoes_perinatal_menor_1500 = fetal_28sem_grupos_durante_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_durante_afeccoes_perinatal_1500_a_2500 = fetal_28sem_grupos_durante_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_durante_afeccoes_perinatal_2500_mais = fetal_28sem_grupos_durante_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_durante_afeccoes_perinatal_sem_informacao = fetal_28sem_grupos_durante_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_durante_outros_menor_1500 = fetal_28sem_grupos_durante_outros_menor_1500,
+    perinatal_grupos_durante_outros_1500_a_2500 = fetal_28sem_grupos_durante_outros_1500_a_2500,
+    perinatal_grupos_durante_outros_2500_mais = fetal_28sem_grupos_durante_outros_2500_mais,
+    perinatal_grupos_durante_outros_sem_informacao = fetal_28sem_grupos_durante_outros_sem_informacao,
+
+    # Causas evitaveis por faixa de peso no dia 0
+
+    evitaveis_perinatal_0_dias_imunoprevencao_menor_1500 = evitaveis_neonatal_0_dias_imunoprevencao_menor_1500,
+    #evitaveis_perinatal_0_dias_imunoprevencao_1500_a_2500 = evitaveis_neonatal_0_dias_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_0_dias_imunoprevencao_2500_mais = evitaveis_neonatal_0_dias_imunoprevencao_2500_mais,
+    evitaveis_perinatal_0_dias_imunoprevencao_sem_informacao = evitaveis_neonatal_0_dias_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_0_dias_mulher_gestacao_menor_1500 = evitaveis_neonatal_0_dias_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_0_dias_mulher_gestacao_1500_a_2500 = evitaveis_neonatal_0_dias_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_0_dias_mulher_gestacao_2500_mais = evitaveis_neonatal_0_dias_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_0_dias_mulher_gestacao_sem_informacao = evitaveis_neonatal_0_dias_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_0_dias_parto_menor_1500 = evitaveis_neonatal_0_dias_parto_menor_1500,
+    evitaveis_perinatal_0_dias_parto_1500_a_2500 = evitaveis_neonatal_0_dias_parto_1500_a_2500,
+    evitaveis_perinatal_0_dias_parto_2500_mais = evitaveis_neonatal_0_dias_parto_2500_mais,
+    evitaveis_perinatal_0_dias_parto_sem_informacao = evitaveis_neonatal_0_dias_parto_sem_informacao,
+
+    evitaveis_perinatal_0_dias_recem_nascido_menor_1500 = evitaveis_neonatal_0_dias_recem_nascido_menor_1500,
+    evitaveis_perinatal_0_dias_recem_nascido_1500_a_2500 = evitaveis_neonatal_0_dias_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_0_dias_recem_nascido_2500_mais = evitaveis_neonatal_0_dias_recem_nascido_2500_mais,
+    evitaveis_perinatal_0_dias_recem_nascido_sem_informacao = evitaveis_neonatal_0_dias_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_0_dias_tratamento_menor_1500 = evitaveis_neonatal_0_dias_tratamento_menor_1500,
+    evitaveis_perinatal_0_dias_tratamento_1500_a_2500 = evitaveis_neonatal_0_dias_tratamento_1500_a_2500,
+    evitaveis_perinatal_0_dias_tratamento_2500_mais = evitaveis_neonatal_0_dias_tratamento_2500_mais,
+    evitaveis_perinatal_0_dias_tratamento_sem_informacao = evitaveis_neonatal_0_dias_tratamento_sem_informacao,
+
+    evitaveis_perinatal_0_dias_saude_menor_1500 = evitaveis_neonatal_0_dias_saude_menor_1500,
+    evitaveis_perinatal_0_dias_saude_1500_a_2500 = evitaveis_neonatal_0_dias_saude_1500_a_2500,
+    evitaveis_perinatal_0_dias_saude_2500_mais = evitaveis_neonatal_0_dias_saude_2500_mais,
+    evitaveis_perinatal_0_dias_saude_sem_informacao = evitaveis_neonatal_0_dias_saude_sem_informacao,
+
+    evitaveis_perinatal_0_dias_mal_definidas_menor_1500 = evitaveis_neonatal_0_dias_mal_definidas_menor_1500,
+    evitaveis_perinatal_0_dias_mal_definidas_1500_a_2500 = evitaveis_neonatal_0_dias_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_0_dias_mal_definidas_2500_mais = evitaveis_neonatal_0_dias_mal_definidas_2500_mais,
+    evitaveis_perinatal_0_dias_mal_definidas_sem_informacao = evitaveis_neonatal_0_dias_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_0_dias_outros_menor_1500 = evitaveis_neonatal_0_dias_outros_menor_1500,
+    evitaveis_perinatal_0_dias_outros_1500_a_2500 = evitaveis_neonatal_0_dias_outros_1500_a_2500,
+    evitaveis_perinatal_0_dias_outros_2500_mais = evitaveis_neonatal_0_dias_outros_2500_mais,
+    evitaveis_perinatal_0_dias_outros_sem_informacao = evitaveis_neonatal_0_dias_outros_sem_informacao,
+
+    # Grupos de causa por faixa de peso no dia 0
+
+    perinatal_grupos_0_dias_prematuridade_menor_1500 = neonatal_grupos_0_dias_prematuridade_menor_1500,
+    perinatal_grupos_0_dias_prematuridade_1500_a_2500 = neonatal_grupos_0_dias_prematuridade_1500_a_2500,
+    perinatal_grupos_0_dias_prematuridade_2500_mais = neonatal_grupos_0_dias_prematuridade_2500_mais,
+    perinatal_grupos_0_dias_prematuridade_sem_informacao = neonatal_grupos_0_dias_prematuridade_sem_informacao,
+
+    perinatal_grupos_0_dias_infeccoes_menor_1500 = neonatal_grupos_0_dias_infeccoes_menor_1500,
+    perinatal_grupos_0_dias_infeccoes_1500_a_2500 = neonatal_grupos_0_dias_infeccoes_1500_a_2500,
+    perinatal_grupos_0_dias_infeccoes_2500_mais = neonatal_grupos_0_dias_infeccoes_2500_mais,
+    perinatal_grupos_0_dias_infeccoes_sem_informacao = neonatal_grupos_0_dias_infeccoes_sem_informacao,
+
+    perinatal_grupos_0_dias_asfixia_menor_1500 = neonatal_grupos_0_dias_asfixia_menor_1500,
+    perinatal_grupos_0_dias_asfixia_1500_a_2500 = neonatal_grupos_0_dias_asfixia_1500_a_2500,
+    perinatal_grupos_0_dias_asfixia_2500_mais = neonatal_grupos_0_dias_asfixia_2500_mais,
+    perinatal_grupos_0_dias_asfixia_sem_informacao = neonatal_grupos_0_dias_asfixia_sem_informacao,
+
+    perinatal_grupos_0_dias_ma_formacao_menor_1500 = neonatal_grupos_0_dias_ma_formacao_menor_1500,
+    perinatal_grupos_0_dias_ma_formacao_1500_a_2500 = neonatal_grupos_0_dias_ma_formacao_1500_a_2500,
+    perinatal_grupos_0_dias_ma_formacao_2500_mais = neonatal_grupos_0_dias_ma_formacao_2500_mais,
+    perinatal_grupos_0_dias_ma_formacao_sem_informacao = neonatal_grupos_0_dias_ma_formacao_sem_informacao,
+
+    perinatal_grupos_0_dias_respiratorias_menor_1500 = neonatal_grupos_0_dias_respiratorias_menor_1500,
+    perinatal_grupos_0_dias_respiratorias_1500_a_2500 = neonatal_grupos_0_dias_respiratorias_1500_a_2500,
+    perinatal_grupos_0_dias_respiratorias_2500_mais = neonatal_grupos_0_dias_respiratorias_2500_mais,
+    perinatal_grupos_0_dias_respiratorias_sem_informacao = neonatal_grupos_0_dias_respiratorias_sem_informacao,
+
+    perinatal_grupos_0_dias_gravidez_menor_1500 = neonatal_grupos_0_dias_gravidez_menor_1500,
+    perinatal_grupos_0_dias_gravidez_1500_a_2500 = neonatal_grupos_0_dias_gravidez_1500_a_2500,
+    perinatal_grupos_0_dias_gravidez_2500_mais = neonatal_grupos_0_dias_gravidez_2500_mais,
+    perinatal_grupos_0_dias_gravidez_sem_informacao = neonatal_grupos_0_dias_gravidez_sem_informacao,
+
+    perinatal_grupos_0_dias_afeccoes_perinatal_menor_1500 = neonatal_grupos_0_dias_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_0_dias_afeccoes_perinatal_1500_a_2500 = neonatal_grupos_0_dias_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_0_dias_afeccoes_perinatal_2500_mais = neonatal_grupos_0_dias_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_0_dias_afeccoes_perinatal_sem_informacao = neonatal_grupos_0_dias_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_0_dias_outros_menor_1500 = neonatal_grupos_0_dias_outros_menor_1500,
+    perinatal_grupos_0_dias_outros_1500_a_2500 = neonatal_grupos_0_dias_outros_1500_a_2500,
+    perinatal_grupos_0_dias_outros_2500_mais = neonatal_grupos_0_dias_outros_2500_mais,
+    perinatal_grupos_0_dias_outros_sem_informacao = neonatal_grupos_0_dias_outros_sem_informacao,
+
+    # Causas evitáveis por faixa de peso entre dia 1 e 6
+
+    evitaveis_perinatal_1_6_dias_imunoprevencao_menor_1500 = evitaveis_neonatal_1_6_dias_imunoprevencao_menor_1500,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_1500_a_2500 = evitaveis_neonatal_1_6_dias_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_2500_mais = evitaveis_neonatal_1_6_dias_imunoprevencao_2500_mais,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_sem_informacao = evitaveis_neonatal_1_6_dias_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_menor_1500 = evitaveis_neonatal_1_6_dias_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_1500_a_2500 = evitaveis_neonatal_1_6_dias_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_2500_mais = evitaveis_neonatal_1_6_dias_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_sem_informacao = evitaveis_neonatal_1_6_dias_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_parto_menor_1500 = evitaveis_neonatal_1_6_dias_parto_menor_1500,
+    evitaveis_perinatal_1_6_dias_parto_1500_a_2500 = evitaveis_neonatal_1_6_dias_parto_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_parto_2500_mais = evitaveis_neonatal_1_6_dias_parto_2500_mais,
+    evitaveis_perinatal_1_6_dias_parto_sem_informacao = evitaveis_neonatal_1_6_dias_parto_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_recem_nascido_menor_1500 = evitaveis_neonatal_1_6_dias_recem_nascido_menor_1500,
+    evitaveis_perinatal_1_6_dias_recem_nascido_1500_a_2500 = evitaveis_neonatal_1_6_dias_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_recem_nascido_2500_mais = evitaveis_neonatal_1_6_dias_recem_nascido_2500_mais,
+    evitaveis_perinatal_1_6_dias_recem_nascido_sem_informacao = evitaveis_neonatal_1_6_dias_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_tratamento_menor_1500 = evitaveis_neonatal_1_6_dias_tratamento_menor_1500,
+    evitaveis_perinatal_1_6_dias_tratamento_1500_a_2500 = evitaveis_neonatal_1_6_dias_tratamento_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_tratamento_2500_mais = evitaveis_neonatal_1_6_dias_tratamento_2500_mais,
+    evitaveis_perinatal_1_6_dias_tratamento_sem_informacao = evitaveis_neonatal_1_6_dias_tratamento_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_saude_menor_1500 = evitaveis_neonatal_1_6_dias_saude_menor_1500,
+    evitaveis_perinatal_1_6_dias_saude_1500_a_2500 = evitaveis_neonatal_1_6_dias_saude_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_saude_2500_mais = evitaveis_neonatal_1_6_dias_saude_2500_mais,
+    evitaveis_perinatal_1_6_dias_saude_sem_informacao = evitaveis_neonatal_1_6_dias_saude_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_mal_definidas_menor_1500 = evitaveis_neonatal_1_6_dias_mal_definidas_menor_1500,
+    evitaveis_perinatal_1_6_dias_mal_definidas_1500_a_2500 = evitaveis_neonatal_1_6_dias_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_mal_definidas_2500_mais = evitaveis_neonatal_1_6_dias_mal_definidas_2500_mais,
+    evitaveis_perinatal_1_6_dias_mal_definidas_sem_informacao = evitaveis_neonatal_1_6_dias_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_outros_menor_1500 = evitaveis_neonatal_1_6_dias_outros_menor_1500,
+    evitaveis_perinatal_1_6_dias_outros_1500_a_2500 = evitaveis_neonatal_1_6_dias_outros_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_outros_2500_mais = evitaveis_neonatal_1_6_dias_outros_2500_mais,
+    evitaveis_perinatal_1_6_dias_outros_sem_informacao = evitaveis_neonatal_1_6_dias_outros_sem_informacao,
+
+    # Grupos de causa por faixa de peso entre dias 1 a 6
+
+    perinatal_grupos_1_6_dias_prematuridade_menor_1500 = neonatal_grupos_1_6_dias_prematuridade_menor_1500,
+    perinatal_grupos_1_6_dias_prematuridade_1500_a_2500 = neonatal_grupos_1_6_dias_prematuridade_1500_a_2500,
+    perinatal_grupos_1_6_dias_prematuridade_2500_mais = neonatal_grupos_1_6_dias_prematuridade_2500_mais,
+    perinatal_grupos_1_6_dias_prematuridade_sem_informacao = neonatal_grupos_1_6_dias_prematuridade_sem_informacao,
+
+    perinatal_grupos_1_6_dias_infeccoes_menor_1500 = neonatal_grupos_1_6_dias_infeccoes_menor_1500,
+    perinatal_grupos_1_6_dias_infeccoes_1500_a_2500 = neonatal_grupos_1_6_dias_infeccoes_1500_a_2500,
+    perinatal_grupos_1_6_dias_infeccoes_2500_mais = neonatal_grupos_1_6_dias_infeccoes_2500_mais,
+    perinatal_grupos_1_6_dias_infeccoes_sem_informacao = neonatal_grupos_1_6_dias_infeccoes_sem_informacao,
+
+    perinatal_grupos_1_6_dias_asfixia_menor_1500 = neonatal_grupos_1_6_dias_asfixia_menor_1500,
+    perinatal_grupos_1_6_dias_asfixia_1500_a_2500 = neonatal_grupos_1_6_dias_asfixia_1500_a_2500,
+    perinatal_grupos_1_6_dias_asfixia_2500_mais = neonatal_grupos_1_6_dias_asfixia_2500_mais,
+    perinatal_grupos_1_6_dias_asfixia_sem_informacao = neonatal_grupos_1_6_dias_asfixia_sem_informacao,
+
+    perinatal_grupos_1_6_dias_ma_formacao_menor_1500 = neonatal_grupos_1_6_dias_ma_formacao_menor_1500,
+    perinatal_grupos_1_6_dias_ma_formacao_1500_a_2500 = neonatal_grupos_1_6_dias_ma_formacao_1500_a_2500,
+    perinatal_grupos_1_6_dias_ma_formacao_2500_mais = neonatal_grupos_1_6_dias_ma_formacao_2500_mais,
+    perinatal_grupos_1_6_dias_ma_formacao_sem_informacao = neonatal_grupos_1_6_dias_ma_formacao_sem_informacao,
+
+    perinatal_grupos_1_6_dias_respiratorias_menor_1500 = neonatal_grupos_1_6_dias_respiratorias_menor_1500,
+    perinatal_grupos_1_6_dias_respiratorias_1500_a_2500 = neonatal_grupos_1_6_dias_respiratorias_1500_a_2500,
+    perinatal_grupos_1_6_dias_respiratorias_2500_mais = neonatal_grupos_1_6_dias_respiratorias_2500_mais,
+    perinatal_grupos_1_6_dias_respiratorias_sem_informacao = neonatal_grupos_1_6_dias_respiratorias_sem_informacao,
+
+    perinatal_grupos_1_6_dias_gravidez_menor_1500 = neonatal_grupos_1_6_dias_gravidez_menor_1500,
+    perinatal_grupos_1_6_dias_gravidez_1500_a_2500 = neonatal_grupos_1_6_dias_gravidez_1500_a_2500,
+    perinatal_grupos_1_6_dias_gravidez_2500_mais = neonatal_grupos_1_6_dias_gravidez_2500_mais,
+    perinatal_grupos_1_6_dias_gravidez_sem_informacao = neonatal_grupos_1_6_dias_gravidez_sem_informacao,
+
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_menor_1500 = neonatal_grupos_1_6_dias_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_1500_a_2500 = neonatal_grupos_1_6_dias_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_2500_mais = neonatal_grupos_1_6_dias_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_sem_informacao = neonatal_grupos_1_6_dias_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_1_6_dias_mal_definida_menor_1500 = neonatal_grupos_1_6_dias_mal_definida_menor_1500,
+    perinatal_grupos_1_6_dias_mal_definida_1500_a_2500 = neonatal_grupos_1_6_dias_mal_definida_1500_a_2500,
+    perinatal_grupos_1_6_dias_mal_definida_2500_mais = neonatal_grupos_1_6_dias_mal_definida_2500_mais,
+    perinatal_grupos_1_6_dias_mal_definida_sem_informacao = neonatal_grupos_1_6_dias_mal_definida_sem_informacao,
+
+    perinatal_grupos_1_6_dias_outros_menor_1500 = neonatal_grupos_1_6_dias_outros_menor_1500,
+    perinatal_grupos_1_6_dias_outros_1500_a_2500 = neonatal_grupos_1_6_dias_outros_1500_a_2500,
+    perinatal_grupos_1_6_dias_outros_2500_mais = neonatal_grupos_1_6_dias_outros_2500_mais,
+    perinatal_grupos_1_6_dias_outros_sem_informacao = neonatal_grupos_1_6_dias_outros_sem_informacao,
 
   ) |>
-  select(-c(
-    #evitaveis_fetal_28sem_durante_imunoprevencao,
-    evitaveis_fetal_28sem_durante_mulher_gestacao,
-    evitaveis_fetal_28sem_durante_parto,
-    evitaveis_fetal_28sem_durante_recem_nascido,
-    evitaveis_fetal_28sem_durante_tratamento,
-    #evitaveis_fetal_28sem_durante_saude,
-    evitaveis_fetal_28sem_durante_mal_definidas,
-    evitaveis_fetal_28sem_durante_outros,
-    evitaveis_fetal_28sem_antes_imunoprevencao,
-    evitaveis_fetal_28sem_antes_mulher_gestacao,
-    evitaveis_fetal_28sem_antes_parto,
-    evitaveis_fetal_28sem_antes_recem_nascido,
-    evitaveis_fetal_28sem_antes_tratamento,
-    #evitaveis_fetal_28sem_antes_saude,
-    evitaveis_fetal_28sem_antes_mal_definidas,
-    evitaveis_fetal_28sem_antes_outros,
-    evitaveis_fetal_28sem_imunoprevencao,
-    evitaveis_fetal_28sem_mulher_gestacao,
-    evitaveis_fetal_28sem_parto,
-    evitaveis_fetal_28sem_recem_nascido,
-    evitaveis_fetal_28sem_tratamento,
-    #evitaveis_fetal_28sem_saude,
-    evitaveis_fetal_28sem_mal_definidas,
-    evitaveis_fetal_28sem_outros,
+  select(c(
+    codmunres,
+    ano,
+    obitos_perinat_totais,
+    obitos_perinat_totais_antes,
+    obitos_perinat_totais_durante,
+    obitos_perinatais_totais,
 
-    fetal_grupos_durante_prematuridade,
-    fetal_grupos_durante_infeccoes,
-    fetal_grupos_durante_asfixia,
-    #fetal_grupos_durante_respiratorias,
-    fetal_grupos_durante_gravidez,
-    fetal_grupos_durante_afeccoes_perinatal,
-    fetal_grupos_durante_ma_formacao,
-    #fetal_grupos_durante_mal_definida,
-    fetal_grupos_durante_outros,
-    fetal_grupos_antes_prematuridade,
-    fetal_grupos_antes_infeccoes,
-    fetal_grupos_antes_asfixia,
-    fetal_grupos_antes_respiratorias,
-    fetal_grupos_antes_gravidez,
-    fetal_grupos_antes_afeccoes_perinatal,
-    fetal_grupos_antes_ma_formacao,
-    #fetal_grupos_antes_mal_definida,
-    fetal_grupos_antes_outros,
-    fetal_grupos_prematuridade,
-    fetal_grupos_infeccoes,
-    fetal_grupos_asfixia,
-    fetal_grupos_respiratorias,
-    fetal_grupos_gravidez,
-    fetal_grupos_afeccoes_perinatal,
-    fetal_grupos_ma_formacao,
-    #fetal_grupos_mal_definida,
-    fetal_grupos_outros
+    evitaveis_perinatal_imunoprevencao_menor_1500,
+    evitaveis_perinatal_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_imunoprevencao_2500_mais,
+    evitaveis_perinatal_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_parto_menor_1500,
+    evitaveis_perinatal_parto_1500_a_2500,
+    evitaveis_perinatal_parto_2500_mais,
+    evitaveis_perinatal_parto_sem_informacao,
+
+    evitaveis_perinatal_recem_nascido_menor_1500,
+    evitaveis_perinatal_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_recem_nascido_2500_mais,
+    evitaveis_perinatal_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_tratamento_menor_1500,
+    evitaveis_perinatal_tratamento_1500_a_2500,
+    evitaveis_perinatal_tratamento_2500_mais,
+    evitaveis_perinatal_tratamento_sem_informacao,
+
+    evitaveis_perinatal_saude_menor_1500,
+    evitaveis_perinatal_saude_1500_a_2500,
+    evitaveis_perinatal_saude_2500_mais,
+    evitaveis_perinatal_saude_sem_informacao,
+
+    evitaveis_perinatal_mal_definidas_menor_1500,
+    evitaveis_perinatal_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_mal_definidas_2500_mais,
+    evitaveis_perinatal_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_outros_menor_1500,
+    evitaveis_perinatal_outros_1500_a_2500,
+    evitaveis_perinatal_outros_2500_mais,
+    evitaveis_perinatal_outros_sem_informacao,
+
+    perinatal_grupos_prematuridade_menor_1500,
+    perinatal_grupos_prematuridade_1500_a_2500,
+    perinatal_grupos_prematuridade_2500_mais,
+    perinatal_grupos_prematuridade_sem_informacao,
+
+    perinatal_grupos_infeccoes_menor_1500,
+    perinatal_grupos_infeccoes_1500_a_2500,
+    perinatal_grupos_infeccoes_2500_mais,
+    perinatal_grupos_infeccoes_sem_informacao,
+
+    perinatal_grupos_asfixia_menor_1500,
+    perinatal_grupos_asfixia_1500_a_2500,
+    perinatal_grupos_asfixia_2500_mais,
+    perinatal_grupos_asfixia_sem_informacao,
+
+    perinatal_grupos_ma_formacao_menor_1500,
+    perinatal_grupos_ma_formacao_1500_a_2500,
+    perinatal_grupos_ma_formacao_2500_mais,
+    perinatal_grupos_ma_formacao_sem_informacao,
+
+    perinatal_grupos_respiratorias_menor_1500,
+    perinatal_grupos_respiratorias_1500_a_2500,
+    perinatal_grupos_respiratorias_2500_mais,
+    perinatal_grupos_respiratorias_sem_informacao,
+
+    perinatal_grupos_gravidez_menor_1500,
+    perinatal_grupos_gravidez_1500_a_2500,
+    perinatal_grupos_gravidez_2500_mais,
+    perinatal_grupos_gravidez_sem_informacao,
+
+    perinatal_grupos_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_mal_definida_menor_1500,
+    perinatal_grupos_mal_definida_1500_a_2500,
+    perinatal_grupos_mal_definida_2500_mais,
+    perinatal_grupos_mal_definida_sem_informacao,
+
+    perinatal_grupos_outros_menor_1500,
+    perinatal_grupos_outros_1500_a_2500,
+    perinatal_grupos_outros_2500_mais,
+    perinatal_grupos_outros_sem_informacao,
+
+    evitaveis_perinatal_antes_imunoprevencao_menor_1500,
+    evitaveis_perinatal_antes_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_antes_imunoprevencao_2500_mais,
+    #evitaveis_perinatal_antes_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_antes_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_antes_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_antes_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_antes_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_antes_parto_menor_1500,
+    evitaveis_perinatal_antes_parto_1500_a_2500,
+    evitaveis_perinatal_antes_parto_2500_mais,
+    evitaveis_perinatal_antes_parto_sem_informacao,
+
+    evitaveis_perinatal_antes_recem_nascido_menor_1500,
+    evitaveis_perinatal_antes_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_antes_recem_nascido_2500_mais,
+    evitaveis_perinatal_antes_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_antes_tratamento_menor_1500,
+    evitaveis_perinatal_antes_tratamento_1500_a_2500,
+    evitaveis_perinatal_antes_tratamento_2500_mais,
+    evitaveis_perinatal_antes_tratamento_sem_informacao,
+
+    evitaveis_perinatal_antes_mal_definidas_menor_1500,
+    evitaveis_perinatal_antes_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_antes_mal_definidas_2500_mais,
+    evitaveis_perinatal_antes_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_antes_outros_menor_1500,
+    evitaveis_perinatal_antes_outros_1500_a_2500,
+    evitaveis_perinatal_antes_outros_2500_mais,
+    evitaveis_perinatal_antes_outros_sem_informacao,
+
+    perinatal_grupos_antes_prematuridade_menor_1500,
+    perinatal_grupos_antes_prematuridade_1500_a_2500,
+    perinatal_grupos_antes_prematuridade_2500_mais,
+    perinatal_grupos_antes_prematuridade_sem_informacao,
+
+    perinatal_grupos_antes_infeccoes_menor_1500,
+    perinatal_grupos_antes_infeccoes_1500_a_2500,
+    perinatal_grupos_antes_infeccoes_2500_mais,
+    perinatal_grupos_antes_infeccoes_sem_informacao,
+
+    perinatal_grupos_antes_asfixia_menor_1500,
+    perinatal_grupos_antes_asfixia_1500_a_2500,
+    perinatal_grupos_antes_asfixia_2500_mais,
+    perinatal_grupos_antes_asfixia_sem_informacao,
+
+    perinatal_grupos_antes_ma_formacao_menor_1500,
+    perinatal_grupos_antes_ma_formacao_1500_a_2500,
+    perinatal_grupos_antes_ma_formacao_2500_mais,
+    perinatal_grupos_antes_ma_formacao_sem_informacao,
+
+    perinatal_grupos_antes_gravidez_menor_1500,
+    perinatal_grupos_antes_gravidez_1500_a_2500,
+    perinatal_grupos_antes_gravidez_2500_mais,
+    perinatal_grupos_antes_gravidez_sem_informacao,
+
+    perinatal_grupos_antes_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_antes_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_antes_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_antes_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_antes_outros_menor_1500,
+    perinatal_grupos_antes_outros_1500_a_2500,
+    perinatal_grupos_antes_outros_2500_mais,
+    perinatal_grupos_antes_outros_sem_informacao,
+
+    evitaveis_perinatal_durante_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_durante_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_durante_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_durante_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_durante_parto_menor_1500,
+    evitaveis_perinatal_durante_parto_1500_a_2500,
+    evitaveis_perinatal_durante_parto_2500_mais,
+    evitaveis_perinatal_durante_parto_sem_informacao,
+
+    evitaveis_perinatal_durante_recem_nascido_menor_1500,
+    evitaveis_perinatal_durante_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_durante_recem_nascido_2500_mais,
+    evitaveis_perinatal_durante_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_durante_tratamento_menor_1500,
+    evitaveis_perinatal_durante_tratamento_1500_a_2500,
+    evitaveis_perinatal_durante_tratamento_2500_mais,
+    #evitaveis_perinatal_durante_tratamento_sem_informacao,
+
+    evitaveis_perinatal_durante_mal_definidas_menor_1500,
+    evitaveis_perinatal_durante_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_durante_mal_definidas_2500_mais,
+    evitaveis_perinatal_durante_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_durante_outros_menor_1500,
+    evitaveis_perinatal_durante_outros_1500_a_2500,
+    evitaveis_perinatal_durante_outros_2500_mais,
+    evitaveis_perinatal_durante_outros_sem_informacao,
+
+    perinatal_grupos_durante_prematuridade_menor_1500,
+    perinatal_grupos_durante_prematuridade_1500_a_2500,
+    perinatal_grupos_durante_prematuridade_2500_mais,
+    perinatal_grupos_durante_prematuridade_sem_informacao,
+
+    perinatal_grupos_durante_infeccoes_menor_1500,
+    perinatal_grupos_durante_infeccoes_1500_a_2500,
+    perinatal_grupos_durante_infeccoes_2500_mais,
+    perinatal_grupos_durante_infeccoes_sem_informacao,
+
+    perinatal_grupos_durante_asfixia_menor_1500,
+    perinatal_grupos_durante_asfixia_1500_a_2500,
+    perinatal_grupos_durante_asfixia_2500_mais,
+    perinatal_grupos_durante_asfixia_sem_informacao,
+
+    perinatal_grupos_durante_ma_formacao_menor_1500,
+    perinatal_grupos_durante_ma_formacao_1500_a_2500,
+    perinatal_grupos_durante_ma_formacao_2500_mais,
+    perinatal_grupos_durante_ma_formacao_sem_informacao,
+
+    perinatal_grupos_durante_gravidez_menor_1500,
+    perinatal_grupos_durante_gravidez_1500_a_2500,
+    perinatal_grupos_durante_gravidez_2500_mais,
+    perinatal_grupos_durante_gravidez_sem_informacao,
+
+    perinatal_grupos_durante_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_durante_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_durante_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_durante_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_durante_outros_menor_1500,
+    perinatal_grupos_durante_outros_1500_a_2500,
+    perinatal_grupos_durante_outros_2500_mais,
+    perinatal_grupos_durante_outros_sem_informacao,
+
+    evitaveis_perinatal_0_dias_imunoprevencao_menor_1500,
+    #evitaveis_perinatal_0_dias_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_0_dias_imunoprevencao_2500_mais,
+    evitaveis_perinatal_0_dias_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_0_dias_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_0_dias_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_0_dias_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_0_dias_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_0_dias_parto_menor_1500,
+    evitaveis_perinatal_0_dias_parto_1500_a_2500,
+    evitaveis_perinatal_0_dias_parto_2500_mais,
+    evitaveis_perinatal_0_dias_parto_sem_informacao,
+
+    evitaveis_perinatal_0_dias_recem_nascido_menor_1500,
+    evitaveis_perinatal_0_dias_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_0_dias_recem_nascido_2500_mais,
+    evitaveis_perinatal_0_dias_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_0_dias_tratamento_menor_1500,
+    evitaveis_perinatal_0_dias_tratamento_1500_a_2500,
+    evitaveis_perinatal_0_dias_tratamento_2500_mais,
+    evitaveis_perinatal_0_dias_tratamento_sem_informacao,
+
+    evitaveis_perinatal_0_dias_saude_menor_1500,
+    evitaveis_perinatal_0_dias_saude_1500_a_2500,
+    evitaveis_perinatal_0_dias_saude_2500_mais,
+    evitaveis_perinatal_0_dias_saude_sem_informacao,
+
+    evitaveis_perinatal_0_dias_mal_definidas_menor_1500,
+    evitaveis_perinatal_0_dias_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_0_dias_mal_definidas_2500_mais,
+    evitaveis_perinatal_0_dias_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_0_dias_outros_menor_1500,
+    evitaveis_perinatal_0_dias_outros_1500_a_2500,
+    evitaveis_perinatal_0_dias_outros_2500_mais,
+    evitaveis_perinatal_0_dias_outros_sem_informacao,
+
+    perinatal_grupos_0_dias_prematuridade_menor_1500,
+    perinatal_grupos_0_dias_prematuridade_1500_a_2500,
+    perinatal_grupos_0_dias_prematuridade_2500_mais,
+    perinatal_grupos_0_dias_prematuridade_sem_informacao,
+
+    perinatal_grupos_0_dias_infeccoes_menor_1500,
+    perinatal_grupos_0_dias_infeccoes_1500_a_2500,
+    perinatal_grupos_0_dias_infeccoes_2500_mais,
+    perinatal_grupos_0_dias_infeccoes_sem_informacao,
+
+    perinatal_grupos_0_dias_asfixia_menor_1500,
+    perinatal_grupos_0_dias_asfixia_1500_a_2500,
+    perinatal_grupos_0_dias_asfixia_2500_mais,
+    perinatal_grupos_0_dias_asfixia_sem_informacao,
+
+    perinatal_grupos_0_dias_ma_formacao_menor_1500,
+    perinatal_grupos_0_dias_ma_formacao_1500_a_2500,
+    perinatal_grupos_0_dias_ma_formacao_2500_mais,
+    perinatal_grupos_0_dias_ma_formacao_sem_informacao,
+
+    perinatal_grupos_0_dias_respiratorias_menor_1500,
+    perinatal_grupos_0_dias_respiratorias_1500_a_2500,
+    perinatal_grupos_0_dias_respiratorias_2500_mais,
+    perinatal_grupos_0_dias_respiratorias_sem_informacao,
+
+    perinatal_grupos_0_dias_gravidez_menor_1500,
+    perinatal_grupos_0_dias_gravidez_1500_a_2500,
+    perinatal_grupos_0_dias_gravidez_2500_mais,
+    perinatal_grupos_0_dias_gravidez_sem_informacao,
+
+    perinatal_grupos_0_dias_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_0_dias_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_0_dias_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_0_dias_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_0_dias_outros_menor_1500,
+    perinatal_grupos_0_dias_outros_1500_a_2500,
+    perinatal_grupos_0_dias_outros_2500_mais,
+    perinatal_grupos_0_dias_outros_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_imunoprevencao_menor_1500,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_2500_mais,
+    evitaveis_perinatal_1_6_dias_imunoprevencao_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_1_6_dias_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_parto_menor_1500,
+    evitaveis_perinatal_1_6_dias_parto_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_parto_2500_mais,
+    evitaveis_perinatal_1_6_dias_parto_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_recem_nascido_menor_1500,
+    evitaveis_perinatal_1_6_dias_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_recem_nascido_2500_mais,
+    evitaveis_perinatal_1_6_dias_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_tratamento_menor_1500,
+    evitaveis_perinatal_1_6_dias_tratamento_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_tratamento_2500_mais,
+    evitaveis_perinatal_1_6_dias_tratamento_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_saude_menor_1500,
+    evitaveis_perinatal_1_6_dias_saude_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_saude_2500_mais,
+    evitaveis_perinatal_1_6_dias_saude_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_mal_definidas_menor_1500,
+    evitaveis_perinatal_1_6_dias_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_mal_definidas_2500_mais,
+    evitaveis_perinatal_1_6_dias_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_1_6_dias_outros_menor_1500,
+    evitaveis_perinatal_1_6_dias_outros_1500_a_2500,
+    evitaveis_perinatal_1_6_dias_outros_2500_mais,
+    evitaveis_perinatal_1_6_dias_outros_sem_informacao,
+
+    perinatal_grupos_1_6_dias_prematuridade_menor_1500,
+    perinatal_grupos_1_6_dias_prematuridade_1500_a_2500,
+    perinatal_grupos_1_6_dias_prematuridade_2500_mais,
+    perinatal_grupos_1_6_dias_prematuridade_sem_informacao,
+
+    perinatal_grupos_1_6_dias_infeccoes_menor_1500,
+    perinatal_grupos_1_6_dias_infeccoes_1500_a_2500,
+    perinatal_grupos_1_6_dias_infeccoes_2500_mais,
+    perinatal_grupos_1_6_dias_infeccoes_sem_informacao,
+
+    perinatal_grupos_1_6_dias_asfixia_menor_1500,
+    perinatal_grupos_1_6_dias_asfixia_1500_a_2500,
+    perinatal_grupos_1_6_dias_asfixia_2500_mais,
+    perinatal_grupos_1_6_dias_asfixia_sem_informacao,
+
+    perinatal_grupos_1_6_dias_ma_formacao_menor_1500,
+    perinatal_grupos_1_6_dias_ma_formacao_1500_a_2500,
+    perinatal_grupos_1_6_dias_ma_formacao_2500_mais,
+    perinatal_grupos_1_6_dias_ma_formacao_sem_informacao,
+
+    perinatal_grupos_1_6_dias_respiratorias_menor_1500,
+    perinatal_grupos_1_6_dias_respiratorias_1500_a_2500,
+    perinatal_grupos_1_6_dias_respiratorias_2500_mais,
+    perinatal_grupos_1_6_dias_respiratorias_sem_informacao,
+
+    perinatal_grupos_1_6_dias_gravidez_menor_1500,
+    perinatal_grupos_1_6_dias_gravidez_1500_a_2500,
+    perinatal_grupos_1_6_dias_gravidez_2500_mais,
+    perinatal_grupos_1_6_dias_gravidez_sem_informacao,
+
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_1_6_dias_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_1_6_dias_mal_definida_menor_1500,
+    perinatal_grupos_1_6_dias_mal_definida_1500_a_2500,
+    perinatal_grupos_1_6_dias_mal_definida_2500_mais,
+    perinatal_grupos_1_6_dias_mal_definida_sem_informacao,
+
+    perinatal_grupos_1_6_dias_outros_menor_1500,
+    perinatal_grupos_1_6_dias_outros_1500_a_2500,
+    perinatal_grupos_1_6_dias_outros_2500_mais,
+    perinatal_grupos_1_6_dias_outros_sem_informacao
   ))
 
-write.csv(df_bloco7_distribuicao_cids_perinatal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv", row.names = FALSE)
-
-
-
-
-
+### Exportando os dados
+write.csv(df_bloco7_distribuicao_cids_perinatal1, "data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv", row.names = FALSE)
 
 
 
@@ -2966,6 +3660,7 @@ write.csv(df_bloco7_distribuicao_cids_perinatal, "data-raw/csv/indicadores_bloco
 # ### Removendo objetos já utilizados
 # rm(df_evitaveis_fetal_todos_v1, df_evitaveis_fetal_antes_v1, df_evitaveis_fetal_durante_v1)
 # gc()
+
 
 
 

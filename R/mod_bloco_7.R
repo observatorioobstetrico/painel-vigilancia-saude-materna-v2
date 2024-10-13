@@ -927,7 +927,7 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
                         label = "Selecione, aqui, os grupos de interesse:",
@@ -959,6 +959,29 @@ mod_bloco_7_ui <- function(id) {
                         width = "100%"
                       )
                     ),
+                  ),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("faixa_peso_perinatal_grupos"),
+                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Menor que 1500 g" = "menor_1500",
+                          "De 1500 g a 2500 g" = "1500_a_2500",
+                          "Maior ou igual a 2500 g" = "2500_mais",
+                          "Sem informação" = "sem_informacao"
+                        ),
+                        selected = c("menor_1500","1500_a_2500", "2500_mais", "sem_informacao"),
+                        multiple = TRUE,
+                        width = "98%"
+                      )
+                    ),
                     column(
                       width = 6,
                       strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
@@ -969,7 +992,7 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_perinatal_grupos"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "perinatal_grupos_antes", # estou aqui
+                            "Antes do parto" = "perinatal_grupos_antes",
                             "Durante o parto" = "perinatal_grupos_durante",
                             "Dia 0 de vida" = "perinatal_grupos_0_dias",
                             "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
@@ -1000,7 +1023,7 @@ mod_bloco_7_ui <- function(id) {
                   hr(),
                   fluidRow(
                     column(
-                      width = 6,
+                      width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
                         label = "Selecione, aqui, os grupos de interesse:",
@@ -1027,6 +1050,29 @@ mod_bloco_7_ui <- function(id) {
                         ),
                         multiple = TRUE,
                         width = "100%"
+                      )
+                    ),
+                  ),
+                  fluidRow(
+                    column(
+                      width = 6,
+                      shinyWidgets::pickerInput(
+                        inputId = ns("faixa_peso_perinatal_evitaveis"),
+                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
+                                       `actions-box` = TRUE,
+                                       `deselect-all-text` = "Desselecionar todas",
+                                       `select-all-text` = "Selecionar todas",
+                                       `none-selected-text` = "Nenhuma opção selecionada"),
+                        choices = c(
+                          "Menor que 1500 g" = "menor_1500",
+                          "De 1500 g a 2500 g" = "1500_a_2500",
+                          "Maior ou igual a 2500 g" = "2500_mais",
+                          "Sem informação" = "sem_informacao"
+                        ),
+                        selected = c("menor_1500","1500_a_2500", "2500_mais", "sem_informacao"),
+                        multiple = TRUE,
+                        width = "98%"
                       )
                     ),
                     column(
@@ -1126,7 +1172,7 @@ mod_bloco_7_ui <- function(id) {
               ),
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_evitaveis_neonatal")), proxy.height = "325px") #[zzz]
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_evitaveis_neonatal")), proxy.height = "325px")
               ),
               column(
                 width = 6,
@@ -1592,8 +1638,6 @@ mod_bloco_7_ui <- function(id) {
           )
         )
       ),
-
-
       tabPanel(
         HTML("<b>Indicadores relacionados à morbidade neonatal</b>"),
         value = "tabpanel_morbidade_neonatal",
@@ -1880,16 +1924,12 @@ mod_bloco_7_ui <- function(id) {
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 470))
                 )
               )
-
-
             )
           )
         )
-      ) #fim do tabpanel morbidade neonatal
-
-
-
-  ) )
+      )
+    ) #fim do tabpanel morbidade neonatal
+  )
 }
 
 #' bloco_7 Server Functions
@@ -3942,13 +3982,30 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_evitaveis_perinatal <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
+
+      if (length(input$momento_obito_perinatal) == 4) {
+        data_plot_evitaveis_perinatal_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_perinatal_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              dplyr::contains(input$momento_obito_perinatal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_perinatal_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
+          cols = dplyr::contains("evitaveis_perinatal"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -4193,13 +4250,30 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_evitaveis_perinatal_comp <- reactive({
-      data_filtrada_comp_aux() |>
+
+      if (length(input$momento_obito_perinatal) == 4) {
+        data_plot_evitaveis_perinatal_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_perinatal_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              dplyr::contains(input$momento_obito_perinatal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_perinatal_comp_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
+          cols = dplyr::contains("evitaveis_perinatal"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -4410,7 +4484,32 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_evitaveis_perinatal_referencia <- reactive({
-      bloco7_distribuicao_cids |>
+
+      if (length(input$momento_obito_perinatal_evitaveis) == 4) {
+        data_plot_evitaveis_perinatal_referencia_aux <- bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      } else {
+        data_plot_evitaveis_perinatal_referencia_aux <- bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("evitaveis_perinatal") &
+              dplyr::contains(input$momento_obito_perinatal_evitaveis) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
+          )
+      }
+
+      data_plot_evitaveis_perinatal_referencia_aux |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -5020,13 +5119,30 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_grupos_perinatal <- reactive({
-      data_filtrada_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
+
+      if (length(input$momento_obito_perinatal_grupos) == 4) {
+        data_plot_grupos_perinatal_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+      } else {
+        data_plot_grupos_perinatal_aux <- data_filtrada_aux() |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              dplyr::contains(input$momento_obito_perinatal_grupos) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+      }
+
+      data_plot_grupos_perinatal_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::contains("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
+          cols = dplyr::contains("perinatal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
@@ -5206,14 +5322,30 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     data_plot_grupos_perinatal_comp <- reactive({
-      data_filtrada_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos") | "obitos_perinatais_totais"), sum) |>
+
+      if (length(input$momento_obito_perinatal_grupos) == 4) {
+        data_plot_grupos_perinatal_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+      } else {
+        data_plot_grupos_perinatal_comp_aux <- data_filtrada_comp_aux() |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              dplyr::contains(input$momento_obito_perinatal_grupos) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+      }
+
+      data_plot_grupos_perinatal_comp_aux() |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::contains("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
-          names_to = "grupo_cid10",
+          cols = dplyr::contains("perinatal_grupos"),
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
@@ -5442,17 +5574,42 @@ mod_bloco_7_server <- function(id, filtros){
     # })
 
     data_plot_grupos_perinatal_referencia <- reactive({
-      bloco7_distribuicao_cids |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
+
+      if (length(input$momento_obito_perinatal_grupos) == 4) {
+        data_plot_grupos_perinatal_referencia_aux <-
+          bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+
+      } else {
+        data_plot_grupos_perinatal_referencia_aux <-
+          bloco7_distribuicao_cids |>
+          dplyr::filter(
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::select(
+            dplyr::contains("perinatal_grupos") &
+              dplyr::contains(input$momento_obito_perinatal_grupos) &
+              dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
+          )
+
+      }
+
+      data_plot_grupos_perinatal_referencia_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos))), ~ (. / obitos_perinatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::contains("perinatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "grupos", input = input$momento_obito_perinatal_grupos)),
+          cols = dplyr::contains("perinatal_grupos"),
           names_to = "grupo_cid10",
           values_to = "br_porc_obitos"
         ) |>
