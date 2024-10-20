@@ -555,7 +555,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com anomalias congênitas &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao8"),
@@ -584,7 +584,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 20%; display: flex; align-items: center",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao9"),
@@ -612,7 +612,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Tabela dos grupos de malformações prioritárias para vigilância definidos pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>")
+                HTML("<b style='font-size:18px'> Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>")
               ),
               hr(),
               shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
@@ -962,7 +962,7 @@ mod_bloco_5_server <- function(id, filtros){
     #   )
     # })
 
-    #### Porcentagem de nascidos vivos com malformações -----------------------
+    #### Porcentagem de nascidos vivos com anomalias congênitas -----------------------
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao8", anim = TRUE, animType = "fade", time = 0.8)
       shinyjs::hide(id = "mostrar_botao9", anim = TRUE, animType = "fade", time = 0.8)
@@ -1363,12 +1363,12 @@ mod_bloco_5_server <- function(id, filtros){
     #   )
     # })
 
-    ### Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo MS ---
+    ### Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo MS ---
     output$b5_i8 <- renderUI({
       cria_caixa_server(
         dados = data5_resumo(),
         indicador = "porc_malformacao_vigilancia",
-        titulo = "Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo Ministério da Saúde",
+        titulo = "Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde",
         tem_meta = TRUE,
         valor_de_referencia = data5_resumo_referencia()$porc_malformacao_vigilancia,
         tipo = "porcentagem",
@@ -1389,12 +1389,12 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
-    ### Porcentagem de nascidos vivos com malformações ------------------------
+    ### Porcentagem de nascidos vivos com anomalias congênitas ------------------------
     output$b5_i9 <- renderUI({
       cria_caixa_server(
         dados = data5_resumo(),
         indicador = "porc_malformacao_geral",
-        titulo = "Porcentagem de nascidos vivos com malformações",
+        titulo = "Porcentagem de nascidos vivos com anomalias congênitas",
         tem_meta = TRUE,
         valor_de_referencia = data5_resumo_referencia()$porc_malformacao_geral,
         tipo = "porcentagem",
@@ -1497,9 +1497,9 @@ mod_bloco_5_server <- function(id, filtros){
     # Para os gráficos --------------------------------------------------------
     cols <- c("#2c115f", "#b73779", "#fc8961")
 
-    ## Organizando a base de malformações -------------------------------------
+    ## Organizando a base de anomalias congênitas -------------------------------------
     ## Calculando os indicadores para cada ano do período selecionado ---------
-    ### Para a tabela de malformações -----------------------------------------
+    ### Para a tabela de anomalias congênitas -----------------------------------------
     data5_nascidos_vivos <- reactive({
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
@@ -2354,7 +2354,7 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
-    ### Porcentagem de nascidos vivos com malformações ------------------------
+    ### Porcentagem de nascidos vivos com anomalias congênitas ------------------------
     output$plot6 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -2430,7 +2430,7 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
-    ### Porcentagem de nascidos vivos com malformações prioritárias para vigilância definidas pelo MS ----
+    ### Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo MS ----
     output$plot7 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -2506,7 +2506,7 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
-    ### Tabela dos grupos de malformações prioritárias para vigilância definidos pelo MS ----
+    ### Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo MS ----
     output$tabela_malformacoes <- reactable::renderReactable({
       proporcao_geral <- function(numerador, denominador, fator) {
         reactable::JS(

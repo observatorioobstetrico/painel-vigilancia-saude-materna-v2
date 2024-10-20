@@ -4092,7 +4092,7 @@ mod_nivel_1_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
