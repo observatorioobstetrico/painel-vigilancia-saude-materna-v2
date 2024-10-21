@@ -740,7 +740,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:16px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -808,7 +808,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:16px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -921,7 +921,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 8%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
@@ -1005,7 +1005,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 470))
                 )
               ),
               column(
@@ -1017,7 +1017,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
+                    style = "height: 8%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
@@ -1098,7 +1098,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 470))
                 )
               )
             )
@@ -1839,7 +1839,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 360))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 350))
                 )
               ),
 
@@ -2960,7 +2960,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = taxa_mortalidade_fetal(),
         titulo = titulo_taxa_mortalidade_fetal(),
         tem_meta = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", TRUE, FALSE),
-        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta brasileira", ""),
+        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta ODS", ""),
         valor_de_referencia = ifelse(
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]] > 0,
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]],
@@ -3109,7 +3109,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso,
         titulo = titulo_caixa_neonat(),
         tem_meta = ifelse(input$faixa_peso == "mort_neonat", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta brasileira", ""),
+        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta ODS", ""),
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
         tipo = "taxa",
         invertido = FALSE,
@@ -3336,7 +3336,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso_perinatal_taxa_oms,
         titulo = titulo_caixa_taxa_perinatal_oms(),
         tem_meta = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta brasileira adaptada para a localidade", FALSE),
+        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta ODS adaptada para a localidade", FALSE),
         valor_de_referencia = ifelse(
           input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms",
           data7_referencia_perinatal()$taxa_perinatal_oms,
@@ -6021,7 +6021,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -6052,7 +6052,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -6535,7 +6535,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.8
@@ -6566,7 +6566,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7
@@ -7188,7 +7188,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", "Referência (média nacional)", "Referência (meta adaptada para a localidade)"),
+              name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", "Referência (média nacional)", "Referência (meta ODS adaptada para a localidade)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -7220,7 +7220,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_aux$class)})"),
+              name = glue::glue("Referência (meta ODS adaptada para {unique(data7_plot_aux$class)})"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -7228,7 +7228,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_comp_aux,
               type = "line",
-              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_comp_aux$class)})"),
+              name = glue::glue("Referência (meta ODS adaptada para {unique(data7_plot_comp_aux$class)})"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
