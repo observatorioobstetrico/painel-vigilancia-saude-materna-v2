@@ -3882,7 +3882,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_fetal2 <- reactive({
 
-      if (length(input$momento_obito_fetal_evitaveis2) == 2) {
+      if (length(input$momento_obito_fetal_evitaveis2) == 3) {
         data_plot_evitaveis_fetal2_aux <- data_filtrada_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") & #[eee]
@@ -4291,7 +4291,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
       }
 
-      data_plot_evitaveis_perinatal_comp_aux() |>
+      data_plot_evitaveis_perinatal_comp_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
@@ -4754,17 +4754,17 @@ mod_bloco_7_server <- function(id, filtros){
                                           "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(
-          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
         dplyr::mutate(
-          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))
         )
     })
 
@@ -5012,11 +5012,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Para a localidade selecionada ----------------------------------------
     data_plot_grupos_fetal <- reactive({
 
-      if (length(input$momento_obito_fetal_grupos) == 2) {
+      if (length(input$momento_obito_fetal_grupos) == 3) {
         data_plot_grupos_fetal_aux <- data_filtrada_aux() |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
       } else {
@@ -5211,11 +5211,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Para a comparação selecionada ----------------------------------------
     data_plot_grupos_fetal_comp <- reactive({
 
-      if (length(input$momento_obito_fetal_grupos) == 2) {
+      if (length(input$momento_obito_fetal_grupos) == 3) {
         data_plot_grupos_fetal_comp_aux <- data_filtrada_comp_aux() |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
       } else {
@@ -5351,7 +5351,7 @@ mod_bloco_7_server <- function(id, filtros){
         data_plot_grupos_perinatal_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
       } else {
@@ -5363,7 +5363,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
       }
 
-      data_plot_grupos_perinatal_comp_aux() |>
+      data_plot_grupos_perinatal_comp_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::contains("perinatal_grupos")))) |>
@@ -5423,7 +5423,7 @@ mod_bloco_7_server <- function(id, filtros){
             dplyr::group_by(ano) |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
 
