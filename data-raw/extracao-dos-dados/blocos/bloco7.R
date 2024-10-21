@@ -40,6 +40,9 @@ df_sim_dofet_consolidados <- fetch_datasus(
     ((GESTACAO != "1" & !is.na(GESTACAO) & GESTACAO != "9") | (SEMAGESTAC >= 22 & SEMAGESTAC != 99)) | (PESO >= 500)
   )
 
+## Ajustando o tempo máximo para download
+options(timeout=9999)
+
 ## Baixando os dados preliminares do SIM de 2023 e filtrando pelos óbitos fetais
 df_sim_dofet_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv") |>
   mutate(
@@ -114,6 +117,22 @@ df_bloco7_fetais_aux <- df_fetais_totais |>
       (OBITOPARTO == "3") ~ 1,
       !(OBITOPARTO == "3") ~ 0
     ),
+    # sem_info_parto_peso_menos_1500 = case_when(
+    #   (PESO < 1500 & is.na(OBITOPARTO)) ~ 1,
+    #   !(PESO < 1500 & is.na(OBITOPARTO)) ~ 0
+    # ),
+    # sem_info_parto_peso_1500_1999 = case_when(
+    #   (PESO >= 1500 & PESO < 2000 & is.na(OBITOPARTO)) ~ 1,
+    #   !(PESO >= 1500 & PESO < 2000 & is.na(OBITOPARTO)) ~ 0
+    # ),
+    # sem_info_parto_peso_2000_2499 = case_when(
+    #   (PESO >= 2000 & PESO < 2500 & is.na(OBITOPARTO)) ~ 1,
+    #   !(PESO >= 2000 & PESO < 2500 & is.na(OBITOPARTO)) ~ 0
+    # ),
+    # sem_info_parto_peso_mais_2500 = case_when(
+    #   (PESO >= 2500 & is.na(OBITOPARTO)) ~ 1,
+    #   !(PESO >=2500 & is.na(OBITOPARTO)) ~ 0
+    # ),
     antes_peso_menos_1500 = case_when(
       (PESO < 1500 & OBITOPARTO == "1") ~ 1,
       !(PESO < 1500 & OBITOPARTO == "1") ~ 0
@@ -255,6 +274,10 @@ df_bloco7_fetais_aux <- df_fetais_totais |>
     fetal_antes = sum(antes, na.rm = T),
     fetal_durante = sum(durante, na.rm = T),
     fetal_depois = sum(depois, na.rm = T),
+    # fetal_sem_info_parto_peso_menos_1500 = sum(sem_info_parto_peso_menos_1500, na.rm = T),
+    # fetal_sem_info_parto_peso_1500_1999 = sum(sem_info_parto_peso_1500_1999, na.rm = T),
+    # fetal_sem_info_parto_peso_2000_2499 = sum(sem_info_parto_peso_2000_2499, na.rm = T),
+    # fetal_sem_info_parto_peso_mais_2500 = sum(sem_info_parto_peso_mais_2500, na.rm = T),
     fetal_antes_peso_menos_1500 = sum(antes_peso_menos_1500, na.rm = T),
     fetal_antes_peso_1500_1999 = sum(antes_peso_1500_1999, na.rm = T),
     fetal_antes_peso_2000_2499 = sum(antes_peso_2000_2499, na.rm = T),
@@ -482,14 +505,58 @@ df_evitaveis_fetal_durante_v2 <- df_fetais_totais |>
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_evitaveis_fetal_durante_v2[is.na(df_evitaveis_fetal_durante_v2)] <- 0
 
-### Juntando os três data.frames da segunda versão de causas evitáveis
-df_bloco7_fetais_evitaveis_v2 <- full_join(
-  df_evitaveis_fetal_todos_v2,
-  full_join(df_evitaveis_fetal_antes_v2, df_evitaveis_fetal_durante_v2)
-)
+### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação [eee]
+df_evitaveis_fetal_sem_info_parto_v2 <- df_fetais_totais |>
+  clean_names() |>
+  filter(is.na(obitoparto)) |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao2 | causabas2 %in% imunoprevencao2 ~ "evitaveis_fetal_sem_info_parto_imunoprevencao2",
+      causabas %in% mulher_gestacao2 | causabas2 %in% mulher_gestacao2~ "evitaveis_fetal_sem_info_parto_mulher_gestacao2",
+      causabas %in% evitaveis_parto2 | causabas2 %in% evitaveis_parto2 ~ "evitaveis_fetal_sem_info_parto_parto2",
+      causabas %in% nao_aplica2 | causabas2 %in% nao_aplica2 ~ "evitaveis_fetal_sem_info_parto_nao_aplica2",
+      causabas %in% mal_definidas2 | causabas2 %in% mal_definidas2~ "evitaveis_fetal_sem_info_parto_mal_definidas2"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_sem_info_parto_outros2", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = c(grupo_cid, faixa_de_peso),
+    values_from = obitos,
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
+  # mutate(obitos_fetais_totais_sem_info_parto = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_fetal_sem_info_parto_v2[is.na(df_evitaveis_fetal_sem_info_parto_v2)] <- 0
+
+### Juntando os três data.frames da segunda versão de causas evitáveis [eee]
+df_bloco7_fetais_evitaveis_v2 <-
+  full_join(
+    full_join(df_evitaveis_fetal_todos_v2,
+      full_join(df_evitaveis_fetal_antes_v2, df_evitaveis_fetal_durante_v2)),
+                df_evitaveis_fetal_sem_info_parto_v2
+  )
 
 ### Removendo objetos já utilizados
-rm(df_evitaveis_fetal_todos_v2, df_evitaveis_fetal_antes_v2, df_evitaveis_fetal_durante_v2)
+rm(df_evitaveis_fetal_todos_v2, df_evitaveis_fetal_antes_v2, df_evitaveis_fetal_durante_v2, df_evitaveis_fetal_sem_info_parto_v2)
 gc()
 
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
@@ -661,14 +728,61 @@ df_fetais_grupos_durante <- df_fetais_totais |>
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_fetais_grupos_durante[is.na(df_fetais_grupos_durante)] <- 0
 
-### Juntando os três data.frames de grupos de causas
-df_bloco7_fetais_grupos <- full_join(
-  df_fetais_grupos_todos,
-  full_join(df_fetais_grupos_antes, df_fetais_grupos_durante)
+### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação do parto [eee]
+df_fetais_grupos_sem_info_parto <- df_fetais_totais |>
+  clean_names() |>
+  filter(obitoparto == "2") |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "fetal_grupos_sem_info_parto_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes  ~ "fetal_grupos_sem_info_parto_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "fetal_grupos_sem_info_parto_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "fetal_grupos_sem_info_parto_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_grupos_sem_info_parto_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_grupos_sem_info_parto_afeccoes_perinatal",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_grupos_sem_info_parto_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_grupos_sem_info_parto_mal_definida",
+      TRUE ~ "fetal_grupos_sem_info_parto_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = c(grupo_cid, faixa_de_peso),
+    values_from = obitos,
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_fetais_grupos_sem_info_parto[is.na(df_fetais_grupos_sem_info_parto)] <- 0
+
+### Juntando os três data.frames de grupos de causas [eee]
+df_bloco7_fetais_grupos <-
+  full_join(
+    full_join(df_fetais_grupos_todos,
+      full_join(df_fetais_grupos_antes, df_fetais_grupos_durante)),
+                df_fetais_grupos_sem_info_parto
 )
 
 ### Removendo objetos já utilizados
-rm(df_fetais_grupos_todos, df_fetais_grupos_antes, df_fetais_grupos_durante)
+rm(df_fetais_grupos_todos, df_fetais_grupos_antes, df_fetais_grupos_durante, df_fetais_grupos_sem_info_parto)
 gc()
 
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
@@ -676,9 +790,6 @@ df_bloco7_distribuicao_cids_fetal <- full_join(df_bloco7_distribuicao_cids_fetal
 
 ### Exportando os dados
 write.csv(df_bloco7_distribuicao_cids_fetal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv", row.names = FALSE)
-
-
-
 
 ################# INDICADORES DA ABA PERINATAL
 
