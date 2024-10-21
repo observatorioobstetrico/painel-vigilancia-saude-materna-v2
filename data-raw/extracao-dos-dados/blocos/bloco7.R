@@ -505,7 +505,7 @@ df_evitaveis_fetal_durante_v2 <- df_fetais_totais |>
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_evitaveis_fetal_durante_v2[is.na(df_evitaveis_fetal_durante_v2)] <- 0
 
-### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação [eee]
+### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação
 df_evitaveis_fetal_sem_info_parto_v2 <- df_fetais_totais |>
   clean_names() |>
   filter(is.na(obitoparto)) |>
@@ -728,7 +728,7 @@ df_fetais_grupos_durante <- df_fetais_totais |>
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_fetais_grupos_durante[is.na(df_fetais_grupos_durante)] <- 0
 
-### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação do parto [eee]
+### Criando um dataframe com o total de óbitos em cada grupo de causas, considerando apenas óbitos sem informação do parto
 df_fetais_grupos_sem_info_parto <- df_fetais_totais |>
   clean_names() |>
   filter(obitoparto == "2") |>
@@ -2418,6 +2418,15 @@ df_sim_perinat_durante <- df_fetais_totais |>
     (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & obitoparto == 2
   )
 
+df_sim_perinat_sem_informacao <- df_fetais_totais |>
+  clean_names() |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+  ) |>
+  filter(
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & (is.na(obitoparto) | obitoparto == 9)
+  )
+
 ## Criando um data.frame com os óbitos fetais totais
 df_perinat_totais <- df_perinat |>
   select(codmunres, ano) |>
@@ -2445,7 +2454,7 @@ df_perinat_totais_antes <- df_sim_perinat_antes |>
 df_perinat_totais_antes[is.na(df_perinat_totais_antes)] <- 0
 
 ## Criando um data.frame com os óbitos fetais totais durante o parto
-df_perinat_totais_durante <- df_perinat |>
+df_perinat_totais_durante <- df_sim_perinat_durante |>
   select(codmunres, ano) |>
   mutate(obitos_perinat_totais_durante = 1) |>
   group_by(across(!obitos_perinat_totais_durante)) |>
@@ -2456,6 +2465,19 @@ df_perinat_totais_durante <- df_perinat |>
 
 ## Substituindo todos os NAs por 0 (gerados após o right join)
 df_perinat_totais_durante[is.na(df_perinat_totais_durante)] <- 0
+
+## Criando um data.frame com os óbitos fetais totais sem informação
+df_perinat_totais_sem_informacao <- df_sim_perinat_sem_informacao |>
+  select(codmunres, ano) |>
+  mutate(obitos_perinat_totais_sem_informacao = 1) |>
+  group_by(across(!obitos_perinat_totais_sem_informacao)) |>
+  summarise(obitos_perinat_totais_sem_informacao = sum(obitos_perinat_totais_sem_informacao)) |>
+  ungroup() |>
+  right_join(df_aux_municipios) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_perinat_totais_sem_informacao[is.na(df_perinat_totais_sem_informacao)] <- 0
 
 # Causas evitáveis --------------------------------------------------------
 ## Criando um vetor com as cids
@@ -2644,6 +2666,50 @@ df_evitaveis_perinat_durante[is.na(df_evitaveis_perinat_durante)] <- 0
 ## Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_evitaveis_perinat_durante)
 
+df_evitaveis_perinat_sem_informacao <- df_sim_perinat_sem_informacao |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% imunoprevencao | causabas2 %in% imunoprevencao ~ "evitaveis_fetal_28sem_sem_info_imunoprevencao",
+      causabas %in% mulher_gestacao | causabas2 %in% mulher_gestacao~ "evitaveis_fetal_28sem_sem_info_mulher_gestacao",
+      causabas %in% evitaveis_parto | causabas2 %in% evitaveis_parto ~ "evitaveis_fetal_28sem_sem_info_parto",
+      causabas %in% recem_nascido | causabas2 %in% recem_nascido ~ "evitaveis_fetal_28sem_sem_info_recem_nascido",
+      causabas %in% tratamento | causabas2 %in% tratamento ~ "evitaveis_fetal_28sem_sem_info_tratamento",
+      causabas %in% saude | causabas2 %in% saude~ "evitaveis_fetal_28sem_sem_info_saude",
+      causabas %in% mal_definidas | causabas2 %in% mal_definidas~ "evitaveis_fetal_28sem_sem_info_mal_definidas"
+    ),
+    grupo_cid = ifelse(is.na(grupo_cid), "evitaveis_fetal_28sem_sem_info_outros", grupo_cid)
+  ) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = c(grupo_cid, faixa_de_peso),
+    values_from = obitos,
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_perinat_totais_sem_informacao) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_evitaveis_perinat_sem_informacao[is.na(df_evitaveis_perinat_sem_informacao)] <- 0
+
+## Juntando com o restante da base de causas evitáveis e grupos de causa
+df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_evitaveis_perinat_sem_informacao)
+
 df_perinat_grupos <- df_perinat |>
   mutate(
     causabas = causabas,
@@ -2782,6 +2848,53 @@ df_perinat_grupos_durante[is.na(df_perinat_grupos_durante)] <- 0
 
 ## Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_perinat_grupos_durante)
+
+
+df_perinat_grupos_sem_informacao <- df_sim_perinat_sem_informacao |>
+  mutate(
+    causabas = causabas,
+    causabas2 = substr(causabas, 1 , 3),
+    faixa_de_peso = case_when(
+      is.na(peso) ~ "sem_informacao",
+      peso < 1500 ~ "menor_1500",
+      peso >= 1500 & peso < 2500 ~ "1500_a_2500",
+      peso >= 2500 ~ "2500_mais"
+    )
+  ) |>
+  mutate(
+    grupo_cid = case_when(
+      causabas %in% grupos_prematuridade | causabas2 %in% grupos_prematuridade ~ "fetal_28sem_grupos_sem_info_prematuridade",
+      causabas %in% grupos_infeccoes | causabas2 %in% grupos_infeccoes  ~ "fetal_28sem_grupos_sem_info_infeccoes",
+      causabas %in% grupos_asfixia | causabas2 %in% grupos_asfixia ~ "fetal_28sem_grupos_sem_info_asfixia",
+      causabas %in% grupos_respiratorias | causabas2 %in% grupos_respiratorias ~ "fetal_28sem_grupos_sem_info_respiratorias",
+      causabas %in% grupos_gravidez | causabas2 %in% grupos_gravidez ~ "fetal_28sem_grupos_sem_info_gravidez",
+      #causabas %in% grupos_cardiorrespiratoria ~ "fetal_grupos_cardiorrespiratoria",
+      causabas %in% grupos_afeccoes_perinatal | causabas2 %in% grupos_afeccoes_perinatal~ "fetal_28sem_grupos_sem_info_afeccoes_perinatal",
+      causabas %in% grupos_ma_formacao | causabas2 %in% grupos_ma_formacao~ "fetal_28sem_grupos_sem_info_ma_formacao",
+      causabas %in% grupos_mal_definida | causabas2 %in% grupos_mal_definida~ "fetal_28sem_grupos_sem_info_mal_definida",
+      TRUE ~ "fetal_28sem_grupos_sem_info_outros"
+    )
+  ) |>
+  select(codmunres, ano, grupo_cid, faixa_de_peso) |>
+  mutate(obitos = 1) |>
+  group_by(across(!obitos)) |>
+  summarise(obitos = sum(obitos)) |>
+  ungroup() |>
+  pivot_wider(
+    names_from = c(grupo_cid, faixa_de_peso),
+    values_from = obitos,
+    values_fill = 0,
+    names_sort = TRUE
+  ) |>
+  right_join(df_aux_municipios) |>
+  right_join(df_perinat_totais_sem_informacao) |>
+  arrange(codmunres)
+
+## Substituindo todos os NAs por 0 (gerados após o right join)
+df_perinat_grupos_sem_informacao[is.na(df_perinat_grupos_sem_informacao)] <- 0
+
+## Juntando com o restante da base de causas evitáveis e grupos de causa
+df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_perinat_grupos_sem_informacao)
 
 
 df_bloco7_distribuicao_cids_perinatal1 <- full_join(
@@ -3023,6 +3136,75 @@ df_bloco7_distribuicao_cids_perinatal1 <- full_join(
     perinatal_grupos_durante_outros_1500_a_2500 = fetal_28sem_grupos_durante_outros_1500_a_2500,
     perinatal_grupos_durante_outros_2500_mais = fetal_28sem_grupos_durante_outros_2500_mais,
     perinatal_grupos_durante_outros_sem_informacao = fetal_28sem_grupos_durante_outros_sem_informacao,
+
+    # Causas evitaveis por faixa de peso sem informação de momento do óbito
+
+    evitaveis_perinatal_sem_info_mal_definidas_menor_1500 = evitaveis_fetal_28sem_sem_info_mal_definidas_menor_1500,
+    evitaveis_perinatal_sem_info_mal_definidas_1500_a_2500 = evitaveis_fetal_28sem_sem_info_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_sem_info_mal_definidas_2500_mais = evitaveis_fetal_28sem_sem_info_mal_definidas_2500_mais,
+    evitaveis_perinatal_sem_info_mal_definidas_sem_informacao = evitaveis_fetal_28sem_sem_info_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_sem_info_mulher_gestacao_menor_1500 = evitaveis_fetal_28sem_sem_info_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_sem_info_mulher_gestacao_1500_a_2500 = evitaveis_fetal_28sem_sem_info_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_sem_info_mulher_gestacao_2500_mais = evitaveis_fetal_28sem_sem_info_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_sem_info_mulher_gestacao_sem_informacao = evitaveis_fetal_28sem_sem_info_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_sem_info_parto_menor_1500 = evitaveis_fetal_28sem_sem_info_parto_menor_1500,
+    evitaveis_perinatal_sem_info_parto_1500_a_2500 = evitaveis_fetal_28sem_sem_info_parto_1500_a_2500,
+    evitaveis_perinatal_sem_info_parto_2500_mais = evitaveis_fetal_28sem_sem_info_parto_2500_mais,
+    evitaveis_perinatal_sem_info_parto_sem_informacao = evitaveis_fetal_28sem_sem_info_parto_sem_informacao,
+
+    evitaveis_perinatal_sem_info_recem_nascido_menor_1500 = evitaveis_fetal_28sem_sem_info_recem_nascido_menor_1500,
+    evitaveis_perinatal_sem_info_recem_nascido_1500_a_2500 = evitaveis_fetal_28sem_sem_info_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_sem_info_recem_nascido_2500_mais = evitaveis_fetal_28sem_sem_info_recem_nascido_2500_mais,
+    evitaveis_perinatal_sem_info_recem_nascido_sem_informacao = evitaveis_fetal_28sem_sem_info_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_sem_info_tratamento_menor_1500 = evitaveis_fetal_28sem_sem_info_tratamento_menor_1500,
+    evitaveis_perinatal_sem_info_tratamento_1500_a_2500 = evitaveis_fetal_28sem_sem_info_tratamento_1500_a_2500,
+    evitaveis_perinatal_sem_info_tratamento_2500_mais = evitaveis_fetal_28sem_sem_info_tratamento_2500_mais,
+    evitaveis_perinatal_sem_info_tratamento_sem_informacao = evitaveis_fetal_28sem_sem_info_tratamento_sem_informacao,
+
+    evitaveis_perinatal_sem_info_outros_menor_1500 = evitaveis_fetal_28sem_sem_info_outros_menor_1500,
+    evitaveis_perinatal_sem_info_outros_1500_a_2500 = evitaveis_fetal_28sem_sem_info_outros_1500_a_2500,
+    evitaveis_perinatal_sem_info_outros_2500_mais = evitaveis_fetal_28sem_sem_info_outros_2500_mais,
+    evitaveis_perinatal_sem_info_outros_sem_informacao =evitaveis_fetal_28sem_sem_info_outros_sem_informacao,
+
+    # Grupos de causas por faixa de peso sem informação do momento do óbito
+
+    perinatal_grupos_sem_info_afeccoes_perinatal_menor_1500 = fetal_28sem_grupos_sem_info_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_sem_info_afeccoes_perinatal_1500_a_2500 = fetal_28sem_grupos_sem_info_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_sem_info_afeccoes_perinatal_2500_mais = fetal_28sem_grupos_sem_info_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_sem_info_afeccoes_perinatal_sem_informacao = fetal_28sem_grupos_sem_info_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_sem_info_asfixia_menor_1500 = fetal_28sem_grupos_sem_info_asfixia_menor_1500,
+    perinatal_grupos_sem_info_asfixia_1500_a_2500 = fetal_28sem_grupos_sem_info_asfixia_1500_a_2500,
+    perinatal_grupos_sem_info_asfixia_2500_mais = fetal_28sem_grupos_sem_info_asfixia_2500_mais,
+    perinatal_grupos_sem_info_asfixia_sem_informacao = fetal_28sem_grupos_sem_info_asfixia_sem_informacao,
+
+    perinatal_grupos_sem_info_gravidez_menor_1500 = fetal_28sem_grupos_sem_info_gravidez_menor_1500,
+    perinatal_grupos_sem_info_gravidez_1500_a_2500 = fetal_28sem_grupos_sem_info_gravidez_1500_a_2500,
+    perinatal_grupos_sem_info_gravidez_2500_mais = fetal_28sem_grupos_sem_info_gravidez_2500_mais,
+    perinatal_grupos_sem_info_gravidez_sem_informacao = fetal_28sem_grupos_sem_info_gravidez_sem_informacao,
+
+    perinatal_grupos_sem_info_infeccoes_menor_1500 = fetal_28sem_grupos_sem_info_infeccoes_menor_1500,
+    perinatal_grupos_sem_info_infeccoes_1500_a_2500 = fetal_28sem_grupos_sem_info_infeccoes_1500_a_2500,
+    perinatal_grupos_sem_info_infeccoes_2500_mais = fetal_28sem_grupos_sem_info_infeccoes_2500_mais,
+    perinatal_grupos_sem_info_infeccoes_sem_informacao = fetal_28sem_grupos_sem_info_infeccoes_sem_informacao,
+
+    perinatal_grupos_sem_info_ma_formacao_menor_1500 = fetal_28sem_grupos_sem_info_ma_formacao_menor_1500,
+    perinatal_grupos_sem_info_ma_formacao_1500_a_2500 = fetal_28sem_grupos_sem_info_ma_formacao_1500_a_2500,
+    perinatal_grupos_sem_info_ma_formacao_2500_mais = fetal_28sem_grupos_sem_info_ma_formacao_2500_mais,
+    perinatal_grupos_sem_info_ma_formacao_sem_informacao = fetal_28sem_grupos_sem_info_ma_formacao_sem_informacao,
+
+    perinatal_grupos_sem_info_prematuridade_menor_1500 = fetal_28sem_grupos_sem_info_prematuridade_menor_1500,
+    perinatal_grupos_sem_info_prematuridade_1500_a_2500 = fetal_28sem_grupos_sem_info_prematuridade_1500_a_2500,
+    perinatal_grupos_sem_info_prematuridade_2500_mais = fetal_28sem_grupos_sem_info_prematuridade_2500_mais,
+    perinatal_grupos_sem_info_prematuridade_sem_informacao = fetal_28sem_grupos_sem_info_prematuridade_sem_informacao,
+
+    perinatal_grupos_sem_info_outros_menor_1500 = fetal_28sem_grupos_sem_info_outros_menor_1500,
+    perinatal_grupos_sem_info_outros_1500_a_2500 = fetal_28sem_grupos_sem_info_outros_1500_a_2500,
+    perinatal_grupos_sem_info_outros_2500_mais = fetal_28sem_grupos_sem_info_outros_2500_mais,
+    perinatal_grupos_sem_info_outros_sem_informacao = fetal_28sem_grupos_sem_info_outros_sem_informacao,
 
     # Causas evitaveis por faixa de peso no dia 0
 
@@ -3425,6 +3607,71 @@ df_bloco7_distribuicao_cids_perinatal1 <- full_join(
     perinatal_grupos_durante_outros_1500_a_2500,
     perinatal_grupos_durante_outros_2500_mais,
     perinatal_grupos_durante_outros_sem_informacao,
+
+    evitaveis_perinatal_sem_info_mal_definidas_menor_1500,
+    evitaveis_perinatal_sem_info_mal_definidas_1500_a_2500,
+    evitaveis_perinatal_sem_info_mal_definidas_2500_mais,
+    evitaveis_perinatal_sem_info_mal_definidas_sem_informacao,
+
+    evitaveis_perinatal_sem_info_mulher_gestacao_menor_1500,
+    evitaveis_perinatal_sem_info_mulher_gestacao_1500_a_2500,
+    evitaveis_perinatal_sem_info_mulher_gestacao_2500_mais,
+    evitaveis_perinatal_sem_info_mulher_gestacao_sem_informacao,
+
+    evitaveis_perinatal_sem_info_parto_menor_1500,
+    evitaveis_perinatal_sem_info_parto_1500_a_2500,
+    evitaveis_perinatal_sem_info_parto_2500_mais,
+    evitaveis_perinatal_sem_info_parto_sem_informacao,
+
+    evitaveis_perinatal_sem_info_recem_nascido_menor_1500,
+    evitaveis_perinatal_sem_info_recem_nascido_1500_a_2500,
+    evitaveis_perinatal_sem_info_recem_nascido_2500_mais,
+    evitaveis_perinatal_sem_info_recem_nascido_sem_informacao,
+
+    evitaveis_perinatal_sem_info_tratamento_menor_1500,
+    evitaveis_perinatal_sem_info_tratamento_1500_a_2500,
+    evitaveis_perinatal_sem_info_tratamento_2500_mais,
+    evitaveis_perinatal_sem_info_tratamento_sem_informacao,
+
+    evitaveis_perinatal_sem_info_outros_menor_1500,
+    evitaveis_perinatal_sem_info_outros_1500_a_2500,
+    evitaveis_perinatal_sem_info_outros_2500_mais,
+    evitaveis_perinatal_sem_info_outros_sem_informacao,
+
+    perinatal_grupos_sem_info_afeccoes_perinatal_menor_1500,
+    perinatal_grupos_sem_info_afeccoes_perinatal_1500_a_2500,
+    perinatal_grupos_sem_info_afeccoes_perinatal_2500_mais,
+    perinatal_grupos_sem_info_afeccoes_perinatal_sem_informacao,
+
+    perinatal_grupos_sem_info_asfixia_menor_1500,
+    perinatal_grupos_sem_info_asfixia_1500_a_2500,
+    perinatal_grupos_sem_info_asfixia_2500_mais,
+    perinatal_grupos_sem_info_asfixia_sem_informacao,
+
+    perinatal_grupos_sem_info_gravidez_menor_1500,
+    perinatal_grupos_sem_info_gravidez_1500_a_2500,
+    perinatal_grupos_sem_info_gravidez_2500_mais,
+    perinatal_grupos_sem_info_gravidez_sem_informacao,
+
+    perinatal_grupos_sem_info_infeccoes_menor_1500,
+    perinatal_grupos_sem_info_infeccoes_1500_a_2500,
+    perinatal_grupos_sem_info_infeccoes_2500_mais,
+    perinatal_grupos_sem_info_infeccoes_sem_informacao,
+
+    perinatal_grupos_sem_info_ma_formacao_menor_1500,
+    perinatal_grupos_sem_info_ma_formacao_1500_a_2500,
+    perinatal_grupos_sem_info_ma_formacao_2500_mais,
+    perinatal_grupos_sem_info_ma_formacao_sem_informacao,
+
+    perinatal_grupos_sem_info_prematuridade_menor_1500,
+    perinatal_grupos_sem_info_prematuridade_1500_a_2500,
+    perinatal_grupos_sem_info_prematuridade_2500_mais,
+    perinatal_grupos_sem_info_prematuridade_sem_informacao,
+
+    perinatal_grupos_sem_info_outros_menor_1500,
+    perinatal_grupos_sem_info_outros_1500_a_2500,
+    perinatal_grupos_sem_info_outros_2500_mais,
+    perinatal_grupos_sem_info_outros_sem_informacao,
 
     evitaveis_perinatal_0_dias_imunoprevencao_menor_1500,
     #evitaveis_perinatal_0_dias_imunoprevencao_1500_a_2500,

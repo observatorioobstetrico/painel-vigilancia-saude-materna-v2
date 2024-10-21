@@ -1015,11 +1015,13 @@ mod_bloco_7_ui <- function(id) {
                             "Antes do parto" = "perinatal_grupos_antes",
                             "Durante o parto" = "perinatal_grupos_durante",
                             "Dia 0 de vida" = "perinatal_grupos_0_dias",
-                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
+                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias",
+                            "Sem informação" = "perinatal_grupos_sem_info"
                           ),
                           selected = c(
                             "perinatal_grupos_antes", "perinatal_grupos_durante",
-                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"
+                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias",
+                            "perinatal_grupos_sem_info"
                           )
                         )
                       )
@@ -1108,11 +1110,13 @@ mod_bloco_7_ui <- function(id) {
                             "Antes do parto" = "evitaveis_perinatal_antes",
                             "Durante o parto" = "evitaveis_perinatal_durante",
                             "Dia 0 de vida" = "evitaveis_perinatal_0_dias",
-                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias"
+                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias",
+                            "Sem informação" = "evitaveis_perinatal_sem_info"
                           ),
                           selected = c(
                             "evitaveis_perinatal_antes", "evitaveis_perinatal_durante",
-                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias"
+                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias",
+                            "evitaveis_perinatal_sem_info"
                           )
                         )
                       )
@@ -1400,7 +1404,7 @@ mod_bloco_7_ui <- function(id) {
                         align = 'left',
                         class = 'multicol',
                         checkboxGroupInput(
-                          inputId = ns("momento_obito_dist_peso_neonat"),
+                          inputId = ns("mom ento_obito_dist_peso_neonat"),
                           label    = NULL,
                           choices = c(
                             "Dia 0 de vida" = "dist_peso_neonat_dia_0",
@@ -4003,11 +4007,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal <- reactive({
 
-      if (length(input$momento_obito_perinatal) == 4) {
+      if (length(input$momento_obito_perinatal) == 5) {
         data_plot_evitaveis_perinatal_aux <- data_filtrada_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -4271,11 +4275,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal_comp <- reactive({
 
-      if (length(input$momento_obito_perinatal) == 4) {
+      if (length(input$momento_obito_perinatal) == 5) {
         data_plot_evitaveis_perinatal_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -4505,7 +4509,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal_referencia <- reactive({
 
-      if (length(input$momento_obito_perinatal_evitaveis) == 4) {
+      if (length(input$momento_obito_perinatal_evitaveis) == 5) {
         data_plot_evitaveis_perinatal_referencia_aux <- bloco7_distribuicao_cids |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -4513,7 +4517,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -5140,11 +5144,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_aux <- data_filtrada_aux() |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
       } else {
@@ -5343,7 +5347,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal_comp <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
@@ -5595,7 +5599,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal_referencia <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_referencia_aux <-
           bloco7_distribuicao_cids |>
           dplyr::filter(
@@ -5604,7 +5608,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
 
