@@ -4292,7 +4292,8 @@ mod_bloco_7_server <- function(id, filtros){
       }
 
       data_plot_evitaveis_perinatal_comp_aux |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
+        # dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
@@ -5370,6 +5371,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate_at(dplyr::vars(dplyr::contains("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("perinatal_grupos"),
+          names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
