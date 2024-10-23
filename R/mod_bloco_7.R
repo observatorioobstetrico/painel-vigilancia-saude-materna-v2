@@ -399,7 +399,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           #"Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -956,7 +956,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -1493,7 +1493,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -1891,7 +1891,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Má formação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias do recém-nascido" = "afeccoes_respiratorias",
                           "Fatores maternos relacionados à gravidez" = "fatores_maternos",
                           "Afecções originais no período perinatal" = "afeccoes_perinatal",
@@ -3642,7 +3642,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3670,7 +3670,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                     "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -3696,7 +3696,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3725,7 +3725,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                     "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -3755,7 +3755,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3775,7 +3775,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                    "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -4796,7 +4796,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4835,7 +4835,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4879,7 +4879,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4984,7 +4984,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5046,7 +5046,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5070,7 +5070,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5112,7 +5112,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5136,7 +5136,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5178,7 +5178,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5202,7 +5202,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5245,7 +5245,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5271,7 +5271,7 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
-                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                       "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                       "Afecções originais no período perinatal", "Mal definidas",
                                                       "Grupos não selecionados", "Demais causas")),
@@ -5313,7 +5313,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5339,7 +5339,7 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
-                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                       "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                       "Afecções originais no período perinatal", "Mal definidas",
                                                       "Grupos não selecionados", "Demais causas")),
@@ -5381,7 +5381,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5406,7 +5406,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5461,7 +5461,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5477,7 +5477,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5531,7 +5531,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5547,7 +5547,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5646,7 +5646,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5662,7 +5662,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
