@@ -455,34 +455,15 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_fetal_grupos"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "fetal_grupos_antes", #[eee]
-                            "Sem informação" = "fetal_grupos_sem_info_parto",
-                            "Durante o parto" = "fetal_grupos_durante"
+                            "Antes do parto" = "fetal_grupos_antes",
+                            "Durante o parto" = "fetal_grupos_durante"#,
                           ),
-                          selected = c("fetal_grupos_antes", "fetal_grupos_sem_info_parto", "fetal_grupos_durante")
+                          selected = c(
+                            "fetal_grupos_antes", "fetal_grupos_durante"
+                          )
                         )
                       )
-                    ),
-                    # column(
-                    #   width = 6,
-                    #   shinyWidgets::pickerInput(
-                    #     inputId = ns("momento_obito_fetal_grupos"),
-                    #     label = "Selecione, aqui, os momentos de óbito considerados:",
-                    #     options = list(placeholder = "Selecione, aqui, os momentos de óbito considerados",
-                    #                    `actions-box` = TRUE,
-                    #                    `deselect-all-text` = "Desselecionar todas",
-                    #                    `select-all-text` = "Selecionar todas",
-                    #                    `none-selected-text` = "Nenhuma opção selecionada"),
-                    #     choices = c(
-                    #       "Antes do parto" = "fetal_grupos_antes", #[eee]
-                    #       "Sem informação" = "fetal_grupos_sem_info_parto",
-                    #       "Durante o parto" = "fetal_grupos_durante"
-                    #     ),
-                    #     selected = c("fetal_grupos_antes", "fetal_grupos_sem_info_parto", "fetal_grupos_durante"),
-                    #     multiple = TRUE,
-                    #     width = "98%"
-                    #   )
-                    # )
+                    )
                   ),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 490))
                 )
@@ -627,12 +608,11 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_fetal_evitaveis2"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes", #[eee]
-                            "Sem informação" = "evitaveis_fetal_sem_info_parto",
-                            "Durante o parto" = "evitaveis_fetal_durante"
+                            "Antes do parto" = "evitaveis_fetal_antes",
+                            "Durante o parto" = "evitaveis_fetal_durante"#,
                           ),
                           selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_sem_info_parto", "evitaveis_fetal_durante"
+                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
                           )
                         )
                       )
@@ -3881,8 +3861,8 @@ mod_bloco_7_server <- function(id, filtros){
       if (length(input$momento_obito_fetal_evitaveis2) == 2) {
         data_plot_evitaveis_fetal2_aux <- data_filtrada_aux() |>
           dplyr::select(
-            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") & #[eee]
-              !dplyr::matches("antes|durante|sem_info_parto") &
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
+              !dplyr::matches("antes|durante") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
@@ -4148,14 +4128,14 @@ mod_bloco_7_server <- function(id, filtros){
         data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              !dplyr::matches("antes|durante|sem_info_parto") &
+              !dplyr::matches("antes|durante") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
         data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              dplyr::contains(input$momento_obito_fetal_evitaveis2) &
+              dplyr::contains(input$momento_obito_fetal_evitaveis) &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       }
@@ -4380,7 +4360,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_fetal_referencia2 <- reactive({
 
-      if (length(input$momento_obito_fetal_evitaveis2) == 2) {
+      if (length(input$momento_obito_fetal_evitaveis) == 2) {
         data_plot_evitaveis_fetal2_referencia_aux <- bloco7_distribuicao_cids |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -4388,7 +4368,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              !dplyr::matches("antes|durante|sem_info_parto") &
+              !dplyr::matches("antes|durante") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
