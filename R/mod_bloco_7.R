@@ -399,7 +399,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           #"Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -455,17 +455,36 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_fetal_grupos"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "fetal_grupos_antes",
-                            "Durante o parto" = "fetal_grupos_durante"#,
+                            "Antes do parto" = "fetal_grupos_antes", #[eee]
+                            "Sem informação" = "fetal_grupos_sem_info_parto",
+                            "Durante o parto" = "fetal_grupos_durante"
                           ),
-                          selected = c(
-                            "fetal_grupos_antes", "fetal_grupos_durante"
-                          )
+                          selected = c("fetal_grupos_antes", "fetal_grupos_sem_info_parto", "fetal_grupos_durante")
                         )
                       )
-                    )
+                    ),
+                    # column(
+                    #   width = 6,
+                    #   shinyWidgets::pickerInput(
+                    #     inputId = ns("momento_obito_fetal_grupos"),
+                    #     label = "Selecione, aqui, os momentos de óbito considerados:",
+                    #     options = list(placeholder = "Selecione, aqui, os momentos de óbito considerados",
+                    #                    `actions-box` = TRUE,
+                    #                    `deselect-all-text` = "Desselecionar todas",
+                    #                    `select-all-text` = "Selecionar todas",
+                    #                    `none-selected-text` = "Nenhuma opção selecionada"),
+                    #     choices = c(
+                    #       "Antes do parto" = "fetal_grupos_antes", #[eee]
+                    #       "Sem informação" = "fetal_grupos_sem_info_parto",
+                    #       "Durante o parto" = "fetal_grupos_durante"
+                    #     ),
+                    #     selected = c("fetal_grupos_antes", "fetal_grupos_sem_info_parto", "fetal_grupos_durante"),
+                    #     multiple = TRUE,
+                    #     width = "98%"
+                    #   )
+                    # )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 470))
                 )
               ),
               # column(
@@ -608,17 +627,18 @@ mod_bloco_7_ui <- function(id) {
                           inputId = ns("momento_obito_fetal_evitaveis2"),
                           label    = NULL,
                           choices = c(
-                            "Antes do parto" = "evitaveis_fetal_antes",
-                            "Durante o parto" = "evitaveis_fetal_durante"#,
+                            "Antes do parto" = "evitaveis_fetal_antes", #[eee]
+                            "Sem informação" = "evitaveis_fetal_sem_info_parto",
+                            "Durante o parto" = "evitaveis_fetal_durante"
                           ),
                           selected = c(
-                            "evitaveis_fetal_antes", "evitaveis_fetal_durante"
+                            "evitaveis_fetal_antes", "evitaveis_fetal_sem_info_parto", "evitaveis_fetal_durante"
                           )
                         )
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 470))
                  )
               )
             )
@@ -740,7 +760,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:16px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -808,7 +828,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:16px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
+                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -921,7 +941,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 8%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Rede Interagencial de Informações para Saúde (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
@@ -936,7 +956,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -995,17 +1015,19 @@ mod_bloco_7_ui <- function(id) {
                             "Antes do parto" = "perinatal_grupos_antes",
                             "Durante o parto" = "perinatal_grupos_durante",
                             "Dia 0 de vida" = "perinatal_grupos_0_dias",
-                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias"
+                            "De 1 a 6 dias de vida" = "perinatal_grupos_1_6_dias",
+                            "Sem informação" = "perinatal_grupos_sem_info"
                           ),
                           selected = c(
                             "perinatal_grupos_antes", "perinatal_grupos_durante",
-                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias"
+                            "perinatal_grupos_0_dias", "perinatal_grupos_1_6_dias",
+                            "perinatal_grupos_sem_info"
                           )
                         )
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 460))
                 )
               ),
               column(
@@ -1017,7 +1039,7 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 8%; display: flex; align-items: center;",
+                    style = "height: 10%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
@@ -1088,17 +1110,19 @@ mod_bloco_7_ui <- function(id) {
                             "Antes do parto" = "evitaveis_perinatal_antes",
                             "Durante o parto" = "evitaveis_perinatal_durante",
                             "Dia 0 de vida" = "evitaveis_perinatal_0_dias",
-                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias"
+                            "De 1 a 6 dias de vida" = "evitaveis_perinatal_1_6_dias",
+                            "Sem informação" = "evitaveis_perinatal_sem_info"
                           ),
                           selected = c(
                             "evitaveis_perinatal_antes", "evitaveis_perinatal_durante",
-                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias"
+                            "evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias",
+                            "evitaveis_perinatal_sem_info"
                           )
                         )
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 460))
                 )
               )
             )
@@ -1380,7 +1404,7 @@ mod_bloco_7_ui <- function(id) {
                         align = 'left',
                         class = 'multicol',
                         checkboxGroupInput(
-                          inputId = ns("momento_obito_dist_peso_neonat"),
+                          inputId = ns("mom ento_obito_dist_peso_neonat"),
                           label    = NULL,
                           choices = c(
                             "Dia 0 de vida" = "dist_peso_neonat_dia_0",
@@ -1469,7 +1493,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Malformação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias dos recém nascidos" = "respiratorias",
                           "Fatores maternos relacionados à gravidez " = "gravidez",
                           "Afecções originais no período perinatal" = "afeccoes",
@@ -1839,7 +1863,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 350))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 360))
                 )
               ),
 
@@ -1867,7 +1891,7 @@ mod_bloco_7_ui <- function(id) {
                           "Prematuridade" = "prematuridade",
                           "Infecções" = "infeccoes",
                           "Asfixia/Hipóxia" = "asfixia",
-                          "Má formação congênita" = "ma_formacao",
+                          "Anomalia congênita" = "ma_formacao",
                           "Afecções respiratórias do recém-nascido" = "afeccoes_respiratorias",
                           "Fatores maternos relacionados à gravidez" = "fatores_maternos",
                           "Afecções originais no período perinatal" = "afeccoes_perinatal",
@@ -2960,7 +2984,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = taxa_mortalidade_fetal(),
         titulo = titulo_taxa_mortalidade_fetal(),
         tem_meta = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", TRUE, FALSE),
-        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta ODS", ""),
+        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta brasileira", ""),
         valor_de_referencia = ifelse(
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]] > 0,
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]],
@@ -3109,7 +3133,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso,
         titulo = titulo_caixa_neonat(),
         tem_meta = ifelse(input$faixa_peso == "mort_neonat", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta ODS", ""),
+        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta brasileira", ""),
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
         tipo = "taxa",
         invertido = FALSE,
@@ -3336,7 +3360,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso_perinatal_taxa_oms,
         titulo = titulo_caixa_taxa_perinatal_oms(),
         tem_meta = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta ODS adaptada para a localidade", FALSE),
+        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta brasileira adaptada para a localidade", FALSE),
         valor_de_referencia = ifelse(
           input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms",
           data7_referencia_perinatal()$taxa_perinatal_oms,
@@ -3618,7 +3642,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3646,7 +3670,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                     "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -3672,7 +3696,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3701,7 +3725,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                     "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -3731,7 +3755,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -3751,7 +3775,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Má formação congênita","Afecções respiratórias do recém-nascido",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
                                                                    "Fatores maternos relacionados à gravidez","Afecções originais no período perinatal",
                                                                    "Icterícia neonatal",  "Transtornos endócrinos e metabólicos transitórios específicos do feto e do recém-nascido",
                                                                    "Problemas de alimentação do recém-nascido", "Transtornos cardíacos originados no período perinatal", "Mal definidas",
@@ -3858,11 +3882,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_fetal2 <- reactive({
 
-      if (length(input$momento_obito_fetal_evitaveis2) == 2) {
+      if (length(input$momento_obito_fetal_evitaveis2) == 3) {
         data_plot_evitaveis_fetal2_aux <- data_filtrada_aux() |>
           dplyr::select(
-            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              !dplyr::matches("antes|durante") &
+            dplyr::contains("evitaveis_fetal") & dplyr::contains("2") & #[eee]
+              !dplyr::matches("antes|durante|sem_info_parto") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
@@ -3983,11 +4007,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal <- reactive({
 
-      if (length(input$momento_obito_perinatal) == 4) {
+      if (length(input$momento_obito_perinatal) == 5) {
         data_plot_evitaveis_perinatal_aux <- data_filtrada_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -4128,14 +4152,14 @@ mod_bloco_7_server <- function(id, filtros){
         data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              !dplyr::matches("antes|durante") &
+              !dplyr::matches("antes|durante|sem_info_parto") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
         data_plot_evitaveis_fetal2_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              dplyr::contains(input$momento_obito_fetal_evitaveis) &
+              dplyr::contains(input$momento_obito_fetal_evitaveis2) &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       }
@@ -4251,11 +4275,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal_comp <- reactive({
 
-      if (length(input$momento_obito_perinatal) == 4) {
+      if (length(input$momento_obito_perinatal) == 5) {
         data_plot_evitaveis_perinatal_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -4267,8 +4291,9 @@ mod_bloco_7_server <- function(id, filtros){
           )
       }
 
-      data_plot_evitaveis_perinatal_comp_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
+      data_plot_evitaveis_perinatal_comp_aux |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
+        # dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
@@ -4360,7 +4385,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_fetal_referencia2 <- reactive({
 
-      if (length(input$momento_obito_fetal_evitaveis) == 2) {
+      if (length(input$momento_obito_fetal_evitaveis2) == 3) {
         data_plot_evitaveis_fetal2_referencia_aux <- bloco7_distribuicao_cids |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -4368,7 +4393,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("evitaveis_fetal") & dplyr::contains("2") &
-              !dplyr::matches("antes|durante") &
+              !dplyr::matches("antes|durante|sem_info_parto") &
               dplyr::matches(paste(input$faixa_peso_fetal_evitaveis2, collapse = "|"))
           )
       } else {
@@ -4485,7 +4510,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_evitaveis_perinatal_referencia <- reactive({
 
-      if (length(input$momento_obito_perinatal_evitaveis) == 4) {
+      if (length(input$momento_obito_perinatal_evitaveis) == 5) {
         data_plot_evitaveis_perinatal_referencia_aux <- bloco7_distribuicao_cids |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -4493,7 +4518,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("evitaveis_perinatal") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_evitaveis, collapse = "|"))
           )
       } else {
@@ -4700,17 +4725,17 @@ mod_bloco_7_server <- function(id, filtros){
                                           "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(
-          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
         dplyr::mutate(
-          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))
         )
     })
 
@@ -4730,17 +4755,17 @@ mod_bloco_7_server <- function(id, filtros){
                                           "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(
-          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          obitos_fetais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           obitos_neonatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
+          obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto")))), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
         dplyr::mutate(
-          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante"))))),
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
           porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias")))))
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))
         )
     })
 
@@ -4771,7 +4796,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4810,7 +4835,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4854,7 +4879,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4959,7 +4984,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
             grepl("infeccoes", grupo_cid10) ~ "Infecções",
             grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-            grepl("ma_formacao", grupo_cid10) ~ "Má formação congênita",
+            grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
             grepl("afeccoes_respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
             grepl("fatores_maternos", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
             grepl("afeccoes_perinatal", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -4988,11 +5013,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Para a localidade selecionada ----------------------------------------
     data_plot_grupos_fetal <- reactive({
 
-      if (length(input$momento_obito_fetal_grupos) == 2) {
+      if (length(input$momento_obito_fetal_grupos) == 3) {
         data_plot_grupos_fetal_aux <- data_filtrada_aux() |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
       } else {
@@ -5021,7 +5046,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5045,7 +5070,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5087,7 +5112,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5111,7 +5136,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5120,11 +5145,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_aux <- data_filtrada_aux() |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
       } else {
@@ -5153,7 +5178,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5177,7 +5202,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5187,11 +5212,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Para a comparação selecionada ----------------------------------------
     data_plot_grupos_fetal_comp <- reactive({
 
-      if (length(input$momento_obito_fetal_grupos) == 2) {
+      if (length(input$momento_obito_fetal_grupos) == 3) {
         data_plot_grupos_fetal_comp_aux <- data_filtrada_comp_aux() |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
       } else {
@@ -5220,7 +5245,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5246,7 +5271,7 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
-                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                       "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                       "Afecções originais no período perinatal", "Mal definidas",
                                                       "Grupos não selecionados", "Demais causas")),
@@ -5288,7 +5313,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5314,7 +5339,7 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10,
-                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+                                           levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                       "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                       "Afecções originais no período perinatal", "Mal definidas",
                                                       "Grupos não selecionados", "Demais causas")),
@@ -5323,11 +5348,11 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal_comp <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_comp_aux <- data_filtrada_comp_aux() |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
       } else {
@@ -5339,13 +5364,14 @@ mod_bloco_7_server <- function(id, filtros){
           )
       }
 
-      data_plot_grupos_perinatal_comp_aux() |>
+      data_plot_grupos_perinatal_comp_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("perinatal_grupos")), sum) |>
         dplyr::rowwise() |>
         dplyr::mutate(obitos_perinatais_grupos_total = sum(dplyr::c_across(dplyr::contains("perinatal_grupos")))) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("perinatal_grupos")), ~ (. / obitos_perinatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("perinatal_grupos"),
+          names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>
         dplyr::mutate(
@@ -5355,7 +5381,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5380,7 +5406,7 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5390,7 +5416,7 @@ mod_bloco_7_server <- function(id, filtros){
     #### Para a referência ----------------------------------------------------
     data_plot_grupos_fetal_referencia <- reactive({
 
-      if (length(input$momento_obito_fetal_grupos) == 2) {
+      if (length(input$momento_obito_fetal_grupos) == 3) {
         data_plot_grupos_fetal_referencia_aux <-
           bloco7_distribuicao_cids |>
             dplyr::filter(
@@ -5399,7 +5425,7 @@ mod_bloco_7_server <- function(id, filtros){
             dplyr::group_by(ano) |>
             dplyr::select(
               dplyr::contains("fetal_grupos") &
-                !dplyr::matches("antes|durante") &
+                !dplyr::matches("antes|durante|sem_info_parto") &
                 dplyr::matches(paste(input$faixa_peso_fetal_grupos, collapse = "|"))
             )
 
@@ -5435,7 +5461,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5451,7 +5477,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5505,7 +5531,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5521,7 +5547,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Malformação congênita",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia",  "Anomalia congênita",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido", "Prematuridade",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -5575,7 +5601,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     data_plot_grupos_perinatal_referencia <- reactive({
 
-      if (length(input$momento_obito_perinatal_grupos) == 4) {
+      if (length(input$momento_obito_perinatal_grupos) == 5) {
         data_plot_grupos_perinatal_referencia_aux <-
           bloco7_distribuicao_cids |>
           dplyr::filter(
@@ -5584,7 +5610,7 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::select(
             dplyr::contains("perinatal_grupos") &
-              !dplyr::matches("antes|durante|0_dias|1_6_dias") &
+              !dplyr::matches("antes|durante|0_dias|1_6_dias|sem_info") &
               dplyr::matches(paste(input$faixa_peso_perinatal_grupos, collapse = "|"))
           )
 
@@ -5620,7 +5646,7 @@ mod_bloco_7_server <- function(id, filtros){
               grepl("prematuridade", grupo_cid10) ~ "Prematuridade",
               grepl("infeccoes", grupo_cid10) ~ "Infecções",
               grepl("asfixia", grupo_cid10) ~ "Asfixia/Hipóxia",
-              grepl("ma_formacao", grupo_cid10) ~ "Malformação congênita",
+              grepl("ma_formacao", grupo_cid10) ~ "Anomalia congênita",
               grepl("respiratorias", grupo_cid10) ~ "Afecções respiratórias do recém-nascido",
               grepl("gravidez", grupo_cid10) ~ "Fatores maternos relacionados à gravidez",
               grepl("afeccoes", grupo_cid10) ~ "Afecções originais no período perinatal",
@@ -5636,7 +5662,7 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Malformação congênita", "Prematuridade",
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Fatores maternos relacionados à gravidez","Asfixia/Hipóxia", "Anomalia congênita", "Prematuridade",
                                                                    "Infecções", "Afecções respiratórias do recém-nascido",
                                                                    "Afecções originais no período perinatal", "Mal definidas",
                                                                    "Grupos não selecionados", "Demais causas")),
@@ -6021,7 +6047,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -6052,7 +6078,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -6535,7 +6561,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.8
@@ -6566,7 +6592,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7
@@ -7188,7 +7214,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", "Referência (média nacional)", "Referência (meta ODS adaptada para a localidade)"),
+              name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", "Referência (média nacional)", "Referência (meta adaptada para a localidade)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -7220,7 +7246,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = glue::glue("Referência (meta ODS adaptada para {unique(data7_plot_aux$class)})"),
+              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_aux$class)})"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -7228,7 +7254,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_comp_aux,
               type = "line",
-              name = glue::glue("Referência (meta ODS adaptada para {unique(data7_plot_comp_aux$class)})"),
+              name = glue::glue("Referência (meta adaptada para {unique(data7_plot_comp_aux$class)})"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7

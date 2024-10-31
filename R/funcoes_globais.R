@@ -1078,7 +1078,7 @@ momento_obitos <- function(aba, grafico, input){
   if(aba == "perinatal"){
     if(grafico == "grupos"){
 
-      if(length(input) < 4){
+      if(length(input) < 5){
         return(paste(input, collapse = "|"))
       } else {
         return("perinatal_grupos_prematuridade|perinatal_grupos_infeccoes|perinatal_grupos_asfixia|perinatal_grupos_ma_formacao|perinatal_grupos_respiratorias|perinatal_grupos_gravidez|perinatal_grupos_afeccoes_perinatal|perinatal_grupos_mal_definida|perinatal_grupos_outros")
@@ -1086,7 +1086,7 @@ momento_obitos <- function(aba, grafico, input){
 
     } else if(grafico == "evitaveis"){
 
-      if(length(input) < 4){
+      if(length(input) < 5){
         return(paste(input, collapse = "|"))
       } else {
         return("evitaveis_perinatal_imunoprevencao|evitaveis_perinatal_mulher_gestacao|evitaveis_perinatal_parto|evitaveis_perinatal_recem_nascido|evitaveis_perinatal_tratamento|evitaveis_perinatal_saude|evitaveis_perinatal_mal_definidas|evitaveis_perinatal_outros")
