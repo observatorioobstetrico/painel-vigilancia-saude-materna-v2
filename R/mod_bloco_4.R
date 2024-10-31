@@ -33,7 +33,7 @@ mod_bloco_4_ui <- function(id){
                 "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
                 "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
                 "Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas" = "indicador3"
-                ),
+              ),
               width = "81%"
             )
           )
@@ -475,13 +475,13 @@ mod_bloco_4_ui <- function(id){
                   shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
                 )
               )
-             #  fluidRow(
-             #    column(
-             #      offset = 3,
-             #      width = 6,
-             #      shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
-             #    )
-             # )
+              #  fluidRow(
+              #    column(
+              #      offset = 3,
+              #      width = 6,
+              #      shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
+              #    )
+              # )
             ),
             column(
               width = 8,
@@ -1297,13 +1297,13 @@ mod_bloco_4_server <- function(id, filtros){
     ### Para a localidade selecionada -----------------------------------------
     data4_resumo <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-      # dplyr::left_join(
-      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-      #   dplyr::left_join(
-      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-      #   )
-      # ) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
@@ -1365,13 +1365,13 @@ mod_bloco_4_server <- function(id, filtros){
 
     data4_deslocamento_resumo <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-      # dplyr::left_join(
-      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-      #   dplyr::left_join(
-      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-      #   )
-      # ) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
@@ -1433,13 +1433,13 @@ mod_bloco_4_server <- function(id, filtros){
     ### Para a referência -----------------------------------------------------
     data4_resumo_referencia <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-      # dplyr::left_join(
-      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-      #   dplyr::left_join(
-      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-      #   )
-      # ) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)
@@ -1447,13 +1447,13 @@ mod_bloco_4_server <- function(id, filtros){
 
     data4_deslocamento_resumo_referencia <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-      # dplyr::left_join(
-      #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-      #   dplyr::left_join(
-      #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-      #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-      #   )
-      # ) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)
@@ -1513,10 +1513,10 @@ mod_bloco_4_server <- function(id, filtros){
               } else {
                 tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]
               }
-          }
-        ) |> unlist(),
-        sufixo = rep("%", 5)
-      )
+            }
+          ) |> unlist(),
+          sufixo = rep("%", 5)
+        )
     })
 
     ### Criando o output
@@ -2391,7 +2391,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::mutate(
           indicador = factor(
-              dplyr::case_when(
+            dplyr::case_when(
               indicador == "prop_partos_municipio_res" ~ "No município de residência",
               indicador == "prop_partos_rsaude_res" ~ "Na microrregião de saúde, mas fora do município de residência",
               indicador == "prop_partos_macro_rsaude_res" ~ "Na macrorregião de saúde, mas fora da microrregião de saúde de residência",
@@ -3011,7 +3011,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 1 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 1 de Robson é formado por nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e em trabalho de parto espontâneo.
+            O grupo 1 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3031,7 +3031,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 2 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 2 de Robson é formado por nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e cujo parto é induzido ou que são submetidas à cesárea antes do início do trabalho de parto.
+            O grupo 2 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea anterior ao trabalho de parto.
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3051,7 +3051,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 3 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 3 de Robson é formado por multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) sem cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e em trabalho de parto espontâneo.
+            O grupo 3 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3071,7 +3071,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 4 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 4 de Robson é formado por multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) sem cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional de pelo menos 37 semanas e cujo parto é induzido ou que são submetidas à cesárea antes do início do trabalho de parto.
+            O grupo 4 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea realizada antes do início do trabalho de parto.
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3091,7 +3091,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 5 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 5 de Robson é formado por todas as multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com pelo menos uma cesárea anterior, com feto único, cefálico (o feto está posicionado com a cabeça para baixo) e com idade gestacional de pelo menos 37 semanas.
+            O grupo 5 de Robson é formado por todas as multíparas com antecedente de cesárea, gestação única, cefálica e \U2265 37 semanas.
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3111,16 +3111,16 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre os grupos 6 a 9 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 6 de Robson é formado por todas as nulíparas (mulheres que ainda não tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único em apresentação pélvica (o feto está posicionado com a cabeça para cima).
+            O grupo 6 de Robson é formado por todas as nulíparas com partos pélvicos.
             <br>
             <br>
-            O grupo 7 de Robson é formado por todas as multíparas (mulheres que já tiveram parto de bebês com pelo menos 500 g ou pelo menos 22 semanas) com feto único em apresentação pélvica (o feto está posicionado com a cabeça para cima), incluindo aquelas com cesárea(s) anterior(es).
+            O grupo 7 de Robson é formado por todas as multíparas com partos pélvicos (incluindo aquelas com antecedente de cesárea).
             <br>
             <br>
-            O grupo 8 de Robson é formado por todas as mulheres com gestação múltipla, incluindo aquelas com cesárea(s) anterior(es).
+            O grupo 8 de Robson é formado por todas as mulheres com gestação múltipla (incluindo aquelas com antecedente de cesárea).
             <br>
             <br>
-            O grupo 9 de Robson é formado por todas as gestantes com feto em situação transversa ou oblíqua (o feto está posicionado com a cabeça para um dos lados), incluindo aquelas com cesárea(s) anterior(es).
+            O grupo 9 de Robson é formado por todas as gestantes com feto em apresentações anormais (incluindo aquelas com antecedente de cesárea).
           </div>",
         size = "s",
         closeOnEsc = TRUE,
@@ -3140,7 +3140,7 @@ mod_bloco_4_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 10 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 10 de Robson é formado por todas as gestantes com feto único e cefálico (o feto está posicionado com a cabeça para baixo), com idade gestacional menor que 37 semanas, incluindo aquelas com cesárea(s) anterior(es).
+            O grupo 10 de Robson é formado por todas as mulheres com gestação única, cefálica e < 37 semanas (incluindo aquelas com antecedente de cesárea).
           </div>",
         size = "s",
         closeOnEsc = TRUE,
