@@ -153,9 +153,9 @@ mod_bloco_5_ui <- function(id) {
                     label = "Peso ao nascer",
                     options = list(placeholder = "Selecione a faixa de peso ao nascer"),
                     choices = c(
-                      "Menor que 1500 g" = "porc_nasc_peso_menor_1500",
-                      "De 1500 a 1999 g" = "porc_nasc_peso_1500_a_1999",
-                      "De 2000 a 2499 g" = "porc_nasc_peso_2000_a_2499",
+                      "Menor que 1000 g" = "porc_nasc_peso_menor_1000",
+                      "De 1000 a 1499 g" = "porc_nasc_peso_1000_a_1499",
+                      "De 1500 a 2499 g" = "porc_nasc_peso_1500_a_2499",
                       "Menor que 2500 g" = "porc_nasc_baixo_peso"
                     ),
                     width = "100%", selected = "porc_nasc_baixo_peso"
@@ -635,12 +635,12 @@ mod_bloco_5_server <- function(id, filtros){
     bloco5_calcs <- data.frame(
         tipo = c("local", "referencia"),
         porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_menor_1500 = rep("round(sum(nascidos_vivos_peso_menor_1500) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_1500_a_1999 = rep("round(sum(nascidos_vivos_peso_1500_a_1999) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_2000_a_2499= rep("round(sum(nascidos_vivos_peso_2000_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_baixo_peso_menor_1500 = rep("round(sum(nascidos_vivos_peso_menor_1500) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        porc_baixo_peso_1500_a_1999 = rep("round(sum(nascidos_vivos_peso_1500_a_1999) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        porc_baixo_peso_2000_a_2499 = rep("round(sum(nascidos_vivos_peso_2000_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+        porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        porc_nasc_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        porc_nasc_peso_1500_a_2499= rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        porc_baixo_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+        porc_baixo_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+        porc_baixo_peso_1500_a_2499 = rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
         porc_nasc_premat = c("round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)", "10"),
         porc_nasc_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nasc_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -1827,33 +1827,33 @@ mod_bloco_5_server <- function(id, filtros){
     output$plot1_1 <- highcharter::renderHighchart({
       highcharter::highchart()|>
         highcharter::hc_add_series(
-          name = "De 2000 a 2499 g",
+          name = "De 1500 a 2499 g",
           data =  data5_juncao_barras(),
-          highcharter::hcaes(x = ano, y = porc_baixo_peso_2000_a_2499),
+          highcharter::hcaes(x = ano, y = porc_baixo_peso_1500_a_2499),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_2000_a_2499:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1500_a_2499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
-          name = "De 1500 a 1999 g",
+          name = "De 1000 a 1499 g",
           data =  data5_juncao_barras(),
-          highcharter::hcaes(x = ano, y = porc_baixo_peso_1500_a_1999),
+          highcharter::hcaes(x = ano, y = porc_baixo_peso_1000_a_1499),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1500_a_1999:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1000_a_1499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
-          name = "Menor que 1500 g",
+          name = "Menor que 1000 g",
           data =  data5_juncao_barras(),
-          highcharter::hcaes(x = ano, y = porc_baixo_peso_menor_1500),
+          highcharter::hcaes(x = ano, y = porc_baixo_peso_menor_1000),
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_menor_1500:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_menor_1000:,f}% </b>"
           )
         ) |>
         highcharter::hc_legend(reversed = TRUE) |>

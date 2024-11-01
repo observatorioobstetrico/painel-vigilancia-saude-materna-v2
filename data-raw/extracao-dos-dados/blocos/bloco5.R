@@ -21,7 +21,7 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 # Para os indicadores provenientes do SINASC ------------------------------
 ## Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
 df_sinasc_consolidados <- fetch_datasus(
-  year_start = 2022,
+  year_start = 2012,
   year_end = 2022,
   vars = c("CODMUNRES", "CODMUNNASC", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
   information_system = "SINASC"
@@ -71,9 +71,9 @@ df_bloco5_sinasc <- df_sinasc |>
     nascidos_vivos_com_baixo_peso = if_else(PESO < 2500, 1, 0, missing = 0),
     nascidos_vivos_prematuros = if_else(GESTACAO < 5, 1, 0, missing = 0),
     nascidos_vivos_termo_precoce = if_else(SEMAGESTAC %in% c(37, 38), 1, 0, missing = 0),
-    nascidos_vivos_peso_menor_1500 = if_else(PESO < 1500, 1, 0, missing = 0),
-    nascidos_vivos_peso_1500_a_1999 = if_else(PESO >= 1500 & PESO <= 1999, 1, 0, missing = 0),
-    nascidos_vivos_peso_2000_a_2499 = if_else(PESO <= 2499 & PESO >= 2000, 1, 0, missing = 0),
+    nascidos_vivos_peso_menor_1000 = if_else(PESO < 1000, 1, 0, missing = 0),
+    nascidos_vivos_peso_1000_a_1499 = if_else(PESO >= 100 & PESO < 1500, 1, 0, missing = 0),
+    nascidos_vivos_peso_1500_a_2499 = if_else(PESO < 2500 & PESO >= 1500, 1, 0, missing = 0),
     nascidos_vivos_menos_de_28_semanas = if_else(SEMAGESTAC < 28, 1, 0, missing = 0),
     nascidos_vivos_28_a_32_semanas = if_else(SEMAGESTAC >= 28 & SEMAGESTAC <= 32, 1, 0, missing = 0),
     nascidos_vivos_33_a_34_semanas = if_else(SEMAGESTAC %in% c(33, 34), 1, 0, missing = 0),
@@ -95,8 +95,8 @@ df_bloco5_sinasc <- df_sinasc |>
 bloco5_antigo <- read_csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
   filter(ano <= 2021) |>
   select(codmunres, ano, total_de_nascidos_vivos, nascidos_vivos_com_baixo_peso,
-  nascidos_vivos_prematuros, nascidos_vivos_termo_precoce, nascidos_vivos_peso_menor_1500,
-  nascidos_vivos_peso_1500_a_1999, nascidos_vivos_peso_2000_a_2499, nascidos_vivos_menos_de_28_semanas,
+  nascidos_vivos_prematuros, nascidos_vivos_termo_precoce, nascidos_vivos_peso_menor_1000,
+  nascidos_vivos_peso_1000_a_1499, nascidos_vivos_peso_1500_a_2499, nascidos_vivos_menos_de_28_semanas,
   nascidos_vivos_28_a_32_semanas, nascidos_vivos_33_a_34_semanas,
   nascidos_vivos_35_a_36_semanas, nascidos_condicoes_ameacadoras, total_de_nascidos_malformacao)
 

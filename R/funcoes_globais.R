@@ -322,9 +322,9 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa = "300px", fonte_titulo = "16px", width_caixa = 12) {
 
   if (indicador == "baixo peso") {
-    valor_indicador1 <- dados[["porc_baixo_peso_menor_1500"]]
-    valor_indicador2 <- dados[["porc_baixo_peso_1500_a_1999"]]
-    valor_indicador3 <- dados[["porc_baixo_peso_2000_a_2499"]]
+    valor_indicador1 <- dados[["porc_baixo_peso_menor_1000"]]
+    valor_indicador2 <- dados[["porc_baixo_peso_1000_a_1499"]]
+    valor_indicador3 <- dados[["porc_baixo_peso_1500_a_2499"]]
   }
 
   if (indicador == "prematuridade") {
@@ -382,15 +382,15 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
         style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "possuem peso < 1500 g")
+          p(style = style_descricao, "possuem peso < 1000 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+          p(style = style_descricao, "possuem peso de 1000 a 1499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+          p(style = style_descricao, "possuem peso de 1500 a 2499 g")
         )
       )
     )
@@ -433,9 +433,9 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
 cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = "303px", fonte_titulo = "16px", width_caixa = 12) {
 
   if (indicador == "fetal peso por idade gestacional") {
-    valor_indicador1 <- dados[["menos_1500_dist_peso_fetal"]]
-    valor_indicador2 <- dados[["de_1500_1999_dist_peso_fetal"]]
-    valor_indicador3 <- dados[["de_2000_2499_dist_peso_fetal"]]
+    valor_indicador1 <- dados[["menos_1000_dist_peso_fetal"]]
+    valor_indicador2 <- dados[["de_1000_1499_dist_peso_fetal"]]
+    valor_indicador3 <- dados[["de_1500_2499_dist_peso_fetal"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_fetal"]]
   }
 
@@ -453,9 +453,9 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
   }
 
   if (indicador == "perinatal peso por momento do obito") {
-    valor_indicador1 <- dados[["menos_1500_dist_peso_perinat"]]
-    valor_indicador2 <- dados[["de_1500_1999_dist_peso_perinat"]]
-    valor_indicador3 <- dados[["de_2000_2499_dist_peso_perinat"]]
+    valor_indicador1 <- dados[["menos_1000_dist_peso_perinat"]]
+    valor_indicador2 <- dados[["de_1000_1499_dist_peso_perinat"]]
+    valor_indicador3 <- dados[["de_1500_2499_dist_peso_perinat"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_perinat"]]
   }
 
@@ -466,9 +466,9 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
   }
 
   if (indicador == "neonatal peso por momento do obito") {
-    valor_indicador1 <- dados[["menos_1500_dist_peso_neonat"]]
-    valor_indicador2 <- dados[["de_1500_1999_dist_peso_neonat"]]
-    valor_indicador3 <- dados[["de_2000_2499_dist_peso_neonat"]]
+    valor_indicador1 <- dados[["menos_1000_dist_peso_neonat"]]
+    valor_indicador2 <- dados[["de_1000_1499_dist_peso_neonat"]]
+    valor_indicador3 <- dados[["de_1500_2499_dist_peso_neonat"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_neonat"]]
   }
 
@@ -516,15 +516,15 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "possuem peso menor que 1500 g")
+          p(style = style_descricao, "possuem peso menor que 1000 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+          p(style = style_descricao, "possuem peso de 1000 a 1499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+          p(style = style_descricao, "possuem peso de 1500 a 2499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
@@ -598,15 +598,15 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "possuem peso menor que 1500 g")
+          p(style = style_descricao, "possuem peso menor que 1000 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+          p(style = style_descricao, "possuem peso de 1000 a 1499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+          p(style = style_descricao, "possuem peso de 1500 a 2499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
@@ -651,15 +651,15 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "possuem peso menor que 1500 g")
+          p(style = style_descricao, "possuem peso menor que 1000 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1500 a 1999 g")
+          p(style = style_descricao, "possuem peso de 1000 a 1499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "possuem peso de 2000 a 2499 g")
+          p(style = style_descricao, "possuem peso de 1500 a 2499 g")
         ),
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
@@ -970,12 +970,12 @@ seleciona <- function(aba, indicador, input){
       if(length(input) < 4){
 
         return(
-          opcoes <- c( "dist_moment_obito_fetal_menos1500", "dist_moment_obito_fetal_1500_1999", "dist_moment_obito_fetal_2000_2499", "dist_moment_obito_fetal_mais2500", "falso")
+          opcoes <- c( "dist_moment_obito_fetal_menos1000", "dist_moment_obito_fetal_1000_1499", "dist_moment_obito_fetal_1500_2499", "dist_moment_obito_fetal_mais2500", "falso")
         )
 
       } else{
         return(
-          opcoes <- c(rep("falso", 4), "dist_moment_obito_fetal_menos1500")
+          opcoes <- c(rep("falso", 4), "dist_moment_obito_fetal_menos1000")
         )
       }
 
@@ -1007,11 +1007,11 @@ seleciona <- function(aba, indicador, input){
 
           return(
 
-            opcoes <- c("dist_moment_obito_perinat_menos1500", "dist_moment_obito_perinat_1500_1999", "dist_moment_obito_perinat_2000_2499", "dist_moment_obito_perinat_mais2500", "falso")
+            opcoes <- c("dist_moment_obito_perinat_menos1000", "dist_moment_obito_perinat_1000_1499", "dist_moment_obito_perinat_1500_2499", "dist_moment_obito_perinat_mais2500", "falso")
           )
 
         } else{
-          return( opcoes <- c(rep("falso", 4), "dist_moment_obito_perinat_menos1500"))
+          return( opcoes <- c(rep("falso", 4), "dist_moment_obito_perinat_menos1000"))
         }
 
 
@@ -1041,11 +1041,11 @@ seleciona <- function(aba, indicador, input){
 
         return(
 
-          opcoes <- c("dist_moment_obito_neonat_menos1500", "dist_moment_obito_neonat_1500_1999", "dist_moment_obito_neonat_2000_2499", "dist_moment_obito_neonat_mais2500", "falso")
+          opcoes <- c("dist_moment_obito_neonat_menos1000", "dist_moment_obito_neonat_1000_1499", "dist_moment_obito_neonat_1500_2499", "dist_moment_obito_neonat_mais2500", "falso")
         )
 
       } else{
-        return(opcoes <- c(rep("falso", 4), "dist_moment_obito_neonat_menos1500"))
+        return(opcoes <- c(rep("falso", 4), "dist_moment_obito_neonat_menos1000"))
       }
 
 
