@@ -485,7 +485,7 @@ mod_bloco_7_ui <- function(id) {
                     #   )
                     # )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 470))
                 )
               ),
               # column(
@@ -640,7 +640,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 470))
                  )
               )
             )
@@ -1030,7 +1030,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 460))
                 )
               ),
               column(
@@ -1126,7 +1126,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 490))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 460))
                 )
               )
             )
