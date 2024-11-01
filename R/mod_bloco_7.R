@@ -944,7 +944,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a Lansky e França (2009) (Fonte: <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>link</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo a lista de causas de mortes evitáveis por intervenções do SUS (Fonte: <a href = https://bvsms.saude.gov.br/bvs/publicacoes/demografia_saude_contribuicao_tendencias.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1757,7 +1757,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) no SUS &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao10"),
@@ -1820,7 +1820,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS &nbsp;</b>"),
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao12"),
