@@ -92,18 +92,18 @@ df_bloco5_sinasc <- df_sinasc |>
 
 # Juntando dados antigos e dados novos
 
-bloco5_antigo <- read_csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
-  filter(ano <= 2021) |>
-  select(codmunres, ano, total_de_nascidos_vivos, nascidos_vivos_com_baixo_peso,
-  nascidos_vivos_prematuros, nascidos_vivos_termo_precoce, nascidos_vivos_peso_menor_1000,
-  nascidos_vivos_peso_1000_a_1499, nascidos_vivos_peso_1500_a_2499, nascidos_vivos_menos_de_28_semanas,
-  nascidos_vivos_28_a_32_semanas, nascidos_vivos_33_a_34_semanas,
-  nascidos_vivos_35_a_36_semanas, nascidos_condicoes_ameacadoras, total_de_nascidos_malformacao)
+# bloco5_antigo <- read_csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2023.csv") |>
+#   filter(ano <= 2021) |>
+#   select(codmunres, ano, total_de_nascidos_vivos, nascidos_vivos_com_baixo_peso,
+#   nascidos_vivos_prematuros, nascidos_vivos_termo_precoce, nascidos_vivos_peso_menor_1000,
+#   nascidos_vivos_peso_1000_a_1499, nascidos_vivos_peso_1500_a_2499, nascidos_vivos_menos_de_28_semanas,
+#   nascidos_vivos_28_a_32_semanas, nascidos_vivos_33_a_34_semanas,
+#   nascidos_vivos_35_a_36_semanas, nascidos_condicoes_ameacadoras, total_de_nascidos_malformacao)
 
-bloco5_novo <- full_join(bloco5_antigo, df_bloco5_sinasc)
+#bloco5_novo <- full_join(bloco5_antigo, df_bloco5_sinasc)
 
 ## Fazendo um left_join com a base auxiliar de municípios
-df_bloco5_aux <- left_join(df_aux_municipios, bloco5_novo, by = c("codmunres", "ano"))
+df_bloco5_aux <- left_join(df_aux_municipios, df_bloco5_sinasc, by = c("codmunres", "ano"))
 
 ## Juntando, também, com os dados de asifixia e malformação, baixados no script 'bloco5_asfixia.R'
 df_asfixia <- read.csv("data-raw/csv/asfixia_2012_2024.csv", sep = ';') |>
