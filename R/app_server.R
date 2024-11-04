@@ -257,8 +257,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       updateSelectizeInput(
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco5",
-        choices = c("Menor que 1500 g" = "menos_1500", "De 1500 a 1999 g" = "1500_a_1999",
-                    "De 2000 a 2499 g" = "2000_a_2499", "Menor que 2500 g" = "menos_2500"),
+        choices = c("Menor que 1000 g" = "menos_1000", "De 1000 a 1499 g" = "1000_a_1499",
+                    "De 1500 a 2499 g" = "1500_a_2499", "Menor que 2500 g" = "menos_2500"),
         label = "Faixa de peso"
       )
     } else if (input$indicador == "Porcentagem de nascidos vivos prematuros") {
@@ -293,7 +293,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "indicador_uma_caixinha_adicional_bloco7",
         choices = c(
-          "Geral" = "geral", "< 1500 g" = "menos1500", "1500 a 1999 g" = "1500_1999", "2000 a 2499 g" = "2000_2499", "Maior ou igual a 2500 g" = "mais2500"
+          "Geral" = "geral", "< 1000 g" = "menos1000", "1000 a 1499 g" = "1000_1499", "1500 a 2499 g" = "1500_2499", "Maior ou igual a 2500 g" = "mais2500"
         ),
         label = "Faixa de peso"
       )
@@ -407,7 +407,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "indicador_duas_caixinhas_adicionais2",
         choices = c(
-          "Geral" = "geral", "< 1500 g" = "menos1500", "1500 a 1999 g" = "1500_1999", "2000 a 2499 g" = "2000_2499", "Maior ou igual a 2500 g" = "mais2500"
+          "Geral" = "geral", "< 1000 g" = "menos1000", "1000 a 1499 g" = "1000_1499", "1500 a 2499 g" = "1500_2499", "Maior ou igual a 2500 g" = "mais2500"
         ),
         label = "Faixa de peso"
       )

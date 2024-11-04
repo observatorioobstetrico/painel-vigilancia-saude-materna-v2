@@ -1831,7 +1831,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             infos_indicador()$referencia == "Nacional",
             !!rlang::parse_expr(infos_indicador()$calculo),
             ifelse(
-              infos_indicador()$nome_abreviado != "porc_nasc_baixo_peso_menos_1500",
+              infos_indicador()$nome_abreviado != "porc_nasc_baixo_peso_menos_1000",
               {as.numeric(infos_indicador()$referencia)},
               NA
             )
