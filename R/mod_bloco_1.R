@@ -164,7 +164,8 @@ mod_bloco_1_ui <- function(id){
                       "Branca" = "porc_nvm_com_cor_da_pele_branca",
                       "Indígena" = "porc_nvm_indigenas",
                       "Parda" = "porc_nvm_com_cor_da_pele_parda",
-                      "Preta" = "porc_nvm_com_cor_da_pele_preta"
+                      "Preta" = "porc_nvm_com_cor_da_pele_preta",
+                      "Negra (pardas e pretas)" = "porc_nvm_com_cor_da_pele_negra"
                     ),
                     width = "100%"
                   )
@@ -305,6 +306,7 @@ mod_bloco_1_server <- function(id, filtros){
       porc_nvm_com_cor_da_pele_preta = rep("round(sum(nvm_com_cor_da_pele_preta)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_com_cor_da_pele_amarela = rep("round(sum(nvm_com_cor_da_pele_amarela)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_com_cor_da_pele_parda = rep("round(sum(nvm_com_cor_da_pele_parda)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nvm_com_cor_da_pele_negra = rep("round((sum(nvm_com_cor_da_pele_parda) + sum(nvm_com_cor_da_pele_preta))/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_indigenas = rep("round(sum(nvm_indigenas)/sum(total_de_nascidos_vivos) * 100, 1)", 2)
     )
 
@@ -410,9 +412,9 @@ mod_bloco_1_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          idademae = round(sum(idademae_incompletos, na.rm = TRUE)/sum(idademae_totais, na.rm = TRUE) * 100, 2),
-          racacor = round(sum(racacor_incompletos, na.rm = TRUE)/sum(racacor_totais, na.rm = TRUE) * 100, 2),
-          escmae = round(sum(escmae_incompletos, na.rm = TRUE)/sum(escmae_totais, na.rm = TRUE) * 100, 2),
+          idademae = round(sum(idademae_incompletos, na.rm = TRUE)/sum(idademae_totais, na.rm = TRUE) * 100, 1),
+          racacor = round(sum(racacor_incompletos, na.rm = TRUE)/sum(racacor_totais, na.rm = TRUE) * 100, 1),
+          escmae = round(sum(escmae_incompletos, na.rm = TRUE)/sum(escmae_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -824,7 +826,7 @@ mod_bloco_1_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           filtros()$nivel == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} nascidos vivos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} nascidos vivos"
         ),
         tamanho_caixa = "303px",
         pagina = "bloco_1",
@@ -880,7 +882,8 @@ mod_bloco_1_server <- function(id, filtros){
         input$raca == "porc_nvm_com_cor_da_pele_branca" ~ "Porcentagem de nascidos vivos de mães de raça/cor branca",
         input$raca == "porc_nvm_indigenas" ~ "Porcentagem de nascidos vivos de mães indígenas",
         input$raca == "porc_nvm_com_cor_da_pele_parda" ~ "Porcentagem de nascidos vivos de mães de raça/cor parda",
-        input$raca == "porc_nvm_com_cor_da_pele_preta" ~ "Porcentagem de nascidos vivos de mães de raça/cor preta"
+        input$raca == "porc_nvm_com_cor_da_pele_preta" ~ "Porcentagem de nascidos vivos de mães de raça/cor preta",
+        input$raca == "porc_nvm_com_cor_da_pele_negra" ~ "Porcentagem de nascidos vivos de mães de raça/cor negra (pardas e pretas)"
       )
     })
 

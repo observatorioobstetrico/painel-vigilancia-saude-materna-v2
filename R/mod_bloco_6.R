@@ -311,7 +311,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave em internações obstétricas públicas &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao5"),
@@ -524,8 +524,8 @@ mod_bloco_6_server <- function(id, filtros){
 
     bloco6_calcs_resumo <- bloco6_calcs |>
       dplyr::mutate(
-        prop_mif_investigado = c("round((sum(obito_mif_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil[ano <= 2020], na.rm = TRUE) * 100, 2)", "100"),
-        prop_obito_materno_investigado = c("round((sum(obito_materno_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_maternos[ano <= 2020], na.rm = TRUE) * 100, 2)", "100")
+        prop_mif_investigado = c("round((sum(obito_mif_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil[ano <= 2020], na.rm = TRUE) * 100, 1)", "100"),
+        prop_obito_materno_investigado = c("round((sum(obito_materno_investigado_com_ficha_sintese[ano <= 2020], na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese[ano <= 2020], na.rm = TRUE))/sum(total_obitos_maternos[ano <= 2020], na.rm = TRUE) * 100, 1)", "100")
       )
 
     # Criando alguns outputs para a UI ----------------------------------------
@@ -687,8 +687,8 @@ mod_bloco_6_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_mif_investigado = round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 2),
-          prop_obito_materno_investigado = round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 2),
+          prop_mif_investigado = round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 1),
+          prop_obito_materno_investigado = round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -1078,7 +1078,7 @@ mod_bloco_6_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           filtros()$nivel == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "303px",
         pagina = "bloco_6",
@@ -1185,12 +1185,12 @@ mod_bloco_6_server <- function(id, filtros){
 
 
     ### Para os indicadores de morbidade materna ------------------------------
-    #### Porcentagem de casos de morbidade materna grave em internações obstétricas públicas ----
+    #### Porcentagem de casos de morbidade materna grave no SUS ----
     output$caixa_b6_mmg_i1 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = "prop_mmg_int_publicas",
-        titulo = "Porcentagem de casos de morbidade materna grave em internações obstétricas públicas",
+        titulo = "Porcentagem de casos de morbidade materna grave no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_int_publicas,
         tipo = "porcentagem",
@@ -1700,7 +1700,7 @@ mod_bloco_6_server <- function(id, filtros){
 
 
     ### Para os indicadores de morbidade materna ------------------------------
-    #### Porcentagem de casos de morbidade materna grave em internações obstétricas públicas ----
+    #### Porcentagem de casos de morbidade materna grave no SUS ----
     output$plot1_mmg <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>

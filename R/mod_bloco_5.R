@@ -23,10 +23,12 @@ mod_bloco_5_ui <- function(id) {
         width = 12,
         HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
         HTML(
-          "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
-                <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição percentual,
-                passe o cursor do mouse sobre a barra que contém a categoria de interesse.
-                </b> </div>"
+          "<div style = 'text-align: center;'>
+            <b style = 'font-size: 19px'> <br>
+              <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição percentual,
+              passe o cursor do mouse sobre a barra que contém a categoria de interesse.
+            </b>
+          </div>"
         ),
         hr(),
         HTML("<span style='display: block; margin-bottom: 25px;'> </span>"),
@@ -766,10 +768,10 @@ mod_bloco_5_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 2),
-          gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 2),
-          semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 2),
-          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 2),
+          peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 1),
+          gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 1),
+          semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 1),
+          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,

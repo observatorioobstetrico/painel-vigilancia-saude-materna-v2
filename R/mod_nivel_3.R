@@ -770,9 +770,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               NA
             ),
             proporcao = dplyr::case_when(
-              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
-              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 2),
-              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 1),
+              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_mif_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_mif_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_mulher_idade_fertil, na.rm = TRUE) * 100, 1),
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_preenchido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 1)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -818,9 +818,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               NA
             ),
             proporcao = dplyr::case_when(
-              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 2),
-              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 2),
-              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 2)
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 1),
+              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 1),
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 1)
             ),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
