@@ -306,7 +306,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito fetal por faixa de peso  &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_fetal1"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_fetal1"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -346,7 +358,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito fetal &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_fetal2"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_fetal2"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -864,7 +888,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito perinatal por faixa de peso &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_perinatal1"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_perinatal1"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -904,7 +940,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito  &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito perinatal &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_perinatal2"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_perinatal2"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -1357,7 +1405,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito por faixa de peso &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito neonatal por faixa de peso &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_neonatal1"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_neonatal1"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -1397,7 +1457,19 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito neonatal &nbsp;</b>"),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_comparacao_neonatal2"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_comparacao_neonatal2"),
+                          icon = icon("info"),
+                          color = "primary",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
                   ),
                   hr(),
                   fluidRow(
@@ -1730,6 +1802,13 @@ mod_bloco_7_ui <- function(id) {
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
                     HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao_explicacao_indicador"),
+                      icon = icon("info"),
+                      color = "primary",
+                      style = "material-circle",
+                      size = "xs"
+                    ),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao7"),
@@ -1812,6 +1891,7 @@ mod_bloco_7_ui <- function(id) {
 
               column(
                 width = 6,
+                offset = 3,
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
@@ -2039,38 +2119,38 @@ mod_bloco_7_server <- function(id, filtros){
         taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 1)", 2),
 
         # Variáveis número de óbitos fetais mais de 28 semanas (critério oms)
-        obitos_fetais_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T)",2),
-        fetal_oms_peso_menos_1000 = rep("sum(peso_menos_1000_mais_28sem, na.rm = T)",2),
-        fetal_oms_peso_1000_1499 = rep("sum(peso_1000_1499_mais_28sem, na.rm=T)",2),
-        fetal_oms_peso_1500_2499 = rep("sum(peso_1500_2499_mais_28sem, na.rm=T)",2),
+        obitos_fetais_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T)", 2),
+        fetal_oms_peso_menos_1000 = rep("sum(peso_menos_1000_mais_28sem, na.rm = T)", 2),
+        fetal_oms_peso_1000_1499 = rep("sum(peso_1000_1499_mais_28sem, na.rm=T)", 2),
+        fetal_oms_peso_1500_2499 = rep("sum(peso_1500_2499_mais_28sem, na.rm=T)", 2),
         fetal_oms_peso_mais_2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T)", 2),
-        fetal_oms_antes = rep("sum(perinatal_antes)",2),
-        fetal_oms_durante = rep("sum(perinatal_durante)",2),
-        fetal_oms_antes_peso_menos_1000 = rep("sum(perinatal_antes_peso_menos_1000)",2),
-        fetal_oms_antes_peso_1000_1499 = rep("sum(perinatal_antes_peso_1000_1499)",2),
-        fetal_oms_antes_peso_1500_2499 = rep("sum(perinatal_antes_peso_1500_2499)",2),
-        fetal_oms_antes_peso_mais_2500 = rep("sum(perinatal_antes_peso_mais_2500)",2),
-        fetal_oms_durante_peso_menos_1000 = rep("sum(perinatal_durante_peso_menos_1000)",2),
-        fetal_oms_durante_peso_1000_1499 = rep("sum(perinatal_durante_peso_1000_1499)",2),
-        fetal_oms_durante_peso_1500_2499 = rep("sum(perinatal_durante_peso_1500_2499)",2),
-        fetal_oms_durante_peso_mais_2500 = rep("sum(perinatal_durante_peso_mais_2500)",2),
+        fetal_oms_antes = rep("sum(perinatal_antes)", 2),
+        fetal_oms_durante = rep("sum(perinatal_durante)", 2),
+        fetal_oms_antes_peso_menos_1000 = rep("sum(perinatal_antes_peso_menos_1000)", 2),
+        fetal_oms_antes_peso_1000_1499 = rep("sum(perinatal_antes_peso_1000_1499)", 2),
+        fetal_oms_antes_peso_1500_2499 = rep("sum(perinatal_antes_peso_1500_2499)", 2),
+        fetal_oms_antes_peso_mais_2500 = rep("sum(perinatal_antes_peso_mais_2500)", 2),
+        fetal_oms_durante_peso_menos_1000 = rep("sum(perinatal_durante_peso_menos_1000)", 2),
+        fetal_oms_durante_peso_1000_1499 = rep("sum(perinatal_durante_peso_1000_1499)", 2),
+        fetal_oms_durante_peso_1500_2499 = rep("sum(perinatal_durante_peso_1500_2499)", 2),
+        fetal_oms_durante_peso_mais_2500 = rep("sum(perinatal_durante_peso_mais_2500)", 2),
 
         # Variáveis sobre taxa de mortalidades fetal para mais de 28 semanas (critério oms)
         taxa_mort_fetal_oms = rep("round(sum(obitos_fetais_mais_28sem)/(sum(nascidos)+sum(obitos_fetais_mais_28sem)) *1000, 1)", 2),
-        taxa_mort_fetal_oms_peso_menos_1000 = rep("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem)),2)",2),
-        taxa_mort_fetal_oms_peso_1000_1499 = rep("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem)),2)",2),
-        taxa_mort_fetal_oms_peso_1500_2499 = rep("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem)),2)",2),
-        taxa_mort_fetal_oms_peso_mais_2500 = rep("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)),2)",2),
-        taxa_mort_fetal_oms_antes = rep("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes)),2)",2),
-        taxa_mort_fetal_oms_durante = rep("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)),2)",2),
-        taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000)),2)",2),
-        taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499)),2)",2,),
-        taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499)),2)",2,),
-        taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500)),2)",2,),
-        taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000)),2)",2),
-        taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499)),2)",2),
-        taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499)),2)",2),
-        taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500)),2)",2),
+        taxa_mort_fetal_oms_peso_menos_1000 = rep("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem)), 1)", 2),
+        taxa_mort_fetal_oms_peso_1000_1499 = rep("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem)), 1)", 2),
+        taxa_mort_fetal_oms_peso_1500_2499 = rep("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem)), 1)", 2),
+        taxa_mort_fetal_oms_peso_mais_2500 = rep("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)), 1)", 2),
+        taxa_mort_fetal_oms_antes = rep("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes)), 1)", 2),
+        taxa_mort_fetal_oms_durante = rep("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)), 1)", 2),
+        taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000)), 1)", 2),
+        taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499)), 1)",2,),
+        taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499)), 1)",2,),
+        taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500)), 1)",2,),
+        taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000)), 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499)), 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499)), 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500)), 1)", 2),
 
         obitos_perinatal_total = rep("sum(obitos_fetais_mais_22sem) + sum(obitos_6dias)", 2),
         perinatal_total_menos1000 = rep("sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000)", 2),
@@ -2546,8 +2626,80 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    ## Para os botões de alerta quanto à incompletude e cobertura --------------
 
+    ## Para os botões de informação em alguns indicadores ----------------------
+    ### Mostrando o botão com a informação sobre a comparação nos gráficos de distribuição proporcional
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao_comparacao_fetal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_comparacao_fetal2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_comparacao_perinatal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_comparacao_perinatal2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_comparacao_neonatal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_comparacao_neonatal2", anim = TRUE, animType = "fade", time = 0.8)
+      req(filtros()$comparar == "Sim")
+      shinyjs::show(id = "mostrar_botao_comparacao_fetal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao_comparacao_fetal2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao_comparacao_perinatal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao_comparacao_perinatal2", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao_comparacao_neonatal1", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::show(id = "mostrar_botao_comparacao_neonatal2", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+    ### Criando o pop-up com a informação sobre a comparação nos gráficos de distribuição proporcional
+    observeEvent(
+      c(input$botao_comparacao_fetal1, input$botao_comparacao_fetal2,
+        input$botao_comparacao_perinatal1, input$botao_comparacao_perinatal2,
+        input$botao_comparacao_neonatal1, input$botao_comparacao_perinatal2
+      ),
+      {
+        shinyalert::shinyalert(
+          html = TRUE,
+          title = "<div style = 'font-size: 25px;'> Sobre a comparação </div>",
+          text = glue::glue(
+            "<div style = 'text-align: justify; text-justify: inter-word;'>
+             Para visualizar os valores referentes à localidade de comparação selecionada, passe o cursor do mouse sobre a barra que contém a categoria de interesse.
+           </div>"
+          ),
+          size = "s",
+          closeOnEsc = TRUE,
+          closeOnClickOutside = TRUE,
+          type = "info",
+          showConfirmButton = TRUE,
+          confirmButtonText = "OK",
+          confirmButtonCol = "#007bff",
+          animation = TRUE
+        )
+      },
+      ignoreInit = TRUE
+    )
+
+    ### Criando o pop-up com a informação sobre o cálculo do indicador de condições ameaçadoras
+    observeEvent(input$botao_explicacao_indicador, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = "<div style = 'font-size: 25px;'> Sobre este indicador </div>",
+        text = glue::glue(
+          "<div style = 'text-align: justify; text-justify: inter-word;'>
+          Foram consideradas condições potencialmente ameaçadoras à vida nascimentos com peso < 1500 g, ou com idade gestacional < 32 semanas ou com Apgar de quinto minuto < 7.
+         </div>"
+        ),
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE
+      )
+    },
+    ignoreInit = TRUE
+    )
+
+
+    ## Para os botões de alerta quanto à incompletude e cobertura --------------
     ### Calculando os indicadores de incompletude ------------------------------
     data_incompletude_aux <- reactive({
       base_incompletude |>
@@ -2568,10 +2720,10 @@ mod_bloco_7_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 2),
-          gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 2),
-          semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 2),
-          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 2),
+          peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 1),
+          gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 1),
+          semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 1),
+          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -2819,7 +2971,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
         pagina = "bloco_7",
@@ -2921,7 +3073,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
         pagina = "bloco_7",
@@ -3225,7 +3377,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
         pagina = "bloco_7",
@@ -3279,7 +3431,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "350px",
         pagina = "bloco_7",
@@ -3311,7 +3463,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
-          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 2), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
+          "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "350px",
         pagina = "bloco_7",
@@ -3942,8 +4094,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação","Causa básica não se aplica a um óbito fetal", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas", "Grupos não selecionados","Imunoprevenção","Causas não claramente evitáveis")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
+                                                                   "Causas mal definidas", "Causa básica não se aplica a um óbito fetal", "Causas não claramente evitáveis")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4209,8 +4361,8 @@ mod_bloco_7_server <- function(id, filtros){
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
         dplyr::ungroup()|>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação","Causa básica não se aplica a um óbito fetal", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas", "Grupos não selecionados","Imunoprevenção","Causas não claramente evitáveis")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
+                                                                   "Causas mal definidas", "Causa básica não se aplica a um óbito fetal", "Causas não claramente evitáveis")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4445,8 +4597,8 @@ mod_bloco_7_server <- function(id, filtros){
           br_porc_obitos = round(sum(br_porc_obitos), 1)
         ) |>
         dplyr::ungroup() |>
-        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação","Causa básica não se aplica a um óbito fetal", "Adequada atenção à mulher no parto",
-                                                                   "Causas mal definidas", "Grupos não selecionados","Imunoprevenção","Causas não claramente evitáveis")),
+        dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
+                                                                   "Causas mal definidas", "Causa básica não se aplica a um óbito fetal", "Causas não claramente evitáveis")),
                       ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1]))
     })
 
@@ -4809,7 +4961,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
             grepl("outros", grupo_cid10) ~ "Demais causas"
           ),
-          porc_obitos = round(porc_obitos, 2)) |>
+          porc_obitos = round(porc_obitos, 1)) |>
         dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
         dplyr::select(grupo, porc_obitos) |>
         dplyr::arrange(desc(porc_obitos)) |>
@@ -4848,7 +5000,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
             grepl("outros", grupo_cid10) ~ "Demais causas"
           ),
-          porc_obitos = round(porc_obitos, 2)) |>
+          porc_obitos = round(porc_obitos, 1)) |>
         dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
         dplyr::select(grupo, porc_obitos) |>
         dplyr::arrange(desc(porc_obitos)) |>
@@ -4892,7 +5044,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("mal_definida", grupo_cid10) ~ "Mal definidas",
             grepl("outros", grupo_cid10) ~ "Demais causas"
           ),
-          porc_obitos = round(porc_obitos, 2)) |>
+          porc_obitos = round(porc_obitos, 1)) |>
         dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
         dplyr::select(grupo, porc_obitos) |>
         dplyr::arrange(desc(porc_obitos)) |>
@@ -5001,7 +5153,7 @@ mod_bloco_7_server <- function(id, filtros){
             grepl("cardiacos_perinatal", grupo_cid10) ~ "Transtornos cardíacos do período perinatal",
             grepl("outros", grupo_cid10) ~ "Demais causas"
           ),
-          porc_obitos = round(br_porc_obitos, 2)) |>
+          porc_obitos = round(br_porc_obitos, 1)) |>
         dplyr::filter(!grepl("outros|mal_definidas", grupo_cid10)) |>
         dplyr::select(grupo, porc_obitos) |>
         dplyr::arrange(desc(porc_obitos)) |>
