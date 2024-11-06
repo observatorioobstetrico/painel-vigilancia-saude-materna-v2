@@ -2993,8 +2993,8 @@ write.csv(df_bloco7_morbidade_neonatal_novo, 'data-raw/csv/indicadores_bloco7_mo
 
 # Novo agrupamento para a distribuição de morbidade
 
-cids_internacoes_neonatais <- read_csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cids_internacoes_neonatais.csv") |>
-  select(causabas = CID,
+cids_internacoes_neonatais <- read_excel("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cids_internacoes_neonatais.xlsx") |>
+  select(causabas = `CID`,
          grupos = `CONSIDERAR ESTA  COLUNA -REVISÃO COM CINTIA E TATIANE EM 1/10/2024 Grupo da rede interagencial moficado para causa de internação neonatal (fluxograma na aba 'orientacoes')`)
 
 for(i in unique(cids_internacoes_neonatais$grupos)){

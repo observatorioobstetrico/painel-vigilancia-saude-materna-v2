@@ -787,7 +787,7 @@ golem_add_external_resources <- function() {
     favicon(ext = "png"),
     bundle_resources(
       path = app_sys("app/www/global"),
-      app_title = "Painel de Vigilância da Saúde Materna"
+      app_title = "Painel de Vigilância da Saúde Materna e Perinatal"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

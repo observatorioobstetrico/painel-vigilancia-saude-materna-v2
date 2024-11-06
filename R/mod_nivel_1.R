@@ -240,7 +240,7 @@ mod_nivel_1_ui <- function(id) {
 
                 <p align='justify' style = 'font-size: 17px'>
                 Neste bloco, o gestor pode acompanhar a porcentagem de mulheres que receberam assistência pré-natal, a porcentagem
-                de mulheres com início precoce do acompanhamento pré-natal, a porcentagem de mulheres que recebeu o número mínimo
+                de mulheres com início do acompanhamento pré-natal até 12 semanas gestacionais,, a porcentagem de mulheres que recebeu o número mínimo
                 de 8 consultas recomendado pela Organização Mundial de Saúde, e a porcentagem de mulheres que recebeu o número
                 adequado de consultas, considerando a idade gestacional no parto. Pode também avaliar a incidência de sífilis congênita,
                 que é considerado um evento sentinela da qualidade da assistência pré-natal, por ser um desfecho negativo evitável
@@ -1895,7 +1895,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data3(),
         indicador = "porc_inicio_prec",
-        titulo = "Porcentagem de mulheres com início precoce do pré-natal (até 12 semanas de gestação)",
+        titulo = "Porcentagem de mulheres com início do pré-natal até 12 semanas de gestação",
         tem_meta = TRUE,
         valor_de_referencia = 95,
         tipo = "porcentagem",
@@ -1925,7 +1925,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data3() |> dplyr::filter(ano >= 2014),
         indicador = "porc_consultas_adequadas",
-        titulo = "Porcentagem de mulheres com número adequado de consultas de pré-natal",
+        titulo = "Porcentagem de mulheres com número adequado de consultas de pré-natal para a idade gestacional no parto",
         tem_meta = FALSE,
         valor_de_referencia = data3_comp()$porc_consultas_adequadas,
         tipo = "porcentagem",
