@@ -15,7 +15,7 @@ mod_sobre_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b("Painel de Vigilância da Saúde Materna"), style = "padding-left: 0.4em"),
+      h2(tags$b("Painel de Vigilância da Saúde Materna e Perinatal"), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
