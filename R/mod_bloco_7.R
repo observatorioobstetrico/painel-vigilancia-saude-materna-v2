@@ -125,7 +125,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Geral" = "fetal_parto_geral",
+                          "Total" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -139,7 +139,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "peso_fetal",
+                          "Total" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -173,7 +173,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Geral" = "fetal_parto_geral",
+                          "Total" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -187,7 +187,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "peso_fetal",
+                          "Total" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -221,7 +221,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Geral" = "fetal_parto_geral",
+                          "Total" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -235,7 +235,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "peso_fetal",
+                          "Total" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -269,7 +269,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Geral" = "fetal_parto_geral",
+                          "Total" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -283,7 +283,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "peso_fetal",
+                          "Total" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -761,7 +761,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "obitos_perinatal_total",
+                          "Total" = "obitos_perinatal_total",
                           "Menor que 1000 g" = "perinatal_total_menos1000",
                           "De 1000 g a 1499 g" = "perinatal_total_1000_1499",
                           "De 1500 g a 2499 g" = "perinatal_total_1500_2499",
@@ -797,7 +797,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "taxa_perinatal_total",
+                          "Total" = "taxa_perinatal_total",
                           "Menor que 1000 g" = "taxa_perinatal_total_menos1000",
                           "De 1000 g a 1499 g" = "taxa_perinatal_total_1000_1499",
                           "De 1500 g a 2499 g" = "taxa_perinatal_total_1500_2499",
@@ -831,7 +831,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "obitos_perinatal_oms",
+                          "Total" = "obitos_perinatal_oms",
                           "Menor que 1000 g" = "perinatal_oms_menos1000",
                           "De 1000 g a 1499 g" = "perinatal_oms_1000_1499",
                           "De 1500 g a 2499 g" = "perinatal_oms_1500_2499",
@@ -865,7 +865,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Geral" = "taxa_perinatal_oms",
+                          "Total" = "taxa_perinatal_oms",
                           "Menor que 1000 g" = "taxa_perinatal_oms_menos1000",
                           "De 1000 g a 1499 g" = "taxa_perinatal_oms_1000_1499",
                           "De 1500 g a 2499 g" = "taxa_perinatal_oms_1500_2499",
@@ -1280,7 +1280,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Geral" = "obitos_neonat",
+                          "Total" = "obitos_neonat",
                           "Menor que 1000 g" = "obitos_neonat_menos1000",
                           "De 1000 g a 1499 g" = "obitos_neonat_1000_1499",
                           "De 1500 g a 2499 g" = "obitos_neonat_1500_2499",
@@ -1314,7 +1314,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Geral" = "mort_neonat",
+                          "Total" = "mort_neonat",
                           "Menor que 1000 g" = "mort_neonat_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_1500_2499",
@@ -1337,7 +1337,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal precoce por 1000 nascidos vivos &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1348,7 +1348,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Geral" = "mort_neonat_precoc",
+                          "Total" = "mort_neonat_precoc",
                           "Menor que 1000 g" = "mort_neonat_precoc_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_precoc_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_precoc_1500_2499",
@@ -1371,7 +1371,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal tardia por 1000 nascidos vivos &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1382,7 +1382,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Geral" = "mort_neonat_tardia",
+                          "Total" = "mort_neonat_tardia",
                           "Menor que 1000 g" = "mort_neonat_tardia_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_tardia_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_tardia_1500_2499",
@@ -3257,7 +3257,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais intermediários e tardios (geral),",
+        titulo = "Dentre os óbitos fetais intermediários e tardios (total),",
         tamanho_caixa = "330px"
       )
     })
@@ -3267,7 +3267,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais intermediários e tardios (geral),",
+        titulo = "Dentre os óbitos fetais intermediários e tardios (total),",
         tamanho_caixa = "330px"
       )
     })
@@ -3304,11 +3304,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade neonatal precoce por 1000 nascidos vivos ---------
     titulo_caixa_neonat_precoc <- reactive({
       dplyr::case_when(
-        input$faixa_peso_precoc == "mort_neonat_precoc" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos",
-        input$faixa_peso_precoc == "mort_neonat_precoc_menos1000" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_1000_1499" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 1000 a 1499 g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_1500_2499" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer de 1500 a 2499 g",
-        input$faixa_peso_precoc == "mort_neonat_precoc_mais2500" ~ "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
+        input$faixa_peso_precoc == "mort_neonat_precoc" ~ "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos",
+        input$faixa_peso_precoc == "mort_neonat_precoc_menos1000" ~ "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_1000_1499" ~ "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos para peso ao nascer de 1000 a 1499 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_1500_2499" ~ "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos para peso ao nascer de 1500 a 2499 g",
+        input$faixa_peso_precoc == "mort_neonat_precoc_mais2500" ~ "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
       )
     })
 
@@ -3330,11 +3330,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade neonatal tardia por 1000 nascidos vivos ----------
     titulo_caixa_neonat_tardia <- reactive({
       dplyr::case_when(
-        input$faixa_peso_tardia == "mort_neonat_tardia" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos",
-        input$faixa_peso_tardia == "mort_neonat_tardia_menos1000" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_1000_1499" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 1000 a 1499 g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_1500_2499" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer de 1500 a 2499 g",
-        input$faixa_peso_tardia == "mort_neonat_tardia_mais2500" ~ "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
+        input$faixa_peso_tardia == "mort_neonat_tardia" ~ "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos",
+        input$faixa_peso_tardia == "mort_neonat_tardia_menos1000" ~ "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_1000_1499" ~ "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos para peso ao nascer de 1000 a 1499 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_1500_2499" ~ "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos para peso ao nascer de 1500 a 2499 g",
+        input$faixa_peso_tardia == "mort_neonat_tardia_mais2500" ~ "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
       )
     })
 
@@ -3390,7 +3390,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre os óbitos neonatais (geral),",
+        titulo = "Dentre os óbitos neonatais (total),",
         tamanho_caixa = "330px"
       )
     })
@@ -3400,7 +3400,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre os óbitos neonatais (geral),",
+        titulo = "Dentre os óbitos neonatais (total),",
         tamanho_caixa = "330px"
       )
     })
@@ -3590,7 +3590,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (total)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -3618,7 +3618,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) no SUS (geral)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) no SUS (total)",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -3648,7 +3648,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_fetal",
-        titulo = "Porcentagem de óbitos fetais intermediários e tardios potencialmente evitáveis (geral)",
+        titulo = "Porcentagem de óbitos fetais intermediários e tardios potencialmente evitáveis (total)",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
         tipo = "porcentagem",
@@ -3666,7 +3666,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_perinatal",
-        titulo = "Porcentagem de óbitos perinatais tardios potencialmente evitáveis (geral)",
+        titulo = "Porcentagem de óbitos perinatais tardios potencialmente evitáveis (total)",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
         tipo = "porcentagem",
@@ -3684,7 +3684,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_neonatal",
-        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (geral)",
+        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (total)",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
         tipo = "porcentagem",
@@ -3703,7 +3703,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_fetal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais intermediários e tardios (geral),"
+        titulo = "Dentre os óbitos fetais intermediários e tardios (total),"
       )
     })
 
@@ -3712,7 +3712,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_perinatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais tardios (geral),"
+        titulo = "Dentre os óbitos perinatais tardios (total),"
       )
     })
 
@@ -3721,7 +3721,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais (geral),"
+        titulo = "Dentre os óbitos neonatais (total),"
       )
     })
 
@@ -3730,7 +3730,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais (geral),"
+        titulo = "Dentre as internações neonatais (total),"
       )
     })
 

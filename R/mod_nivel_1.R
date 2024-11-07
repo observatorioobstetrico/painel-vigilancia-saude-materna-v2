@@ -4324,7 +4324,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "mort_neonat_precoc",
-        titulo = "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$mort_neonat_precoc,
         tipo = "taxa",
@@ -4343,7 +4343,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "mort_neonat_tardia",
-        titulo = "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$mort_neonat_tardia,
         tipo = "taxa",

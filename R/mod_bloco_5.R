@@ -1980,7 +1980,7 @@ mod_bloco_5_server <- function(id, filtros){
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)]) |>
         highcharter::hc_xAxis(title = list(text = ""),categories = unique(data5_juncao_barras()$ano), allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos prematuros"), min = 0, max = 100) |>
         highcharter::hc_legend(reversed = TRUE)
     })
 
