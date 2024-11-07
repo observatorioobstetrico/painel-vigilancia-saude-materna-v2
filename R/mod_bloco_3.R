@@ -109,7 +109,7 @@ mod_bloco_3_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com inicio precoce do pré-natal &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de mulheres com início do pré-natal até 12 semanas de gestação &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -170,7 +170,7 @@ mod_bloco_3_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com número adequado de consultas de pré-natal &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de mulheres com número adequado de consultas de pré-natal para a idade gestacional no parto &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(

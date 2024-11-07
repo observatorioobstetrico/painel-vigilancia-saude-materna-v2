@@ -46,11 +46,11 @@ app_ui <- function(request) {
     bs4Dash::bs4DashPage(
       help = NULL,
       dark = NULL,
-      title = "Painel de Vigilância da Saúde Materna",
+      title = "Painel de Vigilância da Saúde Materna e Perinatal",
       bs4Dash::bs4DashNavbar(
         fixed = TRUE,
         title = bs4Dash::bs4DashBrand(
-          title = HTML("<b> Painel de Vigilância da Saúde Materna </b>"),
+          title = HTML("<b> Painel de Vigilância da Saúde Materna e Perinatal </b>"),
           color = "primary",
           href = "https://observatorioobstetricobr.org/",
           image = "www/logos/logo-oobr-curto.png"
@@ -787,7 +787,7 @@ golem_add_external_resources <- function() {
     favicon(ext = "png"),
     bundle_resources(
       path = app_sys("app/www/global"),
-      app_title = "Painel de Vigilância da Saúde Materna"
+      app_title = "Painel de Vigilância da Saúde Materna e Perinatal"
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

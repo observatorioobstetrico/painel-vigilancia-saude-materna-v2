@@ -30,8 +30,8 @@ mod_bloco_4_ui <- function(id){
               label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
               options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
               choices = c(
-                "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
                 "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
+                "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
                 "Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas" = "indicador3"
               ),
               width = "81%"
