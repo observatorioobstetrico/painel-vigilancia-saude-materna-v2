@@ -1940,7 +1940,6 @@ mal_definidas <- c(
   "P95", "P969"
 )
 
-
 ## Criando a variável de ano, limitando a variável 'causabas' a três caracteres e filtrando apenas pelos óbitos fetais que consideramos
 df_perinat_fetal <- df_fetais_totais |>
   clean_names() |>
@@ -2042,6 +2041,7 @@ df_evitaveis_perinat <- df_perinat_total |>
     values_fill = 0,
     names_sort = TRUE
   ) |>
+  mutate(obitos_perinatais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
 

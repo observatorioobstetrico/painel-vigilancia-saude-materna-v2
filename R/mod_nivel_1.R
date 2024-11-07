@@ -328,7 +328,7 @@ mod_nivel_1_ui <- function(id) {
                 distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
                 Robson e a contribuição de cada grupo para a taxa global de cesariana. Apresentamos, também,
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
-                assistência ao parto, e a distância percorrida para chegar nos serviços de saúde de alta e
+                assistência ao parto, a distância percorrida para chegar nos serviços de saúde de alta e
                 baixa complexidade e a porcentagem de nascidos vivos com peso < 1500g segundo local de
                 ocorrência do parto.
                 <span style='display: block; margin-bottom: 14px;'> </span>
@@ -337,7 +337,7 @@ mod_nivel_1_ui <- function(id) {
                 residência da mulher (% de partos) e hospital com maior número de partos ocorridos fora do
                 município de residência da mulher. Essas informações podem auxiliar os gestores municipais
                 e estaduais a verificar se a regionalização da atenção ao parto está ocorrendo conforme o
-                planejado.
+                planejado, ou seja, se os partos estão ocorrendo em serviços e municípios previstos na regionalização.
 
                 </p>
                 "
@@ -434,16 +434,15 @@ mod_nivel_1_ui <- function(id) {
                 <p align='justify' style = 'font-size: 17px'>
                 As condições de nascimento do recém-nato dependem da saúde materna e devem ser monitoradas porque refletem a
                 qualidade dos cuidados recebidos pela gestante durante a assistência pré-natal e ao parto. Além disso, seu
-                monitoramento é importante para o planejamento da atenção à saúde do recém-nascido. Embora sejam indicadores
-                relacionados ao bebê, devem ser monitorados por também refletirem a qualidade dos cuidados recebidos pela
-                gestante durante a assistência pré-natal e ao parto.
+                monitoramento é importante para o planejamento da atenção à saúde do recém-nascido.
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Neste bloco apresentamos a porcentagem de nascimentos prematuros (com menos de 37 semanas gestacionais) e com baixo
                 peso ao nascer (<2500g), principais determinantes da mortalidade infantil. Apresentamos também os nascimentos a termo
-                precoce (bebês nascidos com 37 e 38 semanas gestacionais), que apresentam maior risco de complicações e que são mais
-                frequentes em locais com taxa elevada de cesariana; a porcentagem de nascidos com anomalias congênitas (total e as
-                definidas pelo Ministério da Saúde como de relevância para a vigilância); e a porcentagem de recém-nascidos sem
-                baixo peso ao nascer e sem anomalias que apresentaram asfixia no quinto minuto de vida (Apgar <7).
+                precoce (bebês nascidos com 37 e 38 semanas gestacionais), que têm maior risco de complicações e ocorrem com maior frequência em locais com taxa elevada de cesariana;
+                a porcentagem de nascidos com anomalias congênitas (total e as
+                definidas pelo Ministério da Saúde como de relevância para a vigilância em saúde); e a porcentagem de recém-nascidos com peso ≥2500g
+                e sem anomalias congênitas que nasceram com asfixia no quinto minuto de vida (Apgar <7).
+
 
                 </p>
                 "
@@ -694,7 +693,9 @@ mod_nivel_1_ui <- function(id) {
                 assistenciais. Neste bloco, apresentamos o número absoluto de óbitos e a taxa
                 de mortalidade fetal, neonatal e perinatal; a distribuição desses óbitos segundo
                 o peso ao nascer e o momento de ocorrência do óbito; e as principais causas dos
-                óbitos e sua evitabilidade. Para a morbidade neonatal, são apresentadas a
+                óbitos e sua evitabilidade. Para a avaliação da evitabilidade, ou seja, da possibilidade
+                do óbito ser evitado, utilizamos a Lista Brasileira de Causas de Mortes Evitáveis por intervenção do Sistema Único de Saúde.
+                Para a morbidade neonatal, são apresentadas a
                 porcentagem de nascidos com condições potencialmente ameaçadoras à vida
                 (peso < 1500g ou idade gestacional < 32 semanas ou asfixia ao nascer);
                 o número de internações neonatais e de internações em unidade de terapia
@@ -703,7 +704,8 @@ mod_nivel_1_ui <- function(id) {
                 segundo local de ocorrência (na macrorregião de residência ou fora da
                 macrorregião); e as principais causas de morbidade. A análise da morbidade
                 é particularmente importante para locais com baixo número de nascimentos,
-                onde a frequência de óbitos neonatais pode ser muito baixa ou inexistente.
+                onde a frequência de óbitos neonatais pode ser muito baixa ou inexistente,
+                ampliando a capacidade de análise do cuidado e dos riscos da população.
 
                 </p>
                 "
@@ -2740,7 +2742,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_nasc_premat",
-        titulo = "Porcentagem de nascimentos prematuros",
+        titulo = "Porcentagem de nascimentos prematuros (com menos de 37 semanas de gestação)",
         tem_meta = TRUE,
         valor_de_referencia = 10,
         tipo = "porcentagem",
@@ -2763,7 +2765,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_termo_precoce",
-        titulo = "Porcentagem de nascimentos termo precoce",
+        titulo = "Porcentagem de nascimentos termo precoce (com 37 ou 38 semanas de gestação)",
         tem_meta = TRUE,
         valor_de_referencia = 20,
         tipo = "porcentagem",
@@ -4122,7 +4124,7 @@ mod_nivel_1_server <- function(id, filtros){
        cria_caixa_server(
          dados = bloco7_evitaveis_resumo(),
          indicador = "porc_evitavel_fetal",
-         titulo = "Porcentagem de óbitos fetais potencialmente evitáveis",
+         titulo = "Porcentagem de óbitos fetais intermediários e tardios potencialmente evitáveis",
          tem_meta = FALSE,
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
          tipo = "porcentagem",
@@ -4140,7 +4142,7 @@ mod_nivel_1_server <- function(id, filtros){
        cria_caixa_server(
          dados = bloco7_evitaveis_resumo(),
          indicador = "porc_evitavel_perinatal",
-         titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis",
+         titulo = "Porcentagem de óbitos perinatais tardios potencialmente evitáveis",
          tem_meta = FALSE,
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
          tipo = "porcentagem",
@@ -4177,7 +4179,7 @@ mod_nivel_1_server <- function(id, filtros){
      output$caixa_b7_fetal_i5 <- renderUI({
        cria_caixa_principais_evitaveis_bloco7(
          dados = bloco7_principais_obito_fetal(),
-         titulo = "Dentre os óbitos fetais,"
+         titulo = "Dentre os óbitos fetais intermediários e tardios,"
        )
      })
 
@@ -4186,7 +4188,7 @@ mod_nivel_1_server <- function(id, filtros){
      output$caixa_b7_perinatal_i5 <- renderUI({
        cria_caixa_principais_evitaveis_bloco7(
          dados = bloco7_principais_obito_perinatal(),
-         titulo = "Dentre os óbitos perinatais,"
+         titulo = "Dentre os óbitos perinatais tardios,"
       )
      })
 
@@ -4203,7 +4205,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_fetais",
-        titulo = "Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+        titulo = "Número de óbitos fetais intermediários e tardios (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_fetais,
         tipo = "número",
@@ -4224,7 +4226,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_fetais_oms",
-        titulo = "Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
+        titulo = "Número de óbitos fetais tardios (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_fetais_oms,
         tipo = "número",
@@ -4246,7 +4248,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_mort_fetal",
-        titulo = "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
+        titulo = "Taxa de mortalidade fetal intermediária e tardia (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
         tem_meta = FALSE,
         valor_de_referencia = #ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
                                              data7_comp()$taxa_mort_fetal,#, NaN),
@@ -4264,7 +4266,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_mort_fetal_oms",
-        titulo = "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
+        titulo = "Taxa de mortalidade fetal tardia (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
         tem_meta = FALSE,
         valor_de_referencia = #dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]] >0 ,
                                              data7_comp()$taxa_mort_fetal_oms,
@@ -4282,7 +4284,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais,",
+        titulo = "Dentre os óbitos fetais intermediários e tardios,",
         tamanho_caixa = "330px"
       )
     })
@@ -4292,7 +4294,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais,",
+        titulo = "Dentre os óbitos fetais intermediários e tardios,",
         tamanho_caixa = "330px"
       )
     })
@@ -4406,7 +4408,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_perinatal_total",
-        titulo = "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        titulo = "Número de óbitos perinatais intermediários e tardios (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_perinatal_total,
         tipo = "número",
@@ -4429,7 +4431,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_perinatal_total",
-        titulo = "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        titulo = "Taxa de mortalidade perinatal intermediária e tardia (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
         valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
           data7_comp()$taxa_perinatal_total, #, NaN),
@@ -4448,7 +4450,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_perinatal_oms",
-        titulo = "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        titulo = "Número de óbitos perinatais tardios (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_perinatal_oms,
         tipo = "número",
@@ -4471,7 +4473,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_perinatal_oms",
-        titulo = "Taxa de mortalidade perinatal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
+        titulo = "Taxa de mortalidade perinatal tardia (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
         valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
                                              data7_comp()$taxa_perinatal_oms, #, NaN),
@@ -4489,7 +4491,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "perinatal momento do obito por peso",
-        titulo = "Dentre os óbitos perinatais,",
+        titulo = "Dentre os óbitos perinatais tardios,",
         tamanho_caixa = "330px",
       )
     })
@@ -4499,7 +4501,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "perinatal peso por momento do obito",
-        titulo = "Dentre os óbitos perinatais,",
+        titulo = "Dentre os óbitos perinatais tardios,",
         tamanho_caixa = "330px",
       )
     })

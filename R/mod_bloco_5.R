@@ -208,7 +208,7 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de nascimentos prematuros &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de nascimentos prematuros (com menos de 37 semanas de gestação)&nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -288,7 +288,7 @@ mod_bloco_5_ui <- function(id) {
               div(
                 style = "height: 15%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de nascimentos termo precoce &nbsp;</b>"
+                  "<b style='font-size:19px'> Porcentagem de nascimentos termo precoce (com 37 ou 38 semanas de gestação)&nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -1862,7 +1862,7 @@ mod_bloco_5_server <- function(id, filtros){
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(viridis::magma(5, direction = -1)[-c(1, 5)]) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data5_juncao_barras()$ano), allowDecimals = FALSE, reversed = TRUE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos com baixo peso"), min = 0, max = 100)
 
     })
 
