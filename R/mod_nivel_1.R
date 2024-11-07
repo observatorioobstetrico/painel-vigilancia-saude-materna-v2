@@ -1686,7 +1686,7 @@ mod_nivel_1_server <- function(id, filtros){
             data1_comp()$porc_nvm_com_cor_da_pele_negra
           ),
           "categorias" = rep(c("Amarela", "Branca",  "Indígena", "Parda", "Preta", "Negra (pardas e pretas)"), times = 2),
-          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 5)
+          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 6)
         )
       })
 
