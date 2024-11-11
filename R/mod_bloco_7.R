@@ -405,7 +405,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -992,7 +992,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 8%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1555,7 +1555,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1963,7 +1963,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
