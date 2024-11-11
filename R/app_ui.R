@@ -60,7 +60,7 @@ app_ui <- function(request) {
       ),
       bs4Dash::bs4DashSidebar(
         #style = "z-index: 9999;",
-        width = "470px",
+        width = "500px",
         status = "navy",
         skin = "light",
         collapsed = TRUE,

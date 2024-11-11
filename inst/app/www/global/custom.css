@@ -50,7 +50,7 @@
 
 .layout-navbar-fixed .wrapper .main-sidebar:hover .brand-link {
   transition: width .3s ease-in-out;
-  width: 470px!important;
+  width: 500px!important;
 }
 
 .layout-navbar-fixed .wrapper .brand-link {
@@ -58,7 +58,7 @@
   position: fixed;
   top: 0;
   transition: width .3s ease-in-out;
-  width: 470px;
+  width: 500px;
   z-index: 1035;
 }
 
