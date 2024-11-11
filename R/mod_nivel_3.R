@@ -573,12 +573,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando vetores que recebem os indicadores que só estão disponíveis a partir de ou até certos anos --------
     indicadores_2014 <- c(
-      "tx_abortos_mil_mulheres_valor_medio",
-      "sus_tx_abortos_mil_mulheres_valor_medio",
-      "ans_tx_abortos_mil_mulheres_valor_medio",
-      "tx_abortos_cem_nascidos_vivos_valor_medio",
-      "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
-      "ans_tx_abortos_cem_nascidos_vivos_valor_medio",
       "cobertura_pre_natal",
       "porc_7",
       "porc_consultas_adequadas",
@@ -587,28 +581,18 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
 
-    indicadores_2022 <- reactive({
-      indicadores_2022_aux <-
-        if (filtros()$nivel %in% c("Nacional", "Estadual", "Regional")) {
-          c(
-            "porc_dependentes_sus",
-            "porc_menor20",
-            tabela_indicadores$nome_abreviado[grep("tx_abortos_mil", tabela_indicadores$nome_abreviado)],
-            "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
-            "ans_tx_abortos_cem_nascidos_vivos_valor_medio",
-            tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4_deslocamento"]
-          )
-        } else {
-          c(
-            "porc_dependentes_sus",
-            "porc_menor20",
-            tabela_indicadores$nome_abreviado[grep("tx_abortos_mil", tabela_indicadores$nome_abreviado)],
-            "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
-            "ans_tx_abortos_cem_nascidos_vivos_valor_medio",
-            tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4_deslocamento"]
-          )
-        }
-    })
+    indicadores_2022 <- c(
+      "porc_dependentes_sus",
+      "porc_menor20",
+      tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)],
+      "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
+      "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
+    )
+
+    indicadores_2024 <- c(
+      "porc_sc"
+    )
+
 
     ## Criando um vetor com a lista de anos disponíveis para o indicador selecionado --------
     anos_disponiveis <- reactive({
@@ -620,12 +604,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         anos_disponiveis_aux <- filtros()$ano2[1]:filtros()$ano2[2]
       }
 
-      if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
-        anos_disponiveis_aux[anos_disponiveis_aux <= 2022]
+      if (infos_indicador()$nome_abreviado %in% indicadores_2022) {
+        anos_disponiveis_aux[anos_disponiveis_aux <= 2021]
       } else {
         anos_disponiveis_aux
       }
 
+      if (infos_indicador()$nome_abreviado %in% indicadores_2024) {
+        anos_disponiveis_aux[anos_disponiveis_aux <= 2023]
+      } else {
+        anos_disponiveis_aux
+      }
     })
 
     ## Definindo as cores dos gráficos ----------------------------------------
@@ -909,7 +898,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando o output do velocímetro (gauge) --------------------------------
     output$gauge1 <- renderUI({
       if (infos_indicador()$num_indicadores_incompletude == 0 & !(startsWith(infos_indicador()$bloco, "bloco5")) &
-          !(startsWith(infos_indicador()$bloco, "bloco7")) &
+          !(startsWith(infos_indicador()$bloco, "bloco7")) & !(grepl("tx_abortos_cem", infos_indicador()$nome_abreviado)) &
           !(infos_indicador()$nome_abreviado %in% c(indicadores_2014[1:6], "porc_sc"))) {
         if (infos_indicador()$nome_abreviado == "porc_dependentes_sus") {
           div(
@@ -1765,9 +1754,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ) |>
         dplyr::ungroup()
 
-      if (infos_indicador()$nome_abreviado %in% indicadores_2022()) {
+      if (infos_indicador()$nome_abreviado %in% indicadores_2022) {
         data_grafico_serie_aux |>
-          tibble::add_row(ano = 2022, class = data_grafico_serie_aux$class[1])
+          tibble::add_row(ano = 2022:filtros()$ano2[2], class = rep(data_grafico_serie_aux$class[1], length(2022:filtros()$ano2[2])))
       } else {
         data_grafico_serie_aux
       }
@@ -2036,9 +2025,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               data = data_referencia_serie() |>
                 dplyr::filter(
                   ano <= ifelse(
-                    infos_indicador()$nome_abreviado %in% indicadores_2022(),
+                    infos_indicador()$nome_abreviado %in% indicadores_2022,
                     2021,
-                    2022
+                    filtros()$ano2[2]
                   )
                 ),
               type = "line",
