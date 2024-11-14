@@ -573,6 +573,9 @@ app_ui <- function(request) {
                     condition = {
                       indicadores_uma_caixinha_adicional_bloco7 <- c(
                         "'Número de óbitos neonatais'",
+                        "'Taxa de mortalidade neonatal por 1000 nascidos vivos'",
+                        "'Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos'",
+                        "'Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos'",
                         "'Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)'",
                         "'Taxa de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)'",
                         "'Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)'",
