@@ -617,7 +617,9 @@ app_ui <- function(request) {
                         "'Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)'",
                         "'Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)'",
                         "'Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)'",
-                        "'Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)'"
+                        "'Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)'",
+                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS'",
+                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'"
                       )
 
                       glue::glue(

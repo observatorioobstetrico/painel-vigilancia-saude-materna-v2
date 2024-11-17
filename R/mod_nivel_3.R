@@ -425,7 +425,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Número de óbitos fetais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
       "Número de óbitos fetais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
       "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)",
-      "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)"
+      "Taxa de mortalidade fetal (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)",
+      "Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS",
+      "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS"
     )
 
 
@@ -469,11 +471,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         } else if (filtros()$indicador_blocos4_6_7 %in% indicadores_duas_caixinhas_adicionais_bloco7) {
           nome_abreviado <- tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
 
-          tabela_indicadores |>
-            dplyr::filter(
-              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_duas_caixinhas_adicionais1}_{filtros()$indicador_duas_caixinhas_adicionais2}")
-            ) |>
-            dplyr::mutate(indicador = trimws(indicador))
+            tabela_indicadores |>
+              dplyr::filter(
+                nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_duas_caixinhas_adicionais1}_{filtros()$indicador_duas_caixinhas_adicionais2}")
+              ) |>
+              dplyr::mutate(indicador = trimws(indicador))
 
         } else {
           tabela_indicadores |>

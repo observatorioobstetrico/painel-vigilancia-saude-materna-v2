@@ -415,6 +415,25 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         label = "Faixa de peso"
       )
     }
+
+    if (input$indicador_blocos4_6_7 %in% c("Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS",
+                                           "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS")) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_duas_caixinhas_adicionais1",
+        choices = c("Geral" = "geral", "Dentro da macrorregião de saúde" = "na_macro", "Fora da macrorregião de saúde" = "fora_macro"
+        ),
+        label = "Local da internação"
+      )
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_duas_caixinhas_adicionais2",
+        choices = c("Geral" = "geral", "0 dias" = "0_dias", "1 a 6 dias" = "1_a_6_dias", "7 a 27 dias" = "7_a_27_dias"
+        ),
+        label = "Idade, em dias, do bebê"
+      )
+    }
+
     if (input$indicador_blocos4_6_7 == "Porcentagem de nascidos vivos segundo local de ocorrência do parto") {
       updateSelectizeInput(
         session,
