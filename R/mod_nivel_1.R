@@ -521,18 +521,18 @@ mod_nivel_1_ui <- function(id) {
           #icon = icon("6"),
           status = "primary",
           fluidRow(
-            fluidRow(
-              column(
-                width=12,
-                HTML(
-                  "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+            column(
+              width=12,
+              HTML(
+                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
                 </b> </div>"
-                ),
-                hr(),
-                HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
-              )
-            ),
+              ),
+              hr(),
+              HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+            )
+          ),
+          fluidRow(
             column(
               width = 5,
               HTML(
@@ -670,18 +670,18 @@ mod_nivel_1_ui <- function(id) {
           #icon = icon("6"),
           status = "primary",
           fluidRow(
-            fluidRow(
-              column(
-                width=12,
-                HTML(
-                  "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+            column(
+              width=12,
+              HTML(
+                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
-                ),
-                hr(),
-                HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
-              )
-            ),
+              ),
+              hr(),
+              HTML("<span style='display: block; margin-bottom: 27px;'> </span>")
+            )
+          ),
+          fluidRow(
             column(
               width = 5,
               HTML(
@@ -690,10 +690,14 @@ mod_nivel_1_ui <- function(id) {
                 A mortalidade fetal, neonatal e perinatal são os desfechos adversos mais graves
                 da atenção à gestação, parto e nascimento, enquanto a morbidade neonatal é um
                 indicador que reflete a carga de doença em recém-nascidos e suas necessidades
-                assistenciais. Neste bloco, apresentamos o número absoluto de óbitos e a taxa
+                assistenciais.
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Neste bloco, apresentamos o número absoluto de óbitos e a taxa
                 de mortalidade fetal, neonatal e perinatal; a distribuição desses óbitos segundo
                 o peso ao nascer e o momento de ocorrência do óbito; e as principais causas dos
-                óbitos e sua evitabilidade. Para a avaliação da evitabilidade, ou seja, da possibilidade
+                óbitos e sua evitabilidade.
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Para a avaliação da evitabilidade, ou seja, da possibilidade
                 do óbito ser evitado, utilizamos a Lista Brasileira de Causas de Mortes Evitáveis por intervenção do Sistema Único de Saúde.
                 Para a morbidade neonatal, são apresentadas a
                 porcentagem de nascidos com condições potencialmente ameaçadoras à vida
@@ -748,19 +752,19 @@ mod_nivel_1_ui <- function(id) {
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i7")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i2")), proxy.height = "270px")
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i8")), proxy.height = "270px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i3")), proxy.height = "270px")
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i3")), proxy.height = "270px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i7")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i8")), proxy.height = "270px")
                      ),
                       column(
                         width = 4,
@@ -769,11 +773,11 @@ mod_nivel_1_ui <- function(id) {
                       column(
                         offset = 2,
                         width = 4,
-                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "280px")
+                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "280px")
                       ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "280px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i5")), proxy.height = "280px")
                      )
 
                 ) ),
@@ -821,6 +825,10 @@ mod_nivel_1_ui <- function(id) {
                   fluidRow(
                      column(
                        width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i4")), proxy.height = "270px")
+                     ),
+                     column(
+                       width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i1")), proxy.height = "270px")
                      ),
                      column(
@@ -829,11 +837,7 @@ mod_nivel_1_ui <- function(id) {
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i3")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i4")), proxy.height = "280px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i3")), proxy.height = "280px")
                      ),
                      column(
                        width = 4,
@@ -846,11 +850,11 @@ mod_nivel_1_ui <- function(id) {
                      column(
                        offset = 2,
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i7")), proxy.height = "280px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i8")), proxy.height = "280px")
                      ),
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i8")), proxy.height = "280px")
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i7")), proxy.height = "280px")
                      )
                   )
                 ),
@@ -2197,7 +2201,7 @@ mod_nivel_1_server <- function(id, filtros){
         "Grupo de Robson 10"
       )
       porc_nascidos <- c(
-        "---",
+        "100%",
         ifelse(filtros()$ano >= 2014, paste0(formatC(data4()$prop_nasc_robson1, big.mark = ".", decimal.mark = ","), "%"), "---"),
         ifelse(filtros()$ano >= 2014, paste0(formatC(data4()$prop_nasc_robson2, big.mark = ".", decimal.mark = ","), "%"), "---"),
         ifelse(filtros()$ano >= 2014, paste0(formatC(data4()$prop_nasc_robson3, big.mark = ".", decimal.mark = ","), "%"), "---"),
@@ -4015,12 +4019,16 @@ mod_nivel_1_server <- function(id, filtros){
 
     bloco7_principais_obito_neonatal <- reactive({
       data_filtrada_evitaveis_aux() |>
-        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonat_grupos") | "obitos_neonatais_totais"), sum) |>
+        dplyr::select(
+          dplyr::contains("neonatal_grupos") &
+            !dplyr::matches("0_dias|1_6_dias|7_27_dias")
+        ) |>
+        dplyr::summarise_at(dplyr::vars(dplyr::contains("neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))))) |>
-        dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias")))), ~ (. / obitos_neonatais_grupos_total * 100)) |>
+        dplyr::mutate(obitos_neonatais_grupos_total = sum(dplyr::across(dplyr::contains("neonatal_grupos")))) |>
+        dplyr::mutate_at(dplyr::vars(dplyr::contains("neonatal_grupos")), ~ (. / obitos_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
-          cols = dplyr::matches(momento_obitos(aba="neonatal", grafico = "grupos", input = c("neonat_grupos_0_dias","neonat_grupos_1_6_dias","neonat_grupos_7_27_dias"))),
+          cols = dplyr::contains("neonatal_grupos"),
           names_to = "grupo_cid10",
           values_to = "porc_obitos"
         ) |>

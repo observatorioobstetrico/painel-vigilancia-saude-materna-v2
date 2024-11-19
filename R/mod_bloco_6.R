@@ -412,7 +412,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com tempo de permanência prolongado &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao7"),
@@ -440,7 +440,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com transfusão sanguínea &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com transfusão sanguínea &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao8"),
@@ -468,7 +468,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos com morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao9"),

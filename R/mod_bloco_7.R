@@ -38,7 +38,7 @@ mod_bloco_7_ui <- function(id) {
       width = 12,
       collapsible = FALSE,
       tabPanel(
-        HTML("<b>Indicadores relacionados à mortalidade fetal </b>"),
+        HTML("<b>Relacionados à mortalidade fetal </b>"),
         value = "tabpanel_fetal",
         fluidRow(
           column(
@@ -125,7 +125,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Total" = "fetal_parto_geral",
+                          "Geral" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -139,7 +139,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "peso_fetal",
+                          "Geral" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -173,7 +173,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Total" = "fetal_parto_geral",
+                          "Geral" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -187,7 +187,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "peso_fetal",
+                          "Geral" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -221,7 +221,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Total" = "fetal_parto_geral",
+                          "Geral" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -235,7 +235,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "peso_fetal",
+                          "Geral" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -269,7 +269,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Momento do óbito",
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
-                          "Total" = "fetal_parto_geral",
+                          "Geral" = "fetal_parto_geral",
                           "Antes do trabalho de parto" = "antes",
                           "Durante o trabalho de parto" = "durante"
                         ),
@@ -283,7 +283,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "peso_fetal",
+                          "Geral" = "peso_fetal",
                           "Menor que 1000 g" = "fetal_menos1000",
                           "De 1000 g a 1499 g" = "fetal_1000_1499",
                           "De 1500 g a 2499 g" = "fetal_1500_2499",
@@ -306,7 +306,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito fetal por faixa de peso  &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito fetal intermediário e tardio por faixa de peso  &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal1"),
@@ -358,7 +358,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito fetal &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito fetal intermediário e tardio &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal2"),
@@ -405,7 +405,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais intermediários e tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -590,7 +590,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
+                   HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais intermediários e tardios segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
@@ -674,7 +674,7 @@ mod_bloco_7_ui <- function(id) {
       #),
 
       tabPanel(
-        HTML("<b>Indicadores relacionados à mortalidade perinatal </b>"),
+        HTML("<b>Relacionados à mortalidade perinatal </b>"),
         value = "tabpanel_perinatal",
         fluidRow(
           column(
@@ -750,7 +750,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Número de óbitos perinatais intermediários e tardios (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
+                    HTML("<b style='font-size:18px'> Número de óbitos perinatais tardios (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -761,7 +761,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "obitos_perinatal_total",
+                          "Geral" = "obitos_perinatal_total",
                           "Menor que 1000 g" = "perinatal_total_menos1000",
                           "De 1000 g a 1499 g" = "perinatal_total_1000_1499",
                           "De 1500 g a 2499 g" = "perinatal_total_1500_2499",
@@ -797,7 +797,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "taxa_perinatal_total",
+                          "Geral" = "taxa_perinatal_total",
                           "Menor que 1000 g" = "taxa_perinatal_total_menos1000",
                           "De 1000 g a 1499 g" = "taxa_perinatal_total_1000_1499",
                           "De 1500 g a 2499 g" = "taxa_perinatal_total_1500_2499",
@@ -831,7 +831,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "obitos_perinatal_oms",
+                          "Geral" = "obitos_perinatal_oms",
                           "Menor que 1000 g" = "perinatal_oms_menos1000",
                           "De 1000 g a 1499 g" = "perinatal_oms_1000_1499",
                           "De 1500 g a 2499 g" = "perinatal_oms_1500_2499",
@@ -865,7 +865,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso",
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
-                          "Total" = "taxa_perinatal_oms",
+                          "Geral" = "taxa_perinatal_oms",
                           "Menor que 1000 g" = "taxa_perinatal_oms_menos1000",
                           "De 1000 g a 1499 g" = "taxa_perinatal_oms_1000_1499",
                           "De 1500 g a 2499 g" = "taxa_perinatal_oms_1500_2499",
@@ -888,7 +888,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito perinatal por faixa de peso &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito perinatal tardio por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal1"),
@@ -940,7 +940,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito perinatal &nbsp;</b>"),
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito perinatal tardio &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal2"),
@@ -992,7 +992,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 8%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1091,7 +1091,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 8%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais tardios por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1182,7 +1182,7 @@ mod_bloco_7_ui <- function(id) {
         )
       ),
       tabPanel(
-        HTML("<b>Indicadores relacionados à mortalidade neonatal</b>"),
+        HTML("<b>Relacionados à mortalidade neonatal</b>"),
         value = "tabpanel_neonatal",
         fluidRow(
           column(
@@ -1280,7 +1280,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Total" = "obitos_neonat",
+                          "Geral" = "obitos_neonat",
                           "Menor que 1000 g" = "obitos_neonat_menos1000",
                           "De 1000 g a 1499 g" = "obitos_neonat_1000_1499",
                           "De 1500 g a 2499 g" = "obitos_neonat_1500_2499",
@@ -1314,7 +1314,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Total" = "mort_neonat",
+                          "Geral" = "mort_neonat",
                           "Menor que 1000 g" = "mort_neonat_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_1500_2499",
@@ -1348,7 +1348,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Total" = "mort_neonat_precoc",
+                          "Geral" = "mort_neonat_precoc",
                           "Menor que 1000 g" = "mort_neonat_precoc_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_precoc_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_precoc_1500_2499",
@@ -1382,7 +1382,7 @@ mod_bloco_7_ui <- function(id) {
                         label = "Faixa de peso ao nascer",
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
-                          "Total" = "mort_neonat_tardia",
+                          "Geral" = "mort_neonat_tardia",
                           "Menor que 1000 g" = "mort_neonat_tardia_menos1000",
                           "De 1000 g a 1499 g" = "mort_neonat_tardia_1000_1499",
                           "De 1500 g a 2499 g" = "mort_neonat_tardia_1500_2499",
@@ -1741,7 +1741,7 @@ mod_bloco_7_ui <- function(id) {
         )
       ),
       tabPanel(
-        HTML("<b>Indicadores relacionados à morbidade neonatal</b>"),
+        HTML("<b>Relacionados à morbidade neonatal</b>"),
         value = "tabpanel_morbidade_neonatal",
         fluidRow(
           column(
@@ -3142,7 +3142,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = taxa_mortalidade_fetal(),
         titulo = titulo_taxa_mortalidade_fetal(),
         tem_meta = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", TRUE, FALSE),
-        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta brasileira", ""),
+        tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta ODS", ""),
         valor_de_referencia = ifelse(
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]] > 0,
           data7_resumo_referencia()[[taxa_mortalidade_fetal()]],
@@ -3278,7 +3278,7 @@ mod_bloco_7_server <- function(id, filtros){
     titulo_caixa_neonat <- reactive({
       dplyr::case_when(
         input$faixa_peso == "mort_neonat" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos",
-        input$faixa_peso == "mort_neonat_menos1000" ~ "Mortalidade neonatal por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
+        input$faixa_peso == "mort_neonat_menos1000" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer menor que 1000 g",
         input$faixa_peso == "mort_neonat_1000_1499" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1000 a 1499 g",
         input$faixa_peso == "mort_neonat_1500_2499" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer de 1500 a 2499 g",
         input$faixa_peso == "mort_neonat_mais2500" ~ "Taxa de mortalidade neonatal por 1000 nascidos vivos para peso ao nascer maior ou igual a 2500 g"
@@ -3291,7 +3291,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso,
         titulo = titulo_caixa_neonat(),
         tem_meta = ifelse(input$faixa_peso == "mort_neonat", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta brasileira", ""),
+        tipo_referencia = ifelse(input$faixa_peso == "mort_neonat", "meta ODS", ""),
         valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
         tipo = "taxa",
         invertido = FALSE,
@@ -3518,7 +3518,7 @@ mod_bloco_7_server <- function(id, filtros){
         indicador = input$faixa_peso_perinatal_taxa_oms,
         titulo = titulo_caixa_taxa_perinatal_oms(),
         tem_meta = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", TRUE, FALSE),
-        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta brasileira adaptada para a localidade", FALSE),
+        tipo_referencia = ifelse(input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms", "meta ODS adaptada para os óbitos perinatais e para a localidade", FALSE),
         valor_de_referencia = ifelse(
           input$faixa_peso_perinatal_taxa_oms == "taxa_perinatal_oms",
           data7_referencia_perinatal()$taxa_perinatal_oms,
@@ -6205,7 +6205,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -6236,7 +6236,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta brasileira)"),
+              name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.7
@@ -6719,7 +6719,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.8
@@ -6750,7 +6750,7 @@ mod_bloco_7_server <- function(id, filtros){
            highcharter::hc_add_series(
              data = data7_plot_referencia_aux,
              type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta brasileira)"),
+             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
              dashStyle = "ShortDot",
              opacity = 0.7

@@ -38,6 +38,7 @@ mod_bloco_4_ui <- function(id){
             )
           )
         ),
+        hr(),
         conditionalPanel(
           ns = ns,
           condition = "input.indicador_robson == 'indicador1'",
