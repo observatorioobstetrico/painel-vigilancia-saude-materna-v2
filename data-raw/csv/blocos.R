@@ -203,7 +203,7 @@ bloco7_distribuicao_cids_aux <- dplyr::full_join(
   bloco7_distribuicao_cids_fetais_aux,
   bloco7_distribuicao_cids_neonatais_aux
 ) |>
-  full_join(bloco7_distribuicao_cids_perinatais_aux)
+  dplyr::full_join(bloco7_distribuicao_cids_perinatais_aux)
 
 
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
@@ -215,10 +215,10 @@ bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloc
 bloco8_garbage_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_2012-2024.csv") |>
   janitor::clean_names()
 
-bloco8_garbage_morbidade_aux <- read_csv(gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv")) |>
-  clean_names()
+bloco8_garbage_morbidade_aux <- read.csv(gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv")) |>
+  janitor::clean_names()
 
-bloco8_garbage_aux <- full_join(bloco8_garbage_mortalidade_aux, bloco8_garbage_morbidade_aux)
+bloco8_garbage_aux <- dplyr::full_join(bloco8_garbage_mortalidade_aux, bloco8_garbage_morbidade_aux)
 
 bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
 
@@ -372,7 +372,7 @@ bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
 #   )
 
 bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres") |>
-  rename(morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias = morbidade_neonatal_grupos_afeccoes_0_dias_respiratorias)
+  dplyr::rename(morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias = morbidade_neonatal_grupos_afeccoes_0_dias_respiratorias)
 
 bloco7_dist_morbidade[is.na(bloco7_dist_morbidade)] <- 0
 
