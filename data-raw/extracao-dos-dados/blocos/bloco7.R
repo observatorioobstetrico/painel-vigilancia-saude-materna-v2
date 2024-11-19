@@ -496,7 +496,14 @@ df_evitaveis_fetal_todos_v2 <- df_fetais_totais |>
     values_fill = 0,
     names_sort = TRUE
   ) |>
-  mutate(obitos_fetais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)) |>
+  mutate(
+    evitaveis_fetal_imunoprevencao2_total = rowSums(across(starts_with("evitaveis_fetal_imunoprevencao2"), ~ .x), na.rm = TRUE),
+    evitaveis_fetal_mulher_gestacao2_total = rowSums(across(starts_with("evitaveis_fetal_mulher_gestacao2"), ~ .x), na.rm = TRUE),
+    evitaveis_fetal_parto2_total = rowSums(across(starts_with("evitaveis_fetal_parto2"), ~ .x), na.rm = TRUE),
+    evitaveis_fetal_nao_aplica2_total = rowSums(across(starts_with("evitaveis_fetal_nao_aplica2"), ~ .x), na.rm = TRUE),
+    evitaveis_fetal_mal_definidas2_total = rowSums(across(starts_with("evitaveis_fetal_mal_definidas2"), ~ .x), na.rm = TRUE),
+    obitos_fetais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)
+  ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
 
@@ -715,6 +722,16 @@ df_fetais_grupos_todos <- df_fetais_totais |>
     values_from = obitos,
     values_fill = 0,
     names_sort = TRUE
+  ) |>
+  mutate(
+    fetal_grupos_prematuridade_total = rowSums(across(starts_with("fetal_grupos_prematuridade"), ~ .x), na.rm = TRUE),
+    fetal_grupos_infeccoes_total = rowSums(across(starts_with("fetal_grupos_infeccoes"), ~ .x), na.rm = TRUE),
+    fetal_grupos_asfixia_total = rowSums(across(starts_with("fetal_grupos_asfixia"), ~ .x), na.rm = TRUE),
+    fetal_grupos_respiratorias_total = rowSums(across(starts_with("fetal_grupos_respiratorias"), ~ .x), na.rm = TRUE),
+    fetal_grupos_gravidez_total = rowSums(across(starts_with("fetal_grupos_gravidez"), ~ .x), na.rm = TRUE),
+    fetal_grupos_afeccoes_perinatal_total = rowSums(across(starts_with("fetal_grupos_afeccoes_perinatal"), ~ .x), na.rm = TRUE),
+    fetal_grupos_ma_formacao_total = rowSums(across(starts_with("fetal_grupos_ma_formacao"), ~ .x), na.rm = TRUE),
+    fetal_grupos_mal_definida_total = rowSums(across(starts_with("fetal_grupos_mal_definida"), ~ .x), na.rm = TRUE)
   ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
@@ -1316,7 +1333,16 @@ df_evitaveis_neonatais_todos <- df_sim_total2 |>
     values_fill = 0,
     names_sort = TRUE
   ) |>
-  mutate(obitos_neonatais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)) |>
+  mutate(
+    obitos_neonatais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_imunoprevencao_total = rowSums(across(starts_with("evitaveis_neonatal_imunoprevencao"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_mulher_gestacao_total = rowSums(across(starts_with("evitaveis_neonatal_mulher_gestacao"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_parto_total = rowSums(across(starts_with("evitaveis_neonatal_parto"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_mal_definidas_total = rowSums(across(starts_with("evitaveis_neonatal_mal_definidas"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_saude_total = rowSums(across(starts_with("evitaveis_neonatal_saude"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_tratamento_total = rowSums(across(starts_with("evitaveis_neonatal_tratamento"), ~ .x), na.rm = TRUE),
+    evitaveis_neonatal_recem_nascido_total = rowSums(across(starts_with("evitaveis_neonatal_recem_nascido"), ~ .x), na.rm = TRUE)
+  ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
 
@@ -1554,6 +1580,16 @@ df_neonatais_grupos_todos <- df_sim_total2 |>
     values_from = obitos,
     values_fill = 0,
     names_sort = TRUE
+  ) |>
+  mutate(
+    neonatal_grupos_prematuridade_total = rowSums(across(starts_with("neonatal_grupos_prematuridade"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_infeccoes_total = rowSums(across(starts_with("neonatal_grupos_infeccoes"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_asfixia_total = rowSums(across(starts_with("neonatal_grupos_asfixia"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_respiratorias_total = rowSums(across(starts_with("neonatal_grupos_respiratorias"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_gravidez_total = rowSums(across(starts_with("neonatal_grupos_gravidez"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_afeccoes_perinatal_total = rowSums(across(starts_with("neonatal_grupos_afeccoes_perinatal"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_ma_formacao_total = rowSums(across(starts_with("neonatal_grupos_ma_formacao"), ~ .x), na.rm = TRUE),
+    neonatal_grupos_mal_definida_total = rowSums(across(starts_with("neonatal_grupos_mal_definida"), ~ .x), na.rm = TRUE)
   ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
@@ -2041,7 +2077,16 @@ df_evitaveis_perinat <- df_perinat_total |>
     values_fill = 0,
     names_sort = TRUE
   ) |>
-  mutate(obitos_perinatais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE)) |>
+  mutate(
+    obitos_perinatais_totais = rowSums(across(starts_with("evitaveis"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_imunoprevencao = rowSums(across(starts_with("evitaveis_perinatal_imunoprevencao"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_mulher_gestacao = rowSums(across(starts_with("evitaveis_perinatal_mulher_gestacao"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_parto = rowSums(across(starts_with("evitaveis_perinatal_parto"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_mal_definidas = rowSums(across(starts_with("evitaveis_perinatal_mal_definidas"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_saude = rowSums(across(starts_with("evitaveis_perinatal_saude"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_tratamento = rowSums(across(starts_with("evitaveis_perinatal_tratamento"), ~ .x), na.rm = TRUE),
+    evitaveis_perinatal_recem_nascido = rowSums(across(starts_with("evitaveis_perinatal_recem_nascido"), ~ .x), na.rm = TRUE)
+  ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
 
@@ -2332,6 +2377,16 @@ df_perinat_grupos <- df_perinat_total |>
     values_from = obitos,
     values_fill = 0,
     names_sort = TRUE
+  ) |>
+  mutate(
+    perinatal_grupos_prematuridade_total = rowSums(across(starts_with("perinatal_grupos_prematuridade"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_infeccoes_total = rowSums(across(starts_with("perinatal_grupos_infeccoes"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_asfixia_total = rowSums(across(starts_with("perinatal_grupos_asfixia"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_respiratorias_total = rowSums(across(starts_with("perinatal_grupos_respiratorias"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_gravidez_total = rowSums(across(starts_with("perinatal_grupos_gravidez"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_afeccoes_perinatal_total = rowSums(across(starts_with("perinatal_grupos_afeccoes_perinatal"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_ma_formacao_total = rowSums(across(starts_with("perinatal_grupos_ma_formacao"), ~ .x), na.rm = TRUE),
+    perinatal_grupos_mal_definida_total = rowSums(across(starts_with("perinatal_grupos_mal_definida"), ~ .x), na.rm = TRUE)
   ) |>
   right_join(df_aux_municipios) |>
   arrange(codmunres)
