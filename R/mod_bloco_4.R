@@ -46,7 +46,16 @@ mod_bloco_4_ui <- function(id){
             column(
               width = 4,
               HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              HTML("<b style='font-size:19px'> Resumo do período </b>"),
+              div(
+                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+                shinyWidgets::actionBttn(
+                  inputId = ns('botao_resumo1'),
+                  icon = icon('question'),
+                  style = 'material-circle',
+                  color = "primary",
+                  size = 'xs'
+                )
+              ),
               hr(),
               fluidRow(
                 column(
@@ -236,7 +245,16 @@ mod_bloco_4_ui <- function(id){
             column(
               width = 4,
               HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              HTML("<b style='font-size:19px'> Resumo do período </b>"),
+              div(
+                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+                shinyWidgets::actionBttn(
+                  inputId = ns('botao_resumo2'),
+                  icon = icon('question'),
+                  style = 'material-circle',
+                  color = "primary",
+                  size = 'xs'
+                )
+              ),
               hr(),
               fluidRow(
                 column(
@@ -321,7 +339,16 @@ mod_bloco_4_ui <- function(id){
             column(
               width = 4,
               HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              HTML("<b style='font-size:19px'> Resumo do período </b>"),
+              div(
+                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+                shinyWidgets::actionBttn(
+                  inputId = ns('botao_resumo3'),
+                  icon = icon('question'),
+                  style = 'material-circle',
+                  color = "primary",
+                  size = 'xs'
+                )
+              ),
               hr(),
               fluidRow(
                 column(
@@ -421,297 +448,128 @@ mod_bloco_4_ui <- function(id){
             HTML("<span style='display: block; margin-bottom: 25px;'> </span>"),
           )
         ),
-        shinyjs::hidden(
-          fluidRow(
-            id = ns("mostrar_card_indicadores_deslocamento_outros_niveis"),
-            column(
-              width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              HTML("<b style='font-size:19px'> Resumo do período </b>"),
-              hr(),
-              fluidRow(
-                column(
-                  width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-                  uiOutput(ns("input_localidade_resumo4")),
-                  align = "center"
-                )
-              ),
-              # fluidRow(
-              #   bs4Dash::box(
-              #     width = 12,
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart4"), height = 530))
-              #   )
-              # ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_deslocamento_resto")), proxy.height = "300px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_deslocamento_resto")), proxy.height = "300px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_deslocamento_resto")), proxy.height = "332px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_deslocamento_resto")), proxy.height = "332px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_resto")), proxy.height = "332px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
-                )
+        fluidRow(
+          column(
+            width = 4,
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+            div(
+              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              shinyWidgets::actionBttn(
+                inputId = ns('botao_resumo4'),
+                icon = icon('question'),
+                style = 'material-circle',
+                color = "primary",
+                size = 'xs'
               )
-              #  fluidRow(
-              #    column(
-              #      offset = 3,
-              #      width = 6,
-              #      shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
-              #    )
-              # )
             ),
-            column(
-              width = 8,
-              fluidRow(
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
-                    shinyjs::hidden(
-                      span(
-                        id = ns("mostrar_botao_deslocamento_prop1"),
-                        shinyWidgets::actionBttn(
-                          inputId = ns("botao_prop1"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
-                          color = "warning",
-                          style = "material-circle",
-                          size = "xs"
-                        )
-                      )
-                    )
-                  ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_resto_prop1"), height = "640px"))
-                )
+            hr(),
+            fluidRow(
+              column(
+                width = 12,
+                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                uiOutput(ns("input_localidade_resumo4")),
+                align = "center"
+              )
+            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart4"), height = 530))
+            #   )
+            # ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_deslocamento")), proxy.height = "300px")
               ),
-              fluidRow(
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
-                    shinyjs::hidden(
-                      span(
-                        id = ns("mostrar_botao_deslocamento_prop2"),
-                        shinyWidgets::actionBttn(
-                          inputId = ns("botao_prop2"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
-                          color = "warning",
-                          style = "material-circle",
-                          size = "xs"
-                        )
-                      )
-                    )
-                  ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_1"), height = "650px"))
-                )
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_deslocamento")), proxy.height = "300px")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_deslocamento")), proxy.height = "332px")
               ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_deslocamento")), proxy.height = "332px")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento")), proxy.height = "332px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
+              )
             )
-          )
-        ),
-        shinyjs::hidden(
-          fluidRow(
-            id = ns("mostrar_card_indicadores_deslocamento_muni_uf"),
-            column(
-              width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              HTML("<b style='font-size:19px'> Resumo do período </b>"),
-              hr(),
-              fluidRow(
-                column(
-                  width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-                  uiOutput(ns("input_localidade_resumo5")),
-                  align = "center"
-                )
-              ),
-              # fluidRow(
-              #   bs4Dash::box(
-              #     width = 12,
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart5"), height = 530))
-              #   )
-              # ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_deslocamento_muni")), proxy.height = "300px")
+          ),
+          column(
+            width = 8,
+            fluidRow(
+              bs4Dash::bs4Card(
+                width = 12,
+                status = "primary",
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                div(
+                  style = "display: flex; align-items: center;",
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
+                  shinyjs::hidden(
+                    span(
+                      id = ns("mostrar_botao_deslocamento_prop1"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns("botao_prop1"),
+                        icon = icon("triangle-exclamation", style = "color: red"),
+                        color = "warning",
+                        style = "material-circle",
+                        size = "xs"
+                      )
+                    )
+                  )
                 ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_deslocamento_muni")), proxy.height = "300px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_deslocamento_muni")), proxy.height = "332px")
+                hr(),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_prop"), height = "640px"))
+              )
+            ),
+            fluidRow(
+              bs4Dash::bs4Card(
+                width = 12,
+                status = "primary",
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                div(
+                  style = "display: flex; align-items: center;",
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e tipo de estabelecimento do parto &nbsp;</b>")),
+                  shinyjs::hidden(
+                    span(
+                      id = ns("mostrar_botao_deslocamento_prop2"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns("botao_prop2"),
+                        icon = icon("triangle-exclamation", style = "color: red"),
+                        color = "warning",
+                        style = "material-circle",
+                        size = "xs"
+                      )
+                    )
+                  )
                 ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_deslocamento_muni")), proxy.height = "332px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento_muni")), proxy.height = "332px"),
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_resto")), proxy.height = "332px")
-                )
-              )#,
-              # fluidRow(
-              #   column(
-              #     offset = 3,
-              #     width = 6,
-              #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_resto")), proxy.height = "332px")
-              #   )
-              # )
+                hr(),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "650px"))
+              )
             ),
             shinyjs::hidden(
-              column(
-                id = ns("mostrar_card_indicadores_deslocamento_muni"),
-                width = 8,
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop3"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop3"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_muni_prop1"), height = "650px"))
-                  )
-                ),
-                fluidRow(
-                  column(
-                    width = 12,
-                    bs4Dash::bs4Card(
-                      width = 12,
-                      status = "primary",
-                      collapsible = FALSE,
-                      headerBorder = FALSE,
-                      style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                      div(
-                        style = "display: flex; align-items: center;",
-                        HTML(glue::glue("<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
-                        shinyjs::hidden(
-                          span(
-                            id = ns("mostrar_botao_deslocamento_mediana1"),
-                            shinyWidgets::actionBttn(
-                              inputId = ns("botao_mediana1"),
-                              icon = icon("triangle-exclamation", style = "color: red"),
-                              color = "warning",
-                              style = "material-circle",
-                              size = "xs"
-                            )
-                          )
-                        )
-                      ),
-                      hr(),
-                      selectizeInput(
-                        inputId = ns("local_med_muni"),
-                        label = "Local de ocorrência do parto",
-                        options = list(placeholder = "Selecione o local de ocorrência do parto"),
-                        choices = c(
-                          "Fora do município de residência da mulher" = "fora_municipio",
-                          "Na microrregião de saúde, mas fora do município de residência da mulher" = "na_regiao",
-                          "Na macrorregião de saúde, mas fora da microrregião de saúde de residência mulher" = "na_macrorregiao",
-                          "Na UF, mas fora da macrorregião de saúde de residência mulher" = "fora_macrorregiao",
-                          "Fora da UF de residência da mulher" = "fora_uf"
-                        ),
-                        width = "100%"
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_muni_med1"), height = "500px"))
-                    )
-                  )
-                ),
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop4"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop4"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_2"), height = "650px"))
-                  )
-                )
-              ),
-              column(
-                id = ns("mostrar_tabela_indicadores_deslocamento_muni"),
-                offset = 4,
-                width = 8,
+              fluidRow(
+                id = ns("mostrar_card_indicadores_deslocamento_muni_uf"),
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
@@ -720,7 +578,50 @@ mod_bloco_4_ui <- function(id){
                   style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Informações adicionais &nbsp;</b>")),
+                    HTML(glue::glue("<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
+                    shinyjs::hidden(
+                      span(
+                        id = ns("mostrar_botao_deslocamento_mediana1"),
+                        shinyWidgets::actionBttn(
+                          inputId = ns("botao_mediana1"),
+                          icon = icon("triangle-exclamation", style = "color: red"),
+                          color = "warning",
+                          style = "material-circle",
+                          size = "xs"
+                        )
+                      )
+                    )
+                  ),
+                  hr(),
+                  selectizeInput(
+                    inputId = ns("local_med"),
+                    label = "Local de ocorrência do parto",
+                    options = list(placeholder = "Selecione o local de ocorrência do parto"),
+                    choices = c(
+                      "Fora do município de residência da mulher" = "fora_municipio",
+                      "Na microrregião de saúde, mas fora do município de residência da mulher" = "na_regiao",
+                      "Na macrorregião de saúde, mas fora da microrregião de saúde de residência mulher" = "na_macrorregiao",
+                      "Na UF, mas fora da macrorregião de saúde de residência mulher" = "fora_macrorregiao",
+                      "Fora da UF de residência da mulher" = "fora_uf"
+                    ),
+                    width = "100%"
+                  ),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_med"), height = "500px"))
+                )
+              )
+            ),
+            shinyjs::hidden(
+              fluidRow(
+                id = ns("mostrar_card_indicadores_deslocamento_muni"),
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "display: flex; align-items: center;",
+                    tags$b(HTML(glue::glue("Informações adicionais sobre os partos")), htmlOutput(ns("municipio_informacoes_adicionais"), inline = TRUE), HTML("&nbsp"), style = 'font-size: 19px'),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_infos"),
@@ -735,110 +636,7 @@ mod_bloco_4_ui <- function(id){
                     )
                   ),
                   hr(),
-                  div(
-                    style = "height: 90%; overflow-y: auto;",
-                    shinycssloaders::withSpinner(uiOutput(ns("infos_deslocamento_muni")))
-                  )
-                )
-              )
-            ),
-            shinyjs::hidden(
-              column(
-                id = ns("mostrar_card_indicadores_deslocamento_uf"),
-                width = 8,
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop5"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop5"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_uf_prop1"), height = "640px"))
-                  )
-                ),
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_mediana2"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_mediana2"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    selectizeInput(
-                      inputId = ns("local_med_uf"),
-                      label = "Local de ocorrência do parto",
-                      options = list(placeholder = "Selecione o local de ocorrência do parto"),
-                      choices = c(
-                        "Fora do município de residência da mulher" = "fora_municipio",
-                        "Na microrregião de saúde, mas fora do município de residência da mulher" = "na_regiao",
-                        "Na macrorregião de saúde, mas fora da microrregião de saúde de residência mulher" = "na_macrorregiao",
-                        "Na UF, mas fora da macrorregião de saúde de residência mulher" = "fora_macrorregiao",
-                        "Fora da UF de residência da mulher" = "fora_uf"
-                      ),
-                      width = "100%"
-                    ),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_uf_med1"), height = "500px"))
-                  )
-                ),
-                fluidRow(
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                    div(
-                      style = "display: flex; align-items: center;",
-                      HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto &nbsp;</b>")),
-                      shinyjs::hidden(
-                        span(
-                          id = ns("mostrar_botao_deslocamento_prop6"),
-                          shinyWidgets::actionBttn(
-                            inputId = ns("botao_prop6"),
-                            icon = icon("triangle-exclamation", style = "color: red"),
-                            color = "warning",
-                            style = "material-circle",
-                            size = "xs"
-                          )
-                        )
-                      )
-                    ),
-                    hr(),
-                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao_3"), height = "650px"))
-                  )
+                  shinycssloaders::withSpinner(reactable::reactableOutput(ns("infos_deslocamento_muni"), height = "600px"))
                 )
               )
             )
@@ -940,24 +738,15 @@ mod_bloco_4_server <- function(id, filtros){
 
     ## Mostrando/ocultando partes de deslocamento da UI de acordo com o nível selecionado ----
     observeEvent(filtros()$nivel, {
-      if (filtros()$nivel == "Municipal") {
-        shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_outros_niveis", anim = TRUE, animType = "slide", time = 0.001)
-        shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_uf", anim = TRUE, animType = "slide", time = 0.001)
+      if (filtros()$nivel == "Municipal" | (filtros()$comparar == "Sim" & filtros()$nivel2 == "Municipal")) {
         shinyjs::show(id = "mostrar_card_indicadores_deslocamento_muni_uf", anim = TRUE, animType = "slide", time = 0.8)
         shinyjs::show(id = "mostrar_card_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.8)
-        shinyjs::show(id = "mostrar_tabela_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.8)
-      } else if (filtros()$nivel == "Estadual") {
-        shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_outros_niveis", anim = TRUE, animType = "slide", time = 0.001)
+      } else if (filtros()$nivel == "Estadual" | (filtros()$comparar == "Sim" & filtros()$nivel2 == "Estadual")) {
         shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.001)
-        shinyjs::hide(id = "mostrar_tabela_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.001)
         shinyjs::show(id = "mostrar_card_indicadores_deslocamento_muni_uf", anim = TRUE, animType = "slide", time = 0.8)
-        shinyjs::show(id = "mostrar_card_indicadores_deslocamento_uf", anim = TRUE, animType = "slide", time = 0.8)
       } else {
-        shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_uf", anim = TRUE, animType = "slide", time = 0.001)
         shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_muni_uf", anim = TRUE, animType = "slide", time = 0.001)
-        shinyjs::hide(id = "mostrar_tabela_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.001)
         shinyjs::hide(id = "mostrar_card_indicadores_deslocamento_muni", anim = TRUE, animType = "slide", time = 0.001)
-        shinyjs::show(id = "mostrar_card_indicadores_deslocamento_outros_niveis", anim = TRUE, animType = "slide", time = 0.8)
       }
     })
 
@@ -1092,21 +881,60 @@ mod_bloco_4_server <- function(id, filtros){
       }
     })
 
-    output$input_localidade_resumo5 <- renderUI({
-      if (filtros()$comparar == "Sim") {
-        radioButtons(
-          inputId = ns("localidade_resumo5"),
-          label = NULL,
-          choiceNames = list(
-            localidade_original(),
-            localidade_comparacao()
-          ),
-          choiceValues = list("escolha1", "escolha2"),
-          selected = "escolha1",
-          inline = TRUE
-        )
-      }
-    })
+    # Criando os pop-ups com a informação sobre o resumo do período -------------
+    observeEvent(c(input$botao_resumo1, input$botao_resumo2, input$botao_resumo3), {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        text = '
+          <div style = "text-align: justify; text-justify: inter-word;">
+            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Dentro desta aba, referente aos indicadores relacionados aos grupos de Robson, as caixinhas mudam de acordo com o indicador selecionado na caixa de seleção acima.
+          </div>',
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    },
+    ignoreInit = TRUE
+    )
+
+    observeEvent(c(input$botao_resumo4), {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        text = '
+          <div style = "text-align: justify; text-justify: inter-word;">
+            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando a comparação é feita com estados ou municípios, o gráfico contendo as medianas de deslocamento para o parto é atualizado de acordo com a localidade escolhida no resumo do período.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando a comparação é feita com municípios, a tabela contendo informações adicionais sobre os partos é atualizada de acordo com a localidade escolhida no resumo do período.
+          </div>',
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
+    },
+    ignoreInit = TRUE
+    )
 
     ## Para os botões de alerta quanto à incompletude e cobertura --------------
     ### Calculando os indicadores de incompletude ------------------------------
@@ -1390,10 +1218,8 @@ mod_bloco_4_server <- function(id, filtros){
             else if(filtros()$nivel == "Municipal")
               municipio == filtros()$municipio & uf == filtros()$estado_municipio
           } else {
-            req(
-              get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]]
-            )
-            if (get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1") {
+            req(input$localidade_resumo4)
+            if (input$localidade_resumo4 == "escolha1") {
               if (filtros()$nivel == "Nacional")
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
               else if (filtros()$nivel == "Regional")
@@ -1427,7 +1253,7 @@ mod_bloco_4_server <- function(id, filtros){
         cria_indicadores(
           df_calcs = bloco4_calcs_resumo,
           filtros = filtros(),
-          localidade_resumo = get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]]
+          localidade_resumo = input$localidade_resumo4
         )
     })
 
@@ -2114,7 +1940,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     ### Relacionadas aos indicadores de deslocamento --------------------------
-    output$caixa_b4_i1_deslocamento_muni <- output$caixa_b4_i1_deslocamento_resto <- renderUI({
+    output$caixa_b4_i1_deslocamento <- renderUI({
       cria_caixa_server(
         dados = data4_deslocamento_resumo(),
         indicador = "prop_partos_municipio_res",
@@ -2130,7 +1956,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -2138,7 +1964,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i2_deslocamento_muni <- output$caixa_b4_i2_deslocamento_resto <- renderUI({
+    output$caixa_b4_i2_deslocamento <- renderUI({
       cria_caixa_server(
         dados = data4_deslocamento_resumo(),
         indicador = "prop_partos_rsaude_res",
@@ -2154,7 +1980,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -2162,7 +1988,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i3_deslocamento_muni <- output$caixa_b4_i3_deslocamento_resto <- renderUI({
+    output$caixa_b4_i3_deslocamento <- renderUI({
       cria_caixa_server(
         dados = data4_deslocamento_resumo(),
         indicador = "prop_partos_macro_rsaude_res",
@@ -2178,7 +2004,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -2186,7 +2012,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i4_deslocamento_muni <- output$caixa_b4_i4_deslocamento_resto <- renderUI({
+    output$caixa_b4_i4_deslocamento <- renderUI({
       cria_caixa_server(
         dados = data4_deslocamento_resumo(),
         indicador = "prop_partos_fora_macro_rsaude_res",
@@ -2202,7 +2028,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -2210,7 +2036,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i5_deslocamento_muni <- output$caixa_b4_i5_deslocamento_resto <- renderUI({
+    output$caixa_b4_i5_deslocamento <- renderUI({
       cria_caixa_server(
         dados = data4_deslocamento_resumo(),
         indicador = "prop_partos_fora_uf_res",
@@ -2226,7 +2052,7 @@ mod_bloco_4_server <- function(id, filtros){
           filtros()$comparar == "Não",
           filtros()$nivel,
           ifelse(
-            get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+            input$localidade_resumo4 == "escolha1",
             filtros()$nivel,
             filtros()$nivel2
           )
@@ -2234,7 +2060,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    output$caixa_b4_i9_deslocamento_macro <- output$caixa_b4_i9_deslocamento_resto <- renderUI({
+    output$caixa_b4_i9_deslocamento_macro <- renderUI({
       tagList(
         div(
           style = "position: relative;",
@@ -2255,7 +2081,7 @@ mod_bloco_4_server <- function(id, filtros){
               filtros()$comparar == "Não",
               filtros()$nivel,
               ifelse(
-                get('input')[[glue::glue("localidade_resumo{ifelse(filtros()$nivel %in% c('Estadual', 'Municipal'), 5, 4)}")]] == "escolha1",
+                input$localidade_resumo4 == "escolha1",
                 filtros()$nivel,
                 filtros()$nivel2
               )
@@ -2280,7 +2106,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$aviso_desloc, {
       shinyalert::shinyalert(
         title = "Atenção",
-        text = "Esse indicador é condicional a ter nascido vivo",
+        text = "Esse indicador é condicional a ter nascido vivo.",
         type = "info"
       )
     })
@@ -2410,29 +2236,52 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_deslocamento_med <- reactive({
-      if (filtros()$nivel == "Municipal") {
-        input_local_med <- input$local_med_muni
+      if (filtros()$comparar == "Não") {
+        sufixo <- ""
+      } else {
+        req(input$localidade_resumo4)
+        if (input$localidade_resumo4 == "escolha1") {
+          sufixo <- ""
+        } else {
+          sufixo <- "2"
+        }
+      }
+
+      validate(
+        need(
+          filtros()[[paste0("nivel", sufixo)]] %in% c("Municipal", "Estadual"),
+          "Este indicador só está disponível para os níveis estadual e municipal."
+        )
+      )
+
+      if (filtros()[[paste0("nivel", sufixo)]] == "Municipal") {
         data_aux <- bloco4_deslocamento_muni
       } else {
-        input_local_med <- input$local_med_uf
         data_aux <- bloco4_deslocamento_uf
       }
 
-      data4_deslocamento_med_aux <- data_aux |>
+      data_aux |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
         dplyr::filter(
-          if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado
-          else if(filtros()$nivel == "Municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          if (filtros()[[paste0("nivel", sufixo)]] == "Estadual") {
+            uf == filtros()[[paste0("estado", sufixo)]]
+          } else if (filtros()[[paste0("nivel", sufixo)]] == "Municipal") {
+            municipio == filtros()[[paste0("municipio", sufixo)]] & uf == filtros()[[paste0("estado_municipio", sufixo)]]
+          }
         ) |>
         dplyr::select(
           ano,
-          no_local = glue::glue("km_partos_{input_local_med}"),
+          no_local = glue::glue("km_partos_{input$local_med}"),
           baixa_complexidade = "km_partos_fora_municipio_baixa_complexidade",
           alta_complexidade = "km_partos_fora_municipio_alta_complexidade"
+        ) |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()[[paste0("nivel", sufixo)]] == "Estadual" ~ filtros()[[paste0("estado", sufixo)]],
+            filtros()[[paste0("nivel", sufixo)]] == "Municipal" ~ filtros()[[paste0("municipio", sufixo)]]
+          )
         )
     })
 
@@ -3246,7 +3095,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos segundo local de ocorrência do parto ----
-    output$grafico_deslocamento_muni_prop1 <- output$grafico_deslocamento_resto_prop1 <- output$grafico_deslocamento_uf_prop1 <- highcharter::renderHighchart({
+    output$grafico_deslocamento_prop <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
@@ -3292,8 +3141,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto ----
-    output$grafico_deslocamento_macrorregiao_1 <- output$grafico_deslocamento_macrorregiao_2 <-
-      output$grafico_deslocamento_macrorregiao_3 <- highcharter::renderHighchart({
+    output$grafico_deslocamento_macrorregiao <- highcharter::renderHighchart({
         if (filtros()$comparar == "Não") {
           grafico_base <- highcharter::highchart() |>
             highcharter::hc_add_series(
@@ -3322,12 +3170,13 @@ mod_bloco_4_server <- function(id, filtros){
               data = data4_deslocamento_macro_comp_completo(),
               highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
               type = "column",
-              showInLegend = FALSE,
+              #showInLegend = FALSE,
               tooltip = list(
 
                 pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
               ),
-              stack = 1
+              stack = 1,
+              linkedTo = ":previous"
             )
         }
 
@@ -3339,142 +3188,174 @@ mod_bloco_4_server <- function(id, filtros){
       })
 
     ### Mediana de deslocamento para o destino, segundo destinos --------------
-    output$grafico_deslocamento_muni_med1 <- output$grafico_deslocamento_uf_med1 <- highcharter::renderHighchart({
-      if (filtros()$nivel %in% c("Municipal", "Estadual")) {
-        highcharter::highchart() |>
-          highcharter::hc_add_series(
-            name = "Total de partos",
-            data = data4_deslocamento_med(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = no_local),
-            legendIndex = 1,
-            index = 1
-          ) |>
-          highcharter::hc_add_series(
-            name = "Serviços de baixa complexidade",
-            data = data4_deslocamento_med(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = baixa_complexidade),
-            legendIndex = 2,
-            index = 2
-          ) |>
-          highcharter::hc_add_series(
-            name = "Serviços de alta complexidade",
-            data = data4_deslocamento_med(),
-            type = "line",
-            highcharter::hcaes(x = ano, y = alta_complexidade),
-            legendIndex = 3,
-            index = 3
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
-          highcharter::hc_colors(cols)
-      }
+    output$grafico_deslocamento_med <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          name = ifelse(filtros()$comparar == "Não", "Total de partos", glue::glue("Total de partos <b>({data4_deslocamento_med()$class[1]})</b>")),
+          data = data4_deslocamento_med(),
+          type = "line",
+          highcharter::hcaes(x = ano, y = no_local),
+          legendIndex = 1,
+          index = 1
+        ) |>
+        highcharter::hc_add_series(
+          name = ifelse(filtros()$comparar == "Não", "Serviços de baixa complexidade", glue::glue("Serviços de baixa complexidade <b>({data4_deslocamento_med()$class[1]})</b>")),
+          data = data4_deslocamento_med(),
+          type = "line",
+          highcharter::hcaes(x = ano, y = baixa_complexidade),
+          legendIndex = 2,
+          index = 2
+        ) |>
+        highcharter::hc_add_series(
+          name = ifelse(filtros()$comparar == "Não", "Serviços de alta complexidade", glue::glue("Serviços de alta complexidade <b>({data4_deslocamento_med()$class[1]})</b>")),
+          data = data4_deslocamento_med(),
+          type = "line",
+          highcharter::hcaes(x = ano, y = alta_complexidade),
+          legendIndex = 3,
+          index = 3
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
+        highcharter::hc_colors(cols)
     })
 
     ### Tabela com informações adicionais -------------------------------------
-    output$infos_deslocamento_muni <- renderUI({
-      if (filtros()$nivel == "Municipal") {
-        data_infos_deslocamento <- bloco4_deslocamento_muni |>
-          dplyr::filter(
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-          ) |>
-          dplyr::group_by(ano) |>
-          dplyr::mutate(
-            prop_partos_muni_maior_ocorrencia = round(n_nasc1/nao_local * 100, 1),
-            prop_partos_muni_2_maior_ocorrencia = round(n_nasc2/nao_local * 100, 1),
-            prop_partos_muni_3_maior_ocorrencia = round(n_nasc3/nao_local * 100, 1),
-            .keep = "unused"
-          ) |>
-          dplyr::ungroup()
-
-        municipio1 <- municipio2 <- municipio3 <- NULL
-
-        for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2024))) {
-          municipio1[i] <- ifelse(
-            !is.na(data_infos_deslocamento$codmunnasc1[i]),
-            tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento$codmunnasc1[i])],
-            NA
-          )
-
-          municipio2[i] <- ifelse(
-            !is.na(data_infos_deslocamento$codmunnasc2[i]),
-            tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento$codmunnasc2[i])],
-            NA
-          )
-
-          municipio3[i] <- ifelse(
-            !is.na(data_infos_deslocamento$codmunnasc3[i]),
-            tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento$codmunnasc3[i])],
-            NA
-          )
+    output$municipio_informacoes_adicionais <- renderUI({
+      if (filtros()$comparar == "Não") {
+        sufixo <- ""
+      } else {
+        req(input$localidade_resumo4)
+        if (input$localidade_resumo4 == "escolha1") {
+          sufixo <- ""
+        } else {
+          sufixo <- "2"
         }
-
-        partos_municipio1 <- data_infos_deslocamento$prop_partos_muni_maior_ocorrencia
-        partos_municipio2 <- data_infos_deslocamento$prop_partos_muni_2_maior_ocorrencia
-        partos_municipio3 <- data_infos_deslocamento$prop_partos_muni_3_maior_ocorrencia
-        cnes <- data_infos_deslocamento$cnes
-        estabelecimento <- data_infos_deslocamento$nome_estabelecimento_fantasia
-        partos_estabelecimento <- data_infos_deslocamento$nasc_estab
-
-        ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2024)
-        infos_municipio1 <- dplyr::if_else(
-          glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
-          glue::glue("---"),
-          glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)")
-        )
-        infos_municipio2 <- dplyr::if_else(
-          glue::glue("{municipio2} ({formatC(partos_municipio2, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
-          glue::glue("---"),
-          glue::glue("{municipio2} ({formatC(partos_municipio2, big.mark = '.', decimal.mark = ',')}%)")
-        )
-        infos_municipio3 <- dplyr::if_else(
-          glue::glue("{municipio3} ({formatC(partos_municipio3, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
-          glue::glue("---"),
-          glue::glue("{municipio3} ({formatC(partos_municipio3, big.mark = '.', decimal.mark = ',')}%)")
-        )
-
-        infos_estabelecimento <- glue::glue("{estabelecimento} (CNES {cnes}, com {partos_estabelecimento} partos)")
-
-        data.frame(ano, infos_municipio1, infos_municipio2, infos_municipio3, infos_estabelecimento) |>
-          reactable::reactable(
-            defaultColDef = reactable::colDef(
-              footerStyle = list(fontWeight = "bold"),
-              align = "center"
-            ),
-            columns = list(
-              ano = reactable::colDef(
-                name = "Ano",
-                minWidth = 60
-              ),
-              infos_municipio1 = reactable::colDef(
-                name = "Município com maior ocorrência de partos fora do município de residência da mulher (% de partos)",
-                minWidth = 60
-              ),
-              infos_municipio2 = reactable::colDef(
-                name = "Município com a segunda maior ocorrência de partos fora do município de residência da mulher (% de partos)",
-                minWidth = 60
-              ),
-              infos_municipio3 = reactable::colDef(
-                name = "Município com a terceira maior ocorrência de partos fora do município de residência da mulher (% de partos)",
-                minWidth = 60
-              ),
-              infos_estabelecimento = reactable::colDef(
-                name = "Hospital com maior número de partos ocorridos fora do município de residência da mulher",
-                minWidth = 60
-              )
-            ),
-            sortable = TRUE,
-            resizable = TRUE,
-            highlight = TRUE,
-            striped = TRUE,
-            borderless = TRUE,
-            pagination = FALSE,
-            height = 600
-          )
       }
+
+      glue::glue("({filtros()[[paste0('municipio', sufixo)]]})")
+    })
+
+    data_infos_deslocamento <- reactive({
+      if (filtros()$comparar == "Não") {
+        sufixo <- ""
+      } else {
+        req(input$localidade_resumo4)
+        if (input$localidade_resumo4 == "escolha1") {
+          sufixo <- ""
+        } else {
+          sufixo <- "2"
+        }
+      }
+
+      validate(
+        need(
+          filtros()[[paste0("nivel", sufixo)]] %in% c("Municipal"),
+          "Esta tabela de informações só está disponível para o nível municipal."
+        )
+      )
+
+      bloco4_deslocamento_muni |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
+          municipio == filtros()[[paste0("municipio", sufixo)]] & uf == filtros()[[paste0("estado_municipio", sufixo)]]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::mutate(
+          prop_partos_muni_maior_ocorrencia = round(n_nasc1/nao_local * 100, 1),
+          prop_partos_muni_2_maior_ocorrencia = round(n_nasc2/nao_local * 100, 1),
+          prop_partos_muni_3_maior_ocorrencia = round(n_nasc3/nao_local * 100, 1),
+          .keep = "unused"
+        ) |>
+        dplyr::ungroup()
+    })
+
+
+    output$infos_deslocamento_muni <- reactable::renderReactable({
+      municipio1 <- municipio2 <- municipio3 <- NULL
+
+      for (i in 1:length(filtros()$ano2[1]:min(filtros()$ano2[2], 2024))) {
+        municipio1[i] <- ifelse(
+          !is.na(data_infos_deslocamento()$codmunnasc1[i]),
+          tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento()$codmunnasc1[i])],
+          NA
+        )
+
+        municipio2[i] <- ifelse(
+          !is.na(data_infos_deslocamento()$codmunnasc2[i]),
+          tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento()$codmunnasc2[i])],
+          NA
+        )
+
+        municipio3[i] <- ifelse(
+          !is.na(data_infos_deslocamento()$codmunnasc3[i]),
+          tabela_aux_municipios$municipio[which(tabela_aux_municipios$codmunres == data_infos_deslocamento()$codmunnasc3[i])],
+          NA
+        )
+      }
+
+      partos_municipio1 <- data_infos_deslocamento()$prop_partos_muni_maior_ocorrencia
+      partos_municipio2 <- data_infos_deslocamento()$prop_partos_muni_2_maior_ocorrencia
+      partos_municipio3 <- data_infos_deslocamento()$prop_partos_muni_3_maior_ocorrencia
+      cnes <- data_infos_deslocamento()$cnes
+      estabelecimento <- data_infos_deslocamento()$nome_estabelecimento_fantasia
+      partos_estabelecimento <- data_infos_deslocamento()$nasc_estab
+
+      ano <- filtros()$ano2[1]:min(filtros()$ano2[2], 2024)
+      infos_municipio1 <- dplyr::if_else(
+        glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
+        glue::glue("---"),
+        glue::glue("{municipio1} ({formatC(partos_municipio1, big.mark = '.', decimal.mark = ',')}%)")
+      )
+      infos_municipio2 <- dplyr::if_else(
+        glue::glue("{municipio2} ({formatC(partos_municipio2, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
+        glue::glue("---"),
+        glue::glue("{municipio2} ({formatC(partos_municipio2, big.mark = '.', decimal.mark = ',')}%)")
+      )
+      infos_municipio3 <- dplyr::if_else(
+        glue::glue("{municipio3} ({formatC(partos_municipio3, big.mark = '.', decimal.mark = ',')}%)") == "NA (NA%)",
+        glue::glue("---"),
+        glue::glue("{municipio3} ({formatC(partos_municipio3, big.mark = '.', decimal.mark = ',')}%)")
+      )
+
+      infos_estabelecimento <- glue::glue("{estabelecimento} (CNES {cnes}, com {partos_estabelecimento} partos)")
+
+      data.frame(ano, infos_municipio1, infos_municipio2, infos_municipio3, infos_estabelecimento) |>
+        reactable::reactable(
+          defaultColDef = reactable::colDef(
+            footerStyle = list(fontWeight = "bold"),
+            align = "center"
+          ),
+          columns = list(
+            ano = reactable::colDef(
+              name = "Ano",
+              minWidth = 60
+            ),
+            infos_municipio1 = reactable::colDef(
+              name = "Município com maior ocorrência de partos fora do município de residência da mulher (% de partos)",
+              minWidth = 60
+            ),
+            infos_municipio2 = reactable::colDef(
+              name = "Município com a segunda maior ocorrência de partos fora do município de residência da mulher (% de partos)",
+              minWidth = 60
+            ),
+            infos_municipio3 = reactable::colDef(
+              name = "Município com a terceira maior ocorrência de partos fora do município de residência da mulher (% de partos)",
+              minWidth = 60
+            ),
+            infos_estabelecimento = reactable::colDef(
+              name = "Hospital com maior número de partos ocorridos fora do município de residência da mulher",
+              minWidth = 60
+            )
+          ),
+          sortable = TRUE,
+          resizable = TRUE,
+          highlight = TRUE,
+          striped = TRUE,
+          borderless = TRUE,
+          pagination = FALSE,
+          height = 600
+        )
     })
 
   })
