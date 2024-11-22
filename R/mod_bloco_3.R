@@ -20,7 +20,16 @@ mod_bloco_3_ui <- function(id) {
       column(
         width = 4,
         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-        HTML("<b style='font-size:19px'> Resumo do período </b>"),
+        div(
+          HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+          shinyWidgets::actionBttn(
+            inputId = ns('botao_resumo'),
+            icon = icon('question'),
+            style = 'material-circle',
+            color = "primary",
+            size = 'xs'
+          )
+        ),
         hr(),
         fluidRow(
           column(
@@ -323,6 +332,29 @@ mod_bloco_3_server <- function(id, filtros){
           inline = TRUE
         )
       }
+    })
+
+    ## Criando o pop-up com a informação sobre o resumo do período -------------
+    observeEvent(input$botao_resumo, {
+      shinyalert::shinyalert(
+        html = TRUE,
+        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        text = '
+          <div style = "text-align: justify; text-justify: inter-word;">
+            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+          </div>',
+        size = "s",
+        closeOnEsc = TRUE,
+        closeOnClickOutside = TRUE,
+        type = "info",
+        showConfirmButton = TRUE,
+        confirmButtonText = "OK",
+        confirmButtonCol = "#007bff",
+        animation = TRUE,
+        immediate = TRUE
+      )
     })
 
     ## Para os botões de alerta quanto à incompletude e cobertura --------------
