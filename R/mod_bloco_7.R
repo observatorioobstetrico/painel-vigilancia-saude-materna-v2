@@ -414,7 +414,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais intermediários e tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais intermediários e tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1010,7 +1010,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 8%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais tardios por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1582,7 +1582,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1999,7 +1999,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>Lansky e França (2019)</a> &nbsp;</b>")
+                    HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -2172,21 +2172,21 @@ mod_bloco_7_server <- function(id, filtros){
         fetal_oms_durante_peso_mais_2500 = rep("sum(perinatal_durante_peso_mais_2500)", 2),
 
         # Variáveis sobre taxa de mortalidades fetal para mais de 28 semanas (critério oms)
-        taxa_mort_fetal_oms = rep("round(sum(obitos_fetais_mais_28sem)/(sum(nascidos)+sum(obitos_fetais_mais_28sem)) *1000, 1)", 2),
-        taxa_mort_fetal_oms_peso_menos_1000 = rep("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem)), 1)", 2),
-        taxa_mort_fetal_oms_peso_1000_1499 = rep("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem)), 1)", 2),
-        taxa_mort_fetal_oms_peso_1500_2499 = rep("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem)), 1)", 2),
-        taxa_mort_fetal_oms_peso_mais_2500 = rep("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)), 1)", 2),
-        taxa_mort_fetal_oms_antes = rep("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes)), 1)", 2),
-        taxa_mort_fetal_oms_durante = rep("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)), 1)", 2),
-        taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000)), 1)", 2),
-        taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499)), 1)",2,),
-        taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499)), 1)",2,),
-        taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500)), 1)",2,),
-        taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000)), 1)", 2),
-        taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499)), 1)", 2),
-        taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499)), 1)", 2),
-        taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500)), 1)", 2),
+        taxa_mort_fetal_oms = rep("round(sum(obitos_fetais_mais_28sem)/(sum(nascidos)+sum(obitos_fetais_mais_28sem)) *1000, 4)", 2),
+        taxa_mort_fetal_oms_peso_menos_1000 = rep("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem)), 4)", 2),
+        taxa_mort_fetal_oms_peso_1000_1499 = rep("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem)), 4)", 2),
+        taxa_mort_fetal_oms_peso_1500_2499 = rep("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem)), 4)", 2),
+        taxa_mort_fetal_oms_peso_mais_2500 = rep("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)), 4)", 2),
+        taxa_mort_fetal_oms_antes = rep("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes)), 4)", 2),
+        taxa_mort_fetal_oms_durante = rep("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)), 4)", 2),
+        taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000)), 4)", 2),
+        taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499)), 4)",2,),
+        taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499)), 4)",2,),
+        taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500)), 4)",2,),
+        taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000)), 4)", 2),
+        taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499)), 4)", 2),
+        taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499)), 4)", 2),
+        taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500)), 4)", 2),
 
         obitos_perinatal_total = rep("sum(obitos_fetais_mais_22sem) + sum(obitos_6dias)", 2),
         perinatal_total_menos1000 = rep("sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000)", 2),
