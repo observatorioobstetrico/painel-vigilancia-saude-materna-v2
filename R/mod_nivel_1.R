@@ -330,7 +330,7 @@ mod_nivel_1_ui <- function(id) {
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
                 assistência ao parto, a distância percorrida para chegar nos serviços de saúde de alta e
                 baixa complexidade e a porcentagem de nascidos vivos com peso < 1500g segundo local de
-                ocorrência do parto.
+                ocorrência do parto e disponibilidade de leito de UTI.
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Para o nível de análise municipal, apresentamos duas informações adicionais:
                 município com primeira, segunda e terceira maior ocorrência de partos fora do município de
