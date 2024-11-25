@@ -8,8 +8,8 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
              "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
              "RS", "RO", "RR", "SC", "SP", "SE", "TO")
 
-# Criando um vetor com os anos considerados (2012 a 2023)
-anos <- c(2022:2024)
+# Criando um vetor com os anos considerados (2012 a 2024)
+anos <- c(2012:2024)
 
 # Criando um vetor com os procedimentos de interesse
 procedimentos <- c(
@@ -41,7 +41,7 @@ for (estado in estados) {
       year_start = ano,
       year_end = ano,
       month_start = 1,
-      month_end = 12,
+      month_end = ifelse(ano == 2024, 8, 12),
       uf = estado,
       information_system = "SIH-RD"
     )
@@ -102,7 +102,7 @@ for (estado in estados) {
 
   # Salvando a base completa contendo apenas internações obstétricas para a dada UF
   output_dir <- glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos")
-  if (!dir.exists(output_dir)) {dir.create(output_dir)}
+  if (!dir.exists(output_dir)) {dir.create(output_dir, recursive = TRUE)}
 
   write.csv2(
     df_sih_rd_uf,

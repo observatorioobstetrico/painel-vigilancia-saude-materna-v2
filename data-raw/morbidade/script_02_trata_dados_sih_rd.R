@@ -8,6 +8,9 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
              "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
              "RS", "RO", "RR", "SC", "SP", "SE", "TO")
 
+# Criando um vetor com os anos considerados (2012 a 2024)
+anos <- c(2012:2024)
+
 # # Criando uma função para calcular a diferença, em dias, entre duas datas
 # datediff <- function(mindate, maxdate) {
 #   diff <- as.numeric(difftime(maxdate, mindate, units = "days"))
@@ -32,7 +35,7 @@ for (estado in estados) {
   setwd("data-raw/morbidade/algorithm_episode_of_care/")
 
   # Rodando o algoritmo em C++ na base do SIH-RD com os dados brutos
-  system(glue("./processaih {diretorio_bases_brutas}/{estado}_sih_rd_bruto_2022_2024.csv"))
+  system(glue("./processaih {diretorio_bases_brutas}/{estado}_sih_rd_bruto_{anos[1]}_{anos[length(anos)]}.csv"))
 
   # Voltando para o diretório original do projeto
   setwd(diretorio_original)
@@ -44,7 +47,7 @@ for (estado in estados) {
   df_aih <- dbGetQuery(con, "select * from aih order by AIHREF, DT_INTER")
 
   # Lendo a base do SIH-RD com os dados brutos e seleciobnando as variáveis adicionais de diagnóstico
-  df_aih_bruto <- fread(glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_2022_2024.csv"), sep = ";") |>
+  df_aih_bruto <- fread(glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_{anos[1]}_{anos[length(anos)]}.csv"), sep = ";") |>
     select(
       N_AIH, ANO_CMPT, DIAG_SECUN, DIAGSEC1, DIAGSEC2, DIAGSEC3, DIAGSEC4,
       DIAGSEC5, DIAGSEC6, DIAGSEC7, DIAGSEC8, DIAGSEC9, CID_MORTE,
@@ -62,7 +65,7 @@ for (estado in estados) {
   output_dir <- "data-raw/morbidade/databases/01_sih_rd/02_arquivos_tratados_long"
   if (!dir.exists(output_dir)) {dir.create(output_dir)}
 
-  write.csv(df_aih, glue("{output_dir}/{estado}_sih_rd_tratado_long_2022_2024.csv"), row.names = FALSE)
+  write.csv(df_aih, glue("{output_dir}/{estado}_sih_rd_tratado_long_{anos[1]}_{anos[length(anos)]}.csv"), row.names = FALSE)
 
   # Limpando a memória
   rm(df_aih, df_aih_completo)
