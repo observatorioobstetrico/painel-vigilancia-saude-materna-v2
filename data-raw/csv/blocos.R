@@ -41,13 +41,8 @@ aux_r_saude <- readODS::read_ods("data-raw/extracao-dos-dados/cobertura/regioes_
 
 #Juntando as duas bases auxiliares
 aux_municipios <- dplyr::left_join(aux_municipios_1, aux_r_saude, by = "codmunres") |>
-  dplyr::select(!municipio2)
-
-#Criando uma coluna contendo o ranking dos IDHMs
-aux_idhm <- data.frame(
-  "idhm" = unique(sort(aux_municipios$idhm)),
-  "posicao_idhm" = c(0, (length(unique(sort(aux_municipios$idhm))) - 1):1)
-)
+  dplyr::select(!municipio2) |>
+  dplyr::mutate(posicao_idhm = dplyr::min_rank(desc(idhm)))
 
 #Carregando a base auxiliar que contém variáveis referentes ao IDH das UFs e do Brasil
 aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
@@ -59,7 +54,7 @@ aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv"
   )
 
 #Juntando todas as bases auxiliares (a tabela_aux_municipios será salva para ser utilizada ao carregar o pacote)
-tabela_aux_municipios <- dplyr::left_join(dplyr::left_join(aux_municipios, aux_idhm, by = "idhm"), aux_idh_estados, by = "uf")
+tabela_aux_municipios <- dplyr::left_join(aux_municipios, aux_idh_estados, by = "uf")
 
 #Lendo os arquivos originais
 bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv") |>
