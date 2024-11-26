@@ -563,10 +563,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0px 10px 0px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
-        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 60%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "ocorreram antes do parto")
@@ -592,10 +592,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0px 10px 0px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
-        style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 60%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "possuem peso menor que 1000 g")
@@ -1184,10 +1184,10 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
     width = width_caixa,
     collapsible = FALSE,
     headerBorder = FALSE,
-    div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0 5px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+    div(style = glue::glue("font-size: {fonte_titulo}; height: 25%; padding: 0px 10px 0px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
     hr(),
     div(
-      style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+      style = "height: 60%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
       div(
         p(style = style_porc, HTML(glue::glue("<b> {glue::glue(porc_1)} </b>"))),
         p(style = style_grupo, HTML(glue::glue('pertencem ao grupo de causa "{glue::glue(grupo_1)}"')))
