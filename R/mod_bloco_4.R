@@ -3016,35 +3016,152 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-            )
-          )
+            ))|>
+              highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)])
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2"),
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 1 de Robson"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
+            color = "#FEC98DFF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2"),
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 1 de Robson"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
+            color = "#FEC98DFF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
-            stack = 1
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 2 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#FD9567FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 2 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#FD9567FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 3 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 3 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 4 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#CD4071FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 4 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#CD4071FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 5 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#9F2F7FFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupo 5 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#9F2F7FFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupos 6 a 9 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#721F81FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_comp_completo() |> dplyr::filter(tipo_indicador == "indicador2" & indicador == "Grupos 6 a 9 de Robson"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#721F81FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
           )
       }
 
       grafico_base |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-        highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)]) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_completo()$ano), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
@@ -3104,7 +3221,6 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             )
           )|>
@@ -3112,8 +3228,8 @@ mod_bloco_4_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo |> dplyr::filter(indicador() == "No município de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "No município de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
             color = "#FEAF77FF",
@@ -3123,21 +3239,20 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo |> dplyr::filter(indicador() == "No município de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "No município de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#FEAF77FF",
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo |> dplyr::filter(indicador() == "Na microrregião de saúde, mas fora do município de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Na microrregião de saúde, mas fora do município de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
             color = "#F1605DFF",
@@ -3147,21 +3262,20 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo |> dplyr::filter(indicador() == "Na microrregião de saúde, mas fora do município de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Na microrregião de saúde, mas fora do município de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#F1605DFF",
             tooltip = list(
-
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo |> dplyr::filter(indicador() == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
             color = "#B63679FF",
@@ -3171,8 +3285,8 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo |> dplyr::filter(indicador() == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#B63679FF",
@@ -3184,8 +3298,8 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo |> dplyr::filter(indicador() == "Fora da macrorregião de saúde, mas na UF de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas na UF de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
             color = "#721F81FF",
@@ -3195,8 +3309,8 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo |> dplyr::filter(indicador() == "Fora da macrorregião de saúde, mas na UF de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas na UF de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#721F81FF",
@@ -3208,8 +3322,8 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           )|>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo |> dplyr::filter(indicador() == "Fora da UF de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Fora da UF de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
             color = "#2D1160FF",
@@ -3219,13 +3333,12 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo |> dplyr::filter(indicador() == "Fora da UF de residência"),
-            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador()),
+            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Fora da UF de residência"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#2D1160FF",
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
@@ -3252,24 +3365,147 @@ mod_bloco_4_server <- function(id, filtros){
 
                 pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
               )
-            )
+            )|>
+            highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
         } else {
           grafico_base <- highcharter::highchart() |>
             highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo(),
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI"),
               highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
               type = "column",
               showInLegend = TRUE,
+              color = "#FEBA80FF",
               tooltip = list(
                 pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
               ),
               stack = 0
             ) |>
             highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo(),
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI"),
               highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
               type = "column",
-              #showInLegend = FALSE,
+              showInLegend = FALSE,
+              color = "#FEBA80FF",
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1,
+              linkedTo = ":previous"
+            )|>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde e em estabelecimento que não tem leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              color = "#F8765CFF",
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde e em estabelecimento que não tem leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              color = "#F8765CFF",
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1,
+              linkedTo = ":previous"
+            )|>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              color = "#D3436EFF",
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              color = "#D3436EFF",
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1,
+              linkedTo = ":previous"
+            )|>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              color = "#982D80FF",
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              color = "#982D80FF",
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1,
+              linkedTo = ":previous"
+            )|>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              color = "#5F187FFF",
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              color = "#5F187FFF",
+              tooltip = list(
+
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 1,
+              linkedTo = ":previous"
+            )|>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde, mas sem informação sobre leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = TRUE,
+              color = "#231151FF",
+              tooltip = list(
+                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              ),
+              stack = 0
+            ) |>
+            highcharter::hc_add_series(
+              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Na macrorregião de saúde, mas sem informação sobre leito de UTI"),
+              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+              type = "column",
+              showInLegend = FALSE,
+              color = "#231151FF",
               tooltip = list(
 
                 pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
@@ -3281,7 +3517,6 @@ mod_bloco_4_server <- function(id, filtros){
 
         grafico_base |>
           highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)]) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_deslocamento_macro_completo()$ano), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "% de nascidos vivos com peso < 1500g"), min = 0, max = 100)
       })
