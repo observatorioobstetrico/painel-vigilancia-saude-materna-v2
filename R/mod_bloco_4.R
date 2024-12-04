@@ -509,6 +509,12 @@ mod_bloco_4_ui <- function(id){
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
               )
+            ),
+            #[LOOK]
+            column(
+              offset = 3,
+              width = 6,
+              shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
             )
           ),
           column(
@@ -694,11 +700,11 @@ mod_bloco_4_server <- function(id, filtros){
       prop_partos_fora_macro_rsaude_res = rep("round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
       prop_partos_fora_uf_res = rep("round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2)
     )
-
+    #[LOOK]
     bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
       dplyr::mutate(
-        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2)
-
+        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
+        percentil_5_partos_sem_uti = rep("round(quantile(((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti)) * 100, probs = 0.1, na.rm = T), 1)", 2)
       )
 
 
@@ -2073,13 +2079,56 @@ mod_bloco_4_server <- function(id, filtros){
             indicador = "prop_partos_sem_uti",
             titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
             tem_meta = TRUE,
-            valor_de_referencia = 16.3, #data4_deslocamento_resumo_referencia()$prop_partos_sem_uti,
+            valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_sem_uti, # 16.3,
             tipo = "porcentagem",
             invertido = FALSE,
             tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
             fonte_titulo = "15px",
             pagina = "bloco_4",
-            tipo_referencia = "HEALTHY PEOPLE, 2020",
+            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
+            nivel_de_analise = ifelse(
+              filtros()$comparar == "Não",
+              filtros()$nivel,
+              ifelse(
+                input$localidade_resumo4 == "escolha1",
+                filtros()$nivel,
+                filtros()$nivel2
+              )
+            )
+          ),
+          # Botão de aviso posicionado no canto superior direito
+          div(
+            style = "position: absolute; top: 10px; right: 10px;",
+            shinyWidgets::actionBttn(
+              inputId = ns("aviso_desloc"),
+              icon = icon("triangle-exclamation", style = "color: red"),
+              color = "warning",
+              style = "material-circle",
+              size = "xs"
+            )
+          )
+        )
+      )
+    })
+
+    #[LOOK]
+    output$caixa_b4_i10_deslocamento_macro <- renderUI({
+      tagList(
+        div(
+          style = "position: relative;",
+          # Caixinha criada pela função cria_caixa_server
+          cria_caixa_server(
+            dados = data4_deslocamento_resumo_referencia(),
+            indicador = "percentil_5_partos_sem_uti",
+            titulo = "Percentil de 5 da distribuição da porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+            tem_meta = TRUE,
+            valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_5_partos_sem_uti, # 16.3,
+            tipo = "porcentagem",
+            invertido = FALSE,
+            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+            fonte_titulo = "15px",
+            pagina = "bloco_4",
+            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
             nivel_de_analise = ifelse(
               filtros()$comparar == "Não",
               filtros()$nivel,
