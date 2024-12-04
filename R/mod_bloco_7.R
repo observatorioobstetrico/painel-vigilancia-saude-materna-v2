@@ -2250,78 +2250,7 @@ mod_bloco_7_server <- function(id, filtros){
         #porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
         porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2),
         porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2)
-
-        # # Variáveis que calculamos os percentis
-        # percentil_mort_neonat = rep("round(quantile(sum(obitos_27dias)/sum(nascidos) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_precoc = rep("round(quantile(sum(obitos_6dias)/sum(nascidos) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_tardia = rep("round(quantile(sum(obitos_7_27dias)/sum(nascidos) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_menos1000 = rep("round(quantile(sum(obitos_27dias_menos1000)/sum(nascidos_menos1000) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_precoc_menos1000 = rep("round(quantile(sum(obitos_6dias_menos1000)/sum(nascidos_menos1000) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_tardia_menos1000 = rep("round(quantile(sum(obitos_7_27dias_menos1000)/sum(nascidos_menos1000) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_1000_1499 = rep("round(quantile(sum(obitos_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_precoc_1000_1499 = rep("round(quantile(sum(obitos_6dias_1000_1499)/sum(nascidos_1000_1499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_tardia_1000_1499 = rep("round(quantile(sum(obitos_7_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_1500_2499 = rep("round(quantile(sum(obitos_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_precoc_1500_2499 = rep("round(quantile(sum(obitos_6dias_1500_2499)/sum(nascidos_1500_2499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_tardia_1500_2499 = rep("round(quantile(sum(obitos_7_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_mais2500 = rep("round(quantile(sum(obitos_27dias_mais2500)/sum(nascidos_mais2500) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_precoc_mais2500 = rep("round(quantile(sum(obitos_6dias_mais2500)/sum(nascidos_mais2500) *1000, probs=0.05), 1)", 2),
-        # percentil_mort_neonat_tardia_mais2500 = rep("round(quantile(sum(obitos_7_27dias_mais2500)/sum(nascidos_mais2500) *1000, probs=0.05), 1)", 2),
-        #
-        # percentil_taxa_mort_fetal = rep("round(quantile(sum(obitos_fetais_mais_22sem)/(sum(nascidos)+sum(obitos_fetais_mais_22sem)) *1000, probs = 0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_peso_menos_1000 = rep("round(quantile(sum(fetal_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_peso_menos_1000)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_peso_1000_1499 = rep("round(quantile(sum(fetal_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_peso_1000_1499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_peso_1500_2499 = rep("round(quantile(sum(fetal_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_peso_1500_2499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_peso_mais_2500 = rep("round(quantile(sum(fetal_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_peso_mais_2500)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_antes = rep("round(quantile(sum(fetal_antes)/(sum(nascidos) + sum(fetal_antes)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_durante = rep("round(quantile(sum(fetal_durante)/(sum(nascidos) + sum(fetal_durante)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_depois = rep("round(quantile(sum(fetal_depois)/(sum(nascidos) + sum(fetal_depois)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_antes_peso_menos_1000 = rep("round(quantile(sum(fetal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_antes_peso_menos_1000)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_antes_peso_1000_1499 = rep("round(quantile(sum(fetal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_antes_peso_1000_1499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_antes_peso_1500_2499 = rep("round(quantile(sum(fetal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_antes_peso_1500_2499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_antes_peso_mais_2500 = rep("round(quantile(sum(fetal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_antes_peso_mais_2500)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_durante_peso_menos_1000 = rep("round(quantile(sum(fetal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_durante_peso_menos_1000)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_durante_peso_1000_1499 = rep("round(quantile(sum(fetal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_durante_peso_1000_1499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_durante_peso_1500_2499 = rep("round(quantile(sum(fetal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_durante_peso_1500_2499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_durante_peso_mais_2500 = rep("round(quantile(sum(fetal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_durante_peso_mais_2500)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_depois_peso_menos_1000 = rep("round(quantile(sum(fetal_depois_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_depois_peso_menos_1000)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_depois_peso_1000_1499 = rep("round(quantile(sum(fetal_depois_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_depois_peso_1000_1499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_depois_peso_1500_2499 = rep("round(quantile(sum(fetal_depois_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_depois_peso_1500_2499)) *1000, probs=0.05), 1)", 2),
-        # percentil_taxa_mort_fetal_depois_peso_mais_2500 = rep("round(quantile(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, probs=0.05), 1)", 2),
-        #
-        # percentil_taxa_mort_fetal_oms = rep("round(quantile(sum(obitos_fetais_mais_28sem)/(sum(nascidos)+sum(obitos_fetais_mais_28sem)) *1000, probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_peso_menos_1000 = rep("round(quantile(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_peso_1000_1499 = rep("round(quantile(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_peso_1500_2499 = rep("round(quantile(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_peso_mais_2500 = rep("round(quantile(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_antes = rep("round(quantile(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_durante = rep("round(quantile(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(quantile(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(quantile(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499)), probs = 0.05), 4)",2),
-        # percentil_taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(quantile(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499)), probs = 0.05), 4)",2),
-        # percentil_taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(quantile(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500)), probs = 0.05), 4)",2),
-        # percentil_taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(quantile(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(quantile(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(quantile(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499)), probs=0.05), 4)", 2),
-        # percentil_taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(quantile(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500)), probs=0.05), 4)", 2),
-        #
-        # percentil_taxa_perinatal_total = rep("round(quantile((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_total_menos1000 = rep("round(quantile((sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000))/(sum(fetal_peso_menos_1000)+ sum(nascidos_menos1000))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_total_1000_1499 = rep("round(quantile((sum(fetal_peso_1000_1499) + sum(obitos_6dias_1000_1499))/(sum(fetal_peso_1000_1499)+sum(nascidos_1000_1499))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_total_1500_2499 = rep("round(quantile((sum(fetal_peso_1500_2499)+sum(obitos_6dias_1500_2499))/(sum(fetal_peso_1500_2499)+sum(nascidos_1500_2499))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_total_mais2500 = rep("round(quantile((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_oms = rep("round(quantile((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_oms_menos1000 = rep("round(quantile((sum(peso_menos_1000_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1000))/(sum(peso_menos_1000_mais_28sem, na.rm=T)+ sum(nascidos_menos1000))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_oms_1000_1499 = rep("round(quantile((sum(peso_1000_1499_mais_28sem, na.rm=T) + sum(obitos_6dias_1000_1499))/(sum(peso_1000_1499_mais_28sem, na.rm=T)+sum(nascidos_1000_1499))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_oms_1500_2499 = rep("round(quantile((sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_1500_2499))/(sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(nascidos_1500_2499))*1000, probs=0.05), 1)", 2),
-        # percentil_taxa_perinatal_oms_mais2500 = rep("round(quantile((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, probs=0.05), 1)", 2),
-        #
-        # percentil_porc_internacoes_menores_28_dias_sih_geral = rep("round(quantile(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs=0.05), 1)", 2),
-        # percentil_porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(quantile(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs=0.05), 1)", 2),
-        # percentil_porc_condicoes_ameacadoras = rep("round(quantile(sum(nascidos_condicoes_ameacadoras) / sum(nascidos) * 100, probs = 0.05), 1)", 2)
-
       )
-
 
        if (is.null(input$idade_dias_sih[1])) {
          df_calcs_aux3 <- data.frame(
@@ -2344,21 +2273,7 @@ mod_bloco_7_server <- function(id, filtros){
 
                )
              )"
-            ), 2)#,
-
-           # percentil_porc_internacoes_menores_28_dias_sih = rep(glue::glue(
-           #   "ifelse(
-           #     length(input$idade_dias_sih) == 3,
-           #     round(quantile(sum(internacoes_{input$local_internacao_sih}_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs= 0.05), 1),
-           #     ifelse(
-           #     length(input$idade_dias_sih) == 2,
-           #     round(quantile((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs=0.05), 1),
-           #     round(quantile(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs = 0.05), 1)
-           #
-           #     )
-           #   )"
-           # ), 2)
-
+            ), 2)
          )
        }
 
@@ -2373,16 +2288,6 @@ mod_bloco_7_server <- function(id, filtros){
          df_calcs_aux4 <- data.frame(
            tipo = c("local", "referencia"),
            porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
-
-             # "if(length(input$idade_dias_sih) == 1){
-             # round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-             # } else if(length(input$idade_dias_sih) == 2){
-             # round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-             # } else{
-             # round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-             #
-             # }
-             # "
               "ifelse(
                 length(input$idade_dias_sih) == 3,
                 round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
@@ -2392,29 +2297,7 @@ mod_bloco_7_server <- function(id, filtros){
                 round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
                 )
               )"
-            ), 2)#,
-           #
-           # percentil_porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
-           #
-           #   # "if(length(input$idade_dias_sih) == 1){
-           #   # round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   # } else if(length(input$idade_dias_sih) == 2){
-           #   # round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti[ano <= 2022]) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti[ano <= 2022])) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)
-           #   # } else{
-           #   # round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1),
-           #   #
-           #   # }
-           #   # "
-           #   "ifelse(
-           #      length(input$idade_dias_sih) == 3,
-           #      round(quantile(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs = 0.05), 1),
-           #      ifelse(
-           #      length(input$idade_dias_sih) == 2,
-           #      round(quantile((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti)) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs = 0.05), 1),
-           #      round(quantile(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, probs = 0.05), 1)
-           #      )
-           #    )"
-           # ), 2)
+            ), 2)
          )
        }
 
