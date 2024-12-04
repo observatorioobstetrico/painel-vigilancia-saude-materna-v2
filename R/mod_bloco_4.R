@@ -680,7 +680,10 @@ mod_bloco_4_server <- function(id, filtros){
       contrib_robson5_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_5) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
       contrib_robson6_a_9_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_6_ao_9) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
       contrib_robson10_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_10) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
-      contrib_robson_faltante_tx_cesariana = rep("round((sum(mulheres_com_parto_cesariana) - sum(dplyr::across(dplyr::starts_with('total_cesariana')))) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2)
+      contrib_robson_faltante_tx_cesariana = rep("round((sum(mulheres_com_parto_cesariana) - sum(dplyr::across(dplyr::starts_with('total_cesariana')))) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
+      #[REFF]
+      percentil_95_robson6_a_9_tx_cesariana = rep("round(quantile((total_cesariana_grupo_robson_6_ao_9 / mulheres_dentro_do_grupo_de_robson_6_ao_9)* 100, probs = 0.95, na.rm = T), 2)"),
+      percentil_5_robson6_a_9_tx_cesariana = rep("round(quantile((total_cesariana_grupo_robson_6_ao_9 / mulheres_dentro_do_grupo_de_robson_6_ao_9)* 100, probs = 0.05, na.rm = T), 2)")
     )
 
     bloco4_deslocamento_calcs <- data.frame(
@@ -2551,17 +2554,20 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), adicionar_localidade = FALSE, referencia = TRUE) |>
         tidyr::pivot_longer(
-          cols = starts_with("prop") | starts_with("contrib"),
+          cols = starts_with("prop") | starts_with("contrib") | starts_with("percentil"),
           names_to = "indicador",
           values_to = "br_prop_indicador"
         ) |>
+        #[REFF]
         dplyr::mutate(
           localidade_comparacao = "Média nacional",
           tipo_indicador = as.factor(
             dplyr::case_when(
               stringr::str_detect(indicador, "^prop_nasc") ~ "indicador2",
               stringr::str_detect(indicador, "^prop_tx") | stringr::str_detect(indicador, "^prop_robson") ~ "indicador1",
-              stringr::str_detect(indicador, "^contrib") ~ "indicador3"
+              stringr::str_detect(indicador, "^contrib") ~ "indicador3",
+              stringr::str_detect(indicador, "^percentil_95") ~ "indicador4",
+              stringr::str_detect(indicador, "^percentil_5") ~ "indicador5"
             )
           ),
           indicador = factor(
@@ -2574,7 +2580,7 @@ mod_bloco_4_server <- function(id, filtros){
               grepl("robson4", indicador) ~ "Grupo 4 de Robson",
               grepl("robson5", indicador) ~ "Grupo 5 de Robson",
               grepl("robson6_a_9", indicador) ~ "Grupos 6 a 9 de Robson",
-              grepl("robson10", indicador) ~ "Grupo 10 de Robson"
+              grepl("robson10", indicador) ~ "Grupo 10 de Robson",
             ),
             levels = c(
               "Geral",
@@ -2825,6 +2831,7 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    #[REFF]
     output$plot7_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[7]] |>
         highcharter::hc_add_series(
@@ -2834,6 +2841,26 @@ mod_bloco_4_server <- function(id, filtros){
           dashStyle = "ShortDot",
           highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        ) |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador4", grepl("6 a 9 de Robson", indicador)),
+          type = "line",
+          name = "Referência (Percentil 95)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = "#fc8961",
+          showInLegend = TRUE,
+          opacity = 0.8
+        ) |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador5", grepl("6 a 9 de Robson", indicador)),
+          type = "line",
+          name = "Referência (Percentil 5)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          # color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
         )
