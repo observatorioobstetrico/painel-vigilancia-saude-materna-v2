@@ -30,9 +30,11 @@ mod_sobre_ui <- function(id){
 
           Neste painel, você encontrará um conjunto de indicadores que expressam a vulnerabilidade das
           mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde
-          recebida ao longo da sua vida reprodutiva. Os indicadores estão disponíveis para municípios, estados, regiões de saúde e país e foram
-          calculados a partir de vários sistemas de informação brasileiros (SINASC, SIM, SINAN, SIH, SIAB,
-          ANS e estimativas populacionais). O painel contém indicadores para o período 2012 a 2022 e
+          recebida ao longo da sua vida reprodutiva. Encontrará também indicadores relacionados aos
+          desfechos perinatais, determinados em grande parte pela atenção recebida pela mulher durante a
+          gestação e o parto. Os indicadores estão disponíveis para municípios, estados, regiões de saúde e
+          país e foram calculados a partir de vários sistemas de informação brasileiros (SINASC, SIM, SINAN,
+          SIH, SIAB, ANS e estimativas populacionais). O painel contém indicadores a partir do ano 2012 e
           será atualizado anualmente.
 
           <span style='display: block; margin-bottom: 12px;'> </span>
@@ -51,7 +53,7 @@ mod_sobre_ui <- function(id){
             <li> Séries históricas: <span style = 'font-weight: normal;'>nesse nível, é mostrada a evolução dos indicadores de cada bloco para a localidade e período de tempo selecionados, sendo possível a comparação entre
                  localidades, situando o município/estado/região no cenário nacional;</span></li>
             <li> Visão detalhada dos indicadores: <span style = 'font-weight: normal;'>nesse nível, cada indicador pode ser visualizado individualmente e comparado a outras localidades.
-                 Deve-se primeiro selecionar o bloco ao qual o indicador pertence e depois o indicador escolhido. Além das visualizações, a documentação de cada indicador é apresentada de forma resumida: sua definição, a fonte dos dados, o método de cálculo e informações sobre a qualidade da informação são apresentados,</span></li>
+                 Deve-se primeiro selecionar o bloco ao qual o indicador pertence e depois o indicador escolhido. Além das visualizações, a documentação de cada indicador é apresentada de forma resumida: sua definição, a fonte dos dados, o método de cálculo e informações sobre a qualidade da informação são apresentados.</span></li>
           </ol>
 
           <p align='justify'; style='font-size:18px'>
@@ -60,7 +62,7 @@ mod_sobre_ui <- function(id){
           </p>
 
           <ol start='4', align='justify'; style='font-size:18px; font-weight: bold;'>
-            <li> Documentação dos indicadores: <span style = 'font-weight: normal;'> nesse munu, disponibilizamos um documento para impressão, contendo a documentação completa de todos os indicadores do painel;</span></li>
+            <li> Documentação dos indicadores: <span style = 'font-weight: normal;'> nesse menu, disponibilizamos um documento para impressão, contendo a documentação completa de todos os indicadores do painel;</span></li>
             <li> A história da Aparecida: <span style = 'font-weight: normal;'>nesse menu, disponibilizamos um link para a \"História de Aparecida\", onde mostramos os indicadores apresentados neste painel em diferentes contextos e em como eles refletem as situações de vulnerabilidade da mulher ao óbito materno, permitindo maior conhecimento sobre a morte materna e seus determinantes.</span></li>
           </ol>
 

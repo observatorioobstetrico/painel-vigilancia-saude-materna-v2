@@ -240,7 +240,7 @@ mod_nivel_1_ui <- function(id) {
 
                 <p align='justify' style = 'font-size: 17px'>
                 Neste bloco, o gestor pode acompanhar a porcentagem de mulheres que receberam assistência pré-natal, a porcentagem
-                de mulheres com início do acompanhamento pré-natal até 12 semanas gestacionais,, a porcentagem de mulheres que recebeu o número mínimo
+                de mulheres com início do acompanhamento pré-natal até 12 semanas gestacionais, a porcentagem de mulheres que recebeu o número mínimo
                 de 8 consultas recomendado pela Organização Mundial de Saúde, e a porcentagem de mulheres que recebeu o número
                 adequado de consultas, considerando a idade gestacional no parto. Pode também avaliar a incidência de sífilis congênita,
                 que é considerado um evento sentinela da qualidade da assistência pré-natal, por ser um desfecho negativo evitável
@@ -281,7 +281,7 @@ mod_nivel_1_ui <- function(id) {
                 ),
                 column(
                   width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i2")), proxy.height = "270px")
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i4")), proxy.height = "270px")
                 ),
                 column(
                   #offset = 2,
@@ -297,7 +297,7 @@ mod_nivel_1_ui <- function(id) {
                 ),
                 column(
                   width = 4,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i4")), proxy.height = "280px")
+                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b3_i2")), proxy.height = "280px")
                 )
              )
             )
