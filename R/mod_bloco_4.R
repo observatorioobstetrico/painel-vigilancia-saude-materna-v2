@@ -509,6 +509,12 @@ mod_bloco_4_ui <- function(id){
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
               )
+            ),
+            #[LOOK]
+            column(
+              offset = 3,
+              width = 6,
+              shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
             )
           ),
           column(
@@ -680,7 +686,10 @@ mod_bloco_4_server <- function(id, filtros){
       contrib_robson5_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_5) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
       contrib_robson6_a_9_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_6_ao_9) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
       contrib_robson10_tx_cesariana = rep("round(sum(total_cesariana_grupo_robson_10) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
-      contrib_robson_faltante_tx_cesariana = rep("round((sum(mulheres_com_parto_cesariana) - sum(dplyr::across(dplyr::starts_with('total_cesariana')))) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2)
+      contrib_robson_faltante_tx_cesariana = rep("round((sum(mulheres_com_parto_cesariana) - sum(dplyr::across(dplyr::starts_with('total_cesariana')))) / sum(mulheres_com_parto_cesariana) * 100, 1)", 2),
+      #[REFF]
+      percentil_95_robson6_a_9_tx_cesariana = rep("round(quantile((total_cesariana_grupo_robson_6_ao_9 / mulheres_dentro_do_grupo_de_robson_6_ao_9)* 100, probs = 0.95, na.rm = T), 2)"),
+      percentil_5_robson6_a_9_tx_cesariana = rep("round(quantile((total_cesariana_grupo_robson_6_ao_9 / mulheres_dentro_do_grupo_de_robson_6_ao_9)* 100, probs = 0.05, na.rm = T), 2)")
     )
 
     bloco4_deslocamento_calcs <- data.frame(
@@ -691,11 +700,11 @@ mod_bloco_4_server <- function(id, filtros){
       prop_partos_fora_macro_rsaude_res = rep("round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2),
       prop_partos_fora_uf_res = rep("round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)", 2)
     )
-
+    #[LOOK]
     bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
       dplyr::mutate(
-        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2)
-
+        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
+        percentil_5_partos_sem_uti = rep("round(quantile(((partos_na_macro_sem_uti + partos_fora_macro_sem_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti)) * 100, probs = 0.1, na.rm = T), 1)", 2)
       )
 
 
@@ -2070,13 +2079,56 @@ mod_bloco_4_server <- function(id, filtros){
             indicador = "prop_partos_sem_uti",
             titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
             tem_meta = TRUE,
-            valor_de_referencia = 16.3, #data4_deslocamento_resumo_referencia()$prop_partos_sem_uti,
+            valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_sem_uti, # 16.3,
             tipo = "porcentagem",
             invertido = FALSE,
             tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
             fonte_titulo = "15px",
             pagina = "bloco_4",
-            tipo_referencia = "HEALTHY PEOPLE, 2020",
+            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
+            nivel_de_analise = ifelse(
+              filtros()$comparar == "Não",
+              filtros()$nivel,
+              ifelse(
+                input$localidade_resumo4 == "escolha1",
+                filtros()$nivel,
+                filtros()$nivel2
+              )
+            )
+          ),
+          # Botão de aviso posicionado no canto superior direito
+          div(
+            style = "position: absolute; top: 10px; right: 10px;",
+            shinyWidgets::actionBttn(
+              inputId = ns("aviso_desloc"),
+              icon = icon("triangle-exclamation", style = "color: red"),
+              color = "warning",
+              style = "material-circle",
+              size = "xs"
+            )
+          )
+        )
+      )
+    })
+
+    #[LOOK]
+    output$caixa_b4_i10_deslocamento_macro <- renderUI({
+      tagList(
+        div(
+          style = "position: relative;",
+          # Caixinha criada pela função cria_caixa_server
+          cria_caixa_server(
+            dados = data4_deslocamento_resumo_referencia(),
+            indicador = "percentil_5_partos_sem_uti",
+            titulo = "Percentil de 5 da distribuição da porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+            tem_meta = TRUE,
+            valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_5_partos_sem_uti, # 16.3,
+            tipo = "porcentagem",
+            invertido = FALSE,
+            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+            fonte_titulo = "15px",
+            pagina = "bloco_4",
+            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
             nivel_de_analise = ifelse(
               filtros()$comparar == "Não",
               filtros()$nivel,
@@ -2551,17 +2603,20 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), adicionar_localidade = FALSE, referencia = TRUE) |>
         tidyr::pivot_longer(
-          cols = starts_with("prop") | starts_with("contrib"),
+          cols = starts_with("prop") | starts_with("contrib") | starts_with("percentil"),
           names_to = "indicador",
           values_to = "br_prop_indicador"
         ) |>
+        #[REFF]
         dplyr::mutate(
           localidade_comparacao = "Média nacional",
           tipo_indicador = as.factor(
             dplyr::case_when(
               stringr::str_detect(indicador, "^prop_nasc") ~ "indicador2",
               stringr::str_detect(indicador, "^prop_tx") | stringr::str_detect(indicador, "^prop_robson") ~ "indicador1",
-              stringr::str_detect(indicador, "^contrib") ~ "indicador3"
+              stringr::str_detect(indicador, "^contrib") ~ "indicador3",
+              stringr::str_detect(indicador, "^percentil_95") ~ "indicador4",
+              stringr::str_detect(indicador, "^percentil_5") ~ "indicador5"
             )
           ),
           indicador = factor(
@@ -2574,7 +2629,7 @@ mod_bloco_4_server <- function(id, filtros){
               grepl("robson4", indicador) ~ "Grupo 4 de Robson",
               grepl("robson5", indicador) ~ "Grupo 5 de Robson",
               grepl("robson6_a_9", indicador) ~ "Grupos 6 a 9 de Robson",
-              grepl("robson10", indicador) ~ "Grupo 10 de Robson"
+              grepl("robson10", indicador) ~ "Grupo 10 de Robson",
             ),
             levels = c(
               "Geral",
@@ -2825,6 +2880,7 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    #[REFF]
     output$plot7_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[7]] |>
         highcharter::hc_add_series(
@@ -2834,6 +2890,26 @@ mod_bloco_4_server <- function(id, filtros){
           dashStyle = "ShortDot",
           highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
+          showInLegend = TRUE,
+          opacity = 0.8
+        ) |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador4", grepl("6 a 9 de Robson", indicador)),
+          type = "line",
+          name = "Referência (Percentil 95)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          color = "#fc8961",
+          showInLegend = TRUE,
+          opacity = 0.8
+        ) |>
+        highcharter::hc_add_series(
+          data = data4_referencia() |> dplyr::filter(tipo_indicador == "indicador5", grepl("6 a 9 de Robson", indicador)),
+          type = "line",
+          name = "Referência (Percentil 5)",
+          dashStyle = "ShortDot",
+          highcharter::hcaes(x = ano, y = br_prop_indicador, group = localidade_comparacao),
+          # color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
         )
