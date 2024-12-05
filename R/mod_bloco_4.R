@@ -1403,7 +1403,7 @@ mod_bloco_4_server <- function(id, filtros){
           data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
           color = "#b73779",
           lineWidth = 2,
-          opacity = 0.7,
+          opacity = 0.6,
           dashStyle = "ShortDash",
           marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
           tooltip = list(
@@ -2165,7 +2165,7 @@ mod_bloco_4_server <- function(id, filtros){
 
 
     # Para os gráficos --------------------------------------------------------
-    cols <- c("#2c115f", "#b73779", "#fc8961")
+    cols <- c("#2c115f", "#b73779", "#fc8961", "#000004FF", "#f1605d")
 
     ## Calculando os indicadores para cada ano do período selecionado ---------
     ### Para a localidade selecionada -----------------------------------------
