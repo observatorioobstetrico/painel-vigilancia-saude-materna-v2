@@ -2100,18 +2100,18 @@ mod_bloco_7_server <- function(id, filtros){
         mort_neonat = c("round(sum(obitos_27dias)/sum(nascidos) *1000, 1)", "5"),
         mort_neonat_precoc = c("round(sum(obitos_6dias)/sum(nascidos) *1000, 1)", "3.75"),
         mort_neonat_tardia = c("round(sum(obitos_7_27dias)/sum(nascidos) *1000, 1)", "1.25"),
-        mort_neonat_menos1000 = c("round(sum(obitos_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", "5"),
-        mort_neonat_precoc_menos1000 = c("round(sum(obitos_6dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", "3.75"),
-        mort_neonat_tardia_menos1000 = c("round(sum(obitos_7_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", "1.25"),
-        mort_neonat_1000_1499 = c("round(sum(obitos_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", "5"),
-        mort_neonat_precoc_1000_1499 = c("round(sum(obitos_6dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", "3.75"),
-        mort_neonat_tardia_1000_1499 = c("round(sum(obitos_7_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", "1.25"),
-        mort_neonat_1500_2499 = c("round(sum(obitos_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", "5"),
-        mort_neonat_precoc_1500_2499 = c("round(sum(obitos_6dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", "3.75"),
-        mort_neonat_tardia_1500_2499 = c("round(sum(obitos_7_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", "1.25"),
-        mort_neonat_mais2500 = c("round(sum(obitos_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", "5"),
-        mort_neonat_precoc_mais2500 = c("round(sum(obitos_6dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", "3.75"),
-        mort_neonat_tardia_mais2500 = c("round(sum(obitos_7_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", "1.25"),
+        mort_neonat_menos1000 = rep("round(sum(obitos_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
+        mort_neonat_precoc_menos1000 = rep("round(sum(obitos_6dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
+        mort_neonat_tardia_menos1000 = rep("round(sum(obitos_7_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
+        mort_neonat_1000_1499 = rep("round(sum(obitos_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
+        mort_neonat_precoc_1000_1499 = rep("round(sum(obitos_6dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
+        mort_neonat_tardia_1000_1499 = rep("round(sum(obitos_7_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
+        mort_neonat_1500_2499 = rep("round(sum(obitos_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
+        mort_neonat_precoc_1500_2499 = rep("round(sum(obitos_6dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
+        mort_neonat_tardia_1500_2499 = rep("round(sum(obitos_7_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
+        mort_neonat_mais2500 = rep("round(sum(obitos_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
+        mort_neonat_precoc_mais2500 = rep("round(sum(obitos_6dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
+        mort_neonat_tardia_mais2500 = rep("round(sum(obitos_7_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
 
         obitos_fetais = rep("sum(obitos_fetais_mais_22sem)", 2),
         fetal_peso_menos_1000 = rep("sum(fetal_peso_menos_1000)", 2),
@@ -2135,25 +2135,25 @@ mod_bloco_7_server <- function(id, filtros){
         fetal_depois_peso_mais_2500 = rep("sum(fetal_depois_peso_mais_2500)", 2),
 
         taxa_mort_fetal = c("round(sum(obitos_fetais_mais_22sem)/(sum(nascidos)+sum(obitos_fetais_mais_22sem)) *1000, 1)", "5"),
-        taxa_mort_fetal_peso_menos_1000 = c("round(sum(fetal_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_peso_menos_1000)) *1000, 1)", "5"),
-        taxa_mort_fetal_peso_1000_1499 = c("round(sum(fetal_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_peso_1000_1499)) *1000, 1)", "5"),
-        taxa_mort_fetal_peso_1500_2499 = c("round(sum(fetal_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_peso_1500_2499)) *1000, 1)", "5"),
-        taxa_mort_fetal_peso_mais_2500 = c("round(sum(fetal_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_peso_mais_2500)) *1000, 1)", "5"),
-        taxa_mort_fetal_antes = c("round(sum(fetal_antes)/(sum(nascidos) + sum(fetal_antes)) *1000, 1)", "5"),
-        taxa_mort_fetal_durante = c("round(sum(fetal_durante)/(sum(nascidos) + sum(fetal_durante)) *1000, 1)", "5"),
-        taxa_mort_fetal_depois = c("round(sum(fetal_depois)/(sum(nascidos) + sum(fetal_depois)) *1000, 1)", "5"),
-        taxa_mort_fetal_antes_peso_menos_1000 = c("round(sum(fetal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_antes_peso_menos_1000)) *1000, 1)", "5"),
-        taxa_mort_fetal_antes_peso_1000_1499 = c("round(sum(fetal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_antes_peso_1000_1499)) *1000, 1)", "5"),
-        taxa_mort_fetal_antes_peso_1500_2499 = c("round(sum(fetal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_antes_peso_1500_2499)) *1000, 1)", "5"),
-        taxa_mort_fetal_antes_peso_mais_2500 = c("round(sum(fetal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_antes_peso_mais_2500)) *1000, 1)", "5"),
-        taxa_mort_fetal_durante_peso_menos_1000 = c("round(sum(fetal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_durante_peso_menos_1000)) *1000, 1)", "5"),
-        taxa_mort_fetal_durante_peso_1000_1499 = c("round(sum(fetal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_durante_peso_1000_1499)) *1000, 1)", "5"),
-        taxa_mort_fetal_durante_peso_1500_2499 = c("round(sum(fetal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_durante_peso_1500_2499)) *1000, 1)", "5"),
-        taxa_mort_fetal_durante_peso_mais_2500 = c("round(sum(fetal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_durante_peso_mais_2500)) *1000, 1)", "5"),
-        taxa_mort_fetal_depois_peso_menos_1000 = c("round(sum(fetal_depois_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_depois_peso_menos_1000)) *1000, 1)", "5"),
-        taxa_mort_fetal_depois_peso_1000_1499 = c("round(sum(fetal_depois_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_depois_peso_1000_1499)) *1000, 1)", "5"),
-        taxa_mort_fetal_depois_peso_1500_2499 = c("round(sum(fetal_depois_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_depois_peso_1500_2499)) *1000, 1)", "5"),
-        taxa_mort_fetal_depois_peso_mais_2500 = c("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 1)", "5"),
+        taxa_mort_fetal_peso_menos_1000 = rep("round(sum(fetal_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_peso_menos_1000)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_1000_1499 = rep("round(sum(fetal_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_peso_1000_1499)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_1500_2499 = rep("round(sum(fetal_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_peso_1500_2499)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_mais_2500 = rep("round(sum(fetal_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_peso_mais_2500)) *1000, 1)", 2),
+        taxa_mort_fetal_antes = rep("round(sum(fetal_antes)/(sum(nascidos) + sum(fetal_antes)) *1000, 1)", 2),
+        taxa_mort_fetal_durante = rep("round(sum(fetal_durante)/(sum(nascidos) + sum(fetal_durante)) *1000, 1)", 2),
+        taxa_mort_fetal_depois = rep("round(sum(fetal_depois)/(sum(nascidos) + sum(fetal_depois)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_menos_1000 = rep("round(sum(fetal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_antes_peso_menos_1000)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_1000_1499 = rep("round(sum(fetal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_antes_peso_1000_1499)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_1500_2499 = rep("round(sum(fetal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_antes_peso_1500_2499)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_mais_2500 = rep("round(sum(fetal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_antes_peso_mais_2500)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_menos_1000 = rep("round(sum(fetal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_durante_peso_menos_1000)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_1000_1499 = rep("round(sum(fetal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_durante_peso_1000_1499)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_1500_2499 = rep("round(sum(fetal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_durante_peso_1500_2499)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_mais_2500 = rep("round(sum(fetal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_durante_peso_mais_2500)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_menos_1000 = rep("round(sum(fetal_depois_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_depois_peso_menos_1000)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_1000_1499 = rep("round(sum(fetal_depois_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_depois_peso_1000_1499)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_1500_2499 = rep("round(sum(fetal_depois_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_depois_peso_1500_2499)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 1)", 2),
 
         # Variáveis número de óbitos fetais mais de 28 semanas (critério oms)
         obitos_fetais_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T)", 2),
@@ -2174,20 +2174,20 @@ mod_bloco_7_server <- function(id, filtros){
 
         # Variáveis sobre taxa de mortalidades fetal para mais de 28 semanas (critério oms)
         taxa_mort_fetal_oms = c("round(sum(obitos_fetais_mais_28sem)/(sum(nascidos)+sum(obitos_fetais_mais_28sem)) *1000, 1)", "5"),
-        taxa_mort_fetal_oms_peso_menos_1000 = c("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_peso_1000_1499 = c("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_peso_1500_2499 = c("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_peso_mais_2500 = c("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)) *1000, 1)", "5"),
-        taxa_mort_fetal_oms_antes = c("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_durante = c("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_antes_peso_menos_1000 = c("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_antes_peso_1000_1499 = c("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499))*1000, 1)","5"),
-        taxa_mort_fetal_oms_antes_peso_1500_2499 = c("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499))*1000, 1)","5"),
-        taxa_mort_fetal_oms_antes_peso_mais_2500 = c("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500))*1000, 1)","5"),
-        taxa_mort_fetal_oms_durante_peso_menos_1000 = c("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_durante_peso_1000_1499 = c("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_durante_peso_1500_2499 = c("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499))*1000, 1)", "5"),
-        taxa_mort_fetal_oms_durante_peso_mais_2500 = c("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500))*1000, 1)", "5"),
+        taxa_mort_fetal_oms_peso_menos_1000 = rep("round(sum(peso_menos_1000_mais_28sem)/(sum(nascidos_menos1000)+sum(peso_menos_1000_mais_28sem))*1000, 1)", 2),
+        taxa_mort_fetal_oms_peso_1000_1499 = rep("round(sum(peso_1000_1499_mais_28sem)/(sum(nascidos_1000_1499)+sum(peso_1000_1499_mais_28sem))*1000, 1)", 2),
+        taxa_mort_fetal_oms_peso_1500_2499 = rep("round(sum(peso_1500_2499_mais_28sem)/(sum(nascidos_1500_2499)+sum(peso_1500_2499_mais_28sem))*1000, 1)", 2),
+        taxa_mort_fetal_oms_peso_mais_2500 = rep("round(sum(peso_mais_2500_mais_28sem)/(sum(nascidos_mais2500)+sum(peso_mais_2500_mais_28sem)) *1000, 1)", 2),
+        taxa_mort_fetal_oms_antes = rep("round(sum(perinatal_antes)/(sum(nascidos)+sum(perinatal_antes))*1000, 1)", 2),
+        taxa_mort_fetal_oms_durante = rep("round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante))*1000, 1)", 2),
+        taxa_mort_fetal_oms_antes_peso_menos_1000 = rep("round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_antes_peso_menos_1000))*1000, 1)", 2),
+        taxa_mort_fetal_oms_antes_peso_1000_1499 = rep("round(sum(perinatal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_antes_peso_1000_1499))*1000, 1)",2),
+        taxa_mort_fetal_oms_antes_peso_1500_2499 = rep("round(sum(perinatal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_antes_peso_1500_2499))*1000, 1)", 2),
+        taxa_mort_fetal_oms_antes_peso_mais_2500 = rep("round(sum(perinatal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_antes_peso_mais_2500))*1000, 1)",2),
+        taxa_mort_fetal_oms_durante_peso_menos_1000 = rep("round(sum(perinatal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(perinatal_durante_peso_menos_1000))*1000, 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_1000_1499 = rep("round(sum(perinatal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(perinatal_durante_peso_1000_1499))*1000, 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499))*1000, 1)", 2),
+        taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500))*1000, 1)", 2),
 
         obitos_perinatal_total = rep("sum(obitos_fetais_mais_22sem) + sum(obitos_6dias)", 2),
         perinatal_total_menos1000 = rep("sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000)", 2),
@@ -2212,15 +2212,15 @@ mod_bloco_7_server <- function(id, filtros){
         perinatal_oms_mais2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500)", 2),
 
         taxa_perinatal_total = c("round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 1)", "8.7"),
-        taxa_perinatal_total_menos1000 = c("round((sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000))/(sum(fetal_peso_menos_1000)+ sum(nascidos_menos1000))*1000, 1)", "8.7"),
-        taxa_perinatal_total_1000_1499 = c("round((sum(fetal_peso_1000_1499) + sum(obitos_6dias_1000_1499))/(sum(fetal_peso_1000_1499)+sum(nascidos_1000_1499))*1000, 1)", "8.7"),
-        taxa_perinatal_total_1500_2499 = c("round((sum(fetal_peso_1500_2499)+sum(obitos_6dias_1500_2499))/(sum(fetal_peso_1500_2499)+sum(nascidos_1500_2499))*1000, 1)", "8.7"),
-        taxa_perinatal_total_mais2500 = c("round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 1)", "8.7"),
+        taxa_perinatal_total_menos1000 = rep("round((sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000))/(sum(fetal_peso_menos_1000)+ sum(nascidos_menos1000))*1000, 1)", 2),
+        taxa_perinatal_total_1000_1499 = rep("round((sum(fetal_peso_1000_1499) + sum(obitos_6dias_1000_1499))/(sum(fetal_peso_1000_1499)+sum(nascidos_1000_1499))*1000, 1)", 2),
+        taxa_perinatal_total_1500_2499 = rep("round((sum(fetal_peso_1500_2499)+sum(obitos_6dias_1500_2499))/(sum(fetal_peso_1500_2499)+sum(nascidos_1500_2499))*1000, 1)", 2),
+        taxa_perinatal_total_mais2500 = rep("round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 1)", 2),
         taxa_perinatal_oms = c("round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 1)", "8.7"),
-        taxa_perinatal_oms_menos1000 = c("round((sum(peso_menos_1000_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1000))/(sum(peso_menos_1000_mais_28sem, na.rm=T)+ sum(nascidos_menos1000))*1000, 1)", "8.7"),
-        taxa_perinatal_oms_1000_1499 = c("round((sum(peso_1000_1499_mais_28sem, na.rm=T) + sum(obitos_6dias_1000_1499))/(sum(peso_1000_1499_mais_28sem, na.rm=T)+sum(nascidos_1000_1499))*1000, 1)", "8.7"),
-        taxa_perinatal_oms_1500_2499 = c("round((sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_1500_2499))/(sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(nascidos_1500_2499))*1000, 1)", "8.7"),
-        taxa_perinatal_oms_mais2500 = c("round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 1)", "8.7"),
+        taxa_perinatal_oms_menos1000 = rep("round((sum(peso_menos_1000_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1000))/(sum(peso_menos_1000_mais_28sem, na.rm=T)+ sum(nascidos_menos1000))*1000, 1)", 2),
+        taxa_perinatal_oms_1000_1499 = rep("round((sum(peso_1000_1499_mais_28sem, na.rm=T) + sum(obitos_6dias_1000_1499))/(sum(peso_1000_1499_mais_28sem, na.rm=T)+sum(nascidos_1000_1499))*1000, 1)", 2),
+        taxa_perinatal_oms_1500_2499 = rep("round((sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_1500_2499))/(sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(nascidos_1500_2499))*1000, 1)", 2),
+        taxa_perinatal_oms_mais2500 = rep("round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 1)", 2),
 
         obitos_0dias = rep("sum(obitos_0dias)", 2),
         obitos_0dias_menos1000 = rep("sum(obitos_0dias_menos1000)", 2),
@@ -6755,24 +6755,24 @@ mod_bloco_7_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols) |>
-          highcharter::hc_add_series(
-            data = data7_plot_percentil5_aux,
-            type = "line",
-            name = "Referência (percentil 5)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-          )|>
-          highcharter::hc_add_series(
-            data = data7_plot_percentil95_aux,
-            type = "line",
-            name = "Referência (percentil 95)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-          )
+          highcharter::hc_yAxis(title = list(text = ""), min = 0)|>
+          highcharter::hc_colors(cols)
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )
         if (filtros()$nivel == "Nacional" & taxa_mortalidade_fetal() != "taxa_mort_fetal") {
           grafico_base
         } else {
@@ -6799,23 +6799,23 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data7_plot_percentil5_aux,
-            type = "line",
-            name = "Referência (percentil 5)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-          ) |>
-          highcharter::hc_add_series(
-            data = data7_plot_percentil95_aux,
-            type = "line",
-            name = "Referência (percentil 95)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-          ) |>
+           ) |>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # ) |>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
@@ -7177,8 +7177,56 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
-          )|>
+          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+        #   type = "line",
+        #   name = "Referência (percentil 95)",
+        #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #   dashStyle = "ShortDot",
+        #   opacity = 0.8
+        # )
+        if (filtros()$nivel == "Nacional" & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_aux,
+              type = "line",
+              name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", "Referência (média nacional)", "Referência (meta ODS)"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data7_plot_aux,
+            type = "line",
+            name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_add_series(
+            data = data7_plot_comp_aux,
+            type = "line",
+            name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
+            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
           #   type = "line",
@@ -7190,88 +7238,27 @@ mod_bloco_7_server <- function(id, filtros){
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil95_aux,
           #   type = "line",
-          #   name = "Referência (percentil 95)",
-          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-          #   dashStyle = "ShortDot",
-          #   opacity = 0.8
-          # )|>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+        #   name = "Referência (percentil 95)",
+        #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+        #   dashStyle = "ShortDot",
+        #   opacity = 0.8
+        # ) |>
+        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
-              opacity = 0.8
+              opacity = 0.7
             )
-        }
-      } else {
-        grafico_base <- highcharter::highchart() |>
-          highcharter::hc_add_series(
-            data = data7_plot_aux,
-            type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data7_plot_comp_aux,
-            type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
-          ) |>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base#|>
-            # highcharter::hc_add_series(
-            #   data = data7_plot_percentil5_aux,
-            #   type = "line",
-            #   name = "Referência (percentil 5)",
-            #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            #   dashStyle = "ShortDot",
-            #   opacity = 0.8
-            # )|>
-            # highcharter::hc_add_series(
-            #   data = data7_plot_percentil95_aux,
-            #   type = "line",
-            #   name = "Referência (percentil 95)",
-            #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            #   dashStyle = "ShortDot",
-            #   opacity = 0.8
-            # )
-        } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data7_plot_referencia_aux,
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )#|>
-            # highcharter::hc_add_series(
-            #   data = data7_plot_percentil5_aux,
-            #   type = "line",
-            #   name = "Referência (percentil 5)",
-            #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            #   dashStyle = "ShortDot",
-            #   opacity = 0.8
-            # )|>
-            # highcharter::hc_add_series(
-            #   data = data7_plot_percentil95_aux,
-            #   type = "line",
-            #   name = "Referência (percentil 95)",
-            #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-            #   dashStyle = "ShortDot",
-            #   opacity = 0.8
-            # )
         }
       }
     })
@@ -7394,6 +7381,7 @@ mod_bloco_7_server <- function(id, filtros){
            data = data7_plot_aux,
            type = "line",
            name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
+           #name = ifelse(data7_plot_aux$class == "Brasil (valor de referência)", gsub(" \\(valor de referência\\)", "", data7_plot_aux$class), data7_plot_aux$class),
            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
@@ -7419,15 +7407,15 @@ mod_bloco_7_server <- function(id, filtros){
            #   opacity = 0.8
            # )
        } else {
-         grafico_base |>
-           highcharter::hc_add_series(
-             data = data7_plot_referencia_aux,
-             type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
-             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-             dashStyle = "ShortDot",
-             opacity = 0.8
-           ) #|>
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_aux,
+              type = "line",
+              name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            ) #|>
            # highcharter::hc_add_series(
            #   data = data7_plot_percentil5_aux,
            #   type = "line",
@@ -7452,14 +7440,24 @@ mod_bloco_7_server <- function(id, filtros){
            data = data7_plot_aux,
            type = "line",
            name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
+           #name = ifelse(data7_plot_aux$class == "Brasil (valor de referência)", gsub(" \\(valor de referência\\)", "", data7_plot_aux$class), data7_plot_aux$class),
            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
           highcharter::hc_add_series(
           data = data7_plot_comp_aux,
           type = "line",
           name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
+          #name = ifelse(data7_plot_comp_aux$class == "Brasil (valor de referência)", gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class), data7_plot_comp_aux$class),
           highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
          ) |>
+         # highcharter::hc_add_series(
+         #   data = data7_plot_referencia_aux,
+         #   type = "line",
+         #   name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
+         #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+         #   dashStyle = "ShortDot",
+         #   opacity = 0.6
+         # )|>
          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
@@ -7484,14 +7482,14 @@ mod_bloco_7_server <- function(id, filtros){
            # )
        } else {
          grafico_base |>
-           highcharter::hc_add_series(
-             data = data7_plot_referencia_aux,
-             type = "line",
-             name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
-             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
-             dashStyle = "ShortDot",
-             opacity = 0.6
-           )#|>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_aux,
+              type = "line",
+              name = ifelse(input$faixa_peso != "mort_neonat", "Referência (média nacional)", "Referência (meta ODS)"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.6
+            )#|>
            # highcharter::hc_add_series(
            #   data = data7_plot_percentil5_aux,
            #   type = "line",
@@ -7574,13 +7572,14 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "Nacional" & input$faixa_peso_precoc != "mort_neonat_precoc") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7603,7 +7602,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -7630,18 +7629,21 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data7_plot_comp_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_precoc != "mort_neonat_precoc") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7664,7 +7666,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
@@ -7751,13 +7753,14 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "Nacional" & input$faixa_peso_tardia != "mort_neonat_tardia") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7780,7 +7783,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
@@ -7807,18 +7810,20 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data7_plot_comp_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_tardia != "mort_neonat_tardia") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7841,7 +7846,7 @@ mod_bloco_7_server <- function(id, filtros){
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
@@ -8247,8 +8252,15 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if (filtros()$nivel == "Nacional" & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") {
+          grafico_base#|>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
           #   type = "line",
@@ -8264,36 +8276,55 @@ mod_bloco_7_server <- function(id, filtros){
           #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
           #   dashStyle = "ShortDot",
           #   opacity = 0.8
-          # )|>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
-          grafico_base
+          # )
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               data = data7_plot_referencia_aux,
               type = "line",
-              name = "Referência (média nacional)",
+              name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", "Referência (média nacional)", "Referência (meta ODS)"),
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
-            )
+            )#|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )
         }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
+            name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data7_plot_comp_aux,
+            name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+          highcharter::hc_colors(cols)
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") |
+            (filtros()$mostrar_referencia == "nao_mostrar_referencia") ) {
+          grafico_base #|>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
           #   type = "line",
@@ -8301,7 +8332,7 @@ mod_bloco_7_server <- function(id, filtros){
           #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
           #   dashStyle = "ShortDot",
           #   opacity = 0.8
-          # ) |>
+          # )|>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil95_aux,
           #   type = "line",
@@ -8309,13 +8340,33 @@ mod_bloco_7_server <- function(id, filtros){
           #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
           #   dashStyle = "ShortDot",
           #   opacity = 0.8
+          # )
+        } else if (input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total") {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data7_plot_referencia_aux,
+              type = "line",
+              name = glue::glue("Referência (meta ODS)"),
+              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.6
+            )
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
           # )|>
-          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
-          highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )
         } else {
           grafico_base |>
             highcharter::hc_add_series(
@@ -8325,7 +8376,23 @@ mod_bloco_7_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
-            )
+            )#|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil5_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )|>
+          # highcharter::hc_add_series(
+          #   data = data7_plot_percentil95_aux,
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.8
+          # )
         }
       }
     })
