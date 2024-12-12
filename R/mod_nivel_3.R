@@ -610,13 +610,13 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
 
       if (infos_indicador()$nome_abreviado %in% indicadores_2022) {
-        anos_disponiveis_aux[anos_disponiveis_aux <= 2021]
+        anos_disponiveis_aux <- anos_disponiveis_aux[anos_disponiveis_aux <= 2021]
       } else {
         anos_disponiveis_aux
       }
 
       if (infos_indicador()$nome_abreviado %in% indicadores_2024) {
-        anos_disponiveis_aux[anos_disponiveis_aux <= 2023]
+        anos_disponiveis_aux <- anos_disponiveis_aux[anos_disponiveis_aux <= 2023]
       } else {
         anos_disponiveis_aux
       }
@@ -1627,6 +1627,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     # Gráfico de barras das regiões -------------------------------------------
     ## Criando um data.frame que recebe a distribuição do indicador selecionado entre as regiões do país --------
+    observe(print(infos_indicador()$calculo))
+    observe(print(anos_disponiveis()))
+
     data_grafico_regioes <- reactive({
       validate(
         need(
@@ -1634,6 +1637,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde, para regiões do país e para o nível de análise nacional. Dessa forma, esta visualização não se aplica."
         )
       )
+      req(base_bloco_selecionado())
       base_bloco_selecionado() |>
         dplyr::filter(ano %in% anos_disponiveis()) |>
         dplyr::group_by(regiao) |>
@@ -1713,7 +1717,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             dplyr::case_when(
               infos_indicador()$nome_abreviado == "tx_abortos_mil_mulheres_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 5)) / sum(pop_fem_10_49) * 1000, 1),
               infos_indicador()$nome_abreviado == "sus_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) / sum(pop_fem_sus_10_49) * 1000, 1),
-              infos_indicador()$nome_abreviado == "ans_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 5) / sum(pop_fem_ans_10_49) * 1000, 1),
+              infos_indicador()$nome_abreviado == "ans_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 4) / sum(pop_fem_ans_10_49) * 1000, 1),
             ),
             NA
           ),
@@ -1722,25 +1726,25 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             dplyr::case_when(
               infos_indicador()$nome_abreviado == "tx_abortos_mil_mulheres_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 7)) / sum(pop_fem_10_49) * 1000, 1),
               infos_indicador()$nome_abreviado == "sus_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) / sum(pop_fem_sus_10_49) * 1000, 1),
-              infos_indicador()$nome_abreviado == "ans_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 7) / sum(pop_fem_ans_10_49) * 1000, 1)
+              infos_indicador()$nome_abreviado == "ans_tx_abortos_mil_mulheres_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6) / sum(pop_fem_ans_10_49) * 1000, 1)
             ),
             NA
           ),
           tx_abortos_cem_nascidos_vivos_lim_inf = ifelse(
             grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado),
             dplyr::case_when(
-              infos_indicador()$nome_abreviado == "tx_abortos_cem_nascidos_vivos_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 5)) / sum(total_de_nascidos_vivos) * 100, 1),
-              infos_indicador()$nome_abreviado == "sus_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) / sum(total_de_nascidos_vivos_sus) * 100, 1),
-              infos_indicador()$nome_abreviado == "ans_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 5) / sum(total_de_nascidos_vivos_ans) * 100, 1)
+              infos_indicador()$nome_abreviado == "tx_abortos_cem_nascidos_vivos_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 5)) / sum(total_de_nascidos_vivos_10_a_49) * 100, 1),
+              infos_indicador()$nome_abreviado == "sus_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 3) / sum(total_de_nascidos_vivos_10_a_49_sus) * 100, 1),
+              infos_indicador()$nome_abreviado == "ans_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 4) / sum(total_de_nascidos_vivos_10_a_49_ans) * 100, 1)
             ),
             NA
           ),
           tx_abortos_cem_nascidos_vivos_lim_sup = ifelse(
             grepl("tx_abortos_cem_nascidos_vivos_valor_medio", infos_indicador()$nome_abreviado),
             dplyr::case_when(
-              infos_indicador()$nome_abreviado == "tx_abortos_cem_nascidos_vivos_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 7)) / sum(total_de_nascidos_vivos) * 100, 1),
-              infos_indicador()$nome_abreviado == "sus_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) / sum(total_de_nascidos_vivos_sus) * 100, 1),
-              infos_indicador()$nome_abreviado == "ans_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 7) / sum(total_de_nascidos_vivos_ans) * 100, 1)
+              infos_indicador()$nome_abreviado == "tx_abortos_cem_nascidos_vivos_valor_medio" ~ round(((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) + (((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 7)) / sum(total_de_nascidos_vivos_10_a_49) * 100, 1),
+              infos_indicador()$nome_abreviado == "sus_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_sus_menor_30) * 0.9) + (sum(abortos_sus_30_a_39) * 0.85) + (sum(abortos_sus_40_a_49) * 0.75)) * 5) / sum(total_de_nascidos_vivos_10_a_49_sus) * 100, 1),
+              infos_indicador()$nome_abreviado == "ans_tx_abortos_cem_nascidos_vivos_valor_medio" ~ round((((sum(abortos_ans_menor_30) * 0.9) + (sum(abortos_ans_30_a_39) * 0.85) + (sum(abortos_ans_40_a_49) * 0.75)) * 6) / sum(total_de_nascidos_vivos_10_a_49_ans) * 100, 1)
             ),
             NA
           ),

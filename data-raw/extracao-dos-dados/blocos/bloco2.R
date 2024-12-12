@@ -53,6 +53,11 @@ df_bloco2_sinasc <- df_sinasc |>
   ) |>
   mutate(
     total_de_nascidos_vivos = 1,
+    total_de_nascidos_vivos_10_a_19 = if_else(IDADEMAE >= 10 & IDADEMAE <= 19, 1, 0, missing = 0),
+    total_de_nascidos_vivos_20_a_29 = if_else(IDADEMAE >= 20 & IDADEMAE <= 29, 1, 0, missing = 0),
+    total_de_nascidos_vivos_30_a_39 = if_else(IDADEMAE >= 30 & IDADEMAE <= 39, 1, 0, missing = 0),
+    total_de_nascidos_vivos_40_a_49 = if_else(IDADEMAE >= 40 & IDADEMAE <= 49, 1, 0, missing = 0),
+    total_de_nascidos_vivos_10_a_49 = if_else(IDADEMAE >= 10 & IDADEMAE <= 49, 1, 0, missing = 0),
     nvm_menor_que_20 = if_else(IDADEMAE < 20, 1, 0, missing = 0),
     mulheres_com_mais_de_tres_partos_anteriores = if_else(
       QTDPARTNOR > 3 | (QTDPARTNOR > 2 & QTDPARTCES > 0) |
@@ -100,6 +105,85 @@ head(df_est_pop_fem_10_19_long)
 
 #### Substituindo todos os NAs, gerados após o right_join, por 0 (menos para o ano de 2022)
 df_est_pop_fem_10_19_long[is.na(df_est_pop_fem_10_19_long) & df_est_pop_fem_10_19_long$ano != 2022] <- 0
+
+
+### Estimativas populacionais de mulheres de 20 a 29 anos ---------------------
+#### Baixando os dados de 2012 a 2021
+df_est_pop_fem_20_29 <- est_pop_tabnet(
+  coluna = "Ano",
+  periodo = as.character(2012:2021),
+  faixa_etaria = c("20 a 29 anos")
+)
+head(df_est_pop_fem_20_29)
+
+#### Passando os dados para o formato long e juntando com a base auxiliar de municípios
+df_est_pop_fem_20_29_long <- df_est_pop_fem_20_29 |>
+  select(!municipio) |>
+  pivot_longer(
+    cols = !c(codmunres),
+    names_to = "ano",
+    values_to = "pop_feminina_20_a_29"
+  ) |>
+  mutate(codmunres = as.character(codmunres)) |>
+  mutate_at(vars(ano, pop_feminina_20_a_29), as.numeric) |>
+  right_join(df_aux_municipios)
+
+head(df_est_pop_fem_20_29_long)
+
+#### Substituindo todos os NAs, gerados após o right_join, por 0 (menos para o ano de 2022)
+df_est_pop_fem_20_29_long[is.na(df_est_pop_fem_20_29_long) & df_est_pop_fem_20_29_long$ano != 2022] <- 0
+
+### Estimativas populacionais de mulheres de 30 a 39 anos ---------------------
+#### Baixando os dados de 2012 a 2021
+df_est_pop_fem_30_39 <- est_pop_tabnet(
+  coluna = "Ano",
+  periodo = as.character(2012:2021),
+  faixa_etaria = c("30 a 39 anos")
+)
+head(df_est_pop_fem_30_39)
+
+#### Passando os dados para o formato long e juntando com a base auxiliar de municípios
+df_est_pop_fem_30_39_long <- df_est_pop_fem_30_39 |>
+  select(!municipio) |>
+  pivot_longer(
+    cols = !c(codmunres),
+    names_to = "ano",
+    values_to = "pop_feminina_30_a_39"
+  ) |>
+  mutate(codmunres = as.character(codmunres)) |>
+  mutate_at(vars(ano, pop_feminina_30_a_39), as.numeric) |>
+  right_join(df_aux_municipios)
+
+head(df_est_pop_fem_30_39_long)
+
+#### Substituindo todos os NAs, gerados após o right_join, por 0 (menos para o ano de 3022)
+df_est_pop_fem_30_39_long[is.na(df_est_pop_fem_30_39_long) & df_est_pop_fem_30_39_long$ano != 2022] <- 0
+
+### Estimativas populacionais de mulheres de 40 a 49 anos ---------------------
+#### Baixando os dados de 2012 a 2021
+df_est_pop_fem_40_49 <- est_pop_tabnet(
+  coluna = "Ano",
+  periodo = as.character(2012:2021),
+  faixa_etaria = c("40 a 49 anos")
+)
+head(df_est_pop_fem_40_49)
+
+#### Passando os dados para o formato long e juntando com a base auxiliar de municípios
+df_est_pop_fem_40_49_long <- df_est_pop_fem_40_49 |>
+  select(!municipio) |>
+  pivot_longer(
+    cols = !c(codmunres),
+    names_to = "ano",
+    values_to = "pop_feminina_40_a_49"
+  ) |>
+  mutate(codmunres = as.character(codmunres)) |>
+  mutate_at(vars(ano, pop_feminina_40_a_49), as.numeric) |>
+  right_join(df_aux_municipios)
+
+head(df_est_pop_fem_40_49_long)
+
+#### Substituindo todos os NAs, gerados após o right_join, por 0 (menos para o ano de 4022)
+df_est_pop_fem_40_49_long[is.na(df_est_pop_fem_40_49_long) & df_est_pop_fem_40_49_long$ano != 2022] <- 0
 
 ### Estimativas populacionais de mulheres de 10 a 49 anos ---------------------
 #### Baixando os dados de 2012 a 2021
@@ -158,10 +242,13 @@ df_beneficiarias_10_49_long <- df_beneficiarias_10_49 |>
 df_beneficiarias_10_49_long[is.na(df_beneficiarias_10_49_long) & df_beneficiarias_10_49_long$ano != 2022] <- 0
 
 ### Juntando todos os dados --------------------------------------------------
-df_bloco2_tabnet <- full_join(
-  full_join(df_est_pop_fem_10_19_long, df_est_pop_fem_10_49_long),
-  df_beneficiarias_10_49_long
-) |>
+df_bloco2_tabnet <- df_est_pop_fem_10_19_long |>
+  full_join(df_est_pop_fem_10_19_long) |>
+  full_join(df_est_pop_fem_20_29_long) |>
+  full_join(df_est_pop_fem_30_39_long) |>
+  full_join(df_est_pop_fem_40_49_long) |>
+  full_join(df_est_pop_fem_10_49_long) |>
+  full_join(df_beneficiarias_10_49_long) |>
   arrange(codmunres, ano)
 
 
@@ -535,7 +622,7 @@ for (ano in anos) {
   # Juntando com o restante dos dados
   df_numerador_aborto_sus <- bind_rows(df_numerador_aborto_sus, dados_filtrados_wide) |>
     group_by(codmunres, ano) |>
-    summarise_at(starts_with("aborto"), sum) |>
+    summarise_at(vars(starts_with("aborto")), sum) |>
     ungroup()
 
   # Limpando a memória
@@ -558,43 +645,61 @@ df_numerador_aborto <- full_join(df_numerador_aborto_ans, df_numerador_aborto_su
 
 
 ### Para os denominadores -----------------------------------------------------
-#### Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
-df_cob_suplementar <- df_bloco2_tabnet |>
-  mutate(
-    cob_suplementar = round(beneficiarias_10_a_49 / pop_fem_10_49, 3)
-  ) |>
-  group_by(codmunres) |>
-  mutate(
-    q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.25), 3),
-    q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.75), 3),
-    iiq = q3 - q1,
-    lim_inf = round(q1 - 1.5*iiq, 3),
-    lim_sup = round(q3 + 1.5*iiq, 3),
-    outlier = ifelse(
-      # Obs.: estou desconsiderando 2022, aqui, porque não temos as estimativas populacionais ainda
-      ano < 2022 & ((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)) | (is.na(cob_suplementar))),
-      1,
-      0
-    ),
-    novo_cob_suplementar = ifelse(
-      outlier == 0,
-      cob_suplementar,
-      round(median(cob_suplementar[which(outlier == 0 & ano %in% 2014:2021)]), 3)
-    ),
-    novo_beneficiarias_10_a_49 = round(novo_cob_suplementar * pop_fem_10_49)
-  ) |>
-  ungroup() |>
-  select(codmunres, ano, pop_fem_10_49, cob_suplementar = novo_cob_suplementar)
+# #### Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
+# df_cob_suplementar <- df_bloco2_tabnet |>
+#   mutate(
+#     cob_suplementar = round(beneficiarias_10_a_49 / pop_fem_10_49, 3)
+#   ) |>
+#   group_by(codmunres) |>
+#   mutate(
+#     q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.25), 3),
+#     q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.75), 3),
+#     iiq = q3 - q1,
+#     lim_inf = round(q1 - 1.5*iiq, 3),
+#     lim_sup = round(q3 + 1.5*iiq, 3),
+#     outlier = ifelse(
+#       # Obs.: estou desconsiderando 2022, aqui, porque não temos as estimativas populacionais ainda
+#       ano < 2022 & ((cob_suplementar > 1) | (cob_suplementar < lim_inf | cob_suplementar > lim_sup) | (is.na(q1) & is.na(q3)) | (is.na(cob_suplementar))),
+#       1,
+#       0
+#     ),
+#     novo_cob_suplementar = ifelse(
+#       outlier == 0,
+#       cob_suplementar,
+#       round(median(cob_suplementar[which(outlier == 0 & ano %in% 2014:2021)]), 3)
+#     ),
+#     novo_beneficiarias_10_a_49 = round(novo_cob_suplementar * pop_fem_10_49)
+#   ) |>
+#   ungroup() |>
+#   select(codmunres, ano, pop_fem_10_49, cob_suplementar = novo_cob_suplementar)
+#
+# #### Juntando com os dados de nascidos vivos do SINASC e criando as variáveis exclusivas do SUS ou da ANS
+# df_denominador_aborto <- left_join(df_bloco2_sinasc, df_cob_suplementar) |>
+#   mutate(
+#     pop_fem_ans_10_49 = round(pop_fem_10_49 * cob_suplementar),
+#     pop_fem_sus_10_49 = pop_fem_10_49 - pop_fem_ans_10_49,
+#     total_de_nascidos_vivos_ans = round(total_de_nascidos_vivos * cob_suplementar),
+#     total_de_nascidos_vivos_sus = total_de_nascidos_vivos - total_de_nascidos_vivos_ans
+#   ) |>
+#   select(codmunres, ano, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_ans, total_de_nascidos_vivos_sus)
 
-#### Juntando com os dados de nascidos vivos do SINASC e criando as variáveis exclusivas do SUS ou da ANS
-df_denominador_aborto <- left_join(df_bloco2_sinasc, df_cob_suplementar) |>
+#### Calculando as estimativas de mulheres com plano de saúde em cada faixa etária
+df_denominador_aborto <- left_join(df_bloco2_sinasc, df_bloco2_tabnet) |>
   mutate(
-    pop_fem_ans_10_49 = round(pop_fem_10_49 * cob_suplementar),
+    pop_feminina_10_a_19_ans = floor(pop_feminina_10_a_19 * 0.179),
+    pop_feminina_20_a_29_ans = floor(pop_feminina_20_a_29 * 0.26),
+    pop_feminina_30_a_39_ans = floor(pop_feminina_30_a_39 * 0.32),
+    pop_feminina_40_a_49_ans = floor(pop_feminina_40_a_49 * 0.27),
+    total_de_nascidos_vivos_10_a_19_ans = floor(total_de_nascidos_vivos_10_a_19 * 0.179),
+    total_de_nascidos_vivos_20_a_29_ans = floor(total_de_nascidos_vivos_20_a_29 * 0.26),
+    total_de_nascidos_vivos_30_a_39_ans = floor(total_de_nascidos_vivos_30_a_39 * 0.32),
+    total_de_nascidos_vivos_40_a_49_ans = floor(total_de_nascidos_vivos_40_a_49 * 0.27),
+    pop_fem_ans_10_49 = pop_feminina_10_a_19_ans + pop_feminina_20_a_29_ans + pop_feminina_30_a_39_ans + pop_feminina_40_a_49_ans,
     pop_fem_sus_10_49 = pop_fem_10_49 - pop_fem_ans_10_49,
-    total_de_nascidos_vivos_ans = round(total_de_nascidos_vivos * cob_suplementar),
-    total_de_nascidos_vivos_sus = total_de_nascidos_vivos - total_de_nascidos_vivos_ans
+    total_de_nascidos_vivos_10_a_49_ans = total_de_nascidos_vivos_10_a_19_ans + total_de_nascidos_vivos_20_a_29_ans + total_de_nascidos_vivos_30_a_39_ans + total_de_nascidos_vivos_40_a_49_ans,
+    total_de_nascidos_vivos_10_a_49_sus = total_de_nascidos_vivos_10_a_49 - total_de_nascidos_vivos_10_a_49_ans
   ) |>
-  select(codmunres, ano, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_ans, total_de_nascidos_vivos_sus)
+  select(codmunres, ano, pop_fem_10_49, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_10_a_49, total_de_nascidos_vivos_10_a_49_ans, total_de_nascidos_vivos_10_a_49_sus)
 
 ### Juntando os dados dos numeradores e dos denominadores ---------------------
 df_bloco2_aborto <- full_join(df_numerador_aborto, df_denominador_aborto)
@@ -638,6 +743,9 @@ setwd(diretorio_original)
 
 
 # Para os dados preliminares --------------------------------------------------
+## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios_preliminares <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2024)), ano = 2023:2024)
+
 ## Para as variáveis provenientes do SINASC -----------------------------------
 ### Baixando os dados preliminares de 2023 e selecionando as variáveis de interesse
 df_sinasc_preliminares_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";") |>
@@ -666,6 +774,11 @@ df_bloco2_sinasc_preliminares <- df_sinasc_preliminares |>
   ) |>
   mutate(
     total_de_nascidos_vivos = 1,
+    total_de_nascidos_vivos_10_a_19 = if_else(IDADEMAE >= 10 & IDADEMAE <= 19, 1, 0, missing = 0),
+    total_de_nascidos_vivos_20_a_29 = if_else(IDADEMAE >= 20 & IDADEMAE <= 29, 1, 0, missing = 0),
+    total_de_nascidos_vivos_30_a_39 = if_else(IDADEMAE >= 30 & IDADEMAE <= 39, 1, 0, missing = 0),
+    total_de_nascidos_vivos_40_a_49 = if_else(IDADEMAE >= 40 & IDADEMAE <= 49, 1, 0, missing = 0),
+    total_de_nascidos_vivos_10_a_49 = if_else(IDADEMAE >= 10 & IDADEMAE <= 49, 1, 0, missing = 0),
     nvm_menor_que_20 = if_else(IDADEMAE < 20, 1, 0, missing = 0),
     mulheres_com_mais_de_tres_partos_anteriores = if_else(
       QTDPARTNOR > 3 | (QTDPARTNOR > 2 & QTDPARTCES > 0) |
@@ -681,7 +794,7 @@ df_bloco2_sinasc_preliminares <- df_sinasc_preliminares |>
   summarise_at(vars(-group_cols()), sum) |>
   ungroup() |>
   # Juntando com a base aulixiar de municípios
-  right_join(df_aux_municipios)
+  right_join(df_aux_municipios_preliminares)
 
 ### Substituindo todos os NAs, gerados após o right_join, por 0
 df_bloco2_sinasc_preliminares[is.na(df_bloco2_sinasc_preliminares)] <- 0
@@ -689,9 +802,12 @@ df_bloco2_sinasc_preliminares[is.na(df_bloco2_sinasc_preliminares)] <- 0
 
 ## Para as variáveis provenientes do Tabnet -----------------------------------
 ### Ainda não estão disponíveis para 2023 e 2024. Assim, essa parte é apenas um placeholder
-df_bloco2_tabnet_preliminares <- df_aux_municipios |>
+df_bloco2_tabnet_preliminares <- df_aux_municipios_preliminares |>
   mutate(
     pop_feminina_10_a_19 = NA,
+    pop_feminina_20_a_29 = NA,
+    pop_feminina_30_a_39 = NA,
+    pop_feminina_40_a_49 = NA,
     pop_fem_10_49 = NA,
     beneficiarias_10_a_49 = NA
   )
@@ -722,7 +838,7 @@ cids_nao_aborto <- c("O00", "O000", "O001", "O002", "O008", "O009",
 
 #### Para os dados da ANS -----------------------------------------------------
 ##### Ainda não estão disponíveis para 2023 e 2024
-df_numerador_aborto_ans <- df_aux_municipios |>
+df_numerador_aborto_ans_preliminares <- df_aux_municipios_preliminares |>
   mutate(
     abortos_ans_menor_30 = NA,
     abortos_ans_30_a_39 = NA,
@@ -732,7 +848,7 @@ df_numerador_aborto_ans <- df_aux_municipios |>
 
 #### Para os dados do SIH -----------------------------------------------------
 ##### Criando a base que guardará os dados de todos os anos
-df_numerador_aborto_sus <- data.frame()
+df_numerador_aborto_sus_preliminares_aux <- data.frame()
 
 for (ano in anos) {
   # Baixando os dados do dado ano e criando uma coluna de ano
@@ -790,7 +906,10 @@ for (ano in anos) {
     rename(codmunres = MUNIC_RES)
 
   # Juntando com o restante dos dados
-  df_numerador_aborto_sus <- bind_rows(df_numerador_aborto_sus, dados_filtrados_wide)
+  df_numerador_aborto_sus_preliminares_aux <- bind_rows(df_numerador_aborto_sus_preliminares_aux, dados_filtrados_wide) |>
+    group_by(codmunres, ano) |>
+    summarise_at(vars(starts_with("aborto")), sum) |>
+    ungroup()
 
   # Limpando a memória
   rm(dados, dados_filtrados1, dados_filtrados2, dados_filtrados3, dados_filtrados_wide)
@@ -798,29 +917,37 @@ for (ano in anos) {
 }
 
 ##### Juntando com a base aulixiar de municípios
-df_numerador_aborto_sus <- left_join(
-  df_aux_municipios,
-  df_numerador_aborto_sus |> mutate(codmunres = as.character(codmunres), ano = as.numeric(ano))
+df_numerador_aborto_sus_preliminares <- left_join(
+  df_aux_municipios_preliminares,
+  df_numerador_aborto_sus_preliminares_aux |> mutate(ano = as.numeric(ano))
 )
 
 ##### Substituindo todos os NAs, gerados após o right_join, por 0
-df_numerador_aborto_sus[is.na(df_numerador_aborto_sus)] <- 0
+df_numerador_aborto_sus_preliminares[is.na(df_numerador_aborto_sus_preliminares)] <- 0
 
 
 #### Juntando os dados das duas bases -----------------------------------------
-df_numerador_aborto_preliminares <- full_join(df_numerador_aborto_ans, df_numerador_aborto_sus)
+df_numerador_aborto_preliminares <- full_join(df_numerador_aborto_ans_preliminares, df_numerador_aborto_sus_preliminares)
 
 
 ### Para os denominadores -----------------------------------------------------
 #### Como dependem do Tabnet, ainda não estão disponíveis para 2023 e 2024
-df_denominador_aborto_preliminares <- df_aux_municipios |>
+df_denominador_aborto_preliminares <- left_join(df_bloco2_sinasc_preliminares, df_bloco2_tabnet_preliminares) |>
   mutate(
-    pop_fem_ans_10_49 = NA,
-    pop_fem_sus_10_49 = NA,
-    total_de_nascidos_vivos_ans = NA,
-    total_de_nascidos_vivos_sus = NA
+    pop_feminina_10_a_19_ans = floor(pop_feminina_10_a_19 * 0.179),
+    pop_feminina_20_a_29_ans = floor(pop_feminina_20_a_29 * 0.26),
+    pop_feminina_30_a_39_ans = floor(pop_feminina_30_a_39 * 0.32),
+    pop_feminina_40_a_49_ans = floor(pop_feminina_40_a_49 * 0.27),
+    total_de_nascidos_vivos_10_a_19_ans = floor(total_de_nascidos_vivos_10_a_19 * 0.179),
+    total_de_nascidos_vivos_20_a_29_ans = floor(total_de_nascidos_vivos_20_a_29 * 0.26),
+    total_de_nascidos_vivos_30_a_39_ans = floor(total_de_nascidos_vivos_30_a_39 * 0.32),
+    total_de_nascidos_vivos_40_a_49_ans = floor(total_de_nascidos_vivos_40_a_49 * 0.27),
+    pop_fem_ans_10_49 = pop_feminina_10_a_19_ans + pop_feminina_20_a_29_ans + pop_feminina_30_a_39_ans + pop_feminina_40_a_49_ans,
+    pop_fem_sus_10_49 = pop_fem_10_49 - pop_fem_ans_10_49,
+    total_de_nascidos_vivos_10_a_49_ans = total_de_nascidos_vivos_10_a_19_ans + total_de_nascidos_vivos_20_a_29_ans + total_de_nascidos_vivos_30_a_39_ans + total_de_nascidos_vivos_40_a_49_ans,
+    total_de_nascidos_vivos_10_a_49_sus = total_de_nascidos_vivos_10_a_49 - total_de_nascidos_vivos_10_a_49_ans
   ) |>
-  select(codmunres, ano, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_ans, total_de_nascidos_vivos_sus)
+  select(codmunres, ano, pop_fem_10_49, pop_fem_ans_10_49, pop_fem_sus_10_49, total_de_nascidos_vivos_10_a_49, total_de_nascidos_vivos_10_a_49_ans, total_de_nascidos_vivos_10_a_49_sus)
 
 
 ### Juntando os dados dos numeradores e dos denominadores ---------------------
@@ -837,7 +964,7 @@ df_bloco2_preliminares <- full_join(
 ## Juntando os dados preliminares com os dados consolidados -------------------
 ### Lendo o arquivo com os dados consolidados
 df_bloco2_consolidados <- read.csv(
-  "databases_consolidadas/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2022.csv"
+  "data-raw/extracao-dos-dados/blocos/databases_consolidadas/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2022.csv"
 )
 
 ### Juntando as duas bases
