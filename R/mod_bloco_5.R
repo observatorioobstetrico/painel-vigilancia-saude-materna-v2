@@ -673,8 +673,8 @@ mod_bloco_5_server <- function(id, filtros){
         #[AAA]
         quant_95_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
         quant_05_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
         quant_95_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
         quant_05_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
         quant_95_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
@@ -1851,43 +1851,56 @@ mod_bloco_5_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
             )
+            # highcharter::hc_add_series(
+            #   data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
+            #   type = "line",
+            #   name = "Referência (percentil 95)",
+            #   highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # ) |>
+            # highcharter::hc_add_series(
+            #   data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
+            #   type = "line",
+            #   name = "Referência (percentil 5)",
+            #   highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # )
+            } else {
+              if (filtros()$nivel == "Nacional"){
+                grafico_base
+              } else {
+                grafico_base <- grafico_base |>
+                  highcharter::hc_add_series(
+                    data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!input$baixo_peso),
+                    type = "line",
+                    name = "Referência (média nacional)",
+                    highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+                    dashStyle = "ShortDot",
+                    opacity = 0.8
+                  )
+                }
+              }
+            # grafico_base |>
+            #   highcharter::hc_add_series(
+            #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
+            #     type = "line",
+            #     name = "Referência (percentil 95)",
+            #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #     dashStyle = "ShortDot",
+            #     opacity = 0.6
+            #   ) |>
+            #   highcharter::hc_add_series(
+            #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
+            #     type = "line",
+            #     name = "Referência (percentil 5)",
+            #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #     dashStyle = "ShortDot",
+            #     opacity = 0.6
+            # )
         } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
-        }
-      } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data5_baixo_peso() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class)),
@@ -1924,24 +1937,25 @@ mod_bloco_5_server <- function(id, filtros){
                 dashStyle = "ShortDot",
                 opacity = 0.6
               )
-          } else {
-            grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          # } else {
+          #   grafico_base |>
+          #   highcharter::hc_add_series(
+          #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$baixo_peso)),
+          #     type = "line",
+          #     name = "Referência (percentil 95)",
+          #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+          #     dashStyle = "ShortDot",
+          #     opacity = 0.6
+          #   ) |>
+          #   highcharter::hc_add_series(
+          #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$baixo_peso)),
+          #     type = "line",
+          #     name = "Referência (percentil 5)",
+          #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+          #     dashStyle = "ShortDot",
+          #     opacity = 0.6
+          #   )
+          # }
           }
         }
       }
