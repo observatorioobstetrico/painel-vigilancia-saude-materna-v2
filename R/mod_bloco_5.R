@@ -2680,7 +2680,7 @@ mod_bloco_5_server <- function(id, filtros){
             title = list(text = "%"),
             min = 0,
             max = max(c(
-              c(data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+              c(6,data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
               c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia, data5_referencia()$quant_95_porc_malformacao_geral)
             ), na.rm = TRUE) + 0.1
           ) |>
@@ -2702,6 +2702,16 @@ mod_bloco_5_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.6
+            ) |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              name = "Referência (meta OMS)",
+              highcharter::hcaes(x = ano, low = 3, high = 6),
+              type = "arearange",
+              dashStyle = "ShortDot",
+              color = "black",
+              fillOpacity = 0.2,
+              enableMouseTracking = TRUE
             )
         } else {
           grafico_base |>
@@ -2728,6 +2738,16 @@ mod_bloco_5_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.6
+            ) |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              name = "Referência (meta OMS)",
+              highcharter::hcaes(x = ano, low = 3, high = 6),
+              type = "arearange",
+              dashStyle = "ShortDot",
+              color = "black",
+              fillOpacity = 0.2,
+              enableMouseTracking = TRUE
             )
         }
       } else {
@@ -2750,56 +2770,109 @@ mod_bloco_5_server <- function(id, filtros){
             title = list(text = "%"),
             min = 0,
             max = max(c(
-              c(data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+              c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
               c(data5_comp()$porc_malformacao_geral, data5_comp()$porc_malformacao_vigilancia),
-              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
+              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia, data5_referencia()$quant_95_porc_malformacao_geral)
             ), na.rm = TRUE) + 1
           ) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+        if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
+          grafico_base
+          if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional")) {
+            grafico_base |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 95)",
+                highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 5)",
+                highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                name = "Referência (meta OMS)",
+                highcharter::hcaes(x = ano, low = 3, high = 6),
+                type = "arearange",
+                dashStyle = "ShortDot",
+                color = "black",
+                fillOpacity = 0.2,
+                enableMouseTracking = TRUE
+              )
+          }
         } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional")){
+            grafico_base |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 95)",
+                highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 5)",
+                highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                name = "Referência (meta OMS)",
+                highcharter::hcaes(x = ano, low = 3, high = 6),
+                type = "arearange",
+                dashStyle = "ShortDot",
+                color = "black",
+                fillOpacity = 0.2,
+                enableMouseTracking = TRUE
+              )
+          } else {
+            grafico_base |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (média nacional)",
+                highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |> #[AAA]
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 95)",
+                highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                type = "line",
+                name = "Referência (percentil 5)",
+                highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                name = "Referência (meta OMS)",
+                highcharter::hcaes(x = ano, low = 3, high = 6),
+                type = "arearange",
+                dashStyle = "ShortDot",
+                color = "black",
+                fillOpacity = 0.2,
+                enableMouseTracking = TRUE
+              )
+          }
         }
       }
     })
@@ -2826,23 +2899,24 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
-          grafico_base |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          grafico_base
+
+          #   highcharter::hc_add_series(
+          #     data = data5_referencia(),
+          #     type = "line",
+          #     name = "Referência (percentil 95)",
+          #     highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+          #     dashStyle = "ShortDot",
+          #     opacity = 0.6
+          #   ) |>
+          #   highcharter::hc_add_series(
+          #     data = data5_referencia(),
+          #     type = "line",
+          #     name = "Referência (percentil 5)",
+          #     highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+          #     dashStyle = "ShortDot",
+          #     opacity = 0.6
+          #   )
         } else {
           grafico_base |>
             highcharter::hc_add_series(
@@ -2852,23 +2926,23 @@ mod_bloco_5_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.8
-            ) |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
             )
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 95)",
+            #   highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # ) |>
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 5)",
+            #   highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # )
         }
       } else {
         grafico_base <- highcharter::highchart() |>
@@ -2897,23 +2971,23 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
-          grafico_base |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          grafico_base
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 95)",
+            #   highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # ) |>
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 5)",
+            #   highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # )
         } else {
           grafico_base |>
             highcharter::hc_add_series(
@@ -2923,23 +2997,23 @@ mod_bloco_5_server <- function(id, filtros){
               highcharter::hcaes(x = ano, y = porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.6
-            ) |> #[AAA]
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
             )
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 95)",
+            #   highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # ) |>
+            # highcharter::hc_add_series(
+            #   data = data5_referencia(),
+            #   type = "line",
+            #   name = "Referência (percentil 5)",
+            #   highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_vigilancia, group = localidade_comparacao, colour = localidade_comparacao),
+            #   dashStyle = "ShortDot",
+            #   opacity = 0.6
+            # )
         }
       }
     })
