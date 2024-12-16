@@ -758,20 +758,19 @@ mod_nivel_1_ui <- function(id) {
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i3")), proxy.height = "270px")
                      ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i7")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i8")), proxy.height = "270px")
-                     ),
+                     # column(
+                     #   width = 4,
+                     #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i7")), proxy.height = "270px")
+                     # ),
+                     # column(
+                     #   width = 4,
+                     #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i8")), proxy.height = "270px")
+                     # ),
                       column(
                         width = 4,
                         shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i4")), proxy.height = "280px")
                       ),
                       column(
-                        offset = 2,
                         width = 4,
                         shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i6")), proxy.height = "280px")
                       ),
@@ -786,18 +785,6 @@ mod_nivel_1_ui <- function(id) {
                   fluidRow(
                      column(
                        width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i7")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i8")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
-                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
-                     ),
-                     column(
-                       width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i1")), proxy.height = "270px")
                      ),
                      column(
@@ -806,10 +793,21 @@ mod_nivel_1_ui <- function(id) {
                      ),
                      column(
                        width = 4,
+                       shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i3")), proxy.height = "270px")
+                     ),
+                     # column(
+                     #   width = 4,
+                     #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i7")), proxy.height = "270px")
+                     # ),
+                     # column(
+                     #   width = 4,
+                     #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i8")), proxy.height = "270px")
+                     # ),
+                     column(
+                       width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i4")), proxy.height = "280px")
                      ),
                      column(
-                       offset = 2,
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_perinatal_i6")), proxy.height = "280px")
                      ),
@@ -848,7 +846,6 @@ mod_nivel_1_ui <- function(id) {
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i6")), proxy.height = "280px")
                       ),
                      column(
-                       offset = 2,
                        width = 4,
                        shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_neonatal_i8")), proxy.height = "280px")
                      ),
@@ -4137,7 +4134,6 @@ mod_nivel_1_server <- function(id, filtros){
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
          tipo = "porcentagem",
          invertido = FALSE,
-         cor = "lightgrey",
          tamanho_caixa = "330px",
          pagina = "nivel_1",
          nivel_de_analise = filtros()$nivel
@@ -4155,7 +4151,6 @@ mod_nivel_1_server <- function(id, filtros){
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
          tipo = "porcentagem",
          invertido = FALSE,
-         cor = "lightgrey",
          tamanho_caixa = "330px",
          pagina = "nivel_1",
          nivel_de_analise = filtros()$nivel
@@ -4173,7 +4168,6 @@ mod_nivel_1_server <- function(id, filtros){
          valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
          tipo = "porcentagem",
          invertido = FALSE,
-         cor = "lightgrey",
          tamanho_caixa = "330px",
          pagina = "nivel_1",
          nivel_de_analise = filtros()$nivel
