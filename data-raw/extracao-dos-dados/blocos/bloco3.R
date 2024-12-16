@@ -100,8 +100,8 @@ df2 <- df |>
       !(MESPRENAT ==  1 | MESPRENAT == 2 | MESPRENAT ==  3) ~ 0
     ),
     mais_de_sete_consultas_prenatal = case_when(
-      (CONSPRENAT > 7) ~ 1,
-      !(CONSPRENAT > 7) ~ 0
+      (CONSPRENAT > 7 & CONSPRENAT < 99) ~ 1,
+      !(CONSPRENAT > 7 & CONSPRENAT < 99) ~ 0
     ),
     mulheres_com_consultas_prenatal_adequadas = case_when(
       ((SEMAGESTAC < 20 & CONSPRENAT >= 1) |
@@ -111,7 +111,7 @@ df2 <- df |>
          (SEMAGESTAC >= 34 & SEMAGESTAC < 36 & CONSPRENAT >= 5) |
          (SEMAGESTAC >= 36 & SEMAGESTAC < 38 & CONSPRENAT >= 6) |
          (SEMAGESTAC >= 38 & SEMAGESTAC < 40 & CONSPRENAT >= 7) |
-         (SEMAGESTAC >= 40 & CONSPRENAT >= 8)) ~ 1,
+         (SEMAGESTAC >= 40 & SEMAGESTAC < 99 & CONSPRENAT >= 8 & CONSPRENAT < 99)) ~ 1,
 
       !((SEMAGESTAC < 20 & CONSPRENAT >= 1) |
           (SEMAGESTAC >= 20 & SEMAGESTAC < 26 & CONSPRENAT >= 2) |
@@ -120,7 +120,7 @@ df2 <- df |>
           (SEMAGESTAC >= 34 & SEMAGESTAC < 36 & CONSPRENAT >= 5) |
           (SEMAGESTAC >= 36 & SEMAGESTAC < 38 & CONSPRENAT >= 6) |
           (SEMAGESTAC >= 38 & SEMAGESTAC < 40 & CONSPRENAT >= 7) |
-          (SEMAGESTAC >= 40 & CONSPRENAT >= 8)) ~ 0
+          (SEMAGESTAC >= 40 & SEMAGESTAC < 99 & CONSPRENAT >= 8 & CONSPRENAT < 99)) ~ 0
     )
 
   ) |>
