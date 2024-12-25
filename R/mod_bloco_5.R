@@ -669,36 +669,36 @@ mod_bloco_5_server <- function(id, filtros){
         porc_termo_precoce = rep("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
         porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
         #[AAA]
-        quant_95_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-
-        quant_95_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
+        # quant_95_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # # quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # # quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        #
+        # quant_95_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+        # quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+        # quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
 
       )
 
@@ -2046,23 +2046,23 @@ mod_bloco_5_server <- function(id, filtros){
               )
           }
         }
-          grafico_base <- grafico_base |>
-            highcharter::hc_add_series(
-            data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$faixa_prematuridade)),
-            type = "line",
-            name = "Referência (percentil 95)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-            dashStyle = "ShortDot",
-            opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$faixa_prematuridade)),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          # grafico_base <- grafico_base |>
+          #   highcharter::hc_add_series(
+          #   data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$faixa_prematuridade)),
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.6
+          #   ) |>
+          #   highcharter::hc_add_series(
+          #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$faixa_prematuridade)),
+          #     type = "line",
+          #     name = "Referência (percentil 5)",
+          #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+          #     dashStyle = "ShortDot",
+          #     opacity = 0.6
+          #   )
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
@@ -2107,23 +2107,23 @@ mod_bloco_5_server <- function(id, filtros){
                 )
             }
 
-            grafico_base <- grafico_base |>
-              highcharter::hc_add_series(
-                data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$faixa_prematuridade)),
-                type = "line",
-                name = "Referência (percentil 95)",
-                highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-                dashStyle = "ShortDot",
-                opacity = 0.6
-              ) |>
-              highcharter::hc_add_series(
-                data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$faixa_prematuridade)),
-                type = "line",
-                name = "Referência (percentil 5)",
-                highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
-                dashStyle = "ShortDot",
-                opacity = 0.6
-              )
+            # grafico_base <- grafico_base |>
+            #   highcharter::hc_add_series(
+            #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_95_", input$faixa_prematuridade)),
+            #     type = "line",
+            #     name = "Referência (percentil 95)",
+            #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #     dashStyle = "ShortDot",
+            #     opacity = 0.6
+            #   ) |>
+            #   highcharter::hc_add_series(
+            #     data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!paste0("quant_05_", input$faixa_prematuridade)),
+            #     type = "line",
+            #     name = "Referência (percentil 5)",
+            #     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
+            #     dashStyle = "ShortDot",
+            #     opacity = 0.6
+            #   )
 
           }
         }
@@ -2690,7 +2690,7 @@ mod_bloco_5_server <- function(id, filtros){
         if (filtros()$nivel == "Nacional") {
           grafico_base
         } else {
-          grafico_base |>
+          grafico_base <- grafico_base |>
             highcharter::hc_add_series(
               data = data5_referencia(),
               type = "line",
@@ -2700,29 +2700,30 @@ mod_bloco_5_server <- function(id, filtros){
               opacity = 0.8
             )
         }
-        grafico_base <- grafico_base |> highcharter::hc_add_series(
-            data = data5_referencia(),
-            type = "line",
-            name = "Referência (percentil 95)",
-            highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-            dashStyle = "ShortDot",
-            opacity = 0.6
-          ) |>
+        grafico_base |>
+          # highcharter::hc_add_series(
+          #   data = data5_referencia(),
+          #   type = "line",
+          #   name = "Referência (percentil 95)",
+          #   highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.6
+          # ) |>
+          # highcharter::hc_add_series(
+          #   data = data5_referencia(),
+          #   type = "line",
+          #   name = "Referência (percentil 5)",
+          #   highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+          #   dashStyle = "ShortDot",
+          #   opacity = 0.6
+          # ) |>
           highcharter::hc_add_series(
             data = data5_referencia(),
-            type = "line",
-            name = "Referência (percentil 5)",
-            highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-            dashStyle = "ShortDot",
-            opacity = 0.6
-          ) |>
-          highcharter::hc_add_series(
-            data = data5_referencia(),
-            name = "Referência (meta OMS)",
+            name = "Referência (mundo)",
             highcharter::hcaes(x = ano, low = 3, high = 6),
             type = "arearange",
             dashStyle = "ShortDot",
-            color = "black",
+            # color = "black",
             fillOpacity = 0.2,
             enableMouseTracking = TRUE
           )
@@ -2756,7 +2757,17 @@ mod_bloco_5_server <- function(id, filtros){
           grafico_base
         } else {
           if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional")) {
-            grafico_base
+            grafico_base |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                name = "Referência (mundo)",
+                highcharter::hcaes(x = ano, low = 3, high = 6),
+                type = "arearange",
+                dashStyle = "ShortDot",
+                # color = "#000000",
+                fillOpacity = 0.2,
+                enableMouseTracking = TRUE
+              )
           } else {
             grafico_base |>
               highcharter::hc_add_series(
@@ -2765,37 +2776,36 @@ mod_bloco_5_server <- function(id, filtros){
                 name = "Referência (média nacional)",
                 highcharter::hcaes(x = ano, y = porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
                 dashStyle = "ShortDot",
-                opacity = 0.6
+                fillOpacity = 0.2,
+                opacity = 0.8
+              ) |>
+              highcharter::hc_add_series(
+                data = data5_referencia(),
+                name = "Referência (mundo)",
+                highcharter::hcaes(x = ano, low = 3, high = 6),
+                type = "arearange",
+                dashStyle = "ShortDot",
+                color = "#000000",
+                fillOpacity = 0.2,
+                enableMouseTracking = TRUE
               )
-          }
-
-          grafico_base <- grafico_base |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 95)",
-              highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              type = "line",
-              name = "Referência (percentil 5)",
-              highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            ) |>
-            highcharter::hc_add_series(
-              data = data5_referencia(),
-              name = "Referência (meta OMS)",
-              highcharter::hcaes(x = ano, low = 3, high = 6),
-              type = "arearange",
-              dashStyle = "ShortDot",
-              color = "black",
-              fillOpacity = 0.2,
-              enableMouseTracking = TRUE
-            )
+              # highcharter::hc_add_series(
+              #   data = data5_referencia(),
+              #   type = "line",
+              #   name = "Referência (percentil 95)",
+              #   highcharter::hcaes(x = ano, y = quant_95_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+              #   dashStyle = "ShortDot",
+              #   opacity = 0.6
+              # ) |>
+              # highcharter::hc_add_series(
+              #   data = data5_referencia(),
+              #   type = "line",
+              #   name = "Referência (percentil 5)",
+              #   highcharter::hcaes(x = ano, y = quant_05_porc_malformacao_geral, group = localidade_comparacao, colour = localidade_comparacao),
+              #   dashStyle = "ShortDot",
+              #   opacity = 0.6
+              # ) |>
+            }
           }
         }
     })

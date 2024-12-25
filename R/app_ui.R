@@ -340,7 +340,7 @@ app_ui <- function(request) {
                       inputId = "nivel2",
                       label = HTML(glue::glue("<span style = 'font-size: 17'> {uiOutput('label_nivel_comp')} </span>")),
                       options = list(placeholder = "Selecione o nível de análise"),
-                      choices = c("Nacional", "Regional", "Macrorregião de saúde", "Microrregião de saúde", "Estadual", "Municipal"),
+                      choices = c("Nacional", "Regional", "Estadual", "Macrorregião de saúde", "Microrregião de saúde", "Municipal"),
                       width = "95%"
                     )
                   )

@@ -400,10 +400,10 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 30%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
-        style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 55%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "nasceram com menos de 28 semanas")
