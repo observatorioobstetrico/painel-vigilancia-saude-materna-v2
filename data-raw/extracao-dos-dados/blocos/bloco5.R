@@ -72,7 +72,7 @@ df_bloco5_sinasc <- df_sinasc |>
     nascidos_vivos_prematuros = if_else(GESTACAO < 5, 1, 0, missing = 0),
     nascidos_vivos_termo_precoce = if_else(SEMAGESTAC %in% c(37, 38), 1, 0, missing = 0),
     nascidos_vivos_peso_menor_1000 = if_else(PESO < 1000, 1, 0, missing = 0),
-    nascidos_vivos_peso_1000_a_1499 = if_else(PESO >= 100 & PESO < 1500, 1, 0, missing = 0),
+    nascidos_vivos_peso_1000_a_1499 = if_else(PESO >= 1000 & PESO < 1500, 1, 0, missing = 0),
     nascidos_vivos_peso_1500_a_2499 = if_else(PESO < 2500 & PESO >= 1500, 1, 0, missing = 0),
     nascidos_vivos_menos_de_28_semanas = if_else(SEMAGESTAC < 28, 1, 0, missing = 0),
     nascidos_vivos_28_a_32_semanas = if_else(SEMAGESTAC >= 28 & SEMAGESTAC <= 32, 1, 0, missing = 0),
