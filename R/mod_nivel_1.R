@@ -2710,8 +2710,8 @@ mod_nivel_1_server <- function(id, filtros){
         ) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100, 1)*0.7,
-        )
+          porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100*0.7, 1),
+          )
     })
 
 
@@ -2745,7 +2745,7 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "porc_nasc_premat",
         titulo = "Porcentagem de nascimentos prematuros (com menos de 37 semanas de gestação)",
         tem_meta = TRUE,
-        valor_de_referencia = 10,
+        valor_de_referencia = 8,
         tipo = "porcentagem",
         invertido = FALSE,
         pagina = "nivel_1",
