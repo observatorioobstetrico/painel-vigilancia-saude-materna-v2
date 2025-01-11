@@ -510,16 +510,16 @@ mod_bloco_4_ui <- function(id){
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
               )
             ),
-            fluidRow(
-              column(
-                width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i11_deslocamento_macro")), proxy.height = "332px")
-              ),
-              column(
-                width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
-              )
-            )
+            # fluidRow(
+            #   column(
+            #     width = 6,
+            #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i11_deslocamento_macro")), proxy.height = "332px")
+            #   ),
+            #   column(
+            #     width = 6,
+            #     shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i10_deslocamento_macro")), proxy.height = "332px")
+            #   )
+            # )
           ),
           column(
             width = 8,
@@ -2087,7 +2087,7 @@ mod_bloco_4_server <- function(id, filtros){
           cria_caixa_server(
             dados = data4_deslocamento_resumo(),
             indicador = "prop_partos_com_uti",
-            titulo = "Porcentagem de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal",
+            titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
             tem_meta = TRUE,
             valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_uti, # 16.3,
             tipo = "porcentagem",
@@ -2121,90 +2121,89 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    #[LOOK]
-    output$caixa_b4_i10_deslocamento_macro <- renderUI({
-      tagList(
-        div(
-          style = "position: relative;",
-          # Caixinha criada pela função cria_caixa_server
-          cria_caixa_server(
-            dados = data4_deslocamento_resumo_referencia(),
-            indicador = "percentil_95_partos_com_uti",
-            titulo = "Percentil de 95 da distribuição da porcentagem de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal",
-            tem_meta = TRUE,
-            valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_95_partos_com_uti, # 16.3,
-            tipo = "porcentagem",
-            invertido = TRUE,
-            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-            fonte_titulo = "15px",
-            pagina = "bloco_4",
-            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
-            nivel_de_analise = ifelse(
-              filtros()$comparar == "Não",
-              filtros()$nivel,
-              ifelse(
-                input$localidade_resumo4 == "escolha1",
-                filtros()$nivel,
-                filtros()$nivel2
-              )
-            )
-          ),
-          # Botão de aviso posicionado no canto superior direito
-          div(
-            style = "position: absolute; top: 10px; right: 10px;",
-            shinyWidgets::actionBttn(
-              inputId = ns("aviso_desloc"),
-              icon = icon("triangle-exclamation", style = "color: red"),
-              color = "warning",
-              style = "material-circle",
-              size = "xs"
-            )
-          )
-        )
-      )
-    })
-
-    output$caixa_b4_i11_deslocamento_macro <- renderUI({
-      tagList(
-        div(
-          style = "position: relative;",
-          # Caixinha criada pela função cria_caixa_server
-          cria_caixa_server(
-            dados = data4_deslocamento_resumo_referencia(),
-            indicador = "percentil_90_partos_com_uti",
-            titulo = "Percentil de 90 da distribuição da porcentagem de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal",
-            tem_meta = TRUE,
-            valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_90_partos_com_uti, # 16.3,
-            tipo = "porcentagem",
-            invertido = TRUE,
-            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-            fonte_titulo = "15px",
-            pagina = "bloco_4",
-            tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
-            nivel_de_analise = ifelse(
-              filtros()$comparar == "Não",
-              filtros()$nivel,
-              ifelse(
-                input$localidade_resumo4 == "escolha1",
-                filtros()$nivel,
-                filtros()$nivel2
-              )
-            )
-          ),
-          # Botão de aviso posicionado no canto superior direito
-          div(
-            style = "position: absolute; top: 10px; right: 10px;",
-            shinyWidgets::actionBttn(
-              inputId = ns("aviso_desloc"),
-              icon = icon("triangle-exclamation", style = "color: red"),
-              color = "warning",
-              style = "material-circle",
-              size = "xs"
-            )
-          )
-        )
-      )
-    })
+    # output$caixa_b4_i10_deslocamento_macro <- renderUI({
+    #   tagList(
+    #     div(
+    #       style = "position: relative;",
+    #       # Caixinha criada pela função cria_caixa_server
+    #       cria_caixa_server(
+    #         dados = data4_deslocamento_resumo_referencia(),
+    #         indicador = "percentil_95_partos_com_uti",
+    #         titulo = "Percentil de 95 da distribuição da porcentagem de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal",
+    #         tem_meta = TRUE,
+    #         valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_95_partos_com_uti, # 16.3,
+    #         tipo = "porcentagem",
+    #         invertido = TRUE,
+    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #         fonte_titulo = "15px",
+    #         pagina = "bloco_4",
+    #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
+    #         nivel_de_analise = ifelse(
+    #           filtros()$comparar == "Não",
+    #           filtros()$nivel,
+    #           ifelse(
+    #             input$localidade_resumo4 == "escolha1",
+    #             filtros()$nivel,
+    #             filtros()$nivel2
+    #           )
+    #         )
+    #       ),
+    #       # Botão de aviso posicionado no canto superior direito
+    #       div(
+    #         style = "position: absolute; top: 10px; right: 10px;",
+    #         shinyWidgets::actionBttn(
+    #           inputId = ns("aviso_desloc"),
+    #           icon = icon("triangle-exclamation", style = "color: red"),
+    #           color = "warning",
+    #           style = "material-circle",
+    #           size = "xs"
+    #         )
+    #       )
+    #     )
+    #   )
+    # })
+    #
+    # output$caixa_b4_i11_deslocamento_macro <- renderUI({
+    #   tagList(
+    #     div(
+    #       style = "position: relative;",
+    #       # Caixinha criada pela função cria_caixa_server
+    #       cria_caixa_server(
+    #         dados = data4_deslocamento_resumo_referencia(),
+    #         indicador = "percentil_90_partos_com_uti",
+    #         titulo = "Percentil de 90 da distribuição da porcentagem de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal",
+    #         tem_meta = TRUE,
+    #         valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_90_partos_com_uti, # 16.3,
+    #         tipo = "porcentagem",
+    #         invertido = TRUE,
+    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #         fonte_titulo = "15px",
+    #         pagina = "bloco_4",
+    #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
+    #         nivel_de_analise = ifelse(
+    #           filtros()$comparar == "Não",
+    #           filtros()$nivel,
+    #           ifelse(
+    #             input$localidade_resumo4 == "escolha1",
+    #             filtros()$nivel,
+    #             filtros()$nivel2
+    #           )
+    #         )
+    #       ),
+    #       # Botão de aviso posicionado no canto superior direito
+    #       div(
+    #         style = "position: absolute; top: 10px; right: 10px;",
+    #         shinyWidgets::actionBttn(
+    #           inputId = ns("aviso_desloc"),
+    #           icon = icon("triangle-exclamation", style = "color: red"),
+    #           color = "warning",
+    #           style = "material-circle",
+    #           size = "xs"
+    #         )
+    #       )
+    #     )
+    #   )
+    # })
 
     # Exibe a mensagem quando o botão for clicado
     observeEvent(input$aviso_desloc, {

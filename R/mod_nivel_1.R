@@ -1142,6 +1142,8 @@ mod_nivel_1_server <- function(id, filtros){
               data4_comp = data4_comp,
               data4_deslocamento = data4_deslocamento(),
               data4_comp_deslocamento = data4_comp_deslocamento(),
+              data4_deslocamento_macrorregiao = data4_deslocamento_macrorregiao(),
+              data4_comp_deslocamento_macrorregiao = data4_comp_deslocamento_macrorregiao(),
               data5 = data5(),
               data5_comp = data5_comp(),
               data5_comp_baixo_peso = data5_comp_baixo_peso(),
@@ -2054,6 +2056,7 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
             #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
@@ -2077,6 +2080,7 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
             #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$municipio,
             .keep = "unused"
@@ -2096,6 +2100,7 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+            prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
             #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$estado,
             .keep = "unused"
@@ -2106,7 +2111,7 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
     data4_deslocamento_macrorregiao <- reactive({
-      # if (filtros()$nivel != "Estadual" & filtros()$nivel != "Municipal") {
+     # if (filtros()$nivel != "Estadual" & filtros()$nivel != "Municipal") {
         bloco4_deslocamento_macrorregiao |>
           dplyr::filter(
             ano == filtros()$ano
@@ -2127,7 +2132,8 @@ mod_nivel_1_server <- function(id, filtros){
           ) |>
           dplyr::group_by(ano) |>
           dplyr::summarise(
-            prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+            #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+            prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
               filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -2144,7 +2150,8 @@ mod_nivel_1_server <- function(id, filtros){
       #     ) |>
       #     dplyr::group_by(ano) |>
       #     dplyr::mutate(
-      #       prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+      #       #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
+      #       prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
       #       localidade = filtros()$municipio,
       #       .keep = "unused"
       #     ) |>
@@ -2180,8 +2187,17 @@ mod_nivel_1_server <- function(id, filtros){
           prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-          prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)
+          prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
+          #prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
           #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1)
+        )
+    })
+
+    data4_comp_deslocamento_macrorregiao <- reactive({
+      bloco4_deslocamento_macrorregiao |>
+        dplyr::filter(ano == filtros()$ano) |>
+        dplyr::summarise(
+          prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
         )
     })
 
@@ -2592,14 +2608,14 @@ mod_nivel_1_server <- function(id, filtros){
    output$caixa_b4_i9_deslocamento_muni <- output$caixa_b4_i9_deslocamento_resto <- renderUI({ #[fff]
      cria_caixa_server(
        dados = data4_deslocamento_macrorregiao(),
-       indicador = "prop_partos_sem_uti",
-       titulo = "Porcentagem de nascidos vivos com peso < 1500 g nascidos em serviço sem UTI neonatal",
+       indicador = "prop_partos_com_uti",
+       titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
        tem_meta = TRUE,
-       valor_de_referencia = 16.3,
+       valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
        # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
        tipo = "porcentagem",
-       tipo_referencia = "HEALTHY PEOPLE, 2020",
-       invertido = FALSE,
+       tipo_referencia = "média nacional",
+       invertido = TRUE,
        pagina = "nivel_1",
        nivel_de_analise = filtros()$nivel,
        width_caixa = 11
