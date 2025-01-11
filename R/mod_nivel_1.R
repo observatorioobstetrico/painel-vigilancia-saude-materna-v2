@@ -2606,20 +2606,36 @@ mod_nivel_1_server <- function(id, filtros){
     })
 
    output$caixa_b4_i9_deslocamento_muni <- output$caixa_b4_i9_deslocamento_resto <- renderUI({ #[fff]
-     cria_caixa_server(
-       dados = data4_deslocamento_macrorregiao(),
-       indicador = "prop_partos_com_uti",
-       titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
-       tem_meta = TRUE,
-       valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
-       # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
-       tipo = "porcentagem",
-       tipo_referencia = "média nacional",
-       invertido = TRUE,
-       pagina = "nivel_1",
-       nivel_de_analise = filtros()$nivel,
-       width_caixa = 11
-   )
+     tagList(
+       div(
+         style = "position: relative;",
+         cria_caixa_server(
+           dados = data4_deslocamento_macrorregiao(),
+           indicador = "prop_partos_com_uti",
+           titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
+           tem_meta = TRUE,
+           valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
+           # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
+           tipo = "porcentagem",
+           tipo_referencia = "média nacional",
+           invertido = TRUE,
+           pagina = "nivel_1",
+           nivel_de_analise = filtros()$nivel,
+           width_caixa = 11
+       ),
+     # Botão de aviso posicionado no canto superior direito
+       div(
+         style = "position: absolute; top: 10px; right: 10px;",
+         shinyWidgets::actionBttn(
+           inputId = ns("aviso_desloc"),
+           icon = icon("triangle-exclamation", style = "color: red"),
+           color = "warning",
+           style = "material-circle",
+           size = "xs"
+         )
+       )
+      )
+     )
    })
 
     observeEvent(filtros()$pesquisar, {
