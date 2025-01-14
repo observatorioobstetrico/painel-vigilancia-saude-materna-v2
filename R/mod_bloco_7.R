@@ -3593,7 +3593,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais (total),",
+        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
         tamanho_caixa = "330px"
       )
     })

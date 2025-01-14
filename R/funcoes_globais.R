@@ -437,6 +437,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
     valor_indicador2 <- dados[["de_1000_1499_dist_peso_fetal"]]
     valor_indicador3 <- dados[["de_1500_2499_dist_peso_fetal"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_fetal"]]
+    valor_indicador5 <- dados[["faltante_dist_peso_fetal"]]
   }
 
   if (indicador == "fetal momento do obito por peso") {
@@ -450,6 +451,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
     valor_indicador2 <- dados[["durante_dist_moment_obito_perinat"]]
     valor_indicador3 <- dados[["dia_0_dist_moment_obito_perinat"]]
     valor_indicador4 <- dados[["dia_1_6_dist_moment_obito_perinat"]]
+    valor_indicador5 <- dados[["faltante_dist_moment_obito_perinat"]]
   }
 
   if (indicador == "perinatal peso por momento do obito") {
@@ -457,6 +459,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
     valor_indicador2 <- dados[["de_1000_1499_dist_peso_perinat"]]
     valor_indicador3 <- dados[["de_1500_2499_dist_peso_perinat"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_perinat"]]
+    valor_indicador5 <- dados[["faltante_dist_peso_perinat"]]
   }
 
   if (indicador == "neonatal momento do obito por peso") {
@@ -470,6 +473,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
     valor_indicador2 <- dados[["de_1000_1499_dist_peso_neonat"]]
     valor_indicador3 <- dados[["de_1500_2499_dist_peso_neonat"]]
     valor_indicador4 <- dados[["mais_2500_dist_peso_neonat"]]
+    valor_indicador5 <- dados[["faltante_dist_peso_neonat"]]
   }
 
   if (is.nan(valor_indicador1)) {
@@ -501,6 +505,16 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
 
   }
 
+  if (indicador == "fetal peso por idade gestacional" | indicador == "perinatal momento do obito por peso"|
+      indicador == "perinatal peso por momento do obito" | indicador == "neonatal peso por momento do obito"){
+
+    if (is.nan(valor_indicador5)) {
+      texto5 <- "---"
+    } else {
+      texto5 <- "{formatC(valor_indicador5, big.mark = '.', decimal.mark = ',')}%"
+    }
+  }
+
   style_texto <- "font-size: 30px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
   style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
 
@@ -510,7 +524,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
@@ -529,6 +543,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+          p(style = style_descricao, "não tem informação")
         )
       )
     )
@@ -538,7 +556,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 15%; padding: 0px 10px 10px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
@@ -582,6 +600,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
           p(style = style_descricao, "ocorreram de 1 a 6 dias de vida")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+          p(style = style_descricao, "não tem informação")
         )
       )
     )
@@ -611,7 +633,11 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
-        )
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+          p(style = style_descricao, "não tem informação")
+        ),
       )
     )
   } else if (indicador == "neonatal momento do obito por peso") {
@@ -664,6 +690,10 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+        ),
+        div(
+          p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+          p(style = style_descricao, "não tem informação")
         )
       )
     )
