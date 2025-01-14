@@ -3785,24 +3785,24 @@ mod_nivel_1_server <- function(id, filtros){
           faltante_dist_moment_obito_fetal =  round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 1) ,
 
           antes_dist_moment_obito_perinat =  round(
-            sum(c(perinatal_antes_peso_menos_1000, perinatal_antes_peso_1000_1499, perinatal_antes_peso_1500_2499, perinatal_antes_peso_mais_2500, perinatal_antes)[c(rep(F, 4), T)])/
-              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[c(rep(F, 4), T)])
-            * 100, 1) ,
+            sum(c(perinatal_antes_peso_menos_1000, perinatal_antes_peso_1000_1499, perinatal_antes_peso_1500_2499, perinatal_antes_peso_mais_2500, perinatal_antes)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+            *100, 1) ,
 
           durante_dist_moment_obito_perinat =  round(
-            sum(c(perinatal_durante_peso_menos_1000, perinatal_durante_peso_1000_1499, perinatal_durante_peso_1500_2499, perinatal_durante_peso_mais_2500, perinatal_durante)[c(rep(F, 4), T)])/
-              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[c(rep(F, 4), T)])
-            * 100, 1) ,
+            sum(c(perinatal_durante_peso_menos_1000, perinatal_durante_peso_1000_1499, perinatal_durante_peso_1500_2499, perinatal_durante_peso_mais_2500, perinatal_durante)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+            *100, 1) ,
 
           dia_0_dist_moment_obito_perinat =  round(
-            sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[c(rep(F, 4), T)])/
-              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[c(rep(F, 4), T)])
-            * 100, 1) ,
+            sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+            *100, 1) ,
 
           dia_1_6_dist_moment_obito_perinat =  round(
-            sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[c(rep(F, 4), T)])/
-              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[c(rep(F, 4), T)])
-            * 100, 1) ,
+            sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
+              sum(c(perinatal_oms_menos1000, perinatal_oms_1000_1499, perinatal_oms_1500_2499, perinatal_oms_mais2500, obitos_perinatal_oms)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+            *100, 1) ,
 
           faltante_dist_moment_obito_perinat =  round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 1) ,
 
