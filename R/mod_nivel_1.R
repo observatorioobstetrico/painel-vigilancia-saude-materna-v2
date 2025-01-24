@@ -3665,7 +3665,7 @@ mod_nivel_1_server <- function(id, filtros){
           # taxa_mort_fetal_oms_durante =  round(sum(perinatal_durante)/(sum(nascidos)+sum(perinatal_durante)),2)",2),
           # taxa_mort_fetal_oms_antes_peso_menos_1000 =  round(sum(perinatal_antes_peso_menos_1000)/(sum(nascidos_menos_1000)+sum(perinatal_antes_peso_menos_1000)),2)",2),
 
-          obitos_perinatal_total =  8.7,
+          obitos_perinatal_total =  sum(obitos_fetais_mais_22sem) + sum(obitos_6dias),
           perinatal_total_menos1000 =  sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000) ,
           perinatal_total_1000_1499 =  sum(fetal_peso_1000_1499) + sum(obitos_6dias_1000_1499) ,
           perinatal_total_1500_2499 =  sum(fetal_peso_1500_2499) + sum(obitos_6dias_1500_2499) ,
