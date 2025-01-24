@@ -4291,7 +4291,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
 
         nivel_de_analise = filtros()$nivel
       )
@@ -4349,8 +4348,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
-
         nivel_de_analise = filtros()$nivel
       )
     })
@@ -4369,7 +4366,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
 
         nivel_de_analise = filtros()$nivel
       )
@@ -4389,7 +4385,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
@@ -4479,7 +4474,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
@@ -4522,7 +4516,6 @@ mod_nivel_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "330px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
       )
     })
