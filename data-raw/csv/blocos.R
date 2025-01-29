@@ -42,7 +42,7 @@ aux_r_saude <- readODS::read_ods("data-raw/extracao-dos-dados/cobertura/regioes_
 #Juntando as duas bases auxiliares
 aux_municipios <- dplyr::left_join(aux_municipios_1, aux_r_saude, by = "codmunres") |>
   dplyr::select(!municipio2) |>
-  dplyr::mutate(posicao_idhm = dplyr::min_rank(desc(idhm)))
+  dplyr::mutate(posicao_idhm = dplyr::min_rank(dplyr::desc(idhm)))
 
 #Carregando a base auxiliar que contém variáveis referentes ao IDH das UFs e do Brasil
 aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
@@ -155,28 +155,19 @@ bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by 
 bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv") #|>
   #dplyr::select(!c(uf, municipio, regiao))
 
-bloco7_neonatal_aux[is.na(bloco7_neonatal_aux)] <- 0
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv")
 
-bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv") #|>
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv")
 
+bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv")  |>
+  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
 
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv") #|>
-  #dplyr::select(!(nascidos)
-  #) |>
- # dplyr::select(!c(uf, municipio, regiao))
+# juncao_bloco7_aux1 <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
+# juncao_bloco7_aux2 <- dplyr::left_join(juncao_bloco7_aux1, bloco7_morbidade_neonatal_aux, by = c("ano", "codmunres"))
+# bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c("ano", "codmunres"))
 
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv") #|>
-  #dplyr::select(!c(uf, municipio, regiao))
-bloco7_perinatal_aux$codmunres <- as.numeric(bloco7_perinatal_aux$codmunres)
-
-bloco7_perinatal_aux[is.na(bloco7_perinatal_aux)] <- 0
-
-
-juncao_bloco7_aux1 <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
-juncao_bloco7_aux2 <- dplyr::left_join(juncao_bloco7_aux1, bloco7_morbidade_neonatal_aux, by = c("ano", "codmunres"))
-bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c("ano", "codmunres"))
-
-bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") #|>
+bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") |>
+  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
 
 
 ## Lendo os dados dos indicadores de causas evitáveis e grupos de causas para os óbitos fetais
@@ -359,7 +350,10 @@ bloco6 <- bloco6 |>
     (which(names(bloco6) == "ano") + 1):(which(names(bloco6) == "municipio") - 1)
   )
 
-bloco7 <- dplyr::left_join(bloco7_aux, aux_municipios, by = "codmunres")
+bloco7_fetal <- dplyr::left_join(bloco7_fetal_aux, aux_municipios, by = "codmunres")
+bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, aux_municipios, by = "codmunres")
+bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "codmunres")
+bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
 # bloco7 <- bloco7 |>
 #   dplyr::select(
 #     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
@@ -569,7 +563,10 @@ usethis::use_data(bloco5, overwrite = TRUE)
 # usethis::use_data(asfixia, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
-usethis::use_data(bloco7, overwrite = TRUE)
+usethis::use_data(bloco7_fetal, overwrite = TRUE)
+usethis::use_data(bloco7_neonatal, overwrite = TRUE)
+usethis::use_data(bloco7_perinatal, overwrite = TRUE)
+usethis::use_data(bloco7_morbidade_neonatal, overwrite = TRUE)
 usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
 # usethis::use_data(bloco8_garbage_materno, overwrite = TRUE)
 # usethis::use_data(bloco8_garbage_fetal, overwrite = TRUE)

@@ -13,7 +13,6 @@ library(purrr)
 
 # OBS.: Ainda pretendo melhorar a separação entre dados consolidados e dados preliminares
 
-
 # Para os dados consolidados --------------------------------------------------
 ## Criando um vetor que contém o diretório original do projeto
 diretorio_original <- getwd()
@@ -22,22 +21,25 @@ diretorio_original <- getwd()
 setwd("data-raw/extracao-dos-dados/blocos/")
 
 ## Criando alguns objetos auxiliares ------------------------------------------
+### Criando um vetor com os anos consolidados
+anos_consolidados <- 2012:2023
+
 ### Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres) |>
   as.character()
 
 ### Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(anos_consolidados)), ano = anos_consolidados)
 
 ### Importando funções que baixam dados do Tabnet
 source("funcoes_auxiliares.R")
 
 ## Para as variáveis provenientes do SINASC -----------------------------------
-### Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
+### Baixando os dados consolidados do SINASC e selecionando as variáveis de interesse
 df_sinasc <- fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
+  year_start = anos_consolidados[1],
+  year_end = anos_consolidados[length(anos_consolidados)],
   vars = c("CODMUNRES", "DTNASC", "IDADEMAE", "QTDPARTNOR", "QTDPARTCES"),
   information_system = "SINASC"
 )
@@ -744,27 +746,16 @@ setwd(diretorio_original)
 
 # Para os dados preliminares --------------------------------------------------
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios_preliminares <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2024)), ano = 2023:2024)
+df_aux_municipios_preliminares <- data.frame(codmunres = rep(codigos_municipios, each = length(2024)), ano = 2024)
 
 ## Para as variáveis provenientes do SINASC -----------------------------------
-### Baixando os dados preliminares de 2023 e selecionando as variáveis de interesse
-df_sinasc_preliminares_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";") |>
-  select(CODMUNRES, DTNASC, IDADEMAE, QTDPARTNOR, QTDPARTCES)
-
 ### Baixando os dados preliminares de 2024 e selecionando as variáveis de interesse
 df_sinasc_preliminares_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
-  select(CODMUNRES, DTNASC, IDADEMAE, QTDPARTNOR, QTDPARTCES)
-
-### Juntando os dados preliminares em uma única base
-df_sinasc_preliminares <- full_join(df_sinasc_preliminares_2023, df_sinasc_preliminares_2024) |>
+  select(CODMUNRES, DTNASC, IDADEMAE, QTDPARTNOR, QTDPARTCES) |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
-### Removendo arquivos já utilizados e limpando a memória
-rm(df_sinasc_preliminares_2023, df_sinasc_preliminares_2024)
-gc()
-
 ### Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
-df_bloco2_sinasc_preliminares <- df_sinasc_preliminares |>
+df_bloco2_sinasc_preliminares <- df_sinasc_preliminares_2024 |>
   mutate(
     ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
     IDADEMAE = as.numeric(IDADEMAE),
