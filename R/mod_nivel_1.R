@@ -3121,7 +3121,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_int_publicas",
-        titulo = "Porcentagem de casos de morbidade materna grave em internações obstétricas públicas",
+        titulo = "Porcentagem de casos de morbidade materna grave no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_int_publicas,
         tipo = "porcentagem",

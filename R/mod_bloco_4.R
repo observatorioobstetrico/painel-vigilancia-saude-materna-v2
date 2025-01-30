@@ -1434,7 +1434,7 @@ mod_bloco_4_server <- function(id, filtros){
         indicador = "prop_tx_cesariana_geral",
         titulo = "Porcentagem global de cesarianas",
         tem_meta = TRUE,
-        valor_de_referencia = 25,
+        valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
