@@ -573,7 +573,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Buscando a documentação do indicador selecionado -----------------------
     output$documentacao <- renderUI({
-      includeHTML(glue::glue("inst/app/www/html/documentacao_nivel3/{substr(infos_indicador()$bloco}, start = 1, stop = 6)/{infos_indicador()$nome_documentacao}.html"))
+      includeHTML(glue::glue("inst/app/www/html/documentacao_nivel3/{substr(infos_indicador()$bloco, start = 1, stop = 6)}/{infos_indicador()$nome_documentacao}.html"))
     })
 
     ## Criando vetores que recebem os indicadores que só estão disponíveis a partir de ou até certos anos --------
