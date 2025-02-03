@@ -13,7 +13,7 @@ library(data.table)
 # Criar um vetor para armazenar os dados de cada ano
 df_list <- list()
 
-anos <- c(2012, 2014:2022)
+anos <- c(2012, 2014:2023)
 
 for (ano in anos){
 
@@ -65,10 +65,10 @@ rm(df_list, df_ano)
 # Dados ainda não consolidados
 options(timeout=99999)
 
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  mutate(ano = 2023) |>
-  select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
+#sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+#sinasc23 <- sinasc23 |>
+#  mutate(ano = 2023) |>
+#  select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
 sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
 sinasc24 <- sinasc24 |>
@@ -76,9 +76,9 @@ sinasc24 <- sinasc24 |>
   select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
 # Juntar os dataframes da lista em um único dataframe
-df <- rbind(df, sinasc23, sinasc24)
+df <- rbind(df, sinasc24)
 
-rm(sinasc23, sinasc24)
+rm(sinasc24)
 
 # Tratando os dados
 df2 <- df |>
@@ -160,7 +160,7 @@ df_sifilis_excel1 <- read_excel("data-raw/extracao-dos-dados/blocos/databases_au
                                sheet = "DADOS CONTINUAÇÃO 2"
 )
 
-df_sifilis_excel2 <- read_excel("data-raw/extracao-dos-dados/blocos/databases_auxiliares/dados_painel_sifilis_2013_2023.xlsx",
+df_sifilis_excel2 <- read_excel("data-raw/extracao-dos-dados/blocos/databases_auxiliares/dados_painel_sifilis_2013_2024.xlsx",
                                 sheet = "DADOS CONTINUAÇÃO 2"
 )
 
