@@ -603,7 +603,7 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos neonatais por grupos de causas'",
                         "'Porcentagem de nascidos vivos segundo local de ocorrência do parto'",
                         "'Medianas de deslocamento segundo o local de ocorrência do parto'",
-                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
+                        #"'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
                         "'Porcentagem de internações neonatais por grupos de causas'",
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas evitáveis'",
                         "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por grupos de causas evitáveis'",
@@ -634,11 +634,13 @@ app_ui <- function(request) {
                         "'Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por 1000 nascidos vivos'",
                         "'Taxa de mortalidade fetal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g por 1000 nascidos vivos'",
                         "'Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS'",
-                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'"
+                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'",
+
+                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
                       )
 
                       glue::glue(
-                        "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                        "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7'|input.bloco == 'bloco4')"
                       )
                     },
                     selectizeInput(
@@ -653,7 +655,7 @@ app_ui <- function(request) {
                   width = 3,
                   conditionalPanel(
                     condition = glue::glue(
-                      "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                      "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7'|input.bloco == 'bloco4')"
                     ),
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais2",

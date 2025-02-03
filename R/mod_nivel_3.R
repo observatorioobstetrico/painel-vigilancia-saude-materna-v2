@@ -417,9 +417,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por grupos de causas",
       "Porcentagem de óbitos neonatais por grupos de causas",
       "Porcentagem de internações neonatais por grupos de causas",
+
+      ## Bloco4
       "Porcentagem de nascidos vivos segundo local de ocorrência do parto",
-      "Medianas de deslocamento segundo o local de ocorrência do parto",
-      "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
+      "Medianas de deslocamento segundo o local de ocorrência do parto"
+      #"Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
     )
 
     indicadores_duas_caixinhas_adicionais_bloco7 <- c(
@@ -428,7 +430,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por 1000 nascidos vivos",
       "Taxa de mortalidade fetal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g por 1000 nascidos vivos",
       "Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS",
-      "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS"
+      "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS",
+
+      ## Bloco4
+      "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
     )
 
 
@@ -441,6 +446,15 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             dplyr::filter(
               nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")
             )
+        } else if (filtros()$indicador_blocos4_6_7 %in% indicadores_duas_caixinhas_adicionais_bloco7) {
+          nome_abreviado <- tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)
+
+          tabela_indicadores |>
+            dplyr::filter(
+              nome_abreviado == !!glue::glue("{nome_abreviado}_{filtros()$indicador_duas_caixinhas_adicionais1}_{filtros()$indicador_duas_caixinhas_adicionais2}")
+            ) |>
+            dplyr::mutate(indicador = trimws(indicador))
+
         } else {
           tabela_indicadores |>
             dplyr::filter(indicador == filtros()$indicador_blocos4_6_7)
