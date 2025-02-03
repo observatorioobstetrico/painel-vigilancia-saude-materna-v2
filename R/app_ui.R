@@ -67,17 +67,17 @@ app_ui <- function(request) {
         bs4Dash::bs4SidebarMenu(
           id = "abas",
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Sobre o painel </b>"),
+            text = HTML("<b>Sobre o painel </b>"),
             tabName = "sobre",
             icon = icon("circle-info")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Resumo dos blocos de indicadores </b>"),
+            text = HTML("<b>Nível 1: Resumo dos blocos de indicadores </b>"),
             tabName = "nivel_1",
             icon = icon("chart-gantt")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Séries históricas </b>"),
+            text = HTML("<b>Nível 2: Séries históricas </b>"),
             icon = icon("chart-line"),
             startExpanded = TRUE,
             bs4Dash::bs4SidebarMenuSubItem(
@@ -122,17 +122,17 @@ app_ui <- function(request) {
             # )
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Visão detalhada dos indicadores </b>"),
+            text = HTML("<b>Nível 3: Visão detalhada dos indicadores </b>"),
             tabName = "nivel_3",
             icon = icon("chart-column")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Documentação dos indicadores </b>"),
+            text = HTML("<b>Documentação dos indicadores </b>"),
             tabName = "documentacao",
             icon = icon("file-circle-question")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> A história de Aparecida </b>"),
+            text = HTML("<b>A história de Aparecida </b>"),
             tabName = "aparecida",
             icon = icon("person-pregnant")
           )

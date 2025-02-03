@@ -350,6 +350,7 @@ mod_nivel_3_ui <- function(id){
                   fluidRow(
                     column(
                       width = 12,
+                      hr(),
                       tags$style(HTML(".radio-inline, .checkbox-inline {overflow-x: auto}")),
                       radioButtons(
                         inputId = ns("opcoes_tab1"),
