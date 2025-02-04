@@ -2829,7 +2829,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data5_comp()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
