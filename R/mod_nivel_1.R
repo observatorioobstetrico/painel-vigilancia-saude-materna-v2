@@ -2612,7 +2612,7 @@ mod_nivel_1_server <- function(id, filtros){
          cria_caixa_server(
            dados = data4_deslocamento_macrorregiao(),
            indicador = "prop_partos_com_uti",
-           titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
+           titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
            tem_meta = TRUE,
            valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
            # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,

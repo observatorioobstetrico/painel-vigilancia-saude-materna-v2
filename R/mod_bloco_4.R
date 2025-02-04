@@ -2087,7 +2087,7 @@ mod_bloco_4_server <- function(id, filtros){
           cria_caixa_server(
             dados = data4_deslocamento_resumo(),
             indicador = "prop_partos_com_uti",
-            titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
+            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
             tem_meta = TRUE,
             valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_uti, # 16.3,
             tipo = "porcentagem",
