@@ -538,7 +538,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g &nbsp;</b>"),
+                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao6"),
@@ -979,7 +979,7 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
-    #### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g ----
+    #### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g ----
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao6", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$peso > 5, na.rm = TRUE) |
@@ -1378,12 +1378,12 @@ mod_bloco_5_server <- function(id, filtros){
       )
     })
 
-    ### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g ----
+    ### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g ----
     output$b5_i6 <- renderUI({
       cria_caixa_server(
         dados = data5_resumo(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data5_resumo_referencia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
@@ -2540,7 +2540,7 @@ mod_bloco_5_server <- function(id, filtros){
     #   }
     # })
 
-    ### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g ----
+    ### Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g ----
     output$plot4 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>

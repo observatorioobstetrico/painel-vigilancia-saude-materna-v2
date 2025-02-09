@@ -467,17 +467,35 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
 
     if (input$indicador_blocos4_6_7 == "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto") {
+      # updateSelectizeInput(
+      #   session,
+      #   inputId = "indicador_uma_caixinha_adicional_bloco7",
+      #   choices = c("Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI" = "na_macro_com_uti",
+      #               "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI" = "na_macro_sem_uti",
+      #               "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI" = "fora_macro_com_uti",
+      #               "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI" = "fora_macro_sem_uti",
+      #               "Na macrorregião de saúde, mas sem informação sobre leito de UTI" = "na_macro_sem_inf",
+      #               "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI" = "fora_macro_sem_inf"
+      #               ),
+      #   label = "Localidade e tipo de estabelecimento"
+      # )
+
       updateSelectizeInput(
         session,
-        inputId = "indicador_uma_caixinha_adicional_bloco7",
-        choices = c("Na macrorregião de saúde e em estabelecimento que tem pelo menos um leito de UTI" = "na_macro_com_uti",
-                    "Na macrorregião de saúde, mas em estabelecimento que não tem leito de UTI" = "na_macro_sem_uti",
-                    "Fora da macrorregião de saúde, mas em estabelecimento que tem pelo menos um leito de UTI" = "fora_macro_com_uti",
-                    "Fora da macrorregião de saúde e em estabelecimento que não tem leito de UTI" = "fora_macro_sem_uti",
-                    "Na macrorregião de saúde, mas sem informação sobre leito de UTI" = "na_macro_sem_inf",
-                    "Fora da macrorregião de saúde, mas sem informação sobre leito de UTI" = "fora_macro_sem_inf"
-                    ),
-        label = "Localidade e tipo de estabelecimento"
+        inputId = "indicador_duas_caixinhas_adicionais1",
+        choices = c("Dentro da macrorregião de saúde" = "na_macro",
+                    "Fora da macrorregião de saúde" = "fora_macro"
+        ),
+        label = "Local do parto"
+      )
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_duas_caixinhas_adicionais2",
+        choices = c("Pelo menos um leito" = "com_uti",
+                    "Sem leito" = "sem_uti",
+                    "Sem informação" = "sem_inf"
+        ),
+        label = "Disponibilidade de leito de UTI"
       )
     }
 

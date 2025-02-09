@@ -67,17 +67,17 @@ app_ui <- function(request) {
         bs4Dash::bs4SidebarMenu(
           id = "abas",
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Sobre o painel </b>"),
+            text = HTML("<b>Sobre o painel </b>"),
             tabName = "sobre",
             icon = icon("circle-info")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Resumo dos blocos de indicadores </b>"),
+            text = HTML("<b>Nível 1: Resumo dos blocos de indicadores </b>"),
             tabName = "nivel_1",
             icon = icon("chart-gantt")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Séries históricas </b>"),
+            text = HTML("<b>Nível 2: Séries históricas </b>"),
             icon = icon("chart-line"),
             startExpanded = TRUE,
             bs4Dash::bs4SidebarMenuSubItem(
@@ -122,17 +122,17 @@ app_ui <- function(request) {
             # )
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Visão detalhada dos indicadores </b>"),
+            text = HTML("<b>Nível 3: Visão detalhada dos indicadores </b>"),
             tabName = "nivel_3",
             icon = icon("chart-column")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> Documentação dos indicadores </b>"),
+            text = HTML("<b>Documentação dos indicadores </b>"),
             tabName = "documentacao",
             icon = icon("file-circle-question")
           ),
           bs4Dash::bs4SidebarMenuItem(
-            text = HTML("<b> A história de Aparecida </b>"),
+            text = HTML("<b>A história de Aparecida </b>"),
             tabName = "aparecida",
             icon = icon("person-pregnant")
           )
@@ -304,7 +304,7 @@ app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & ( input.ano2[1] == 2023 | input.ano2[1] == 2024))",
+              condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & input.abas != 'bloco_1' & input.abas != 'bloco_2' & ( input.ano2[1] == 2023 | input.ano2[1] == 2024))",
               fluidRow(
                 column(
                   width = 3,
@@ -312,6 +312,22 @@ app_ui <- function(request) {
                   "
                     <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
                         <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 e 2024 são preliminares
+                    </b> </div>
+                    <span style='display: block; margin-bottom: 15px;'> </span>
+                  "
+                  )
+                )
+              )
+            ),
+            conditionalPanel(
+              condition = "(input.abas == 'bloco_1' | input.abas == 'bloco_2') & input.ano2[1] == 2024",
+              fluidRow(
+                column(
+                  width = 3,
+                  HTML(
+                    "
+                    <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2024 são preliminares
                     </b> </div>
                     <span style='display: block; margin-bottom: 15px;'> </span>
                   "
@@ -587,7 +603,7 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos neonatais por grupos de causas'",
                         "'Porcentagem de nascidos vivos segundo local de ocorrência do parto'",
                         "'Medianas de deslocamento segundo o local de ocorrência do parto'",
-                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
+                        #"'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
                         "'Porcentagem de internações neonatais por grupos de causas'",
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas evitáveis'",
                         "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por grupos de causas evitáveis'",
@@ -618,11 +634,13 @@ app_ui <- function(request) {
                         "'Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por 1000 nascidos vivos'",
                         "'Taxa de mortalidade fetal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g por 1000 nascidos vivos'",
                         "'Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS'",
-                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'"
+                        "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'",
+
+                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
                       )
 
                       glue::glue(
-                        "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                        "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7'|input.bloco == 'bloco4')"
                       )
                     },
                     selectizeInput(
@@ -637,7 +655,7 @@ app_ui <- function(request) {
                   width = 3,
                   conditionalPanel(
                     condition = glue::glue(
-                      "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & input.bloco == 'bloco7'"
+                      "[{paste(indicadores_duas_caixinhas_adicionais, collapse = ', ')}].includes(input.indicador_blocos4_6_7) & (input.bloco == 'bloco7'|input.bloco == 'bloco4')"
                     ),
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais2",

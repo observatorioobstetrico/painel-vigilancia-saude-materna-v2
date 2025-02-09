@@ -1142,8 +1142,8 @@ mod_nivel_1_server <- function(id, filtros){
               data4_comp = data4_comp,
               data4_deslocamento = data4_deslocamento(),
               data4_comp_deslocamento = data4_comp_deslocamento(),
-              data4_deslocamento_macrorregiao = data4_deslocamento_macrorregiao(),
-              data4_comp_deslocamento_macrorregiao = data4_comp_deslocamento_macrorregiao(),
+              # data4_deslocamento_macrorregiao = data4_deslocamento_macrorregiao(),
+              # data4_comp_deslocamento_macrorregiao = data4_comp_deslocamento_macrorregiao(),
               data5 = data5(),
               data5_comp = data5_comp(),
               data5_comp_baixo_peso = data5_comp_baixo_peso(),
@@ -2612,7 +2612,7 @@ mod_nivel_1_server <- function(id, filtros){
          cria_caixa_server(
            dados = data4_deslocamento_macrorregiao(),
            indicador = "prop_partos_com_uti",
-           titulo = "Porcentagem de nascidos vivos em serviço com UTI neonatal dentre os nascidos com peso  < 1500 g",
+           titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
            tem_meta = TRUE,
            valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
            # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
@@ -2829,7 +2829,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data5(),
         indicador = "porc_nascidos_vivos_asfixia1",
-        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso > 2500 g",
+        titulo = "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g",
         tem_meta = FALSE,
         valor_de_referencia = data5_comp()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
@@ -3121,7 +3121,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_int_publicas",
-        titulo = "Porcentagem de casos de morbidade materna grave em internações obstétricas públicas",
+        titulo = "Porcentagem de casos de morbidade materna grave no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_int_publicas,
         tipo = "porcentagem",
