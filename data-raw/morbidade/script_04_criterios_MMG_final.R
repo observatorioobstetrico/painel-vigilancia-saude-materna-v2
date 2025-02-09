@@ -18,7 +18,7 @@ arq_SP <- "data-raw/morbidade/databases/02_sih_sp"
 
 
 # Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2012:2024)
+anos <- c(2023:2024)
 
 
 ### Descolamento prematuro de placenta (cids O450; O458; O459)
@@ -516,7 +516,7 @@ for( estado in estados ) {
 
   # liberar memoria
 
-  rm( list = c( glue("sp_obs_cluster_{anos[1]}_{anos[length(anos)]}atual"), "grupos_aih", "sp_uf_obs_nao_clusters", "sp_uf_obs_clusters" ) )
+  #rm( list = c( glue("sp_obs_cluster_{anos[1]}_{anos[length(anos)]}atual"), "grupos_aih", "sp_uf_obs_nao_clusters", "sp_uf_obs_clusters" ) )
   gc()
 
 
@@ -604,13 +604,18 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2024)), ano = 2023:2024)
 
 df_bloco6_morbidade <- left_join(df_aux_municipios, obs_cluster_total_mun_ano |> janitor::clean_names())
 
 df_bloco6_morbidade[is.na(df_bloco6_morbidade)] <- 0
 
-write.csv(df_bloco6_morbidade, glue("{output_dir}/indicadores_bloco6_morbidade_materna_2012-2024.csv"), row.names = FALSE)
+bloco6_morbidade_materna_antigo <- read_csv("{output_dir}/indicadores_bloco6_morbidade_materna_2012-2024.csv") |>
+  filter(ano <= 2022)
+
+bloco6_morbidade_materna_novo <- rbind(bloco6_morbidade_materna_antigo, df_bloco6_morbidade)
+
+write.csv(bloco6_morbidade_materna_novo, glue("{output_dir}/indicadores_bloco6_morbidade_materna_2012-2024.csv"), row.names = FALSE)
 
 
 
