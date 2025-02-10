@@ -1912,69 +1912,69 @@ mod_bloco_7_server <- function(id, filtros){
       df_calcs_aux1 <- data.frame(
         tipo = c("local", "referencia"),
 
-        obitos_neonat = rep("sum(obitos_27dias)", 2),
-        obitos_neonat_menos1000 = rep("sum(obitos_27dias_menos1000)", 2),
-        obitos_neonat_1000_1499 = rep("sum(obitos_27dias_1000_1499)", 2),
-        obitos_neonat_1500_2499 = rep("sum(obitos_27dias_1500_2499)", 2),
-        obitos_neonat_mais2500 = rep("sum(obitos_27dias_mais2500)", 2),
+        obitos_neonat = rep("sum(obitos_27dias, na.rm = T)", 2),
+        obitos_neonat_menos1000 = rep("sum(obitos_27dias_menos1000, na.rm = T)", 2),
+        obitos_neonat_1000_1499 = rep("sum(obitos_27dias_1000_1499, na.rm = T)", 2),
+        obitos_neonat_1500_2499 = rep("sum(obitos_27dias_1500_2499, na.rm = T)", 2),
+        obitos_neonat_mais2500 = rep("sum(obitos_27dias_mais2500, na.rm = T)", 2),
 
-        mort_neonat = c("round(sum(obitos_27dias)/sum(nascidos) *1000, 1)", "5"),
-        mort_neonat_precoc = c("round(sum(obitos_6dias)/sum(nascidos) *1000, 1)", "3.75"),
-        mort_neonat_tardia = c("round(sum(obitos_7_27dias)/sum(nascidos) *1000, 1)", "1.25"),
-        mort_neonat_menos1000 = rep("round(sum(obitos_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
-        mort_neonat_precoc_menos1000 = rep("round(sum(obitos_6dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
-        mort_neonat_tardia_menos1000 = rep("round(sum(obitos_7_27dias_menos1000)/sum(nascidos_menos1000) *1000, 1)", 2),
-        mort_neonat_1000_1499 = rep("round(sum(obitos_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
-        mort_neonat_precoc_1000_1499 = rep("round(sum(obitos_6dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
-        mort_neonat_tardia_1000_1499 = rep("round(sum(obitos_7_27dias_1000_1499)/sum(nascidos_1000_1499) *1000, 1)", 2),
-        mort_neonat_1500_2499 = rep("round(sum(obitos_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
-        mort_neonat_precoc_1500_2499 = rep("round(sum(obitos_6dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
-        mort_neonat_tardia_1500_2499 = rep("round(sum(obitos_7_27dias_1500_2499)/sum(nascidos_1500_2499) *1000, 1)", 2),
-        mort_neonat_mais2500 = rep("round(sum(obitos_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
-        mort_neonat_precoc_mais2500 = rep("round(sum(obitos_6dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
-        mort_neonat_tardia_mais2500 = rep("round(sum(obitos_7_27dias_mais2500)/sum(nascidos_mais2500) *1000, 1)", 2),
+        mort_neonat = c("round(sum(obitos_27dias, na.rm = T)/sum(nascidos, na.rm = T) *1000, 1)", "5"),
+        mort_neonat_precoc = c("round(sum(obitos_6dias, na.rm = T)/sum(nascidos, na.rm = T) *1000, 1)", "3.75"),
+        mort_neonat_tardia = c("round(sum(obitos_7_27dias, na.rm = T)/sum(nascidos, na.rm = T) *1000, 1)", "1.25"),
+        mort_neonat_menos1000 = rep("round(sum(obitos_27dias_menos1000, na.rm = T)/sum(nascidos_menos1000, na.rm = T) *1000, 1)", 2),
+        mort_neonat_precoc_menos1000 = rep("round(sum(obitos_6dias_menos1000, na.rm = T)/sum(nascidos_menos1000, na.rm = T) *1000, 1)", 2),
+        mort_neonat_tardia_menos1000 = rep("round(sum(obitos_7_27dias_menos1000, na.rm = T)/sum(nascidos_menos1000, na.rm = T) *1000, 1)", 2),
+        mort_neonat_1000_1499 = rep("round(sum(obitos_27dias_1000_1499, na.rm = T)/sum(nascidos_1000_1499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_precoc_1000_1499 = rep("round(sum(obitos_6dias_1000_1499, na.rm = T)/sum(nascidos_1000_1499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_tardia_1000_1499 = rep("round(sum(obitos_7_27dias_1000_1499, na.rm = T)/sum(nascidos_1000_1499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_1500_2499 = rep("round(sum(obitos_27dias_1500_2499, na.rm = T)/sum(nascidos_1500_2499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_precoc_1500_2499 = rep("round(sum(obitos_6dias_1500_2499, na.rm = T)/sum(nascidos_1500_2499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_tardia_1500_2499 = rep("round(sum(obitos_7_27dias_1500_2499, na.rm = T)/sum(nascidos_1500_2499, na.rm = T) *1000, 1)", 2),
+        mort_neonat_mais2500 = rep("round(sum(obitos_27dias_mais2500, na.rm = T)/sum(nascidos_mais2500, na.rm = T) *1000, 1)", 2),
+        mort_neonat_precoc_mais2500 = rep("round(sum(obitos_6dias_mais2500, na.rm = T)/sum(nascidos_mais2500, na.rm = T) *1000, 1)", 2),
+        mort_neonat_tardia_mais2500 = rep("round(sum(obitos_7_27dias_mais2500, na.rm = T)/sum(nascidos_mais2500, na.rm = T) *1000, 1)", 2),
 
-        obitos_fetais = rep("sum(obitos_fetais_mais_22sem)", 2),
-        fetal_peso_menos_1000 = rep("sum(fetal_peso_menos_1000)", 2),
-        fetal_peso_1000_1499 = rep("sum(fetal_peso_1000_1499)", 2),
-        fetal_peso_1500_2499 = rep("sum(fetal_peso_1500_2499)", 2),
-        fetal_peso_mais_2500 = rep("sum(fetal_peso_mais_2500)", 2),
-        fetal_antes = rep("sum(fetal_antes)", 2),
-        fetal_durante = rep("sum(fetal_durante)", 2),
-        fetal_depois = rep("sum(fetal_depois)", 2),
-        fetal_antes_peso_menos_1000 = rep("sum(fetal_antes_peso_menos_1000)", 2),
-        fetal_antes_peso_1000_1499 = rep("sum(fetal_antes_peso_1000_1499)", 2),
-        fetal_antes_peso_1500_2499 = rep("sum(fetal_antes_peso_1500_2499)", 2),
-        fetal_antes_peso_mais_2500 = rep("sum(fetal_antes_peso_mais_2500)", 2),
-        fetal_durante_peso_menos_1000 = rep("sum(fetal_durante_peso_menos_1000)", 2),
-        fetal_durante_peso_1000_1499 = rep("sum(fetal_durante_peso_1000_1499)", 2),
-        fetal_durante_peso_1500_2499 = rep("sum(fetal_durante_peso_1500_2499)", 2),
-        fetal_durante_peso_mais_2500 = rep("sum(fetal_durante_peso_mais_2500)", 2),
-        fetal_depois_peso_menos_1000 = rep("sum(fetal_depois_peso_menos_1000)", 2),
-        fetal_depois_peso_1000_1499 = rep("sum(fetal_depois_peso_1000_1499)", 2),
-        fetal_depois_peso_1500_2499 = rep("sum(fetal_depois_peso_1500_2499)", 2),
-        fetal_depois_peso_mais_2500 = rep("sum(fetal_depois_peso_mais_2500)", 2),
+        obitos_fetais = rep("sum(obitos_fetais_mais_22sem, na.rm = T)", 2),
+        fetal_peso_menos_1000 = rep("sum(fetal_peso_menos_1000, na.rm = T)", 2),
+        fetal_peso_1000_1499 = rep("sum(fetal_peso_1000_1499, na.rm = T)", 2),
+        fetal_peso_1500_2499 = rep("sum(fetal_peso_1500_2499, na.rm = T)", 2),
+        fetal_peso_mais_2500 = rep("sum(fetal_peso_mais_2500, na.rm = T)", 2),
+        fetal_antes = rep("sum(fetal_antes, na.rm = T)", 2),
+        fetal_durante = rep("sum(fetal_durante, na.rm = T)", 2),
+        fetal_depois = rep("sum(fetal_depois, na.rm = T)", 2),
+        fetal_antes_peso_menos_1000 = rep("sum(fetal_antes_peso_menos_1000, na.rm = T)", 2),
+        fetal_antes_peso_1000_1499 = rep("sum(fetal_antes_peso_1000_1499, na.rm = T)", 2),
+        fetal_antes_peso_1500_2499 = rep("sum(fetal_antes_peso_1500_2499, na.rm = T)", 2),
+        fetal_antes_peso_mais_2500 = rep("sum(fetal_antes_peso_mais_2500, na.rm = T)", 2),
+        fetal_durante_peso_menos_1000 = rep("sum(fetal_durante_peso_menos_1000, na.rm = T)", 2),
+        fetal_durante_peso_1000_1499 = rep("sum(fetal_durante_peso_1000_1499, na.rm = T)", 2),
+        fetal_durante_peso_1500_2499 = rep("sum(fetal_durante_peso_1500_2499, na.rm = T)", 2),
+        fetal_durante_peso_mais_2500 = rep("sum(fetal_durante_peso_mais_2500, na.rm = T)", 2),
+        fetal_depois_peso_menos_1000 = rep("sum(fetal_depois_peso_menos_1000, na.rm = T)", 2),
+        fetal_depois_peso_1000_1499 = rep("sum(fetal_depois_peso_1000_1499, na.rm = T)", 2),
+        fetal_depois_peso_1500_2499 = rep("sum(fetal_depois_peso_1500_2499, na.rm = T)", 2),
+        fetal_depois_peso_mais_2500 = rep("sum(fetal_depois_peso_mais_2500, na.rm = T)", 2),
 
-        taxa_mort_fetal = c("round(sum(obitos_fetais_mais_22sem)/(sum(nascidos)+sum(obitos_fetais_mais_22sem)) *1000, 1)", "5"),
-        taxa_mort_fetal_peso_menos_1000 = rep("round(sum(fetal_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_peso_menos_1000)) *1000, 1)", 2),
-        taxa_mort_fetal_peso_1000_1499 = rep("round(sum(fetal_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_peso_1000_1499)) *1000, 1)", 2),
-        taxa_mort_fetal_peso_1500_2499 = rep("round(sum(fetal_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_peso_1500_2499)) *1000, 1)", 2),
-        taxa_mort_fetal_peso_mais_2500 = rep("round(sum(fetal_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_peso_mais_2500)) *1000, 1)", 2),
-        taxa_mort_fetal_antes = rep("round(sum(fetal_antes)/(sum(nascidos) + sum(fetal_antes)) *1000, 1)", 2),
-        taxa_mort_fetal_durante = rep("round(sum(fetal_durante)/(sum(nascidos) + sum(fetal_durante)) *1000, 1)", 2),
-        taxa_mort_fetal_depois = rep("round(sum(fetal_depois)/(sum(nascidos) + sum(fetal_depois)) *1000, 1)", 2),
-        taxa_mort_fetal_antes_peso_menos_1000 = rep("round(sum(fetal_antes_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_antes_peso_menos_1000)) *1000, 1)", 2),
-        taxa_mort_fetal_antes_peso_1000_1499 = rep("round(sum(fetal_antes_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_antes_peso_1000_1499)) *1000, 1)", 2),
-        taxa_mort_fetal_antes_peso_1500_2499 = rep("round(sum(fetal_antes_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_antes_peso_1500_2499)) *1000, 1)", 2),
-        taxa_mort_fetal_antes_peso_mais_2500 = rep("round(sum(fetal_antes_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_antes_peso_mais_2500)) *1000, 1)", 2),
-        taxa_mort_fetal_durante_peso_menos_1000 = rep("round(sum(fetal_durante_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_durante_peso_menos_1000)) *1000, 1)", 2),
-        taxa_mort_fetal_durante_peso_1000_1499 = rep("round(sum(fetal_durante_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_durante_peso_1000_1499)) *1000, 1)", 2),
-        taxa_mort_fetal_durante_peso_1500_2499 = rep("round(sum(fetal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_durante_peso_1500_2499)) *1000, 1)", 2),
-        taxa_mort_fetal_durante_peso_mais_2500 = rep("round(sum(fetal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_durante_peso_mais_2500)) *1000, 1)", 2),
-        taxa_mort_fetal_depois_peso_menos_1000 = rep("round(sum(fetal_depois_peso_menos_1000)/(sum(nascidos_menos1000)+sum(fetal_depois_peso_menos_1000)) *1000, 1)", 2),
-        taxa_mort_fetal_depois_peso_1000_1499 = rep("round(sum(fetal_depois_peso_1000_1499)/(sum(nascidos_1000_1499)+sum(fetal_depois_peso_1000_1499)) *1000, 1)", 2),
-        taxa_mort_fetal_depois_peso_1500_2499 = rep("round(sum(fetal_depois_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(fetal_depois_peso_1500_2499)) *1000, 1)", 2),
-        taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500)/(sum(nascidos_mais2500)+sum(fetal_depois_peso_mais_2500)) *1000, 1)", 2),
+        taxa_mort_fetal = c("round(sum(obitos_fetais_mais_22sem, na.rm = T)/(sum(nascidos, na.rm = T)+sum(obitos_fetais_mais_22sem, na.rm = T)) *1000, 1)", "5"),
+        taxa_mort_fetal_peso_menos_1000 = rep("round(sum(fetal_peso_menos_1000, na.rm = T)/(sum(nascidos_menos1000, na.rm = T)+sum(fetal_peso_menos_1000, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_1000_1499 = rep("round(sum(fetal_peso_1000_1499, na.rm = T)/(sum(nascidos_1000_1499, na.rm = T)+sum(fetal_peso_1000_1499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_1500_2499 = rep("round(sum(fetal_peso_1500_2499, na.rm = T)/(sum(nascidos_1500_2499, na.rm = T)+sum(fetal_peso_1500_2499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_peso_mais_2500 = rep("round(sum(fetal_peso_mais_2500, na.rm = T)/(sum(nascidos_mais2500, na.rm = T)+sum(fetal_peso_mais_2500, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_antes = rep("round(sum(fetal_antes, na.rm = T)/(sum(nascidos, na.rm = T) + sum(fetal_antes, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_durante = rep("round(sum(fetal_durante, na.rm = T)/(sum(nascidos, na.rm = T) + sum(fetal_durante, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_depois = rep("round(sum(fetal_depois, na.rm = T)/(sum(nascidos, na.rm = T) + sum(fetal_depois, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_menos_1000 = rep("round(sum(fetal_antes_peso_menos_1000, na.rm = T)/(sum(nascidos_menos1000, na.rm = T)+sum(fetal_antes_peso_menos_1000, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_1000_1499 = rep("round(sum(fetal_antes_peso_1000_1499, na.rm = T)/(sum(nascidos_1000_1499, na.rm = T)+sum(fetal_antes_peso_1000_1499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_1500_2499 = rep("round(sum(fetal_antes_peso_1500_2499, na.rm = T)/(sum(nascidos_1500_2499, na.rm = T)+sum(fetal_antes_peso_1500_2499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_antes_peso_mais_2500 = rep("round(sum(fetal_antes_peso_mais_2500, na.rm = T)/(sum(nascidos_mais2500, na.rm = T)+sum(fetal_antes_peso_mais_2500, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_menos_1000 = rep("round(sum(fetal_durante_peso_menos_1000, na.rm = T)/(sum(nascidos_menos1000, na.rm = T)+sum(fetal_durante_peso_menos_1000, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_1000_1499 = rep("round(sum(fetal_durante_peso_1000_1499, na.rm = T)/(sum(nascidos_1000_1499, na.rm = T)+sum(fetal_durante_peso_1000_1499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_1500_2499 = rep("round(sum(fetal_durante_peso_1500_2499, na.rm = T)/(sum(nascidos_1500_2499, na.rm = T)+sum(fetal_durante_peso_1500_2499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_durante_peso_mais_2500 = rep("round(sum(fetal_durante_peso_mais_2500, na.rm = T)/(sum(nascidos_mais2500, na.rm = T)+sum(fetal_durante_peso_mais_2500, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_menos_1000 = rep("round(sum(fetal_depois_peso_menos_1000, na.rm = T)/(sum(nascidos_menos1000, na.rm = T)+sum(fetal_depois_peso_menos_1000, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_1000_1499 = rep("round(sum(fetal_depois_peso_1000_1499, na.rm = T)/(sum(nascidos_1000_1499, na.rm = T)+sum(fetal_depois_peso_1000_1499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_1500_2499 = rep("round(sum(fetal_depois_peso_1500_2499, na.rm = T)/(sum(nascidos_1500_2499, na.rm = T)+sum(fetal_depois_peso_1500_2499, na.rm = T)) *1000, 1)", 2),
+        taxa_mort_fetal_depois_peso_mais_2500 = rep("round(sum(fetal_depois_peso_mais_2500, na.rm = T)/(sum(nascidos_mais2500, na.rm = T)+sum(fetal_depois_peso_mais_2500, na.rm = T)) *1000, 1)", 2),
 
         # Variáveis número de óbitos fetais mais de 28 semanas (critério oms)
         # obitos_fetais_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T)", 2),
@@ -2010,36 +2010,36 @@ mod_bloco_7_server <- function(id, filtros){
         # taxa_mort_fetal_oms_durante_peso_1500_2499 = rep("round(sum(perinatal_durante_peso_1500_2499)/(sum(nascidos_1500_2499)+sum(perinatal_durante_peso_1500_2499))*1000, 1)", 2),
         # taxa_mort_fetal_oms_durante_peso_mais_2500 = rep("round(sum(perinatal_durante_peso_mais_2500)/(sum(nascidos_mais2500)+sum(perinatal_durante_peso_mais_2500))*1000, 1)", 2),
 
-        perinatal_todos_total = rep("sum(perinatal_todos_total)", 2),
-        perinatal_todos_peso_menos_1000 = rep("sum(perinatal_todos_peso_menos_1000)", 2),
-        perinatal_todos_peso_1000_1499 = rep("sum(perinatal_todos_peso_1000_1499)", 2),
-        perinatal_todos_peso_1500_2499 = rep("sum(perinatal_todos_peso_1500_2499)", 2),
-        perinatal_todos_peso_mais_2500 = rep("sum(perinatal_todos_peso_mais_2500)", 2),
-        perinatal_todos_antes = rep("sum(perinatal_todos_antes)", 2),
-        perinatal_todos_durante = rep("sum(perinatal_todos_durante)", 2),
-        perinatal_todos_0dias = rep("sum(perinatal_todos_0dias)", 2),
-        perinatal_todos_1_6dias = rep("sum(perinatal_todos_1_6dias)", 2),
-        perinatal_todos_0_6dias = rep("sum(perinatal_todos_0_6dias)", 2),
-        perinatal_todos_antes_menos_1000 = rep("sum(perinatal_todos_antes_menos_1000)", 2),
-        perinatal_todos_antes_1000_1499 = rep("sum(perinatal_todos_antes_1000_1499)", 2),
-        perinatal_todos_antes_1500_2499 = rep("sum(perinatal_todos_antes_1500_2499)", 2),
-        perinatal_todos_antes_mais_2500 = rep("sum(perinatal_todos_antes_mais_2500)", 2),
-        perinatal_todos_durante_menos_1000 = rep("sum(perinatal_todos_durante_menos_1000)", 2),
-        perinatal_todos_durante_1000_1499 = rep("sum(perinatal_todos_durante_1000_1499)", 2),
-        perinatal_todos_durante_1500_2499 = rep("sum(perinatal_todos_durante_1500_2499)", 2),
-        perinatal_todos_durante_mais_2500 = rep("sum(perinatal_todos_durante_mais_2500)", 2),
-        perinatal_todos_0dias_menos_1000 = rep("sum(perinatal_todos_0dias_menos_1000)", 2),
-        perinatal_todos_0dias_1000_1499 = rep("sum(perinatal_todos_0dias_1000_1499)", 2),
-        perinatal_todos_0dias_1500_2499 = rep("sum(perinatal_todos_0dias_1500_2499)", 2),
-        perinatal_todos_0dias_mais_2500 = rep("sum(perinatal_todos_0dias_mais_2500)", 2),
-        perinatal_todos_1_6dias_menos_1000 = rep("sum(perinatal_todos_1_6dias_menos_1000)", 2),
-        perinatal_todos_1_6dias_1000_1499 = rep("sum(perinatal_todos_1_6dias_1000_1499)", 2),
-        perinatal_todos_1_6dias_1500_2499 = rep("sum(perinatal_todos_1_6dias_1500_2499)", 2),
-        perinatal_todos_1_6dias_mais_2500 = rep("sum(perinatal_todos_1_6dias_mais_2500)", 2),
-        perinatal_todos_0_6dias_menos_1000 = rep("sum(perinatal_todos_0_6dias_menos_1000)", 2),
-        perinatal_todos_0_6dias_1000_1499 = rep("sum(perinatal_todos_0_6dias_1000_1499)", 2),
-        perinatal_todos_0_6dias_1500_2499 = rep("sum(perinatal_todos_0_6dias_1500_2499)", 2),
-        perinatal_todos_0_6dias_mais_2500 = rep("sum(perinatal_todos_0_6dias_mais_2500)", 2),
+        perinatal_todos_total = rep("sum(perinatal_todos_total, na.rm=T)", 2),
+        perinatal_todos_peso_menos_1000 = rep("sum(perinatal_todos_peso_menos_1000, na.rm=T)", 2),
+        perinatal_todos_peso_1000_1499 = rep("sum(perinatal_todos_peso_1000_1499, na.rm=T)", 2),
+        perinatal_todos_peso_1500_2499 = rep("sum(perinatal_todos_peso_1500_2499, na.rm=T)", 2),
+        perinatal_todos_peso_mais_2500 = rep("sum(perinatal_todos_peso_mais_2500, na.rm=T)", 2),
+        perinatal_todos_antes = rep("sum(perinatal_todos_antes, na.rm=T)", 2),
+        perinatal_todos_durante = rep("sum(perinatal_todos_durante, na.rm=T)", 2),
+        perinatal_todos_0dias = rep("sum(perinatal_todos_0dias, na.rm=T)", 2),
+        perinatal_todos_1_6dias = rep("sum(perinatal_todos_1_6dias, na.rm=T)", 2),
+        perinatal_todos_0_6dias = rep("sum(perinatal_todos_0_6dias, na.rm=T)", 2),
+        perinatal_todos_antes_menos_1000 = rep("sum(perinatal_todos_antes_menos_1000, na.rm=T)", 2),
+        perinatal_todos_antes_1000_1499 = rep("sum(perinatal_todos_antes_1000_1499, na.rm=T)", 2),
+        perinatal_todos_antes_1500_2499 = rep("sum(perinatal_todos_antes_1500_2499, na.rm=T)", 2),
+        perinatal_todos_antes_mais_2500 = rep("sum(perinatal_todos_antes_mais_2500, na.rm=T)", 2),
+        perinatal_todos_durante_menos_1000 = rep("sum(perinatal_todos_durante_menos_1000, na.rm=T)", 2),
+        perinatal_todos_durante_1000_1499 = rep("sum(perinatal_todos_durante_1000_1499, na.rm=T)", 2),
+        perinatal_todos_durante_1500_2499 = rep("sum(perinatal_todos_durante_1500_2499, na.rm=T)", 2),
+        perinatal_todos_durante_mais_2500 = rep("sum(perinatal_todos_durante_mais_2500, na.rm=T)", 2),
+        perinatal_todos_0dias_menos_1000 = rep("sum(perinatal_todos_0dias_menos_1000, na.rm=T)", 2),
+        perinatal_todos_0dias_1000_1499 = rep("sum(perinatal_todos_0dias_1000_1499, na.rm=T)", 2),
+        perinatal_todos_0dias_1500_2499 = rep("sum(perinatal_todos_0dias_1500_2499, na.rm=T)", 2),
+        perinatal_todos_0dias_mais_2500 = rep("sum(perinatal_todos_0dias_mais_2500, na.rm=T)", 2),
+        perinatal_todos_1_6dias_menos_1000 = rep("sum(perinatal_todos_1_6dias_menos_1000, na.rm=T)", 2),
+        perinatal_todos_1_6dias_1000_1499 = rep("sum(perinatal_todos_1_6dias_1000_1499, na.rm=T)", 2),
+        perinatal_todos_1_6dias_1500_2499 = rep("sum(perinatal_todos_1_6dias_1500_2499, na.rm=T)", 2),
+        perinatal_todos_1_6dias_mais_2500 = rep("sum(perinatal_todos_1_6dias_mais_2500, na.rm=T)", 2),
+        perinatal_todos_0_6dias_menos_1000 = rep("sum(perinatal_todos_0_6dias_menos_1000, na.rm=T)", 2),
+        perinatal_todos_0_6dias_1000_1499 = rep("sum(perinatal_todos_0_6dias_1000_1499, na.rm=T)", 2),
+        perinatal_todos_0_6dias_1500_2499 = rep("sum(perinatal_todos_0_6dias_1500_2499, na.rm=T)", 2),
+        perinatal_todos_0_6dias_mais_2500 = rep("sum(perinatal_todos_0_6dias_mais_2500, na.rm=T)", 2),
 
         # obitos_perinatal_oms = rep("sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias)", 2),
         # perinatal_oms_menos1000 = rep("sum(peso_menos_1000_mais_28sem, na.rm = T) + sum(obitos_6dias_menos1000)", 2),
@@ -2047,46 +2047,46 @@ mod_bloco_7_server <- function(id, filtros){
         # perinatal_oms_1500_2499 = rep("sum(peso_1500_2499_mais_28sem, na.rm=T) + sum(obitos_6dias_1500_2499)", 2),
         # perinatal_oms_mais2500 = rep("sum(peso_mais_2500_mais_28sem, na.rm=T) + sum(obitos_6dias_mais2500)", 2),
 
-        taxa_perinatal_total = c("round((sum(obitos_fetais_mais_22sem) + sum(obitos_6dias))/(sum(obitos_fetais_mais_22sem) + sum(nascidos) )*1000, 1)", "8.7"),
-        taxa_perinatal_total_menos1000 = rep("round((sum(fetal_peso_menos_1000) + sum(obitos_6dias_menos1000))/(sum(fetal_peso_menos_1000)+ sum(nascidos_menos1000))*1000, 1)", 2),
-        taxa_perinatal_total_1000_1499 = rep("round((sum(fetal_peso_1000_1499) + sum(obitos_6dias_1000_1499))/(sum(fetal_peso_1000_1499)+sum(nascidos_1000_1499))*1000, 1)", 2),
-        taxa_perinatal_total_1500_2499 = rep("round((sum(fetal_peso_1500_2499)+sum(obitos_6dias_1500_2499))/(sum(fetal_peso_1500_2499)+sum(nascidos_1500_2499))*1000, 1)", 2),
-        taxa_perinatal_total_mais2500 = rep("round((sum(fetal_peso_mais_2500)+sum(obitos_6dias_mais2500))/(sum(fetal_peso_mais_2500)+sum(nascidos_mais2500))*1000, 1)", 2),
+        taxa_perinatal_total = c("round((sum(obitos_fetais_mais_22sem, na.rm=T) + sum(obitos_6dias, na.rm=T))/(sum(obitos_fetais_mais_22sem, na.rm=T) + sum(nascidos, na.rm=T) )*1000, 1)", "8.7"),
+        taxa_perinatal_total_menos1000 = rep("round((sum(fetal_peso_menos_1000, na.rm=T) + sum(obitos_6dias_menos1000, na.rm=T))/(sum(fetal_peso_menos_1000, na.rm=T)+ sum(nascidos_menos1000, na.rm=T))*1000, 1)", 2),
+        taxa_perinatal_total_1000_1499 = rep("round((sum(fetal_peso_1000_1499, na.rm=T) + sum(obitos_6dias_1000_1499, na.rm=T))/(sum(fetal_peso_1000_1499, na.rm=T)+sum(nascidos_1000_1499, na.rm=T))*1000, 1)", 2),
+        taxa_perinatal_total_1500_2499 = rep("round((sum(fetal_peso_1500_2499, na.rm=T)+sum(obitos_6dias_1500_2499, na.rm=T))/(sum(fetal_peso_1500_2499, na.rm=T)+sum(nascidos_1500_2499, na.rm=T))*1000, 1)", 2),
+        taxa_perinatal_total_mais2500 = rep("round((sum(fetal_peso_mais_2500, na.rm=T)+sum(obitos_6dias_mais2500, na.rm=T))/(sum(fetal_peso_mais_2500, na.rm=T)+sum(nascidos_mais2500, na.rm=T))*1000, 1)", 2),
         # taxa_perinatal_oms = c("round((sum(obitos_fetais_mais_28sem, na.rm=T) + sum(obitos_6dias))/(sum(obitos_fetais_mais_28sem, na.rm=T) + sum(nascidos) )*1000, 1)", "8.7"),
         # taxa_perinatal_oms_menos1000 = rep("round((sum(peso_menos_1000_mais_28sem, na.rm=T) + sum(obitos_6dias_menos1000))/(sum(peso_menos_1000_mais_28sem, na.rm=T)+ sum(nascidos_menos1000))*1000, 1)", 2),
         # taxa_perinatal_oms_1000_1499 = rep("round((sum(peso_1000_1499_mais_28sem, na.rm=T) + sum(obitos_6dias_1000_1499))/(sum(peso_1000_1499_mais_28sem, na.rm=T)+sum(nascidos_1000_1499))*1000, 1)", 2),
         # taxa_perinatal_oms_1500_2499 = rep("round((sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(obitos_6dias_1500_2499))/(sum(peso_1500_2499_mais_28sem, na.rm=T)+sum(nascidos_1500_2499))*1000, 1)", 2),
         # taxa_perinatal_oms_mais2500 = rep("round((sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(obitos_6dias_mais2500))/(sum(peso_mais_2500_mais_28sem, na.rm=T)+sum(nascidos_mais2500))*1000, 1)", 2),
 
-        obitos_0dias = rep("sum(obitos_0dias)", 2),
-        obitos_0dias_menos1000 = rep("sum(obitos_0dias_menos1000)", 2),
-        obitos_0dias_1000_1499 = rep("sum(obitos_0dias_1000_1499)", 2),
-        obitos_0dias_1500_2499 = rep("sum(obitos_0dias_1500_2499)", 2),
-        obitos_0dias_mais2500 = rep("sum(obitos_0dias_mais2500)", 2),
-        obitos_1_6dias = rep("sum(obitos_1_6dias)", 2),
-        obitos_1_6dias_menos1000 = rep("sum(obitos_1_6dias_menos1000)", 2),
-        obitos_1_6dias_1000_1499 = rep("sum(obitos_1_6dias_1000_1499)", 2),
-        obitos_1_6dias_1500_2499 = rep("sum(obitos_1_6dias_1500_2499)", 2),
-        obitos_1_6dias_mais2500 = rep("sum(obitos_1_6dias_mais2500)", 2),
-        obitos_6dias = rep("sum(obitos_6dias)", 2),
-        obitos_6dias_menos1000 = rep("sum(obitos_6dias_menos1000)", 2),
-        obitos_6dias_1000_1499 = rep("sum(obitos_6dias_1000_1499)", 2),
-        obitos_6dias_1500_2499 = rep("sum(obitos_6dias_1500_2499)", 2),
-        obitos_6dias_mais2500 = rep("sum(obitos_6dias_mais2500)", 2),
-        obitos_27dias = rep("sum(obitos_27dias)", 2),
-        obitos_27dias_menos1000 = rep("sum(obitos_27dias_menos1000)", 2),
-        obitos_27dias_1000_1499 = rep("sum(obitos_27dias_1000_1499)", 2),
-        obitos_27dias_1500_2499 = rep("sum(obitos_27dias_1500_2499)", 2),
-        obitos_27dias_mais2500 = rep("sum(obitos_27dias_mais2500)", 2),
-        obitos_7_27dias = rep("sum(obitos_7_27dias)", 2),
-        obitos_7_27dias_menos1000 = rep("sum(obitos_7_27dias_menos1000)", 2),
-        obitos_7_27dias_1000_1499 = rep("sum(obitos_7_27dias_1000_1499)", 2),
-        obitos_7_27dias_1500_2499 = rep("sum(obitos_7_27dias_1500_2499)", 2),
-        obitos_7_27dias_mais2500 = rep("sum(obitos_7_27dias_mais2500)", 2),
-        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras) / sum(nascidos) * 100, 1)", 2),
+        obitos_0dias = rep("sum(obitos_0dias, na.rm=T)", 2),
+        obitos_0dias_menos1000 = rep("sum(obitos_0dias_menos1000, na.rm=T)", 2),
+        obitos_0dias_1000_1499 = rep("sum(obitos_0dias_1000_1499, na.rm=T)", 2),
+        obitos_0dias_1500_2499 = rep("sum(obitos_0dias_1500_2499, na.rm=T)", 2),
+        obitos_0dias_mais2500 = rep("sum(obitos_0dias_mais2500, na.rm=T)", 2),
+        obitos_1_6dias = rep("sum(obitos_1_6dias, na.rm=T)", 2),
+        obitos_1_6dias_menos1000 = rep("sum(obitos_1_6dias_menos1000, na.rm=T)", 2),
+        obitos_1_6dias_1000_1499 = rep("sum(obitos_1_6dias_1000_1499, na.rm=T)", 2),
+        obitos_1_6dias_1500_2499 = rep("sum(obitos_1_6dias_1500_2499, na.rm=T)", 2),
+        obitos_1_6dias_mais2500 = rep("sum(obitos_1_6dias_mais2500, na.rm=T)", 2),
+        obitos_6dias = rep("sum(obitos_6dias, na.rm=T)", 2),
+        obitos_6dias_menos1000 = rep("sum(obitos_6dias_menos1000, na.rm=T)", 2),
+        obitos_6dias_1000_1499 = rep("sum(obitos_6dias_1000_1499, na.rm=T)", 2),
+        obitos_6dias_1500_2499 = rep("sum(obitos_6dias_1500_2499, na.rm=T)", 2),
+        obitos_6dias_mais2500 = rep("sum(obitos_6dias_mais2500, na.rm=T)", 2),
+        obitos_27dias = rep("sum(obitos_27dias, na.rm=T)", 2),
+        obitos_27dias_menos1000 = rep("sum(obitos_27dias_menos1000, na.rm=T)", 2),
+        obitos_27dias_1000_1499 = rep("sum(obitos_27dias_1000_1499, na.rm=T)", 2),
+        obitos_27dias_1500_2499 = rep("sum(obitos_27dias_1500_2499, na.rm=T)", 2),
+        obitos_27dias_mais2500 = rep("sum(obitos_27dias_mais2500, na.rm=T)", 2),
+        obitos_7_27dias = rep("sum(obitos_7_27dias, na.rm=T)", 2),
+        obitos_7_27dias_menos1000 = rep("sum(obitos_7_27dias_menos1000, na.rm=T)", 2),
+        obitos_7_27dias_1000_1499 = rep("sum(obitos_7_27dias_1000_1499, na.rm=T)", 2),
+        obitos_7_27dias_1500_2499 = rep("sum(obitos_7_27dias_1500_2499, na.rm=T)", 2),
+        obitos_7_27dias_mais2500 = rep("sum(obitos_7_27dias_mais2500, na.rm=T)", 2),
+        porc_condicoes_ameacadoras = rep("round(sum(nascidos_condicoes_ameacadoras, na.rm=T) / sum(nascidos, na.rm=T) * 100, 1)", 2),
         #porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral[ano <= 2022]) / sum(nascidos_estabelecimentos_publicos_sih[ano <= 2022]) * 100, 1)", 2),
-        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2),
-        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)", 2)
+        porc_internacoes_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral, na.rm=T) / sum(nascidos_estabelecimentos_publicos_sih, na.rm=T) * 100, 1)", 2),
+        porc_internacoes_uti_menores_28_dias_sih_geral = rep("round(sum(internacoes_geral_geral_internado_uti, na.rm=T) / sum(nascidos_estabelecimentos_publicos_sih, na.rm=T) * 100, 1)", 2)
       )
 
        if (is.null(input$idade_dias_sih[1])) {
@@ -2106,7 +2106,7 @@ mod_bloco_7_server <- function(id, filtros){
                ifelse(
                length(input$idade_dias_sih) == 2,
                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
-               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
+               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}T) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
                )
              )"
@@ -2148,120 +2148,120 @@ mod_bloco_7_server <- function(id, filtros){
     bloco7_calcs_dist <- data.frame(
       tipo = c("local", "referencia"),
       antes_dist_moment_obito_fetal = rep("round(
-        sum(c(fetal_antes_peso_menos_1000, fetal_antes_peso_1000_1499, fetal_antes_peso_1500_2499, fetal_antes_peso_mais_2500, fetal_antes)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal])/
-          sum(c(fetal_peso_menos_1000, fetal_peso_1000_1499, fetal_peso_1500_2499, fetal_peso_mais_2500, obitos_fetais)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal])
+        sum(c(fetal_antes_peso_menos_1000, fetal_antes_peso_1000_1499, fetal_antes_peso_1500_2499, fetal_antes_peso_mais_2500, fetal_antes)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal], na.rm=T)/
+          sum(c(fetal_peso_menos_1000, fetal_peso_1000_1499, fetal_peso_1500_2499, fetal_peso_mais_2500, obitos_fetais)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal], na.rm=T)
         *100, 1)", 2),
 
       durante_dist_moment_obito_fetal = rep("round(
-        sum(c(fetal_durante_peso_menos_1000, fetal_durante_peso_1000_1499, fetal_durante_peso_1500_2499, fetal_durante_peso_mais_2500, fetal_durante)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal])/
-          sum(c(fetal_peso_menos_1000, fetal_peso_1000_1499, fetal_peso_1500_2499, fetal_peso_mais_2500, obitos_fetais)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal])
+        sum(c(fetal_durante_peso_menos_1000, fetal_durante_peso_1000_1499, fetal_durante_peso_1500_2499, fetal_durante_peso_mais_2500, fetal_durante)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal], na.rm=T)/
+          sum(c(fetal_peso_menos_1000, fetal_peso_1000_1499, fetal_peso_1500_2499, fetal_peso_mais_2500, obitos_fetais)[seleciona(aba = 'fetal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_fetal) %in% input$faixa_peso_dist_moment_obit_fetal], na.rm=T)
         *100, 1)", 2),
 
       faltante_dist_moment_obito_fetal = rep("round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 1)", 2),
 
       antes_dist_moment_obito_perinat = rep("round(
-        sum(c(perinatal_todos_antes_menos_1000, perinatal_todos_antes_1000_1499, perinatal_todos_antes_1500_2499, perinatal_todos_antes_mais_2500, perinatal_todos_antes)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(perinatal_todos_antes_menos_1000, perinatal_todos_antes_1000_1499, perinatal_todos_antes_1500_2499, perinatal_todos_antes_mais_2500, perinatal_todos_antes)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
+          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)
         *100, 1)", 2),
 
       durante_dist_moment_obito_perinat = rep("round(
-        sum(c(perinatal_todos_durante_menos_1000, perinatal_todos_durante_1000_1499, perinatal_todos_durante_1500_2499, perinatal_todos_durante_mais_2500, perinatal_todos_durante)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(perinatal_todos_durante_menos_1000, perinatal_todos_durante_1000_1499, perinatal_todos_durante_1500_2499, perinatal_todos_durante_mais_2500, perinatal_todos_durante)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
+          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)
         *100, 1)", 2),
 
       dia_0_dist_moment_obito_perinat = rep("round(
-        sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
+          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)
         *100, 1)", 2),
 
       dia_1_6_dist_moment_obito_perinat = rep("round(
-        sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])/
-          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat])
+        sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
+          sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)
         *100, 1)", 2),
 
       faltante_dist_moment_obito_perinat = rep("round(100 -antes_dist_moment_obito_perinat -durante_dist_moment_obito_perinat -dia_0_dist_moment_obito_perinat -dia_1_6_dist_moment_obito_perinat, 1)", 2),
 
       dia_0_dist_moment_obito_neonat = rep("round(
-        sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])/
-          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])
+        sum(c(obitos_0dias_menos1000, obitos_0dias_1000_1499, obitos_0dias_1500_2499, obitos_0dias_mais2500, obitos_0dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)/
+          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)
         *100, 1)", 2),
 
       dia_1_6dist_moment_obito_neonat = rep("round(
-        sum(c(obitos_1_6dias_menos1000, obitos_1_6dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])/
-          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])
+        sum(c(obitos_1_6dias_menos1000, obitos_1_6dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)/
+          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)
         *100, 1)", 2),
 
       dia_7_27dist_moment_obito_neonat = rep("round(
-        sum(c(obitos_7_27dias_menos1000, obitos_7_27dias_1000_1499, obitos_7_27dias_1500_2499, obitos_7_27dias_mais2500, obitos_7_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])/
-          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat])
+        sum(c(obitos_7_27dias_menos1000, obitos_7_27dias_1000_1499, obitos_7_27dias_1500_2499, obitos_7_27dias_mais2500, obitos_7_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)/
+          sum(c(obitos_27dias_menos1000, obitos_27dias_1000_1499, obitos_27dias_1500_2499, obitos_27dias_mais2500, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_neonat) %in% input$faixa_peso_dist_moment_obit_neonat], na.rm=T)
         *100, 1)", 2),
 
       faltante_moment_obito_neonat = rep("round(100 -dia_0_dist_moment_obito_neonat -dia_1_6dist_moment_obito_neonat -dia_7_27dist_moment_obito_neonat, 1)", 2),
 
       menos_1000_dist_peso_fetal = rep("round(
-        sum(c(fetal_antes_peso_menos_1000, fetal_durante_peso_menos_1000, fetal_peso_menos_1000)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])/
-          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])
+        sum(c(fetal_antes_peso_menos_1000, fetal_durante_peso_menos_1000, fetal_peso_menos_1000)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)/
+          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)
         *100, 1)", 2),
 
       de_1000_1499_dist_peso_fetal = rep("round(
-        sum(c(fetal_antes_peso_1000_1499, fetal_durante_peso_1000_1499, fetal_peso_1000_1499)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])/
-          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])
+        sum(c(fetal_antes_peso_1000_1499, fetal_durante_peso_1000_1499, fetal_peso_1000_1499)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)/
+          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)
         *100, 1)", 2),
 
       de_1500_2499_dist_peso_fetal = rep("round(
-        sum(c(fetal_antes_peso_1500_2499, fetal_durante_peso_1500_2499, fetal_peso_1500_2499)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])/
-          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])
+        sum(c(fetal_antes_peso_1500_2499, fetal_durante_peso_1500_2499, fetal_peso_1500_2499)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)/
+          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)
         *100, 1)", 2),
 
       mais_2500_dist_peso_fetal = rep("round(
-        sum(c(fetal_antes_peso_mais_2500, fetal_durante_peso_mais_2500, fetal_peso_mais_2500)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])/
-          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal])
+        sum(c(fetal_antes_peso_mais_2500, fetal_durante_peso_mais_2500, fetal_peso_mais_2500)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)/
+          sum(c(fetal_antes, fetal_durante, obitos_fetais)[seleciona(aba = 'fetal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_fetal) %in% input$momento_obito_dist_peso_fetal], na.rm=T)
         *100, 1)", 2),
 
       faltante_dist_peso_fetal = rep("round(100 -menos_1000_dist_peso_fetal-de_1000_1499_dist_peso_fetal-de_1500_2499_dist_peso_fetal -mais_2500_dist_peso_fetal, 1)", 2),
 
       menos_1000_dist_peso_perinat = rep("round(
-        sum(c(perinatal_todos_antes_menos_1000, perinatal_todos_durante_menos_1000, obitos_0dias_menos1000, obitos_1_6dias_menos1000, perinatal_todos_peso_menos_1000)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_todos_antes_menos_1000, perinatal_todos_durante_menos_1000, obitos_0dias_menos1000, obitos_1_6dias_menos1000, perinatal_todos_peso_menos_1000)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)/
+          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)
         *100, 1)", 2),
 
       de_1000_1499_dist_peso_perinat = rep("round(
-        sum(c(perinatal_todos_antes_1000_1499, perinatal_todos_durante_1000_1499, obitos_0dias_1000_1499, obitos_1_6dias_1000_1499, perinatal_todos_peso_1000_1499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_todos_antes_1000_1499, perinatal_todos_durante_1000_1499, obitos_0dias_1000_1499, obitos_1_6dias_1000_1499, perinatal_todos_peso_1000_1499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)/
+          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)
         *100, 1)", 2),
 
 
       de_1500_2499_dist_peso_perinat = rep("round(
-        sum(c(perinatal_todos_antes_1500_2499, perinatal_todos_durante_1500_2499, obitos_0dias_1500_2499, obitos_1_6dias_1500_2499, perinatal_todos_peso_1500_2499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_todos_antes_1500_2499, perinatal_todos_durante_1500_2499, obitos_0dias_1500_2499, obitos_1_6dias_1500_2499, perinatal_todos_peso_1500_2499)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)/
+          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)
         *100, 1)", 2),
 
       mais_2500_dist_peso_perinat = rep("round(
-        sum(c(perinatal_todos_antes_mais_2500 , perinatal_todos_durante_mais_2500, obitos_0dias_mais2500, obitos_1_6dias_mais2500, perinatal_todos_peso_mais_2500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])/
-          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat])
+        sum(c(perinatal_todos_antes_mais_2500 , perinatal_todos_durante_mais_2500, obitos_0dias_mais2500, obitos_1_6dias_mais2500, perinatal_todos_peso_mais_2500)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)/
+          sum(c(perinatal_todos_antes, perinatal_todos_durante, obitos_0dias, obitos_1_6dias, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_perinat) %in% input$momento_obito_dist_peso_perinat], na.rm=T)
         *100, 1)", 2),
 
       faltante_dist_peso_perinat = rep("round(100 -menos_1000_dist_peso_perinat -de_1000_1499_dist_peso_perinat -de_1500_2499_dist_peso_perinat -mais_2500_dist_peso_perinat, 1)", 2),
 
 
       menos_1000_dist_peso_neonat = rep("round(
-        sum(c(obitos_0dias_menos1000, obitos_1_6dias_menos1000, obitos_7_27dias_menos1000, obitos_27dias_menos1000)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])/
-          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
+        sum(c(obitos_0dias_menos1000, obitos_1_6dias_menos1000, obitos_7_27dias_menos1000, obitos_27dias_menos1000)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)/
+          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)
         *100, 1)", 2),
 
       de_1000_1499_dist_peso_neonat = rep("round(
-        sum(c(obitos_0dias_1000_1499, obitos_1_6dias_1000_1499, obitos_7_27dias_1000_1499, obitos_27dias_1000_1499)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])/
-          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
+        sum(c(obitos_0dias_1000_1499, obitos_1_6dias_1000_1499, obitos_7_27dias_1000_1499, obitos_27dias_1000_1499)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)/
+          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)
         *100, 1)", 2),
 
       de_1500_2499_dist_peso_neonat = rep("round(
-        sum(c(obitos_0dias_1500_2499, obitos_1_6dias_1500_2499, obitos_7_27dias_1500_2499, obitos_27dias_1500_2499)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])/
-          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
+        sum(c(obitos_0dias_1500_2499, obitos_1_6dias_1500_2499, obitos_7_27dias_1500_2499, obitos_27dias_1500_2499)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)/
+          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)
         *100, 1)", 2),
 
       mais_2500_dist_peso_neonat = rep("round(
-        sum(c(obitos_0dias_mais2500, obitos_1_6dias_mais2500, obitos_7_27dias_mais2500, obitos_27dias_mais2500)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])/
-          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat])
+        sum(c(obitos_0dias_mais2500, obitos_1_6dias_mais2500, obitos_7_27dias_mais2500, obitos_27dias_mais2500)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)/
+          sum(c(obitos_0dias, obitos_1_6dias, obitos_7_27dias, obitos_27dias)[seleciona(aba = 'neonatal', indicador ='peso por momento do obito', input$momento_obito_dist_peso_neonat) %in% input$momento_obito_dist_peso_neonat], na.rm=T)
         *100, 1)", 2),
 
       faltante_dist_peso_neonat = rep("round(100 -menos_1000_dist_peso_neonat -de_1000_1499_dist_peso_neonat -de_1500_2499_dist_peso_neonat -mais_2500_dist_peso_neonat, 1)", 2)
@@ -3959,7 +3959,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_morbidade_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)))), na.rm=T) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
@@ -4017,7 +4017,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
@@ -4032,7 +4032,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_filtrada_comp_morbidade_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
@@ -4091,7 +4091,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
@@ -4110,7 +4110,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("morbidade_neonatal_grupos")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))))) |>
+        dplyr::mutate(internacoes_neonatais_grupos_total = sum(dplyr::c_across(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos))), ~ (. / internacoes_neonatais_grupos_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::matches(momento_internacoes(input = input$momento_internacao_neonatal_grupos)),
@@ -4141,7 +4141,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10) |>
         dplyr::summarise(
-          br_porc_obitos = round(sum(br_porc_obitos), 1)
+          br_porc_obitos = round(sum(br_porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Prematuridade","Infecções","Asfixia/Hipóxia","Anomalia congênita","Afecções respiratórias do recém-nascido",
@@ -4270,7 +4270,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_fetal2_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_fetal"),
@@ -4314,7 +4314,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
@@ -4343,7 +4343,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_neonatal_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")))) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_neonatal"),
@@ -4391,7 +4391,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
@@ -4421,7 +4421,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_perinatal_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_perinatal"),
@@ -4469,7 +4469,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
@@ -4576,7 +4576,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_fetal2_comp_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_fetal"),
@@ -4621,7 +4621,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
@@ -4650,7 +4650,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_neonatal_comp_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")))) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_neonatal"),
@@ -4699,7 +4699,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
@@ -4730,7 +4730,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
         # dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal") | "obitos_perinatais_totais"), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal")))) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_perinatal"))), na.rm=T) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_perinatal"),
@@ -4779,7 +4779,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
         dplyr::summarise(
-          porc_obitos = round(sum(porc_obitos), 1)
+          porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
@@ -4861,7 +4861,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_fetal2_referencia_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")))) |>
+        dplyr::mutate(obitos_fetais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_fetal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_fetal")), ~ (. / obitos_fetais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_fetal"),
@@ -4885,7 +4885,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10) |>
         dplyr::summarise(
-          br_porc_obitos = round(sum(br_porc_obitos), 1)
+          br_porc_obitos = round(sum(br_porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto", "Imunoprevenção", "Grupos não selecionados",
@@ -4922,7 +4922,7 @@ mod_bloco_7_server <- function(id, filtros){
       data_plot_evitaveis_neonatal_referencia_aux |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")))) |>
+        dplyr::mutate(obitos_neonatais_evitaveis_total = sum(dplyr::across(dplyr::contains("evitaveis_neonatal")), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::contains("evitaveis_neonatal")), ~ (. / obitos_neonatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::contains("evitaveis_neonatal"),
@@ -4948,7 +4948,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10) |>
         dplyr::summarise(
-          br_porc_obitos = round(sum(br_porc_obitos), 1)
+          br_porc_obitos = round(sum(br_porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",
@@ -4990,7 +4990,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("evitaveis_perinatal")), sum) |>
         dplyr::rowwise() |>
-        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))))) |>
+        dplyr::mutate(obitos_perinatais_evitaveis_total = sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), na.rm=T)) |>
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         tidyr::pivot_longer(
           cols = dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = input$momento_obito_perinatal_evitaveis)),
@@ -5016,7 +5016,7 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::ungroup() |>
         dplyr::group_by(ano, grupo_cid10) |>
         dplyr::summarise(
-          br_porc_obitos = round(sum(br_porc_obitos), 1)
+          br_porc_obitos = round(sum(br_porc_obitos, na.rm=T), 1)
         ) |>
         dplyr::ungroup()|>
         dplyr::mutate(grupo_cid10 = factor(grupo_cid10, levels = c("Imunoprevenção", "Adequada atenção à mulher na gestação", "Adequada atenção à mulher no parto",

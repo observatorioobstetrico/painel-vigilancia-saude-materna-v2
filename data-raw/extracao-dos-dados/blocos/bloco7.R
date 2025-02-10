@@ -18,8 +18,8 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 
 ## Criando data.frames que irão receber os dados dos indicadores de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_fetal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
-df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
-df_bloco7_distribuicao_cids_perinatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
+df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2023)), ano = 2023:2023)
+df_bloco7_distribuicao_cids_perinatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
 # Para os óbitos fetais ---------------------------------------------------
 ## Baixando os dados consolidados do SIM-DOFET e filtrando apenas pelos óbitos fetais que consideramos
@@ -428,7 +428,12 @@ df_bloco7_fetais_originais <- left_join(df_aux_municipios, df_bloco7_fetais_aux,
   mutate(across(starts_with(c("obitos", "fetal")), ~ replace_na(.x, 0)))
 
 ### Exportando os dados
-write.csv(df_bloco7_fetais_originais, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv', row.names = FALSE)
+df_bloco7_fetais_originais_antigo <- read_csv('data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv')|>
+  filter(ano != 2023)
+
+df_bloco7_fetais_originais_novo <- rbind(df_bloco7_fetais_originais_antigo, df_bloco7_fetais_originais)
+
+write.csv(df_bloco7_fetais_originais_novo, 'data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv', row.names = FALSE)
 
 
 ## Para o indicador de causas evitáveis ---------------------------------------
@@ -878,13 +883,21 @@ gc()
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_fetal <- full_join(df_bloco7_distribuicao_cids_fetal, df_bloco7_fetais_grupos)
 
+df_bloco7_distribuicao_cids_fetal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv")|>
+  filter(ano != 2023)
+
+df_bloco7_distribuicao_cids_fetal$codmunres <- as.numeric(df_bloco7_distribuicao_cids_fetal$codmunres)
+df_bloco7_distribuicao_cids_fetal_novo <- rbind(df_bloco7_distribuicao_cids_fetal_antigo, df_bloco7_distribuicao_cids_fetal)
+
+df_bloco7_distribuicao_cids_fetal_novo[is.na(df_bloco7_distribuicao_cids_fetal_novo)] <- 0
+
 ### Exportando os dados
-write.csv(df_bloco7_distribuicao_cids_fetal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv", row.names = FALSE)
+write.csv(df_bloco7_distribuicao_cids_fetal_novo, "data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv", row.names = FALSE)
 
 
 ######### INDICADORES DA ABA A NEONATAL
 
-df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
+df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2023)), ano = 2023:2023)
 
 # Para os óbitos neonatais ---------------------------------------------------
 ## Baixando os dados consolidados do SIM-DOFET e filtrando apenas pelos óbitos fetais que consideramos
@@ -1094,7 +1107,7 @@ df_neonat_total3 <- df_sim_total2  |>
 
 
 df_nascidos_total1_aux <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2023,
   year_end = 2023,
   vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5"),
   information_system = "SINASC"
@@ -1118,7 +1131,7 @@ df_nascidos_total2 <- process_sinasc(df_nascidos_total, municipality_data = T)
 
 df_nascidos_total3 <- df_nascidos_total2 |>
   mutate(
-    ano1 = substr(DTNASC, 5, 8),
+    ano1 = substr(DTNASC, 1, 4),
     codmunres = as.numeric(CODMUNRES),
     PESO = as.numeric(PESO)
   ) |>
@@ -1206,7 +1219,7 @@ df_neonat <- left_join(df_aux_municipios, df_juncao, by=c("codmunres", "ano")) |
   )
 
 df_neonat_antigo <- read_csv('data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv') |>
-  filter(ano == 2024)
+  filter(ano != 2023)
 
 df_neonat_novo <- rbind(df_neonat_antigo, df_neonat)
 
@@ -1738,13 +1751,12 @@ gc()
 df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_neonatal, df_bloco7_neonatais_grupos)
 
 ### Exportando os dados
-df_bloco7_distribuicao_cids_neonatal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
-df_bloco7_distribuicao_cids_neonatal_antigo <- filter(df_bloco7_distribuicao_cids_neonatal_antigo, ano == 2024)|>
-  select(names(df_bloco7_distribuicao_cids_neonatal))
+df_bloco7_distribuicao_cids_neonatal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")|>
+   filter(ano != 2023)
 
 df_bloco7_distribuicao_cids_neonatal$codmunres <- as.numeric(df_bloco7_distribuicao_cids_neonatal$codmunres)
 
-df_bloco7_distribuicao_cids_neonatal_novo <- rbind(df_bloco7_distribuicao_cids_neonatal_antigo, df_bloco7_distribuicao_cids_neonatal)
+df_bloco7_distribuicao_cids_neonatal_novo <- full_join(df_bloco7_distribuicao_cids_neonatal_antigo, df_bloco7_distribuicao_cids_neonatal)
 
 df_bloco7_distribuicao_cids_neonatal_novo <- df_bloco7_distribuicao_cids_neonatal_novo[is.na(df_bloco7_distribuicao_cids_neonatal_novo)]
 
@@ -1755,7 +1767,8 @@ write.csv(df_bloco7_distribuicao_cids_neonatal, "data-raw/csv/indicadores_bloco7
 
 # Óbitos perinatais totais, ou seja, óbitos neonatais prcoces e fetais a partir de 22 semanas somados
 
-base_perinatal <- full_join(df_bloco7_fetais_originais, df_neonat_novo, by = c("ano","codmunres"))
+df_bloco7_fetais_originais$codmunres <- as.numeric(df_bloco7_fetais_originais$codmunres)
+base_perinatal <- full_join(df_bloco7_fetais_originais, df_neonat_novo)
 
 df_perinatal_total <- base_perinatal |>
   group_by(ano, codmunres)|>
