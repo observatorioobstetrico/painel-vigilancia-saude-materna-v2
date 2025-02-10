@@ -902,7 +902,7 @@ df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_munic
 # Para os óbitos neonatais ---------------------------------------------------
 ## Baixando os dados consolidados do SIM-DOFET e filtrando apenas pelos óbitos fetais que consideramos
 df_neonat_total <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2023,
   year_end = 2023,
   #vars = c("CODMUNRES", "DTOBITO", "IDADE", "PESO"),
   information_system = "SIM-DOINF"
@@ -1493,7 +1493,7 @@ rm(df_evitaveis_neonatais_todos, df_evitaveis_neonatais_0_dias, df_evitaveis_neo
 gc()
 
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
-df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_fetal, df_bloco7_neonatais_evitaveis)
+df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_neonatal, df_bloco7_neonatais_evitaveis)
 
 
 ## Para o indicador de grupos de causas ------------------------------------
@@ -1760,7 +1760,7 @@ df_bloco7_distribuicao_cids_neonatal_novo <- full_join(df_bloco7_distribuicao_ci
 
 df_bloco7_distribuicao_cids_neonatal_novo <- df_bloco7_distribuicao_cids_neonatal_novo[is.na(df_bloco7_distribuicao_cids_neonatal_novo)]
 
-write.csv(df_bloco7_distribuicao_cids_neonatal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv", row.names = FALSE)
+write.csv(df_bloco7_distribuicao_cids_neonatal_novo, "data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv", row.names = FALSE)
 
 
 ################# INDICADORES DA ABA PERINATAL
@@ -1768,7 +1768,7 @@ write.csv(df_bloco7_distribuicao_cids_neonatal, "data-raw/csv/indicadores_bloco7
 # Óbitos perinatais totais, ou seja, óbitos neonatais prcoces e fetais a partir de 22 semanas somados
 
 df_bloco7_fetais_originais$codmunres <- as.numeric(df_bloco7_fetais_originais$codmunres)
-base_perinatal <- full_join(df_bloco7_fetais_originais, df_neonat_novo)
+base_perinatal <- full_join(df_bloco7_fetais_originais, df_neonat)
 
 df_perinatal_total <- base_perinatal |>
   group_by(ano, codmunres)|>

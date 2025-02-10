@@ -3125,7 +3125,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_obitos_fetais_oms <- reactive({
-      paste0(titulo_obitos_fetais_oms_aux(), " (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)")
+      paste0(titulo_obitos_fetais_oms_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
     })
 
     output$caixa_b7_fetal_i5 <- renderUI({
@@ -3404,7 +3404,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_taxa_mortalidade_fetal_oms <- reactive({
-      paste0(titulo_taxa_mortalidade_fetal_oms_aux(), " (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g)")
+      paste0(titulo_taxa_mortalidade_fetal_oms_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
     })
 
     output$caixa_b7_fetal_i6 <- renderUI({
@@ -3565,7 +3565,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre os óbitos neonatais (total),",
+        titulo = "Dentre o total de óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -3575,7 +3575,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre os óbitos neonatais (total),",
+        titulo = "Dentre o total de óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -3714,7 +3714,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "perinatal momento do obito por peso",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
         tamanho_caixa = "350px",
       )
     })
@@ -3724,7 +3724,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "perinatal peso por momento do obito",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
         tamanho_caixa = "350px",
       )
     })
@@ -3763,7 +3763,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS (total)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -3791,7 +3791,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) no SUS (total)",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) no SUS",
         tem_meta = TRUE,
         valor_de_referencia = data7_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
@@ -3821,7 +3821,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_fetal",
-        titulo = "Porcentagem de óbitos fetais potencialmente evitáveis (total)",
+        titulo = "Porcentagem de óbitos fetais potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
         tipo = "porcentagem",
@@ -3839,7 +3839,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_perinatal",
-        titulo = "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida potencialmente evitáveis (total)",
+        titulo = "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
         tipo = "porcentagem",
@@ -3857,7 +3857,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_neonatal",
-        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis (total)",
+        titulo = "Porcentagem de óbitos neonatais potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
         tipo = "porcentagem",
@@ -3876,7 +3876,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_fetal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais (total),"
+        titulo = "Dentre os óbitos fetais,"
       )
     })
 
@@ -3885,7 +3885,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_perinatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida (total),"
+        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,"
       )
     })
 
@@ -3894,7 +3894,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais (total),"
+        titulo = "Dentre os óbitos neonatais,"
       )
     })
 
@@ -3903,7 +3903,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais (total),"
+        titulo = "Dentre as internações neonatais,"
       )
     })
 
@@ -5182,9 +5182,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
         dplyr::mutate(
-          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
-          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto")))), na.rm=T),
+          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), na.rm=T),
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), na.rm=T)
         )
     })
 
@@ -5212,9 +5212,9 @@ mod_bloco_7_server <- function(id, filtros){
         dplyr::mutate_at(dplyr::vars(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), ~ (. / obitos_perinatais_evitaveis_total * 100)) |>
         dplyr::select(dplyr::contains(c("outros", "mal_definidas"))) |>
         dplyr::mutate(
-          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto"))))),
-          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias"))))),
-          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))))
+          porc_evitavel_fetal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="fetal", grafico = "evitaveis2", input = c("evitaveis_fetal_antes", "evitaveis_fetal_durante", "evitaveis_fetal_sem_info_parto")))), na.rm = T),
+          porc_evitavel_neonatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="neonatal", grafico = "evitaveis", input = c("evitaveis_neonatal_0_dias","evitaveis_neonatal_1_6_dias","evitaveis_neonatal_7_27_dias")))), na.rm = T),
+          porc_evitavel_perinatal = 100 - sum(dplyr::c_across(dplyr::matches(momento_obitos(aba="perinatal", grafico = "evitaveis", input = c("evitaveis_perinatal_antes", "evitaveis_perinatal_durante","evitaveis_perinatal_0_dias", "evitaveis_perinatal_1_6_dias", "evitaveis_perinatal_sem_info")))), na.rm = T)
         )
     })
 
