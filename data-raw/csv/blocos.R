@@ -187,9 +187,9 @@ bloco7_distribuicao_cids_perinatais_aux <- read.csv("data-raw/csv/indicadores_bl
 ## Juntando todos os dados dos indicadores de causas evitáveis e grupos de causas
 bloco7_distribuicao_cids_aux <- dplyr::full_join(
   bloco7_distribuicao_cids_fetais_aux,
-  bloco7_distribuicao_cids_neonatais_aux
+  bloco7_distribuicao_cids_neonatais_aux, by = c("ano", "codmunres")
 ) |>
-  dplyr::full_join(bloco7_distribuicao_cids_perinatais_aux)
+  dplyr::full_join(bloco7_distribuicao_cids_perinatais_aux, by = c("ano", "codmunres"))
 
 
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
@@ -354,11 +354,16 @@ bloco7_fetal <- dplyr::left_join(bloco7_fetal_aux, aux_municipios, by = "codmunr
 bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, aux_municipios, by = "codmunres")
 bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "codmunres")
 bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
-# bloco7 <- bloco7 |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
-#   )
+
+bloco7 <- full_join(bloco7_fetal, bloco7_perinatal)|>
+  full_join(bloco7_neonatal)|>
+  full_join(bloco7_morbidade_neonatal)
+
+ # bloco7 <- bloco7 |>
+ #   dplyr::select(
+ #     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+ #     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
+ #   )
 
 bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres") |>
   dplyr::rename(morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias = morbidade_neonatal_grupos_afeccoes_0_dias_respiratorias)
@@ -563,6 +568,7 @@ usethis::use_data(bloco5, overwrite = TRUE)
 # usethis::use_data(asfixia, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
+usethis::use_data(bloco7, overwrite = TRUE)
 usethis::use_data(bloco7_fetal, overwrite = TRUE)
 usethis::use_data(bloco7_neonatal, overwrite = TRUE)
 usethis::use_data(bloco7_perinatal, overwrite = TRUE)

@@ -593,9 +593,9 @@ app_ui <- function(request) {
                         "'Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos'",
                         "'Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos'",
                         "'Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida'",
-                        "'Número de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida'",
+                        #"'Número de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida'",
                         "'Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos'",
-                        "'Taxa de mortalidade perinatal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por 1000 nascidos vivos'",
+                        #"'Taxa de mortalidade perinatal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por 1000 nascidos vivos'",
                         "'Taxa de mortalidade neonatal por 1000 nascidos vivos '",
                         "'Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  '",
                         "'Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  '",
@@ -606,9 +606,9 @@ app_ui <- function(request) {
                         #"'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'",
                         "'Porcentagem de internações neonatais por grupos de causas'",
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas evitáveis'",
-                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por grupos de causas evitáveis'",
+                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas evitáveis'",
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas'",
-                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por grupos de causas'"
+                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas'"
                       )
 
                       glue::glue(

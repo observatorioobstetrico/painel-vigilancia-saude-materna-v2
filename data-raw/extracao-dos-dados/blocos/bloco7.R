@@ -19,13 +19,13 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 ## Criando data.frames que irão receber os dados dos indicadores de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_fetal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
-df_bloco7_distribuicao_cids_perinatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
+df_bloco7_distribuicao_cids_perinatal <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
 
 # Para os óbitos fetais ---------------------------------------------------
 ## Baixando os dados consolidados do SIM-DOFET e filtrando apenas pelos óbitos fetais que consideramos
 df_sim_dofet_consolidados <- fetch_datasus(
   year_start = 2012,
-  year_end = 2022,
+  year_end = 2023,
   vars = c("CODMUNRES", "DTOBITO", "PESO", "GESTACAO", "SEMAGESTAC", "OBITOPARTO", "CAUSABAS"),
   information_system = "SIM-DOFET",
   #timeout = 600
@@ -43,20 +43,6 @@ df_sim_dofet_consolidados <- fetch_datasus(
 ## Ajustando o tempo máximo para download
 options(timeout=9999)
 
-## Baixando os dados preliminares do SIM de 2023 e filtrando pelos óbitos fetais
-df_sim_dofet_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv") |>
-  mutate(
-    ano = as.numeric(substr(DTOBITO, nchar(DTOBITO) - 3, nchar(DTOBITO))),
-    SEMAGESTAC = as.numeric(SEMAGESTAC),
-    PESO = as.numeric(PESO),
-    TIPOBITO = as.numeric(TIPOBITO),
-    GESTACAO = as.character(GESTACAO)
-  ) |>
-  filter(
-    TIPOBITO == 1, ((GESTACAO != "1" & !is.na(GESTACAO) & GESTACAO != "9") | (SEMAGESTAC >= 22 & SEMAGESTAC != 99)) | (PESO >= 500)
-  ) |>
-  select(c(CODMUNRES, ano, DTOBITO, PESO, GESTACAO, SEMAGESTAC, OBITOPARTO, CAUSABAS))
-
 ## Baixando os dados preliminares do SIM de 2024 e filtrando pelos óbitos fetais
 df_sim_dofet_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv") |>
   mutate(
@@ -73,8 +59,7 @@ df_sim_dofet_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br
 
 ## Juntando os dados consolidados e os dados preliminares e arrumando algumas colunas
 df_fetais_totais <- rbind(
-  df_sim_dofet_consolidados,
-  rbind(df_sim_dofet_2023, df_sim_dofet_2024)
+  df_sim_dofet_consolidados, df_sim_dofet_2024
 )
 
 ## Para os indicadores originais ------------------------------------------
@@ -905,18 +890,12 @@ df_bloco7_distribuicao_cids_neonatal <- data.frame(codmunres = rep(codigos_munic
 ## Baixando os dados consolidados do SIM-DOFET e filtrando apenas pelos óbitos fetais que consideramos
 df_neonat_total <- fetch_datasus(
   year_start = 2012,
-  year_end = 2022,
+  year_end = 2023,
   #vars = c("CODMUNRES", "DTOBITO", "IDADE", "PESO"),
   information_system = "SIM-DOINF"
 )
 
 options(timeout = 600)
-
-df_sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv")
-
-sim23 <- df_sim_2023 |> select(-c(contador
-                        #          , OPOR_DO, TP_ALTERA, CB_ALT
-))
 
 df_sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv")
 
@@ -928,7 +907,7 @@ df_neonat_total <- df_neonat_total |> select(-c(ESTABDESCR, NUDIASOBIN,
                                                 DTREGCART, DTRECORIG, EXPDIFDATA, CRM))
 
 ## Juntando os dados consolidados e os dados preliminares e filtrnado para idade menor que 28 dias
-preliminares <- rbind(sim23, sim24)
+preliminares <- sim24
 
 df_sim_total2 <- rbind(df_neonat_total, preliminares) |>
   select(
@@ -1116,20 +1095,12 @@ df_neonat_total3 <- df_sim_total2  |>
 
 df_nascidos_total1_aux <- fetch_datasus(
   year_start = 2012,
-  year_end = 2022,
+  year_end = 2023,
   vars = c("CODMUNRES", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5"),
   information_system = "SINASC"
 )
 
 df_nascidos_total1 <- df_nascidos_total1_aux |>
-  select(CODMUNRES, DTNASC, PESO)
-
-options(timeout = 600)
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23_aux <- sinasc23 |>
-  select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5)
-
-sinasc23 <- sinasc23 |>
   select(CODMUNRES, DTNASC, PESO)
 
 sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
@@ -1139,8 +1110,7 @@ sinasc24_aux <- sinasc24 |>
 sinasc24 <- sinasc24 |>
   select(CODMUNRES, DTNASC, PESO)
 
-df_nascidos_total <- rbind(df_nascidos_total1, sinasc23) |>
-  rbind(sinasc24)
+df_nascidos_total <- rbind(df_nascidos_total1, sinasc24)
 
 df_nascidos_total2 <- process_sinasc(df_nascidos_total, municipality_data = T)
 
@@ -1235,7 +1205,12 @@ df_neonat <- left_join(df_aux_municipios, df_juncao, by=c("codmunres", "ano")) |
     obitos_1_6dias_mais2500
   )
 
-write.csv(df_neonat, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
+df_neonat_antigo <- read_csv('data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv') |>
+  filter(ano == 2024)
+
+df_neonat_novo <- rbind(df_neonat_antigo, df_neonat)
+
+write.csv(df_neonat_novo, 'data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ## Para o indicador de causas evitáveis ---------------------------------------
@@ -1763,154 +1738,69 @@ gc()
 df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_neonatal, df_bloco7_neonatais_grupos)
 
 ### Exportando os dados
+df_bloco7_distribuicao_cids_neonatal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
+df_bloco7_distribuicao_cids_neonatal_antigo <- filter(df_bloco7_distribuicao_cids_neonatal_antigo, ano == 2024)|>
+  select(names(df_bloco7_distribuicao_cids_neonatal))
+
+df_bloco7_distribuicao_cids_neonatal$codmunres <- as.numeric(df_bloco7_distribuicao_cids_neonatal$codmunres)
+
+df_bloco7_distribuicao_cids_neonatal_novo <- rbind(df_bloco7_distribuicao_cids_neonatal_antigo, df_bloco7_distribuicao_cids_neonatal)
+
+df_bloco7_distribuicao_cids_neonatal_novo <- df_bloco7_distribuicao_cids_neonatal_novo[is.na(df_bloco7_distribuicao_cids_neonatal_novo)]
+
 write.csv(df_bloco7_distribuicao_cids_neonatal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv", row.names = FALSE)
 
 
 ################# INDICADORES DA ABA PERINATAL
 
-# Óbitos fetais de idade gestacional maior ou igual a 28 semanas por ano e município
+# Óbitos perinatais totais, ou seja, óbitos neonatais prcoces e fetais a partir de 22 semanas somados
 
-df_fetais_totais2 <- df_fetais_totais |>
-  mutate(
-    ano = as.numeric(substr(DTOBITO, nchar(DTOBITO) - 3, nchar(DTOBITO))),
-    SEMAGESTAC = as.numeric(SEMAGESTAC),
-    PESO = as.numeric(PESO),
-    GESTACAO = as.character(GESTACAO)
-  ) |>
-  filter(
-    ((GESTACAO == "28 a 31 semanas" | GESTACAO == "32 a 36 semanas" | GESTACAO == "37 a 41 semanas" | GESTACAO == "42 semanas e mais") | (is.na(GESTACAO) & SEMAGESTAC >= 28 & SEMAGESTAC != 99)) | (PESO >= 1000)
-  ) |>
-  select(c(CODMUNRES, ano, DTOBITO, PESO, GESTACAO, SEMAGESTAC, OBITOPARTO, CAUSABAS))
+base_perinatal <- full_join(df_bloco7_fetais_originais, df_neonat_novo, by = c("ano","codmunres"))
 
-df_fetais_28sem <- df_fetais_totais2 |>
-  mutate(SEMAGESTAC = as.numeric(SEMAGESTAC), PESO = as.numeric(PESO)) |>
-  filter(
-    ((GESTACAO == "28 a 31 semanas" | GESTACAO == "32 a 36 semanas" | GESTACAO == "37 a 41 semanas" | GESTACAO == "42 semanas e mais") | (is.na(GESTACAO) & SEMAGESTAC >= 28 & SEMAGESTAC != 99)) | (PESO >= 1000)
-  )|>
-  mutate(
-    ano1 = substr(DTOBITO, 5, 8),
-    codmunres = as.numeric(CODMUNRES)
+df_perinatal_total <- base_perinatal |>
+  group_by(ano, codmunres)|>
+  summarise(
+    perinatal_todos_total = obitos_fetais_mais_22sem + obitos_6dias,
+    perinatal_todos_peso_menos_1000 = fetal_peso_menos_1000 + obitos_6dias_menos1000,
+    perinatal_todos_peso_1000_1499 = fetal_peso_1000_1499 + obitos_6dias_1000_1499,
+    perinatal_todos_peso_1500_2499 = fetal_peso_1500_2499 + obitos_6dias_1500_2499,
+    perinatal_todos_peso_mais_2500 = fetal_peso_mais_2500 + obitos_6dias_mais2500,
+    perinatal_todos_antes = fetal_antes,
+    perinatal_todos_durante = fetal_durante,
+    perinatal_todos_0dias = obitos_0dias,
+    perinatal_todos_1_6dias = obitos_1_6dias,
+    perinatal_todos_0_6dias = obitos_6dias,
+    perinatal_todos_antes_menos_1000 = fetal_antes_peso_menos_1000,
+    perinatal_todos_antes_1000_1499 = fetal_antes_peso_1000_1499,
+    perinatal_todos_antes_1500_2499 = fetal_antes_peso_1500_2499,
+    perinatal_todos_antes_mais_2500 = fetal_antes_peso_mais_2500,
+    perinatal_todos_durante_menos_1000 = fetal_durante_peso_menos_1000,
+    perinatal_todos_durante_1000_1499 = fetal_durante_peso_1000_1499,
+    perinatal_todos_durante_1500_2499 = fetal_durante_peso_1500_2499,
+    perinatal_todos_durante_mais_2500 = fetal_durante_peso_mais_2500,
+    perinatal_todos_0dias_menos_1000 = obitos_0dias_menos1000,
+    perinatal_todos_0dias_1000_1499 = obitos_0dias_1000_1499,
+    perinatal_todos_0dias_1500_2499 = obitos_0dias_1500_2499,
+    perinatal_todos_0dias_mais_2500 = obitos_0dias_mais2500,
+    perinatal_todos_1_6dias_menos_1000 = obitos_1_6dias_menos1000,
+    perinatal_todos_1_6dias_1000_1499 = obitos_1_6dias_1000_1499,
+    perinatal_todos_1_6dias_1500_2499 = obitos_1_6dias_1500_2499,
+    perinatal_todos_1_6dias_mais_2500 = obitos_1_6dias_mais2500,
+    perinatal_todos_0_6dias_menos_1000 = obitos_6dias_menos1000,
+    perinatal_todos_0_6dias_1000_1499 = obitos_6dias_1000_1499,
+    perinatal_todos_0_6dias_1500_2499 = obitos_6dias_1500_2499,
+    perinatal_todos_0_6dias_mais_2500 = obitos_6dias_mais2500
   ) |>
-  mutate(
-    ano = case_when(
-      ano1 == "023" ~ "2023",
-      ano1 == "024" ~ "2024",
-      TRUE ~ ano1
-    ))|>
-  mutate(
-    peso_menos_1000 = case_when(
-      PESO < 1000 ~ 1,
-      !(PESO < 1000) ~ 0
-    ),
-    peso_1000_1499 = case_when(
-      (PESO >= 1000 & PESO < 1500) ~ 1,
-      !(PESO >= 1000 & PESO < 1500) ~ 0
-    ),
-    peso_1500_2499 = case_when(
-      (PESO >= 1500 & PESO < 2500) ~ 1,
-      !(PESO >= 1500 & PESO < 2500) ~ 0
-    ),
-    peso_mais_2500 = case_when(
-      (PESO >= 2500) ~ 1,
-      !(PESO >=2500) ~ 0
-    ),
-    antes = case_when(
-      OBITOPARTO == "1" ~ 1,
-      !(OBITOPARTO == "1") ~ 0
-    ),
-    durante = case_when(
-      (OBITOPARTO == "2") ~ 1,
-      !(OBITOPARTO == "2") ~ 0
-    ),
-    antes_peso_menos_1000 = case_when(
-      (PESO < 1000 & OBITOPARTO == "1") ~ 1,
-      !(PESO < 1000 & OBITOPARTO == "1") ~ 0
-    ),
-    antes_peso_1000_1499 = case_when(
-      (PESO >= 1000 & PESO < 1500 & OBITOPARTO == "1") ~ 1,
-      !(PESO >= 1000 & PESO < 1500 & OBITOPARTO == "1") ~ 0
-    ),
-    antes_peso_1500_2499 = case_when(
-      (PESO >= 1500 & PESO < 2500 & OBITOPARTO == "1") ~ 1,
-      !(PESO >= 1500 & PESO < 2500 & OBITOPARTO == "1") ~ 0
-    ),
-    antes_peso_mais_2500 = case_when(
-      (PESO >= 2500 & OBITOPARTO == "1") ~ 1,
-      !(PESO >=2500 & OBITOPARTO == "1") ~ 0
-    ),
-    durante_peso_menos_1000 = case_when(
-      (PESO < 1000 & OBITOPARTO == "2") ~ 1,
-      !(PESO < 1000 & OBITOPARTO == "2") ~ 0
-    ),
-    durante_peso_1000_1499 = case_when(
-      (PESO >= 1000 & PESO < 1500 & OBITOPARTO == "2") ~ 1,
-      !(PESO >= 1000 & PESO < 1500 & OBITOPARTO == "2") ~ 0
-    ),
-    durante_peso_1500_2499 = case_when(
-      (PESO >= 1500 & PESO < 2500 & OBITOPARTO == "2") ~ 1,
-      !(PESO >= 1500 & PESO < 2500 & OBITOPARTO == "2") ~ 0
-    ),
-    durante_peso_mais_2500 = case_when(
-      (PESO >= 2500 & OBITOPARTO == "2") ~ 1,
-      !(PESO >=2500 & OBITOPARTO == "2") ~ 0
-    ),
-    obitos = 1,
-    .after = PESO
-  )|>
-  group_by(ano, codmunres) |>
-  summarise(obitos_fetais_mais_28sem = sum(obitos),
-            peso_menos_1000_mais_28sem = sum(peso_menos_1000, na.rm=T),
-            peso_1000_1499_mais_28sem = sum(peso_1000_1499, na.rm=T),
-            peso_1500_2499_mais_28sem = sum(peso_1500_2499, na.rm=T),
-            peso_mais_2500_mais_28sem = sum(peso_mais_2500, na.rm=T),
-            perinatal_antes = sum(antes, na.rm = T),
-            perinatal_durante = sum(durante, na.rm = T),
-            perinatal_antes_peso_menos_1000 = sum(antes_peso_menos_1000, na.rm = T),
-            perinatal_antes_peso_1000_1499 = sum(antes_peso_1000_1499, na.rm = T),
-            perinatal_antes_peso_1500_2499 = sum(antes_peso_1500_2499, na.rm = T),
-            perinatal_antes_peso_mais_2500 = sum(antes_peso_mais_2500, na.rm = T),
-            perinatal_durante_peso_menos_1000 = sum(durante_peso_menos_1000, na.rm = T),
-            perinatal_durante_peso_1000_1499 = sum(durante_peso_1000_1499, na.rm = T),
-            perinatal_durante_peso_1500_2499 = sum(durante_peso_1500_2499, na.rm = T),
-            perinatal_durante_peso_mais_2500 = sum(durante_peso_mais_2500, na.rm = T)) |>
   ungroup()
 
 ############ Juntando as bases de dados
-df_fetais_28sem <- df_fetais_28sem |> mutate_if(is.character, as.numeric)
+df_perinatal_total <- df_perinatal_total |> mutate_if(is.character, as.numeric)
 
-df_fetais_28sem$codmunres <- as.character(df_fetais_28sem$codmunres)
+df_perinatal_total$codmunres <- as.character(df_perinatal_total$codmunres)
 
-juncao <- left_join(df_aux_municipios, df_fetais_28sem, by=c("codmunres", "ano"))
+df_obitos_perinatais_totais <- left_join(df_aux_municipios, df_perinatal_total, by=c("codmunres", "ano"))
 
-juncao[is.na(juncao)] <- 0
-
-
-# juncao$obitos_fetais_mais_28sem[is.na(juncao$obitos_fetais_mais_28sem)] <- 0
-# juncao$peso_menos_1500_mais_28sem[is.na(juncao$peso_menos_1500_mais_28sem)] <- 0
-# juncao$peso_1500_1999_mais_28sem[is.na(juncao$peso_1500_1999_mais_28sem)] <- 0
-# juncao$peso_2000_2499_mais_28sem[is.na(juncao$peso_2000_2499_mais_28sem)] <- 0
-# juncao$peso_mais_2500_mais_28sem[is.na(juncao$peso_mais_2500_mais_28sem)] <- 0
-
-df_obitos_perinatais <- juncao %>%
-  select(
-    codmunres,
-    ano,
-    obitos_fetais_mais_28sem,
-    peso_menos_1000_mais_28sem,
-    peso_1000_1499_mais_28sem,
-    peso_1500_2499_mais_28sem,
-    peso_mais_2500_mais_28sem,
-    perinatal_antes,
-    perinatal_durante,
-    perinatal_antes_peso_menos_1000,
-    perinatal_antes_peso_1000_1499,
-    perinatal_antes_peso_1500_2499,
-    perinatal_antes_peso_mais_2500,
-    perinatal_durante_peso_menos_1000,
-    perinatal_durante_peso_1000_1499,
-    perinatal_durante_peso_1500_2499,
-    perinatal_durante_peso_mais_2500
-  )
+df_obitos_perinatais_totais[is.na(df_obitos_perinatais_totais)] <- 0
 
 # df_obitos_perinatais_antigo <- read_csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2023.csv") |>
 #   filter(ano <= 2021) |>
@@ -1918,7 +1808,7 @@ df_obitos_perinatais <- juncao %>%
 #
 # df_obitos_perinatais_novo <- rbind(df_obitos_perinatais_antigo, df_obitos_perinatais)
 
-write.table(df_obitos_perinatais, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
+write.table(df_obitos_perinatais_totais, 'data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
 
 
 ## DISTRIBUIÇÃO DE ÓBITOS  PERINATAIS #############
@@ -1983,7 +1873,7 @@ df_perinat_fetal <- df_fetais_totais |>
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito)))
   ) |>
   filter(
-    ((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)
+    ((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)
   ) |>
   mutate(
     causabas = causabas,
@@ -2031,7 +1921,7 @@ df_sim_perinat_fetal_antes <- df_fetais_totais |>
     obitoparto = as.numeric(obitoparto)
   ) |>
   filter(
-    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & obitoparto == 1
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)) & obitoparto == 1
   )
 
 df_sim_perinat_fetal_durante <- df_fetais_totais |>
@@ -2041,7 +1931,7 @@ df_sim_perinat_fetal_durante <- df_fetais_totais |>
     obitoparto = as.numeric(obitoparto)
   ) |>
   filter(
-    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & obitoparto == 2
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)) & obitoparto == 2
   )
 
 df_sim_perinat_fetal_sem_informacao <- df_fetais_totais |>
@@ -2050,7 +1940,7 @@ df_sim_perinat_fetal_sem_informacao <- df_fetais_totais |>
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
   ) |>
   filter(
-    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 28 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 1000)) & (is.na(obitoparto) | obitoparto == 9)
+    (((gestacao != "1" & !is.na(gestacao) & gestacao != "9") | (as.numeric(semagestac) >= 22 & as.numeric(semagestac) != 99)) | (as.numeric(peso) >= 500)) & (is.na(obitoparto) | obitoparto == 9)
   )
 
 df_evitaveis_perinat <- df_perinat_total |>
@@ -2637,7 +2527,12 @@ df_perinat_grupos_sem_informacao[is.na(df_perinat_grupos_sem_informacao)] <- 0
 ## Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_perinatal <- left_join(df_bloco7_distribuicao_cids_perinatal, df_perinat_grupos_sem_informacao)
 
-write.csv(df_bloco7_distribuicao_cids_perinatal, "data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv", row.names = FALSE)
+df_bloco7_distribuicao_cids_perinatal_antigo <- read_csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv")|>
+  filter(ano == 2024)
+
+df_bloco7_distribuicao_cids_perinatal_novo <- rbind(df_bloco7_distribuicao_cids_perinatal_antigo, df_bloco7_distribuicao_cids_perinatal)
+
+write.csv(df_bloco7_distribuicao_cids_perinatal_novo, "data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv", row.names = FALSE)
 
 
 ######### INDICADORES DE MORBIDADE NEONATAL
