@@ -56,7 +56,7 @@ est_pop_tabnet <- function(periodo = 12:24, sexo = 2, idade_min = 10, idade_max 
     # Agrupar e somar POP
     df_resumo <- df |>
       group_by(codmunres, ano) |>
-      summarise(populacao_feminina_10_a_49 = sum(POP, na.rm = TRUE), .groups = "drop")
+      summarise(!!glue::glue("populacao_feminina_{idade_min}_a_{idade_max}") := sum(POP, na.rm = TRUE), .groups = "drop")
 
     # Adicionar o dataframe à lista
     lista_dfs[[ano]] <- df_resumo

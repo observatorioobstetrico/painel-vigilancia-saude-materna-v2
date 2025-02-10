@@ -48,7 +48,7 @@ mod_nivel_3_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 380px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 480px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'> Resumo da qualidade da informação &nbsp;</b>"),
@@ -91,7 +91,7 @@ mod_nivel_3_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
+                  style = "height: 565px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
@@ -263,7 +263,7 @@ mod_nivel_3_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 550px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 565px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
@@ -340,35 +340,43 @@ mod_nivel_3_ui <- function(id){
                 id = "tabela",
                 uiOutput(ns("css_tabela")),
                 div(
-                  style = "height: 140px",
-                  br(),
-                  HTML(
-                    "<b style='font-size:19px'> Distribuição do indicador por UF, macrorregião de saúde e município em todo o período &nbsp;</b>"
-                  ),
-                  br(),
                   br(),
                   fluidRow(
                     column(
-                      width = 12,
-                      hr(),
-                      tags$style(HTML(".radio-inline, .checkbox-inline {overflow-x: auto}")),
-                      radioButtons(
-                        inputId = ns("opcoes_tab1"),
-                        label = NULL,
-                        choiceNames = list(
-                          HTML("<span> Mostrar informações referentes a todo o país </span>"),
-                          HTML("<span> Mostrar informações referentes apenas à localidade escolhida </span>")
-                        ),
-                        choiceValues = list("escolha1", "escolha2"),
-                        selected = "escolha2",
-                        inline = TRUE
-                      ),
-                      align = "center"
+                      width = 10,
+                      HTML(
+                        "<b style='font-size:19px'> Distribuição do indicador por UF, macrorregião de saúde e município em todo o período &nbsp;</b>"
+                      )
+                    ),
+                    column(
+                      width = 2,
+                      downloadButton(ns("download_tabela"), " Download")
                     )
+                  ),
+                  br(),
+                ),
+                fluidRow(
+                  column(
+                    width = 12,
+                    hr(),
+                    br(),
+                    tags$style(HTML(".radio-inline, .checkbox-inline {overflow-x: auto; align-items: center;}")),
+                    radioButtons(
+                      inputId = ns("opcoes_tab1"),
+                      label = NULL,
+                      choiceNames = list(
+                        HTML("<span> Mostrar informações referentes a todo o país </span>"),
+                        HTML("<span> Mostrar informações referentes apenas à localidade escolhida </span>")
+                      ),
+                      choiceValues = list("escolha1", "escolha2"),
+                      selected = "escolha2",
+                      inline = TRUE
+                    ),
+                    align = "center"
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "713px")
+                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "783px")
               )
             )
           )
@@ -602,14 +610,14 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
 
     indicadores_2022 <- c(
-      "porc_menor20",
-      tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)],
-      "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
-      "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
+      "porc_menor20"
     )
 
     indicadores_2024 <- c(
-      "porc_sc"
+      "porc_sc",
+      tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)],
+      "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
+      "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
     )
 
 
@@ -2117,6 +2125,37 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ignoreNULL = FALSE
     )
 
+    ## Criando um data.frame a versão da tabela que vai para download ----------
+    data_tabela_download <- eventReactive(c(filtros()$pesquisar), {
+      base_bloco_selecionado() |>
+        dplyr::filter(ano %in% anos_disponiveis()) |>
+        dplyr::group_by(codmunres, municipio, r_saude, macro_r_saude, uf, regiao) |>
+        dplyr::summarise(
+          periodo = paste(max(filtros()$ano2[1], anos_disponiveis()[1]), "a", min(filtros()$ano2[2], anos_disponiveis()[length(anos_disponiveis())])),
+          numerador = !!rlang::parse_expr(infos_indicador()$numerador),
+          denominador = !!rlang::parse_expr(infos_indicador()$denominador),
+          indicador := round(numerador/denominador * {infos_indicador()$fator}, 1)
+        ) |>
+        dplyr::rename(
+          !!infos_indicador()$nome_numerador := numerador,
+          !!infos_indicador()$nome_denominador := denominador,
+          !!infos_indicador()$indicador := indicador
+        )
+    },
+    ignoreNULL = FALSE
+    )
+
+    ## Criando o output de download da tabela ----------------------------------
+    output$download_tabela <- downloadHandler(
+      filename = function() {
+        paste0("dados_tabela_nivel3_", infos_indicador()$nome_abreviado, ".csv")
+      },
+      content = function(file) {
+        # Write the dataset to the `file` that will be downloaded
+        write.csv(data_tabela_download(), file, row.names = FALSE)
+      }
+    )
+
     ## Criando a tabela --------------------------------------------------------
     output$tabela1 <- reactable::renderReactable({
       proporcao_geral <- function(numerador, denominador, fator, tipo_do_indicador) {
@@ -2264,10 +2303,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
       if (infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco)) {
-        tags$style(HTML("#tabela {height: 950px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1080px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else {
         req(filtros()$indicador)
-        tags$style(HTML("#tabela {height: 1693px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1823px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       }
 
     })
