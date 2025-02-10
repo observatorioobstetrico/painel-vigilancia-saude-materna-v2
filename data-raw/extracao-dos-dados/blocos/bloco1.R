@@ -1,3 +1,4 @@
+# Carregando os pacotes necessários
 library(tidyverse)
 library(httr)
 library(janitor)
@@ -10,9 +11,6 @@ library(tidyr)
 library(microdatasus)
 
 # Criando alguns objetos auxiliares ---------------------------------------
-### Criando um vetor com os anos consolidados
-anos_consolidados <- 2012:2023
-
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres) |>
@@ -26,21 +24,19 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 # Para os indicadores provenientes do SINASC ------------------------------
 ## Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
 df_sinasc_consolidados <- fetch_datasus(
-  year_start = anos_consolidados[1],
-  year_end = anos_consolidados[length(anos_consolidados)],
+  year_start = 2012,
+  year_end = 2023,
   vars = c("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE"),
   information_system = "SINASC"
-)
-
-df_sinasc_consolidados <- df_sinasc_consolidados %>%
+) |>
   mutate_if(is.character, as.numeric)
 
 ## Baixando os dados preliminares do SINASC de 2024 e selecionando as variáveis de interesse
-df_sinasc_preliminares_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
+df_sinasc_preliminares <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
   select("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE")
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares_2024) |>
+df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares) |>
   clean_names()
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
@@ -87,36 +83,20 @@ df_bloco1_sinasc[is.na(df_bloco1_sinasc)] <- 0
 
 
 # Para os indicadores provenientes do Tabnet ------------------------------
-## Observação: Tabnet foi atualizado até 2021.
 ## Importando as funções utilizadas para baixar os dados do Tabnet
 source("data-raw/extracao-dos-dados/blocos/funcoes_auxiliares.R")
 
 ## População feminina de 10 a 49 anos com plano de saúde -------------------
 ### Baixando os dados de estimativas da população feminina de 10 a 49 anos
-df_est_pop_aux <- est_pop_tabnet(
-  coluna = "Ano", periodo = as.character(2012:2021)
-) |>
-  select(!municipio)
+df_est_pop <- est_pop_tabnet(periodo = 12:24, idade_min = 10, idade_max = 49)
 
 ### Verificando se existem NAs
-if (any(is.na(df_est_pop_aux))) {
+if (any(is.na(df_est_pop))) {
   print("existem NAs")
 } else {
   print("não existem NAs")
 }
 
-### Passando o data.frame para o formato long
-df_est_pop <- df_est_pop_aux |>
-  pivot_longer(
-    !codmunres,
-    names_to = "ano",
-    values_to = "populacao_feminina_10_a_49"
-  ) |>
-  mutate(
-    ano = as.numeric(ano),
-  ) |>
-  arrange(codmunres, ano) |>
-  filter(codmunres %in% df_aux_municipios$codmunres)
 
 ### Baixando os dados de mulheres de 10 a 49 anos beneficíarias de planos de saúde
 #### Tive que separar em dois porque estava dando erro baixando o período inteiro
@@ -128,12 +108,14 @@ df_beneficiarias_aux1 <- pop_com_plano_saude_tabnet(
 
 df_beneficiarias_aux2 <- pop_com_plano_saude_tabnet(
   faixa_etaria = c("10 a 14 anos", "15 a 19 anos", "20 a 24 anos", "25 a 29 anos", "30 a 34 anos", "35 a 39 anos", "40 a 44 anos", "45 a 49 anos"),
-  periodo = 2017:2021
+  periodo = 2017:2024
 ) |>
   select(!municipio)
 
 df_beneficiarias_aux <- full_join(df_beneficiarias_aux1, df_beneficiarias_aux2) |>
   arrange()
+
+rm(df_beneficiarias_aux1, df_beneficiarias_aux2)
 
 #### Verificando se existem NAs
 if (any(is.na(df_beneficiarias_aux))) {
@@ -147,6 +129,7 @@ df_beneficiarias_aux[is.na(df_beneficiarias_aux)] <- 0
 
 #### Passando o data.frame para o formato long
 df_beneficiarias <- df_beneficiarias_aux |>
+  mutate(codmunres = as.character(codmunres)) |>
   pivot_longer(
     !codmunres,
     names_to = "mes_ano",
@@ -160,7 +143,7 @@ df_beneficiarias <- df_beneficiarias_aux |>
   ) |>
   arrange(codmunres, ano) |>
   filter(codmunres %in% df_aux_municipios$codmunres) |>
-  left_join(df_est_pop) |>
+  left_join(df_est_pop |> mutate(ano = as.numeric(ano))) |>
   group_by(codmunres, ano) |>
   filter(beneficiarias_10_a_49 < populacao_feminina_10_a_49) |>
   summarise(
@@ -169,7 +152,7 @@ df_beneficiarias <- df_beneficiarias_aux |>
   ungroup()
 
 #### Juntando com os dados de estimativas populacionais
-df_beneficiarias_pop <- left_join(df_est_pop, df_beneficiarias)
+df_beneficiarias_pop <- left_join(df_est_pop |> mutate(ano = as.numeric(ano)), df_beneficiarias)
 
 ### Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
 df_cob_suplementar <- df_beneficiarias_pop |>
@@ -178,8 +161,8 @@ df_cob_suplementar <- df_beneficiarias_pop |>
   ) |>
   group_by(codmunres) |>
   mutate(
-    q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.25), 3),
-    q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2014:2021)], 0.75), 3),
+    q1 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2024)], 0.25), 3),
+    q3 = round(quantile(cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2024)], 0.75), 3),
     iiq = q3 - q1,
     lim_inf = round(q1 - 1.5*iiq, 3),
     lim_sup = round(q3 + 1.5*iiq, 3),
@@ -187,7 +170,7 @@ df_cob_suplementar <- df_beneficiarias_pop |>
     novo_cob_suplementar = ifelse(
       outlier == 0,
       cob_suplementar,
-      round(median(cob_suplementar[which(outlier == 0 & ano %in% 2014:2021)]), 3)
+      round(median(cob_suplementar[which(outlier == 0 & ano %in% 2012:2024)]), 3)
     ),
     novo_beneficiarias_10_a_49 = round(novo_cob_suplementar * populacao_feminina_10_a_49)
   ) |>
@@ -197,16 +180,16 @@ df_cob_suplementar <- df_beneficiarias_pop |>
 
 ## Juntando todos os dados provenientes do Tabnet --------------------------
 df_bloco1_tabnet <- df_aux_municipios |>
-  left_join(df_cob_suplementar)
+  left_join(df_cob_suplementar |> mutate(codmunres = as.numeric(codmunres)))
 
 ### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
-df_bloco1_tabnet$pop_fem_10_49_com_plano_saude[is.na(df_bloco1_tabnet$pop_fem_10_49_com_plano_saude) & df_bloco1_tabnet$ano <= 2021] <- 0
+df_bloco1_tabnet$pop_fem_10_49_com_plano_saude[is.na(df_bloco1_tabnet$pop_fem_10_49_com_plano_saude)] <- 0
 
 
 # Para o indicador de cobertura da AB -------------------------------------
 ## Lendo as bases contendo as variáveis que serão utilizadas e fazendo os tratamentos necessários
 ### Para os anos de 2012 até 2020
-historico_ab_municipios <- read_delim("data-raw/csv/Historico_AB_MUNICIPIOS_2007_202012.csv") |>
+historico_ab_municipios <- read_delim("data-raw/extracao-dos-dados/blocos/databases_auxiliares/Historico_AB_MUNICIPIOS_2007_202012.csv") |>
   janitor::clean_names() |>
   mutate(
     ano = as.numeric(substr(nu_competencia, 1, 4)),
@@ -216,7 +199,7 @@ historico_ab_municipios <- read_delim("data-raw/csv/Historico_AB_MUNICIPIOS_2007
   select(ano, codmunres = co_municipio_ibge, qt_cobertura_ab, qt_populacao)
 
 ### Para os anos de 2021 até set/2023
-cobertura_potencial_aps_municipio1 <- read.xlsx("data-raw/csv/cobertura_potencial_aps_municipio3.xlsx") |>
+cobertura_potencial_aps_municipio1 <- read.xlsx("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cobertura_potencial_aps_municipio3.xlsx") |>
   janitor::clean_names() |>
   select(comp_cnes, codmunres = codigo_ibge, qt_cobertura_ab = qt_capacidade_da_equipe, qt_populacao = populacao) |>
   mutate(
@@ -227,7 +210,7 @@ cobertura_potencial_aps_municipio1 <- read.xlsx("data-raw/csv/cobertura_potencia
   select(ano, codmunres, qt_cobertura_ab, qt_populacao)
 
 ### Para os meses de out/2023 até abr/2024
-cobertura_potencial_aps_municipio2 <- readxl::read_xls("data-raw/csv/cobertura_potencial_aps_municipio4.xls") |>
+cobertura_potencial_aps_municipio2 <- readxl::read_xls("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cobertura_potencial_aps_municipio4.xls") |>
   janitor::clean_names() |>
   select(competencia_cnes, codmunres = ibge, qt_cobertura_ab = qt_capacidade_da_equipe, qt_populacao = populacao) |>
   mutate(
@@ -259,10 +242,10 @@ dados_ab_municipios$qt_cobertura_ab <- pmin(dados_ab_municipios$qt_cobertura_ab,
 df_cobertura_ab <- left_join(df_aux_municipios, dados_ab_municipios |> mutate(codmunres = as.numeric(codmunres)))
 
 ### Substituindo os NA's da coluna 'qt_cobertura_ab' por 0 (gerados após o left_join)
-df_cobertura_ab$qt_cobertura_ab[is.na(df_cobertura_ab$qt_cobertura_ab) & df_cobertura_ab$ano < 2023] <- 0
+df_cobertura_ab$qt_cobertura_ab[is.na(df_cobertura_ab$qt_cobertura_ab)] <- 0
 
 ### Substituindo os NA's da coluna 'qt_populacao' por 0 (gerados após o left_join)
-df_cobertura_ab$qt_populacao[is.na(df_cobertura_ab$qt_populacao) & df_cobertura_ab$ano < 2023] <- 0
+df_cobertura_ab$qt_populacao[is.na(df_cobertura_ab$qt_populacao)] <- 0
 
 
 # Juntando os dados de todas as bases -------------------------------------
@@ -290,9 +273,7 @@ sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_ate_3)) - sum(d
 sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
 sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
 sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(media_cobertura_esf)) - sum(df_bloco1_antigo$media_cobertura_esf)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(populacao_total)) - sum(df_bloco1_antigo$populacao_total)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49, na.rm = T)
+sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49, na.rm = T) # As estimativas foram atualizadas com o censo de 2022
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------

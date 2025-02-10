@@ -602,7 +602,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
 
     indicadores_2022 <- c(
-      "porc_dependentes_sus",
       "porc_menor20",
       tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)],
       "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
