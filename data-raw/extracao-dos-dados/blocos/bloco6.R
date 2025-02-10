@@ -16,44 +16,21 @@ soma_var <- function(vars,dados) {
   return(out)
 }
 
-#Carregando os dados do SIM de 2022
+#Carregando os dados do SIM de 2021 a 2023
 
 df_causas_especif_aux1 <- fetch_datasus(
-  year_start = 2022,
-  year_end = 2022,
+  year_start = 2021,
+  year_end = 2023,
   information_system = "SIM-DOMAT"
 )
 
 options(timeout = 600)
 
-sim_2023 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO23OPEN.csv")
-
-sim_2023$OBITOPUERP <- as.character(sim_2023$OBITOPUERP)
-sim_2023$OBITOGRAV <- as.character(sim_2023$OBITOGRAV)
-sim_2023$SEXO <- as.character(sim_2023$SEXO)
-
-sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN+(2).csv")
+sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv")
 
 sim_2024$OBITOPUERP <- as.character(sim_2024$OBITOPUERP)
 sim_2024$OBITOGRAV <- as.character(sim_2024$OBITOGRAV)
 sim_2024$SEXO <- as.character(sim_2024$SEXO)
-
-
-
-sim_mat2023 <- sim_2023 |>
-  filter(
-    SEXO == "2",
-    ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
-       (CAUSABAS >= "O980"  &  CAUSABAS <= "O999") |
-       (CAUSABAS == "A34" & OBITOPUERP != "2") |
-       ((CAUSABAS >= "B200"  &  CAUSABAS <= "B249") & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       (CAUSABAS == "D392" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       (CAUSABAS == "E230" & (OBITOGRAV == "1" | OBITOPUERP == "1")) |
-       ((CAUSABAS >= "F530"  &  CAUSABAS <= "F539") & (OBITOPUERP != "2")) |
-       (CAUSABAS == "M830" & OBITOPUERP != "2"))
-  )
-
-sim_mat2023 <- sim_mat2023 |> select(-c(contador, OPOR_DO, TP_ALTERA, CB_ALT))
 
 sim_mat2024 <- sim_2024 |>
   filter(
@@ -74,8 +51,7 @@ df_causas_especif_aux1 <- df_causas_especif_aux1 |> select(-c(ESTABDESCR, NUDIAS
                                                               NUDIASINF, FONTESINF,
                                                               CONTADOR))
 
-df_causas_especif_aux <- rbind(df_causas_especif_aux1, sim_mat2023) |>
-  rbind(sim_mat2024)
+df_causas_especif_aux <- rbind(df_causas_especif_aux1, sim_mat2024)
 
 
 df_causas_especif_aux <- df_causas_especif_aux |>
@@ -145,7 +121,7 @@ df_nascimentos <- read_csv("data-raw/extracao-dos-dados/blocos/databases_auxilia
 
 df_nascimentos$codigo <- as.character(df_nascimentos$codigo)
 
-df_nascimentos_2021 <- filter(df_nascimentos, ano >= 2022)
+df_nascimentos_2021 <- filter(df_nascimentos, ano >= 2021)
 
 df_completo <- left_join(df_nascimentos_2021, df_causas_especificas, by = c("codigo", "ano")) |>
   select(
@@ -192,7 +168,7 @@ get_dupes(df_completo_plus, codmunres, municipio, uf, regiao, ano)
 #   filter(ano == 2023)
 
 indicadores_bloco6_mortalidade_materna_2012_2023 <- read_csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
-  filter(ano <= 2021)
+  filter(ano <= 2020)
 
 bloco6_mortalidade_materna_2012_2024 <- rbind(indicadores_bloco6_mortalidade_materna_2012_2023, df_completo_plus)
 
