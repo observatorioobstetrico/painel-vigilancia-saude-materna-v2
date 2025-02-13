@@ -304,7 +304,7 @@ app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & input.abas != 'bloco_1' & input.abas != 'bloco_2' & ( input.ano2[1] == 2023 | input.ano2[1] == 2024))",
+              condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & (input.abas == 'bloco_3' | input.abas == 'bloco_4' | input.abas == 'bloco_5') & (input.ano2[1] == 2023 | input.ano2[1] == 2024))",
               fluidRow(
                 column(
                   width = 3,
@@ -320,7 +320,7 @@ app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "(input.abas == 'bloco_1' | input.abas == 'bloco_2') & input.ano2[1] == 2024",
+              condition = "(input.abas == 'bloco_1' | input.abas == 'bloco_2' | input.abas == 'bloco_6' | input.abas == 'bloco_7') & input.ano2[1] == 2024",
               fluidRow(
                 column(
                   width = 3,
