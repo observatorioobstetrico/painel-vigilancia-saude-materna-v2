@@ -18,7 +18,7 @@ df_bloco4 <- data.frame()
 df_list <- list()
 
 # Baixar os dados ano a ano
-for (ano in c(2012,2014:2022)) {
+for (ano in c(2012,2014:2023)) {
   df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
                                         information_system = "SINASC",
                                         vars = c("CODMUNRES", "TPROBSON", "PARTO"))
@@ -47,10 +47,10 @@ df$TPROBSON <- as.numeric(df$TPROBSON)
 # Dados ainda não consolidados
 options(timeout=99999)
 
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  mutate(ano = 2023) |>
-  select(CODMUNRES, TPROBSON, PARTO, ano)
+#sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
+#sinasc23 <- sinasc23 |>
+#  mutate(ano = 2023) |>
+#  select(CODMUNRES, TPROBSON, PARTO, ano)
 
 sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
 sinasc24 <- sinasc24 |>
