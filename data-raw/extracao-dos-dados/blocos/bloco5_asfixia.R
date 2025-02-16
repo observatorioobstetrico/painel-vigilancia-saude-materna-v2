@@ -7,6 +7,8 @@ library(microdatasus)
 library(data.table)
 library(readr)
 
+options(timeout = 6000)
+
 # sinasc12 <- microdatasus::fetch_datasus(year_start = 2012, year_end = 2012, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 #
 # sinasc13 <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2013, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
@@ -26,26 +28,19 @@ library(readr)
 # sinasc20 <- microdatasus::fetch_datasus(year_start = 2020, year_end = 2020, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 #
 # sinasc21 <- microdatasus::fetch_datasus(year_start = 2021, year_end = 2021, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
+#
+# sinasc22 <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-sinasc22 <- microdatasus::fetch_datasus(year_start = 2022, year_end = 2022, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
+sinasc23 <- microdatasus::fetch_datasus(year_start = 2023, year_end = 2023, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-# dados preliminares  SINASC 2023 e 2024
-
-options(timeout = 600)
-
-sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-sinasc23 <- sinasc23 |>
-  select(CODMUNRES, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
-  mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
+# dados preliminares  SINASC 2024
 
 sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
 sinasc24 <- sinasc24 |>
   select(CODMUNRES, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
 
-sinasc23[, 1:5] <- lapply(sinasc23[, 1:5], as.character)
 sinasc24[, 1:5] <- lapply(sinasc24[, 1:5], as.character)
-
 
 ## criando coluna de anos
 # sinasc12$Ano <- 2012
@@ -59,13 +54,13 @@ sinasc24[, 1:5] <- lapply(sinasc24[, 1:5], as.character)
 # sinasc19$Ano <- 2019
 # sinasc20$Ano <- 2020
 # sinasc21$Ano <- 2021
-sinasc22$Ano <- 2022
+# sinasc22$Ano <- 2022
 sinasc23$Ano <- 2023
 sinasc24$Ano <- 2024
 
 
-sinasc_microdatasus <- dplyr::bind_rows(#sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21,
-  sinasc22, sinasc23, sinasc24)
+sinasc_microdatasus <- dplyr::bind_rows(#sinasc12, sinasc13, sinasc14, sinasc15, sinasc16, sinasc17, sinasc18, sinasc19, sinasc20, sinasc21, sinasc22,
+  sinasc23, sinasc24)
 
 
 #write.table(sinasc_microdatasus, 'data-raw/csv/bruto_sinasc_microdatasus_2012_2023.csv', sep = ";", dec = ".", row.names = FALSE)

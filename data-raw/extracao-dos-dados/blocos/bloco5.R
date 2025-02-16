@@ -8,6 +8,8 @@ library(tidyr)
 library(data.table)
 library(readr)
 
+options(timeout = 6000)
+
 # Criando alguns objetos auxiliares ---------------------------------------
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
 codigos_municipios <- read_csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
@@ -17,22 +19,29 @@ codigos_municipios <- read_csv("data-raw/extracao-dos-dados/blocos/databases_aux
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
-
 # Para os indicadores provenientes do SINASC ------------------------------
-## Baixando os dados consolidados do SINASC de 2012 a 2022 e selecionando as variáveis de interesse
-df_sinasc_consolidados <- fetch_datasus(
-  year_start = 2012,
-  year_end = 2022,
-  vars = c("CODMUNRES", "CODMUNNASC", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
-  information_system = "SINASC"
-)
+## Baixando os dados consolidados do SINASC de 2012 a 2023 e selecionando as variáveis de interesse
 
-## Baixando os dados preliminares do SINASC de 2023 e 2024 e selecionando as variáveis de interesse
-options(timeout = 600)
+df_sinasc_consolidados <- list()
 
-df_sinasc_preliminares23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";") |>
-  select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL) |>
-  mutate(IDANOMAL = as.character(IDANOMAL))
+anos <- 2012:2023
+
+for (i in anos){
+  a <- fetch_datasus(
+    year_start = i,
+    year_end = i,
+    vars = c("CODMUNRES", "CODMUNNASC", "CODESTAB", "DTNASC", "PESO", "GESTACAO", "SEMAGESTAC", "APGAR5", "IDANOMAL", "CODANOMAL"),
+    information_system = "SINASC"
+  )
+
+  df_sinasc_consolidados[[i-2011]] <- a
+
+  print(paste0("Ano ", i, " finalizado"))
+}
+
+df_sinasc_consolidados <- bind_rows(df_sinasc_consolidados)
+
+## Baixando os dados preliminares do SINASC de 2024 e selecionando as variáveis de interesse
 
 df_sinasc_preliminares24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
   select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL) |>
@@ -41,15 +50,11 @@ df_sinasc_preliminares24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude
 df_sinasc_consolidados <- df_sinasc_consolidados %>%
   mutate_if(is.character, as.numeric)
 
-df_sinasc_preliminares23 <- df_sinasc_preliminares23 %>%
-  mutate_if(is.character, as.numeric)
-
 df_sinasc_preliminares24 <- df_sinasc_preliminares24 %>%
   mutate_if(is.character, as.numeric)
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares23) |>
-  full_join(df_sinasc_preliminares24)
+df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares24)
 
 ## Verificando o que pode ser considerado um dado faltante para CODANOMAL
 unique(df_sinasc$CODANOMAL)
