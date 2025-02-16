@@ -170,7 +170,7 @@ app_ui <- function(request) {
                     label = HTML("<span style = 'font-size: 17'> Intervalo de anos </span>"),
                     min = 2012,
                     max = 2024,
-                    value = c(2012, 2022),
+                    value = c(2012, 2023),
                     step = 1,
                     sep = '',
                     width = "90%"
@@ -303,24 +303,24 @@ app_ui <- function(request) {
                 )
               )
             ),
+            # conditionalPanel(
+            #   condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & (input.abas == 'bloco_3' | input.abas == 'bloco_4' | input.abas == 'bloco_5') & (input.ano2[1] == 2023 | input.ano2[1] == 2024))",
+            #   fluidRow(
+            #     column(
+            #       width = 3,
+            #       HTML(
+            #       "
+            #         <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
+            #             <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 e 2024 são preliminares
+            #         </b> </div>
+            #         <span style='display: block; margin-bottom: 15px;'> </span>
+            #       "
+            #       )
+            #     )
+            #   )
+            # ),
             conditionalPanel(
-              condition = "(input.abas == 'nivel_1' & (input.ano == 2023 | input.ano == 2024)) | (input.abas != 'nivel_1' & (input.abas == 'bloco_3' | input.abas == 'bloco_4' | input.abas == 'bloco_5') & (input.ano2[1] == 2023 | input.ano2[1] == 2024))",
-              fluidRow(
-                column(
-                  width = 3,
-                  HTML(
-                  "
-                    <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
-                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2023 e 2024 são preliminares
-                    </b> </div>
-                    <span style='display: block; margin-bottom: 15px;'> </span>
-                  "
-                  )
-                )
-              )
-            ),
-            conditionalPanel(
-              condition = "(input.abas == 'bloco_1' | input.abas == 'bloco_2' | input.abas == 'bloco_6' | input.abas == 'bloco_7') & input.ano2[1] == 2024",
+              condition = "((input.abas == 'nivel_1' & input.ano == 2024) | input.abas == 'bloco_1' | input.abas == 'bloco_2' | input.abas == 'bloco_3' | input.abas == 'bloco_4' | input.abas == 'bloco_5' | input.abas == 'bloco_6' | input.abas == 'bloco_7') & input.ano2[1] == 2024",
               fluidRow(
                 column(
                   width = 3,
