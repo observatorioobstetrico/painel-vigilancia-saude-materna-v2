@@ -6,7 +6,7 @@ library(tidyverse)
 
 #### Baixando os dados do sinasc de 2012-2022
 
-anos <- c(2012, 2014:2022)
+anos <- c(2012, 2014:2023)
 dados <- data.frame()
 
 for (i in anos){
@@ -49,15 +49,6 @@ rm(df13)
 
 options(timeout=99999)
 
-df23 <- data.table::fread(
-  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv",
-  sep= ";") |>
-  select("CODMUNRES", "CODMUNNASC", 'CODESTAB', "LOCNASC",
-         "PARTO", "IDADEMAE", "ESCMAE", "RACACORMAE",
-         "TPROBSON", "PESO") |> mutate(ANO = 2023)
-
-# data.table::fwrite(SINASC_2023, "data-raw/extracao-dos-dados/csv/sinasc_2023.csv")
-
 #### Baixando os dados res do sinasc 2024
 
 df24 <- data.table::fread(
@@ -70,9 +61,7 @@ df24 <- data.table::fread(
 
 #### Juntando os preliminares aos consolidados
 
-df_sinasc_consolidados <- rbind(dados, df23)
-
-df_sinasc_consolidados <- rbind(df_sinasc_consolidados, df24)
+df_sinasc_consolidados <- rbind(dados, df24)
 
 data.table::fwrite(df_sinasc_consolidados, "data-raw/csv/sinasc_2012_2024.csv",
                    row.names = FALSE)
@@ -605,9 +594,18 @@ dados10 <- full_join(dados9, dados8, by = c("ano", "codmunres"))
 
 rm(dados8, dados9)
 
-## Dados dos estabelecimentos do CNES
+## Dados dos estabelecimentos do CNES, disponivel em:
+## https://opendatasus.saude.gov.br/dataset/cnes-cadastro-nacional-de-estabelecimentos-de-saude
 
 dados_cnes_estabelecimento <- data.table::fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/cnes_estabelecimentos.csv")
+
+# dados_cnes_estabelecimento <- dados_cnes_estabelecimento |>
+#   select(CO_CNES, NO_FANTASIA) |>
+#   rename(cnes = CO_CNES,
+#          nome_estabelecimento_fantasia = NO_FANTASIA)
+#
+# data.table::fwrite(dados_cnes_estabelecimento, "data-raw/extracao-dos-dados/blocos/databases_auxiliares/cnes_estabelecimentos.csv",
+#                    row.names = FALSE)
 
 ## Juntando os dados
 
@@ -641,7 +639,7 @@ dados_municipio <- full_join(dados12, dados_1500, by = c("codmunres","ano"))
 
 dados_municipio$km_partos_fora_uf <- as.numeric(dados_municipio$km_partos_fora_uf)
 
-data.table::fwrite(dados_municipio,"data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012_2024.csv")
+data.table::fwrite(dados_municipio,"data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv")
 
 rm(dados12,dados_1500,dados_municipio)
 

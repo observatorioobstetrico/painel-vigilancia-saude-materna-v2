@@ -111,8 +111,8 @@ bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_desloca
     uf = sub('.', '', uf)
   )
 
-bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2021-2024.csv") |>
-  janitor::clean_names()
+bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2024.csv") |>
+  janitor::clean_names() |> dplyr::filter(ano > 2020)
 
 bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
 
@@ -307,8 +307,7 @@ bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
   )
 
 bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
-
-bloco4_deslocamento_uf <- bloco4_deslocamento_uf |> dplyr::arrange(ano)
+bloco4_deslocamento_uf <- bloco4_deslocamento_uf |> dplyr::arrange(ano, cod_uf)
 
 
 bloco4_deslocamento_macrorregiao <- dplyr::left_join(bloco4_deslocamento_macrorregiao, aux_municipios, by = "codmunres")
