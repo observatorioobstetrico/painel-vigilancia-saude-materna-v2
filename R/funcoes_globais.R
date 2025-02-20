@@ -400,10 +400,10 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(style = glue::glue("font-size: {fonte_titulo}; height: 30%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = glue::glue("font-size: {fonte_titulo}; height: 20%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
       hr(),
       div(
-        style = "height: 55%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+        style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
         div(
           p(style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
           p(style = style_descricao, "nasceram com menos de 28 semanas")
@@ -1200,11 +1200,25 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
   grupo_3 <- (dados$grupo)[3]
 
   porc_obitos_1 <- (dados$porc_obitos)[1]
-  porc_1 <- "{formatC(porc_obitos_1, big.mark = '.', decimal.mark = ',')}%"
+  if (is.nan(porc_obitos_1)) {
+    porc_1 <- "---"
+  } else {
+    porc_1 <- "{formatC(porc_obitos_1, big.mark = '.', decimal.mark = ',')}%"
+  }
+
   porc_obitos_2 <- (dados$porc_obitos)[2]
-  porc_2 <- "{formatC(porc_obitos_2, big.mark = '.', decimal.mark = ',')}%"
+  if (is.nan(porc_obitos_2)) {
+    porc_2 <- "---"
+  } else {
+    porc_2 <- "{formatC(porc_obitos_2, big.mark = '.', decimal.mark = ',')}%"
+  }
+
   porc_obitos_3 <- (dados$porc_obitos)[3]
-  porc_3 <- "{formatC(porc_obitos_3, big.mark = '.', decimal.mark = ',')}%"
+  if (is.nan(porc_obitos_3)) {
+    porc_3 <- "---"
+  } else {
+    porc_3 <- "{formatC(porc_obitos_3, big.mark = '.', decimal.mark = ',')}%"
+  }
 
   style_porc <- "font-size: 30px; display: flex; justify-content: center; text-align: center; margin-bottom: 0"
   style_grupo <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
