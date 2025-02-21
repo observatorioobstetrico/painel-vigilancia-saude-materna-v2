@@ -3565,7 +3565,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre o total de óbitos neonatais,",
+        titulo = "Dentre todos os óbitos neonatais (com idade de 0 a 27 dias de vida),",
         tamanho_caixa = "330px"
       )
     })
@@ -3575,7 +3575,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre o total de óbitos neonatais,",
+        titulo = "Dentre todos os óbitos neonatais (com idade de 0 a 27 dias de vida),",
         tamanho_caixa = "330px"
       )
     })
