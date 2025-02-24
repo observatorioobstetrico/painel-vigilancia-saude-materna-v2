@@ -10,6 +10,15 @@
 mod_bloco_6_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    tags$style(
+      HTML(
+        "
+        #bloco_7_1-tabset1 .nav-link {
+          border-style: solid
+        }
+        "
+      )
+    ),
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
@@ -1120,7 +1129,7 @@ mod_bloco_6_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           filtros()$nivel == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "303px",
@@ -1383,21 +1392,21 @@ mod_bloco_6_server <- function(id, filtros){
         cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros())
     })
 
-    data6_correcao_rmm <- reactive({
-      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-        if(filtros()$nivel == "Estadual"){
+    data6_rmm_corrigida_aux <- reactive({
+      if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
+        if (filtros()$nivel == "Estadual") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$estado,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
-        } else if(filtros()$nivel == "Regional"){
+        } else if (filtros()$nivel == "Regional") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$regiao,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
-        } else if(filtros()$nivel=="Nacional"){
+        } else if (filtros()$nivel == "Nacional") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == "Brasil",
@@ -1411,12 +1420,11 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_rmm_corrigida <- reactive({
-      if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
-          dplyr::select(!rmm) |>
-          dplyr::mutate(rmm = RMM)
-      } else{
-        dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano")
+      if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
+        dplyr::full_join(data6(), data6_rmm_corrigida_aux(), by = "ano") |>
+          dplyr::mutate(rmm = ifelse(ano <= 2022, RMM, rmm))
+      } else {
+        data6()
       }
     })
 
@@ -1444,21 +1452,21 @@ mod_bloco_6_server <- function(id, filtros){
         cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros(), comp = TRUE)
     })
 
-    data6_comp_correcao_rmm <- reactive({
-      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-        if(filtros()$nivel2 == "Estadual"){
+    data6_comp_rmm_corrigida_aux <- reactive({
+      if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
+        if (filtros()$nivel2 == "Estadual") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$estado2,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
-        } else if(filtros()$nivel2 == "Regional"){
+        } else if (filtros()$nivel2 == "Regional") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == filtros()$regiao2,
               ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
             )
-        } else if(filtros()$nivel2=="Nacional"){
+        } else if (filtros()$nivel2=="Nacional") {
           rmm_corrigida |>
             dplyr::filter(
               localidade == "Brasil",
@@ -1472,12 +1480,11 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
     data6_comp_rmm_corrigida <- reactive({
-      if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
-          dplyr::select(!rmm) |>
-          dplyr::mutate(rmm = RMM)
+      if (filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional")) {
+        dplyr::full_join(data6_comp(), data6_comp_rmm_corrigida_aux(), by = "ano") |>
+          dplyr::mutate(rmm = ifelse(ano <= 2022, RMM, rmm))
       } else{
-        dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano")
+        data6_comp
       }
     })
 

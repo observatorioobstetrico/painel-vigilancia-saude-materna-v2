@@ -609,10 +609,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
 
-    indicadores_2022 <- c(
-      "porc_menor20"
-    )
-
     indicadores_2024 <- c(
       "porc_sc",
       tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)],
@@ -629,12 +625,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         anos_disponiveis_aux <- max(2015, filtros()$ano2[1]):filtros()$ano2[2]
       } else {
         anos_disponiveis_aux <- filtros()$ano2[1]:filtros()$ano2[2]
-      }
-
-      if (infos_indicador()$nome_abreviado %in% indicadores_2022) {
-        anos_disponiveis_aux <- anos_disponiveis_aux[anos_disponiveis_aux <= 2021]
-      } else {
-        anos_disponiveis_aux
       }
 
       if (infos_indicador()$nome_abreviado %in% indicadores_2024) {
@@ -702,7 +692,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     data_referencia_cobertura <- reactive({
       data.frame(
-        ano = max(2015, filtros()$ano2[1]):filtros()$ano2[2],
+        ano = max(2015, filtros()$ano2[1]):min(2022, filtros()$ano2[2]),
         referencia = 90,
         localidade = "Referência (Ministério da Saúde)"
       )
@@ -737,7 +727,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = cobertura, group = localidade, colour = localidade)
         ) |>
         highcharter::hc_add_series(
-          data = data_referencia_cobertura() |> dplyr::filter(ano <= 2022),
+          data = data_referencia_cobertura(),
           type = "line",
           highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
           dashStyle = "ShortDot",
@@ -799,7 +789,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               filtros()$nivel == "Municipal" ~ filtros()$municipio
             )
           ) |>
-          dplyr::ungroup()
+          dplyr::ungroup() |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
       }
     })
 
@@ -847,7 +838,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               filtros()$nivel == "Municipal" ~ filtros()$municipio
             )
           ) |>
-          dplyr::ungroup()
+          dplyr::ungroup() |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
       }
     })
 
@@ -857,14 +849,16 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           ano = anos_disponiveis(),
           valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
           class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
-        )
+        ) |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
       } else {
         data.frame(
           ano = anos_disponiveis(),
           valor = c(rep(90, times = length(anos_disponiveis())), rep(100, times = length(anos_disponiveis()))),
           indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis()))),
           class = rep("Ideal", times = length(anos_disponiveis()))
-        )
+        ) |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
       }
     })
 
@@ -896,10 +890,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_add_series(
           data = {
             if (infos_indicador()$bloco == "bloco6") {
-              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude, ano <= 2020)
+              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude)
             } else {
-              data_referencia_incompletude() |>
-                dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento"), 2020, 2022))
+              data_referencia_incompletude()
             }
           },
           type = "line",
@@ -1231,13 +1224,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_materno_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_materno_completo()$cid)) + 2)]
         ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_materno_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos maternos preenchidos com garbage codes"), min = 0, max = 100)
     })
 
-    ####### Distribuição de garbage code para óbitos fetais
 
-
+    ## Criando os data.frames para a construção do gráfico de garbage codes p/ óbitos fetais --------
     data_plot_garbage_fetal <- reactive({
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_fetal")), sum) |>
@@ -1316,7 +1308,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::left_join(data_plot_garbage_fetal(), data_plot_garbage_fetal_referencia())
     })
 
-    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos fetais -------
     output$plot_garbage_fetal <- highcharter::renderHighchart({
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1328,18 +1320,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_fetal:,f}% </b>"
           )
         ) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_legend(reversed = TRUE, title = list(text = "Garbage code (CID-10)")) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_fetal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_fetal_completo()$cid)) + 2)]
         ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_fetal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_fetal_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos fetais preenchidos com garbage codes"), min = 0, max = 100)
     })
 
-    ########## Distribuição de óbitos perinatais preenchidos com garbage code
 
-
+    ## Criando os data.frames para a construção do gráfico de garbage codes p/ óbitos perinatais --------
     data_plot_garbage_perinatal <- reactive({
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_perinatal")), sum) |>
@@ -1418,7 +1409,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::left_join(data_plot_garbage_perinatal(), data_plot_garbage_perinatal_referencia())
     })
 
-    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos perinatais -------
     output$plot_garbage_perinatal <- highcharter::renderHighchart({
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1435,14 +1426,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2)]
         ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_perinatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_perinatal_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos perinatais preenchidos com garbage codes"), min = 0, max = 100)
     })
 
 
-    ########## Distribuição de óbitos neonatais preenchidos com garbage code
-
-
+    ## Criando os data.frames para a construção do gráfico de garbage codes p/ óbitos neonatais --------
     data_plot_garbage_neonatal <- reactive({
       data_filtrada_aux() |>
         dplyr::summarise_at(dplyr::vars(dplyr::contains("garbage_neonatal")), sum) |>
@@ -1521,7 +1510,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::left_join(data_plot_garbage_neonatal(), data_plot_garbage_neonatal_referencia())
     })
 
-    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos maternos -------
+    ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos neonatais -------
     output$plot_garbage_neonatal <- highcharter::renderHighchart({
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1538,7 +1527,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2)]
         ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_neonatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_neonatal_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de óbitos neonatais preenchidos com garbage codes"), min = 0, max = 100)
     })
 
@@ -1641,7 +1630,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_morbidade_neonatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_morbidade_neonatal_completo()$cid)) + 2)]
         ) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_morbidade_neonatal_completo()$ano), allowDecimals = FALSE, reversed = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_morbidade_neonatal_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de internações neonatais preenchidos com garbage codes"), min = 0, max = 100)
     })
 
@@ -1783,58 +1772,49 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ) |>
         dplyr::ungroup()
 
-      if (infos_indicador()$nome_abreviado %in% indicadores_2022) {
-        data_grafico_serie_aux |>
-          tibble::add_row(ano = 2022:filtros()$ano2[2], class = rep(data_grafico_serie_aux$class[1], length(2022:filtros()$ano2[2])))
-      } else {
-        data_grafico_serie_aux
-      }
+      data_grafico_serie_aux
     })
 
-
-    data_fator_de_correcao <- reactive({
+    data_rmm_corrigida_aux <- reactive({
       if (infos_indicador()$nome_abreviado == "rmm") {
-        if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
-          if (filtros()$nivel == "Estadual") {
-            rmm_fator_de_correcao |>
+        if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional")){
+          if(filtros()$nivel == "Estadual"){
+            rmm_corrigida |>
               dplyr::filter(
                 localidade == filtros()$estado,
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
               )
-          } else if (filtros()$nivel == "Regional") {
-            rmm_fator_de_correcao |>
+          } else if(filtros()$nivel == "Regional"){
+            rmm_corrigida |>
               dplyr::filter(
                 localidade == filtros()$regiao,
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
               )
-          } else {
-            rmm_fator_de_correcao |>
+          } else if(filtros()$nivel=="Nacional"){
+            rmm_corrigida |>
               dplyr::filter(
                 localidade == "Brasil",
                 ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
               )
           }
-        } else {
-          data.frame(
-            ano = anos_disponiveis(),
-            fator_de_correcao = rep(1, length(anos_disponiveis()))
-          )
         }
-      }
-    })
-
-    data_rmm_corrigida_aux <- reactive({
-      if (infos_indicador()$nome_abreviado == "rmm") {
-        dplyr::full_join(data_grafico_serie(), data_fator_de_correcao(), by = "ano")
+        else{
+          data.frame(ano = filtros()$ano2[1]:filtros()$ano2[2])
+        }
       }
     })
 
     data_rmm_corrigida <- reactive({
       if (infos_indicador()$nome_abreviado == "rmm") {
-        data_rmm_corrigida_aux() |>
-          dplyr::mutate(
-            rmm = round(indicador * fator_de_correcao, 1)
-          )
+        if (filtros()$nivel %in% c("Estadual", "Regional", "Nacional")) {
+          dplyr::full_join(data_grafico_serie(), data_rmm_corrigida_aux(), by = "ano") |>
+            dplyr::mutate(
+              rmm = ifelse(ano <= 2022, RMM, indicador)
+            )
+        } else {
+          data_grafico_serie() |>
+            dplyr::rename(rmm = indicador)
+        }
       }
     })
 
@@ -2054,11 +2034,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             highcharter::hc_add_series(
               data = data_referencia_serie() |>
                 dplyr::filter(
-                  ano <= ifelse(
-                    infos_indicador()$nome_abreviado %in% indicadores_2022,
-                    2021,
-                    filtros()$ano2[2]
-                  )
+                  ano <= filtros()$ano2[2]
                 ),
               type = "line",
               highcharter::hcaes(x = ano, y = indicador, group = class, colour = class),
