@@ -24,6 +24,10 @@ mod_bloco_7_ui <- function(id) {
         .shiny-input-checkboxgroup label~.shiny-options-group, .shiny-input-radiogroup label~.shiny-options-group {
           margin-top: 0px;
         }
+
+        #bloco_6_1-tabset1 .nav-link {
+          border-style: solid
+        }
         "
       )
     ),
@@ -3038,7 +3042,7 @@ mod_bloco_7_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
@@ -3140,7 +3144,7 @@ mod_bloco_7_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
@@ -3551,7 +3555,7 @@ mod_bloco_7_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "330px",
@@ -3605,7 +3609,7 @@ mod_bloco_7_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "350px",
@@ -3637,7 +3641,7 @@ mod_bloco_7_server <- function(id, filtros){
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
           nivel_selecionado() == "Nacional",
-          "Comparação não aplicável (o total nacional é o valor de referência)",
+          "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
         tamanho_caixa = "350px",
