@@ -255,25 +255,24 @@ df_bloco1 <- df_bloco1_sinasc |>
 
 
 # Verificando se os dados novos e antigos estão batendo -------------------
-## Lendo o arquivo com os dados de 2012 a 2023, que utilizamos no painel original
-df_bloco1_antigo <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2023.csv") |>
+## Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
+df_bloco1_antigo <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/indicadores_bloco1_socioeconomicos_2012-2020.csv") |>
   clean_names() |>
-  filter(ano <= 2022)
 
-sum(df_bloco1 |> filter(ano < 2023) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
-sum(df_bloco1 |> filter(ano < 2023) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
-sum(df_bloco1 |> filter(ano < 2022) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49, na.rm = T) # As estimativas foram atualizadas com o censo de 2022
+sum(df_bloco1 |> filter(ano < 2020) |> pull(total_de_nascidos_vivos)) - sum(df_bloco1_antigo$total_de_nascidos_vivos)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_menor_que_20_anos)) - sum(df_bloco1_antigo$nvm_menor_que_20_anos)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_entre_20_e_34_anos)) - sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_maior_que_34_anos)) - sum(df_bloco1_antigo$nvm_maior_que_34_anos)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_cor_da_pele_branca)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_cor_da_pele_preta)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_cor_da_pele_parda)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_cor_da_pele_amarela)) - sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_indigenas)) - sum(df_bloco1_antigo$nvm_indigenas)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_escolaridade_ate_3)) - sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_escolaridade_de_4_a_7)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_escolaridade_de_8_a_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(nvm_com_escolaridade_acima_de_11)) - sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
+sum(df_bloco1 |> filter(ano < 2020) |> pull(populacao_feminina_10_a_49)) - sum(df_bloco1_antigo$populacao_feminina_10_a_49, na.rm = T) # As estimativas foram atualizadas com o censo de 2022
 
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
