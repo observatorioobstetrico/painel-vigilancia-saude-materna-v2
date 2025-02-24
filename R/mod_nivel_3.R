@@ -793,7 +793,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
       }
     })
 
@@ -842,7 +842,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
       }
     })
 
@@ -853,7 +853,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
           class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
         ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
       } else {
         data.frame(
           ano = anos_disponiveis(),
@@ -861,7 +861,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis()))),
           class = rep("Ideal", times = length(anos_disponiveis()))
         ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco %in% c("bloco4_deslocamento", "bloco6"), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
       }
     })
 
