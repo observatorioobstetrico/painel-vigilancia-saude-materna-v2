@@ -182,7 +182,7 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
       texto_footer <- "Comparação não aplicável"
       cor <- "lightgrey"
     } else {
-      texto_footer <- "Comparação não aplicável (a média nacional é o valor de referência)"
+      texto_footer <- "Comparação não aplicável (este é o valor de referência)"
       cor <- "lightgrey"
     }
   }
