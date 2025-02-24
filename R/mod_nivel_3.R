@@ -444,6 +444,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
     )
 
+    observe(print(tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)))
+
+    observe(print(glue::glue("{tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")))
 
     infos_indicador <- reactive({
       if (filtros()$bloco %in% c("bloco4", "bloco6")) {
@@ -2276,15 +2279,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
+    observe(print(grepl("bloco7", infos_indicador()$bloco)))
+
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
-      if (infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco)) {
-        tags$style(HTML("#tabela {height: 1080px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
-      } else {
-        req(filtros()$indicador)
+      if (infos_indicador()$bloco == "bloco6") {
         tags$style(HTML("#tabela {height: 1823px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+      } else if (grepl("bloco7", infos_indicador()$bloco)) {
+        tags$style(HTML("#tabela {height: 1823px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+      } else {
+        tags$style(HTML("#tabela {height: 1080px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       }
-
     })
 
 
