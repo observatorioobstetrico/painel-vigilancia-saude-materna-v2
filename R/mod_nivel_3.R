@@ -135,6 +135,106 @@ mod_nivel_3_ui <- function(id){
                 width = 12,
                 conditionalPanel(
                   ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_fetal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos fetais totais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_fetal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_perinatal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos perinatais totais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_perinatal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco7_selecionado == 'bloco7_neonatal'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos neonatais totais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_neonatal"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
+                  condition = "output.bloco_selecionado == 'bloco6'",
+                  bs4Dash::bs4Card(
+                    width = 12,
+                    status = "primary",
+                    collapsible = FALSE,
+                    headerBorder = FALSE,
+                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    div(
+                      style = "height: 8%; display: flex; align-items: center;",
+                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos maternos totais </b>")
+                    ),
+                    hr(),
+                    div(
+                      style = "overflow: auto",
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_materno"), height = 600))
+                    )
+                  )
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                conditionalPanel(
+                  ns = ns,
                   condition = "output.bloco_selecionado == 'bloco6'",
                   bs4Dash::bs4Card(
                     width = 12,
@@ -230,31 +330,31 @@ mod_nivel_3_ui <- function(id){
                 )
               )
             ),
-            fluidRow(
-              column(
-                width = 12,
-                conditionalPanel(
-                  ns = ns,
-                  condition = "output.bloco7_selecionado == 'bloco7_morbidade_neonatal'",
-                  bs4Dash::bs4Card(
-                    width = 12,
-                    status = "primary",
-                    collapsible = FALSE,
-                    headerBorder = FALSE,
-                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
-                    div(
-                      style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nas internações neonatais </b>")
-                    ),
-                    hr(),
-                    div(
-                      style = "overflow: auto",
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_morbidade_neonatal"), height = 600))
-                    )
-                  )
-                )
-              )
-            ),
+            # fluidRow(
+            #   column(
+            #     width = 12,
+            #     conditionalPanel(
+            #       ns = ns,
+            #       condition = "output.bloco7_selecionado == 'bloco7_morbidade_neonatal'",
+            #       bs4Dash::bs4Card(
+            #         width = 12,
+            #         status = "primary",
+            #         collapsible = FALSE,
+            #         headerBorder = FALSE,
+            #         style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+            #         div(
+            #           style = "height: 8%; display: flex; align-items: center;",
+            #           HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nas internações neonatais </b>")
+            #         ),
+            #         hr(),
+            #         div(
+            #           style = "overflow: auto",
+            #           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_morbidade_neonatal"), height = 600))
+            #         )
+            #       )
+            #     )
+            #   )
+            # ),
             fluidRow(
               column(
                 width = 12,
@@ -1636,6 +1736,114 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_xAxis(title = list(text = ""), categories = unique(data_plot_garbage_morbidade_neonatal_completo()$ano), allowDecimals = FALSE, reversed = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% relativo ao total de internações neonatais preenchidos com garbage codes"), min = 0, max = 100)
     })
+
+
+    ############ Porcentagem de garbage codes em relação ao total de óbitos
+
+    garbage_porcentagens <- reactive({
+      bloco8_graficos |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "Nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "Municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::mutate(
+          prop_garbage_fetal = round(sum(total_garbage_codes_fetais, na.rm = T)/sum(obitos_fetais_totais, na.rm=T) *100, 2),
+          prop_garbage_neonatal = round(sum(total_garbage_codes_neonatais, na.rm = T)/sum(obitos_neonatais_totais, na.rm=T) *100, 2),
+          prop_garbage_perinatal = round(sum(total_garbage_codes_perinatais, na.rm = T)/sum(obitos_perinatais_totais, na.rm=T) *100, 2),
+          prop_garbage_materno = round(sum(total_garbage_codes_maternos, na.rm = T)/sum(obitos_maternos_totais, na.rm=T) *100, 2)
+
+
+        )|>
+        dplyr::ungroup()
+    })
+
+    output$porcentagem_garbage_fetal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = garbage_porcentagens(),
+          type = "line",
+          x = garbage_porcentagens()$ano,
+          y = garbage_porcentagens()$prop_garbage_fetal
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_colors(cols)
+    })
+
+
+    output$porcentagem_garbage_neonatal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = garbage_porcentagens(),
+          type = "line",
+          x = garbage_porcentagens()$ano,
+          y = garbage_porcentagens()$prop_garbage_neonatal
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_colors(cols)
+    })
+
+
+    output$porcentagem_garbage_perinatal <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = garbage_porcentagens(),
+          type = "line",
+          x = garbage_porcentagens()$ano,
+          y = garbage_porcentagens()$prop_garbage_perinatal
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_colors(cols)
+    })
+
+
+    output$porcentagem_garbage_materno <- highcharter::renderHighchart({
+      highcharter::highchart() |>
+        highcharter::hc_add_series(
+          data = garbage_porcentagens(),
+          type = "line",
+          x = garbage_porcentagens()$ano,
+          y = garbage_porcentagens()$prop_garbage_materno
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_colors(cols)
+    })
+
 
 
 
