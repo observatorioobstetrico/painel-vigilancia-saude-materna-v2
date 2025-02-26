@@ -144,7 +144,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos fetais totais </b>")
+                      HTML("<b style='font-size:18px'> Porcentagem de óbitos fetais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -169,7 +169,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos perinatais totais </b>")
+                      HTML("<b style='font-size:18px'> Porcentagem de óbitos perinatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -194,7 +194,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos neonatais totais </b>")
+                      HTML("<b style='font-size:18px'> Porcentagem de óbitos neonatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -219,7 +219,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de garbage codes em relação aos óbitos maternos totais </b>")
+                      HTML("<b style='font-size:18px'> Porcentagem de óbitos maternos preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -1268,6 +1268,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         )
     })
 
+
     data_plot_garbage_materno_referencia <- reactive({
       bloco8_graficos |>
         dplyr::filter(
@@ -1365,9 +1366,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
+
 
     data_plot_garbage_fetal_referencia <- reactive({
       bloco8_graficos |>
@@ -1397,9 +1400,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
+
 
     data_plot_garbage_fetal_completo <- reactive({
       validate(
@@ -1410,6 +1415,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
       dplyr::left_join(data_plot_garbage_fetal(), data_plot_garbage_fetal_referencia())
     })
+
 
     ## Criando o gráfico da distribuição percentual de garbage codes p/ óbitos fetais -------
     output$plot_garbage_fetal <- highcharter::renderHighchart({
@@ -1466,7 +1472,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
 
@@ -1498,7 +1505,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
 
@@ -1567,7 +1575,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
 
@@ -1599,7 +1608,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             nchar(cid) == 4,
             paste(substr(cid, 1, 3), ".", substr(cid, 4, 4), sep = ""),
             cid
-          )
+          ),
+          causabas_subcategoria = ifelse(cid != "OUTROS", causabas_subcategoria, "Outros")
         )
     })
 
@@ -1758,91 +1768,91 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        dplyr::mutate(
+        dplyr::summarise(
           prop_garbage_fetal = round(sum(total_garbage_codes_fetais, na.rm = T)/sum(obitos_fetais_totais, na.rm=T) *100, 2),
           prop_garbage_neonatal = round(sum(total_garbage_codes_neonatais, na.rm = T)/sum(obitos_neonatais_totais, na.rm=T) *100, 2),
           prop_garbage_perinatal = round(sum(total_garbage_codes_perinatais, na.rm = T)/sum(obitos_perinatais_totais, na.rm=T) *100, 2),
           prop_garbage_materno = round(sum(total_garbage_codes_maternos, na.rm = T)/sum(obitos_maternos_totais, na.rm=T) *100, 2)
-
-
+        )|>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel == "Nacional" ~ "Brasil",
+            filtros()$nivel == "Regional" ~ filtros()$regiao,
+            filtros()$nivel == "Estadual" ~ filtros()$estado,
+            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+            filtros()$nivel == "Municipal" ~ filtros()$municipio
+          )
         )|>
         dplyr::ungroup()
     })
 
     output$porcentagem_garbage_fetal <- highcharter::renderHighchart({
-      highcharter::highchart() |>
+
+      grafico_base <- highcharter::highchart() |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
-          x = garbage_porcentagens()$ano,
-          y = garbage_porcentagens()$prop_garbage_fetal
+          highcharter::hcaes(x = ano, y = prop_garbage_fetal, group = class, colour = class)
         ) |>
-        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_xAxis(
-          title = list(text = ""),
-          categories = filtros()$ano2[1]:filtros()$ano2[2],
-          allowDecimals = FALSE
-        ) |>
-        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0)|>
         highcharter::hc_colors(cols)
+
     })
+
 
 
     output$porcentagem_garbage_neonatal <- highcharter::renderHighchart({
-      highcharter::highchart() |>
+
+      grafico_base <- highcharter::highchart() |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
-          x = garbage_porcentagens()$ano,
-          y = garbage_porcentagens()$prop_garbage_neonatal
+          highcharter::hcaes(x = ano, y = prop_garbage_neonatal, group = class, colour = class)
         ) |>
-        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_xAxis(
-          title = list(text = ""),
-          categories = filtros()$ano2[1]:filtros()$ano2[2],
-          allowDecimals = FALSE
-        ) |>
-        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0)|>
         highcharter::hc_colors(cols)
+
     })
+
 
 
     output$porcentagem_garbage_perinatal <- highcharter::renderHighchart({
-      highcharter::highchart() |>
+
+      grafico_base <- highcharter::highchart() |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
-          x = garbage_porcentagens()$ano,
-          y = garbage_porcentagens()$prop_garbage_perinatal
+          highcharter::hcaes(x = ano, y = prop_garbage_perinatal, group = class, colour = class)
         ) |>
-        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_xAxis(
-          title = list(text = ""),
-          categories = filtros()$ano2[1]:filtros()$ano2[2],
-          allowDecimals = FALSE
-        ) |>
-        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0)|>
         highcharter::hc_colors(cols)
+
     })
+
 
 
     output$porcentagem_garbage_materno <- highcharter::renderHighchart({
-      highcharter::highchart() |>
+
+      grafico_base <- highcharter::highchart() |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
-          x = garbage_porcentagens()$ano,
-          y = garbage_porcentagens()$prop_garbage_materno
+          highcharter::hcaes(x = ano, y = prop_garbage_materno, group = class, colour = class)
         ) |>
-        highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_xAxis(
-          title = list(text = ""),
-          categories = filtros()$ano2[1]:filtros()$ano2[2],
-          allowDecimals = FALSE
-        ) |>
-        highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = ""), min = 0)|>
         highcharter::hc_colors(cols)
+
     })
+
 
 
 
