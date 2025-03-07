@@ -267,6 +267,8 @@ base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indi
   janitor::clean_names() |>
   dplyr::select(!uf)
 
+base_incompletude_bloco7 <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv')
+
 
 #Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde
 bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
@@ -597,7 +599,7 @@ usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
-
+usethis::use_data(base_incompletude_bloco7, overwrite = TRUE)
 
 
 
