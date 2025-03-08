@@ -61,5 +61,7 @@ dados3<- rbind(dados3,dados_aux)
 dadosa <- dcast(melt(dados3, id.vars=c("CODMUNRES", "ANO", "VARIAVEL")),
                 CODMUNRES +  ANO ~ VARIAVEL + variable)
 
+dadosa <- dadosa |> select(-c(IDANOMAL_INCOMPLETOS, IDANOMAL_TOTAIS))
+
 write.csv(dadosa, "data-raw/csv/incompletude_SINASC_2012-2023.csv")
 

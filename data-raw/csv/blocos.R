@@ -249,10 +249,10 @@ bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
 #     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
 #   )
 
-base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2020.csv", sep = ",")[, -1] |>
+base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2023.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
-  dplyr::select(-c(uf))
+  dplyr::filter(codmunres %in% aux_municipios$codmunres) #|>
+  # dplyr::select(-c(uf))
 
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>

@@ -21,7 +21,8 @@ library(tidyr)
 # CRIACAO TABELA BASE MUNICIPIOS COMPARACAO -------------------------------
 
 dados_nasc <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
-                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
+                         delim = ",", escape_double = FALSE, trim_ws = TRUE) |>
+  filter(ano >= 2012 & ano <= 2023)
 
 dados_nasc_agr <- dados_nasc %>%
   rename(nasc = total_de_nascidos_vivos)
@@ -47,7 +48,7 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios,
                                 ano = 2012:2023)
 
 df_verificacao <- left_join(df_aux_municipios, dados_nasc_agr)
-df_verificacao$NASC[is.na(df_verificacao$nasc)] <- 0
+df_verificacao$nasc[is.na(df_verificacao$nasc)] <- 0
 
 # sum(df_verificacao |> filter(ano < 2021 ) |> pull(NASC)) - sum(dados_nasc_agr_antigo$NASC)
 
@@ -104,8 +105,9 @@ NULOS <- NULOS %>%
   summarise(NULOS = sum(NASC))
 
 names(dados_nasc_agr)<- dados_nasc_agr |> names() |> toupper()
+
 dados <- full_join(NULOS, IGNORADOS, by = c("CODMUNRES","ANO")) %>%
-  right_join(dados_nasc_agr , by = c("ANO", "CODMUNRES"))
+  right_join(dados_nasc_agr, by = c("ANO", "CODMUNRES"))
 
 dados_RACACOR <- dados %>%
   mutate(NULOS =  ifelse(is.na(NULOS), 0, NULOS),

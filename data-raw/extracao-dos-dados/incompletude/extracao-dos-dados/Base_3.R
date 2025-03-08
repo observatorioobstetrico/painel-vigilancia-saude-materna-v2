@@ -12,7 +12,7 @@ require(LaplacesDemon)
 require(TeachingDemos)
 
 dados_nasc <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
-                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
+                         delim = ",", escape_double = FALSE, trim_ws = TRUE) |> select(-...1)
 
 dados_nasc_agr <- dados_nasc %>%
   rename(nasc = total_de_nascidos_vivos)
@@ -27,7 +27,9 @@ janitor::get_dupes(dados_nasc_agr, codmunres)
 codigos_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv") |>
   pull(codmunres)
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios,
+                                                each = length(2012:2023)),
+                                                ano = 2012:2023)
 
 df_verificacao <- left_join(df_aux_municipios, dados_nasc_agr)
 df_verificacao$nasc[is.na(df_verificacao$nasc)] <- 0
@@ -48,6 +50,7 @@ names(dados_nasc_agr) <- names(dados_nasc_agr) |> toupper()
 ## CORRIGINDO O ERRO DE 2013
 TPROBSON_PARTO <-  read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/TPROBSON_PARTO_muni.csv"),
                                delim = ",", escape_double = FALSE, trim_ws = TRUE) #|>
+
   #rename(CODMUNRES = Municipio,
   #       ANO = Ano,
   #       NASC = Nascidos)
@@ -58,7 +61,7 @@ INCOMPLETUDE <- TPROBSON_PARTO %>%
   filter(PARTO  == 9 | TPROBSON %in% c(11,12) | PARTO %>% is.na() | TPROBSON %>% is.na())
 
 INCOMPLETUDE <- INCOMPLETUDE |>
-group_by(CODMUNRES   , ANO ) %>%
+group_by(CODMUNRES, ANO) %>%
   summarise(INCOMPLETUDE = sum(NASC))
 
 
