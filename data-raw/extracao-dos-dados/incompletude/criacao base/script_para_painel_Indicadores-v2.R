@@ -19,7 +19,7 @@ library(readr)
 
 ## carregando dados
 
-dados <- read_csv("Base_1_2012-2022_v2.csv") |>
+dados <- read_csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/Base_1_2012-2023_v2.csv") |>
   select(-...1) %>% rename(VARIAVEL = variavel)
 
 # teste <- janitor::get_dupes(dados, c("CODMUNNASC", "ANO", "VARIAVEL"))
@@ -40,7 +40,7 @@ teste <- janitor::get_dupes(dados1, c("CODMUNRES", "ANO", "VARIAVEL"))
 
 
 dados2 <- dados1 %>%
-  filter(ANO >= 2012 & ANO <= 2022)
+  filter(ANO >= 2012 & ANO <= 2023)
 
 dados3 <- dados2 %>%
   filter(VARIAVEL == "IDADEMAE" | VARIAVEL == "RACACOR" | VARIAVEL == "ESCMAE" |
@@ -53,7 +53,7 @@ dados3 <- dados2 %>%
   mutate(INCOMPLETOS = NULOS + IGNORADOS) %>%
   select(CODMUNRES, ANO, VARIAVEL, INCOMPLETOS, TOTAIS) # VARIAVEL1,
 
-dados_aux <- read_csv("Base_3_2012-2022_v2.csv") |>
+dados_aux <- read_csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/Base_3_2012-2023_v2.csv") |>
   select(-...1) |> mutate(VARIAVEL = 'PARTO_TPROBSON') |> rename(INCOMPLETOS = INCOMPLETUDE)
 dados_aux$UF <- NULL
 
@@ -61,5 +61,5 @@ dados3<- rbind(dados3,dados_aux)
 dadosa <- dcast(melt(dados3, id.vars=c("CODMUNRES", "ANO", "VARIAVEL")),
                 CODMUNRES +  ANO ~ VARIAVEL + variable)
 
-write.csv(dadosa, "incompletude_SINASC_2012-2022.csv")
+write.csv(dadosa, "data-raw/csv/incompletude_SINASC_2012-2023.csv")
 

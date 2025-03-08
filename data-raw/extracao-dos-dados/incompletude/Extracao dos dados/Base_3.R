@@ -11,12 +11,20 @@ require(truncnorm)
 require(LaplacesDemon)
 require(TeachingDemos)
 
-dados_nasc_agr_antigo <- dados_nasc_antigo %>% select(-...1) |>
-  rename(nasc = TOTAL_DE_NASCIDOS_VIVOS)
-sum(dados_nasc_agr |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
+dados_nasc <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
+                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
+
+dados_nasc_agr <- dados_nasc %>%
+  rename(nasc = total_de_nascidos_vivos)
+
+janitor::get_dupes(dados_nasc_agr, codmunres)
+
+# dados_nasc_agr_antigo <- dados_nasc_antigo %>% select(-...1) |>
+#   rename(nasc = TOTAL_DE_NASCIDOS_VIVOS)
+# sum(dados_nasc_agr |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
 #DEU DIFERENCA, TESTANDO AGORA PEGAR SOMENTE OS MUNICIPIOS UTILIZADO NO PAINEL DE VIGILANCIA
 
-codigos_municipios <- read.csv("bases/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv") |>
   pull(codmunres)
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
@@ -24,26 +32,27 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 df_verificacao <- left_join(df_aux_municipios, dados_nasc_agr)
 df_verificacao$nasc[is.na(df_verificacao$nasc)] <- 0
 
-sum(df_verificacao |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
+# sum(df_verificacao |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
 
 
-dados_nasc_agr_antigo$ANO |> unique()
+# dados_nasc_agr_antigo$ANO |> unique()
 #AGORA FOI, USAR ESSE. E COMO SABEMOS QUE OS NUMERO DE NASCIDOS CONFERE,
 #PODEMOS UTILIZAR ESSE BANCO DE DADOS PARA VERIFICACAO AO INVES DA BASE ANTIGA DE
 #CADA VARIAVEL
 dados_nasc_agr <- df_verificacao
-rm(df_verificacao,dados_nasc_agr_antigo,codigos_municipios,dados_nasc_antigo)
+rm(df_verificacao,codigos_municipios #,dados_nasc_antigo,dados_nasc_agr_antigo
+   )
 names(dados_nasc_agr) <- names(dados_nasc_agr) |> toupper()
 
 # TPROBSON-PARTO ----------------------------------------------------------
 ## CORRIGINDO O ERRO DE 2013
-TPROBSON_PARTO_antigo <-  read_delim(("bases/TPROBSON_PARTO_muni.csv"),
+TPROBSON_PARTO <-  read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/TPROBSON_PARTO_muni.csv"),
                                delim = ",", escape_double = FALSE, trim_ws = TRUE) #|>
   #rename(CODMUNRES = Municipio,
   #       ANO = Ano,
   #       NASC = Nascidos)
-TPROBSON_PARTO <- TPROBSON_PARTO |>
-  rbind(TPROBSON_PARTO_antigo[TPROBSON_PARTO_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','TPROBSON', 'PARTO')])
+# TPROBSON_PARTO <- TPROBSON_PARTO |>
+#   rbind(TPROBSON_PARTO_antigo[TPROBSON_PARTO_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','TPROBSON', 'PARTO')])
 
 INCOMPLETUDE <- TPROBSON_PARTO %>%
   filter(PARTO  == 9 | TPROBSON %in% c(11,12) | PARTO %>% is.na() | TPROBSON %>% is.na())
@@ -66,4 +75,4 @@ UFS <- data.frame(
 dados_TPROBSON_PARTO$CODMUNRES <- dados_TPROBSON_PARTO$CODMUNRES %>% as.character()
 dados_TPROBSON_PARTO <-merge(dados_TPROBSON_PARTO, UFS, by.x = "aux", by.y = "COD", all.x = TRUE)
 dados_final_2 <- dados_TPROBSON_PARTO %>% select(-c(aux))
-write.csv(dados_final_2,'Base_3_2012-2022_v2.csv')
+write.csv(dados_final_2,"data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/Base_3_2012-2023_v2.csv")

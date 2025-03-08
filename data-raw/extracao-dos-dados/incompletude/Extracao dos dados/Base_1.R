@@ -14,17 +14,17 @@ require(coda)
 library(foreign)
 library("reshape2")
 library(tidyr)
-setwd('extracao_dados_Samuel')
+# setwd('extracao_dados_Samuel')
 
 ##### Incompletude SINASC raca
 
 # CRIACAO TABELA BASE MUNICIPIOS COMPARACAO -------------------------------
 
-dados_nasc <- read_delim("bases_novas/total_nascidos_CODMUNRES.csv",
+dados_nasc <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
 
 dados_nasc_agr <- dados_nasc %>%
-  rename(nasc = total_de_NASC_vivos)
+  rename(nasc = total_de_nascidos_vivos)
 
 janitor::get_dupes(dados_nasc_agr, codmunres)
 
@@ -32,62 +32,61 @@ dados <- dplyr::distinct(dados_nasc_agr, ano, codmunres, .keep_all = TRUE)
 
 #COMPARANDO COM BASE ANTIGA
 
-dados_nasc_antigo <- read_delim("bases/total_nascidos_CODMUNRES.csv",
-                                delim = ",", escape_double = FALSE, trim_ws = TRUE)
-dados_nasc_agr_antigo <- dados_nasc_antigo %>% #select(-1) |>
-  rename(nasc = total_de_nascidos_vivos)
-sum(dados_nasc_agr |> filter(ano <= 2021 ) |> pull(NASC)) - sum(dados_nasc_agr_antigo$nasc)
+# dados_nasc_antigo <- read_delim("bases/total_nascidos_CODMUNRES.csv",
+#                                 delim = ",", escape_double = FALSE, trim_ws = TRUE)
+# dados_nasc_agr_antigo <- dados_nasc_antigo %>% #select(-1) |>
+#   rename(nasc = total_de_nascidos_vivos)
+# sum(dados_nasc_agr |> filter(ano <= 2021 ) |> pull(NASC)) - sum(dados_nasc_agr_antigo$nasc)
 #DEU DIFERENCA, TESTANDO AGORA PEGAR SOMENTE OS MUNICIPIOS UTILIZADO NO PAINEL DE VIGILANCIA
 
-codigos_municipios <- read.csv("bases/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/csv/tabela_aux_municipios.csv") |>
   pull(codmunres)
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios,
-                                                each = length(2012:2022)),
-                                ano = 2012:2022)
-
-df_aux_municipios <- df_aux_municipios %>%
-  rename(ANO = ano,
-         CODMUNRES = codmunres)
+                                                each = length(2012:2023)),
+                                ano = 2012:2023)
 
 df_verificacao <- left_join(df_aux_municipios, dados_nasc_agr)
 df_verificacao$NASC[is.na(df_verificacao$nasc)] <- 0
 
-sum(df_verificacao |> filter(ano < 2021 ) |> pull(NASC)) - sum(dados_nasc_agr_antigo$NASC)
+# sum(df_verificacao |> filter(ano < 2021 ) |> pull(NASC)) - sum(dados_nasc_agr_antigo$NASC)
 
 
-dados_nasc_agr_antigo$ano |> unique()
+# dados_nasc_agr_antigo$ano |> unique()
+
 #AGORA FOI, USAR ESSE. E COMO SABEMOS QUE OS NUMERO DE NASC CONFERE,
 #PODEMOS UTILIZAR ESSE BANCO DE DADOS PARA VERIFICACAO AO INVES DA BASE ANTIGA DE
 #CADA VARIAVEL
-dados_nasc_agr <- df_verificacao #%>% 
+dados_nasc_agr <- df_verificacao #%>%
   #rename(CODMUNRES = codmunres,
   #       ANO = ano,
   #       NASC = nasc)
-rm(df_verificacao,dados_nasc_agr_antigo,codigos_municipios,dados_nasc_antigo)
+rm(df_verificacao,codigos_municipios #,dados_nasc_antigo,dados_nasc_agr_antigo
+   )
 
 # RACACOR -----------------------------------------------------------------
 
-raca_muni <- read.csv("bases_novas/RACACOR_muni.csv")
+raca_muni <- read.csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/RACACOR_muni.csv")
 
 #esse passo é importante pq na API da PCDaS corremos pela UF de residência,
 #mas usamos o municipio de ocorrência (CODMUNRES)
 raca_muni_agr <- raca_muni %>%
   group_by(CODMUNRES, ANO) %>%
-  summarise(nasc_raca = sum(NASC)) #|> clean_names()
+  summarise(nasc_raca = sum(NASC)) |> clean_names()
 
 ## total de nascimentos das duas bases (de nascimentos e raca) coincidem
-dados <- left_join(dados_nasc_agr, raca_muni_agr, by = c("ANO", "CODMUNRES"))
+dados <- left_join(dados_nasc_agr, raca_muni_agr, by = c("ano", "codmunres"))
 
 dados[is.na(dados$nasc_raca),"nasc_raca"] <- 0
 
-sum(dados$nasc-dados$nasc_raca)
+# sum(dados$nasc-dados$nasc_raca)
+
 # total de nascimentos coincide com o total de NASC vivos do painel de Indicadores Obstétricos
 # guardar esse resultado em um objeto diferente para usar de comparacao para as outras variaveis
 
 dados2_cor <- dados %>%
-  group_by(ANO) %>%
-  summarise(n = sum(NASC))
+  group_by(ano) %>%
+  summarise(n = sum(nasc))
 
 # agora vamos só trabalhar com os dados faltantes
 IGNORADOS <- raca_muni %>%
@@ -115,56 +114,58 @@ dados_RACACOR$variavel <- 'RACACOR'
 
 #IMPORTACAO DOS BANCOS ------------------------------------------------------------------
 variaveis <- c( "IDADEMAE" , "ESCMAE" ,"QTDPARTNOR",  "QTDPARTCES",
-                "CONSPRENAT" ,"MESPRENAT" ,"PARTO" ,"TPROBSON" , "PESO" , 
+                "CONSPRENAT" ,"MESPRENAT" ,"PARTO" ,"TPROBSON" , "PESO" ,
                 "GESTACAO" , "SEMAGESTAC", "IDANOMAL")
 
-IDADEMAE   <- read_delim(("bases_novas/IDADEMAE_muni.csv"),
+IDADEMAE   <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/IDADEMAE_muni.csv"),
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
-ESCMAE <- read_delim(("bases_novas/ESCMAE_muni.csv"),
+ESCMAE <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/ESCMAE_muni.csv"),
                      delim = ",", escape_double = FALSE, trim_ws = TRUE)
-QTDPARTNOR <- read_delim(("bases_novas/QTDPARTNOR_muni.csv"),
+QTDPARTNOR <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/QTDPARTNOR_muni.csv"),
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
-QTDPARTCES <- read_delim(("bases_novas/QTDPARTCES_muni.csv"),
+QTDPARTCES <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/QTDPARTCES_muni.csv"),
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
-CONSPRENAT <- read_delim(("bases_novas/CONSPRENAT_muni.csv"),
+CONSPRENAT <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/CONSPRENAT_muni.csv"),
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
-MESPRENAT <- read_delim(("bases_novas/MESPRENAT_muni.csv"),
+MESPRENAT <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/MESPRENAT_muni.csv"),
                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
-PARTO <- read_delim(("bases_novas/PARTO_muni.csv"),
+PARTO <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/PARTO_muni.csv"),
                     delim = ",", escape_double = FALSE, trim_ws = TRUE)
-TPROBSON <- read_delim(("bases_novas/TPROBSON_muni.csv"),
+TPROBSON <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/TPROBSON_muni.csv"),
                        delim = ",", escape_double = FALSE, trim_ws = TRUE)
-PESO <- read_delim(("bases_novas/PESO_muni.csv"),
+PESO <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/PESO_muni.csv"),
                    delim = ",", escape_double = FALSE, trim_ws = TRUE)
-GESTACAO <- read_delim(("bases_novas/GESTACAO_muni.csv"),
+GESTACAO <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/GESTACAO_muni.csv"),
                        delim = ",", escape_double = FALSE, trim_ws = TRUE)
-SEMAGESTAC <- read_delim(("bases_novas/SEMAGESTAC_muni.csv"),
+SEMAGESTAC <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/SEMAGESTAC_muni.csv"),
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
-IDANOMAL <- read_delim(("bases_novas/IDANOMAL_muni.csv"),
+IDANOMAL <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/IDANOMAL_muni.csv"),
                        delim = ",", escape_double = FALSE, trim_ws = TRUE)
 
 # CONSPRENAT -----------------------------------------------
 
 # AGREGANDO POR MUNICIPIO DA OCORRENCIA
-CONSPRENAT_agr_antigo <-  read_delim(("bases_antigas/CONSPRENAT_muni.csv"),
-                                     delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  group_by(UF,Municipio, Ano) %>%
-  summarise(nasc_CONSPRENAT = sum(Nascidos)) %>%
-  rename(CODMUNRES = Municipio,
-         ANO = Ano)
+
+# CONSPRENAT_agr_antigo <-  read_delim(("bases_antigas/CONSPRENAT_muni.csv"),
+#                                      delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
+#   group_by(UF,Municipio, Ano) %>%
+#   summarise(nasc_CONSPRENAT = sum(Nascidos)) %>%
+#   rename(CODMUNRES = Municipio,
+#          ANO = Ano)
 CONSPRENAT_agr <- CONSPRENAT %>%
   group_by(CODMUNRES , ANO) %>%
   summarise(nasc_CONSPRENAT = sum(NASC))
 
 
 ## CORRIGINDO O ERRO DE 2013
-CONSPRENAT_antigo <-  read_delim(("bases_antigas/CONSPRENAT_muni.csv"),
-                                 delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  rename(CODMUNRES = Municipio,
-         ANO = Ano,
-         NASC = Nascidos)
-CONSPRENAT <- CONSPRENAT |>
-  rbind(CONSPRENAT_antigo[CONSPRENAT_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','CONSPRENAT')])
+
+# CONSPRENAT_antigo <-  read_delim(("bases_antigas/CONSPRENAT_muni.csv"),
+#                                  delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
+#   rename(CODMUNRES = Municipio,
+#          ANO = Ano,
+#          NASC = Nascidos)
+# CONSPRENAT <- CONSPRENAT |>
+#   rbind(CONSPRENAT_antigo[CONSPRENAT_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','CONSPRENAT')])
 
 
 ### número total de nascimentos das  duas bases coincidem
@@ -245,13 +246,13 @@ dados_PARTO$variavel <- 'PARTO'
 
 # TPROBSON ----------------------------------------------------------------
 ## CORRIGINDO O ERRO DE 2013
-TPROBSON_antigo <-  read_delim(("bases_antigas/TPROBSON_muni.csv"),
-                               delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  rename(CODMUNRES = Municipio,
-         ANO = Ano,
-         NASC = Nascidos)
-TPROBSON <- TPROBSON |>
-  rbind(TPROBSON_antigo[TPROBSON_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','TPROBSON')])
+# TPROBSON_antigo <-  read_delim(("bases_antigas/TPROBSON_muni.csv"),
+#                                delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
+#   rename(CODMUNRES = Municipio,
+#          ANO = Ano,
+#          NASC = Nascidos)
+# TPROBSON <- TPROBSON |>
+#   rbind(TPROBSON_antigo[TPROBSON_antigo$ANO == 2013,c('CODMUNRES', 'ANO', 'NASC','TPROBSON')])
 # AGREGANDO POR MUNICIPIO DA OCORRENCIA
 TPROBSON_agr <- TPROBSON %>%
   group_by(CODMUNRES, ANO) %>%
@@ -686,23 +687,23 @@ dados_final <-merge(dados_final, UFS, by.x = "aux", by.y = "COD", all.x = TRUE)
 dados_final_2 <- dados_final %>% select(-c(aux))
 
 #VERIFICANDO COM BASE ANTIGA
-base_1_antiga <- read.csv("Base_1_2012-2022.csv")
-sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(NULOS)) - sum(base_1_antiga$NULOS)
+# base_1_antiga <- read.csv("Base_1_2012-2022.csv")
+# sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(NULOS)) - sum(base_1_antiga$NULOS)
+#
+# sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(IGNORADOS)) - sum(base_1_antiga$IGNORADOS)
+#
+# sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(TOTAIS)) - sum(base_1_antiga$TOTAIS)
+#
+# teste <- full_join(dados_final_2 |>
+#                      mutate(CODMUNRES = as.integer(CODMUNRES)) |>
+#                      filter(ANO < 2021),
+#                    base_1_antiga |>
+#                      select(- X), by = c("CODMUNRES","ANO","variavel","TOTAIS", "UF") )
+#
+# diferentes <- teste[teste$NULOS.x - teste$NULOS.y  + teste$IGNORADOS.x - teste$IGNORADOS.y !=0,]
+# diferentes$ANO |> unique()
+# diferentes$variavel |> unique()
 
-sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(IGNORADOS)) - sum(base_1_antiga$IGNORADOS)
 
-sum(dados_final_2 |> filter(ANO < 2021 ) |> pull(TOTAIS)) - sum(base_1_antiga$TOTAIS)
-
-teste <- full_join(dados_final_2 |>
-                     mutate(CODMUNRES = as.integer(CODMUNRES)) |>
-                     filter(ANO < 2021),
-                   base_1_antiga |>
-                     select(- X), by = c("CODMUNRES","ANO","variavel","TOTAIS", "UF") )
-
-diferentes <- teste[teste$NULOS.x - teste$NULOS.y  + teste$IGNORADOS.x - teste$IGNORADOS.y !=0,]
-diferentes$ANO |> unique()
-diferentes$variavel |> unique()
-
-
-write.csv(dados_final_2,'Base_1_2012-2022_v2.csv')
-dados_final_2[dados_final_2$TOTAIS %>% is.na()]
+write.csv(dados_final_2,"data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/Base_1_2012-2023_v2.csv")
+# dados_final_2[dados_final_2$TOTAIS %>% is.na()]
