@@ -970,7 +970,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_grafico_incompletude2 <- reactive({
-      if (infos_indicador()$num_indicadores_incompletude == 2) {
+      if (infos_indicador()$num_indicadores_incompletude >= 2) {
         base_incompletude |>
           dplyr::filter(
             ano %in% anos_disponiveis(),
@@ -1019,7 +1019,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_grafico_incompletude3 <- reactive({
-      if (infos_indicador()$num_indicadores_incompletude == 3) {
+      if (infos_indicador()$num_indicadores_incompletude >= 3) {
         base_incompletude |>
           dplyr::filter(
             ano %in% anos_disponiveis(),
@@ -1168,13 +1168,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
          (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha1") |
          (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha1")){
         data_grafico_incompletude <- data_grafico_incompletude1()
-      } else if((infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha2") |
-                (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha2") |
-                (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha2")){
+      } else if((infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha2") | (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha2") | (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha2")){
         data_grafico_incompletude <- data_grafico_incompletude2()
       } else if(
-        (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha3") |
-        (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha3")){
+        (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha3") |(infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha3")){
         data_grafico_incompletude <- data_grafico_incompletude3()
       }else if((infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha4")){
         data_grafico_incompletude <- data_grafico_incompletude4()
@@ -1276,7 +1273,23 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           }
           anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
           valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_cobertura)))/length(anos_disponiveis()) * 100)
-        } else {
+        } else if(infos_indicador()$num_indicadores_incompletude == 3){
+          anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
+          anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao > 5)]
+          anos_incompletude3 <- data_grafico_incompletude3()$ano[which(data_grafico_incompletude3()$proporcao > 5)]
+          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
+          valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_incompletude3, anos_cobertura)))/length(anos_disponiveis()) * 100)
+
+        }else if(infos_indicador()$num_indicadores_incompletude == 4){
+          anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
+          anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao > 5)]
+          anos_incompletude3 <- data_grafico_incompletude3()$ano[which(data_grafico_incompletude3()$proporcao > 5)]
+          anos_incompletude4 <- data_grafico_incompletude4()$ano[which(data_grafico_incompletude4()$proporcao > 5)]
+
+          anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
+          valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_incompletude3, anos_incompletude4, anos_cobertura)))/length(anos_disponiveis()) * 100)
+
+        } else{
           anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
           valor <- round(length(anos_cobertura)/length(anos_disponiveis()) * 100)
         }
@@ -1359,12 +1372,18 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         variavel_incompletude1 = ifelse(
           infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos",
           "PARTO e TPROBSON",
-          stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+          ifelse(infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','))
         ),
         descricao_incompletude1 = descricao_incompletude1,
         incompletude2 = data_grafico_incompletude2()$proporcao,
-        variavel_incompletude2 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','),
+        variavel_incompletude2 = ifelse(infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')),
         descricao_incompletude2 = descricao_incompletude2,
+        incompletude3 = data_grafico_incompletude3()$proporcao,
+        variavel_incompletude3 = ifelse(infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')),
+        descricao_incompletude3 = descricao_incompletude3,
+        incompletude4 = data_grafico_incompletude4()$proporcao,
+        variavel_incompletude4 = ifelse(infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')),
+        descricao_incompletude4 = descricao_incompletude4,
         df = data_grafico_incompletude1(),
         cobertura = data_cobertura()$cobertura,
         nivel = 3,
@@ -1372,10 +1391,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           infos_indicador()$bloco == "bloco6" ~ "bloco6",
           grepl("deslocamento", infos_indicador()$bloco) ~ "deslocamento",
           infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ "geral"
-        ),
-        incompletude3 = data_grafico_incompletude3()$proporcao,
-        variavel_incompletude3 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','),
-        descricao_incompletude3 = descricao_incompletude3
+        )
       )
     })
 
