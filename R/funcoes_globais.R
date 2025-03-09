@@ -703,14 +703,14 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
 
 
 
-cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
+cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, incompletude3 = NULL, variavel_incompletude3 = NULL, descricao_incompletude3 = NULL, incompletude4 = NULL, variavel_incompletude4 = NULL, descricao_incompletude4 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
 
-  if (bloco == "bloco6") {
+  if (bloco == "bloco6" | substr(bloco, 1, 6) == "bloco7") {
     base <- "SIM"
   }
 
   if (bloco != "bloco6") {
-    req(any(incompletude1 > 5, na.rm = TRUE) | any(incompletude2 > 5, na.rm = TRUE) | any(cobertura < 90, na.rm = TRUE))
+    req(any(incompletude1 > 5, na.rm = TRUE) | any(incompletude2 > 5, na.rm = TRUE) | any(incompletude3 > 5, na.rm = TRUE) | any(incompletude4 > 5, na.rm = TRUE) | any(cobertura < 90, na.rm = TRUE))
   } else {
     req(any(incompletude1 < 90, na.rm = TRUE) | any(incompletude2 < 100, na.rm = TRUE) | any(cobertura < 90, na.rm = TRUE))
   }
@@ -751,7 +751,13 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
            <span style = 'font-weight: 700'> {anos1}. </span> Nesses anos, a porcentagem de valores em branco ou ignorados dessas variáveis foi,
            respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span> Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são
            considerados bons.")
-      } else {
+      } else if(variavel_incompletude1 == "GESTACAO, SEMAGESTAC e PESO"){
+        texto_incompletude <- glue::glue("As variáveis <span style = 'font-weight: 700'>GESTACAO</span>, <span style = 'font-weight: 700'>SEMAGESTAC</span> e <span style = 'font-weight: 700'>PESO</span>, </span> do {base}, apresentam problemas de incompletude nos anos de
+           <span style = 'font-weight: 700'> {anos1}. </span> Nesses anos, a porcentagem de valores em branco ou ignorados dessas variáveis foi,
+           respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span> Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são
+           considerados bons.")
+      }
+         else {
         texto_incompletude <- glue::glue("A variável <span style = 'font-weight: 700'> {variavel_incompletude1}, </span> do {base}, apresenta problemas de incompletude nos anos de
            <span style = 'font-weight: 700'> {anos1}. </span> Nesses anos, a porcentagem de valores {descricao_incompletude1} dessa variável foi,
            respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span> Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são
@@ -775,6 +781,11 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
              <span style = 'font-weight: 700'> {anos1_aux}. </span> Nesse ano, a porcentagem de valores em branco ou ignorados dessas variáveis foi
              de <span style = 'font-weight: 700'> {val_incomp1_aux}%. </span> Valores abaixo de 5% são considerados excelentes, enquanto
              valores abaixo de 10% são considerados bons.")
+      } else if(variavel_incompletude1 == "GESTACAO, SEMAGESTAC e PESO"){
+        texto_incompletude <- glue::glue("As variáveis <span style = 'font-weight: 700'>GESTACAO</span>, <span style = 'font-weight: 700'>SEMAGESTAC</span> e <span style = 'font-weight: 700'>PESO</span>, </span> do {base}, apresentam problemas de incompletude nos anos de
+           <span style = 'font-weight: 700'> {anos1}. </span> Nesses anos, a porcentagem de valores em branco ou ignorados dessas variáveis foi,
+           respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude1}. </span> Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são
+           considerados bons.")
       } else {
         texto_incompletude <- glue::glue("A variável <span style = 'font-weight: 700'> {variavel_incompletude1}</span>, do {base}, apresenta problemas de incompletude no ano de
              <span style = 'font-weight: 700'> {anos1_aux}. </span> Nesse ano, a porcentagem de valores {descricao_incompletude1} dessa variável foi

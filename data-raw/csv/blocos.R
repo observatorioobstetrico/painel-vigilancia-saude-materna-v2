@@ -249,9 +249,10 @@ bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
 #     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
 #   )
 
-base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2022.csv", sep = ",")[, -1] |>
+base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2023.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
+  dplyr::filter(codmunres %in% aux_municipios$codmunres) #|>
+  # dplyr::select(-c(uf))
 
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>
@@ -266,6 +267,8 @@ base_incompletude_sim_aux <- dplyr::full_join(base_incompletude_sim_maternos_aux
 base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indicadores_deslocamento_parto.csv") |>
   janitor::clean_names() |>
   dplyr::select(!uf)
+
+base_incompletude_bloco7_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv')
 
 
 #Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde
@@ -473,8 +476,16 @@ base_incompletude_deslocamento <- base_incompletude_deslocamento |>
     (which(names(base_incompletude_deslocamento) == "ano") + 1):(which(names(base_incompletude_deslocamento) == "municipio") - 1)
   )
 
+base_incompletude_bloco7 <- dplyr::left_join(base_incompletude_bloco7_aux, aux_municipios, by = "codmunres")
+base_incompletude_bloco7 <- base_incompletude_bloco7 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_incompletude_bloco7) == "ano") + 1):(which(names(base_incompletude_bloco7) == "municipio") - 1)
+  )
+
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
+    dplyr::full_join(
     dplyr::full_join(
       base_incompletude_sinasc,
       base_incompletude_deslocamento,
@@ -484,6 +495,8 @@ base_incompletude <- dplyr::full_join(
     by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
   ),
   base_incompletude_deslocamento
+),
+base_incompletude_bloco7
 )
 
 
@@ -597,7 +610,6 @@ usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
-
 
 
 
