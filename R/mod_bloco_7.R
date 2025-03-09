@@ -1672,9 +1672,9 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     shinyjs::hidden(
                       span(
-                        id = ns("mostrar_botao7"),
+                        id = ns("mostrar_botao_morbidade1"),
                         shinyWidgets::actionBttn(
-                          inputId = ns("botao7"),
+                          inputId = ns("botao_morbidade1"),
                           icon = icon("triangle-exclamation", style = "color: red"),
                           color = "warning",
                           style = "material-circle",
@@ -1697,19 +1697,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>"),
-                    shinyjs::hidden(
-                      span(
-                        id = ns("mostrar_botao10"),
-                        shinyWidgets::actionBttn(
-                          inputId = ns("botao10"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
-                          color = "warning",
-                          style = "material-circle",
-                          size = "xs"
-                        )
-                      )
-                    )
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1761,19 +1749,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>"),
-                    shinyjs::hidden(
-                      span(
-                        id = ns("mostrar_botao12"),
-                        shinyWidgets::actionBttn(
-                          inputId = ns("botao12"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
-                          color = "warning",
-                          style = "material-circle",
-                          size = "xs"
-                        )
-                      )
-                    )
+                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -2754,7 +2730,7 @@ mod_bloco_7_server <- function(id, filtros){
         title = "<div style = 'font-size: 25px;'> Sobre este indicador </div>",
         text = glue::glue(
           "<div style = 'text-align: justify; text-justify: inter-word;'>
-          Foram consideradas condições potencialmente ameaçadoras à vida nascimentos com peso < 1500 g, ou com idade gestacional < 32 semanas ou com Apgar de quinto minuto < 7.
+          Foram considerados nascidos com condições potencialmente ameaçadoras à vida aqueles com peso < 1500 g, com idade gestacional < 32 semanas ou com Apgar de quinto minuto < 7.
          </div>"
         ),
         size = "s",
@@ -2795,7 +2771,8 @@ mod_bloco_7_server <- function(id, filtros){
           peso = round(sum(peso_incompletos, na.rm = TRUE) / sum(peso_totais, na.rm = TRUE) * 100, 1),
           gestacao = round(sum(gestacao_incompletos, na.rm = TRUE) / sum(gestacao_totais, na.rm = TRUE) * 100, 1),
           semagestac = round(sum(semagestac_incompletos, na.rm = TRUE) / sum(semagestac_totais, na.rm = TRUE) * 100, 1),
-          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) *100, 1),
+          idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) * 100, 1),
+          condicoes_ameacadoras = round(sum(condicoes_ameacadoras_incompletos_intersecao, na.rm = TRUE) / sum(condicoes_ameacadoras_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -2858,25 +2835,21 @@ mod_bloco_7_server <- function(id, filtros){
     data_incompletude <- reactive({dplyr::full_join(data_incompletude_aux(), data_cobertura(), by = c("ano", "localidade"))})
 
 
+    ### Ativando os botões de alerta quando necessário ------------------------
     #### Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida ----
     observeEvent(filtros()$pesquisar, {
-      shinyjs::hide(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$gestacao > 5, na.rm = TRUE) |
-            any(data_incompletude()$peso > 5, na.rm = TRUE) |
-            any(data_incompletude()$cobertura < 90, na.rm = TRUE))
-      shinyjs::show(id = "mostrar_botao7", anim = TRUE, animType = "fade", time = 0.8)
+      shinyjs::hide(id = "mostrar_botao_morbidade1", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$condicoes_ameacadoras > 5, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao_morbidade1", anim = TRUE, animType = "fade", time = 0.8)
     },
     ignoreNULL = FALSE
     )
 
-    observeEvent(input$botao7, {
+    observeEvent(input$botao_morbidade1, {
       cria_modal_incompletude(
-        incompletude1 = data_incompletude()$peso,
-        variavel_incompletude1 = "PESO",
+        incompletude1 = data_incompletude()$condicoes_ameacadoras,
+        variavel_incompletude1 = "PESO, GESTACAO, SEMAGESTAC e APGAR5",
         descricao_incompletude1 = "em branco ou ignorados",
-        incompletude2 = data_incompletude()$gestacao,
-        variavel_incompletude2 = "GESTACAO",
-        descricao_incompletude2 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
       )
