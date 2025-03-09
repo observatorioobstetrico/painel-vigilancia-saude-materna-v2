@@ -95,7 +95,7 @@ mod_nivel_3_ui <- function(id){
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
-                    condition = "output.bloco_selecionado != 'bloco6' & output.num_indicadores_incompletude == '1'",
+                    condition = "output.bloco_selecionado != 'bloco6' & (output.num_indicadores_incompletude == '0' | output.num_indicadores_incompletude == '1')",
                     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
                   ),
                   conditionalPanel(
@@ -125,60 +125,60 @@ mod_nivel_3_ui <- function(id){
                       align = "center"
                     )
                   ),
-                  conditionalPanel(
-                    style = "height: 20%;",
-                    ns = ns,
-                    condition = "output.num_indicadores_incompletude == '3'",
-                    conditionalPanel(
-                      ns = ns,
-                      condition = "output.bloco_selecionado != 'bloco6'",
-                      HTML("<b style='font-size:19px'> Incompletude da informação </b>")
-                    ),
-                    conditionalPanel(
-                      ns = ns,
-                      condition = "output.bloco_selecionado == 'bloco6'",
-                      HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
-                    ),
-                    br(),
-                    column(
-                      width = 12,
-                      radioButtons(
-                        inputId = ns("variavel_incompletude"),
-                        label = NULL,
-                        choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
-                        choiceValues = list("escolha1", "escolha2", "escolha3"),
-                        inline = TRUE
-                      ),
-                      align = "center"
-                    )
-                  ),
-                  conditionalPanel(
-                    style = "height: 20%;",
-                    ns = ns,
-                    condition = "output.num_indicadores_incompletude == '4'",
-                    conditionalPanel(
-                      ns = ns,
-                      condition = "output.bloco_selecionado != 'bloco6'",
-                      HTML("<b style='font-size:19px'> Incompletude da informação </b>")
-                    ),
-                    conditionalPanel(
-                      ns = ns,
-                      condition = "output.bloco_selecionado == 'bloco6'",
-                      HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
-                    ),
-                    br(),
-                    column(
-                      width = 12,
-                      radioButtons(
-                        inputId = ns("variavel_incompletude"),
-                        label = NULL,
-                        choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3")), textOutput(ns("escolha4"))),
-                        choiceValues = list("escolha1", "escolha2", "escolha3", "escolha4"),
-                        inline = TRUE
-                      ),
-                      align = "center"
-                    )
-                  ),
+                  # conditionalPanel(
+                  #   style = "height: 20%;",
+                  #   ns = ns,
+                  #   condition = "output.num_indicadores_incompletude == '3'",
+                  #   conditionalPanel(
+                  #     ns = ns,
+                  #     condition = "output.bloco_selecionado != 'bloco6'",
+                  #     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                  #   ),
+                  #   conditionalPanel(
+                  #     ns = ns,
+                  #     condition = "output.bloco_selecionado == 'bloco6'",
+                  #     HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                  #   ),
+                  #   br(),
+                  #   column(
+                  #     width = 12,
+                  #     radioButtons(
+                  #       inputId = ns("variavel_incompletude"),
+                  #       label = NULL,
+                  #       choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
+                  #       choiceValues = list("escolha1", "escolha2", "escolha3"),
+                  #       inline = TRUE
+                  #     ),
+                  #     align = "center"
+                  #   )
+                  # ),
+                  # conditionalPanel(
+                  #   style = "height: 20%;",
+                  #   ns = ns,
+                  #   condition = "output.num_indicadores_incompletude == '4'",
+                  #   conditionalPanel(
+                  #     ns = ns,
+                  #     condition = "output.bloco_selecionado != 'bloco6'",
+                  #     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                  #   ),
+                  #   conditionalPanel(
+                  #     ns = ns,
+                  #     condition = "output.bloco_selecionado == 'bloco6'",
+                  #     HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                  #   ),
+                  #   br(),
+                  #   column(
+                  #     width = 12,
+                  #     radioButtons(
+                  #       inputId = ns("variavel_incompletude"),
+                  #       label = NULL,
+                  #       choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3")), textOutput(ns("escolha4"))),
+                  #       choiceValues = list("escolha1", "escolha2", "escolha3", "escolha4"),
+                  #       inline = TRUE
+                  #     ),
+                  #     align = "center"
+                  #   )
+                  # ),
                   hr(),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_incompletude")))
                 )
@@ -598,10 +598,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
     )
 
-    observe(print(tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)))
-
-    observe(print(glue::glue("{tabela_indicadores |> dplyr::filter(trimws(indicador) == filtros()$indicador_blocos4_6_7) |> dplyr::pull(nome_abreviado)}_{filtros()$indicador_uma_caixinha_adicional_bloco7}")))
-
     infos_indicador <- reactive({
       if (filtros()$bloco %in% c("bloco4", "bloco6")) {
         if (filtros()$indicador_blocos4_6_7 %in% indicadores_uma_caixinha_adicional_bloco7) {
@@ -689,6 +685,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         get(filtros()$bloco)
       }
     })
+
+    observe(print(infos_indicador()$bloco))
 
     ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
@@ -965,7 +963,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       }
     })
 
@@ -1014,7 +1012,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       }
     })
 
@@ -1063,7 +1061,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       }
     })
 
@@ -1112,7 +1110,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             )
           ) |>
           dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       }
     })
 
@@ -1123,7 +1121,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
           class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
         ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       } else {
         data.frame(
           ano = anos_disponiveis(),
@@ -1132,7 +1130,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                         rep("escolha4", times = length(anos_disponiveis()))),
           class = rep("Ideal", times = length(anos_disponiveis()))
         ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
       }
     })
 
@@ -1156,6 +1154,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     #   }
 
     output$grafico_incompletude <- highcharter::renderHighchart({
+      validate(
+        need(
+          !(grepl("bloco7_morbidade_neonatal", infos_indicador()$bloco)) | infos_indicador()$nome_abreviado == "porc_condicoes_ameacadoras",
+          "Informações a respeito da incompletude das variáveis não se aplicam a este indicador."
+        )
+      )
       validate(
         need(
           infos_indicador()$num_indicadores_incompletude != 0,
@@ -2728,8 +2732,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           )
       }
     })
-
-    observe(print(grepl("bloco7", infos_indicador()$bloco)))
 
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
