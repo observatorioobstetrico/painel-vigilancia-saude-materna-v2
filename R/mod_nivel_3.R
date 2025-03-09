@@ -95,7 +95,7 @@ mod_nivel_3_ui <- function(id){
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
-                    condition = "output.bloco_selecionado != 'bloco6' & output.num_indicadores_incompletude != '2'",
+                    condition = "output.bloco_selecionado != 'bloco6' & output.num_indicadores_incompletude == '1'",
                     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
                   ),
                   conditionalPanel(
@@ -120,6 +120,60 @@ mod_nivel_3_ui <- function(id){
                         label = NULL,
                         choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2"))),
                         choiceValues = list("escolha1", "escolha2"),
+                        inline = TRUE
+                      ),
+                      align = "center"
+                    )
+                  ),
+                  conditionalPanel(
+                    style = "height: 20%;",
+                    ns = ns,
+                    condition = "output.num_indicadores_incompletude == '3'",
+                    conditionalPanel(
+                      ns = ns,
+                      condition = "output.bloco_selecionado != 'bloco6'",
+                      HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                    ),
+                    conditionalPanel(
+                      ns = ns,
+                      condition = "output.bloco_selecionado == 'bloco6'",
+                      HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                    ),
+                    br(),
+                    column(
+                      width = 12,
+                      radioButtons(
+                        inputId = ns("variavel_incompletude"),
+                        label = NULL,
+                        choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
+                        choiceValues = list("escolha1", "escolha2", "escolha3"),
+                        inline = TRUE
+                      ),
+                      align = "center"
+                    )
+                  ),
+                  conditionalPanel(
+                    style = "height: 20%;",
+                    ns = ns,
+                    condition = "output.num_indicadores_incompletude == '4'",
+                    conditionalPanel(
+                      ns = ns,
+                      condition = "output.bloco_selecionado != 'bloco6'",
+                      HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                    ),
+                    conditionalPanel(
+                      ns = ns,
+                      condition = "output.bloco_selecionado == 'bloco6'",
+                      HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                    ),
+                    br(),
+                    column(
+                      width = 12,
+                      radioButtons(
+                        inputId = ns("variavel_incompletude"),
+                        label = NULL,
+                        choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3")), textOutput(ns("escolha4"))),
+                        choiceValues = list("escolha1", "escolha2", "escolha3", "escolha4"),
                         inline = TRUE
                       ),
                       align = "center"
@@ -679,6 +733,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
         grepl("deslocamento", infos_indicador()$bloco) ~ "DN sem CNES preenchido",
+        infos_indicador()$nome_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco)  ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
       )
     })
@@ -686,7 +741,22 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
         grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$nome_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
+      )
+    })
+    output$escolha3 <- renderText({
+      dplyr::case_when(
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')
+      )
+    })
+    output$escolha4 <- renderText({
+      dplyr::case_when(
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')
       )
     })
 
@@ -696,6 +766,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     outputOptions(output, "num_indicadores_incompletude", suspendWhenHidden = FALSE)
     outputOptions(output, "escolha1", suspendWhenHidden = FALSE)
     outputOptions(output, "escolha2", suspendWhenHidden = FALSE)
+    outputOptions(output, "escolha3", suspendWhenHidden = FALSE)
+    outputOptions(output, "escolha4", suspendWhenHidden = FALSE)
 
     ## Buscando a documentação do indicador selecionado -----------------------
     output$documentacao <- renderUI({
@@ -946,6 +1018,104 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
+    data_grafico_incompletude3 <- reactive({
+      if (infos_indicador()$num_indicadores_incompletude == 3) {
+        base_incompletude |>
+          dplyr::filter(
+            ano %in% anos_disponiveis(),
+            if (filtros()$nivel == "Nacional")
+              regiao %in% unique(tabela_aux_municipios$regiao)
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::summarise(
+            numerador := ifelse(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
+              sum(.data[[infos_indicador()$numerador_incompletude3]], na.rm = TRUE),
+              NA
+            ),
+            denominador := ifelse(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
+              sum(.data[[infos_indicador()$denominador_incompletude3]], na.rm = TRUE),
+              NA
+            ),
+            proporcao = dplyr::case_when(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 1),
+              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 1),
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 1)
+            ),
+            localidade = dplyr::case_when(
+              filtros()$nivel == "Nacional" ~ "Brasil",
+              filtros()$nivel == "Regional" ~ filtros()$regiao,
+              filtros()$nivel == "Estadual" ~ filtros()$estado,
+              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+              filtros()$nivel == "Municipal" ~ filtros()$municipio
+            )
+          ) |>
+          dplyr::ungroup() |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+      }
+    })
+
+    data_grafico_incompletude4 <- reactive({
+      if (infos_indicador()$num_indicadores_incompletude == 4) {
+        base_incompletude |>
+          dplyr::filter(
+            ano %in% anos_disponiveis(),
+            if (filtros()$nivel == "Nacional")
+              regiao %in% unique(tabela_aux_municipios$regiao)
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          ) |>
+          dplyr::group_by(ano) |>
+          dplyr::summarise(
+            numerador := ifelse(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
+              sum(.data[[infos_indicador()$numerador_incompletude4]], na.rm = TRUE),
+              NA
+            ),
+            denominador := ifelse(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
+              sum(.data[[infos_indicador()$denominador_incompletude4]], na.rm = TRUE),
+              NA
+            ),
+            proporcao = dplyr::case_when(
+              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 1),
+              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 1),
+              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 1)
+            ),
+            localidade = dplyr::case_when(
+              filtros()$nivel == "Nacional" ~ "Brasil",
+              filtros()$nivel == "Regional" ~ filtros()$regiao,
+              filtros()$nivel == "Estadual" ~ filtros()$estado,
+              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
+              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
+              filtros()$nivel == "Municipal" ~ filtros()$municipio
+            )
+          ) |>
+          dplyr::ungroup() |>
+          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
+      }
+    })
+
     data_referencia_incompletude <- reactive({
       if (!(infos_indicador()$bloco %in% c("bloco6"))) {
         data.frame(
@@ -958,7 +1128,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         data.frame(
           ano = anos_disponiveis(),
           valor = c(rep(90, times = length(anos_disponiveis())), rep(100, times = length(anos_disponiveis()))),
-          indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis()))),
+          indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis())), rep("escolha3", times = length(anos_disponiveis())),
+                        rep("escolha4", times = length(anos_disponiveis()))),
           class = rep("Ideal", times = length(anos_disponiveis()))
         ) |>
           dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2022))
@@ -966,6 +1137,24 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     ## Criando os gráficos de linhas para a incompletude ----------------------
+    # output$grafico_incompletude <- highcharter::renderHighchart({
+    #   validate(
+    #     need(
+    #       infos_indicador()$num_indicadores_incompletude != 0,
+    #       "Informações a respeito da incompletude das variáveis necessárias para a construção deste indicador não estão disponíveis."
+    #     )
+    #   )
+    #
+    #   if (infos_indicador()$num_indicadores_incompletude == 1) {
+    #     data_grafico_incompletude <- data_grafico_incompletude1()
+    #   } else {
+    #     if (input$variavel_incompletude == "escolha1") {
+    #       data_grafico_incompletude <- data_grafico_incompletude1()
+    #     } else {
+    #       data_grafico_incompletude <- data_grafico_incompletude2()
+    #     }
+    #   }
+
     output$grafico_incompletude <- highcharter::renderHighchart({
       validate(
         need(
@@ -974,14 +1163,21 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         )
       )
 
-      if (infos_indicador()$num_indicadores_incompletude == 1) {
+      if(infos_indicador()$num_indicadores_incompletude == 1 |
+         (infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha1") |
+         (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha1") |
+         (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha1")){
         data_grafico_incompletude <- data_grafico_incompletude1()
-      } else {
-        if (input$variavel_incompletude == "escolha1") {
-          data_grafico_incompletude <- data_grafico_incompletude1()
-        } else {
-          data_grafico_incompletude <- data_grafico_incompletude2()
-        }
+      } else if((infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha2") |
+                (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha2") |
+                (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha2")){
+        data_grafico_incompletude <- data_grafico_incompletude2()
+      } else if(
+        (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha3") |
+        (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha3")){
+        data_grafico_incompletude <- data_grafico_incompletude3()
+      }else if((infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha4")){
+        data_grafico_incompletude <- data_grafico_incompletude4()
       }
 
       highcharter::highchart() |>
@@ -1012,7 +1208,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
         highcharter::hc_title(
           text = HTML(
-            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, infos_indicador()$nome_incompletude2)}</b>")
+            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, ifelse(input$variavel_incompletude == 'escolha2', infos_indicador()$nome_incompletude2, ifelse(input$variavel_incompletude == 'escolha3', infos_indicador()$nome_incompletude3, infos_indicador()$nome_incompletude4)))}</b>")
           )
         ) |>
         highcharter::hc_colors(cols)
@@ -1122,7 +1318,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         infos_indicador()$numerador_incompletude1 == "gestacao_incompletos" ~ "em branco ou sem informação",
         infos_indicador()$numerador_incompletude1 == "semagestac_incompletos" ~ "em branco ou sem informação",
         infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude1 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)"
+        infos_indicador()$numerador_incompletude1 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO em branco ou ignorada (GESTACAO=9) e PESO em branco e SEMAGESTAC em branco ou ignorada (SEMAGESTAC == 99)",
+        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_idade" ~ "em branco"
       )
 
       descricao_incompletude2 <- dplyr::case_when(
@@ -1138,7 +1336,22 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         infos_indicador()$numerador_incompletude2 == "peso_incompletos" ~ "em branco ou preenchidos com 9999",
         infos_indicador()$numerador_incompletude2 == "gestacao_incompletos" ~ "em branco ou sem informação",
         infos_indicador()$numerador_incompletude2 == "semagestac_incompletos" ~ "em branco ou sem informação",
-        infos_indicador()$numerador_incompletude2 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)"
+        infos_indicador()$numerador_incompletude2 == "idanomal_incompletos" ~ "em branco ou ignorados (IDANOMAL = 9)",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO em branco ou ignorada (GESTACAO=9) e PESO em branco e SEMAGESTAC em branco ou ignorada (SEMAGESTAC == 99)",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso" ~ "em branco",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_momento" ~ "em branco ou ignorada (OBITOPARTO = 9)",
+        infos_indicador()$numerador_incompletude2 == "incompletude_neonatal_peso" ~ "em branco"
+
+      )
+
+      descricao_incompletude3 <- dplyr::case_when(
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso" ~ "em branco",
+        infos_indicador()$numerador_incompletude3 == "incompletude_neonatal_peso" ~ "em branco"
+
+      )
+
+      descricao_incompletude4 <- dplyr::case_when(
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso" ~ "em branco"
       )
 
       cria_modal_incompletude(
@@ -1150,7 +1363,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ),
         descricao_incompletude1 = descricao_incompletude1,
         incompletude2 = data_grafico_incompletude2()$proporcao,
-        variavel_incompletude2 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ','),
+        variavel_incompletude2 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','),
         descricao_incompletude2 = descricao_incompletude2,
         df = data_grafico_incompletude1(),
         cobertura = data_cobertura()$cobertura,
@@ -1159,7 +1372,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           infos_indicador()$bloco == "bloco6" ~ "bloco6",
           grepl("deslocamento", infos_indicador()$bloco) ~ "deslocamento",
           infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ "geral"
-        )
+        ),
+        incompletude3 = data_grafico_incompletude3()$proporcao,
+        variavel_incompletude3 = stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','),
+        descricao_incompletude3 = descricao_incompletude3
       )
     })
 

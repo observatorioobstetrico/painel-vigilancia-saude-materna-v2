@@ -705,7 +705,7 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
 
 cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
 
-  if (bloco == "bloco6") {
+  if (bloco == "bloco6" | substr(bloco, 1, 6) == "bloco7") {
     base <- "SIM"
   }
 
