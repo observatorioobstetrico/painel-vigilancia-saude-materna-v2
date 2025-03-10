@@ -116,7 +116,7 @@ mod_nivel_3_ui <- function(id){
                     column(
                       width = 12,
                       radioButtons(
-                        inputId = ns("variavel_incompletude"),
+                        inputId = ns("variavel_incompletude2"),
                         label = NULL,
                         choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2"))),
                         choiceValues = list("escolha1", "escolha2"),
@@ -125,33 +125,33 @@ mod_nivel_3_ui <- function(id){
                       align = "center"
                     )
                   ),
-                  # conditionalPanel(
-                  #   style = "height: 20%;",
-                  #   ns = ns,
-                  #   condition = "output.num_indicadores_incompletude == '3'",
-                  #   conditionalPanel(
-                  #     ns = ns,
-                  #     condition = "output.bloco_selecionado != 'bloco6'",
-                  #     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
-                  #   ),
-                  #   conditionalPanel(
-                  #     ns = ns,
-                  #     condition = "output.bloco_selecionado == 'bloco6'",
-                  #     HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
-                  #   ),
-                  #   br(),
-                  #   column(
-                  #     width = 12,
-                  #     radioButtons(
-                  #       inputId = ns("variavel_incompletude"),
-                  #       label = NULL,
-                  #       choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
-                  #       choiceValues = list("escolha1", "escolha2", "escolha3"),
-                  #       inline = TRUE
-                  #     ),
-                  #     align = "center"
-                  #   )
-                  # ),
+                   conditionalPanel(
+                     style = "height: 20%;",
+                     ns = ns,
+                     condition = "output.num_indicadores_incompletude == '3'",
+                     conditionalPanel(
+                       ns = ns,
+                       condition = "output.bloco_selecionado != 'bloco6'",
+                       HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                     ),
+                     conditionalPanel(
+                       ns = ns,
+                       condition = "output.bloco_selecionado == 'bloco6'",
+                       HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                     ),
+                     br(),
+                     column(
+                       width = 12,
+                       radioButtons(
+                         inputId = ns("variavel_incompletude3"),
+                         label = NULL,
+                         choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
+                         choiceValues = list("escolha1", "escolha2", "escolha3"),
+                         inline = TRUE
+                       ),
+                       align = "center"
+                     )
+                   ),
                   # conditionalPanel(
                   #   style = "height: 20%;",
                   #   ns = ns,
@@ -731,7 +731,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
         grepl("deslocamento", infos_indicador()$bloco) ~ "DN sem CNES preenchido",
-        infos_indicador()$nome_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_peso" ~ "PESO neonatal",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco)  ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
       )
     })
@@ -739,21 +741,25 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       dplyr::case_when(
         infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
         grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
-        infos_indicador()$nome_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude2 == "incompletude_neonatal_peso" ~ "PESO neonatal",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
       )
     })
     output$escolha3 <- renderText({
       dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude3 == "incompletude_neonatal_peso" ~ "PESO neonatal",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')
       )
     })
     output$escolha4 <- renderText({
       dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude4 == "incompletude_neonatal_peso" ~ "PESO neonatal",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')
       )
     })
@@ -1153,6 +1159,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     #     }
     #   }
 
+    variaveis_escolhidas <- reactive({
+      duas_variaveis <- c(input$variavel_incompletude2)
+      tres_variaveis <- c(input$variavel_incompletude3)
+      return(c(duas_variaveis, tres_variaveis))
+    })
+
     output$grafico_incompletude <- highcharter::renderHighchart({
       validate(
         need(
@@ -1168,18 +1180,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
 
       if(infos_indicador()$num_indicadores_incompletude == 1 |
-         (infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha1") |
-         (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha1") |
-         (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha1")){
+         (variaveis_escolhidas()[1] == "escolha1" & infos_indicador()$num_indicadores_incompletude == 2) |
+         (variaveis_escolhidas()[2] == "escolha1" & infos_indicador()$num_indicadores_incompletude == 3)){
         data_grafico_incompletude <- data_grafico_incompletude1()
-      } else if((infos_indicador()$num_indicadores_incompletude == 2 & input$variavel_incompletude == "escolha2") | (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha2") | (infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha2")){
+      } else if((variaveis_escolhidas()[1] == "escolha2" & infos_indicador()$num_indicadores_incompletude == 2) |
+                variaveis_escolhidas()[2] == "escolha2" & infos_indicador()$num_indicadores_incompletude == 3){
         data_grafico_incompletude <- data_grafico_incompletude2()
       } else if(
-        (infos_indicador()$num_indicadores_incompletude == 3 & input$variavel_incompletude == "escolha3") |(infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha3")){
+        (variaveis_escolhidas()[2] == "escolha3" & infos_indicador()$num_indicadores_incompletude == 3)){
         data_grafico_incompletude <- data_grafico_incompletude3()
-      }else if((infos_indicador()$num_indicadores_incompletude == 4 & input$variavel_incompletude == "escolha4")){
-        data_grafico_incompletude <- data_grafico_incompletude4()
       }
+
 
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1190,7 +1201,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_add_series(
           data = {
             if (infos_indicador()$bloco == "bloco6") {
-              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude)
+              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude2)
             } else {
               data_referencia_incompletude()
             }
@@ -1209,7 +1220,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
         highcharter::hc_title(
           text = HTML(
-            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(input$variavel_incompletude == 'escolha1', infos_indicador()$nome_incompletude1, ifelse(input$variavel_incompletude == 'escolha2', infos_indicador()$nome_incompletude2, ifelse(input$variavel_incompletude == 'escolha3', infos_indicador()$nome_incompletude3, infos_indicador()$nome_incompletude4)))}</b>")
+            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(((variaveis_escolhidas()[1] == 'escolha1' & infos_indicador()$num_indicadores_incompletude == 2)| (variaveis_escolhidas()[2] == 'escolha1' & infos_indicador()$num_indicadores_incompletude == 3) | infos_indicador()$num_indicadores_incompletude == 1), infos_indicador()$nome_incompletude1, ifelse(((variaveis_escolhidas()[1] == 'escolha2' & infos_indicador()$num_indicadores_incompletude == 2) | (variaveis_escolhidas()[2] == 'escolha2' & infos_indicador()$num_indicadores_incompletude == 3)), infos_indicador()$nome_incompletude2, infos_indicador()$nome_incompletude3))}</b>")
           )
         ) |>
         highcharter::hc_colors(cols)
