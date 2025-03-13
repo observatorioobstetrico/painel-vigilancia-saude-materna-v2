@@ -91,7 +91,7 @@ mod_nivel_3_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 565px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
+                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
@@ -739,11 +739,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
     output$escolha2 <- renderText({
       dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
         infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
         infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso" ~ "PESO fetal",
         infos_indicador()$numerador_incompletude2 == "incompletude_neonatal_peso" ~ "PESO neonatal",
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
       )
     })
@@ -757,9 +757,9 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
     output$escolha4 <- renderText({
       dplyr::case_when(
-        infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
-        infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso" ~ "PESO fetal",
-        infos_indicador()$numerador_incompletude4 == "incompletude_neonatal_peso" ~ "PESO neonatal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_peso" ~ "PESO neonatal",
         infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')
       )
     })
@@ -1190,7 +1190,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         (variaveis_escolhidas()[2] == "escolha3" & infos_indicador()$num_indicadores_incompletude == 3)){
         data_grafico_incompletude <- data_grafico_incompletude3()
       }
-
 
       highcharter::highchart() |>
         highcharter::hc_add_series(
