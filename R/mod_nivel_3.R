@@ -81,7 +81,7 @@ mod_nivel_3_ui <- function(id){
                   shinycssloaders::withSpinner(uiOutput(ns("gauge1")), proxy.height = "250px")
                 )
               ),
-              tags$style(HTML(".html-widget.gauge svg {height: 260px;}"))
+              tags$style(HTML(".html-widget.gauge svg {height: 230px;}"))
             ),
             fluidRow(
               column(
@@ -91,7 +91,7 @@ mod_nivel_3_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: hidden",
                   conditionalPanel(
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
@@ -101,7 +101,7 @@ mod_nivel_3_ui <- function(id){
                   conditionalPanel(
                     style = "height: 20%;",
                     ns = ns,
-                    condition = "output.num_indicadores_incompletude == '2'",
+                    condition = "output.num_indicadores_incompletude == '2' | output.num_indicadores_incompletude == '3'",
                     conditionalPanel(
                       ns = ns,
                       condition = "output.bloco_selecionado != 'bloco6'",
@@ -112,75 +112,64 @@ mod_nivel_3_ui <- function(id){
                       condition = "output.bloco_selecionado == 'bloco6'",
                       HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
                     ),
+                    hr(),
+                    column(
+                      width = 12,
+                      selectizeInput(
+                        inputId = ns("variavel_incompletude"),
+                        label = "Selecione a variável de incompletude de interesse:",
+                        options = list(placeholder = "Selecione uma variável de incompletude de interesse"),
+                        choices = NULL,
+                        width = "95%"
+                      )
+                    ),
+                    br(),
+                    br()
+                  ),
+                  hr(),
+                  br(),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_incompletude")))
+                )
+              )
+            ),
+            fluidRow(
+              column(
+                width = 12,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  conditionalPanel(
+                    style = "height: 15%; display: flex; align-items: center;",
+                    ns = ns,
+                    condition = "output.nome_abreviado != 'rmm'",
+                    HTML("<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp; </b>")
+                  ),
+                  conditionalPanel(
+                    style = "height: 18%;",
+                    ns = ns,
+                    condition = "output.nome_abreviado == 'rmm'",
+                    div(
+                      HTML(
+                        "<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp;</b>"
+                      )
+                    ),
                     br(),
                     column(
                       width = 12,
                       radioButtons(
-                        inputId = ns("variavel_incompletude2"),
+                        inputId = ns("sistema_cobertura"),
                         label = NULL,
-                        choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2"))),
-                        choiceValues = list("escolha1", "escolha2"),
+                        choices = c("SIM", "SINASC"),
                         inline = TRUE
                       ),
                       align = "center"
                     )
                   ),
-                   conditionalPanel(
-                     style = "height: 20%;",
-                     ns = ns,
-                     condition = "output.num_indicadores_incompletude == '3'",
-                     conditionalPanel(
-                       ns = ns,
-                       condition = "output.bloco_selecionado != 'bloco6'",
-                       HTML("<b style='font-size:19px'> Incompletude da informação </b>")
-                     ),
-                     conditionalPanel(
-                       ns = ns,
-                       condition = "output.bloco_selecionado == 'bloco6'",
-                       HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
-                     ),
-                     br(),
-                     column(
-                       width = 12,
-                       radioButtons(
-                         inputId = ns("variavel_incompletude3"),
-                         label = NULL,
-                         choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3"))),
-                         choiceValues = list("escolha1", "escolha2", "escolha3"),
-                         inline = TRUE
-                       ),
-                       align = "center"
-                     )
-                   ),
-                  # conditionalPanel(
-                  #   style = "height: 20%;",
-                  #   ns = ns,
-                  #   condition = "output.num_indicadores_incompletude == '4'",
-                  #   conditionalPanel(
-                  #     ns = ns,
-                  #     condition = "output.bloco_selecionado != 'bloco6'",
-                  #     HTML("<b style='font-size:19px'> Incompletude da informação </b>")
-                  #   ),
-                  #   conditionalPanel(
-                  #     ns = ns,
-                  #     condition = "output.bloco_selecionado == 'bloco6'",
-                  #     HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
-                  #   ),
-                  #   br(),
-                  #   column(
-                  #     width = 12,
-                  #     radioButtons(
-                  #       inputId = ns("variavel_incompletude"),
-                  #       label = NULL,
-                  #       choiceNames = list(textOutput(ns("escolha1")), textOutput(ns("escolha2")), textOutput(ns("escolha3")), textOutput(ns("escolha4"))),
-                  #       choiceValues = list("escolha1", "escolha2", "escolha3", "escolha4"),
-                  #       inline = TRUE
-                  #     ),
-                  #     align = "center"
-                  #   )
-                  # ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_incompletude")))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_cobertura")))
                 )
               )
             ),
@@ -195,15 +184,15 @@ mod_nivel_3_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
-                      style = "height: 8%; display: flex; align-items: center;",
+                      style = "height: 15%; display: flex; align-items: center;",
                       HTML("<b style='font-size:18px'> Porcentagem de óbitos fetais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
                       style = "overflow: auto",
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_fetal"), height = 600))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_fetal")))
                     )
                   )
                 )
@@ -220,15 +209,15 @@ mod_nivel_3_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
-                      style = "height: 8%; display: flex; align-items: center;",
+                      style = "height: 15%; display: flex; align-items: center;",
                       HTML("<b style='font-size:18px'> Porcentagem de óbitos perinatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
                       style = "overflow: auto",
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_perinatal"), height = 600))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_perinatal")))
                     )
                   )
                 )
@@ -245,15 +234,15 @@ mod_nivel_3_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
-                      style = "height: 8%; display: flex; align-items: center;",
+                      style = "height: 15%; display: flex; align-items: center;",
                       HTML("<b style='font-size:18px'> Porcentagem de óbitos neonatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
                       style = "overflow: auto",
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_neonatal"), height = 600))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_neonatal")))
                     )
                   )
                 )
@@ -270,15 +259,15 @@ mod_nivel_3_ui <- function(id){
                     status = "primary",
                     collapsible = FALSE,
                     headerBorder = FALSE,
-                    style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
+                    style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
-                      style = "height: 8%; display: flex; align-items: center;",
+                      style = "height: 15%; display: flex; align-items: center;",
                       HTML("<b style='font-size:18px'> Porcentagem de óbitos maternos preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
                       style = "overflow: auto",
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_materno"), height = 600))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("porcentagem_garbage_materno")))
                     )
                   )
                 )
@@ -383,72 +372,6 @@ mod_nivel_3_ui <- function(id){
                   )
                 )
               )
-            ),
-            # fluidRow(
-            #   column(
-            #     width = 12,
-            #     conditionalPanel(
-            #       ns = ns,
-            #       condition = "output.bloco7_selecionado == 'bloco7_morbidade_neonatal'",
-            #       bs4Dash::bs4Card(
-            #         width = 12,
-            #         status = "primary",
-            #         collapsible = FALSE,
-            #         headerBorder = FALSE,
-            #         style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
-            #         div(
-            #           style = "height: 8%; display: flex; align-items: center;",
-            #           HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nas internações neonatais </b>")
-            #         ),
-            #         hr(),
-            #         div(
-            #           style = "overflow: auto",
-            #           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_garbage_morbidade_neonatal"), height = 600))
-            #         )
-            #       )
-            #     )
-            #   )
-            # ),
-            fluidRow(
-              column(
-                width = 12,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 565px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  conditionalPanel(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    ns = ns,
-                    condition = "output.nome_abreviado != 'rmm'",
-                    HTML("<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp; </b>")
-                  ),
-                  conditionalPanel(
-                    style = "height: 18%;",
-                    ns = ns,
-                    condition = "output.nome_abreviado == 'rmm'",
-                    div(
-                      HTML(
-                        "<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp;</b>"
-                      )
-                    ),
-                    br(),
-                    column(
-                      width = 12,
-                      radioButtons(
-                        inputId = ns("sistema_cobertura"),
-                        label = NULL,
-                        choices = c("SIM", "SINASC"),
-                        inline = TRUE
-                      ),
-                      align = "center"
-                    )
-                  ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_cobertura")))
-                )
-              )
             )
           ),
           column(
@@ -507,7 +430,7 @@ mod_nivel_3_ui <- function(id){
                       downloadButton(ns("download_tabela"), " Download")
                     )
                   ),
-                  br(),
+                  br()
                 ),
                 fluidRow(
                   column(
@@ -530,7 +453,7 @@ mod_nivel_3_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "783px")
+                shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela1")), proxy.height = "855px")
               )
             )
           )
@@ -686,8 +609,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
-    observe(print(infos_indicador()$bloco))
-
     ## Criando o output que recebe o título da página --------------------------
     output$titulo_localidade <- renderUI({
       if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
@@ -710,9 +631,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando alguns outputs de texto que precisam ser usados na UI ----------
     output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
-    output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
-    output$bloco_selecionado <- renderText({infos_indicador()$bloco})
 
+    output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
+
+    output$bloco_selecionado <- renderText({infos_indicador()$bloco})
 
     output$bloco7_selecionado <- renderText({
       dplyr::case_when(
@@ -725,53 +647,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
     })
 
-
     output$num_indicadores_incompletude <- renderText({infos_indicador()$num_indicadores_incompletude})
-    output$escolha1 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
-        grepl("deslocamento", infos_indicador()$bloco) ~ "DN sem CNES preenchido",
-        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
-        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso" ~ "PESO fetal",
-        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_peso" ~ "PESO neonatal",
-        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco)  ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
-      )
-    })
-    output$escolha2 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
-        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso" ~ "PESO fetal",
-        infos_indicador()$numerador_incompletude2 == "incompletude_neonatal_peso" ~ "PESO neonatal",
-        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
-        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
-        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
-      )
-    })
-    output$escolha3 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
-        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso" ~ "PESO fetal",
-        infos_indicador()$numerador_incompletude3 == "incompletude_neonatal_peso" ~ "PESO neonatal",
-        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')
-      )
-    })
-    output$escolha4 <- renderText({
-      dplyr::case_when(
-        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
-        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso" ~ "PESO fetal",
-        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_peso" ~ "PESO neonatal",
-        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')
-      )
-    })
 
     outputOptions(output, "nome_abreviado", suspendWhenHidden = FALSE)
     outputOptions(output, "bloco_selecionado", suspendWhenHidden = FALSE)
     outputOptions(output, "bloco7_selecionado", suspendWhenHidden = FALSE)
     outputOptions(output, "num_indicadores_incompletude", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha1", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha2", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha3", suspendWhenHidden = FALSE)
-    outputOptions(output, "escolha4", suspendWhenHidden = FALSE)
 
     ## Buscando a documentação do indicador selecionado -----------------------
     output$documentacao <- renderUI({
@@ -794,7 +675,6 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "sus_tx_abortos_cem_nascidos_vivos_valor_medio",
       "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
     )
-
 
     ## Criando um vetor com a lista de anos disponíveis para o indicador selecionado --------
     anos_disponiveis <- reactive({
@@ -1023,7 +903,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_grafico_incompletude3 <- reactive({
-      if (infos_indicador()$num_indicadores_incompletude >= 3) {
+      if (infos_indicador()$num_indicadores_incompletude == 3) {
         base_incompletude |>
           dplyr::filter(
             ano %in% anos_disponiveis(),
@@ -1071,101 +951,79 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       }
     })
 
-    data_grafico_incompletude4 <- reactive({
-      if (infos_indicador()$num_indicadores_incompletude == 4) {
-        base_incompletude |>
-          dplyr::filter(
-            ano %in% anos_disponiveis(),
-            if (filtros()$nivel == "Nacional")
-              regiao %in% unique(tabela_aux_municipios$regiao)
-            else if (filtros()$nivel == "Regional")
-              regiao == filtros()$regiao
-            else if (filtros()$nivel == "Estadual")
-              uf == filtros()$estado
-            else if (filtros()$nivel == "Macrorregião de saúde")
-              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-            else if(filtros()$nivel == "Microrregião de saúde")
-              r_saude == filtros()$micro & uf == filtros()$estado_micro
-            else if(filtros()$nivel == "Municipal")
-              municipio == filtros()$municipio & uf == filtros()$estado_municipio
-          ) |>
-          dplyr::group_by(ano) |>
-          dplyr::summarise(
-            numerador := ifelse(
-              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
-              sum(.data[[infos_indicador()$numerador_incompletude4]], na.rm = TRUE),
-              NA
-            ),
-            denominador := ifelse(
-              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco),
-              sum(.data[[infos_indicador()$denominador_incompletude4]], na.rm = TRUE),
-              NA
-            ),
-            proporcao = dplyr::case_when(
-              infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ round(numerador/denominador * {infos_indicador()$fator_incompletude}, 1),
-              infos_indicador()$bloco == "bloco6" ~ round((sum(obito_materno_investigado_com_ficha_sintese, na.rm = TRUE) + sum(obito_materno_investigado_sem_ficha_sintese, na.rm = TRUE))/sum(total_obitos_maternos, na.rm = TRUE) * 100, 1),
-              grepl("deslocamento", infos_indicador()$bloco) ~ round((sum(dn_hospital_id_fertil, na.rm = TRUE)-sum(dn_hosp_id_fertil_cnes_valido, na.rm = TRUE))/sum(dn_hospital_id_fertil, na.rm = TRUE) * 100, 1)
-            ),
-            localidade = dplyr::case_when(
-              filtros()$nivel == "Nacional" ~ "Brasil",
-              filtros()$nivel == "Regional" ~ filtros()$regiao,
-              filtros()$nivel == "Estadual" ~ filtros()$estado,
-              filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-              filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-              filtros()$nivel == "Municipal" ~ filtros()$municipio
-            )
-          ) |>
-          dplyr::ungroup() |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
-      }
+    data_referencia_incompletude_blocos_gerais <- reactive({
+      data.frame(
+        ano = anos_disponiveis(),
+        valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
+        class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
+      ) |>
+        dplyr::filter(ano <= ifelse(grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
     })
 
-    data_referencia_incompletude <- reactive({
-      if (!(infos_indicador()$bloco %in% c("bloco6"))) {
-        data.frame(
-          ano = anos_disponiveis(),
-          valor = c(rep(10, times = length(anos_disponiveis())), rep(5, times = length(anos_disponiveis()))),
-          class = c(rep("Bom", times = length(anos_disponiveis())), rep("Excelente", times = length(anos_disponiveis())))
-        ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
-      } else {
-        data.frame(
-          ano = anos_disponiveis(),
-          valor = c(rep(90, times = length(anos_disponiveis())), rep(100, times = length(anos_disponiveis()))),
-          indicador = c(rep("escolha1", times = length(anos_disponiveis())), rep("escolha2", times = length(anos_disponiveis())), rep("escolha3", times = length(anos_disponiveis())),
-                        rep("escolha4", times = length(anos_disponiveis()))),
-          class = rep("Ideal", times = length(anos_disponiveis()))
-        ) |>
-          dplyr::filter(ano <= ifelse(infos_indicador()$bloco == "bloco6" | grepl("bloco4_deslocamento", infos_indicador()$bloco), 2020, 2023))
-      }
+    data_referencia_incompletude_blocos6 <- reactive({
+      data.frame(
+        ano = anos_disponiveis(),
+        valor = c(rep(90, times = length(anos_disponiveis())), rep(100, times = length(anos_disponiveis()))),
+        indicador = c(rep(escolha1(), times = length(anos_disponiveis())), rep(escolha2(), times = length(anos_disponiveis()))),
+        class = rep("Ideal", times = length(anos_disponiveis()))
+      ) |>
+        dplyr::filter(ano <= 2020)
     })
 
     ## Criando os gráficos de linhas para a incompletude ----------------------
-    # output$grafico_incompletude <- highcharter::renderHighchart({
-    #   validate(
-    #     need(
-    #       infos_indicador()$num_indicadores_incompletude != 0,
-    #       "Informações a respeito da incompletude das variáveis necessárias para a construção deste indicador não estão disponíveis."
-    #     )
-    #   )
-    #
-    #   if (infos_indicador()$num_indicadores_incompletude == 1) {
-    #     data_grafico_incompletude <- data_grafico_incompletude1()
-    #   } else {
-    #     if (input$variavel_incompletude == "escolha1") {
-    #       data_grafico_incompletude <- data_grafico_incompletude1()
-    #     } else {
-    #       data_grafico_incompletude <- data_grafico_incompletude2()
-    #     }
-    #   }
-
-    variaveis_escolhidas <- reactive({
-      duas_variaveis <- c(input$variavel_incompletude2)
-      tres_variaveis <- c(input$variavel_incompletude3)
-      return(c(duas_variaveis, tres_variaveis))
+    ### Criando objetos que recebem o nome das variáveis de incompletude, para atualizar o selectizeInput
+    escolha1 <- reactive({
+      dplyr::case_when(
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos de MIF",
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN sem CNES preenchido",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude1 == "incompletude_neonatal_peso" ~ "PESO neonatal",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco)  ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ',')
+      )
+    })
+    escolha2 <- reactive({
+      dplyr::case_when(
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude2 == "incompletude_neonatal_peso" ~ "PESO neonatal",
+        infos_indicador()$bloco == "bloco6" ~ "Óbitos maternos",
+        grepl("deslocamento", infos_indicador()$bloco) ~ "DN com CNES inválido",
+        infos_indicador()$bloco != "bloco6" & !grepl("deslocamento", infos_indicador()$bloco) ~ stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')
+      )
+    })
+    escolha3 <- reactive({
+      dplyr::case_when(
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig" ~ "GESTACAO, SEMAGESTAC e PESO fetal",
+        infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso" ~ "PESO fetal",
+        infos_indicador()$numerador_incompletude3 == "incompletude_neonatal_peso" ~ "PESO neonatal"
+      )
     })
 
+    ### Atualizando as opções do selectizeInput
+    observe({
+      if (infos_indicador()$num_indicadores_incompletude == 2) {
+        updateSelectizeInput(
+          inputId = "variavel_incompletude",
+          label = ifelse(infos_indicador()$bloco == "bloco6", "Selecione o tipo de óbitos de interesse:", "Selecione a variável de incompletude de interesse:"),
+          choices = c(escolha1(), escolha2())
+        )
+      } else if (infos_indicador()$num_indicadores_incompletude == 3) {
+        updateSelectizeInput(
+          inputId = "variavel_incompletude",
+          choices = c(escolha1(), escolha2(), escolha3())
+        )
+      }
+    })
+
+    ### Criando o gráfico de linhas
     output$grafico_incompletude <- highcharter::renderHighchart({
+      validate(
+        need(
+          !(grepl("bloco7_mortalidade_neonatal", infos_indicador()$bloco)) | grepl("00", infos_indicador()$nome_abreviado),
+          "Informações a respeito da incompletude das variáveis não se aplicam a este indicador."
+        )
+      )
       validate(
         need(
           !(grepl("bloco7_morbidade_neonatal", infos_indicador()$bloco)) | infos_indicador()$nome_abreviado == "porc_condicoes_ameacadoras",
@@ -1179,17 +1037,33 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         )
       )
 
-      if(infos_indicador()$num_indicadores_incompletude == 1 |
-         (variaveis_escolhidas()[1] == "escolha1" & infos_indicador()$num_indicadores_incompletude == 2) |
-         (variaveis_escolhidas()[2] == "escolha1" & infos_indicador()$num_indicadores_incompletude == 3)){
+      if (infos_indicador()$num_indicadores_incompletude > 1) {
+        req(input$variavel_incompletude)
+      }
+
+      #### Decidindo qual dataframe de incompletude usar (para quando há mais de um indicador de incompletude)
+      if (infos_indicador()$num_indicadores_incompletude == 1 | input$variavel_incompletude == escolha1()) {
         data_grafico_incompletude <- data_grafico_incompletude1()
-      } else if((variaveis_escolhidas()[1] == "escolha2" & infos_indicador()$num_indicadores_incompletude == 2) |
-                variaveis_escolhidas()[2] == "escolha2" & infos_indicador()$num_indicadores_incompletude == 3){
+      } else if (input$variavel_incompletude == escolha2()) {
         data_grafico_incompletude <- data_grafico_incompletude2()
-      } else if(
-        (variaveis_escolhidas()[2] == "escolha3" & infos_indicador()$num_indicadores_incompletude == 3)){
+      } else if (input$variavel_incompletude == escolha3()) {
         data_grafico_incompletude <- data_grafico_incompletude3()
       }
+
+      #### Decidindo qual dataframe de referência de incompletude usar
+      if (infos_indicador()$bloco == "bloco6") {
+        data_referencia_incompletude <- data_referencia_incompletude_blocos6() |>
+          dplyr::filter(indicador == input$variavel_incompletude, ano <= 2020)
+      } else {
+        data_referencia_incompletude <- data_referencia_incompletude_blocos_gerais()
+      }
+
+      #### Criando um objeto com o título do gráfico
+      titulo_grafico_incompletude <- dplyr::case_when(
+        infos_indicador()$num_indicadores_incompletude == 1 | input$variavel_incompletude == escolha1() ~ infos_indicador()$nome_incompletude1,
+        input$variavel_incompletude == escolha2() ~ infos_indicador()$nome_incompletude2,
+        input$variavel_incompletude == escolha3() ~ infos_indicador()$nome_incompletude3
+      )
 
       highcharter::highchart() |>
         highcharter::hc_add_series(
@@ -1198,13 +1072,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = proporcao, group = localidade, colour = localidade)
         ) |>
         highcharter::hc_add_series(
-          data = {
-            if (infos_indicador()$bloco == "bloco6") {
-              data_referencia_incompletude() |> dplyr::filter(indicador == input$variavel_incompletude2)
-            } else {
-              data_referencia_incompletude()
-            }
-          },
+          data = data_referencia_incompletude,
           type = "line",
           highcharter::hcaes(x = ano, y = valor, group = class, colour = class),
           dashStyle = "ShortDot",
@@ -1216,10 +1084,10 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           categories = anos_disponiveis(),
           allowDecimals = FALSE
         ) |>
-        highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+        highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
         highcharter::hc_title(
           text = HTML(
-            glue::glue("<b style = 'font-size: 16px'> {dplyr::if_else(((variaveis_escolhidas()[1] == 'escolha1' & infos_indicador()$num_indicadores_incompletude == 2)| (variaveis_escolhidas()[2] == 'escolha1' & infos_indicador()$num_indicadores_incompletude == 3) | infos_indicador()$num_indicadores_incompletude == 1), infos_indicador()$nome_incompletude1, ifelse(((variaveis_escolhidas()[1] == 'escolha2' & infos_indicador()$num_indicadores_incompletude == 2) | (variaveis_escolhidas()[2] == 'escolha2' & infos_indicador()$num_indicadores_incompletude == 3)), infos_indicador()$nome_incompletude2, infos_indicador()$nome_incompletude3))}</b>")
+            glue::glue("<b style = 'font-size: 16px'>{titulo_grafico_incompletude}</b>")
           )
         ) |>
         highcharter::hc_colors(cols)
@@ -1324,6 +1192,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               )
             )
           }),
+          br(),
+          br(),
           HTML("dos anos considerados apresentam problemas de qualidade em alguma das variáveis necessárias para a construção do indicador")
         )
       }
@@ -2731,7 +2601,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             striped = TRUE,
             bordered = FALSE,
             pagination = FALSE,
-            height = ifelse(infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco), 730, 1440),
+            height = ifelse(infos_indicador()$bloco != "bloco6" & !grepl("bloco7", infos_indicador()$bloco), 810, 1410),
             rowStyle = reactable::JS(
               "function(rowInfo) {
               if (rowInfo.aggregated === true) {
@@ -2746,11 +2616,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
       if (infos_indicador()$bloco == "bloco6") {
-        tags$style(HTML("#tabela {height: 1823px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1793px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else if (grepl("bloco7", infos_indicador()$bloco)) {
-        tags$style(HTML("#tabela {height: 1823px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1793px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else {
-        tags$style(HTML("#tabela {height: 1080px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
+        tags$style(HTML("#tabela {height: 1150px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       }
     })
 
