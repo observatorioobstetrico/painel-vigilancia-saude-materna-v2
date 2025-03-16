@@ -1255,101 +1255,101 @@ if (params$nivel %in% c("Macrorregião de saúde", "Microrregião de saúde")) {
   }
 
 
-html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
-
-data_imcompletude_formatado <- lapply(params$data_incompletude, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-
-data.frame(
-  "indicador" = c(
-    "Porcentagem de IDADEMAE não preenchida ou ignorada",
-    "Porcentagem de ESCMAE não preenchida ou ignorada",
-    "Porcentagem de RACACOR não preenchida ou ignorada",
-    "Porcentagem de QTDPARTNOR não preenchida ou ignorada",
-    "Porcentagem de QTDPARTCES não preenchida ou ignorada",
-    "Porcentagem de CONSPRENAT não preenchida ou ignorada",
-    "Porcentagem de MESPRENAT não preenchida ou ignorada",
-    "Porcentagem de PARTO não preenchida ou ignorada",
-    "Porcentagem de TPROBSON não preenchida ou ignorada",
-    "Porcentagem de PESO não preenchida ou ignorada",
-    "Porcentagem de GESTACAO não preenchida ou ignorada"
-    
-  ),
+  html_comp_imcompletude <- cria_textos(infos_comp_imcompletude)
   
-  "valor_observado" = c(
-    paste0(data_imcompletude_formatado$idademae, "%"),
-    paste0(data_imcompletude_formatado$escmae, "%"),
-    paste0(data_imcompletude_formatado$racacor, "%"),
-    paste0(data_imcompletude_formatado$qtdpartnor, "%"),
-    paste0(data_imcompletude_formatado$qtdpartces, "%"),
-    paste0(data_imcompletude_formatado$consprenat, "%"),
-    paste0(data_imcompletude_formatado$mesprenat, "%"),
-    paste0(data_imcompletude_formatado$parto, "%"),
-    paste0(data_imcompletude_formatado$tprobson, "%"),
-    paste0(data_imcompletude_formatado$peso, "%"),
-    paste0(data_imcompletude_formatado$gestacao, "%")
+  data_imcompletude_formatado <- lapply(params$data_incompletude, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
   
-  ),
-  
-  "valor_de_referencia" = c(
-    rep(paste0("Máximo de 5%"), 11)
-  ),
-  
-  "comparacao" = c(
-    html_comp_imcompletude[1],
-    html_comp_imcompletude[2],
-    html_comp_imcompletude[3],
-    html_comp_imcompletude[4],
-    html_comp_imcompletude[5],
-    html_comp_imcompletude[6],
-    html_comp_imcompletude[7],
-    html_comp_imcompletude[8],
-    html_comp_imcompletude[9],
-    html_comp_imcompletude[10],
-    html_comp_imcompletude[11]
-    
-  )
-  ) |>
-  dplyr::mutate(
-    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
-    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
-  ) |>
-  reactable::reactable(
-    defaultColDef = reactable::colDef(
-      footerStyle = list(fontWeight = "bold"),
-      align = "center"
-    ), 
-    columns = list(
-      indicador = reactable::colDef(
-        name = "Indicador",
-        minWidth = 160,
-        align = "left"
-      ),
-      valor_observado = reactable::colDef(
-        name = "Valor observado",
-        align = "center"
-      ),
-      valor_de_referencia = reactable::colDef(
-        name = "Valor de referência",
-        align = "center"
-      ),
-      comparacao = reactable::colDef(
-        minWidth = 120,
-        name = "Comparação",
-        align = "center",
-        html = TRUE
-     )
+  data.frame(
+    "indicador" = c(
+      "Porcentagem de IDADEMAE não preenchida ou ignorada",
+      "Porcentagem de ESCMAE não preenchida ou ignorada",
+      "Porcentagem de RACACOR não preenchida ou ignorada",
+      "Porcentagem de QTDPARTNOR não preenchida ou ignorada",
+      "Porcentagem de QTDPARTCES não preenchida ou ignorada",
+      "Porcentagem de CONSPRENAT não preenchida ou ignorada",
+      "Porcentagem de MESPRENAT não preenchida ou ignorada",
+      "Porcentagem de PARTO não preenchida ou ignorada",
+      "Porcentagem de TPROBSON não preenchida ou ignorada",
+      "Porcentagem de PESO não preenchida ou ignorada",
+      "Porcentagem de GESTACAO não preenchida ou ignorada"
+      
     ),
-    sortable = TRUE,
-    resizable = TRUE,
-    highlight = TRUE,
-    striped = TRUE,
-    borderless = TRUE,
-    pagination = FALSE
-  )
+    
+    "valor_observado" = c(
+      paste0(data_imcompletude_formatado$idademae, "%"),
+      paste0(data_imcompletude_formatado$escmae, "%"),
+      paste0(data_imcompletude_formatado$racacor, "%"),
+      paste0(data_imcompletude_formatado$qtdpartnor, "%"),
+      paste0(data_imcompletude_formatado$qtdpartces, "%"),
+      paste0(data_imcompletude_formatado$consprenat, "%"),
+      paste0(data_imcompletude_formatado$mesprenat, "%"),
+      paste0(data_imcompletude_formatado$parto, "%"),
+      paste0(data_imcompletude_formatado$tprobson, "%"),
+      paste0(data_imcompletude_formatado$peso, "%"),
+      paste0(data_imcompletude_formatado$gestacao, "%")
+    
+    ),
+    
+    "valor_de_referencia" = c(
+      rep(paste0("Máximo de 5%"), 11)
+    ),
+    
+    "comparacao" = c(
+      html_comp_imcompletude[1],
+      html_comp_imcompletude[2],
+      html_comp_imcompletude[3],
+      html_comp_imcompletude[4],
+      html_comp_imcompletude[5],
+      html_comp_imcompletude[6],
+      html_comp_imcompletude[7],
+      html_comp_imcompletude[8],
+      html_comp_imcompletude[9],
+      html_comp_imcompletude[10],
+      html_comp_imcompletude[11]
+      
+    )
+    ) |>
+    dplyr::mutate(
+      valor_observado = ifelse(grepl("NA", valor_observado), "---", valor_observado),
+      valor_de_referencia = ifelse(grepl("NA", valor_de_referencia), "---", valor_de_referencia)
+    ) |>
+    reactable::reactable(
+      defaultColDef = reactable::colDef(
+        footerStyle = list(fontWeight = "bold"),
+        align = "center"
+      ), 
+      columns = list(
+        indicador = reactable::colDef(
+          name = "Indicador",
+          minWidth = 160,
+          align = "left"
+        ),
+        valor_observado = reactable::colDef(
+          name = "Valor observado",
+          align = "center"
+        ),
+        valor_de_referencia = reactable::colDef(
+          name = "Valor de referência",
+          align = "center"
+        ),
+        comparacao = reactable::colDef(
+          minWidth = 120,
+          name = "Comparação",
+          align = "center",
+          html = TRUE
+       )
+      ),
+      sortable = TRUE,
+      resizable = TRUE,
+      highlight = TRUE,
+      striped = TRUE,
+      borderless = TRUE,
+      pagination = FALSE
+    )
   
 } else  {
   #colocar todos os indicadores
-  if (isTruthy(params$data_incompletude$cobertura_sinasc)) {
+  if (isTruthy(params$data_incompletude$idademae)) {
     infos_comp_imcompletude <- data.frame(
       valores_comp = c(
         round(100 - 100 * params$data_incompletude$cobertura_sinasc / 90, 1),
@@ -1465,8 +1465,8 @@ data.frame(
   )
 ) |>
   dplyr::mutate(
-    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
-    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
+    valor_observado = ifelse(grepl("NA", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA", valor_de_referencia), "---", valor_de_referencia)
   ) |>
   reactable::reactable(
     defaultColDef = reactable::colDef(
@@ -1535,8 +1535,8 @@ if (params$nivel != "Microrregião de saúde" & params$nivel != "Macrorregião d
   )
 ) |>
   dplyr::mutate(
-    valor_observado = ifelse(grepl("NA|%", valor_observado), "---", valor_observado),
-    valor_de_referencia = ifelse(grepl("NA|%", valor_de_referencia), "---", valor_de_referencia)
+    valor_observado = ifelse(grepl("NA", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA", valor_de_referencia), "---", valor_de_referencia)
   ) |>
   reactable::reactable(
     defaultColDef = reactable::colDef(
