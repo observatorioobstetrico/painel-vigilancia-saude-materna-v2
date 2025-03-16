@@ -1187,7 +1187,6 @@ mod_nivel_1_server <- function(id, filtros){
     data_incompletude_aux <- reactive({
       base_incompletude |>
         dplyr::filter(ano == filtros()$ano) |>
-        #if(filtros()$nivel == "Estadual") dplyr::filter(uf==filtros()$estado)
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
             ano == filtros()$ano
@@ -1304,7 +1303,6 @@ mod_nivel_1_server <- function(id, filtros){
     data_incompletude <- reactive({
       dplyr::full_join(data_incompletude_aux(), data_cobertura(), by = c("ano", "localidade"))
     })
-
 
     ##### Dados do primeiro bloco de indicadores para a localidade escolhida #####
     data1 <- reactive({
@@ -2056,8 +2054,6 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
-            #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = dplyr::case_when(
               filtros()$nivel == "Nacional" ~ "Brasil",
               filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -2080,7 +2076,7 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
+            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
             #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$municipio,
             .keep = "unused"
@@ -2100,12 +2096,13 @@ mod_nivel_1_server <- function(id, filtros){
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
+            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
             #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$estado,
             .keep = "unused"
           ) |>
           dplyr::ungroup()
+
       }
 
     })
@@ -2622,17 +2619,6 @@ mod_nivel_1_server <- function(id, filtros){
            pagina = "nivel_1",
            nivel_de_analise = filtros()$nivel,
            width_caixa = 11
-       ),
-     # Botão de aviso posicionado no canto superior direito
-       div(
-         style = "position: absolute; top: 10px; right: 10px;",
-         shinyWidgets::actionBttn(
-           inputId = ns("aviso_desloc"),
-           icon = icon("triangle-exclamation", style = "color: red"),
-           color = "warning",
-           style = "material-circle",
-           size = "xs"
-         )
        )
       )
      )
