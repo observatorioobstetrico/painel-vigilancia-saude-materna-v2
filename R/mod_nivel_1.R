@@ -1960,11 +1960,11 @@ mod_nivel_1_server <- function(id, filtros){
         indicador = "porc_7",
         titulo = "Porcentagem de mulheres com oito ou mais consultas de pré-natal",
         tem_meta = TRUE,
-        valor_de_referencia = 0.5,
+        valor_de_referencia = 95,
         tipo = "taxa",
-        invertido = FALSE,
+        invertido = TRUE,
         pagina = "nivel_1",
-        tipo_referencia = "meta OMS",
+        tipo_referencia = "recomendações OMS",
         nivel_de_analise = filtros()$nivel
       )
     })
