@@ -2049,7 +2049,7 @@ mod_nivel_1_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::summarise(
             prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
             prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
@@ -2071,7 +2071,7 @@ mod_nivel_1_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::mutate(
             prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
             prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
@@ -2091,7 +2091,7 @@ mod_nivel_1_server <- function(id, filtros){
           dplyr::group_by(ano) |>
           dplyr::mutate(
             prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+            prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
             prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
@@ -2180,7 +2180,7 @@ mod_nivel_1_server <- function(id, filtros){
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::summarise(
           prop_partos_municipio_res = round(sum(local, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-          #prop_partos_fora_municipio_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
+          prop_partos_fora_mun_res = round(sum(nao_local, na.rm=TRUE)/sum(destino_total, na.rm=TRUE)*100, 1),
           prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
@@ -2460,21 +2460,6 @@ mod_nivel_1_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = NaN,
         tipo = "km",
-        invertido = FALSE,
-        pagina = "nivel_1",
-        nivel_de_analise = filtros()$nivel,
-        width_caixa = 11
-      )
-    })
-
-    output$caixa_b4_i5_muni_uf <- output$caixa_b4_i5_resto <- renderUI({
-      cria_caixa_server(
-        dados = data4_deslocamento(),
-        indicador = "prop_partos_fora_mun_res",
-        titulo = "Porcentagem do total de partos ocorridos fora do município de residência da mulher",
-        tem_meta = FALSE,
-        valor_de_referencia = data4_comp_deslocamento()$prop_partos_fora_mun_res,
-        tipo = "porcentagem",
         invertido = FALSE,
         pagina = "nivel_1",
         nivel_de_analise = filtros()$nivel,
