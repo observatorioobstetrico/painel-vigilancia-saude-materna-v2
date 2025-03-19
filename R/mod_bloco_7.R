@@ -2976,7 +2976,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_obitos_fetais_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais (geral)",
+        (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "peso_fetal") ~ "Número de óbitos fetais",
         (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_menos1000") ~ "Número de óbitos fetais com peso menor que 1000 g",
         (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_1000_1499") ~ "Número de óbitos fetais com peso de 1000 a 1499 g",
         (input$parto_fetal == "fetal_parto_geral" & input$faixa_peso_fetal == "fetal_1500_2499") ~ "Número de óbitos fetais com peso de 1500 a 2499 g",
@@ -3018,7 +3018,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3078,7 +3078,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_obitos_fetais_oms_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais (geral)",
+        (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "peso_fetal") ~ "Número de óbitos fetais",
         (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_menos1000") ~ "Número de óbitos fetais com peso menor que 1000 g",
         (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_1000_1499") ~ "Número de óbitos fetais com peso de 1000 a 1499 g",
         (input$parto_fetal_oms == "fetal_parto_geral" & input$faixa_peso_fetal_oms == "fetal_1500_2499") ~ "Número de óbitos fetais com peso de 1500 a 2499 g",
@@ -3120,7 +3120,7 @@ mod_bloco_7_server <- function(id, filtros){
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3204,7 +3204,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_taxa_mortalidade_fetal_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos (geral)",
+        (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "peso_fetal") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos",
         (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_menos1000") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1000 g",
         (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1000_1499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1000 a 1499 g",
         (input$parto_fetal2 == "fetal_parto_geral" & input$faixa_peso_fetal2 == "fetal_1500_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 2499 g",
@@ -3247,7 +3247,7 @@ mod_bloco_7_server <- function(id, filtros){
         ),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3357,7 +3357,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     titulo_taxa_mortalidade_fetal_oms_aux <- reactive({
       dplyr::case_when(
-        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal (geral)",
+        (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "peso_fetal") ~ "Taxa de mortalidade fetal",
         (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_menos1000") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso menor que 1000 g",
         (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1000_1499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1000 a 1499 g",
         (input$parto_fetal2_oms == "fetal_parto_geral" & input$faixa_peso_fetal2_oms == "fetal_1500_2499") ~ "Taxa de mortalidade fetal por 1000 nascidos vivos com peso de 1500 a 2499 g",
@@ -3395,7 +3395,7 @@ mod_bloco_7_server <- function(id, filtros){
                                              data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]], NaN),
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3407,7 +3407,7 @@ mod_bloco_7_server <- function(id, filtros){
         dados = data7_resumo(),
         indicador = "fetal peso por idade gestacional",
         titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
-        tamanho_caixa = "330px"
+        tamanho_caixa = "350px"
       )
     })
 
@@ -3417,7 +3417,7 @@ mod_bloco_7_server <- function(id, filtros){
         dados = data7_resumo(),
         indicador = "fetal momento do obito por peso",
         titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
-        tamanho_caixa = "330px"
+        tamanho_caixa = "350px"
       )
     })
 
@@ -3803,8 +3803,7 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
         tipo = "porcentagem",
         invertido = FALSE,
-        cor = "lightgrey",
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3821,8 +3820,7 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
         tipo = "porcentagem",
         invertido = FALSE,
-        cor = "lightgrey",
-        tamanho_caixa = "330px",
+        tamanho_caixa = "350px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
       )
@@ -3839,7 +3837,6 @@ mod_bloco_7_server <- function(id, filtros){
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_neonatal,
         tipo = "porcentagem",
         invertido = FALSE,
-        cor = "lightgrey",
         tamanho_caixa = "330px",
         pagina = "bloco_7",
         nivel_de_analise = nivel_selecionado()
@@ -3853,7 +3850,8 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_fetal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais,"
+        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        tamanho_caixa = "350px"
       )
     })
 
@@ -3862,7 +3860,8 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_perinatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,"
+        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        tamanho_caixa = "350px"
       )
     })
 
@@ -3871,7 +3870,8 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais,"
+        titulo = "Dentre os óbitos neonatais,",
+        tamanho_caixa = "330px"
       )
     })
 
@@ -3880,7 +3880,8 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais,"
+        titulo = "Dentre as internações neonatais,",
+        tamanho_caixa = "320px"
       )
     })
 
