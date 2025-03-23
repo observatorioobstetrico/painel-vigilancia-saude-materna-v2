@@ -383,15 +383,16 @@ infos_comp_bloco3 <- data.frame(
     round(100 - 100 * params$data3$cobertura_pre_natal / params$data3_comp$cobertura_pre_natal, 1),
     round(100 - 100 * params$data3$porc_inicio_prec / params$data3_comp$porc_inicio_prec, 1),
     round(100 - 100 * params$data3$porc_7 / params$data3_comp$porc_7, 1),
+    round(100 - 100 * params$data3$porc_consultas_adequadas / params$data3_comp$porc_consultas_adequadas, 1),
     round(100 - 100 * params$data3$porc_sc / params$data3_comp$porc_sc, 1)),
   
   invertido = c(
-    rep(TRUE, 3),
+    rep(TRUE, 4),
     FALSE
   ),
   
   tem_meta = c(
-    rep(TRUE, 4)
+    rep(TRUE, 5)
   )
   
 )
@@ -408,6 +409,7 @@ data.frame(
     "Cobertura de assistência pré-natal",
     "Porcentagem de mulheres com início precoce do pré-natal (até 12 semanas de gestação)",
     "Porcentagem de mulheres com mais de sete consultas de pré-natal",
+    "Porcentagem de mulheres com número adequado de consultas de pré-natal",
     "Incidência de sífilis congênita por mil nascidos vivos"
   ),
   
@@ -415,6 +417,7 @@ data.frame(
     paste0(data3_formatado$cobertura_pre_natal, "%"),
     paste0(data3_formatado$porc_inicio_prec, "%"),
     paste0(data3_formatado$porc_7, "%"),
+    paste0(data3_formatado$porc_consultas_adequadas, "%"),
     paste0(data3_formatado$porc_sc)
   ),
   
@@ -422,14 +425,16 @@ data.frame(
     paste0(max_min[1], data3_comp_formatado$cobertura_pre_natal, "% (recomendações OMS)"),
     paste0(max_min[2], data3_comp_formatado$porc_inicio_prec, "% (recomendações OMS)"),
     paste0(max_min[3], data3_comp_formatado$porc_7, "% (recomendações OMS)"),
-    paste0(max_min[4], data3_comp_formatado$porc_sc, " (meta OMS)")
+    paste0(max_min[4], data3_comp_formatado$porc_consultas_adequadas, "% (recomendações OMS)"),
+    paste0(max_min[5], data3_comp_formatado$porc_sc, " (meta OMS)")
   ),
   
   "comparacao" = c(
     html_comp_bloco3[1],
     html_comp_bloco3[2],
     html_comp_bloco3[3],
-    html_comp_bloco3[4]
+    html_comp_bloco3[4],
+    html_comp_bloco3[5]
   )
 ) |>
   dplyr::mutate(
@@ -492,6 +497,12 @@ data.frame(
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de mulheres com mais de sete consultas de pré-natal </div>
 <ul align='justify'>
   <li> O número insuficiente de consultas pode indicar baixa oferta de consultas de pré-natal, dificuldades de comparecimento da mulher ao serviço, barreiras de acesso, não valorização do pré-natal, entre outros. </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de mulheres com número adequado de consultas de pré-natal </div>
+<ul align='justify'>
+  <li> A adequação do número de consultas de pré-natal é medida pelo número de consultas recebidas até a idade gestacional em que ocorreu o parto, considerando o calendário preconizado pela OMS. Esse cálculo permite uma melhor avaliação da realização de consultas de pré-natal, já que em gestações com duração mais curta (partos prematuros), um número inferior a oito consultas pode ter sido adequado para a duração da gestação.
+  Um número inadequado de consultas pode indicar baixa oferta de consultas de pré-natal, dificuldades de comparecimento da mulher ao serviço, barreiras de acesso, não valorização do pré-natal, entre outros.</li>
 </ul>
 
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Incidência de sífilis congênita por mil nascidos vivos </div>
@@ -610,27 +621,35 @@ Para os indicadores relacionados ao deslocamento para o parto:
 
 ```{r}
 
- if (params$nivel != "Municipal" & params$nivel != "Estadual") {
+ #if (params$nivel != "Municipal" & params$nivel != "Estadual") {
   #Fazer igual você fez para os outros blocos, mas o único indicador aqui é o prop_partos_fora_macro_rsaude_res. Os de mediana não entram pra quando o nível não é municipal ou estadual
 
-  infos_comp_bloco4 <- data.frame(
+infos_comp_bloco4 <- data.frame(
     valores_comp = c(
-      # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
       ifelse(
         isTruthy(params$data4_deslocamento$prop_partos_fora_mun_res),
-        round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1),
-        NaN
-      ) 
+        round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1), NaN
+      ),
+      ifelse(isTruthy(params$data4_deslocamento$prop_partos_rsaude_res), round(100 - 100 * params$data4_deslocamento$prop_partos_rsaude_res / params$data4_comp_deslocamento$prop_partos_rsaude_res, 1), NaN
+             ),
+      ifelse(isTruthy(params$data4_deslocamento$prop_partos_macro_rsaude_res), round(100 - 100 * params$data4_deslocamento$prop_partos_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_macro_rsaude_res, 1), NaN
+             ),
+      ifelse(isTruthy(params$data4_deslocamento$prop_partos_fora_macro_rsaude_res), round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1), NaN
+             ),
+      ifelse(isTruthy(params$data4_deslocamento$prop_partos_fora_uf_res), round(100 - 100 * params$data4_deslocamento$prop_partos_fora_uf_res / params$data4_comp_deslocamento$prop_partos_fora_uf_res, 1), NaN
+             ),
+    ifelse(isTruthy(params$data4_deslocamento_macrorregiao$prop_partos_com_uti), round(100 - 100 * params$data4_deslocamento_macrorregiao$prop_partos_com_uti / params$data4_comp_deslocamento_macrorregiao$prop_partos_com_uti, 1),NaN
+           )
     ),
 
     invertido = c(
-      # FALSE,
-      FALSE
+      rep(FALSE,5),
+      TRUE
     ),
 
     tem_meta = c(
-      #FALSE,
-      FALSE
+      rep(FALSE,5),
+      TRUE
     )
 
   )
@@ -645,22 +664,39 @@ Para os indicadores relacionados ao deslocamento para o parto:
   data.frame(
     "indicador" = c(
       # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
-      "Porcentagem do total de partos ocorridos fora do município de residência da mulher"
+      "Porcentagem do total de partos ocorridos fora do município de residência da mulher",
+      "Porcentagem de partos ocorridos na microrregião de saúde, mas fora do município de residência",
+      "Porcentagem de partos ocorridos na macrorregião de saúde, mas fora da microrregião de saúde de residência",
+      "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência",
+      "Porcentagem de partos ocorridos fora da UF de residência",
+      "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal"
     ),
 
     "valor_observado" = c(
-      # paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
-      paste0(data4_formatado$prop_partos_fora_mun_res, "%")
+      paste0(data4_formatado$prop_partos_fora_mun_res, "%"),
+      paste0(data4_formatado$prop_partos_rsaude_res, "%"),
+      paste0(data4_formatado$prop_partos_macro_rsaude_res, "%"),
+      paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
+      paste0(data4_formatado$prop_partos_fora_uf_res, "%"),
+      paste0(data4_formatado$prop_partos_com_uti, "%")
     ),
 
     "valor_de_referencia" = c(
-      # paste0(data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
-      paste0(max_min[1], data4_comp_formatado$prop_partos_fora_mun_res, "% (média nacional)")
+      paste0(max_min[1], data4_comp_formatado$prop_partos_fora_mun_res, "% (média nacional)"),
+      paste0(max_min[2], data4_comp_formatado$prop_partos_rsaude_res, "% (média nacional)"),
+      paste0(max_min[3], data4_comp_formatado$prop_partos_macro_rsaude_res, "% (média nacional)"),
+      paste0(max_min[4], data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
+      paste0(max_min[5], data4_comp_formatado$prop_partos_fora_uf_res, "% (média nacional)"),
+      paste0(max_min[5], data4_comp_formatado$prop_partos_com_uti, "% (média nacional)")
     ),
 
     "comparacao" = c(
-      # html_comp_bloco4[1],
-      html_comp_bloco4[1]
+      html_comp_bloco4[1],
+      html_comp_bloco4[2],
+      html_comp_bloco4[3],
+      html_comp_bloco4[4],
+      html_comp_bloco4[5],
+      html_comp_bloco4[6]
     )
   ) |>
   dplyr::mutate(
@@ -700,120 +736,6 @@ Para os indicadores relacionados ao deslocamento para o parto:
     borderless = TRUE,
     pagination = FALSE
   )
-
-} else {
-
-
-  infos_comp_bloco4 <- data.frame(
-  valores_comp = c(
-    # round(100 - 100 * params$data4_deslocamento$prop_partos_fora_macro_rsaude_res / params$data4_comp_deslocamento$prop_partos_fora_macro_rsaude_res, 1),
-    ifelse(
-      isTruthy(params$data4_deslocamento$prop_partos_fora_mun_res),
-      round(100 - 100 * params$data4_deslocamento$prop_partos_fora_mun_res / params$data4_comp_deslocamento$prop_partos_fora_mun_res, 1),
-      NaN
-    ) 
-  ),
-
-  invertido = c(
-    # FALSE,
-    FALSE
-  ),
-
-  tem_meta = c(
-    # FALSE,
-    FALSE
-  )
-
-)
-
-html_comp_bloco4 <- cria_textos(infos_comp_bloco4)
-
-data4_formatado <- lapply(params$data4_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data4_comp_formatado <- lapply(params$data4_comp_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-
-max_min <- ifelse(infos_comp_bloco4$invertido == FALSE, "Máximo de ", "Mínimo de ")
-
-data.frame(
-  "indicador" = c(
-    # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
-    "Proporção do total de partos ocorridos fora do município de residência da mulher",
-    # "Mediana de deslocamento do total de partos ocorridos na UF, mas fora da macrorregião de saúde de residência mulher",
-    # "Mediana de deslocamento do total de partos ocorridos em serviços de alta complexidade na UF, mas fora da macrorregião de saúde de residência da mulher",
-    # "Mediana de deslocamento do total de partos ocorridos em serviços de baixa complexidade na UF, mas fora da macrorregião de saúde de residência da mulher",
-    "Mediana de deslocamento do total de partos ocorridos fora do municipio de residência da mulher",
-    "Mediana de deslocamento para serviços de baixa complexidade do total de partos ocorridos fora do municipio de residência da mulher",
-    "Mediana de deslocamento para serviços de alta complexidade do total de partos ocorridos fora do municipio de residência da mulher"
-  ),
-
-  "valor_observado" = c(
-    # paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
-    paste0(data4_formatado$prop_partos_fora_mun_res, "%"),
-    # paste0(data4_formatado$km_partos_na_macrorregiao),
-    # paste0(data4_formatado$km_partos_na_macrorregiao_alta_complexidade),
-    # paste0(data4_formatado$km_partos_na_macrorregiao_baixa_complexidade),
-    paste0(data4_formatado$km_partos_fora_municipio, " km"),
-    paste0(data4_formatado$km_partos_fora_municipio_alta_complexidade, " km"),
-    paste0(data4_formatado$km_partos_fora_municipio_baixa_complexidade, " km")
-  ),
-
-  "valor_de_referencia" = c(
-    # paste0(data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
-    paste0(max_min[1], data4_comp_formatado$prop_partos_fora_mun_res, "% (média nacional)"),
-    # paste0("---"),
-    # paste0("---"),
-    # paste0("---"),
-    paste0("---"),
-    paste0("---"),
-    paste0("---")
-  ),
-
-  "comparacao" = c(
-    # html_comp_bloco4[1],
-    html_comp_bloco4[1],
-    #rep("Comparação não aplicável", 3),
-    rep("Comparação não aplicável", 3)
-  )
-) |>
-  dplyr::mutate(
-    valor_observado = ifelse(valor_observado == "%" | valor_observado == " km", "---", valor_observado),
-    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
-  ) |>
-  reactable::reactable(
-    defaultColDef = reactable::colDef(
-      footerStyle = list(fontWeight = "bold"),
-      align = "center"
-    ),
-    columns = list(
-      indicador = reactable::colDef(
-        name = "Indicador",
-        minWidth = 160,
-        align = "left"
-      ),
-      valor_observado = reactable::colDef(
-        name = "Valor observado",
-        align = "center"
-      ),
-      valor_de_referencia = reactable::colDef(
-        name = "Valor de referência",
-        align = "center"
-      ),
-      comparacao = reactable::colDef(
-        minWidth = 120,
-        name = "Comparação",
-        align = "center",
-        html = TRUE
-      )
-    ),
-    sortable = TRUE,
-    resizable = TRUE,
-    highlight = TRUE,
-    striped = TRUE,
-    borderless = TRUE,
-    pagination = FALSE
-  )
-}
-
-
 
 ```
 
@@ -857,15 +779,21 @@ infos_comp_bloco5 <- data.frame(
   valores_comp = c(
     round(100 - 100 * params$data5$porc_nasc_baixo_peso / params$data5_comp_baixo_peso$porc_nasc_baixo_peso, 1),
     round(100 - 100 * params$data5$porc_nasc_premat / params$data5_comp$porc_nasc_premat, 1),
-    round(100 - 100 * params$data5$porc_termo_precoce / params$data5_comp$porc_termo_precoce, 1)),
+    round(100 - 100 * params$data5$porc_termo_precoce / params$data5_comp$porc_termo_precoce, 1),
+    round(100 - 100 * params$data5$porc_nascidos_vivos_asfixia1 /
+            params$data5_comp$porc_nascidos_vivos_asfixia1, 1),
+    round(100 - 100 * params$data5$porc_malformacao_geral / params$data5_comp$porc_malformacao_geral, 1),
+    round(100 - 100 * params$data5$porc_malformacao_vigilancia / params$data5_comp$porc_malformacao_vigilancia, 1)
+    ),
   
   invertido = c(
-    rep(FALSE, 3)
+    rep(FALSE, 6)
   ),
   
   tem_meta = c(
+    rep(TRUE,3),
     FALSE,
-    rep(TRUE, 2)
+    rep(TRUE,2)
   )
   
 )
@@ -882,25 +810,37 @@ data.frame(
   "indicador" = c(
     "Porcentagem de baixo peso ao nascer",
     "Porcentagem de nascimentos prematuros",
-    "Porcentagem de nascimentos termo precoce"
+    "Porcentagem de nascimentos termo precoce",
+    "Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g",
+    "Porcentagem de nascidos vivos com anomalias congênitas",
+    "Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde"
   ),
   
   "valor_observado" = c(
     paste0(data5_formatado$porc_nasc_baixo_peso, "%"),
     paste0(data5_formatado$porc_nasc_premat, "%"),
-    paste0(data5_formatado$porc_termo_precoce, "%")
+    paste0(data5_formatado$porc_termo_precoce, "%"),
+    paste0(data5_formatado$porc_nascidos_vivos_asfixia1, "%"),
+    paste0(data5_formatado$porc_malformacao_geral, "%"),
+    paste0(data5_formatado$porc_malformacao_vigilancia, "%")
   ),
   
   "valor_de_referencia" = c(
     paste0(max_min[1], data5_comp_baixo_peso_formatado$porc_nasc_baixo_peso, "% (meta de redução global)"),
     paste0(max_min[2], data5_comp_formatado$porc_nasc_premat, "% (países desenvolvidos)"),
-    paste0(max_min[3], data5_comp_formatado$porc_termo_precoce, "% (países desenvolvidos)")
+    paste0(max_min[3], data5_comp_formatado$porc_termo_precoce, "% (países desenvolvidos)"),
+    paste0(max_min[4], data5_comp_formatado$porc_nascidos_vivos_asfixia1, "% (países desenvolvidos)"),
+    paste0(max_min[5], data5_comp_formatado$porc_malformacao_geral, "% (países desenvolvidos)"),
+    paste0(max_min[6], data5_comp_formatado$porc_malformacao_vigilancia, "% (países desenvolvidos)")
   ),
   
   "comparacao" = c(
     html_comp_bloco5[1],
     html_comp_bloco5[2],
-    html_comp_bloco5[3]
+    html_comp_bloco5[3],
+    html_comp_bloco5[4],
+    html_comp_bloco5[5],
+    html_comp_bloco5[6]
   )
 ) |> 
   dplyr::mutate(
@@ -962,6 +902,24 @@ data.frame(
   <span style='display: block; margin-bottom: 5px;'> </span>
   <li>
 O valor de referência utilizado foi aquele observado em países desenvolvidos e que apresentam baixa taxa de cesariana, já que nascimentos termo precoce são mais comuns em locais com taxa de cesariana elevada. Melhorias da assistência pré-natal e ao parto e redução de cesarianas desnecessárias são medidas que podem contribuir para a redução desses desfechos.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g </div>
+<ul align='justify'>
+  <li> A asfixia ao nascer é um indicador que reflete a qualidade da assistência ao parto, principalmente em bebês a termo e sem anomalia congênita, já que a prematuridade, o baixo peso ao nascer e as anomalias congênitas podem estar associadas à asfixia. Neste painel foi considerada asfixia em recém-nascidos com índice de Apgar inferior a 7 no quinto minuto de vida. A asfixia ao nascer não deveria ocorrer em bebês a termo e sem anomalia congênita, e por isso é considerada evento-sentinela da qualidade da assistência ao parto e assistência imediata ao recém-nascido. Ou seja, a ocorrência de asfixia ao nascer nesses bebês indica a necessidade de melhoria na assistência ao trabalho de parto, parto e nascimento. O valor de referência, portanto, seria de 0 casos.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos com anomalias congênitas </div>
+<ul align='justify'>
+  <li> As anomalias congênitas são alterações estruturais ou funcionais que ocorrem durante o desenvolvimento do bebê e que podem ser detectadas antes, durante ou depois do nascimento. As anomalias congênitas são uma importante causa de óbitos fetais e neonatais, sendo a segunda causa de óbito em menores de 5 anos no Brasil. 
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde </div>
+<ul align='justify'>
+  <li> O Ministério da Saúde (MS) definiu uma lista de anomalias congênitas prioritárias para a vigilância, considerando-se dois critérios principais: ser diagnosticável ao nascimento e possuir intervenção disponível em diferentes níveis. Neste painel, apresentamos os dois indicadores: a porcentagem total de anomalias congênitas e as definidas como prioritárias segundo classificação do MS. O valor de referência para comparação é a média nacional. No mundo, a prevalência de anomalias congênitas é de 3% a 6% dos nascimentos, valor utilizado como referência neste painel. Valores superiores a esses indicam a necessidade de investigar exposições (fatores ambientais, medicamentos, infecções, dentre outras) que possam causar um aumento de anomalias congênitas. Por outro lado, valores muito inferiores podem estar relacionados ao sub-registro das anomalias congênitas na Declaração de Nascido Vivo e também devem ser investigados e corrigidos.
   </li>
 </ul>
 
