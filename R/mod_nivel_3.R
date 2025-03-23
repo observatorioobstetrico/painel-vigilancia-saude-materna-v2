@@ -1648,7 +1648,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_perinatal:,f}% </b>"
           )
         ) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_legend(reversed = TRUE, title = list(text = "Garbage code (CID-10)")) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_perinatal_completo()$cid)) + 2)]
@@ -1751,7 +1751,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {point.cid}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_garbage_code_neonatal:,f}% </b>"
           )
         ) |>
-        highcharter::hc_legend(reversed = FALSE, title = list(text = "Garbage code (CID-10)")) |>
+        highcharter::hc_legend(reversed = TRUE, title = list(text = "Garbage code (CID-10)")) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
         highcharter::hc_colors(
           viridis::magma(length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2, direction = 1)[-c(1, length(unique(data_plot_garbage_neonatal_completo()$cid)) + 2)]
