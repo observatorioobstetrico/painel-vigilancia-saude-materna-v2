@@ -26,6 +26,10 @@ params:
   data6_rmm_corrigida: NA
   data6_comp: NA   
   data_incompletude: NA
+  data7: NA
+  data7_comp: NA
+  bloco7_evitaveis_resumo: NA
+  bloco7_evitaveis_resumo_comp: NA
 output: 
   painel.indicadores:::minha_paged_windmill
 knit: pagedown::chrome_print
@@ -1546,10 +1550,467 @@ Todos os indicadores utilizados neste painel dependem da qualidade dos dados dos
 
 </div>
 
+# <font size="6"> Bloco 7: Mortalidade fetal, perinatal, neonatal e morbidade neonatal </font> {-}
+
+Para os indicadores relacionados à mortalidade fetal:
+
+```{r, echo = FALSE}
+infos_comp_bloco7 <- data.frame(
+  valores_comp = c(
+    round((params$data7$obitos_fetais / params$data7_comp$obitos_fetais)*100, 1),
+    round(100 - 100 * params$data7$taxa_mort_fetal / params$data7_comp$taxa_mort_fetal, 1),
+    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_fetal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_fetal, 1)
+  
+  ),
+  invertido = c(
+    FALSE,
+    FALSE,
+    FALSE
+  ),
+  tem_meta = c(
+    FALSE,
+    TRUE,
+    FALSE
+  )
+)
+
+html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+
+data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Número de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+    "Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+    "Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g potencialmente evitáveis"
+  ),
+  "valor_observado" = c(
+    data7_formatado$obitos_fetais,
+    data7_formatado$taxa_mort_fetal,
+    paste0(data7_formatado_evitaveis$porc_evitavel_fetal, "%")
+  ),
+  "valor_de_referencia" = c(
+    "---",
+    paste0(max_min[2], data7_comp_formatado$taxa_mort_fetal, " (meta ODS)"),
+    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_fetal, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_fetais, big.mark = '.', decimal.mark = ','), " óbitos")),
+    html_comp_bloco7[2],
+    html_comp_bloco7[3]
+  )
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        minWidth = 160,
+        name = "Indicador",
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+\newpage
+
+Para os indicadores relacionados à mortalidade perinatal:
+
+```{r, echo = FALSE}
+infos_comp_bloco7 <- data.frame(
+  valores_comp = c(
+    round((params$data7$perinatal_todos_total / params$data7_comp$perinatal_todos_total)*100, 1),
+    round(100 - 100 * params$data7$taxa_perinatal_total / params$data7_comp$taxa_perinatal_total, 1),
+    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_perinatal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_perinatal, 1)
+  
+  ),
+  invertido = c(
+    FALSE,
+    FALSE,
+    FALSE
+  ),
+  tem_meta = c(
+    FALSE,
+    TRUE,
+    FALSE
+  )
+)
+
+html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+
+data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
+    "Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos",
+    "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida potencialmente evitáveis"
+  ),
+  "valor_observado" = c(
+    data7_formatado$perinatal_todos_total,
+    data7_formatado$taxa_perinatal_total,
+    paste0(data7_formatado_evitaveis$porc_evitavel_perinatal, "%")
+  ),
+  "valor_de_referencia" = c(
+    "---",
+    paste0(max_min[2], data7_comp_formatado$taxa_perinatal_total, " (meta ODS)"),
+    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$perinatal_todos_total, big.mark = '.', decimal.mark = ','), " óbitos")),
+    html_comp_bloco7[2],
+    html_comp_bloco7[3]
+  )
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        minWidth = 160,
+        name = "Indicador",
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+\newpage
+
+Para os indicadores relacionados à mortalidade neonatal:
+
+```{r, echo = FALSE}
+infos_comp_bloco7 <- data.frame(
+  valores_comp = c(
+    round((params$data7$obitos_neonat / params$data7_comp$obitos_neonat)*100, 1),
+    round(100 - 100 * params$data7$mort_neonat / params$data7_comp$mort_neonat, 1),
+    round(100 - 100 * params$data7$mort_neonat_precoc / params$data7_comp$mort_neonat_precoc, 1),
+    round(100 - 100 * params$data7$mort_neonat_tardia / params$data7_comp$mort_neonat_tardia, 1),
+    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_neonatal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_neonatal, 1)
+  
+  ),
+  invertido = c(
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE,
+    FALSE
+  ),
+  tem_meta = c(
+    FALSE,
+    TRUE,
+    TRUE,
+    TRUE,
+    FALSE
+  )
+)
+
+html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+
+data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Número de óbitos neonatais",
+    "Taxa de mortalidade neonatal por 1000 nascidos vivos",
+    "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos",
+    "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos",
+    "Porcentagem de óbitos neonatais potencialmente evitáveis"
+  ),
+  "valor_observado" = c(
+    data7_formatado$obitos_neonat,
+    data7_formatado$mort_neonat,
+    data7_formatado$mort_neonat_precoc,
+    data7_formatado$mort_neonat_tardia,
+    paste0(data7_formatado_evitaveis$porc_evitavel_neonatal, "%")
+  ),
+  "valor_de_referencia" = c(
+    "---",
+    paste0(max_min[2], data7_comp_formatado$mort_neonat, " (meta ODS)"),
+    paste0(max_min[3], data7_comp_formatado$mort_neonat_precoc, " (meta ODS)"),
+    paste0(max_min[4], data7_comp_formatado$mort_neonat_tardia, " (meta ODS)"),
+    paste0(max_min[5], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_neonat, big.mark = '.', decimal.mark = ','), " óbitos")),
+    html_comp_bloco7[2],
+    html_comp_bloco7[3],
+    html_comp_bloco7[4],
+    html_comp_bloco7[5]
+  )
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        minWidth = 160,
+        name = "Indicador",
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+\newpage
+
+Para os indicadores relacionados à morbidade neonatal:
+
+```{r, echo = FALSE}
+infos_comp_bloco7 <- data.frame(
+  valores_comp = c(
+    round(100 - 100 * params$data7$porc_condicoes_ameacadoras / params$data7_comp$porc_condicoes_ameacadoras, 1),
+    round(100 - 100 * params$data7$porc_internacoes_menores_28_dias_sih_geral / params$data7_comp$porc_internacoes_menores_28_dias_sih_geral, 1),
+    round(100 - 100 * params$data7$porc_internacoes_uti_menores_28_dias_sih_geral / params$data7_comp$porc_internacoes_uti_menores_28_dias_sih_geral, 1)
+  
+  ),
+  invertido = c(
+    FALSE,
+    FALSE,
+    FALSE
+  ),
+  tem_meta = c(
+    TRUE,
+    TRUE,
+    TRUE
+  )
+)
+
+html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+
+data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+
+max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
+
+data.frame(
+  "indicador" = c(
+    "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
+    "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS",
+    "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS"
+  ),
+  "valor_observado" = c(
+    paste0(data7_formatado$porc_condicoes_ameacadoras, "%"),
+    paste0(data7_formatado$porc_internacoes_menores_28_dias_sih_geral, "%"),
+    paste0(data7_formatado$porc_internacoes_uti_menores_28_dias_sih_geral, "%")
+  ),
+  "valor_de_referencia" = c(
+    paste0(max_min[1], data7_comp_formatado$porc_condicoes_ameacadoras, "% (média nacional)"),
+    paste0(max_min[2], data7_comp_formatado$porc_internacoes_menores_28_dias_sih_geral, "% (média nacional)"),
+    paste0(max_min[3], data7_comp_formatado$porc_internacoes_uti_menores_28_dias_sih_geral, "% (média nacional)")
+  ),
+  "comparacao" = c(
+    html_comp_bloco7[1],
+    html_comp_bloco7[2],
+    html_comp_bloco7[3]
+  )
+) |>
+  dplyr::mutate(
+    valor_observado = ifelse(grepl("NA|NaN", valor_observado), "---", valor_observado),
+    valor_de_referencia = ifelse(grepl("NA|NaN", valor_de_referencia), "---", valor_de_referencia)
+  ) |>
+  reactable::reactable(
+    defaultColDef = reactable::colDef(
+      footerStyle = list(fontWeight = "bold"),
+      align = "center"
+    ), 
+    columns = list(
+      indicador = reactable::colDef(
+        minWidth = 160,
+        name = "Indicador",
+        align = "left"
+      ),
+      valor_observado = reactable::colDef(
+        name = "Valor observado",
+        align = "center"
+      ),
+      valor_de_referencia = reactable::colDef(
+        name = "Valor de referência",
+        align = "center"
+      ),
+      comparacao = reactable::colDef(
+        minWidth = 120,
+        name = "Comparação",
+        align = "center",
+        html = TRUE
+      )
+    ),
+    sortable = TRUE,
+    resizable = TRUE,
+    striped = TRUE,
+    borderless = TRUE,
+    pagination = FALSE
+  )
+```
+
+### Interpretação {-}
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Número absoluto, taxa de mortalidade e causas de óbito fetal, neonatal e perinatal </div>
+<ul align='justify'>
+  <li> Óbitos fetais são aqueles que ocorrem antes da expulsão de feto com idade gestacional ≥22 semanas ou peso ≥ 500g. Para fins de comparação internacional, também apresentamos os óbitos fetais tardios, que são aqueles com idade gestacional ≥28 semanas ou peso ≥ 1000g
+
+</li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
 
 
+Óbitos neonatais são aqueles que ocorrem nos primeiros 27 dias de vida do bebê, sendo classificados em precoces (0 a 6 dias) e tardios (7 a 27 dias).
+
+</li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
 
 
+Óbitos perinatais incluem os óbitos fetais tardios e os óbitos neonatais precoces.
+
+</li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
+
+
+Para os três tipos de óbito, apresentamos a distribuição segundo faixa de peso e momento de ocorrência do óbito (antes ou durante o parto, no caso dos óbitos fetais; e 0 dias de vida, 1 a 6 dias de vida, e 7 a 27 dias de vida, no caso dos óbitos neonatais). Também apresentamos as principais causas de óbito e a avaliação de evitabilidade, segundo a Lista Brasileira de Causas de Mortes Evitáveis por intervenção do Sistema Único de Saúde.
+
+</li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>
+
+
+A análise dessas informações permitirá avaliar o perfil de mortalidade na área geográfica selecionada  (do nível municipal ao nacional), considerando o peso ao nascer e o momento de ocorrência do óbito, e as principais causas. De modo geral, quanto maior a taxa de mortalidade, principalmente de fetos e bebês viáveis (ou seja, a termo e com peso ≥ 2500g) e por causas evitáveis, pior a condição de saúde do local, exigindo estratégias para melhoria da assistência pré-natal, ao parto/nascimento e ao recém-nato, visando a prevenção desses óbitos, principalmente os evitáveis com as tecnologias disponíveis no SUS. Como padrão de referência utilizamos a meta brasileira para os Objetivos do Desenvolvimento Sustentável que é reduzir a taxa de mortalidade neonatal para 5 por 1000 até o ano 2030. Consideramos esse mesmo valor de 5 por 1000 para a mortalidade fetal, já que estratégias internacionais recomendam a mesma meta para mortalidade neonatal e fetal. Considerando que 75% dos óbitos neonatais ocorrem no período neonatal precoce (0 a 6 dias de vida), ajustamos a meta da mortalidade neonatal precoce para 3,75 por 1000 e utilizamos como meta para a mortalidade perinatal o valor de 8,7 por 1000, já que ela composta pela mortalidade fetal e neonatal precoce.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida </div>
+<ul align='justify'>
+  <li> As “condições potencialmente ameaçadoras à vida”, definidas como a presença de peso ao nascer < 1500g e/ou idade gestacional < 32 semanas e/ou asfixia ao nascer (Apgar < 7 no 5º minuto de vida) são uma forma de medir a frequência de bebês com morbidade grave, ou seja, bebês que apresentam risco aumentado de morte. Quanto maior a porcentagem de bebês classificados com alguma condição potencialmente ameaçadora à vida, pior a situação do local de residência avaliado, sendo necessárias estratégias de melhoria da assistência pré-natal e ao parto, visando evitar a ocorrência de nascimentos prematuros, com baixo peso ao nascer e com asfixia. Este indicador também sinaliza a necessidade de investimento em cuidados neonatais, já que esses bebês precisam ser assistidos em unidade neonatal com UTI neonatal. Como padrão de referência para avaliação do indicador, utilizamos a média nacional.
+  </li>
+</ul>
+
+<div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de internações neonatais e em UTI neonatal (UTIN) no SUS ocorridas até o 27º dia de vida </div>
+<ul align='justify'>
+
+  <li> As internações neonatais e em UTIN refletem a morbidade neonatal, mas também a oferta de serviços neonatais e de UTIN. Sua análise, portanto, deve ser feita de forma integrada aos indicadores de mortalidade neonatal e de “condições potencialmente ameaçadoras à vida”, bem como ao indicador “Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto”, apresentado no bloco 4. Locais com elevada porcentagem de nascidos com condições potencialmente ameaçadoras à vida e com elevada taxa de mortalidade neonatal, mas com baixa porcentagem de internações neonatais e de nascidos vivos com peso < 1500 nascidos em serviços com UTIN, provavelmente apresentam barreiras de acesso a serviços de atenção neonatal, que devem ser estruturados no âmbito das macrorregiões de saúde em cada estado. As internações neonatais são apresentadas segundo local de ocorrência – na macrorregião de residência ou fora da macrorregião de residência – visando facilitar a análise dos dados e o planejamento das ações.
+
+  </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>    A média nacional foi utilizada como valor de referência para comparação, mas é importante ressaltar que esses indicadores foram calculados apenas para internações no Sistema Único de Saúde (SUS), seja em hospitais públicos ou privados conveniados ao SUS, já que dados sobre internações neonatais em serviços da saúde suplementar não estão disponíveis. Em localidades com elevada proporção de beneficiários de planos de saúde, os resultados desses indicadores não refletem a internação neonatal de todos residentes, mas apenas de usuários do SUS.
+  </li>
+  
+</ul>
+
+  <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Principais causas de morbidade neonatal </div>
+<ul align='justify'>
+ <li>
+  Para avaliação das principais causas de morbidade neonatal, foram utilizadas as causas de internação registradas no Sistema de Informação Hospitalar do SUS, sendo utilizada a mesma classificação de causas detalhadas adotada para os óbitos neonatais com pequenas adaptações. Dessa forma, é possível avaliar a morbimortalidade neonatal de forma integrada, identificando as principais causas de adoecimento e morte nas três faixas etárias selecionadas (0 dias de vida, 1 a 6 dias de vida, 7 a 27 dias de vida).
+
+  </li>
+  <span style='display: block; margin-bottom: 5px;'> </span>
+  <li>    A média nacional foi utilizada como valor de referência para comparação, mas assim como para as internações neonatais, esses indicadores foram calculados apenas para internações no SUS, já que dados sobre internações neonatais em serviços da saúde suplementar não estão disponíveis. Em localidades com elevada proporção de beneficiários de planos de saúde, os resultados desses indicadores não refletem a morbidade neonatal de todos residentes, mas apenas de usuários do SUS.
+  </li>
+  
+</ul>
+<!-- </div> -->
+
+<!-- # <font size="6"> Qualidade da informação </font> {-} -->
+
+<!-- ### Interpretação {-} -->
+
+<!-- <div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px"> -->
+
+<!-- Todos os indicadores utilizados neste painel dependem da qualidade dos dados dos Sistemas de Informação. Para este painel, muitos indicadores utilizaram dados do Sistema de Informação de Nascido Vivo (SINASC) e do Sistema de Informação de Mortalidade (SIM), razão pela qual destacamos dados de cobertura e completitude de preenchimento das variáveis desses sistemas. Os parâmetros de referência utilizados são do Ministério da Saúde, para cobertura, e de Romero & Cunha (2006) para completude. Localidades com cobertura do sistema abaixo do ideal e com porcentagem elevada de incompletude devem avaliar os dados com cautela e investir na melhoria dos sistemas de informação. Para mais informações sobre qualidade do preenchimento dos sistemas de informação, visite o painel <a href = https://observatorioobstetrico.shinyapps.io/oobr_qualidados2/ target = _blank>OOBr Qualidados.</a> -->
 
 <div style = "display: none;"> 
 $$
