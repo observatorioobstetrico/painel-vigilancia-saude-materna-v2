@@ -3130,6 +3130,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
 
+
     ### Porcentagem de nascidos vivos por grupo de Robson --------------------
     output$plot1_indicador2 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
@@ -3140,7 +3141,7 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ))|>
               highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)])
       } else {

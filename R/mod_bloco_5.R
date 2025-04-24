@@ -1730,9 +1730,6 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5_referencia <- eventReactive(c(filtros()$pesquisar), data5_referencia_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_vinc_sus_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_referencia_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_publicos_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_referencia_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_uti_sih_referencia <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_referencia_aux(), ignoreNULL = FALSE)
 
     data5_referencia_baixo_peso <- reactive({
       data5_referencia_baixo_peso_aux <- reactive({
@@ -1808,16 +1805,21 @@ mod_bloco_5_server <- function(id, filtros){
 
     ### Para os gráficos de barras, juntando a localidade selecionada com a referência ----
     data5_juncao_barras <- reactive({
-      if (filtros()$comparar == FALSE) {
-        dplyr::full_join(data5(), data5_referencia(), by = "ano") |>
+      if (filtros()$comparar == "Não") {
+        dplyr::full_join(
+          data5() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class)),
+          data5_referencia(),
+          by = "ano"
+        ) |>
           dplyr::arrange(dplyr::desc(ano)) |>
           dplyr::mutate(
             ano = factor(ano, levels = filtros()$ano2[2]:filtros()$ano2[1])
           )
       } else {
         dplyr::full_join(
-          data5(),
+          data5() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class)),
           data5_comp() |>
+            dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class)) |>
             dplyr::rename(localidade_comparacao = class) |>
             dplyr::rename_with(~paste0("br_", .x), dplyr::starts_with("porc_baixo_peso_") | dplyr::starts_with("porc_premat_")),
           by = "ano"
@@ -1828,7 +1830,6 @@ mod_bloco_5_server <- function(id, filtros){
           )
       }
     })
-
 
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Porcentagem de baixo peso ao nascer -----------------------------------
@@ -1966,6 +1967,7 @@ mod_bloco_5_server <- function(id, filtros){
       }
     })
 
+
     ### Distribuição percentual do baixo peso ao nascer -----------------------
     output$plot1_1 <- highcharter::renderHighchart({
       highcharter::highchart()|>
@@ -1976,7 +1978,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1500_a_2499:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1500_a_2499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -1986,7 +1988,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1000_a_1499:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b><b>({point.class})</b></b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_1000_a_1499:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -1996,7 +1998,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_menor_1000:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_baixo_peso_menor_1000:,f}% </b>"
           )
         ) |>
         highcharter::hc_legend(reversed = TRUE) |>
@@ -2140,7 +2142,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_faltantes:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_faltantes:,f}% </b>"
           )
         )  |>
         highcharter::hc_add_series(
@@ -2150,7 +2152,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_35_a_36_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_35_a_36_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -2160,7 +2162,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_33_a_34_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_33_a_34_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -2170,7 +2172,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_28_a_32_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_28_a_32_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_add_series(
@@ -2180,7 +2182,7 @@ mod_bloco_5_server <- function(id, filtros){
           type = "bar",
           showInLegend = TRUE,
           tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_menos_de_28_semanas:,f}% </b>"
+            pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> {point.localidade_comparacao}: <b> {point.br_porc_premat_menos_de_28_semanas:,f}% </b>"
           )
         ) |>
         highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
