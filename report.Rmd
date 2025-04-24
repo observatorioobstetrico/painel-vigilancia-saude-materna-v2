@@ -2009,11 +2009,7 @@ if (params$nivel != "Microrregião de saúde" & params$nivel != "Macrorregião d
 
 Todos os indicadores utilizados neste painel dependem da qualidade dos dados dos Sistemas de Informação. Para este painel, muitos indicadores utilizaram dados do Sistema de Informação de Nascido Vivo (SINASC) e do Sistema de Informação de Mortalidade (SIM), razão pela qual destacamos dados de cobertura e completitude de preenchimento das variáveis desses sistemas. Os parâmetros de referência utilizados são do Ministério da Saúde, para cobertura, e de Romero & Cunha (2006) para completude. Localidades com cobertura do sistema abaixo do ideal e com porcentagem elevada de incompletude devem avaliar os dados com cautela e investir na melhoria dos sistemas de informação. Para mais informações sobre qualidade do preenchimento dos sistemas de informação, visite o painel <a href = https://observatorioobstetrico.shinyapps.io/oobr_qualidados2/ target = _blank>OOBr Qualidados.</a>
 
-
-
 </div>
-
-
 
 <div style = "display: none;"> 
 $$
