@@ -1150,7 +1150,7 @@ mod_nivel_1_server <- function(id, filtros){
               data6 = data6(),
               data6_rmm_corrigida = data6_rmm_corrigida(),
               data6_comp = data6_comp(),
-              data_incompletude = data_incompletude()
+              data_incompletude = data_incompletude(),
               # data_plot_grupos_morbidade_neonatal_completo = data_plot_grupos_morbidade_neonatal_completo(),
               # data_plot_grupos_morbidade_neonatal_comp_completo = data_plot_grupos_morbidade_neonatal_comp_completo(),
               # data_plot_grupos_fetal_completo = data_plot_grupos_fetal_completo(),
@@ -1159,8 +1159,10 @@ mod_nivel_1_server <- function(id, filtros){
               # data_plot_grupos_neonatal_comp_completo = data_plot_grupos_neonatal_comp_completo(),
               # data_plot_grupos_perinatal_completo = data_plot_grupos_perinatal_completo(),
               # data_plot_grupos_perinatal_comp_completo = data_plot_grupos_perinatal_comp_completo(),
-              # data7 = data7(),
-              # data7_comp = data7_comp()
+              data7 = data7(),
+              data7_comp = data7_comp(),
+              bloco7_evitaveis_resumo = bloco7_evitaveis_resumo(),
+              bloco7_evitaveis_resumo_comp = bloco7_evitaveis_resumo_comp()
 
             )
           )
@@ -4413,7 +4415,7 @@ mod_nivel_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7(),
         indicador = "perinatal_todos_total",
-        titulo = "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos",
+        titulo = "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$perinatal_todos_total,
         tipo = "número",
