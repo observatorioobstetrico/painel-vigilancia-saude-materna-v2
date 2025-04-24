@@ -6664,7 +6664,6 @@ mod_bloco_7_server <- function(id, filtros){
       }
     })
 
-    observe(print(names(data7_juncao_barras_dist1())))
 
     #### Distribuição percentual do momento do óbito por faixa de peso --------
     output$plot3_fetal <- highcharter::renderHighchart({
