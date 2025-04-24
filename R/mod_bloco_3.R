@@ -805,7 +805,8 @@ mod_bloco_3_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros())
+        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros()) |>
+        dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class))
     })
 
     ### Para a comparação selecionada -----------------------------------------
@@ -829,7 +830,8 @@ mod_bloco_3_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros(), comp = TRUE)
+        cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros(), comp = TRUE) |>
+        dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)", "Brasil", class))
     })
 
     ### Para a referência -----------------------------------------------------

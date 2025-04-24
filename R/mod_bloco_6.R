@@ -1505,6 +1505,7 @@ mod_bloco_6_server <- function(id, filtros){
         highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data6(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
@@ -1516,11 +1517,13 @@ mod_bloco_6_server <- function(id, filtros){
         highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data6(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data6_comp(),
+            name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data6_comp()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
           ) |>
