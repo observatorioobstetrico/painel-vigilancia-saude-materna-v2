@@ -159,17 +159,17 @@ mod_bloco_5_ui <- function(id) {
               fluidRow(
                 column(
                   width = 12,
-                  selectizeInput(
+                  checkboxGroupInput(
                     inputId = ns("baixo_peso"),
                     label = "Peso ao nascer",
-                    options = list(placeholder = "Selecione a faixa de peso ao nascer"),
+                    #options = list(placeholder = "Selecione a faixa de peso ao nascer"),
                     choices = c(
                       "Menor que 1000 g" = "porc_nasc_peso_menor_1000",
                       "De 1000 a 1499 g" = "porc_nasc_peso_1000_a_1499",
-                      "De 1500 a 2499 g" = "porc_nasc_peso_1500_a_2499",
-                      "Menor que 2500 g" = "porc_nasc_baixo_peso"
+                      "De 1500 a 2499 g" = "porc_nasc_peso_1500_a_2499"#,
+                      #"Menor que 2500 g" = "porc_nasc_baixo_peso"
                     ),
-                    width = "100%", selected = "porc_nasc_baixo_peso"
+                    width = "100%", selected = c("porc_nasc_peso_menor_1000", "porc_nasc_peso_1000_a_1499", "porc_nasc_peso_1500_a_2499")
                   )
                 )
               ),
@@ -236,20 +236,18 @@ mod_bloco_5_ui <- function(id) {
               fluidRow(
                 column(
                   width = 12,
-                  selectizeInput(
+                  checkboxGroupInput(
                     inputId = ns("faixa_prematuridade"),
                     label = "Idade gestacional",
-                    options = list(placeholder = "Selecione a idade gestacional"),
+                    #options = list(placeholder = "Selecione a idade gestacional"),
                     choices = c(
                       "Menor que 28 semanas" = "porc_nasc_menos_de_28_semanas",
                       "De 28 a 32 semanas" = "porc_nasc_28_a_32_semanas",
                       "De 33 a 34 semanas" = "porc_nasc_33_a_34_semanas",
-                      "De 35 a 36 semanas" = "porc_nasc_35_a_36_semanas",
-                      "Menos que 37 semanas" = "porc_nasc_premat"
-
+                      "De 35 a 36 semanas" = "porc_nasc_35_a_36_semanas"
 
                     ),
-                    width = "100%", selected = "porc_nasc_premat"
+                    width = "100%", selected = c("porc_nasc_menos_de_28_semanas", "porc_nasc_28_a_32_semanas", "porc_nasc_33_a_34_semanas", "porc_nasc_35_a_36_semanas")
                   )
                 )
               ),
@@ -642,21 +640,26 @@ mod_bloco_5_server <- function(id, filtros){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+
+
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco5_calcs <- data.frame(
         tipo = c("local", "referencia"),
-        porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_peso_1500_a_2499= rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
+        porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
+        #porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(dplyr::all_of((c('nascidos_vivos_peso_menor_1000', 'nascidos_vivos_peso_1000_a_1499', 'nascidos_vivos_peso_1500_a_2499')[C('porc_nasc_peso_menor_1000' %in% input$baixo_peso, 'porc_nasc_peso_1000_a_1499' %in% input$baixo_peso, 'porc_nasc_peso_1500_a_2499' %in% input$baixo_peso)])))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
+        #porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_peso_1500_a_2499= rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_baixo_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
         porc_baixo_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
         porc_baixo_peso_1500_a_2499 = rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        porc_nasc_premat = c("round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)", "8"),
-        porc_nasc_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nasc_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_premat = c("round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)", "8"),
+        # porc_nasc_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+        # porc_nasc_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         porc_premat_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
         porc_premat_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
         porc_premat_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
@@ -1648,20 +1651,20 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
     data5_baixo_peso <- reactive(
-      data5() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$baixo_peso),
-          class
-        )
-    )
+       data5() |>
+         dplyr::select(
+           ano,
+           eixo_y = dplyr::all_of(c("porc_nasc_baixo_peso")),
+           class
+         )
+     )
 
     # Para o gráfico de porcentagem de nascidos vivos prematuros, selecionando apenas a coluna de escolha do usuário
     data5_prematuridade <- reactive(
       data5() |>
         dplyr::select(
           ano,
-          eixo_y = dplyr::all_of(input$faixa_prematuridade),
+          eixo_y = dplyr::all_of(c("porc_nasc_premat")),
           class
         )
     )
@@ -1697,21 +1700,22 @@ mod_bloco_5_server <- function(id, filtros){
     # data5_internacoes_uti_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_comp_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
-    data5_comp_baixo_peso <- reactive(
-      data5_comp() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$baixo_peso),
-          class
-        )
-    )
+     data5_comp_baixo_peso <- reactive(
+       data5_comp() |>
+         dplyr::select(
+           ano,
+           eixo_y = dplyr::all_of(c("porc_nasc_baixo_peso")),
+           class
+         )
+     )
+
 
     # Para o gráfico de porcentagem de nascidos vivos prematuros, selecionando apenas a coluna de escolha do usuário
     data5_comp_prematuridade <- reactive(
       data5_comp() |>
         dplyr::select(
           ano,
-          eixo_y = dplyr::all_of(input$faixa_prematuridade),
+          eixo_y = dplyr::all_of(c("porc_nasc_premat")),
           class
         )
     )
@@ -1846,7 +1850,7 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
 
-        if (input$baixo_peso == "porc_nasc_baixo_peso") {
+        if (length(input$baixo_peso) == 3) {
           grafico_base <- grafico_base |>
             highcharter::hc_add_series(
               data = data5_referencia_baixo_peso(),
@@ -1923,7 +1927,7 @@ mod_bloco_5_server <- function(id, filtros){
         if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
           grafico_base
         } else {
-          if (input$baixo_peso == "porc_nasc_baixo_peso") {
+          if (length(input$baixo_peso) == 3) {
             grafico_base |>
               highcharter::hc_add_series(
                 data = data5_referencia_baixo_peso(),
@@ -2015,7 +2019,7 @@ mod_bloco_5_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data5_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & input$faixa_prematuridade == "porc_nasc_premat", "Brasil", class)),
+            data = data5_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & length(input$faixa_prematuridade) == 4, "Brasil", class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           )  |>
@@ -2023,7 +2027,7 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if(input$faixa_prematuridade == "porc_nasc_premat") {
+        if(length(input$faixa_prematuridade) == 4) {
           grafico_base <- grafico_base  |>
             highcharter::hc_add_series(
               data = data5_referencia(),
@@ -2068,12 +2072,12 @@ mod_bloco_5_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data5_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & input$faixa_prematuridade == "porc_nasc_premat", "Brasil", class)),
+            data = data5_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & length(input$faixa_prematuridade) == 4, "Brasil", class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data5_comp_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & input$faixa_prematuridade == "porc_nasc_premat", "Brasil", class)),
+            data = data5_comp_prematuridade() |> dplyr::mutate(class = ifelse(class == "Brasil (valor de referência)" & length(input$faixa_prematuridade) == 4, "Brasil", class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
           ) |>
@@ -2084,7 +2088,7 @@ mod_bloco_5_server <- function(id, filtros){
         if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
           grafico_base
         } else {
-          if(input$faixa_prematuridade == "porc_nasc_premat") {
+          if(length(input$faixa_prematuridade) == 4) {
             grafico_base <- grafico_base  |>
               highcharter::hc_add_series(
                 data = data5_referencia(),
