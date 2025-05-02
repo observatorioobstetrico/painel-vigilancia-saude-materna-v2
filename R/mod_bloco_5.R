@@ -643,7 +643,8 @@ mod_bloco_5_server <- function(id, filtros){
 
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
-    bloco5_calcs <- data.frame(
+    bloco5_calcs <- reactive({
+        data.frame(
         tipo = c("local", "referencia"),
         porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
         porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
@@ -703,7 +704,7 @@ mod_bloco_5_server <- function(id, filtros){
         # quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
         # quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
 
-      )
+      ) })
 
 
 
@@ -1106,7 +1107,7 @@ mod_bloco_5_server <- function(id, filtros){
             }
           }
         ) |>
-        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), localidade_resumo = input$localidade_resumo)
+        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros(), localidade_resumo = input$localidade_resumo)
     })
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos mudarem
@@ -1116,7 +1117,7 @@ mod_bloco_5_server <- function(id, filtros){
     data5_resumo_referencia_aux <- reactive({
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), referencia = TRUE) |>
+        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros(), referencia = TRUE) |>
         dplyr::select(!porc_nasc_baixo_peso)
     })
 
@@ -1640,7 +1641,7 @@ mod_bloco_5_server <- function(id, filtros){
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros())
+        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros())
     })
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
@@ -1690,7 +1691,7 @@ mod_bloco_5_server <- function(id, filtros){
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs, input = input, filtros = filtros(), comp = TRUE)
+        cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros(), comp = TRUE)
     })
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
@@ -1725,7 +1726,7 @@ mod_bloco_5_server <- function(id, filtros){
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::group_by(ano) |>
-        cria_indicadores(df_calcs = bloco5_calcs, filtros = filtros(), input = input, referencia = TRUE, adicionar_localidade = FALSE) |>
+        cria_indicadores(df_calcs = bloco5_calcs(), filtros = filtros(), input = input, referencia = TRUE, adicionar_localidade = FALSE) |>
         dplyr::mutate(
           localidade_comparacao = "Média nacional"
         ) |>
