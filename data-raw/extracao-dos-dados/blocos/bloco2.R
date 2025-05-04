@@ -31,6 +31,7 @@ source("funcoes_auxiliares.R")
 
 # Para as variáveis provenientes do SINASC -----------------------------------
 ## Baixando os dados consolidados do SINASC e selecionando as variáveis de interesse
+
 df_sinasc_consolidados <- fetch_datasus(
   year_start = 2012,
   year_end = 2023,
@@ -39,12 +40,20 @@ df_sinasc_consolidados <- fetch_datasus(
 )
 
 ## Baixando os dados preliminares do SINASC e selecionando as variáveis de interesse
-df_sinasc_preliminares <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
+options(timeout=99999)
+
+df_sinasc_preliminares <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";") |>
   select(CODMUNRES, DTNASC, IDADEMAE, QTDPARTNOR, QTDPARTCES) |>
-  mutate(CODMUNRES = as.character(CODMUNRES))
+  mutate(CODMUNRES = as.character(CODMUNRES),
+         DTNASC = as.character(DTNASC),
+         IDADEMAE = as.character(IDADEMAE),
+         QTDPARTNOR = as.character(QTDPARTNOR),
+         QTDPARTCES = as.character(QTDPARTCES))
 
 ## Juntando os dados consolidados e preliminares
 df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares)
+
+rm(df_sinasc_consolidados, df_sinasc_preliminares)
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
 df_bloco2_sinasc <- df_sinasc |>
@@ -57,7 +66,8 @@ df_bloco2_sinasc <- df_sinasc |>
   ) |>
   mutate(
     total_de_nascidos_vivos = 1,
-    total_de_nascidos_vivos_10_a_19 = if_else(IDADEMAE >= 10 & IDADEMAE <= 19, 1, 0, missing = 0),
+    total_de_nascidos_vivos_10_a_14 = if_else(IDADEMAE >= 10 & IDADEMAE <= 14, 1, 0, missing = 0),
+    total_de_nascidos_vivos_15_a_19 = if_else(IDADEMAE >= 15 & IDADEMAE <= 19, 1, 0, missing = 0),
     total_de_nascidos_vivos_20_a_29 = if_else(IDADEMAE >= 20 & IDADEMAE <= 29, 1, 0, missing = 0),
     total_de_nascidos_vivos_30_a_39 = if_else(IDADEMAE >= 30 & IDADEMAE <= 39, 1, 0, missing = 0),
     total_de_nascidos_vivos_40_a_49 = if_else(IDADEMAE >= 40 & IDADEMAE <= 49, 1, 0, missing = 0),
@@ -82,18 +92,31 @@ df_bloco2_sinasc <- df_sinasc |>
 ## Substituindo todos os NAs, gerados após o right_join, por 0
 df_bloco2_sinasc[is.na(df_bloco2_sinasc)] <- 0
 
+rm(df_sinasc)
 
 # Para as variáveis provenientes do Tabnet -----------------------------------
-## Estimativas populacionais de mulheres de 10 a 19 anos ---------------------
+## Estimativas populacionais de mulheres de 10 a 14 anos ---------------------
 ### Baixando os dados de 2012 a 2024
-df_est_pop_fem_10_19 <- est_pop_tabnet(periodo = 12:24, idade_min = 10, idade_max = 19) |>
+df_est_pop_fem_10_14 <- est_pop_tabnet(periodo = 12:24, idade_min = 10, idade_max = 14) |>
   mutate(ano = as.numeric(ano)) |>
   right_join(df_aux_municipios)
 
-head(df_est_pop_fem_10_19)
+head(df_est_pop_fem_10_14)
 
 ### Substituindo todos os NAs, gerados após o right_join, por 0
-df_est_pop_fem_10_19[is.na(df_est_pop_fem_10_19)] <- 0
+df_est_pop_fem_10_14[is.na(df_est_pop_fem_10_14)] <- 0
+
+
+## Estimativas populacionais de mulheres de 15 a 19 anos ---------------------
+### Baixando os dados de 2012 a 2024
+df_est_pop_fem_15_19 <- est_pop_tabnet(periodo = 12:24, idade_min = 15, idade_max = 19) |>
+  mutate(ano = as.numeric(ano)) |>
+  right_join(df_aux_municipios)
+
+head(df_est_pop_fem_15_19)
+
+### Substituindo todos os NAs, gerados após o right_join, por 0
+df_est_pop_fem_15_19[is.na(df_est_pop_fem_15_19)] <- 0
 
 
 ## Estimativas populacionais de mulheres de 20 a 29 anos ---------------------
@@ -145,7 +168,8 @@ df_est_pop_fem_10_49[is.na(df_est_pop_fem_10_49)] <- 0
 
 
 ## Juntando todos os dados --------------------------------------------------
-df_bloco2_tabnet <- df_est_pop_fem_10_19 |>
+df_bloco2_tabnet <- df_est_pop_fem_10_14 |>
+  full_join(df_est_pop_fem_15_19) |>
   full_join(df_est_pop_fem_20_29) |>
   full_join(df_est_pop_fem_30_39) |>
   full_join(df_est_pop_fem_40_49) |>
@@ -571,7 +595,7 @@ df_bloco2_aborto <- full_join(df_numerador_aborto, df_denominador_aborto)
 df_bloco2 <- full_join(
   full_join(
     df_bloco2_sinasc |> mutate(codmunres = as.character(codmunres)),
-    df_bloco2_tabnet |> rename(pop_feminina_10_a_19 = populacao_feminina_10_a_19)
+    # df_bloco2_tabnet |> rename(pop_feminina_10_a_19 = populacao_feminina_10_a_19)
   ),
   df_bloco2_aborto
 )

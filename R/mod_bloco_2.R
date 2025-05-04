@@ -97,7 +97,25 @@ mod_bloco_2_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 450))
+
+              fluidRow(
+                column(
+                  width = 12,
+                  selectizeInput(
+                    inputId = ns("faixa_etaria"),
+                    label = "Faixa etária",
+                    options = list(placeholder = "Selecione a faixa etária"),
+                    choices = c(
+                      "Menos de 20 anos" = "porc_menor20",
+                      "De 10 a 14 anos" = "porc_10_a_14",
+                      "De 15 a 19 anos" = "porc_15_a_19"
+                    ),
+                    width = "100%", selected = "porc_menor20"
+                  )
+                )
+              ),
+
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 375))
             )
           ),
           column(
@@ -234,7 +252,10 @@ mod_bloco_2_server <- function(id, filtros){
     bloco2_calcs <- data.frame(
       tipo = c("local", "referencia"),
 
-      porc_menor20 = c("round(sum(nvm_menor_que_20) / sum(pop_feminina_10_a_19) * 1000, 1)", "dplyr::first(20)"),
+      porc_10_a_14 = c("round(sum(total_de_nascidos_vivos_10_a_14) / sum(populacao_feminina_10_a_14) * 1000, 1)", "dplyr::first(20)"),
+      porc_15_a_19 = c("round(sum(total_de_nascidos_vivos_15_a_19) / sum(populacao_feminina_15_a_19) * 1000, 1)", "dplyr::first(20)"),
+
+      porc_menor20 = c("round(sum(nvm_menor_que_20) / sum(populacao_feminina_10_a_14 + populacao_feminina_15_a_19) * 1000, 1)", "dplyr::first(20)"),
       porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
 
       geral_tx_abortos_mil_mulheres_lim_inf = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
@@ -817,39 +838,47 @@ mod_bloco_2_server <- function(id, filtros){
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) -----------------
     output$plot1 <- highcharter::renderHighchart({
+
+      faixa_selecionada <- input$faixa_etaria
+
       if (filtros()$comparar == "Não") {
-        highcharter::highchart() |>
+        grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data2(),
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data2()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_menor20, group = class, colour = class)
-          ) |>
-          highcharter::hc_add_series(
-            data = data2_referencia(),
-            type = "line",
-            name = "Referência (países desenvolvidos)",
-            highcharter::hcaes(x = ano, y = porc_menor20, group = class, colour = class),
-            dashStyle = "ShortDot",
-            opacity = 0.8
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
+        if (input$faixa_etaria != "porc_menor20") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data2_referencia(),
+              type = "line",
+              name = "Referência (países desenvolvidos)",
+              highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
+        }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
             data = data2(),
             name = dplyr::if_else(filtros()$nivel == "Nacional", "Brasil", unique(data2()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_menor20, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data2_comp(),
             name = dplyr::if_else(filtros()$nivel2 == "Nacional", "Brasil", unique(data2_comp()$class)),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_menor20, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -858,15 +887,19 @@ mod_bloco_2_server <- function(id, filtros){
         if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
           grafico_base
         } else {
-          grafico_base |>
-            highcharter::hc_add_series(
-              data = data2_referencia(),
-              type = "line",
-              name = "Referência (países desenvolvidos)",
-              highcharter::hcaes(x = ano, y = porc_menor20, group = class, colour = class),
-              dashStyle = "ShortDot",
-              opacity = 0.6
-            )
+          if (input$faixa_etaria == "porc_menor20"){
+            grafico_base |>
+              highcharter::hc_add_series(
+                data = data2_referencia(),
+                type = "line",
+                name = "Referência (países desenvolvidos)",
+                highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
+                dashStyle = "ShortDot",
+                opacity = 0.6
+              )
+          } else {
+            grafico_base
+          }
         }
       }
     })
