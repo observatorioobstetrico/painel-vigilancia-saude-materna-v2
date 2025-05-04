@@ -169,7 +169,8 @@ mod_bloco_5_ui <- function(id) {
                       "De 1500 a 2499 g" = "porc_nasc_peso_1500_a_2499"#,
                       #"Menor que 2500 g" = "porc_nasc_baixo_peso"
                     ),
-                    width = "100%", selected = c("porc_nasc_peso_menor_1000", "porc_nasc_peso_1000_a_1499", "porc_nasc_peso_1500_a_2499")
+                    width = "100%", selected = c("porc_nasc_peso_menor_1000",
+                      "porc_nasc_peso_1000_a_1499", "porc_nasc_peso_1500_a_2499")
                   )
                 )
               ),
@@ -644,10 +645,10 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco5_calcs <- reactive({
-        data.frame(
+      df_calcs_aux1 <- data.frame(
         tipo = c("local", "referencia"),
-        porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
-        porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
+        #porc_nasc_baixo_peso = rep(glue::glue("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)"), 2),
+        #porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
         #porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(dplyr::all_of((c('nascidos_vivos_peso_menor_1000', 'nascidos_vivos_peso_1000_a_1499', 'nascidos_vivos_peso_1500_a_2499')[C('porc_nasc_peso_menor_1000' %in% input$baixo_peso, 'porc_nasc_peso_1000_a_1499' %in% input$baixo_peso, 'porc_nasc_peso_1500_a_2499' %in% input$baixo_peso)])))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
         #porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
         # porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -704,7 +705,81 @@ mod_bloco_5_server <- function(id, filtros){
         # quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
         # quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
 
-      ) })
+      )
+
+      ############## BAIXO PESO
+
+
+      df_calcs_aux2 <- eventReactive(input$baixo_peso, {
+        if (is.null(input$baixo_peso[1])) {
+          data.frame(
+            tipo = c("local", "referencia"),
+            porc_nasc_baixo_peso = "NA"
+          )
+        } else {
+          baixo_peso_selected <- input$baixo_peso
+          n_selected <- length(baixo_peso_selected)
+
+          formula <- if (n_selected == 3) {
+            "round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)"
+          } else if (n_selected == 2) {
+            var1 <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
+            var2 <- substr(baixo_peso_selected[2], 11, nchar(baixo_peso_selected[2]))
+            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}))/sum(total_de_nascidos_vivos) *100, 1)")
+          } else {
+            var <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
+            glue::glue("round(sum(nascidos_vivos_{var})/sum(total_de_nascidos_vivos) *100, 1)")
+          }
+
+          data.frame(
+            tipo = c("local", "referencia"),
+            porc_nasc_baixo_peso = rep(formula, 2)
+          )
+        }
+      })
+
+      ############### PREMATURIDADE
+
+      df_calcs_aux3 <- eventReactive(input$faixa_prematuridade, {
+        if (is.null(input$faixa_prematuridade[1])) {
+          data.frame(
+            tipo = c("local", "referencia"),
+            porc_nasc_premat = c("NA", "8")
+          )
+        } else {
+          prematuridade_selected <- input$faixa_prematuridade
+          n_selected <- length(prematuridade_selected)
+
+          formula_local <- if (n_selected == 4) {
+            "round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)"
+          } else if (n_selected == 3) {
+            var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+            var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
+            var3 <- substr(prematuridade_selected[3], 11, nchar(prematuridade_selected[3]))
+            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}) + sum(nascidos_vivos_{var3})) / sum(total_de_nascidos_vivos) * 100, 1)")
+          } else if (n_selected == 2) {
+            var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+            var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
+            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2})) / sum(total_de_nascidos_vivos) * 100, 1)")
+          } else {
+            var <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+            glue::glue("round(sum(nascidos_vivos_{var}) / sum(total_de_nascidos_vivos) * 100, 1)")
+          }
+
+          data.frame(
+            tipo = c("local", "referencia"),
+            porc_nasc_premat = c(formula_local, "8")
+          )
+        }
+      })
+
+
+      dplyr::full_join(
+        df_calcs_aux1,
+        dplyr::full_join(df_calcs_aux2(), df_calcs_aux3)
+      )
+
+      })
 
 
 
