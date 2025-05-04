@@ -167,7 +167,7 @@ mod_bloco_5_ui <- function(id) {
                       "Menor que 1000 g" = "porc_nasc_peso_menor_1000",
                       "De 1000 a 1499 g" = "porc_nasc_peso_1000_a_1499",
                       "De 1500 a 2499 g" = "porc_nasc_peso_1500_a_2499"#,
-                      #"Menor que 2500 g" = "porc_nasc_baixo_peso"
+                      #"Menor que 2500 g" = "porc_nasc_baixo_peso_plot"
                     ),
                     width = "100%", selected = c("porc_nasc_peso_menor_1000",
                       "porc_nasc_peso_1000_a_1499", "porc_nasc_peso_1500_a_2499")
@@ -644,139 +644,144 @@ mod_bloco_5_server <- function(id, filtros){
 
 
     # Criando um data.frame com os cálculos dos indicadores -------------------
-    bloco5_calcs <- reactive({
-      df_calcs_aux1 <- data.frame(
-        tipo = c("local", "referencia"),
-        #porc_nasc_baixo_peso = rep(glue::glue("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)"), 2),
-        #porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
-        #porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(dplyr::all_of((c('nascidos_vivos_peso_menor_1000', 'nascidos_vivos_peso_1000_a_1499', 'nascidos_vivos_peso_1500_a_2499')[C('porc_nasc_peso_menor_1000' %in% input$baixo_peso, 'porc_nasc_peso_1000_a_1499' %in% input$baixo_peso, 'porc_nasc_peso_1500_a_2499' %in% input$baixo_peso)])))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
-        #porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_peso_1500_a_2499= rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_baixo_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        porc_baixo_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        porc_baixo_peso_1500_a_2499 = rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
-        # porc_nasc_premat = c("round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)", "8"),
-        # porc_nasc_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        # porc_nasc_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_premat_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
-        porc_premat_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
-        porc_premat_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
-        porc_premat_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
-        porc_premat_faltantes = rep("round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
+
+    df_calcs_aux1 <- data.frame(
+      tipo = c("local", "referencia"),
+      #porc_nasc_baixo_peso = rep(glue::glue("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$baixo_peso, 11, nchar(input$baixo_peso))))))/sum(total_de_nascidos_vivos) *100, 1)"), 2),
+      #porc_nasc_premat = c("round(sum(sum(dplyr::across(paste0('nascidos_vivos_', substr(input$faixa_prematuridade, 11, nchar(input$faixa_prematuridade))))))/sum(total_de_nascidos_vivos) *100, 1)", "8"),
+      #porc_nasc_baixo_peso = rep("round(sum(sum(dplyr::across(dplyr::all_of((c('nascidos_vivos_peso_menor_1000', 'nascidos_vivos_peso_1000_a_1499', 'nascidos_vivos_peso_1500_a_2499')[C('porc_nasc_peso_menor_1000' %in% input$baixo_peso, 'porc_nasc_peso_1000_a_1499' %in% input$baixo_peso, 'porc_nasc_peso_1500_a_2499' %in% input$baixo_peso)])))))/sum(total_de_nascidos_vivos) *100, 1)", 2),
+      porc_nasc_baixo_peso = rep("round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_peso_1500_a_2499= rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_baixo_peso_menor_1000 = rep("round(sum(nascidos_vivos_peso_menor_1000) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+      porc_baixo_peso_1000_a_1499 = rep("round(sum(nascidos_vivos_peso_1000_a_1499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+      porc_baixo_peso_1500_a_2499 = rep("round(sum(nascidos_vivos_peso_1500_a_2499) / sum(nascidos_vivos_com_baixo_peso) * 100, 1)", 2),
+      porc_nasc_premat = c("round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)", "8"),
+      porc_nasc_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nasc_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_premat_menos_de_28_semanas = rep("round(sum(nascidos_vivos_menos_de_28_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
+      porc_premat_28_a_32_semanas = rep("round(sum(nascidos_vivos_28_a_32_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
+      porc_premat_33_a_34_semanas = rep("round(sum(nascidos_vivos_33_a_34_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
+      porc_premat_35_a_36_semanas = rep("round(sum(nascidos_vivos_35_a_36_semanas) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
+      porc_premat_faltantes = rep("round((sum(nascidos_vivos_prematuros) - sum(dplyr::across(c(nascidos_vivos_menos_de_28_semanas,
                                                                                            nascidos_vivos_28_a_32_semanas,
                                                                                            nascidos_vivos_33_a_34_semanas,
                                                                                            nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
-        # porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
-        porc_termo_precoce = rep("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
-        porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
-        porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
+      # porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
+      porc_termo_precoce = rep("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
+      porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
 
-        #[AAA]
-        # quant_95_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # # quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # # quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        #
-        # quant_95_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
-        # quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
-        # quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
+      #[AAA]
+      # quant_95_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_termo_precoce = rep("round(quantile(nascidos_vivos_termo_precoce / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # # quant_95_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # # quant_05_porc_nasc_baixo_peso = rep("round(quantile(nascidos_vivos_com_baixo_peso / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_peso_menor_1000 = rep("round(quantile(nascidos_vivos_peso_menor_1000 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_peso_1000_a_1499 = rep("round(quantile(nascidos_vivos_peso_1000_a_1499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_peso_1500_a_2499 = rep("round(quantile(nascidos_vivos_peso_1500_a_2499 / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      #
+      # quant_95_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_premat = rep("round(quantile(nascidos_vivos_prematuros / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_menos_de_28_semanas = rep("round(quantile(nascidos_vivos_menos_de_28_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_28_a_32_semanas = rep("round(quantile(nascidos_vivos_28_a_32_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_33_a_34_semanas = rep("round(quantile(nascidos_vivos_33_a_34_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nasc_35_a_36_semanas = rep("round(quantile(nascidos_vivos_35_a_36_semanas / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_nascidos_vivos_asfixia1 = rep("round(quantile(nascidos_vivos_asfixia1 / total_nascidos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_malformacao_geral = rep("round(quantile(total_de_nascidos_malformacao / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2),
+      # quant_95_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.95, na.rm = TRUE), 1)", 2),
+      # quant_05_porc_malformacao_vigilancia = rep("round(quantile(nascidos_vivos_anomalia / total_de_nascidos_vivos * 100, probs = 0.05, na.rm = TRUE), 1)", 2)
 
-      )
+    )
 
-      ############## BAIXO PESO
+    ############## BAIXO PESO
 
 
-      df_calcs_aux2 <- eventReactive(input$baixo_peso, {
-        if (is.null(input$baixo_peso[1])) {
-          data.frame(
-            tipo = c("local", "referencia"),
-            porc_nasc_baixo_peso = "NA"
-          )
+    df_calcs_aux2 <- eventReactive(input$baixo_peso, {
+      if (is.null(input$baixo_peso[1])) {
+        data.frame(
+          tipo = c("local", "referencia"),
+          porc_nasc_baixo_peso_plot = "NA"
+        )
+      } else {
+        baixo_peso_selected <- input$baixo_peso
+        n_selected <- length(baixo_peso_selected)
+
+        formula <- if (n_selected == 3) {
+          "round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)"
+        } else if (n_selected == 2) {
+          var1 <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
+          var2 <- substr(baixo_peso_selected[2], 11, nchar(baixo_peso_selected[2]))
+          glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}))/sum(total_de_nascidos_vivos) *100, 1)")
         } else {
-          baixo_peso_selected <- input$baixo_peso
-          n_selected <- length(baixo_peso_selected)
-
-          formula <- if (n_selected == 3) {
-            "round(sum(nascidos_vivos_com_baixo_peso) / sum(total_de_nascidos_vivos) * 100, 1)"
-          } else if (n_selected == 2) {
-            var1 <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
-            var2 <- substr(baixo_peso_selected[2], 11, nchar(baixo_peso_selected[2]))
-            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}))/sum(total_de_nascidos_vivos) *100, 1)")
-          } else {
-            var <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
-            glue::glue("round(sum(nascidos_vivos_{var})/sum(total_de_nascidos_vivos) *100, 1)")
-          }
-
-          data.frame(
-            tipo = c("local", "referencia"),
-            porc_nasc_baixo_peso = rep(formula, 2)
-          )
+          var <- substr(baixo_peso_selected[1], 11, nchar(baixo_peso_selected[1]))
+          glue::glue("round(sum(nascidos_vivos_{var})/sum(total_de_nascidos_vivos) *100, 1)")
         }
-      })
 
-      ############### PREMATURIDADE
+        data.frame(
+          tipo = c("local", "referencia"),
+          porc_nasc_baixo_peso_plot = rep(formula, 2)
+        )
+      }
+    }
+    )
 
-      df_calcs_aux3 <- eventReactive(input$faixa_prematuridade, {
-        if (is.null(input$faixa_prematuridade[1])) {
-          data.frame(
-            tipo = c("local", "referencia"),
-            porc_nasc_premat = c("NA", "8")
-          )
+    ############### PREMATURIDADE
+
+    df_calcs_aux3 <- eventReactive(input$faixa_prematuridade, {
+      if (is.null(input$faixa_prematuridade[1])) {
+        data.frame(
+          tipo = c("local", "referencia"),
+          porc_nasc_premat_plot = c("NA", "8")
+        )
+      } else {
+        prematuridade_selected <- input$faixa_prematuridade
+        n_selected <- length(prematuridade_selected)
+
+        formula2 <- if (n_selected == 4) {
+          "round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)"
+        } else if (n_selected == 3) {
+          var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+          var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
+          var3 <- substr(prematuridade_selected[3], 11, nchar(prematuridade_selected[3]))
+          glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}) + sum(nascidos_vivos_{var3})) / sum(total_de_nascidos_vivos) * 100, 1)")
+        } else if (n_selected == 2) {
+          var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+          var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
+          glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2})) / sum(total_de_nascidos_vivos) * 100, 1)")
         } else {
-          prematuridade_selected <- input$faixa_prematuridade
-          n_selected <- length(prematuridade_selected)
-
-          formula_local <- if (n_selected == 4) {
-            "round(sum(nascidos_vivos_prematuros) / sum(total_de_nascidos_vivos) * 100, 1)"
-          } else if (n_selected == 3) {
-            var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
-            var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
-            var3 <- substr(prematuridade_selected[3], 11, nchar(prematuridade_selected[3]))
-            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2}) + sum(nascidos_vivos_{var3})) / sum(total_de_nascidos_vivos) * 100, 1)")
-          } else if (n_selected == 2) {
-            var1 <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
-            var2 <- substr(prematuridade_selected[2], 11, nchar(prematuridade_selected[2]))
-            glue::glue("round((sum(nascidos_vivos_{var1}) + sum(nascidos_vivos_{var2})) / sum(total_de_nascidos_vivos) * 100, 1)")
-          } else {
-            var <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
-            glue::glue("round(sum(nascidos_vivos_{var}) / sum(total_de_nascidos_vivos) * 100, 1)")
-          }
-
-          data.frame(
-            tipo = c("local", "referencia"),
-            porc_nasc_premat = c(formula_local, "8")
-          )
+          var <- substr(prematuridade_selected[1], 11, nchar(prematuridade_selected[1]))
+          glue::glue("round(sum(nascidos_vivos_{var}) / sum(total_de_nascidos_vivos) * 100, 1)")
         }
-      })
 
+        data.frame(
+          tipo = c("local", "referencia"),
+          porc_nasc_premat_plot = c(formula2, "8")
+        )
+      }
+    }
+    )
+
+
+
+    bloco5_calcs <- reactive({
 
       dplyr::full_join(
         df_calcs_aux1,
-        dplyr::full_join(df_calcs_aux2(), df_calcs_aux3)
+        dplyr::full_join(df_calcs_aux2(), df_calcs_aux3())
       )
 
       })
@@ -1726,21 +1731,21 @@ mod_bloco_5_server <- function(id, filtros){
     # data5_internacoes_uti_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
-    data5_baixo_peso <- reactive(
-       data5() |>
-         dplyr::select(
-           ano,
-           eixo_y = dplyr::all_of(c("porc_nasc_baixo_peso")),
-           class
-         )
-     )
+    data5_baixo_peso <- reactive({
+      data5() |>
+        dplyr::select(
+          ano,
+          eixo_y = porc_nasc_baixo_peso_plot,
+          class
+        )
+    })
 
     # Para o gráfico de porcentagem de nascidos vivos prematuros, selecionando apenas a coluna de escolha do usuário
     data5_prematuridade <- reactive(
       data5() |>
         dplyr::select(
           ano,
-          eixo_y = dplyr::all_of(c("porc_nasc_premat")),
+          eixo_y = porc_nasc_premat_plot,
           class
         )
     )
@@ -1780,7 +1785,7 @@ mod_bloco_5_server <- function(id, filtros){
        data5_comp() |>
          dplyr::select(
            ano,
-           eixo_y = dplyr::all_of(c("porc_nasc_baixo_peso")),
+           eixo_y = porc_nasc_baixo_peso_plot,
            class
          )
      )
@@ -1791,7 +1796,7 @@ mod_bloco_5_server <- function(id, filtros){
       data5_comp() |>
         dplyr::select(
           ano,
-          eixo_y = dplyr::all_of(c("porc_nasc_premat")),
+          eixo_y = porc_nasc_premat_plot,
           class
         )
     )
@@ -1830,7 +1835,7 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           dplyr::summarise(
             total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-            porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+            porc_nasc_baixo_peso_plot = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
             class = "Referência"
           ) |>
           dplyr::ungroup()
@@ -1840,7 +1845,7 @@ mod_bloco_5_server <- function(id, filtros){
         data5_referencia_baixo_peso_aux(),
         data.frame(
           ano = filtros()$ano2[1]:filtros()$ano2[2],
-          porc_nasc_baixo_peso = data5_referencia_baixo_peso_aux()$porc_nasc_baixo_peso,
+          porc_nasc_baixo_peso_plot = data5_referencia_baixo_peso_aux()$porc_nasc_baixo_peso_plot,
           class = "Referência"
         )
       )
@@ -1867,7 +1872,7 @@ mod_bloco_5_server <- function(id, filtros){
           ) |>
           dplyr::summarise(
             total_de_nascidos_vivos = sum(nascidos, na.rm = TRUE),
-            porc_nasc_baixo_peso = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
+            porc_nasc_baixo_peso_plot = round(sum(nasc_baixo_peso, na.rm = TRUE)/total_de_nascidos_vivos * 100 * 0.7, 1),
             class = "Referência"
           ) |>
           dplyr::ungroup()
@@ -1877,7 +1882,7 @@ mod_bloco_5_server <- function(id, filtros){
         data5_referencia_baixo_peso_comp_aux(),
         data.frame(
           ano = filtros()$ano2[1]:filtros()$ano2[2],
-          porc_nasc_baixo_peso = data5_referencia_baixo_peso_comp_aux()$porc_nasc_baixo_peso,
+          porc_nasc_baixo_peso_plot = data5_referencia_baixo_peso_comp_aux()$porc_nasc_baixo_peso_plot,
           class = "Referência"
         )
       )
@@ -1932,7 +1937,7 @@ mod_bloco_5_server <- function(id, filtros){
               data = data5_referencia_baixo_peso(),
               type = "line",
               name = "Referência para a localidade (meta de redução global)",
-              highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso_plot, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1958,7 +1963,7 @@ mod_bloco_5_server <- function(id, filtros){
               } else {
                 grafico_base <- grafico_base |>
                   highcharter::hc_add_series(
-                    data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!input$baixo_peso),
+                    data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = porc_nasc_baixo_peso_plot),
                     type = "line",
                     name = "Referência (média nacional)",
                     highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
@@ -2009,7 +2014,7 @@ mod_bloco_5_server <- function(id, filtros){
                 data = data5_referencia_baixo_peso(),
                 type = "line",
                 name = glue::glue("Referência para {ifelse(unique(data5()$class) == 'Brasil (valor de referência)', 'Brasil', unique(data5()$class))} (meta de redução global)"),
-                highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso, group = class, colour = class),
+                highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso_plot, group = class, colour = class),
                 dashStyle = "ShortDot",
                 opacity = 0.6
               ) |>
@@ -2017,7 +2022,7 @@ mod_bloco_5_server <- function(id, filtros){
                 data = data5_referencia_baixo_peso_comp(),
                 type = "line",
                 name = glue::glue("Referência para {ifelse(unique(data5_comp()$class) == 'Brasil (valor de referência)', 'Brasil', unique(data5_comp()$class))} (meta de redução global)"),
-                highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso, group = class, colour = class),
+                highcharter::hcaes(x = ano, y = porc_nasc_baixo_peso_plot, group = class, colour = class),
                 dashStyle = "ShortDot",
                 opacity = 0.6
               )
@@ -2109,7 +2114,7 @@ mod_bloco_5_server <- function(id, filtros){
               data = data5_referencia(),
               type = "line",
               name = "Referência (países desenvolvidos)",
-              highcharter::hcaes(x = ano, y = porc_nasc_premat, group = localidade_comparacao, colour = localidade_comparacao),
+              highcharter::hcaes(x = ano, y = porc_nasc_premat_plot, group = localidade_comparacao, colour = localidade_comparacao),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -2119,7 +2124,7 @@ mod_bloco_5_server <- function(id, filtros){
           } else {
             grafico_base <- grafico_base |>
               highcharter::hc_add_series(
-                data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!input$faixa_prematuridade),
+                data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = porc_nasc_premat_plot),
                 type = "line",
                 name = "Referência (média nacional)",
                 highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
@@ -2170,7 +2175,7 @@ mod_bloco_5_server <- function(id, filtros){
                 data = data5_referencia(),
                 type = "line",
                 name = "Referência (países desenvolvidos)",
-                highcharter::hcaes(x = ano, y = porc_nasc_premat, group = localidade_comparacao, colour = localidade_comparacao),
+                highcharter::hcaes(x = ano, y = porc_nasc_premat_plot, group = localidade_comparacao, colour = localidade_comparacao),
                 dashStyle = "ShortDot",
                 opacity = 0.8
               )
@@ -2180,7 +2185,7 @@ mod_bloco_5_server <- function(id, filtros){
             } else {
               grafico_base <- grafico_base |>
                 highcharter::hc_add_series(
-                  data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = !!input$faixa_prematuridade),
+                  data = data5_referencia() |> dplyr::select(ano, localidade_comparacao, eixo_y = porc_nasc_premat_plot),
                   type = "line",
                   name = "Referência (média nacional)",
                   highcharter::hcaes(x = ano, y = eixo_y, group = localidade_comparacao, colour = localidade_comparacao),
