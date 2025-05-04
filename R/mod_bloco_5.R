@@ -1726,13 +1726,13 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5 <- eventReactive(c(filtros()$pesquisar), data5_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_vinc_sus <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_publicos_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_aux(), ignoreNULL = FALSE)
+    data5_baixo_peso1 <- eventReactive(c(filtros()$pesquisar, input$baixo_peso), data5_aux(), ignoreNULL = FALSE)
+    data5_premat <- eventReactive(c(filtros()$pesquisar, input$faixa_prematuridade), data5_aux(), ignoreNULL = FALSE)
     # data5_internacoes_uti_sih <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
     data5_baixo_peso <- reactive({
-      data5() |>
+      data5_baixo_peso1() |>
         dplyr::select(
           ano,
           eixo_y = porc_nasc_baixo_peso_plot,
@@ -1742,7 +1742,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Para o gráfico de porcentagem de nascidos vivos prematuros, selecionando apenas a coluna de escolha do usuário
     data5_prematuridade <- reactive(
-      data5() |>
+      data5_premat() |>
         dplyr::select(
           ano,
           eixo_y = porc_nasc_premat_plot,
@@ -1776,13 +1776,13 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Não queremos que todos os gráficos se atualizem quando os inputs dos gráficos de internações mudarem
     data5_comp <- eventReactive(c(filtros()$pesquisar), data5_comp_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_vinc_sus_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sus, input$idade_dias_sus), data5_comp_aux(), ignoreNULL = FALSE)
-    # data5_internacoes_publicos_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_sih, input$idade_dias_sih), data5_comp_aux(), ignoreNULL = FALSE)
+    data5_baixo_peso_comp <- eventReactive(c(filtros()$pesquisar, input$baixo_peso), data5_comp_aux(), ignoreNULL = FALSE)
+    data5_premat_comp <- eventReactive(c(filtros()$pesquisar, input$faixa_prematuridade), data5_comp_aux(), ignoreNULL = FALSE)
     # data5_internacoes_uti_sih_comp <- eventReactive(c(filtros()$pesquisar, input$local_internacao_uti_sih, input$idade_dias_uti_sih), data5_comp_aux(), ignoreNULL = FALSE)
 
     # Para o gráfico de porcentagem de nascidos vivos com baixo peso, selecionando apenas a coluna de escolha do usuário
      data5_comp_baixo_peso <- reactive(
-       data5_comp() |>
+       data5_baixo_peso_comp() |>
          dplyr::select(
            ano,
            eixo_y = porc_nasc_baixo_peso_plot,
@@ -1793,7 +1793,7 @@ mod_bloco_5_server <- function(id, filtros){
 
     # Para o gráfico de porcentagem de nascidos vivos prematuros, selecionando apenas a coluna de escolha do usuário
     data5_comp_prematuridade <- reactive(
-      data5_comp() |>
+      data5_premat_comp() |>
         dplyr::select(
           ano,
           eixo_y = porc_nasc_premat_plot,
