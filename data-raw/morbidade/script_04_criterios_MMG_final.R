@@ -18,7 +18,7 @@ arq_SP <- "data-raw/morbidade/databases/02_sih_sp"
 
 
 # Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2023:2024)
+anos <- c(2024)
 
 
 ### Descolamento prematuro de placenta (cids O450; O458; O459)
@@ -604,14 +604,15 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2024)), ano = 2023:2024)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2024)), ano = 2024)
 
 df_bloco6_morbidade <- left_join(df_aux_municipios, obs_cluster_total_mun_ano |> janitor::clean_names())
 
 df_bloco6_morbidade[is.na(df_bloco6_morbidade)] <- 0
 
-bloco6_morbidade_materna_antigo <- read_csv("{output_dir}/indicadores_bloco6_morbidade_materna_2012-2024.csv") |>
-  filter(ano <= 2022)
+bloco6_morbidade_materna_antigo <- read_csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv")|>
+  filter(ANO <= 2023) |>
+  clean_names()
 
 bloco6_morbidade_materna_novo <- rbind(bloco6_morbidade_materna_antigo, df_bloco6_morbidade)
 

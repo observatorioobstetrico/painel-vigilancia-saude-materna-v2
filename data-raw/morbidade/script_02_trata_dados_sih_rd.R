@@ -9,7 +9,7 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
              "RS", "RO", "RR", "SC", "SP", "SE", "TO")
 
 # Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2023:2024)
+anos <- c(2024)
 
 # # Criando uma função para calcular a diferença, em dias, entre duas datas
 # datediff <- function(mindate, maxdate) {
