@@ -9,7 +9,7 @@ estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
              "RS", "RO", "RR", "SC", "SP", "SE", "TO")
 
 # Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2023:2024)
+anos <- c(2024)
 
 options(timeout = 999999999)
 

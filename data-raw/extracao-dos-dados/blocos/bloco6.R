@@ -167,7 +167,7 @@ get_dupes(df_completo_plus, codmunres, municipio, uf, regiao, ano)
 # write.table(df_completo_plus, 'data-raw/csv/indicadores_bloco6_mortalidade_materna_2023.csv', sep = ",", dec = ".", row.names = FALSE) |>
 #   filter(ano == 2023)
 
-indicadores_bloco6_mortalidade_materna_2012_2023 <- read_csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2023.csv") |>
+indicadores_bloco6_mortalidade_materna_2012_2023 <- read_csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv") |>
   filter(ano <= 2020)
 
 bloco6_mortalidade_materna_2012_2024 <- rbind(indicadores_bloco6_mortalidade_materna_2012_2023, df_completo_plus)
