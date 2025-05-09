@@ -37,6 +37,16 @@ df <- rbind(df, df_2024)
 
 rm(df_2024)
 
+# Criando alguns objetos auxiliares --------------------------------------------
+## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
+codigos_municipios <- read.csv("data-raw/csv//tabela_aux_municipios.csv") |>
+  pull(codmunres) |>
+  as.character()
+
+## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2013:2024)), ano = 2013:2024)
+
+
 # TPNASCASSI Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
 # LOCNASC Local de nascimento: 1 – Hospital; 2 – Outros estabelecimentos de saúde; 3 – Domicílio; 4 – Outros; 5- Aldeia Indígena.
 
@@ -111,7 +121,12 @@ df_bloco4_profissional <- df |>
   clean_names() |>
   group_by(codmunres, ano) |>
   summarise_at(vars(-group_cols()), sum) |>
-  ungroup()
+  ungroup() |>
+  # Juntando com a base aulixiar de municípios
+  right_join(df_aux_municipios)
+
+## Substituindo todos os NAs, gerados após o right_join, por 0
+df_bloco4_profissional[is.na(df_bloco4_profissional)] <- 0
 
 data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
 
