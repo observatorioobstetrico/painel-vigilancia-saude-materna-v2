@@ -7,13 +7,19 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_bloco_4_ui <- function(id){
+mod_bloco_4_ui <- function(id) {
   ns <- NS(id)
   tagList(
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Assistência ao parto: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(
+        tags$b(
+          HTML("Assistência ao parto: série histórica"),
+          htmlOutput(ns("titulo_localidade"), inline = TRUE)
+        ),
+        style = "padding-left: 0.4em"
+      ),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -27,8 +33,12 @@ mod_bloco_4_ui <- function(id){
             width = 5,
             selectizeInput(
               inputId = ns("indicador_robson"),
-              label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
-              options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
+              label = HTML(
+                "<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"
+              ),
+              options = list(
+                placeholder = "Selecione o indicador relacionado aos grupos de Robson"
+              ),
               choices = c(
                 "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
                 "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
@@ -45,7 +55,9 @@ mod_bloco_4_ui <- function(id){
           fluidRow(
             column(
               width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+              HTML(
+                "<span style='display: block; margin-bottom: 27px;'> </span>"
+              ),
               div(
                 HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
                 shinyWidgets::actionBttn(
@@ -60,7 +72,9 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                  HTML(
+                    "<span style='display: block; margin-bottom: 15px;'> </span>"
+                  ),
                   uiOutput(ns("input_localidade_resumo1")),
                   align = "center"
                 )
@@ -77,41 +91,65 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador1")), proxy.height = "300px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i1_indicador1")),
+                    proxy.height = "300px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador1")), proxy.height = "300px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i2_indicador1")),
+                    proxy.height = "300px"
+                  )
                 )
               ),
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i3_indicador1")),
+                    proxy.height = "332px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i4_indicador1")),
+                    proxy.height = "332px"
+                  )
                 )
               ),
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i5_indicador1")),
+                    proxy.height = "332px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i6_indicador1")),
+                    proxy.height = "332px"
+                  )
                 )
               ),
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i7_indicador1")),
+                    proxy.height = "332px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_indicador1")), proxy.height = "332px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i8_indicador1")),
+                    proxy.height = "332px"
+                  )
                 )
               )
             ),
@@ -123,7 +161,9 @@ mod_bloco_4_ui <- function(id){
                 collapsible = FALSE,
                 headerBorder = FALSE,
                 style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
+                HTML(
+                  "<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"
+                ),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao1"),
@@ -143,11 +183,16 @@ mod_bloco_4_ui <- function(id){
                     div(
                       style = "text-align: center;",
                       HTML("<b style='font-size:17px'> Geral </b>"),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot1_indicador1"),
+                        height = 340
+                      )),
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson2'),
                         icon = icon('question'),
@@ -155,11 +200,16 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot3_indicador1"),
+                        height = 340
+                      ))
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson4'),
                         icon = icon('question'),
@@ -167,11 +217,16 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot5_indicador1"),
+                        height = 340
+                      )),
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson6_a_9'),
                         icon = icon('question'),
@@ -179,14 +234,19 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot7_indicador1"),
+                        height = 339
+                      ))
                     )
                   ),
                   column(
                     width = 6,
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson1'),
                         icon = icon('question'),
@@ -194,11 +254,16 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot2_indicador1"),
+                        height = 340
+                      )),
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson3'),
                         icon = icon('question'),
@@ -206,11 +271,16 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot4_indicador1"),
+                        height = 340
+                      )),
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson5'),
                         icon = icon('question'),
@@ -218,11 +288,16 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot6_indicador1"),
+                        height = 340
+                      )),
                     ),
                     div(
                       style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+                      HTML(
+                        "<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"
+                      ),
                       shinyWidgets::actionBttn(
                         inputId = ns('texto_robson10'),
                         icon = icon('question'),
@@ -230,7 +305,10 @@ mod_bloco_4_ui <- function(id){
                         color = "primary",
                         size = 'xs'
                       ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
+                      shinycssloaders::withSpinner(highcharter::highchartOutput(
+                        ns("plot8_indicador1"),
+                        height = 339
+                      ))
                     )
                   )
                 )
@@ -244,7 +322,9 @@ mod_bloco_4_ui <- function(id){
           fluidRow(
             column(
               width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+              HTML(
+                "<span style='display: block; margin-bottom: 27px;'> </span>"
+              ),
               div(
                 HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
                 shinyWidgets::actionBttn(
@@ -259,7 +339,9 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                  HTML(
+                    "<span style='display: block; margin-bottom: 15px;'> </span>"
+                  ),
                   uiOutput(ns("input_localidade_resumo2")),
                   align = "center"
                 )
@@ -276,32 +358,53 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador2")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i1_indicador2")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador2")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i2_indicador2")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador2")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i3_indicador2")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador2")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i4_indicador2")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador2")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i5_indicador2")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador2")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i6_indicador2")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   offset = 3,
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador2")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i7_indicador2")),
+                    proxy.height = "325px"
+                  )
                 )
               )
             ),
@@ -313,7 +416,9 @@ mod_bloco_4_ui <- function(id){
                 collapsible = FALSE,
                 headerBorder = FALSE,
                 style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
+                HTML(
+                  "<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"
+                ),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao2"),
@@ -327,7 +432,10 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 650))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(
+                  ns("plot1_indicador2"),
+                  height = 650
+                ))
               )
             )
           )
@@ -338,7 +446,9 @@ mod_bloco_4_ui <- function(id){
           fluidRow(
             column(
               width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+              HTML(
+                "<span style='display: block; margin-bottom: 27px;'> </span>"
+              ),
               div(
                 HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
                 shinyWidgets::actionBttn(
@@ -353,7 +463,9 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                  HTML(
+                    "<span style='display: block; margin-bottom: 15px;'> </span>"
+                  ),
                   uiOutput(ns("input_localidade_resumo3")),
                   align = "center"
                 )
@@ -370,32 +482,53 @@ mod_bloco_4_ui <- function(id){
               fluidRow(
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador3")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i1_indicador3")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador3")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i2_indicador3")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador3")), proxy.height = "293px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i3_indicador3")),
+                    proxy.height = "293px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador3")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i4_indicador3")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador3")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i5_indicador3")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador3")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i6_indicador3")),
+                    proxy.height = "325px"
+                  )
                 ),
                 column(
                   offset = 3,
                   width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador3")), proxy.height = "325px")
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b4_i7_indicador3")),
+                    proxy.height = "325px"
+                  )
                 )
               )
             ),
@@ -407,7 +540,9 @@ mod_bloco_4_ui <- function(id){
                 collapsible = FALSE,
                 headerBorder = FALSE,
                 style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
+                HTML(
+                  "<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"
+                ),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao3"),
@@ -421,7 +556,10 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 650))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(
+                  ns("plot1_indicador3"),
+                  height = 650
+                ))
               )
             )
           )
@@ -466,7 +604,9 @@ mod_bloco_4_ui <- function(id){
             fluidRow(
               column(
                 width = 12,
-                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                HTML(
+                  "<span style='display: block; margin-bottom: 15px;'> </span>"
+                ),
                 uiOutput(ns("input_localidade_resumo4")),
                 align = "center"
               )
@@ -483,31 +623,49 @@ mod_bloco_4_ui <- function(id){
             fluidRow(
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_deslocamento")), proxy.height = "300px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i1_deslocamento")),
+                  proxy.height = "300px"
+                )
               ),
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_deslocamento")), proxy.height = "300px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i2_deslocamento")),
+                  proxy.height = "300px"
+                )
               )
             ),
             fluidRow(
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_deslocamento")), proxy.height = "332px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i3_deslocamento")),
+                  proxy.height = "332px"
+                )
               ),
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_deslocamento")), proxy.height = "332px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i4_deslocamento")),
+                  proxy.height = "332px"
+                )
               )
             ),
             fluidRow(
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_deslocamento")), proxy.height = "332px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i5_deslocamento")),
+                  proxy.height = "332px"
+                )
               ),
               column(
                 width = 6,
-                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i9_deslocamento_macro")), proxy.height = "332px")
+                shinycssloaders::withSpinner(
+                  uiOutput(ns("caixa_b4_i9_deslocamento_macro")),
+                  proxy.height = "332px"
+                )
               )
             ),
             # fluidRow(
@@ -532,13 +690,18 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
+                  HTML(glue::glue(
+                    "<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>"
+                  )),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
                       shinyWidgets::actionBttn(
                         inputId = ns("botao_prop1"),
-                        icon = icon("triangle-exclamation", style = "color: red"),
+                        icon = icon(
+                          "triangle-exclamation",
+                          style = "color: red"
+                        ),
                         color = "warning",
                         style = "material-circle",
                         size = "xs"
@@ -547,7 +710,10 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_prop"), height = "640px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(
+                  ns("grafico_deslocamento_prop"),
+                  height = "640px"
+                ))
               )
             ),
             fluidRow(
@@ -559,13 +725,18 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e disponibilidade de leito de UTI &nbsp;</b>")),
+                  HTML(glue::glue(
+                    "<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e disponibilidade de leito de UTI neonatal &nbsp;</b>"
+                  )),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop2"),
                       shinyWidgets::actionBttn(
                         inputId = ns("botao_prop2"),
-                        icon = icon("triangle-exclamation", style = "color: red"),
+                        icon = icon(
+                          "triangle-exclamation",
+                          style = "color: red"
+                        ),
                         color = "warning",
                         style = "material-circle",
                         size = "xs"
@@ -574,7 +745,10 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "650px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(
+                  ns("grafico_deslocamento_macrorregiao"),
+                  height = "650px"
+                ))
               )
             ),
             shinyjs::hidden(
@@ -588,13 +762,18 @@ mod_bloco_4_ui <- function(id){
                   style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
+                    HTML(glue::glue(
+                      "<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>"
+                    )),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_mediana1"),
                         shinyWidgets::actionBttn(
                           inputId = ns("botao_mediana1"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
+                          icon = icon(
+                            "triangle-exclamation",
+                            style = "color: red"
+                          ),
                           color = "warning",
                           style = "material-circle",
                           size = "xs"
@@ -606,7 +785,9 @@ mod_bloco_4_ui <- function(id){
                   selectizeInput(
                     inputId = ns("local_med"),
                     label = "Local de ocorrência do parto",
-                    options = list(placeholder = "Selecione o local de ocorrência do parto"),
+                    options = list(
+                      placeholder = "Selecione o local de ocorrência do parto"
+                    ),
                     choices = c(
                       "Fora do município de residência da mulher" = "fora_municipio",
                       "Na microrregião de saúde, mas fora do município de residência da mulher" = "na_regiao",
@@ -616,7 +797,10 @@ mod_bloco_4_ui <- function(id){
                     ),
                     width = "100%"
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_med"), height = "500px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(
+                    ns("grafico_deslocamento_med"),
+                    height = "500px"
+                  ))
                 )
               )
             ),
@@ -631,13 +815,26 @@ mod_bloco_4_ui <- function(id){
                   style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "display: flex; align-items: center;",
-                    tags$b(HTML(glue::glue("Informações adicionais sobre os partos")), htmlOutput(ns("municipio_informacoes_adicionais"), inline = TRUE), HTML("&nbsp"), style = 'font-size: 19px'),
+                    tags$b(
+                      HTML(glue::glue(
+                        "Informações adicionais sobre os partos"
+                      )),
+                      htmlOutput(
+                        ns("municipio_informacoes_adicionais"),
+                        inline = TRUE
+                      ),
+                      HTML("&nbsp"),
+                      style = 'font-size: 19px'
+                    ),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_infos"),
                         shinyWidgets::actionBttn(
                           inputId = ns("botao_infos"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
+                          icon = icon(
+                            "triangle-exclamation",
+                            style = "color: red"
+                          ),
                           color = "warning",
                           style = "material-circle",
                           size = "xs"
@@ -646,7 +843,10 @@ mod_bloco_4_ui <- function(id){
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(reactable::reactableOutput(ns("infos_deslocamento_muni"), height = "600px"))
+                  shinycssloaders::withSpinner(reactable::reactableOutput(
+                    ns("infos_deslocamento_muni"),
+                    height = "600px"
+                  ))
                 )
               )
             )
@@ -660,8 +860,8 @@ mod_bloco_4_ui <- function(id){
 #' bloco_4 Server Functions
 #'
 #' @noRd
-mod_bloco_4_server <- function(id, filtros){
-  moduleServer( id, function(input, output, session){
+mod_bloco_4_server <- function(id, filtros) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     # Criando data.frames com os cálculos dos indicadores ---------------------
@@ -714,23 +914,12 @@ mod_bloco_4_server <- function(id, filtros){
         percentil_90_partos_com_uti = rep("round(quantile(((partos_na_macro_com_uti + partos_fora_macro_com_uti) / (partos_na_macro_com_uti + partos_na_macro_sem_uti + partos_fora_macro_com_uti + partos_fora_macro_sem_uti)) * 100, probs = 0.9, na.rm = T), 1)", 2)
       )
 
-
-    # bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
-    #   dplyr::mutate(
-    #     prop_partos_na_macro_com_uti = rep("round(sum(partos_na_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_na_macro_sem_uti = rep("round(sum(partos_na_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_fora_macro_com_uti = rep("round(sum(partos_fora_macro_com_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_fora_macro_sem_uti = rep("round(sum(partos_fora_macro_sem_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)", 2),
-    #     prop_obitos_fetais_durante = rep("round(sum(fetal_durante) / sum(obitos_fetais_mais_22sem) * 100, 1)", 2),
-    #     porc_obitos_fetais_evitaveis_parto = rep("round(sum(evitaveis_fetal_parto) / sum(obitos_fetais_totais) * 100, 1)", 2)
-    #   )
-
     # Juntando as bases de deslocamento ---------------------------------------
     ## Isso deveria ter sido feito na parte de extração
-    bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni, bloco4_deslocamento_macrorregiao) |>
+    bloco4_deslocamento_muni <- dplyr::left_join(
+      bloco4_deslocamento_muni,
+      bloco4_deslocamento_macrorregiao
+    ) |>
       dplyr::arrange(desc(ano))
 
     bloco4_deslocamento_uf <- dplyr::left_join(
@@ -738,10 +927,14 @@ mod_bloco_4_server <- function(id, filtros){
       bloco4_deslocamento_uf,
       bloco4_deslocamento_macrorregiao |>
         dplyr::group_by(ano, uf) |>
-        dplyr::summarise_at(dplyr::vars(dplyr::starts_with("partos") | dplyr::starts_with("nascimentos")), sum) |>
+        dplyr::summarise_at(
+          dplyr::vars(
+            dplyr::starts_with("partos") | dplyr::starts_with("nascimentos")
+          ),
+          sum
+        ) |>
         dplyr::ungroup()
     )
-
 
     # Criando alguns outputs para a UI ----------------------------------------
     ## Criando o output que diz se há ou não comparação -----------------------
@@ -1425,7 +1618,6 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
     })
 
-
     ## Criando os outputs das caixinhas ---------------------------------------
     ### Relacionadas à porcentagem de cesarianas por grupo de Robson ----------
     output$caixa_b4_i1_indicador1 <- renderUI({
@@ -1437,7 +1629,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1461,7 +1657,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 10,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1485,7 +1685,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(20, 35),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1509,7 +1713,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 3,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1533,7 +1741,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1557,7 +1769,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(50, 60),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1581,7 +1797,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "315px",
+          "327px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1605,7 +1825,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 30,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "314px", "328px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "314px",
+          "328px"
+        ),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -1630,7 +1854,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson1,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1654,7 +1882,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson2,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1678,7 +1910,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson3,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1702,7 +1938,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson4,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1726,7 +1966,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson5,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1750,7 +1994,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson6_a_9,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1774,7 +2022,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson10,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1799,7 +2051,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson1_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1823,7 +2079,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson2_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1847,7 +2107,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson3_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1871,7 +2135,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson4_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1895,7 +2163,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson5_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1919,7 +2191,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1943,7 +2219,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson10_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         pagina = "bloco_4",
         fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -1968,7 +2248,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_municipio_res,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -1992,7 +2276,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2016,7 +2304,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_macro_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2040,7 +2332,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_fora_macro_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2064,7 +2360,11 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_fora_uf_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(
+          filtros()$comparar == "Sim",
+          "273px",
+          "300px"
+        ),
         fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2092,7 +2392,11 @@ mod_bloco_4_server <- function(id, filtros){
             valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_uti, # 16.3,
             tipo = "porcentagem",
             invertido = TRUE,
-            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+            tamanho_caixa = dplyr::if_else(
+              filtros()$comparar == "Sim",
+              "273px",
+              "300px"
+            ),
             fonte_titulo = "15px",
             pagina = "bloco_4",
             tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
@@ -2213,7 +2517,6 @@ mod_bloco_4_server <- function(id, filtros){
         type = "info"
       )
     })
-
 
     # Para os gráficos --------------------------------------------------------
     cols <- c("#2c115f", "#b73779", "#fc8961", "#000004FF", "#f1605d")
@@ -2800,7 +3103,6 @@ mod_bloco_4_server <- function(id, filtros){
       dplyr::full_join(data4_deslocamento_macro_comp(), data4_deslocamento_macro_referencia())
     })
 
-
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Porcentagem de cesarianas por grupo de Robson -------------------------
     list_of_plots <- reactive({
@@ -3130,7 +3432,6 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
 
-
     ### Porcentagem de nascidos vivos por grupo de Robson --------------------
     output$plot1_indicador2 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
@@ -3141,9 +3442,9 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.localidade})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ))|>
-              highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)])
+          highcharter::hc_colors(viridis::magma(10, direction = -1)[-c(1, 10)])
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
@@ -3347,14 +3648,15 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>:: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             )
-          )|>
+          ) |>
           highcharter::hc_colors(viridis::magma(7, direction = -1)[-c(1, 7)])
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "No município de residência"),
+            data = data4_deslocamento_parto_completo() |>
+              dplyr::filter(indicador == "No município de residência"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -3365,7 +3667,8 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "No município de residência"),
+            data = data4_deslocamento_parto_comp_completo() |>
+              dplyr::filter(indicador == "No município de residência"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -3377,7 +3680,11 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Na microrregião de saúde, mas fora do município de residência"),
+            data = data4_deslocamento_parto_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Na microrregião de saúde, mas fora do município de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -3388,19 +3695,27 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Na microrregião de saúde, mas fora do município de residência"),
+            data = data4_deslocamento_parto_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Na microrregião de saúde, mas fora do município de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#F1605DFF",
             tooltip = list(
-             pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
+            data = data4_deslocamento_parto_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -3411,20 +3726,27 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"),
+            data = data4_deslocamento_parto_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Na macrorregião de saúde, mas fora da microrregião de saúde de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#B63679FF",
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas na UF de residência"),
+            data = data4_deslocamento_parto_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Fora da macrorregião de saúde, mas na UF de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -3435,20 +3757,24 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde, mas na UF de residência"),
+            data = data4_deslocamento_parto_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Fora da macrorregião de saúde, mas na UF de residência"
+              ),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
             color = "#721F81FF",
             tooltip = list(
-
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
-          )|>
+          ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_completo() |> dplyr::filter(indicador == "Fora da UF de residência"),
+            data = data4_deslocamento_parto_completo() |>
+              dplyr::filter(indicador == "Fora da UF de residência"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -3459,7 +3785,8 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_parto_comp_completo() |> dplyr::filter(indicador == "Fora da UF de residência"),
+            data = data4_deslocamento_parto_comp_completo() |>
+              dplyr::filter(indicador == "Fora da UF de residência"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -3474,183 +3801,248 @@ mod_bloco_4_server <- function(id, filtros){
 
       grafico_base |>
         highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(
+          title = list(text = "% de nascidos vivos"),
+          min = 0,
+          max = 100
+        )
     })
 
     ### Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto ----
-    output$grafico_deslocamento_macrorregiao <- highcharter::renderHighchart({ # [xxx]
-        if (filtros()$comparar == "Não") {
-          grafico_base <- highcharter::highchart() |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo(),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              )
-            )|>
-            highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
-        } else {
-          grafico_base <- highcharter::highchart() |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos com pelo menos um leito de UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#FEBA80FF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos com pelo menos um leito de UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#FEBA80FF",
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
-            )|>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos com pelo menos um leito de UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#F8765CFF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos com pelo menos um leito de UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#F8765CFF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
-            )|>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos que não tem leito de UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#D3436EFF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos que não tem leito de UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#D3436EFF",
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
-            )|>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos que não tem leito de UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#982D80FF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos que não tem leito de UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#982D80FF",
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
-            )|>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos sem informação sobre UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#5F187FFF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos sem informação sobre UTI localizados na macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#5F187FFF",
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
-            )|>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_completo()|> dplyr::filter(indicador == "Em estabelecimentos sem informação sobre UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = TRUE,
-              color = "#231151FF",
-              tooltip = list(
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 0
-            ) |>
-            highcharter::hc_add_series(
-              data = data4_deslocamento_macro_comp_completo()|> dplyr::filter(indicador == "Em estabelecimentos sem informação sobre UTI localizados fora macrorregião de saúde"),
-              highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-              type = "column",
-              showInLegend = FALSE,
-              color = "#231151FF",
-              tooltip = list(
-
-                pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-              ),
-              stack = 1,
-              linkedTo = ":previous"
+    output$grafico_deslocamento_macrorregiao <- highcharter::renderHighchart({
+      # [xxx]
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             )
-        }
+          ) |>
+          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos com pelo menos um leito de UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#FEBA80FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos com pelo menos um leito de UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#FEBA80FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos com pelo menos um leito de UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#F8765CFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos com pelo menos um leito de UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#F8765CFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos que não tem leito de UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#D3436EFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos que não tem leito de UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#D3436EFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos que não tem leito de UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#982D80FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos que não tem leito de UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#982D80FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos sem informação sobre UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#5F187FFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos sem informação sobre UTI neonatal localizados na macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#5F187FFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos sem informação sobre UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#231151FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_deslocamento_macro_comp_completo() |>
+              dplyr::filter(
+                indicador ==
+                  "Em estabelecimentos sem informação sobre UTI neonatal localizados fora macrorregião de saúde"
+              ),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#231151FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )
+      }
 
-        grafico_base |>
-          highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = unique(data4_deslocamento_macro_completo()$ano), allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "% de nascidos vivos com peso < 1500g"), min = 0, max = 100)
-      })
+      grafico_base |>
+        highcharter::hc_plotOptions(series = list(stacking = "percent")) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = unique(data4_deslocamento_macro_completo()$ano),
+          allowDecimals = FALSE
+        ) |>
+        highcharter::hc_yAxis(
+          title = list(text = "% de nascidos vivos com peso < 1500g"),
+          min = 0,
+          max = 100
+        )
+    })
 
     ### Mediana de deslocamento para o destino, segundo destinos --------------
     output$grafico_deslocamento_med <- highcharter::renderHighchart({
       highcharter::highchart() |>
         highcharter::hc_add_series(
-          name = ifelse(filtros()$comparar == "Não", "Total de partos", glue::glue("Total de partos <b>({data4_deslocamento_med()$class[1]})</b>")),
+          name = ifelse(
+            filtros()$comparar == "Não",
+            "Total de partos",
+            glue::glue(
+              "Total de partos <b>({data4_deslocamento_med()$class[1]})</b>"
+            )
+          ),
           data = data4_deslocamento_med(),
           type = "line",
           highcharter::hcaes(x = ano, y = no_local),
@@ -3658,7 +4050,13 @@ mod_bloco_4_server <- function(id, filtros){
           index = 1
         ) |>
         highcharter::hc_add_series(
-          name = ifelse(filtros()$comparar == "Não", "Serviços de baixa complexidade", glue::glue("Serviços de baixa complexidade <b>({data4_deslocamento_med()$class[1]})</b>")),
+          name = ifelse(
+            filtros()$comparar == "Não",
+            "Serviços de baixa complexidade",
+            glue::glue(
+              "Serviços de baixa complexidade <b>({data4_deslocamento_med()$class[1]})</b>"
+            )
+          ),
           data = data4_deslocamento_med(),
           type = "line",
           highcharter::hcaes(x = ano, y = baixa_complexidade),
@@ -3666,15 +4064,30 @@ mod_bloco_4_server <- function(id, filtros){
           index = 2
         ) |>
         highcharter::hc_add_series(
-          name = ifelse(filtros()$comparar == "Não", "Serviços de alta complexidade", glue::glue("Serviços de alta complexidade <b>({data4_deslocamento_med()$class[1]})</b>")),
+          name = ifelse(
+            filtros()$comparar == "Não",
+            "Serviços de alta complexidade",
+            glue::glue(
+              "Serviços de alta complexidade <b>({data4_deslocamento_med()$class[1]})</b>"
+            )
+          ),
           data = data4_deslocamento_med(),
           type = "line",
           highcharter::hcaes(x = ano, y = alta_complexidade),
           legendIndex = 3,
           index = 3
         ) |>
-        highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
-        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_tooltip(
+          valueSuffix = " km",
+          shared = TRUE,
+          sort = TRUE,
+          valueDecimals = 2
+        ) |>
+        highcharter::hc_xAxis(
+          title = list(text = ""),
+          categories = filtros()$ano2[1]:filtros()$ano2[2],
+          allowDecimals = FALSE
+        ) |>
         highcharter::hc_yAxis(title = list(text = "km"), min = 0) |>
         highcharter::hc_colors(cols)
     })
@@ -3827,4 +4240,3 @@ mod_bloco_4_server <- function(id, filtros){
 
 ## To be copied in the server
 # mod_bloco_4_server("bloco_4_1")
-
