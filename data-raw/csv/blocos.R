@@ -97,6 +97,8 @@ bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <
 bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv") |>
   dplyr::select(c(1:2, 38:44))
 
+bloco4_profissional <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
+
 ################################################################################
 
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2024.csv") |>
@@ -293,6 +295,13 @@ bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
     (which(names(bloco4_deslocamento_macrorregiao) == "ano") + 1):(which(names(bloco4_deslocamento_macrorregiao) == "municipio") - 1)
   )
 
+bloco4_profissional <- dplyr::right_join(bloco4_profissional, aux_municipios, by = "codmunres")
+
+bloco4_profissional <- bloco4_profissional |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_profissional) == "ano") + 1):(which(names(bloco4_profissional) == "municipio") - 1)
+  )
 
 bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres")
 bloco5 <- bloco5 |>
@@ -549,6 +558,7 @@ usethis::use_data(bloco4, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
 usethis::use_data(bloco4_deslocamento_macrorregiao, overwrite = TRUE)
+usethis::use_data(bloco4_profissional, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
