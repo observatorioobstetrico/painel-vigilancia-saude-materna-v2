@@ -3542,7 +3542,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre todos os óbitos neonatais (com idade de 0 a 27 dias de vida),",
+        titulo = "Dentre os óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -3552,7 +3552,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre todos os óbitos neonatais (com idade de 0 a 27 dias de vida),",
+        titulo = "Dentre os óbitos neonatais,",
         tamanho_caixa = "330px"
       )
     })
@@ -3871,7 +3871,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
         titulo = "Dentre os óbitos neonatais,",
-        tamanho_caixa = "330px"
+        tamanho_caixa = "330px",
+        height_titulo = 15,
       )
     })
 
@@ -3881,7 +3882,8 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
         titulo = "Dentre as internações neonatais,",
-        tamanho_caixa = "320px"
+        tamanho_caixa = "320px",
+        height_titulo = 15,
       )
     })
 

@@ -1162,6 +1162,7 @@ mod_nivel_1_ui <- function(id) {
                         )
                       ),
                       column(
+                        offset = 2,
                         width = 4,
                         shinycssloaders::withSpinner(
                           uiOutput(ns("caixa_b7_neonatal_i8")),
@@ -4174,7 +4175,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "prematuridade",
-        titulo = "Dentre os nascimentos prematuros,"
+        titulo = "Dentre os nascimentos prematuros (com menos de 37 semanas de gestação),"
       )
     })
 
@@ -7432,7 +7433,8 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_neonatal_i7 <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais,"
+        titulo = "Dentre os óbitos neonatais,",
+        height_titulo = 15,
       )
     })
 
@@ -7790,7 +7792,8 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais,"
+        titulo = "Dentre as internações neonatais,",
+        height_titulo = 15,
       )
     })
   })
