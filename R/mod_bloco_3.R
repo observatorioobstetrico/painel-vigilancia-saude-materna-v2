@@ -104,8 +104,8 @@ mod_bloco_3_ui <- function(id) {
                   )
                 )
               ),
-            hr(),
-            shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 450)))
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 450)))
           ),
           column(
             width = 6,
@@ -247,7 +247,7 @@ mod_bloco_3_server <- function(id, filtros){
     bloco3_calcs <- data.frame(
       tipo = c("local", "referencia"),
       porc_inicio_prec = c("round(sum(mulheres_com_inicio_precoce_do_prenatal) / sum(total_de_nascidos_vivos) * 100, 1)", "dplyr::first(95)"),
-      porc_sc = c("round(sum(casos_sc) / sum(total_de_nascidos_vivos) * 1000, 1)", "dplyr::first(0.5)"),
+      porc_sc = c("round(sum(casos_sc[ano < 2024]) / sum(total_de_nascidos_vivos[ano < 2024]) * 1000, 1)", "dplyr::first(0.5[ano < 2024])"),
       cobertura_pre_natal = c("round(sum(mulheres_com_pelo_menos_uma_consulta_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95)"),
       porc_7 = c("round(sum(mulheres_com_mais_de_sete_consultas_prenatal[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95)"),
       porc_consultas_adequadas = c("round(sum(mulheres_com_consultas_prenatal_adequadas[ano >= 2014]) / sum(total_de_nascidos_vivos[ano >= 2014]) * 100, 1)", "dplyr::first(95)")
@@ -887,19 +887,19 @@ mod_bloco_3_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = max(2014, filtros()$ano2[1]):filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
           highcharter::hc_colors(cols)
-       if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
-         grafico_base
-       } else {
-         grafico_base |>
-           highcharter::hc_add_series(
-             data = data3_referencia() |> dplyr::filter(ano >= 2014),
-             type = "line",
-             name = "Referência (recomendações OMS)",
-             highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class),
-             dashStyle = "ShortDot",
-             opacity = 0.6
-           )
-       }
+        if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
+          grafico_base
+        } else {
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data3_referencia() |> dplyr::filter(ano >= 2014),
+              type = "line",
+              name = "Referência (recomendações OMS)",
+              highcharter::hcaes(x = ano, y = cobertura_pre_natal, group = class, colour = class),
+              dashStyle = "ShortDot",
+              opacity = 0.6
+            )
+        }
       }
     })
 
