@@ -294,107 +294,28 @@ mod_bloco_2_server <- function(id, filtros) {
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco2_calcs <- data.frame(
       tipo = c("local", "referencia"),
-
-      porc_10_a_14 = rep(
-        "round(sum(total_de_nascidos_vivos_10_a_14) / sum(populacao_feminina_10_a_14) * 1000, 1)",
-        2
-      ),
-      porc_15_a_19 = rep(
-        "round(sum(total_de_nascidos_vivos_15_a_19) / sum(populacao_feminina_15_a_19) * 1000, 1)",
-        2
-      ),
-
-      porc_menor20 = c(
-        "round(sum(nvm_menor_que_20) / sum(populacao_feminina_10_a_14 + populacao_feminina_15_a_19) * 1000, 1)",
-        "dplyr::first(20)"
-      ),
-      porc_mais_3pt = rep(
-        "round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)",
-        2
-      ),
-
-      geral_tx_abortos_mil_mulheres_lim_inf = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      geral_tx_abortos_mil_mulheres_valor_medio = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      geral_tx_abortos_mil_mulheres_lim_sup = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-
-      sus_tx_abortos_mil_mulheres_lim_inf = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      sus_tx_abortos_mil_mulheres_valor_medio = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      sus_tx_abortos_mil_mulheres_lim_sup = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-
-      ans_tx_abortos_mil_mulheres_lim_inf = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      ans_tx_abortos_mil_mulheres_valor_medio = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-      ans_tx_abortos_mil_mulheres_lim_sup = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)",
-        2
-      ),
-
-      geral_tx_abortos_cem_nascidos_vivos_lim_inf = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      geral_tx_abortos_cem_nascidos_vivos_valor_medio = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      geral_tx_abortos_cem_nascidos_vivos_lim_sup = rep(
-        "round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-
-      sus_tx_abortos_cem_nascidos_vivos_lim_inf = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      sus_tx_abortos_cem_nascidos_vivos_valor_medio = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      sus_tx_abortos_cem_nascidos_vivos_lim_sup = rep(
-        "round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-
-      ans_tx_abortos_cem_nascidos_vivos_lim_inf = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      ans_tx_abortos_cem_nascidos_vivos_valor_medio = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-      ans_tx_abortos_cem_nascidos_vivos_lim_sup = rep(
-        "round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)",
-        2
-      ),
-
-      prop_obitos_aborto = rep(
-        "round(sum(obitos_mat_aborto) / sum(obitos_mat_diretos) * 100, 1)",
-        2
-      ) #Não pertence a esse bloco, mas precisamos para o gráfico de radar
+      porc_10_a_14 = rep("round(sum(total_de_nascidos_vivos_10_a_14) / sum(populacao_feminina_10_a_14) * 1000, 1)", 2),
+      porc_15_a_19 = rep("round(sum(total_de_nascidos_vivos_15_a_19) / sum(populacao_feminina_15_a_19) * 1000, 1)", 2),
+      porc_menor20 = c("round(sum(nvm_menor_que_20) / sum(populacao_feminina_10_a_14 + populacao_feminina_15_a_19) * 1000, 1)", "dplyr::first(20)"),
+      porc_mais_3pt = rep("round(sum(mulheres_com_mais_de_tres_partos_anteriores) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      geral_tx_abortos_mil_mulheres_lim_inf = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      geral_tx_abortos_mil_mulheres_valor_medio = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      geral_tx_abortos_mil_mulheres_lim_sup = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6)) / sum(pop_fem_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      sus_tx_abortos_mil_mulheres_lim_inf = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      sus_tx_abortos_mil_mulheres_valor_medio = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      sus_tx_abortos_mil_mulheres_lim_sup = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(pop_fem_sus_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      ans_tx_abortos_mil_mulheres_lim_inf = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      ans_tx_abortos_mil_mulheres_valor_medio = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      ans_tx_abortos_mil_mulheres_lim_sup = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6) / sum(pop_fem_ans_10_49[ano >= 2015 & ano <= 2023]) * 1000, 1)", 2),
+      geral_tx_abortos_cem_nascidos_vivos_lim_inf = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      geral_tx_abortos_cem_nascidos_vivos_valor_medio = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      geral_tx_abortos_cem_nascidos_vivos_lim_sup = rep("round(((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) + (((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6)) / sum(total_de_nascidos_vivos_10_a_49[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      sus_tx_abortos_cem_nascidos_vivos_lim_inf = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 3) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      sus_tx_abortos_cem_nascidos_vivos_valor_medio = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      sus_tx_abortos_cem_nascidos_vivos_lim_sup = rep("round((((sum(abortos_sus_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_sus_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_sus_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(total_de_nascidos_vivos_10_a_49_sus[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      ans_tx_abortos_cem_nascidos_vivos_lim_inf = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 4) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      ans_tx_abortos_cem_nascidos_vivos_valor_medio = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 5) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)", 2),
+      ans_tx_abortos_cem_nascidos_vivos_lim_sup = rep("round((((sum(abortos_ans_menor_30[ano >= 2015 & ano <= 2023]) * 0.9) + (sum(abortos_ans_30_a_39[ano >= 2015 & ano <= 2023]) * 0.85) + (sum(abortos_ans_40_a_49[ano >= 2015 & ano <= 2023]) * 0.75)) * 6) / sum(total_de_nascidos_vivos_10_a_49_ans[ano >= 2015 & ano <= 2023]) * 100, 1)", 2)
     )
 
     # Criando alguns outputs para a UI ----------------------------------------
@@ -510,42 +431,23 @@ mod_bloco_2_server <- function(id, filtros) {
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-            filtros()$nivel == "Regional"
-          )
-            regiao == filtros()$regiao else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado else if (
-            filtros()$nivel == "Macrorregião de saúde"
-          )
-            macro_r_saude == filtros()$macro &
-              uf == filtros()$estado_macro else if (
-            filtros()$nivel == "Microrregião de saúde"
-          )
-            r_saude == filtros()$micro & uf == filtros()$estado_micro else if (
-            filtros()$nivel == "Municipal"
-          )
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if (filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if (filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          idademae = round(
-            sum(idademae_incompletos, na.rm = TRUE) /
-              sum(idademae_totais, na.rm = TRUE) *
-              100,
-            1
-          ),
-          qtdpartces = round(
-            sum(qtdpartces_incompletos, na.rm = TRUE) /
-              sum(qtdpartces_totais, na.rm = TRUE) *
-              100,
-            1
-          ),
-          qtdpartnor = round(
-            sum(qtdpartnor_incompletos, na.rm = TRUE) /
-              sum(qtdpartnor_totais, na.rm = TRUE) *
-              100,
-            1
-          ),
+          idademae = round(sum(idademae_incompletos, na.rm = TRUE) / sum(idademae_totais, na.rm = TRUE) * 100, 1),
+          qtdpartces = round(sum(qtdpartces_incompletos, na.rm = TRUE) / sum(qtdpartces_totais, na.rm = TRUE) * 100, 1),
+          qtdpartnor = round(sum(qtdpartnor_incompletos, na.rm = TRUE) / sum(qtdpartnor_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "Nacional" ~ "Brasil",
             filtros()$nivel == "Regional" ~ filtros()$regiao,
@@ -622,10 +524,7 @@ mod_bloco_2_server <- function(id, filtros) {
         animType = "fade",
         time = 0.8
       )
-      req(
-        any(data_incompletude()$idademae > 5, na.rm = TRUE) |
-          any(data_incompletude()$cobertura < 90, na.rm = TRUE)
-      )
+      req(any(data_incompletude()$idademae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(
         id = "mostrar_botao1",
         anim = TRUE,
@@ -646,8 +545,7 @@ mod_bloco_2_server <- function(id, filtros) {
 
     #### Porcentagem de mulheres com mais de 3 partos anteriores --------------
     observeEvent(
-      filtros()$pesquisar,
-      {
+      filtros()$pesquisar, {
         shinyjs::hide(
           id = "mostrar_botao2",
           anim = TRUE,
@@ -695,74 +593,47 @@ mod_bloco_2_server <- function(id, filtros) {
         dplyr::filter(
           if (filtros()$comparar == "Não") {
             if (filtros()$nivel == "Nacional")
-              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-              filtros()$nivel == "Regional"
-            )
-              regiao == filtros()$regiao else if (filtros()$nivel == "Estadual")
-              uf == filtros()$estado else if (
-              filtros()$nivel == "Macrorregião de saúde"
-            )
-              macro_r_saude == filtros()$macro &
-                uf == filtros()$estado_macro else if (
-              filtros()$nivel == "Microrregião de saúde"
-            )
-              r_saude == filtros()$micro &
-                uf == filtros()$estado_micro else if (
-              filtros()$nivel == "Municipal"
-            )
-              municipio == filtros()$municipio &
-                uf == filtros()$estado_municipio
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            else if (filtros()$nivel == "Regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "Estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "Macrorregião de saúde")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if (filtros()$nivel == "Microrregião de saúde")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if (filtros()$nivel == "Municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
           } else {
             req(input$localidade_resumo)
             if (input$localidade_resumo == "escolha1") {
               if (filtros()$nivel == "Nacional")
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-                filtros()$nivel == "Regional"
-              )
-                regiao == filtros()$regiao else if (
-                filtros()$nivel == "Estadual"
-              )
-                uf == filtros()$estado else if (
-                filtros()$nivel == "Macrorregião de saúde"
-              )
-                macro_r_saude == filtros()$macro &
-                  uf == filtros()$estado_macro else if (
-                filtros()$nivel == "Microrregião de saúde"
-              )
-                r_saude == filtros()$micro &
-                  uf == filtros()$estado_micro else if (
-                filtros()$nivel == "Municipal"
-              )
-                municipio == filtros()$municipio &
-                  uf == filtros()$estado_municipio
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+              else if (filtros()$nivel == "Regional")
+                regiao == filtros()$regiao
+              else if (filtros()$nivel == "Estadual")
+                uf == filtros()$estado
+              else if (filtros()$nivel == "Macrorregião de saúde")
+                macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+              else if (filtros()$nivel == "Microrregião de saúde")
+                r_saude == filtros()$micro & uf == filtros()$estado_micro
+              else if (filtros()$nivel == "Municipal")
+                municipio == filtros()$municipio & uf == filtros()$estado_municipio
             } else {
               if (filtros()$nivel2 == "Nacional")
-                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-                filtros()$nivel2 == "Regional"
-              )
-                regiao == filtros()$regiao2 else if (
-                filtros()$nivel2 == "Estadual"
-              )
-                uf == filtros()$estado2 else if (
-                filtros()$nivel2 == "Macrorregião de saúde"
-              )
-                macro_r_saude == filtros()$macro2 &
-                  uf == filtros()$estado_macro2 else if (
-                filtros()$nivel2 == "Microrregião de saúde"
-              )
-                r_saude == filtros()$micro2 &
-                  uf == filtros()$estado_micro2 else if (
-                filtros()$nivel2 == "Municipal"
-              )
-                municipio == filtros()$municipio2 &
-                  uf == filtros()$estado_municipio2 else if (
-                filtros()$nivel2 == "Municípios semelhantes"
-              )
-                grupo_kmeans ==
-                  tabela_aux_municipios$grupo_kmeans[which(
-                    tabela_aux_municipios$municipio == filtros()$municipio &
-                      tabela_aux_municipios$uf == filtros()$estado_municipio
-                  )]
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+              else if (filtros()$nivel2 == "Regional")
+                regiao == filtros()$regiao2
+              else if (filtros()$nivel2 == "Estadual")
+                uf == filtros()$estado2
+              else if (filtros()$nivel2 == "Macrorregião de saúde")
+                macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+              else if (filtros()$nivel2 == "Microrregião de saúde")
+                r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+              else if (filtros()$nivel2 == "Municipal")
+                municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+              else if (filtros()$nivel2 == "Municípios semelhantes")
+                grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
             }
           }
         ) |>
@@ -1034,20 +905,16 @@ mod_bloco_2_server <- function(id, filtros) {
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-            filtros()$nivel == "Regional"
-          )
-            regiao == filtros()$regiao else if (filtros()$nivel == "Estadual")
-            uf == filtros()$estado else if (
-            filtros()$nivel == "Macrorregião de saúde"
-          )
-            macro_r_saude == filtros()$macro &
-              uf == filtros()$estado_macro else if (
-            filtros()$nivel == "Microrregião de saúde"
-          )
-            r_saude == filtros()$micro & uf == filtros()$estado_micro else if (
-            filtros()$nivel == "Municipal"
-          )
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "Regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "Estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if (filtros()$nivel == "Microrregião de saúde")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if (filtros()$nivel == "Municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
@@ -1064,30 +931,19 @@ mod_bloco_2_server <- function(id, filtros) {
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel2 == "Nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2] else if (
-            filtros()$nivel2 == "Regional"
-          )
-            regiao == filtros()$regiao2 else if (filtros()$nivel2 == "Estadual")
-            uf == filtros()$estado2 else if (
-            filtros()$nivel2 == "Macrorregião de saúde"
-          )
-            macro_r_saude == filtros()$macro2 &
-              uf == filtros()$estado_macro2 else if (
-            filtros()$nivel2 == "Microrregião de saúde"
-          )
-            r_saude == filtros()$micro2 &
-              uf == filtros()$estado_micro2 else if (
-            filtros()$nivel2 == "Municipal"
-          )
-            municipio == filtros()$municipio2 &
-              uf == filtros()$estado_municipio2 else if (
-            filtros()$nivel2 == "Municípios semelhantes"
-          )
-            grupo_kmeans ==
-              tabela_aux_municipios$grupo_kmeans[which(
-                tabela_aux_municipios$municipio == filtros()$municipio &
-                  tabela_aux_municipios$uf == filtros()$estado_municipio
-              )]
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "Regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "Estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "Macrorregião de saúde")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if (filtros()$nivel2 == "Microrregião de saúde")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if (filtros()$nivel2 == "Municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "Municípios semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(
@@ -1124,31 +980,14 @@ mod_bloco_2_server <- function(id, filtros) {
             data = data2(),
             name = dplyr::if_else(
               filtros()$nivel == "Nacional",
-              ifelse(
-                faixa_selecionada == "porc_menor20",
-                "Brasil",
-                "Brasil (valor de referência)"
-              ),
+              ifelse(faixa_selecionada == "porc_menor20", "Brasil", "Brasil (valor de referência)"),
               unique(data2()$class)
             ),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = !!faixa_selecionada,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (input$faixa_etaria == "porc_menor20") {
@@ -1157,12 +996,7 @@ mod_bloco_2_server <- function(id, filtros) {
               data = data2_referencia(),
               type = "line",
               name = "Referência (países desenvolvidos)",
-              highcharter::hcaes(
-                x = ano,
-                y = !!faixa_selecionada,
-                group = class,
-                colour = class
-              ),
+              highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1175,12 +1009,7 @@ mod_bloco_2_server <- function(id, filtros) {
                 data = data2_referencia(),
                 type = "line",
                 name = "Referência (média nacional)",
-                highcharter::hcaes(
-                  x = ano,
-                  y = !!faixa_selecionada,
-                  group = class,
-                  colour = class
-                ),
+                highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
                 dashStyle = "ShortDot",
                 opacity = 0.8
               )
@@ -1200,12 +1029,7 @@ mod_bloco_2_server <- function(id, filtros) {
               unique(data2()$class)
             ),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = !!faixa_selecionada,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data2_comp(),
@@ -1219,23 +1043,10 @@ mod_bloco_2_server <- function(id, filtros) {
               unique(data2_comp()$class)
             ),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = !!faixa_selecionada,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE ) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "Taxa"), min = 0) |>
           highcharter::hc_colors(cols)
         if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
@@ -1247,12 +1058,7 @@ mod_bloco_2_server <- function(id, filtros) {
                 data = data2_referencia(),
                 type = "line",
                 name = "Referência (países desenvolvidos)",
-                highcharter::hcaes(
-                  x = ano,
-                  y = !!faixa_selecionada,
-                  group = class,
-                  colour = class
-                ),
+                highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
                 dashStyle = "ShortDot",
                 opacity = 0.6
               )
@@ -1265,12 +1071,7 @@ mod_bloco_2_server <- function(id, filtros) {
                   data = data2_referencia(),
                   type = "line",
                   name = "Referência (média nacional)",
-                  highcharter::hcaes(
-                    x = ano,
-                    y = !!faixa_selecionada,
-                    group = class,
-                    colour = class
-                  ),
+                  highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class),
                   dashStyle = "ShortDot",
                   opacity = 0.8
                 )
@@ -1287,23 +1088,10 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2(),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = porc_mais_3pt,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "%",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
@@ -1314,12 +1102,7 @@ mod_bloco_2_server <- function(id, filtros) {
               data = data2_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(
-                x = ano,
-                y = porc_mais_3pt,
-                group = class,
-                colour = class
-              ),
+              highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1329,39 +1112,18 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2(),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = porc_mais_3pt,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data2_comp(),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = porc_mais_3pt,
-              group = class,
-              colour = class
-            )
+            highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class)
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "%",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (
-          any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") |
-            (filtros()$mostrar_referencia == "nao_mostrar_referencia")
-        ) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
@@ -1369,12 +1131,7 @@ mod_bloco_2_server <- function(id, filtros) {
               data = data2_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(
-                x = ano,
-                y = porc_mais_3pt,
-                group = class,
-                colour = class
-              ),
+              highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -1441,45 +1198,24 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_taxa_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_mil_mulheres_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
             )
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "Taxa"),
             min = 0,
-            max = max(
-              c(
-                c(
-                  data2()$geral_tx_abortos_mil_mulheres_valor_medio,
-                  data2()$sus_tx_abortos_mil_mulheres_valor_medio,
-                  data2()$ans_tx_abortos_mil_mulheres_valor_medio
-                ),
-                c(
-                  data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
-                  data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio,
-                  data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio
-                )
-              ),
-              na.rm = TRUE
-            ) +
-              1
+            max = max(c(
+              data2()$geral_tx_abortos_mil_mulheres_valor_medio,
+              data2()$sus_tx_abortos_mil_mulheres_valor_medio,
+              data2()$ans_tx_abortos_mil_mulheres_valor_medio,
+              data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
+              data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio,
+              data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio
+            ), na.rm = TRUE) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
@@ -1491,10 +1227,7 @@ mod_bloco_2_server <- function(id, filtros) {
               data = data2_taxa_aborto_referencia() |>
                 dplyr::filter(ano >= 2015),
               type = "line",
-              highcharter::hcaes(
-                x = ano,
-                y = tx_abortos_mil_mulheres_valor_medio
-              ),
+              highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio),
               tooltip = list(
                 pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
               ),
@@ -1507,12 +1240,7 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_taxa_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_mil_mulheres_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
             )
@@ -1520,56 +1248,30 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_taxa_aborto_comp() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_mil_mulheres_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
             )
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "Taxa"),
             min = 0,
-            max = max(
-              c(
-                c(
-                  data2()$geral_tx_abortos_mil_mulheres_valor_medio,
-                  data2()$sus_tx_abortos_mil_mulheres_valor_medio,
-                  data2()$ans_tx_abortos_mil_mulheres_valor_medio
-                ),
-                c(
-                  data2_comp()$geral_tx_abortos_mil_mulheres_valor_medio,
-                  data2_comp()$sus_tx_abortos_mil_mulheres_valor_medio,
-                  data2_comp()$ans_tx_abortos_mil_mulheres_valor_medio
-                ),
-                c(
-                  data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
-                  data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio,
-                  data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio
-                )
-              ),
-              na.rm = TRUE
-            ) +
-              1
+            max = max(c(
+                data2()$geral_tx_abortos_mil_mulheres_valor_medio,
+                data2()$sus_tx_abortos_mil_mulheres_valor_medio,
+                data2()$ans_tx_abortos_mil_mulheres_valor_medio,
+                data2_comp()$geral_tx_abortos_mil_mulheres_valor_medio,
+                data2_comp()$sus_tx_abortos_mil_mulheres_valor_medio,
+                data2_comp()$ans_tx_abortos_mil_mulheres_valor_medio,
+                data2_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
+                data2_referencia()$sus_tx_abortos_mil_mulheres_valor_medio,
+                data2_referencia()$ans_tx_abortos_mil_mulheres_valor_medio
+              ), na.rm = TRUE) + 1
           ) |>
           highcharter::hc_colors(cols)
-        if (
-          any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") |
-            (filtros()$mostrar_referencia == "nao_mostrar_referencia")
-        ) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
@@ -1578,10 +1280,7 @@ mod_bloco_2_server <- function(id, filtros) {
               data = data2_taxa_aborto_referencia() |>
                 dplyr::filter(ano >= 2015),
               type = "line",
-              highcharter::hcaes(
-                x = ano,
-                y = tx_abortos_mil_mulheres_valor_medio
-              ),
+              highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio),
               tooltip = list(
                 pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
               ),
@@ -1651,45 +1350,20 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_cem_nascidos_vivos_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
             )
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "Taxa"),
             min = 0,
-            max = max(
-              c(
-                c(
-                  data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio
-                ),
-                c(
-                  data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio
-                )
-              ),
-              na.rm = TRUE
-            ) +
-              1
+            max = max(c(
+              c(data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio)
+            ), na.rm = TRUE) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "Nacional") {
@@ -1698,13 +1372,9 @@ mod_bloco_2_server <- function(id, filtros) {
           grafico_base |>
             highcharter::hc_add_series(
               name = "Referência (média nacional)",
-              data = data2_razao_aborto_referencia() |>
-                dplyr::filter(ano >= 2015),
+              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015),
               type = "line",
-              highcharter::hcaes(
-                x = ano,
-                y = tx_abortos_cem_nascidos_vivos_valor_medio
-              ),
+              highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio),
               tooltip = list(
                 pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
               ),
@@ -1717,12 +1387,7 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_cem_nascidos_vivos_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
             )
@@ -1730,68 +1395,32 @@ mod_bloco_2_server <- function(id, filtros) {
           highcharter::hc_add_series(
             data = data2_razao_aborto_comp() |> dplyr::filter(ano >= 2015),
             type = "line",
-            highcharter::hcaes(
-              x = ano,
-              y = tx_abortos_cem_nascidos_vivos_valor_medio,
-              group = class,
-              colour = class
-            ),
+            highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
             )
           ) |>
-          highcharter::hc_tooltip(
-            valueSuffix = "",
-            shared = TRUE,
-            sort = TRUE
-          ) |>
-          highcharter::hc_xAxis(
-            title = list(text = ""),
-            categories = filtros()$ano2[1]:filtros()$ano2[2],
-            allowDecimals = FALSE
-          ) |>
+          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "Taxa"),
             min = 0,
-            max = max(
-              c(
-                c(
-                  data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio
-                ),
-                c(
-                  data2_comp()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_comp()$sus_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_comp()$ans_tx_abortos_cem_nascidos_vivos_valor_medio
-                ),
-                c(
-                  data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio,
-                  data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio
-                )
-              ),
-              na.rm = TRUE
-            ) +
-              1
+            max = max(c(
+              c(data2()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_comp()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_comp()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_comp()$ans_tx_abortos_cem_nascidos_vivos_valor_medio),
+              c(data2_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$sus_tx_abortos_cem_nascidos_vivos_valor_medio, data2_referencia()$ans_tx_abortos_cem_nascidos_vivos_valor_medio)
+            ), na.rm = TRUE) + 1
           ) |>
           highcharter::hc_colors(cols)
-        if (
-          any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") |
-            (filtros()$mostrar_referencia == "nao_mostrar_referencia")
-        ) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
               name = "Referência (média nacional)",
-              data = data2_razao_aborto_referencia() |>
-                dplyr::filter(ano >= 2015),
+              data = data2_razao_aborto_referencia() |> dplyr::filter(ano >= 2015),
               type = "line",
-              highcharter::hcaes(
-                x = ano,
-                y = tx_abortos_cem_nascidos_vivos_valor_medio
-              ),
+              highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio),
               tooltip = list(
                 pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
               ),
@@ -1799,8 +1428,10 @@ mod_bloco_2_server <- function(id, filtros) {
               opacity = 0.8
             )
         }
+
       }
     })
+
   })
 }
 
