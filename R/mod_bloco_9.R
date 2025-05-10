@@ -147,17 +147,17 @@ observeEvent(input$selected_indicators, {
       bloco1 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         cria_indicadores(df_calcs = bloco1_calcs, filtros = filtros())
@@ -168,19 +168,19 @@ observeEvent(input$selected_indicators, {
       bloco1 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         cria_indicadores(df_calcs = bloco1_calcs, filtros = filtros(), comp = TRUE)
@@ -227,17 +227,17 @@ observeEvent(input$selected_indicators, {
       bloco2 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         cria_indicadores(df_calcs = bloco2_calcs, filtros = filtros())
@@ -248,19 +248,19 @@ observeEvent(input$selected_indicators, {
       bloco2 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         cria_indicadores(df_calcs = bloco2_calcs, filtros = filtros(), comp = TRUE)
@@ -286,17 +286,17 @@ observeEvent(input$selected_indicators, {
       bloco3 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros())
@@ -307,19 +307,19 @@ observeEvent(input$selected_indicators, {
       bloco3 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if (filtros()$nivel2 == "Microrregião de saúde")
+          else if (filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if (filtros()$nivel2 == "Municipal")
+          else if (filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         cria_indicadores(df_calcs = bloco3_calcs, filtros = filtros(), comp = TRUE)
@@ -387,17 +387,17 @@ data4 <- reactive({
   bloco4 |>
     dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel == "Nacional")
+      if (filtros()$nivel == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel == "Regional")
+      else if (filtros()$nivel == "regional")
         regiao == filtros()$regiao
-      else if (filtros()$nivel == "Estadual")
+      else if (filtros()$nivel == "estadual")
         uf == filtros()$estado
-      else if (filtros()$nivel == "Macrorregião de saúde")
+      else if (filtros()$nivel == "macro")
         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-      else if(filtros()$nivel == "Microrregião de saúde")
+      else if(filtros()$nivel == "micro")
         r_saude == filtros()$micro & uf == filtros()$estado_micro
-      else if(filtros()$nivel == "Municipal")
+      else if(filtros()$nivel == "municipal")
         municipio == filtros()$municipio & uf == filtros()$estado_municipio
     ) |>
     cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros())
@@ -407,17 +407,17 @@ data4_deslocamento <- reactive({
   bloco4_deslocamento_muni |>
     dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel == "Nacional")
+      if (filtros()$nivel == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel == "Regional")
+      else if (filtros()$nivel == "regional")
         regiao == filtros()$regiao
-      else if (filtros()$nivel == "Estadual")
+      else if (filtros()$nivel == "estadual")
         uf == filtros()$estado
-      else if (filtros()$nivel == "Macrorregião de saúde")
+      else if (filtros()$nivel == "macro")
         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-      else if(filtros()$nivel == "Microrregião de saúde")
+      else if(filtros()$nivel == "micro")
         r_saude == filtros()$micro & uf == filtros()$estado_micro
-      else if(filtros()$nivel == "Municipal")
+      else if(filtros()$nivel == "municipal")
         municipio == filtros()$municipio & uf == filtros()$estado_municipio
     ) |>
     cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros())
@@ -428,17 +428,17 @@ data4_macrorregiao <- reactive({  # Esse dataframe vai sumir quando juntarem as 
     dplyr::ungroup() |>
     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel == "Nacional")
+      if (filtros()$nivel == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel == "Regional")
+      else if (filtros()$nivel == "regional")
         regiao == filtros()$regiao
-      else if (filtros()$nivel == "Estadual")
+      else if (filtros()$nivel == "estadual")
         uf == filtros()$estado
-      else if (filtros()$nivel == "Macrorregião de saúde")
+      else if (filtros()$nivel == "macro")
         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-      else if(filtros()$nivel == "Microrregião de saúde")
+      else if(filtros()$nivel == "micro")
         r_saude == filtros()$micro & uf == filtros()$estado_micro
-      else if(filtros()$nivel == "Municipal")
+      else if(filtros()$nivel == "municipal")
         municipio == filtros()$municipio & uf == filtros()$estado_municipio
     ) |>
     cria_indicadores(df_calcs = bloco4_deslocamento_macro_calcs, filtros = filtros())
@@ -450,19 +450,19 @@ data4_comp <- reactive({
   bloco4 |>
     dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel2 == "Nacional")
+      if (filtros()$nivel2 == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel2 == "Regional")
+      else if (filtros()$nivel2 == "regional")
         regiao == filtros()$regiao2
-      else if (filtros()$nivel2 == "Estadual")
+      else if (filtros()$nivel2 == "estadual")
         uf == filtros()$estado2
-      else if (filtros()$nivel2 == "Macrorregião de saúde")
+      else if (filtros()$nivel2 == "macro")
         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-      else if (filtros()$nivel2 == "Microrregião de saúde")
+      else if (filtros()$nivel2 == "micro")
         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-      else if (filtros()$nivel2 == "Municipal")
+      else if (filtros()$nivel2 == "municipal")
         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-      else if (filtros()$nivel2 == "Municípios semelhantes")
+      else if (filtros()$nivel2 == "municipios_semelhantes")
         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
     ) |>
     cria_indicadores(df_calcs = bloco4_calcs, filtros = filtros(), comp = TRUE)
@@ -472,19 +472,19 @@ data4_deslocamento_comp <- reactive({
   bloco4_deslocamento_muni |>
     dplyr::filter(ano >= max(2014, filtros()$ano2[1]) & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel2 == "Nacional")
+      if (filtros()$nivel2 == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel2 == "Regional")
+      else if (filtros()$nivel2 == "regional")
         regiao == filtros()$regiao2
-      else if (filtros()$nivel2 == "Estadual")
+      else if (filtros()$nivel2 == "estadual")
         uf == filtros()$estado2
-      else if (filtros()$nivel2 == "Macrorregião de saúde")
+      else if (filtros()$nivel2 == "macro")
         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-      else if (filtros()$nivel2 == "Microrregião de saúde")
+      else if (filtros()$nivel2 == "micro")
         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-      else if (filtros()$nivel2 == "Municipal")
+      else if (filtros()$nivel2 == "municipal")
         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-      else if (filtros()$nivel2 == "Municípios semelhantes")
+      else if (filtros()$nivel2 == "municipios_semelhantes")
         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
     ) |>
     cria_indicadores(df_calcs = bloco4_deslocamento_calcs, filtros = filtros(), comp = TRUE)
@@ -495,19 +495,19 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
     dplyr::ungroup() |>
     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel2 == "Nacional")
+      if (filtros()$nivel2 == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel2 == "Regional")
+      else if (filtros()$nivel2 == "regional")
         regiao == filtros()$regiao2
-      else if (filtros()$nivel2 == "Estadual")
+      else if (filtros()$nivel2 == "estadual")
         uf == filtros()$estado2
-      else if (filtros()$nivel2 == "Macrorregião de saúde")
+      else if (filtros()$nivel2 == "macro")
         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-      else if (filtros()$nivel2 == "Microrregião de saúde")
+      else if (filtros()$nivel2 == "micro")
         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-      else if (filtros()$nivel2 == "Municipal")
+      else if (filtros()$nivel2 == "municipal")
         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-      else if (filtros()$nivel2 == "Municípios semelhantes")
+      else if (filtros()$nivel2 == "municipios_semelhantes")
         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
     ) |>
     cria_indicadores(df_calcs = bloco4_deslocamento_macro_calcs, filtros = filtros(), comp = TRUE)
@@ -554,17 +554,17 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         cria_indicadores(df_calcs = bloco5_calcs(), input = input, filtros = filtros())
@@ -575,19 +575,19 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
       bloco5 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
 
@@ -624,17 +624,17 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
       bloco6 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         cria_indicadores(df_calcs = bloco6_calcs, filtros = filtros())
@@ -642,20 +642,20 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
 
 
     # data6_correcao_rmm <- reactive({
-    #   if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-    #     if(filtros()$nivel == "Estadual"){
+    #   if(filtros()$nivel %in% c("estadual", "regional", "nacional") & filtros()$ano2[2] < 2023){
+    #     if(filtros()$nivel == "estadual"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == filtros()$estado,
     #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
     #         )
-    #     } else if(filtros()$nivel == "Regional"){
+    #     } else if(filtros()$nivel == "regional"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == filtros()$regiao,
     #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
     #         )
-    #     } else if(filtros()$nivel=="Nacional"){
+    #     } else if(filtros()$nivel=="nacional"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == "Brasil",
@@ -669,7 +669,7 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
     # })
     #
     # data6_rmm_corrigida <- reactive({
-    #   if(filtros()$nivel %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
+    #   if(filtros()$nivel %in% c("estadual", "regional", "nacional") & filtros()$ano2[2] < 2023){
     #     dplyr::full_join(data6(), data6_correcao_rmm(), by= "ano") |>
     #       dplyr::mutate(
     #         rmm_c=RMM
@@ -687,19 +687,19 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
       bloco6 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
 
@@ -707,20 +707,20 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
     })
 
     # data6_comp_correcao_rmm <- reactive({
-    #   if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
-    #     if(filtros()$nivel2 == "Estadual"){
+    #   if(filtros()$nivel2 %in% c("estadual", "regional", "nacional") & filtros()$ano2[2] < 2023){
+    #     if(filtros()$nivel2 == "estadual"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == filtros()$estado,
     #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
     #         )
-    #     } else if(filtros()$nivel2 == "Regional"){
+    #     } else if(filtros()$nivel2 == "regional"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == filtros()$regiao,
     #           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
     #         )
-    #     } else if(filtros()$nivel2=="Nacional"){
+    #     } else if(filtros()$nivel2=="nacional"){
     #       rmm_corrigida |>
     #         dplyr::filter(
     #           localidade == "Brasil",
@@ -734,7 +734,7 @@ data4_macrorregiao_comp <- reactive({  # Esse dataframe vai sumir quando juntare
     # })
     #
     # data6_comp_rmm_corrigida <- reactive({
-    #   if(filtros()$nivel2 %in% c("Estadual", "Regional", "Nacional") & filtros()$ano2[2] < 2023){
+    #   if(filtros()$nivel2 %in% c("estadual", "regional", "nacional") & filtros()$ano2[2] < 2023){
     #     dplyr::full_join(data6_comp(), data6_comp_correcao_rmm(), by= "ano") |>
     #       dplyr::mutate(
     #         rmm_c = RMM
@@ -1107,17 +1107,17 @@ data7 <- reactive({
   bloco7 |>
     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel == "Nacional")
+      if (filtros()$nivel == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel == "Regional")
+      else if (filtros()$nivel == "regional")
         regiao == filtros()$regiao
-      else if (filtros()$nivel == "Estadual")
+      else if (filtros()$nivel == "estadual")
         uf == filtros()$estado
-      else if (filtros()$nivel == "Macrorregião de saúde")
+      else if (filtros()$nivel == "macro")
         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-      else if(filtros()$nivel == "Microrregião de saúde")
+      else if(filtros()$nivel == "micro")
         r_saude == filtros()$micro & uf == filtros()$estado_micro
-      else if(filtros()$nivel == "Municipal")
+      else if(filtros()$nivel == "municipal")
         municipio == filtros()$municipio & uf == filtros()$estado_municipio
     )|>
     cria_indicadores(df_calcs = bloco7_calcs(), df_calcs_dist_bloco7 = bloco7_calcs_dist, bloco  = "bloco7", input = input, filtros = filtros())
@@ -1129,19 +1129,19 @@ data7_comp <- reactive({
   bloco7 |>
     dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
     dplyr::filter(
-      if (filtros()$nivel2 == "Nacional")
+      if (filtros()$nivel2 == "nacional")
         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-      else if (filtros()$nivel2 == "Regional")
+      else if (filtros()$nivel2 == "regional")
         regiao == filtros()$regiao2
-      else if (filtros()$nivel2 == "Estadual")
+      else if (filtros()$nivel2 == "estadual")
         uf == filtros()$estado2
-      else if (filtros()$nivel2 == "Macrorregião de saúde")
+      else if (filtros()$nivel2 == "macro")
         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-      else if(filtros()$nivel2 == "Microrregião de saúde")
+      else if(filtros()$nivel2 == "micro")
         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-      else if(filtros()$nivel2 == "Municipal")
+      else if(filtros()$nivel2 == "municipal")
         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-      else if (filtros()$nivel2 == "Municípios semelhantes")
+      else if (filtros()$nivel2 == "municipios_semelhantes")
         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
     ) |>
     cria_indicadores(df_calcs = bloco7_calcs(), df_calcs_dist_bloco7 = bloco7_calcs_dist, bloco  = "bloco7", input = input, filtros = filtros(), comp = TRUE)

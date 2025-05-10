@@ -29,7 +29,7 @@ aux_municipios_1$regiao[which(aux_municipios_1$regiao == "Centro-oeste")] <- "Ce
 
 aux_municipios_1$uf[which(aux_municipios_1$uf == "SAO PAULO")] <- "São Paulo"
 
-#Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde
+#Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
 aux_r_saude <- readODS::read_ods("data-raw/extracao-dos-dados/cobertura/regioes_macrorregioes.ods") |>
   janitor::clean_names() |>
   dplyr::rename(
@@ -246,7 +246,7 @@ base_incompletude_bloco7_outros_aux <- read.csv('data-raw/csv/indicadores_incomp
 
 base_incompletude_bloco7_aux <- full_join(base_incompletude_bloco7_outros_aux, base_incompletude_bloco7_morbidade_aux)
 
-#Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde
+#Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde estaduais
 bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
 bloco1 <- bloco1 |>
   dplyr::select(

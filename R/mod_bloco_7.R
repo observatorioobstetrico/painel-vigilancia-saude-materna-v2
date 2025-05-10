@@ -1709,8 +1709,8 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o local de internação"),
                         choices = c(
                           "Todos" = "geral",
-                          "Dentro da macrorregião de saúde" = "na_macro",
-                          "Fora da macrorregião de saúde" = "fora_macro"
+                          "Dentro da macrorregião de saúde estadual" = "na_macro",
+                          "Fora da macrorregião de saúde estadual" = "fora_macro"
                         ),
                         width = "100%"
                       )
@@ -1761,8 +1761,8 @@ mod_bloco_7_ui <- function(id) {
                         options = list(placeholder = "Selecione o local de internação"),
                         choices = c(
                           "Todos" = "geral",
-                          "Dentro da macrorregião de saúde" = "na_macro",
-                          "Fora da macrorregião de saúde" = "fora_macro"
+                          "Dentro da macrorregião de saúde estadual" = "na_macro",
+                          "Fora da macrorregião de saúde estadual" = "fora_macro"
                         ),
                         width = "100%"
                       )
@@ -2411,31 +2411,31 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         local1 <- dplyr::case_when(
-          filtros()$nivel == "Nacional" ~ "Brasil",
-          filtros()$nivel == "Regional" ~ filtros()$regiao,
-          filtros()$nivel == "Estadual" ~ filtros()$estado,
-          filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-          filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-          filtros()$nivel == "Municipal" ~ filtros()$municipio
+          filtros()$nivel == "nacional" ~ "Brasil",
+          filtros()$nivel == "regional" ~ filtros()$regiao,
+          filtros()$nivel == "estadual" ~ filtros()$estado,
+          filtros()$nivel == "macro" ~ filtros()$macro,
+          filtros()$nivel == "micro" ~ filtros()$micro,
+          filtros()$nivel == "municipal" ~ filtros()$municipio
         )
         texto <- glue::glue("({local1}, {ano})")
       } else {
         local1 <- dplyr::case_when(
-          filtros()$nivel == "Nacional" ~ "Brasil",
-          filtros()$nivel == "Regional" ~ filtros()$regiao,
-          filtros()$nivel == "Estadual" ~ filtros()$estado,
-          filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-          filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-          filtros()$nivel == "Municipal" ~ filtros()$municipio
+          filtros()$nivel == "nacional" ~ "Brasil",
+          filtros()$nivel == "regional" ~ filtros()$regiao,
+          filtros()$nivel == "estadual" ~ filtros()$estado,
+          filtros()$nivel == "macro" ~ filtros()$macro,
+          filtros()$nivel == "micro" ~ filtros()$micro,
+          filtros()$nivel == "municipal" ~ filtros()$municipio
         )
         local2 <- dplyr::case_when(
-          filtros()$nivel2 == "Nacional" ~ "Brasil",
-          filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-          filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-          filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-          filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-          filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-          filtros()$nivel2 == "Municípios semelhantes" ~ "municípios semelhantes"
+          filtros()$nivel2 == "nacional" ~ "Brasil",
+          filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+          filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+          filtros()$nivel2 == "macro" ~ filtros()$macro2,
+          filtros()$nivel2 == "micro" ~ filtros()$micro2,
+          filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+          filtros()$nivel2 == "municipios_semelhantes" ~ "municípios semelhantes"
         )
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
@@ -2447,22 +2447,22 @@ mod_bloco_7_server <- function(id, filtros){
     ## Criando os outputs que receberão os nomes dos locais selecionados quando há comparação --------
     output$input_localidade_resumo_fetal <- renderUI({
       localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
+        filtros()$nivel == "nacional" ~ "Brasil",
+        filtros()$nivel == "regional" ~ filtros()$regiao,
+        filtros()$nivel == "estadual" ~ filtros()$estado,
+        filtros()$nivel == "macro" ~ filtros()$macro,
+        filtros()$nivel == "micro" ~ filtros()$micro,
+        filtros()$nivel == "municipal" ~ filtros()$municipio
       )
 
       localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+        filtros()$nivel2 == "nacional" ~ "Brasil",
+        filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "macro" ~ filtros()$macro2,
+        filtros()$nivel2 == "micro" ~ filtros()$micro2,
+        filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
       )
 
       if (filtros()$comparar == "Sim") {
@@ -2482,22 +2482,22 @@ mod_bloco_7_server <- function(id, filtros){
 
     output$input_localidade_resumo_neonat <- renderUI({
       localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
+        filtros()$nivel == "nacional" ~ "Brasil",
+        filtros()$nivel == "regional" ~ filtros()$regiao,
+        filtros()$nivel == "estadual" ~ filtros()$estado,
+        filtros()$nivel == "macro" ~ filtros()$macro,
+        filtros()$nivel == "micro" ~ filtros()$micro,
+        filtros()$nivel == "municipal" ~ filtros()$municipio
       )
 
       localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+        filtros()$nivel2 == "nacional" ~ "Brasil",
+        filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "macro" ~ filtros()$macro2,
+        filtros()$nivel2 == "micro" ~ filtros()$micro2,
+        filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
       )
 
       if (filtros()$comparar == "Sim") {
@@ -2517,22 +2517,22 @@ mod_bloco_7_server <- function(id, filtros){
 
     output$input_localidade_resumo_perinatal <- renderUI({
       localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
+        filtros()$nivel == "nacional" ~ "Brasil",
+        filtros()$nivel == "regional" ~ filtros()$regiao,
+        filtros()$nivel == "estadual" ~ filtros()$estado,
+        filtros()$nivel == "macro" ~ filtros()$macro,
+        filtros()$nivel == "micro" ~ filtros()$micro,
+        filtros()$nivel == "municipal" ~ filtros()$municipio
       )
 
       localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+        filtros()$nivel2 == "nacional" ~ "Brasil",
+        filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "macro" ~ filtros()$macro2,
+        filtros()$nivel2 == "micro" ~ filtros()$micro2,
+        filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
       )
 
       if (filtros()$comparar == "Sim") {
@@ -2553,22 +2553,22 @@ mod_bloco_7_server <- function(id, filtros){
 
     output$input_localidade_resumo_morbidade_neonatal <- renderUI({
       localidade_original <- dplyr::case_when(
-        filtros()$nivel == "Nacional" ~ "Brasil",
-        filtros()$nivel == "Regional" ~ filtros()$regiao,
-        filtros()$nivel == "Estadual" ~ filtros()$estado,
-        filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-        filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-        filtros()$nivel == "Municipal" ~ filtros()$municipio
+        filtros()$nivel == "nacional" ~ "Brasil",
+        filtros()$nivel == "regional" ~ filtros()$regiao,
+        filtros()$nivel == "estadual" ~ filtros()$estado,
+        filtros()$nivel == "macro" ~ filtros()$macro,
+        filtros()$nivel == "micro" ~ filtros()$micro,
+        filtros()$nivel == "municipal" ~ filtros()$municipio
       )
 
       localidade_comparacao <- dplyr::case_when(
-        filtros()$nivel2 == "Nacional" ~ "Brasil",
-        filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-        filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-        filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-        filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-        filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-        filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+        filtros()$nivel2 == "nacional" ~ "Brasil",
+        filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+        filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+        filtros()$nivel2 == "macro" ~ filtros()$macro2,
+        filtros()$nivel2 == "micro" ~ filtros()$micro2,
+        filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+        filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
       )
 
       if (filtros()$comparar == "Sim") {
@@ -2753,17 +2753,17 @@ mod_bloco_7_server <- function(id, filtros){
       base_incompletude |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
@@ -2774,12 +2774,12 @@ mod_bloco_7_server <- function(id, filtros){
           idanomal = round(sum(idanomal_incompletos, na.rm = TRUE) / sum(idanomal_totais,na.rm = TRUE) * 100, 1),
           condicoes_ameacadoras = round(sum(condicoes_ameacadoras_incompletos_intersecao, na.rm = TRUE) / sum(condicoes_ameacadoras_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup()
@@ -2787,7 +2787,7 @@ mod_bloco_7_server <- function(id, filtros){
 
     ### Calculando os indicadores de cobertura --------------------------------
     data_cobertura <- reactive({
-      if (filtros()$nivel == "Municipal") {
+      if (filtros()$nivel == "municipal") {
         sub_registro_sinasc_muni_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
@@ -2797,19 +2797,19 @@ mod_bloco_7_server <- function(id, filtros){
           dplyr::rename(
             localidade = municipio
           )
-      } else if (filtros()$nivel == "Estadual") {
+      } else if (filtros()$nivel == "estadual") {
         sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             localidade == filtros()$estado
           )
-      } else if (filtros()$nivel == "Regional") {
+      } else if (filtros()$nivel == "regional") {
         sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
             localidade == filtros()$regiao
           )
-      } else if (filtros()$nivel == "Nacional") {
+      } else if (filtros()$nivel == "nacional") {
         sub_registro_sinasc_uf_regioes_2015_2021 |>
           dplyr::filter(
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
@@ -2819,12 +2819,12 @@ mod_bloco_7_server <- function(id, filtros){
         data.frame(
           ano = filtros()$ano2[1]:filtros()$ano2[2],
           localidade = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           ),
           cobertura = 100
         )
@@ -2896,31 +2896,31 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (nivel_selecionado() == "Nacional")
+          if (nivel_selecionado() == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (nivel_selecionado() == "Regional")
+          else if (nivel_selecionado() == "regional")
             regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Estadual")
+          else if (nivel_selecionado() == "estadual")
             uf == filtros()[[paste0("estado", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Macrorregião de saúde")
+          else if (nivel_selecionado() == "macro")
             macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Microrregião de saúde")
+          else if(nivel_selecionado() == "micro")
             r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Municipal")
+          else if(nivel_selecionado() == "municipal")
             municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Municípios semelhantes")
+          else if (nivel_selecionado() == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         cria_indicadores(df_calcs = bloco7_calcs(), df_calcs_dist_bloco7 = bloco7_calcs_dist, bloco  = "bloco7", input = input, filtros = filtros(), adicionar_localidade = FALSE) |>
         dplyr::mutate(
           localidade = dplyr::case_when(
-            nivel_selecionado() == "Nacional" ~ "Brasil",
-            nivel_selecionado() == "Regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
-            nivel_selecionado() == "Estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
-            nivel_selecionado() == "Macrorregião de saúde" ~ filtros()[[paste0("macro", sufixo_inputs)]],
-            nivel_selecionado() == "Microrregião de saúde" ~ filtros()[[paste0("micro", sufixo_inputs)]],
-            nivel_selecionado() == "Municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]],
-            nivel_selecionado() == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            nivel_selecionado() == "nacional" ~ "Brasil",
+            nivel_selecionado() == "regional" ~ filtros()[[paste0("regiao", sufixo_inputs)]],
+            nivel_selecionado() == "estadual" ~ filtros()[[paste0("estado", sufixo_inputs)]],
+            nivel_selecionado() == "macro" ~ filtros()[[paste0("macro", sufixo_inputs)]],
+            nivel_selecionado() == "micro" ~ filtros()[[paste0("micro", sufixo_inputs)]],
+            nivel_selecionado() == "municipal" ~ filtros()[[paste0("municipio", sufixo_inputs)]],
+            nivel_selecionado() == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         )
     })
@@ -3014,7 +3014,7 @@ mod_bloco_7_server <- function(id, filtros){
         invertido = FALSE,
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
-          nivel_selecionado() == "Nacional",
+          nivel_selecionado() == "nacional",
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
@@ -3116,7 +3116,7 @@ mod_bloco_7_server <- function(id, filtros){
         invertido = FALSE,
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
-          nivel_selecionado() == "Nacional",
+          nivel_selecionado() == "nacional",
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
@@ -3527,7 +3527,7 @@ mod_bloco_7_server <- function(id, filtros){
         invertido = FALSE,
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
-          nivel_selecionado() == "Nacional",
+          nivel_selecionado() == "nacional",
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
@@ -3581,7 +3581,7 @@ mod_bloco_7_server <- function(id, filtros){
         invertido = FALSE,
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
-          nivel_selecionado() == "Nacional",
+          nivel_selecionado() == "nacional",
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
@@ -3613,7 +3613,7 @@ mod_bloco_7_server <- function(id, filtros){
         invertido = FALSE,
         cor = "lightgrey",
         texto_footer = dplyr::if_else(
-          nivel_selecionado() == "Nacional",
+          nivel_selecionado() == "nacional",
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
@@ -3897,17 +3897,17 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_dist_morbidade |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano)
@@ -3917,19 +3917,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_dist_morbidade |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano)
@@ -3986,12 +3986,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -4059,13 +4059,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -4159,17 +4159,17 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano)
@@ -4202,12 +4202,12 @@ mod_bloco_7_server <- function(id, filtros){
     #         "Grupos não selecionados"
     #       ),
     #       class = dplyr::case_when(
-    #         filtros()$nivel == "Nacional" ~ "Brasil",
-    #         filtros()$nivel == "Regional" ~ filtros()$regiao,
-    #         filtros()$nivel == "Estadual" ~ filtros()$estado,
-    #         filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-    #         filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-    #         filtros()$nivel == "Municipal" ~ filtros()$municipio
+    #         filtros()$nivel == "nacional" ~ "Brasil",
+    #         filtros()$nivel == "regional" ~ filtros()$regiao,
+    #         filtros()$nivel == "estadual" ~ filtros()$estado,
+    #         filtros()$nivel == "macro" ~ filtros()$macro,
+    #         filtros()$nivel == "micro" ~ filtros()$micro,
+    #         filtros()$nivel == "municipal" ~ filtros()$municipio
     #       )
     #     ) |>
     #     dplyr::ungroup() |>
@@ -4283,12 +4283,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -4360,12 +4360,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -4438,12 +4438,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupo_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -4462,19 +4462,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_distribuicao_cids |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             regiao %in% unique(tabela_aux_municipios$regiao)
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano)
@@ -4507,13 +4507,13 @@ mod_bloco_7_server <- function(id, filtros){
     #         "Grupos não selecionados"
     #       ),
     #       class = dplyr::case_when(
-    #         filtros()$nivel2 == "Nacional" ~ "Brasil",
-    #         filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-    #         filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-    #         filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-    #         filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-    #         filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-    #         filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+    #         filtros()$nivel2 == "nacional" ~ "Brasil",
+    #         filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+    #         filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+    #         filtros()$nivel2 == "macro" ~ filtros()$macro2,
+    #         filtros()$nivel2 == "micro" ~ filtros()$micro2,
+    #         filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+    #         filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
     #       )
     #     ) |>
     #     dplyr::ungroup() |>
@@ -4589,13 +4589,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -4667,13 +4667,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -4747,13 +4747,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -5129,19 +5129,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_distribuicao_cids |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (nivel_selecionado() == "Nacional")
+          if (nivel_selecionado() == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (nivel_selecionado() == "Regional")
+          else if (nivel_selecionado() == "regional")
             regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Estadual")
+          else if (nivel_selecionado() == "estadual")
             uf == filtros()[[paste0("estado", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Macrorregião de saúde")
+          else if (nivel_selecionado() == "macro")
             macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Microrregião de saúde")
+          else if(nivel_selecionado() == "micro")
             r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Municipal")
+          else if(nivel_selecionado() == "municipal")
             municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Municípios semelhantes")
+          else if (nivel_selecionado() == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         )
     })
@@ -5367,19 +5367,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7_dist_morbidade |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (nivel_selecionado() == "Nacional")
+          if (nivel_selecionado() == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (nivel_selecionado() == "Regional")
+          else if (nivel_selecionado() == "regional")
             regiao == filtros()[[paste0("regiao", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Estadual")
+          else if (nivel_selecionado() == "estadual")
             uf == filtros()[[paste0("estado", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Macrorregião de saúde")
+          else if (nivel_selecionado() == "macro")
             macro_r_saude == filtros()[[paste0("macro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_macro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Microrregião de saúde")
+          else if(nivel_selecionado() == "micro")
             r_saude == filtros()[[paste0("micro", sufixo_inputs)]] & uf == filtros()[[paste0("estado_micro", sufixo_inputs)]]
-          else if(nivel_selecionado() == "Municipal")
+          else if(nivel_selecionado() == "municipal")
             municipio == filtros()[[paste0("municipio", sufixo_inputs)]] & uf == filtros()[[paste0("estado_municipio", sufixo_inputs)]]
-          else if (nivel_selecionado() == "Municípios semelhantes")
+          else if (nivel_selecionado() == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         )
     })
@@ -5500,12 +5500,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -5581,12 +5581,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -5662,12 +5662,12 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel == "Nacional" ~ "Brasil",
-            filtros()$nivel == "Regional" ~ filtros()$regiao,
-            filtros()$nivel == "Estadual" ~ filtros()$estado,
-            filtros()$nivel == "Macrorregião de saúde" ~ filtros()$macro,
-            filtros()$nivel == "Microrregião de saúde" ~ filtros()$micro,
-            filtros()$nivel == "Municipal" ~ filtros()$municipio
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
           )
         ) |>
         dplyr::ungroup() |>
@@ -5744,13 +5744,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -5827,13 +5827,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -5910,13 +5910,13 @@ mod_bloco_7_server <- function(id, filtros){
             "grupos_nao_selecionados"
           ),
           class = dplyr::case_when(
-            filtros()$nivel2 == "Nacional" ~ "Brasil",
-            filtros()$nivel2 == "Regional" ~ filtros()$regiao2,
-            filtros()$nivel2 == "Estadual" ~ filtros()$estado2,
-            filtros()$nivel2 == "Macrorregião de saúde" ~ filtros()$macro2,
-            filtros()$nivel2 == "Microrregião de saúde" ~ filtros()$micro2,
-            filtros()$nivel2 == "Municipal" ~ filtros()$municipio2,
-            filtros()$nivel2 == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+            filtros()$nivel2 == "nacional" ~ "Brasil",
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
           )
         ) |>
         dplyr::ungroup() |>
@@ -6257,17 +6257,17 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::group_by(ano) |>
@@ -6299,19 +6299,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::group_by(ano) |>
@@ -6355,17 +6355,17 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel == "Nacional")
+          if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "Regional")
+          else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
-          else if (filtros()$nivel == "Estadual")
+          else if (filtros()$nivel == "estadual")
             uf == filtros()$estado
-          else if (filtros()$nivel == "Macrorregião de saúde")
+          else if (filtros()$nivel == "macro")
             macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "Microrregião de saúde")
+          else if(filtros()$nivel == "micro")
             r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "Municipal")
+          else if(filtros()$nivel == "municipal")
             municipio == filtros()$municipio & uf == filtros()$estado_municipio
         ) |>
         dplyr::reframe(
@@ -6380,19 +6380,19 @@ mod_bloco_7_server <- function(id, filtros){
       bloco7 |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
-          if (filtros()$nivel2 == "Nacional")
+          if (filtros()$nivel2 == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "Regional")
+          else if (filtros()$nivel2 == "regional")
             regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "Estadual")
+          else if (filtros()$nivel2 == "estadual")
             uf == filtros()$estado2
-          else if (filtros()$nivel2 == "Macrorregião de saúde")
+          else if (filtros()$nivel2 == "macro")
             macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "Microrregião de saúde")
+          else if(filtros()$nivel2 == "micro")
             r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if(filtros()$nivel2 == "Municipal")
+          else if(filtros()$nivel2 == "municipal")
             municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "Municípios semelhantes")
+          else if (filtros()$nivel2 == "municipios_semelhantes")
             grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
         ) |>
         dplyr::reframe(
@@ -6603,7 +6603,7 @@ mod_bloco_7_server <- function(id, filtros){
           #   dashStyle = "ShortDot",
           #   opacity = 0.8
           # )
-        if (filtros()$nivel == "Nacional" & taxa_mortalidade_fetal() != "taxa_mort_fetal") {
+        if (filtros()$nivel == "nacional" & taxa_mortalidade_fetal() != "taxa_mort_fetal") {
           grafico_base
         } else {
           grafico_base |>
@@ -6650,7 +6650,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & taxa_mortalidade_fetal() != "taxa_mort_fetal") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & taxa_mortalidade_fetal() != "taxa_mort_fetal") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
@@ -7031,7 +7031,7 @@ mod_bloco_7_server <- function(id, filtros){
         #   dashStyle = "ShortDot",
         #   opacity = 0.8
         # )
-        if (filtros()$nivel == "Nacional" & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") {
+        if (filtros()$nivel == "nacional" & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") {
           grafico_base
         } else {
           grafico_base |>
@@ -7078,7 +7078,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
@@ -7219,7 +7219,7 @@ mod_bloco_7_server <- function(id, filtros){
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
          highcharter::hc_colors(cols)
-       if (filtros()$nivel == "Nacional" & input$faixa_peso != "mort_neonat") {
+       if (filtros()$nivel == "nacional" & input$faixa_peso != "mort_neonat") {
          grafico_base #|>
            # highcharter::hc_add_series(
            #   data = data7_plot_percentil5_aux,
@@ -7293,7 +7293,7 @@ mod_bloco_7_server <- function(id, filtros){
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
          highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
          highcharter::hc_colors(cols)
-       if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso != "mort_neonat") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+       if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & input$faixa_peso != "mort_neonat") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
          grafico_base#|>
            # highcharter::hc_add_series(
            #   data = data7_plot_percentil5_aux,
@@ -7410,7 +7410,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional" & input$faixa_peso_precoc != "mort_neonat_precoc") {
+        if (filtros()$nivel == "nacional" & input$faixa_peso_precoc != "mort_neonat_precoc") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7473,7 +7473,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_precoc != "mort_neonat_precoc") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & input$faixa_peso_precoc != "mort_neonat_precoc") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
 
           grafico_base#|>
             # highcharter::hc_add_series(
@@ -7591,7 +7591,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional" & input$faixa_peso_tardia != "mort_neonat_tardia") {
+        if (filtros()$nivel == "nacional" & input$faixa_peso_tardia != "mort_neonat_tardia") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -7654,7 +7654,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_tardia != "mort_neonat_tardia") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & input$faixa_peso_tardia != "mort_neonat_tardia") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -8090,7 +8090,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional" & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") {
+        if (filtros()$nivel == "nacional" & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") {
           grafico_base#|>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
@@ -8153,7 +8153,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") |
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total") |
             (filtros()$mostrar_referencia == "nao_mostrar_referencia") ) {
           grafico_base #|>
           # highcharter::hc_add_series(
@@ -8317,7 +8317,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional" & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") {
+        if (filtros()$nivel == "nacional" & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_plot_percentil5_aux,
@@ -8380,7 +8380,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = ""), min = 0) |>
           highcharter::hc_colors(cols)
-        if ((any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") |
+        if ((any(c(filtros()$nivel, filtros()$nivel2) == "nacional") & input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms") |
             (filtros()$mostrar_referencia == "nao_mostrar_referencia") ) {
           grafico_base #|>
             # highcharter::hc_add_series(
@@ -8690,14 +8690,14 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "nacional") {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_percentil(),
@@ -8747,7 +8747,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
@@ -8776,7 +8776,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base#|>
             # highcharter::hc_add_series(
             #   data = data7_percentil(),
@@ -8817,7 +8817,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_internacoes_publicos_sih(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
           ) |>
           # highcharter::hc_add_series(
@@ -8843,7 +8843,7 @@ mod_bloco_7_server <- function(id, filtros){
             c(data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih)
           ), na.rm = TRUE) + 1) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
@@ -8861,7 +8861,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_internacoes_publicos_sih(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
@@ -8894,7 +8894,7 @@ mod_bloco_7_server <- function(id, filtros){
             c(data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih, data7_internacoes_publicos_sih_referencia()$porc_internacoes_menores_28_dias_sih)
           ), na.rm = TRUE) + 1) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
@@ -8918,7 +8918,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_internacoes_uti_sih(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
           ) |>
           # highcharter::hc_add_series(
@@ -8941,7 +8941,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "Nacional") {
+        if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
@@ -8959,7 +8959,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data7_internacoes_uti_sih(),
             type = "line",
-            name = ifelse(filtros()$nivel == "Nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
+            name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
@@ -8988,7 +8988,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "Nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>

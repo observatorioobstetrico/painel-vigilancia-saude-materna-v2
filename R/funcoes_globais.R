@@ -72,7 +72,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
     df_localidade_aux |>
       dplyr::mutate(
         class = dplyr::case_when(
-          filtros[[paste0("nivel", sufixo)]] == "Nacional" | referencia == TRUE ~ dplyr::if_else(
+          filtros[[paste0("nivel", sufixo)]] == "nacional" | referencia == TRUE ~ dplyr::if_else(
             filtros$comparar == "Não",
             "Brasil (valor de referência)",
             dplyr::if_else(
@@ -81,12 +81,12 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
               "Brasil (valor de referência)"
             )
           ),
-          filtros[[paste0("nivel", sufixo)]] == "Regional" ~ filtros[[paste0("regiao", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Estadual" ~ filtros[[paste0("estado", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Macrorregião de saúde" ~ filtros[[paste0("macro", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Microrregião de saúde" ~ filtros[[paste0("micro", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Municipal" ~ filtros[[paste0("municipio", sufixo)]],
-          filtros[[paste0("nivel", sufixo)]] == "Municípios semelhantes" ~ "Média dos municípios semelhantes"
+          filtros[[paste0("nivel", sufixo)]] == "regional" ~ filtros[[paste0("regiao", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "estadual" ~ filtros[[paste0("estado", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "macro" ~ filtros[[paste0("macro", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "micro" ~ filtros[[paste0("micro", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "municipal" ~ filtros[[paste0("municipio", sufixo)]],
+          filtros[[paste0("nivel", sufixo)]] == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
         )
       ) |>
       dplyr::ungroup()
@@ -177,7 +177,7 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
     tipo_referencia <- tipo_referencia
   }
 
-  if (tipo_referencia == "média nacional" & nivel_de_analise == "Nacional" & is.null(texto_footer)) {
+  if (tipo_referencia == "média nacional" & nivel_de_analise == "nacional" & is.null(texto_footer)) {
     if (is.nan(valor_comp)) {
       texto_footer <- "Comparação não aplicável"
       cor <- "lightgrey"

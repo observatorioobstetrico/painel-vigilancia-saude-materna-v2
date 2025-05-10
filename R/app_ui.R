@@ -14,7 +14,8 @@ app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "funcoes_javascript.js")),
-    tags$style(HTML("
+    tags$style(HTML(
+      "
       .shiny-output-error-validation {
         color: black;
         display: flex;
@@ -23,8 +24,10 @@ app_ui <- function(request) {
         text-align: center;
         width: 100%
       }
-    ")),
-    tags$style(HTML("
+    "
+    )),
+    tags$style(HTML(
+      "
       .dropdown-menu {
         width: inherit;
         position: absolute;
@@ -33,16 +36,18 @@ app_ui <- function(request) {
         left: 0px;
         transform: translate3d(0px, 0px, 0px)!important;
       }
-    ")),
-    tags$style(HTML("
+    "
+    )),
+    tags$style(HTML(
+      "
       .btn-light {
         background-color: #ebeff2;
         border-color: #ebeff2;
       }
-    ")),
+    "
+    )),
     # Leave this function for adding external resources
-    golem_add_external_resources(
-    ),
+    golem_add_external_resources(),
     bs4Dash::bs4DashPage(
       help = NULL,
       dark = NULL,
@@ -50,7 +55,9 @@ app_ui <- function(request) {
       bs4Dash::bs4DashNavbar(
         fixed = TRUE,
         title = bs4Dash::bs4DashBrand(
-          title = HTML("<b> Painel de Vigilância da Saúde Materna e Perinatal </b>"),
+          title = HTML(
+            "<b> Painel de Vigilância da Saúde Materna e Perinatal </b>"
+          ),
           color = "primary",
           href = "https://observatorioobstetricobr.org/",
           image = "www/logos/logo-oobr-curto.png"
@@ -81,7 +88,9 @@ app_ui <- function(request) {
             icon = icon("chart-line"),
             startExpanded = TRUE,
             bs4Dash::bs4SidebarMenuSubItem(
-              text = HTML("- Condições socioeconômicas e de acesso ao serviço de saúde"),
+              text = HTML(
+                "- Condições socioeconômicas e de acesso ao serviço de saúde"
+              ),
               tabName = "bloco_1",
               icon = icon("1")
             ),
@@ -114,7 +123,7 @@ app_ui <- function(request) {
               text = "- Mortalidade fetal, perinatal e neonatal e morbidade neonatal",
               tabName = "bloco_7",
               icon = icon("7")
-            )#,
+            ) #,
             # bs4Dash::bs4SidebarMenuSubItem(
             #   text = "- Gráfico de radar",
             #   tabName = "bloco_9",
@@ -167,7 +176,9 @@ app_ui <- function(request) {
                   condition = "input.abas != 'nivel_1'",
                   sliderInput(
                     inputId = "ano2",
-                    label = HTML("<span style = 'font-size: 17'> Intervalo de anos </span>"),
+                    label = HTML(
+                      "<span style = 'font-size: 17'> Intervalo de anos </span>"
+                    ),
                     min = 2012,
                     max = 2024,
                     value = c(2012, 2023),
@@ -182,24 +193,43 @@ app_ui <- function(request) {
                 width = 3,
                 selectizeInput(
                   inputId = "nivel",
-                  label = HTML("<span style = 'font-size: 17'> Nível de análise </span>"),
+                  label = HTML(
+                    "<span style = 'font-size: 17'> Nível de análise </span>"
+                  ),
                   options = list(placeholder = "Selecione o nível de análise"),
-                  choices = c("Nacional", "Regional", "Estadual", "Macrorregião de saúde", "Microrregião de saúde", "Municipal"),
+                  choices = c(
+                    "Nacional" = "nacional",
+                    "Região do país" = "regional",
+                    "Estadual" = "estadual",
+                    "Macrorregião de saúde estadual" = "macro",
+                    "Região de saúde estadual" = "micro",
+                    "Municipal" = "municipal"
+                  ),
                   width = "95%"
                 )
               ),
               column(
                 width = 6,
                 conditionalPanel(
-                  condition = "input.nivel == 'Regional'",
+                  condition = "input.nivel == 'regional'",
                   fluidRow(
                     column(
                       width = 6,
                       selectizeInput(
                         inputId = "regiao",
-                        label = HTML("<span style = 'font-size: 17'> Região </span>"),
-                        options = list(placeholder = "Selecione uma região do país"),
-                        choices = c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Região </span>"
+                        ),
+                        options = list(
+                          placeholder = "Selecione uma região do país"
+                        ),
+                        choices = c(
+                          "Centro-Oeste",
+                          "Nordeste",
+                          "Norte",
+                          "Sudeste",
+                          "Sul"
+                        ),
                         width = "95%"
                       )
                     ),
@@ -209,13 +239,15 @@ app_ui <- function(request) {
                   )
                 ),
                 conditionalPanel(
-                  condition = "input.nivel == 'Macrorregião de saúde'",
+                  condition = "input.nivel == 'macro'",
                   fluidRow(
                     column(
                       width = 6,
                       selectizeInput(
                         inputId = "estado_macro",
-                        label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Estado </span>"
+                        ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
                         width = "95%"
@@ -225,22 +257,28 @@ app_ui <- function(request) {
                       width = 6,
                       selectizeInput(
                         inputId = "macro",
-                        label = HTML("<span style = 'font-size: 17'> Macrorregião de saúde </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Macrorregião de saúde estadual </span>"
+                        ),
                         choices = NULL,
-                        options = list(placeholder = "Selecione uma macrorregião de saúde"),
+                        options = list(
+                          placeholder = "Selecione uma macrorregião de saúde estadual estadual"
+                        ),
                         width = "95%"
                       )
                     )
                   )
                 ),
                 conditionalPanel(
-                  condition = "input.nivel == 'Microrregião de saúde'",
+                  condition = "input.nivel == 'micro'",
                   fluidRow(
                     column(
                       width = 6,
                       selectizeInput(
                         inputId = "estado_micro",
-                        label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Estado </span>"
+                        ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
                         width = "95%"
@@ -250,22 +288,28 @@ app_ui <- function(request) {
                       width = 6,
                       selectizeInput(
                         inputId = "micro",
-                        label = HTML("<span style = 'font-size: 17'> Microrregião de saúde </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Região de saúde estadual </span>"
+                        ),
                         choices = NULL,
-                        options = list(placeholder = "Selecione uma microregião de saúde"),
+                        options = list(
+                          placeholder = "Selecione uma região de saúde estadual"
+                        ),
                         width = "95%"
                       )
                     )
                   )
                 ),
                 conditionalPanel(
-                  condition = "input.nivel == 'Estadual'",
+                  condition = "input.nivel == 'estadual'",
                   fluidRow(
                     column(
                       width = 6,
                       selectizeInput(
                         inputId = "estado",
-                        label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Estado </span>"
+                        ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
                         width = "95%"
@@ -277,13 +321,15 @@ app_ui <- function(request) {
                   )
                 ),
                 conditionalPanel(
-                  condition = "input.nivel == 'Municipal'",
+                  condition = "input.nivel == 'municipal'",
                   fluidRow(
                     column(
                       width = 6,
                       selectizeInput(
                         inputId = "estado_municipio",
-                        label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Estado </span>"
+                        ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
                         width = "95%"
@@ -293,7 +339,9 @@ app_ui <- function(request) {
                       width = 6,
                       selectizeInput(
                         inputId = "municipio",
-                        label = HTML("<span style = 'font-size: 17'> Município </span>"),
+                        label = HTML(
+                          "<span style = 'font-size: 17'> Município </span>"
+                        ),
                         choices = NULL,
                         options = list(placeholder = "Selecione um município"),
                         width = "95%"
@@ -304,14 +352,14 @@ app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "input.ano == 2024 | input.ano2[1] == 2024",
+              condition = "(input.abas == 'nivel_1' & input.ano == 2024)  | (input.abas != 'nivel_1' & input.ano2[1] == 2024)",
               fluidRow(
                 column(
                   width = 3,
                   HTML(
                     "
-                    <div style = 'text-align: left;'> <b style = 'font-size: 15px'>
-                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2024 são preliminares
+                    <div style = 'text-align: left;'> <b style = 'font-size: 16px'>
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2024 são preliminares (atualizados em 09 de maio de 2025)
                     </b> </div>
                     <span style='display: block; margin-bottom: 15px;'> </span>
                   "
@@ -326,7 +374,9 @@ app_ui <- function(request) {
                   width = 3,
                   selectizeInput(
                     inputId = "comparar",
-                    label = HTML("<span style = 'font-size: 17'> Comparar com outra localidade? </span>"),
+                    label = HTML(
+                      "<span style = 'font-size: 17'> Comparar com outra localidade? </span>"
+                    ),
                     choices = c("Sim", "Não"),
                     selected = "Não",
                     width = "95%"
@@ -338,9 +388,20 @@ app_ui <- function(request) {
                     condition = "input.comparar == 'Sim'",
                     selectizeInput(
                       inputId = "nivel2",
-                      label = HTML(glue::glue("<span style = 'font-size: 17'> {uiOutput('label_nivel_comp')} </span>")),
-                      options = list(placeholder = "Selecione o nível de análise"),
-                      choices = c("Nacional", "Regional", "Estadual", "Macrorregião de saúde", "Microrregião de saúde", "Municipal"),
+                      label = HTML(glue::glue(
+                        "<span style = 'font-size: 17'> {uiOutput('label_nivel_comp')} </span>"
+                      )),
+                      options = list(
+                        placeholder = "Selecione o nível de análise"
+                      ),
+                      choices = c(
+                        "Nacional" = "nacional",
+                        "Região do país" = "regional",
+                        "Estadual" = "estadual",
+                        "Macrorregião de saúde estadual" = "macro",
+                        "Região de saúde estadual" = "micro",
+                        "Municipal" = "municipal"
+                      ),
                       width = "95%"
                     )
                   )
@@ -348,15 +409,25 @@ app_ui <- function(request) {
                 column(
                   width = 6,
                   conditionalPanel(
-                    condition = "input.nivel2 == 'Regional' & input.comparar == 'Sim'",
+                    condition = "input.nivel2 == 'regional' & input.comparar == 'Sim'",
                     fluidRow(
                       column(
                         width = 6,
                         selectizeInput(
                           inputId = "regiao2",
-                          label = HTML("<span style = 'font-size: 17'> Região </span>"),
-                          options = list(placeholder = "Selecione uma região do país"),
-                          choices = c("Centro-Oeste", "Nordeste", "Norte", "Sudeste", "Sul"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Região </span>"
+                          ),
+                          options = list(
+                            placeholder = "Selecione uma região do país"
+                          ),
+                          choices = c(
+                            "Centro-Oeste",
+                            "Nordeste",
+                            "Norte",
+                            "Sudeste",
+                            "Sul"
+                          ),
                           width = "95%"
                         )
                       ),
@@ -366,13 +437,15 @@ app_ui <- function(request) {
                     )
                   ),
                   conditionalPanel(
-                    condition = "input.nivel2 == 'Macrorregião de saúde' & input.comparar == 'Sim'",
+                    condition = "input.nivel2 == 'macro' & input.comparar == 'Sim'",
                     fluidRow(
                       column(
                         width = 6,
                         selectizeInput(
                           inputId = "estado_macro2",
-                          label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Estado </span>"
+                          ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
                           width = "95%"
@@ -382,8 +455,12 @@ app_ui <- function(request) {
                         width = 6,
                         selectizeInput(
                           inputId = "macro2",
-                          label = HTML("<span style = 'font-size: 17'> Macrorregião de saúde </span>"),
-                          options = list(placeholder = "Selecione uma macrorregião de saúde"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Macrorregião de saúde estadual </span>"
+                          ),
+                          options = list(
+                            placeholder = "Selecione uma macrorregião de saúde estadual estadual"
+                          ),
                           choices = NULL,
                           width = "95%"
                         )
@@ -391,13 +468,15 @@ app_ui <- function(request) {
                     )
                   ),
                   conditionalPanel(
-                    condition = "input.nivel2 == 'Microrregião de saúde' & input.comparar == 'Sim'",
+                    condition = "input.nivel2 == 'micro' & input.comparar == 'Sim'",
                     fluidRow(
                       column(
                         width = 6,
                         selectizeInput(
                           inputId = "estado_micro2",
-                          label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Estado </span>"
+                          ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
                           width = "95%"
@@ -407,8 +486,12 @@ app_ui <- function(request) {
                         width = 6,
                         selectizeInput(
                           inputId = "micro2",
-                          label = HTML("<span style = 'font-size: 17'> Microrregião de saúde </span>"),
-                          options = list(placeholder = "Selecione uma microregião de saúde"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Região de saúde estadual </span>"
+                          ),
+                          options = list(
+                            placeholder = "Selecione uma região de saúde estadual"
+                          ),
                           choices = NULL,
                           width = "95%"
                         )
@@ -416,13 +499,15 @@ app_ui <- function(request) {
                     )
                   ),
                   conditionalPanel(
-                    condition = "input.nivel2 == 'Estadual' & input.comparar == 'Sim'",
+                    condition = "input.nivel2 == 'estadual' & input.comparar == 'Sim'",
                     fluidRow(
                       column(
                         width = 6,
                         selectizeInput(
                           inputId = "estado2",
-                          label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Estado </span>"
+                          ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
                           width = "95%"
@@ -434,13 +519,15 @@ app_ui <- function(request) {
                     )
                   ),
                   conditionalPanel(
-                    condition = "input.nivel2 == 'Municipal' & input.comparar == 'Sim'",
+                    condition = "input.nivel2 == 'municipal' & input.comparar == 'Sim'",
                     fluidRow(
                       column(
                         width = 6,
                         selectizeInput(
                           inputId = "estado_municipio2",
-                          label = HTML("<span style = 'font-size: 17'> Estado </span>"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Estado </span>"
+                          ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
                           width = "95%"
@@ -450,8 +537,12 @@ app_ui <- function(request) {
                         width = 6,
                         selectizeInput(
                           inputId = "municipio2",
-                          label = HTML("<span style = 'font-size: 17'> Município </span>"),
-                          options = list(placeholder = "Selecione um município"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Município </span>"
+                          ),
+                          options = list(
+                            placeholder = "Selecione um município"
+                          ),
                           choices = NULL,
                           width = "95%"
                         )
@@ -469,10 +560,17 @@ app_ui <- function(request) {
                       inputId = "mostrar_referencia",
                       label = NULL,
                       choiceNames = list(
-                        HTML(glue::glue("<span style = 'font-weight: normal'> Mostrar a linha relacionada ao valor de referência </span>")),
-                        HTML(glue::glue("<span style = 'font-weight: normal'> Não mostrar a linha relacionada ao valor de referência </span>"))
+                        HTML(glue::glue(
+                          "<span style = 'font-weight: normal'> Mostrar a linha relacionada ao valor de referência </span>"
+                        )),
+                        HTML(glue::glue(
+                          "<span style = 'font-weight: normal'> Não mostrar a linha relacionada ao valor de referência </span>"
+                        ))
                       ),
-                      choiceValues = list("mostrar_referencia", "nao_mostrar_referencia"),
+                      choiceValues = list(
+                        "mostrar_referencia",
+                        "nao_mostrar_referencia"
+                      ),
                       selected = "mostrar_referencia",
                       inline = TRUE
                     ),
@@ -489,8 +587,12 @@ app_ui <- function(request) {
                   width = 6,
                   selectizeInput(
                     inputId = "bloco",
-                    label = HTML("<span style = 'font-size: 17'> Bloco de indicadores </span>"),
-                    options = list(placeholder = "Selecione o bloco de indicadores"),
+                    label = HTML(
+                      "<span style = 'font-size: 17'> Bloco de indicadores </span>"
+                    ),
+                    options = list(
+                      placeholder = "Selecione o bloco de indicadores"
+                    ),
                     choices = c(
                       "1 - Condições socioeconômicas e de acesso ao serviço de saúde" = "bloco1",
                       "2 - Planejamento reprodutivo" = "bloco2",
@@ -509,9 +611,13 @@ app_ui <- function(request) {
                     condition = "input.bloco != 'bloco4' & input.bloco != 'bloco6' & input.bloco != 'bloco7'",
                     selectizeInput(
                       inputId = "indicador",
-                      label = HTML("<span style = 'font-size: 17'> Indicador </span>"),
+                      label = HTML(
+                        "<span style = 'font-size: 17'> Indicador </span>"
+                      ),
                       options = list(placeholder = "Selecione o indicador"),
-                      choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco1")],
+                      choices = tabela_indicadores$indicador[which(
+                        tabela_indicadores$bloco == "bloco1"
+                      )],
                       width = "98%"
                     )
                   ),
@@ -522,8 +628,12 @@ app_ui <- function(request) {
                         condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6' | input.bloco == 'bloco7'",
                         selectizeInput(
                           inputId = "tipo_do_indicador_blocos4_6_7",
-                          label = HTML("<span style = 'font-size: 17'> Selecione o grupo de indicadores </span>"),
-                          options = list(placeholder = "Selecione um grupo de indicadores"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Selecione o grupo de indicadores </span>"
+                          ),
+                          options = list(
+                            placeholder = "Selecione um grupo de indicadores"
+                          ),
                           choices = NULL,
                           width = "95%"
                         )
@@ -535,7 +645,9 @@ app_ui <- function(request) {
                         condition = "input.bloco == 'bloco4' | input.bloco == 'bloco6' | input.bloco == 'bloco7'",
                         selectizeInput(
                           inputId = "indicador_blocos4_6_7",
-                          label = HTML("<span style = 'font-size: 17'> Indicador </span>"),
+                          label = HTML(
+                            "<span style = 'font-size: 17'> Indicador </span>"
+                          ),
                           options = list(placeholder = "Selecione o indicador"),
                           choices = NULL,
                           width = "95%"
@@ -556,11 +668,15 @@ app_ui <- function(request) {
                         "'Porcentagem de nascidos vivos prematuros'"
                       )
 
-                      glue::glue("[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)")
+                      glue::glue(
+                        "[{paste(indicadores_caixinha_adicional, collapse = ', ')}].includes(input.indicador)"
+                      )
                     },
                     selectizeInput(
                       inputId = "indicador_uma_caixinha_adicional_bloco5",
-                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      label = HTML(
+                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                      ),
                       choices = NULL,
                       width = "99%"
                     )
@@ -601,7 +717,9 @@ app_ui <- function(request) {
                     },
                     selectizeInput(
                       inputId = "indicador_uma_caixinha_adicional_bloco7",
-                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      label = HTML(
+                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                      ),
                       choices = NULL,
                       width = "97%"
                     )
@@ -629,7 +747,9 @@ app_ui <- function(request) {
                     },
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais1",
-                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      label = HTML(
+                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                      ),
                       choices = NULL,
                       width = "94%"
                     )
@@ -643,7 +763,9 @@ app_ui <- function(request) {
                     ),
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais2",
-                      label = HTML("<span style = 'font-size: 17'> Aguarde... </span>"),
+                      label = HTML(
+                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                      ),
                       choices = NULL,
                       width = "94%"
                     )
@@ -659,7 +781,9 @@ app_ui <- function(request) {
                   inputId = "pesquisar",
                   icon = icon("magnifying-glass"),
                   color = "primary",
-                  label = HTML("<span style = 'font-size: 17'> &nbsp; Atualizar resultados </span>"),
+                  label = HTML(
+                    "<span style = 'font-size: 17'> &nbsp; Atualizar resultados </span>"
+                  ),
                   style = "unite",
                   size = "sm"
                 ),
@@ -670,8 +794,8 @@ app_ui <- function(request) {
           style = "display: none;"
         ),
 
-
-        tags$script(HTML("
+        tags$script(HTML(
+          "
           var openTab = function(tabName){
             $('a', $('.sidebar')).each(function() {
               if(this.getAttribute('data-value') == tabName) {
@@ -679,7 +803,8 @@ app_ui <- function(request) {
               };
             });
           }
-        ")),
+        "
+        )),
         shinyjs::useShinyjs(),
         bs4Dash::bs4TabItems(
           bs4Dash::bs4TabItem(
@@ -738,8 +863,13 @@ app_ui <- function(request) {
             tabName = "aparecida",
             div(
               class = "div-titulo",
-              HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-              h2(tags$b("A história de Aparecida"), style = "padding-left: 0.3em"),
+              HTML(
+                "<span style='display: block; margin-bottom: 15px;'> </span>"
+              ),
+              h2(
+                tags$b("A história de Aparecida"),
+                style = "padding-left: 0.3em"
+              ),
               hr(style = "margin-bottom: 0px;")
             ),
             HTML(
@@ -773,8 +903,6 @@ app_ui <- function(request) {
 }
 
 
-
-
 #' Add external Resources to the Application
 #'
 #' This function is internally used to add external
@@ -799,4 +927,3 @@ golem_add_external_resources <- function() {
     # for example, you can add shinyalert::useShinyalert()
   )
 }
-

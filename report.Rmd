@@ -74,8 +74,8 @@ cria_textos <- function(infos_comp) {
         linha[1] < 0 ~ glue::glue("{icone_comp} {valor_comp_formatado}% maior que o valor de referência"),
         linha[1] > 0 ~ glue::glue("{icone_comp} {valor_comp_formatado}% menor que o valor de referência"),
         linha[1] == 0 & linha[3] == TRUE ~ glue::glue("Igual ao valor de referência"),
-        linha[1] == 0 & linha[3] == FALSE & params$nivel != "Nacional" ~ glue::glue("Igual ao valor de referência"),
-        linha[1] == 0 & linha[3] == FALSE & params$nivel == "Nacional" ~ glue::glue("Comparação não aplicável (a média nacional é o valor de referência)"),
+        linha[1] == 0 & linha[3] == FALSE & params$nivel != "nacional" ~ glue::glue("Igual ao valor de referência"),
+        linha[1] == 0 & linha[3] == FALSE & params$nivel == "nacional" ~ glue::glue("Comparação não aplicável (a média nacional é o valor de referência)"),
         is.nan(linha[1]) ~ "Comparação não aplicável"
       )
     }
@@ -221,7 +221,7 @@ data.frame(
 <div style = "text-align: justify; display: table-row; text-align-last: left; width: 1000px">
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> IDHM </div>
 <ul align='justify'>
-<li> O Índice de Desenvolvimento Humano Municipal (IDHM) é uma medida composta que segue as mesmas três dimensões do IDH Global (longevidade, educação e renda), com adequação da metodologia ao contexto brasileiro e à disponibilidade de indicadores nacionais. Valores baixos indicam menor nível de desenvolvimento humano e maior vulnerabilidade das mulheres à morte materna. Sendo um valor global do município, o IDHM não reflete desigualdades socioeconômicas que podem existir dentro do município e para as quais o gestor deve estar atento.  </li>
+<li> O Índice de Desenvolvimento Humano municipal (IDHM) é uma medida composta que segue as mesmas três dimensões do IDH Global (longevidade, educação e renda), com adequação da metodologia ao contexto brasileiro e à disponibilidade de indicadores nacionais. Valores baixos indicam menor nível de desenvolvimento humano e maior vulnerabilidade das mulheres à morte materna. Sendo um valor global do município, o IDHM não reflete desigualdades socioeconômicas que podem existir dentro do município e para as quais o gestor deve estar atento.  </li>
 </ul>
 
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de nascidos vivos por escolaridade da mãe </div>
@@ -616,7 +616,7 @@ data.frame(grupo_robson, porc_nascidos, porc_cesareas, referencia_porc_cesareas)
 <div>
 
 ```{r}
-if (params$nivel %in%  c("Municipal", "Estadual")) {
+if (params$nivel %in%  c("municipal", "estadual")) {
   HTML('<div class="pagebreak"> </div>')
 }
 ```
@@ -625,7 +625,7 @@ Para os indicadores relacionados ao deslocamento para o parto:
 
 ```{r}
 
- #if (params$nivel != "Municipal" & params$nivel != "Estadual") {
+ #if (params$nivel != "municipal" & params$nivel != "estadual") {
   #Fazer igual você fez para os outros blocos, mas o único indicador aqui é o prop_partos_fora_macro_rsaude_res. Os de mediana não entram pra quando o nível não é municipal ou estadual
 
 infos_comp_bloco4 <- data.frame(
@@ -667,11 +667,11 @@ infos_comp_bloco4 <- data.frame(
 
   data.frame(
     "indicador" = c(
-      # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência da mulher",
+      # "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde estadual de residência da mulher",
       "Porcentagem do total de partos ocorridos fora do município de residência da mulher",
-      "Porcentagem de partos ocorridos na microrregião de saúde, mas fora do município de residência",
-      "Porcentagem de partos ocorridos na macrorregião de saúde, mas fora da microrregião de saúde de residência",
-      "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde de residência",
+      "Porcentagem de partos ocorridos na região de saúde estadual, mas fora do município de residência",
+      "Porcentagem de partos ocorridos na macrorregião de saúde estadual, mas fora da região de saúde estadual de residência",
+      "Porcentagem de partos ocorridos na UF, mas fora da macrorregião de saúde estadual de residência",
       "Porcentagem de partos ocorridos fora da UF de residência",
       "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal"
     ),
@@ -764,7 +764,7 @@ infos_comp_bloco4 <- data.frame(
 
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Indicadores relacionados ao deslocamento para o parto </div>
 <ul align='justify'>
-  <li> Demoras no recebimento do cuidado em saúde aumentam o risco de morte materna. A barreira no acesso a serviços de saúde de atenção ao parto é uma causa de demora. Utilizamos dois indicadores para medir possíveis barreiras de acesso: 1) a proporção de nascimentos que ocorreram fora do município de residência da mulher (seja na microrregião, na macrorregião, em outra macrorregião do estado ou fora do estado), e 2) a mediana de deslocamento para serviços localizados fora do município de residência, considerando a mediana total e a mediana segundo complexidade do serviço onde ocorreu o parto, sendo considerado de alto risco o serviço que dispõe de leitos em Unidade de Terapia Intensiva (UTI); </li>
+  <li> Demoras no recebimento do cuidado em saúde aumentam o risco de morte materna. A barreira no acesso a serviços de saúde de atenção ao parto é uma causa de demora. Utilizamos dois indicadores para medir possíveis barreiras de acesso: 1) a proporção de nascimentos que ocorreram fora do município de residência da mulher (seja na região de saúde, na macrorregião de saúde, em outra macrorregião de saúde do estado ou fora do estado), e 2) a mediana de deslocamento para serviços localizados fora do município de residência, considerando a mediana total e a mediana segundo complexidade do serviço onde ocorreu o parto, sendo considerado de alto risco o serviço que dispõe de leitos em Unidade de Terapia Intensiva (UTI); </li>
   <span style='display: block; margin-bottom: 5px;'> </span>
     <li> Localidades com proporção elevada de partos fora do município e com mediana elevada de deslocamento devem reforçar medidas como regulação dos leitos e vinculação da gestante a uma maternidade de referência, evitando a peregrinação na busca pelo serviço de atenção ao parto, bem como o transporte seguro das gestantes, principalmente as de alto risco. As medianas segundo complexidade do serviço de destino (baixa ou alta) podem também auxiliar no planejamento do acesso a esses diferentes tipos de serviço; </li>
   <span style='display: block; margin-bottom: 5px;'> </span>
@@ -1215,7 +1215,7 @@ data.frame(
     paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_fetal, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_fetais, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_fetais, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3]
   )
@@ -1309,7 +1309,7 @@ data.frame(
     paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$perinatal_todos_total, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$perinatal_todos_total, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3]
   )
@@ -1415,7 +1415,7 @@ data.frame(
     paste0(max_min[5], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "Nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_neonat, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_neonat, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3],
     html_comp_bloco7[4],
@@ -1596,7 +1596,7 @@ A análise dessas informações permitirá avaliar o perfil de mortalidade na á
 <div style = 'font-weight: bold; text-align: left; padding-bottom: 5px'> Porcentagem de internações neonatais e em UTI neonatal (UTIN) no SUS ocorridas até o 27º dia de vida </div>
 <ul align='justify'>
 
-  <li> As internações neonatais e em UTIN refletem a morbidade neonatal, mas também a oferta de serviços neonatais e de UTIN. Sua análise, portanto, deve ser feita de forma integrada aos indicadores de mortalidade neonatal e de “condições potencialmente ameaçadoras à vida”, bem como ao indicador “Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto”, apresentado no bloco 4. Locais com elevada porcentagem de nascidos com condições potencialmente ameaçadoras à vida e com elevada taxa de mortalidade neonatal, mas com baixa porcentagem de internações neonatais e de nascidos vivos com peso < 1500 nascidos em serviços com UTIN, provavelmente apresentam barreiras de acesso a serviços de atenção neonatal, que devem ser estruturados no âmbito das macrorregiões de saúde em cada estado. As internações neonatais são apresentadas segundo local de ocorrência – na macrorregião de residência ou fora da macrorregião de residência – visando facilitar a análise dos dados e o planejamento das ações.
+  <li> As internações neonatais e em UTIN refletem a morbidade neonatal, mas também a oferta de serviços neonatais e de UTIN. Sua análise, portanto, deve ser feita de forma integrada aos indicadores de mortalidade neonatal e de “condições potencialmente ameaçadoras à vida”, bem como ao indicador “Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto”, apresentado no bloco 4. Locais com elevada porcentagem de nascidos com condições potencialmente ameaçadoras à vida e com elevada taxa de mortalidade neonatal, mas com baixa porcentagem de internações neonatais e de nascidos vivos com peso < 1500 nascidos em serviços com UTIN, provavelmente apresentam barreiras de acesso a serviços de atenção neonatal, que devem ser estruturados no âmbito das macrorregiões de saúde estaduais em cada estado. As internações neonatais são apresentadas segundo local de ocorrência – na macrorregião de saúde de residência ou fora da macrorregião de saúde de residência – visando facilitar a análise dos dados e o planejamento das ações.
 
   </li>
   <span style='display: block; margin-bottom: 5px;'> </span>
@@ -1631,7 +1631,7 @@ A análise dessas informações permitirá avaliar o perfil de mortalidade na á
 ```{r echo = FALSE}
 #Os indicadores estão em params$data_incompletude. Os nomes das variáveis são "ano", "idademae", "escmae", "racacor", "qtdpartnor", "qtdpartces", "consprenat", "mesprenat", "parto", "tprobson", "peso", "gestacao", "semagestac", "localidade", "cobertura_sinasc" e "cobertura_sim". Os do SIM, que tem lá no resumo pra impressão, não tem ainda (só o da cobertura). Escrever o nome da variável na coluna "indicador" do data.frame. Por exemplo, ao invés de "Porcentagem de idade materna não preenchida ou ignorada", colocar "Porcentagem da variável IDADEMAE não preenchida ou ignorada". Lembrar que os valores de referência para todos os indicadores de incompletude são 5%, e que pros de cobertura são 90%.
 
-if (params$nivel %in% c("Macrorregião de saúde", "Microrregião de saúde")) {
+if (params$nivel %in% c("macro", "micro")) {
   #não colocar os indicadores de cobertura, porque pra esses níveis de análise não tem
   if (isTruthy(params$data_incompletude$idademae)) {
     infos_comp_imcompletude <- data.frame(
@@ -1932,7 +1932,7 @@ data.frame(
 ```
 
 ```{r}
-if (params$nivel != "Microrregião de saúde" & params$nivel != "Macrorregião de saúde") {
+if (params$nivel != "micro" & params$nivel != "macro") {
   data.frame(
   "indicador" = c(
     "Porcentagem da variável TPROBSON não preenchida ou ignorada",
