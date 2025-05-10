@@ -63,22 +63,28 @@ rm(df_list, df_ano)
 #   )
 
 # Dados ainda não consolidados
-options(timeout=99999)
+#options(timeout=99999)
 
 #sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
 #sinasc23 <- sinasc23 |>
 #  mutate(ano = 2023) |>
 #  select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
+#
+# sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
+# sinasc24 <- sinasc24 |>
+#   mutate(ano = 2024) |>
+#   select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
-sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
-sinasc24 <- sinasc24 |>
+# Dados consolidados que não estão no microdatasus
+
+sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";") |>
   mutate(ano = 2024) |>
   select(ano, CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
 # Juntar os dataframes da lista em um único dataframe
 df <- rbind(df, sinasc24)
 
-rm(sinasc24)
+#rm(sinasc24)
 
 # Tratando os dados
 df2 <- df |>
