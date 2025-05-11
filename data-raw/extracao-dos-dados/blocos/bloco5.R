@@ -43,18 +43,24 @@ df_sinasc_consolidados <- bind_rows(df_sinasc_consolidados)
 
 ## Baixando os dados preliminares do SINASC de 2024 e selecionando as variáveis de interesse
 
-df_sinasc_preliminares24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
+# df_sinasc_preliminares24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
+#   select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL) |>
+#   mutate(IDANOMAL = as.character(IDANOMAL))
+
+## Baixando dados consolidados de 2024 que ainda não está no microdatasus
+
+df_sinasc_consolidados24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";") |>
   select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL) |>
   mutate(IDANOMAL = as.character(IDANOMAL))
 
 df_sinasc_consolidados <- df_sinasc_consolidados %>%
   mutate_if(is.character, as.numeric)
 
-df_sinasc_preliminares24 <- df_sinasc_preliminares24 %>%
+df_sinasc_consolidados24 <- df_sinasc_consolidados24 %>%
   mutate_if(is.character, as.numeric)
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares24)
+df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_consolidados24)
 
 ## Verificando o que pode ser considerado um dado faltante para CODANOMAL
 unique(df_sinasc$CODANOMAL)
@@ -142,4 +148,4 @@ df_bloco5[is.na(df_bloco5)] <- 0
 # sum(df_bloco5 |> filter(ano <= 2020) |> pull(nascidos_vivos_termo_precoce)) - sum(df_bloco5_antigo$nascidos_vivos_termo_precoce)
 
 ## Exportando os dados
-write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2024.csv", row.names = FALSE)
+write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2024.csv", row.names = FALSE)

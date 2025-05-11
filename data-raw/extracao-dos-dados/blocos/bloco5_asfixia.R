@@ -33,9 +33,9 @@ options(timeout = 6000)
 
 sinasc23 <- microdatasus::fetch_datasus(year_start = 2023, year_end = 2023, information_system = 'SINASC', vars = c("CODMUNRES", "PESO", "APGAR5", "IDANOMAL", "CODANOMAL"))
 
-# dados preliminares  SINASC 2024
+# dados consolidados do SINASC 2024 que não esta no microdatasus
 
-sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
+sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";")
 sinasc24 <- sinasc24 |>
   select(CODMUNRES, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
@@ -140,13 +140,15 @@ asfixia <- asfixia1_final |>
   rename(codmunres = CODMUNRES,
          ano = Ano)
 
-asfixia_antigo <- read_delim("data-raw/csv/asfixia_2012_2023.csv",
+asfixia_antigo <- read_delim("data-raw/csv/asfixia_2012_2024(antigo).csv",
                                 delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  filter(ano <= 2021)
+  filter(ano <= 2022)
 
 asfixia$codmunres <- as.numeric(asfixia$codmunres)
 
 asfixia_novo <- full_join(asfixia_antigo, asfixia)
+
+asfixia_novo <- asfixia_novo %>% arrange(codmunres)
 
 write.csv(asfixia_novo, "data-raw/csv/asfixia1_2012_2024.csv")
 
@@ -368,9 +370,9 @@ malformacao <- malformacao |>
 
 malformacao <- malformacao[,-c(1,2,3)]
 
-malformacao_antigo <- read_delim("data-raw/csv/malformacao_2012_2023.csv",
+malformacao_antigo <- read_delim("data-raw/csv/malformacao_2012_2024.csv",
                                     delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
-  filter(ano <= 2021)
+  filter(ano <= 2022)
 
 malformacao$codmunres <- as.numeric(malformacao$codmunres)
 
