@@ -70,13 +70,13 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         updateSelectizeInput(
           inputId = "nivel2",
           choices = c(
-            "nacional",
-            "regional",
-            "macro",
-            "micro",
-            "estadual",
-            "municipal",
-            "municipios_semelhantes"
+            "Nacional" = "nacional",
+            "Região do país" = "regional",
+            "Estadual" = "estadual",
+            "Macrorregião de saúde estadual" = "macro",
+            "Região de saúde estadual" = "micro",
+            "Municipal" = "municipal",
+            "Municípios semelhantes" = "municipios_semelhantes"
           )
         )
       }
@@ -90,12 +90,12 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
           updateSelectizeInput(
             inputId = "nivel2",
             choices = c(
-              "nacional",
-              "regional",
-              "macro",
-              "micro",
-              "estadual",
-              "municipal"
+              "Nacional" = "nacional",
+              "Região do país" = "regional",
+              "Estadual" = "estadual",
+              "Macrorregião de saúde estadual" = "macro",
+              "Região de saúde estadual" = "micro",
+              "Municipal" = "municipal"
             )
           )
         }
