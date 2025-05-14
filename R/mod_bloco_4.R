@@ -2499,10 +2499,10 @@ mod_bloco_4_server <- function(id, filtros){
     # gerar símbolos dinamicamente
     vars <- reactive({
       list(
-        na_macro_com   = sym(paste0("partos_na_macro_com_", uti_val())),
-        na_macro_sem   = sym(paste0("partos_na_macro_sem_", uti_val())),
-        fora_macro_com = sym(paste0("partos_fora_macro_com_", uti_val())),
-        fora_macro_sem = sym(paste0("partos_fora_macro_sem_", uti_val()))
+        na_macro_com   = rlang::sym(paste0("partos_na_macro_com_", uti_val())),
+        na_macro_sem   = rlang::sym(paste0("partos_na_macro_sem_", uti_val())),
+        fora_macro_com = rlang::sym(paste0("partos_fora_macro_com_", uti_val())),
+        fora_macro_sem = rlang::sym(paste0("partos_fora_macro_sem_", uti_val()))
       )
     })
 
