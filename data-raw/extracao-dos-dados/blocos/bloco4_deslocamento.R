@@ -52,7 +52,7 @@ options(timeout=99999)
 #### Baixando os dados res do sinasc 2024
 
 df24 <- data.table::fread(
-  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv",
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv",
   sep= ";") |>
   select("CODMUNRES", "CODMUNNASC", 'CODESTAB', "LOCNASC",
          "PARTO", "IDADEMAE", "ESCMAE", "RACACORMAE",
@@ -61,7 +61,7 @@ df24 <- data.table::fread(
 
 #### Juntando os preliminares aos consolidados
 
-df_sinasc_consolidados <- rbind(dados, df24)
+df_sinasc_consolidados <- rbind(df_sinasc_consolidados, df24)
 
 data.table::fwrite(df_sinasc_consolidados, "data-raw/csv/sinasc_2012_2024.csv",
                    row.names = FALSE)
@@ -111,26 +111,24 @@ cnes[, c("ano", "mes") := list(substr(competen, 1, 4), substr(competen, 5, 6))]
 cnes$ano <- as.numeric(cnes$ano)
 
 # realizando filtros para o indicador de leitos neonatal ------------------
-cod_neonat <- c("80", "81", "82")
+cod_neonat <- c(80, 81, 82)
 
 cnes1 <- cnes |>
-  mutate(leito_neonat = ifelse(codleito %in% cod_neonat, "neonat", "outro")) |>
+  mutate(codleito = as.numeric(codleito)) |>
+  mutate(leito_neonat = ifelse(codleito %in% cod_neonat, 1, 0)) |>
+  group_by(codestab, codufmun, ano, competen) |>
+  summarise(num_leitos_neonat = sum(qt_exist[leito_neonat == 1])) |>
+  ungroup() |>
   group_by(codestab, codufmun, ano) |>
-  mutate(leito_neonat = if("neonat" %in% leito_neonat) "neonat" else leito_neonat) |>
+  summarise(num_leitos_neonat = mean(num_leitos_neonat)) |>
+  select(codestab, codufmun, ano, num_leitos_neonat) |>
   ungroup()
 
-cnes1 <- cnes1 |>
-  select(codestab, codufmun, ano, leito_neonat)
-
-cnes_unicos <- cnes1 |>
-  group_by(codestab, codufmun, ano, leito_neonat) |>
-  summarise(n = n())
-
-rm(cnes,cnes1)
+rm(cnes)
 
 # unindo sinasc e cnes ----------------------------------------------------
 
-cnes_unicos$ano <- as.numeric(cnes_unicos$ano)
+cnes1$ano <- as.numeric(cnes1$ano)
 
 sinasc <- sinasc |>
   group_by(codmunres, codestab, codmunnasc, ano) |>
@@ -138,12 +136,11 @@ sinasc <- sinasc |>
   drop_na() |>
   ungroup()
 
-sinasc_cnes <- left_join(sinasc, cnes_unicos, by =
+sinasc_cnes <- left_join(sinasc, cnes1, by =
                            c("codestab", "ano", "codmunnasc" = "codufmun")) |>
-  select(!"n") |>
-  mutate(leito_neonat = ifelse(is.na(leito_neonat), "sem informação", leito_neonat))
+  mutate(num_leitos_neonat = ifelse(is.na(num_leitos_neonat), NA, num_leitos_neonat))
 
-rm(sinasc,cnes_unicos)
+rm(sinasc,cnes1)
 
 
 # unindo com macro ---------------------------------------------------------
@@ -172,35 +169,42 @@ rm(sinasc_cnes,mun_nasc,mun_res)
 # criando indicadores -----------------------------------------------------
 
 dados <- sinasc_cnes_macro |>
-  mutate(partos_na_macro_com_uti = (ifelse(macro_r_saude_res == macro_r_saude_nasc &
-                                             leito_neonat == "neonat", nascimentos, 0)),
-         partos_na_macro_sem_uti = ifelse(macro_r_saude_res == macro_r_saude_nasc &
-                                            leito_neonat == "outro", nascimentos, 0),
-         partos_fora_macro_com_uti = ifelse(macro_r_saude_res != macro_r_saude_nasc &
-                                              leito_neonat == "neonat", nascimentos, 0),
-         partos_fora_macro_sem_uti = ifelse(macro_r_saude_res != macro_r_saude_nasc &
-                                              leito_neonat == "outro", nascimentos, 0),
-         partos_na_macro_sem_inf = ifelse(macro_r_saude_res == macro_r_saude_nasc &
-                                            leito_neonat == "sem informação", nascimentos, 0),
-         partos_fora_macro_sem_inf = ifelse(macro_r_saude_res != macro_r_saude_nasc &
-                                              leito_neonat == "sem informação", nascimentos, 0)
+  mutate(partos_na_macro_com_1mais_uti = if_else(macro_r_saude_res == macro_r_saude_nasc &
+                                             num_leitos_neonat >= 1, nascimentos, 0, missing = 0),
+         partos_na_macro_com_4mais_uti = if_else(macro_r_saude_res == macro_r_saude_nasc &
+                                                   num_leitos_neonat >= 4, nascimentos, 0, missing = 0),
+         partos_na_macro_sem_1mais_uti = if_else(macro_r_saude_res == macro_r_saude_nasc &
+                                                  num_leitos_neonat < 1, nascimentos, 0, missing = 0),
+         partos_na_macro_sem_4mais_uti = if_else(macro_r_saude_res == macro_r_saude_nasc &
+                                                  num_leitos_neonat < 4, nascimentos, 0, missing = 0),
+         partos_fora_macro_com_1mais_uti = if_else(macro_r_saude_res != macro_r_saude_nasc &
+                                                    num_leitos_neonat >= 1, nascimentos, 0, missing = 0),
+         partos_fora_macro_com_4mais_uti = if_else(macro_r_saude_res != macro_r_saude_nasc &
+                                                    num_leitos_neonat >= 4, nascimentos, 0, missing = 0),
+         partos_fora_macro_sem_1mais_uti = if_else(macro_r_saude_res != macro_r_saude_nasc &
+                                                    num_leitos_neonat < 1, nascimentos, 0, missing = 0),
+         partos_fora_macro_sem_4mais_uti = if_else(macro_r_saude_res != macro_r_saude_nasc &
+                                                    num_leitos_neonat < 4, nascimentos, 0, missing = 0),
+         partos_na_macro_sem_inf = if_else(macro_r_saude_res == macro_r_saude_nasc &
+                                            is.na(num_leitos_neonat), nascimentos, 0),
+         partos_fora_macro_sem_inf = if_else(macro_r_saude_res != macro_r_saude_nasc &
+                                              is.na(num_leitos_neonat), nascimentos, 0)
 
-  )
-
-dados <- dados |>
-  select(codmunres, ano, nascimentos,
-         partos_na_macro_com_uti, partos_na_macro_sem_uti,
-         partos_fora_macro_com_uti, partos_fora_macro_sem_uti,
-         partos_na_macro_sem_inf, partos_fora_macro_sem_inf)
-
-dados <- dados |> group_by(codmunres, ano) |>
-  summarise(nascimentos = sum(nascimentos),
-            partos_na_macro_com_uti = sum(partos_na_macro_com_uti),
-            partos_na_macro_sem_uti = sum(partos_na_macro_sem_uti),
-            partos_fora_macro_com_uti = sum(partos_fora_macro_com_uti),
-            partos_fora_macro_sem_uti = sum(partos_fora_macro_sem_uti),
-            partos_na_macro_sem_inf = sum(partos_na_macro_sem_inf),
-            partos_fora_macro_sem_inf = sum(partos_fora_macro_sem_inf)) |>
+  ) |>
+  group_by(codmunres, ano) |>
+  summarise(
+    nascimentos = sum(nascimentos),
+    partos_na_macro_com_1mais_uti = sum(partos_na_macro_com_1mais_uti),
+    partos_na_macro_com_4mais_uti = sum(partos_na_macro_com_4mais_uti),
+    partos_na_macro_sem_1mais_uti = sum(partos_na_macro_sem_1mais_uti),
+    partos_na_macro_sem_4mais_uti = sum(partos_na_macro_sem_4mais_uti),
+    partos_fora_macro_com_1mais_uti = sum(partos_fora_macro_com_1mais_uti),
+    partos_fora_macro_com_4mais_uti = sum(partos_fora_macro_com_4mais_uti),
+    partos_fora_macro_sem_1mais_uti = sum(partos_fora_macro_sem_1mais_uti),
+    partos_fora_macro_sem_4mais_uti = sum(partos_fora_macro_sem_4mais_uti),
+    partos_na_macro_sem_inf = sum(partos_na_macro_sem_inf),
+    partos_fora_macro_sem_inf = sum(partos_fora_macro_sem_inf)
+  ) |>
   ungroup()
 
 ## Dados municipios
@@ -222,6 +226,7 @@ dados1 <- left_join(mun_anos, dados)
 ## Substituindo valores NA por zero
 
 dados1[is.na(dados1)] <- 0
+
 
 write.csv(dados1, "data-raw/csv/indicador_deslocamento_1500_2012_2024.csv",
           row.names = FALSE)

@@ -92,10 +92,7 @@ bloco4_deslocamento_uf_aux <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocam
 
 bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
 
-#bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2023.csv")
-
-bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv") |>
-  dplyr::select(c(1:2, 38:44))
+bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2024.csv")
 
 bloco4_profissional <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
 
