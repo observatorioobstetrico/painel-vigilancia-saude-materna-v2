@@ -648,6 +648,7 @@ df_bloco7_distribuicao_cids_fetal <- full_join(df_bloco7_distribuicao_cids_fetal
 ### Criando vetores com as cids de cada grupo
 grupos_prematuridade <- c("P07", "P220", "P25", "P26", "P52", "P77")
 
+
 grupos_infeccoes <- c("P35", "P36", "P37", "P38", "P39", "A40", "A41", "P23",
                       "J12", "J13", "J14", "J15", "J16", "J17", "J18", "A00", "A01",
                       "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A33",
@@ -908,7 +909,8 @@ df_neonat_total <- fetch_datasus(
   information_system = "SIM-DOINF"
 )
 
-options(timeout = 600)
+
+options(timeout = 999)
 
 df_sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv")
 
@@ -1117,33 +1119,39 @@ df_nascidos_total1_aux <- fetch_datasus(
   information_system = "SINASC"
 )
 
-df_nascidos_total1 <- df_nascidos_total1_aux |>
-  select(CODMUNRES, DTNASC, PESO)
+ df_nascidos_total1 <- df_nascidos_total1_aux |>
+   mutate(
+     ano = substr(DTNASC, 5, 8)
+   ) |>
+  select(CODMUNRES, ano, PESO)
+
 
 sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";")
 sinasc24_aux <- sinasc24 |>
-  select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5)
+  select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5) |>
+  mutate(
+    ano = substr(DTNASC, 5, 8)
+  )
 
-sinasc24 <- sinasc24 |>
-  select(CODMUNRES, DTNASC, PESO)
+sinasc24 <- sinasc24_aux|>
+  select(CODMUNRES, ano, PESO)
 
 df_nascidos_total <- rbind(df_nascidos_total1, sinasc24)
 
-df_nascidos_total2 <- process_sinasc(df_nascidos_total, municipality_data = T)
+#df_nascidos_total2 <- process_sinasc(df_nascidos_total, municipality_data = T)
 
 #write.csv(df_nascidos_total2, file="Bloco_7/Databases/dados_sinasc_neonat.csv")
 
-df_nascidos_total3 <- df_nascidos_total2 |>
+df_nascidos_total3 <- df_nascidos_total |>
   mutate(
-    ano1 = substr(DTNASC, 1, 4),
     codmunres = as.numeric(CODMUNRES),
     PESO = as.numeric(PESO)
   ) |>
   mutate(
     ano = case_when(
-      ano1 == "023" ~ "2023",
-      ano1 == "024" ~ "2024",
-      TRUE ~ ano1
+      ano == "023" ~ "2023",
+      ano == "024" ~ "2024",
+      TRUE ~ ano
     )) |>
   mutate(
     nascidos = 1,
@@ -1496,7 +1504,7 @@ df_bloco7_neonatais_evitaveis <- full_join(
 rm(df_evitaveis_neonatais_todos, df_evitaveis_neonatais_0_dias, df_evitaveis_neonatais_1_6_dias, df_evitaveis_neonatais_7_27_dias)
 gc()
 
-df_bloco7_neonatais_evitaveis$codmunres <- as.numeric(df_bloco7_neonatais_evitaveis$codmunres)
+df_bloco7_neonatais_evitaveis$codmunres <- as.character(df_bloco7_neonatais_evitaveis$codmunres)
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
 df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_neonatal, df_bloco7_neonatais_evitaveis)
 
@@ -1753,7 +1761,7 @@ rm(df_neonatais_grupos_todos, df_neonatais_grupos_0_dias, df_neonatais_grupos_1_
 gc()
 
 ### Juntando com o restante da base de causas evitáveis e grupos de causa
-df_bloco7_neonatais_grupos$codmunres <- as.numeric(df_bloco7_neonatais_grupos$codmunres)
+df_bloco7_neonatais_grupos$codmunres <- as.character(df_bloco7_neonatais_grupos$codmunres)
 df_bloco7_distribuicao_cids_neonatal <- full_join(df_bloco7_distribuicao_cids_neonatal, df_bloco7_neonatais_grupos)
 
 ### Exportando os dados

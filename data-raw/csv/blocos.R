@@ -27,6 +27,7 @@ aux_municipios_1 <- dplyr::full_join(municipios_kmeans, municipios_adicionais)
 
 aux_municipios_1$regiao[which(aux_municipios_1$regiao == "Centro-oeste")] <- "Centro-Oeste"
 
+
 aux_municipios_1$uf[which(aux_municipios_1$uf == "SAO PAULO")] <- "São Paulo"
 
 #Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
@@ -336,9 +337,18 @@ bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, aux_municipios, by = 
 bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "codmunres")
 bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
 
-bloco7 <- full_join(bloco7_fetal, bloco7_perinatal)|>
-  full_join(bloco7_neonatal)|>
-  full_join(bloco7_morbidade_neonatal)
+bloco7_morbidade_neonatal <- bloco7_morbidade_neonatal |>
+  select(-c("nascidos", "nascidos_menos1000", "nascidos_1000_1499", "nascidos_1500_2499", "nascidos_mais2500"))
+
+########  A JUNÇÃO ABAIXO APRESENTA ERRO QUE SUPERESTIMA OS CASOS DE 2024: AS LINHAS DE 2024 ESTÃO DUPLICADAS
+bloco7 <- bloco7_neonatal |>
+  distinct() |>
+  left_join(bloco7_perinatal |> distinct()) |>
+  left_join(bloco7_fetal     |> distinct()) |>
+  left_join(bloco7_morbidade_neonatal |> distinct())
+
+
+bloco7 <- dplyr::distinct(bloco7)
 
  # bloco7 <- bloco7 |>
  #   dplyr::select(
