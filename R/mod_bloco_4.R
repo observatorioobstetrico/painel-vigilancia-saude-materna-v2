@@ -701,9 +701,13 @@ mod_bloco_4_ui <- function(id){
                 align = "center"
               )
             ),
-
             ## caixinhas
-
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_profissional")), proxy.height = "300px")
+              )
+            )
           ),
           column(
             width = 8,
@@ -800,7 +804,8 @@ mod_bloco_4_server <- function(id, filtros){
       prop_nasc_local_domicilio = rep("round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_outros = rep("round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_aldeia = rep("round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2)
+      prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2)
     )
 
     #[LOOK]
@@ -1373,6 +1378,71 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    data4_profissional_resumo <- reactive({
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
+        dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$comparar == "Não") {
+            if (filtros()$nivel == "nacional")
+              ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+            else if (filtros()$nivel == "regional")
+              regiao == filtros()$regiao
+            else if (filtros()$nivel == "estadual")
+              uf == filtros()$estado
+            else if (filtros()$nivel == "macro")
+              macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+            else if(filtros()$nivel == "micro")
+              r_saude == filtros()$micro & uf == filtros()$estado_micro
+            else if(filtros()$nivel == "municipal")
+              municipio == filtros()$municipio & uf == filtros()$estado_municipio
+          } else {
+            req(input$localidade_resumo4)
+            if (input$localidade_resumo4 == "escolha1") {
+              if (filtros()$nivel == "nacional")
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+              else if (filtros()$nivel == "regional")
+                regiao == filtros()$regiao
+              else if (filtros()$nivel == "estadual")
+                uf == filtros()$estado
+              else if (filtros()$nivel == "macro")
+                macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+              else if(filtros()$nivel == "micro")
+                r_saude == filtros()$micro & uf == filtros()$estado_micro
+              else if(filtros()$nivel == "municipal")
+                municipio == filtros()$municipio & uf == filtros()$estado_municipio
+            } else {
+              if (filtros()$nivel2 == "nacional")
+                ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+              else if (filtros()$nivel2 == "regional")
+                regiao == filtros()$regiao2
+              else if (filtros()$nivel2 == "estadual")
+                uf == filtros()$estado2
+              else if (filtros()$nivel2 == "macro")
+                macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+              else if(filtros()$nivel2 == "micro")
+                r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+              else if(filtros()$nivel2 == "municipal")
+                municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+              else if (filtros()$nivel2 == "municipios_semelhantes")
+                grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+            }
+          }
+        ) |>
+        cria_indicadores(
+          df_calcs = bloco4_calcs_resumo,
+          filtros = filtros(),
+          localidade_resumo = input$localidade_resumo4
+        )
+    })
+
     ### Para a referência -----------------------------------------------------
     data4_resumo_referencia <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
@@ -1389,6 +1459,20 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_deslocamento_resumo_referencia <- reactive({
+      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
+        # dplyr::left_join(
+        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
+        #   dplyr::left_join(
+        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
+        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
+        #   )
+        # ) |>
+        dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)
+    })
+
+    data4_profissional_resumo_referencia <- reactive({
       dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
         # dplyr::left_join(
         #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
@@ -2311,6 +2395,32 @@ mod_bloco_4_server <- function(id, filtros){
         title = "Atenção",
         text = "Esse indicador é condicional a ter nascido vivo.",
         type = "info"
+      )
+    })
+
+    ### Relacionados aos indicadores de local de anscimento e profissionais ----
+
+    output$caixa_b4_i1_profissional <- renderUI({
+      cria_caixa_server(
+        dados = data4_profissional_resumo(),
+        indicador = "prop_nasc_local_fora_hospital",
+        titulo = "Porcentagem de partos fora do hospital",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_local_fora_hospital,
+        tipo = "porcentagem",
+        invertido = TRUE,
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        fonte_titulo = "15px",
+        pagina = "bloco_4",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo4 == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
       )
     })
 
