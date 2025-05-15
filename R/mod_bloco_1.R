@@ -858,7 +858,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = data1_resumo_referencia()$sum_total_de_nascidos_vivos,
         tipo = "número",
         invertido = FALSE,
-        cor = dplyr::if_else(filtros()$nivel == "nacional", "lightgrey", "#cbd6ff"),
+        cor = "lightgrey",
         texto_footer = dplyr::if_else(
           filtros()$nivel == "nacional",
           "Comparação não aplicável (o total nacional é o valor de referência)",
