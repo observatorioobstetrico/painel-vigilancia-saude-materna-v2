@@ -1733,13 +1733,13 @@ mod_nivel_1_server <- function(id, filtros) {
           "
       <b style='{dplyr::if_else(stringr::str_length(filtros()$municipio) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$municipio} </b>
       <br>
-      <b> micro: </b> {micro}
-      <br>
-      <b> macro: </b> {macro}
+      <b> Região do país: </b> {regiao}
       <br>
       <b> UF: </b> {uf}
       <br>
-      <b> regional: </b> {regiao}
+      <b> Macrorregião de saúde estadual: </b> {macro}
+      <br>
+      <b> Região de saúde estadual: </b> {micro}
       "
       } else if (filtros()$nivel == "micro") {
         uf <- unique(tabela_aux_municipios$uf[which(tabela_aux_municipios$r_saude == filtros()$micro & tabela_aux_municipios$uf == filtros()$estado_micro)])
@@ -1749,11 +1749,11 @@ mod_nivel_1_server <- function(id, filtros) {
           "
       <b style='{dplyr::if_else(stringr::str_length(filtros()$micro) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$micro} </b>
       <br>
-      <b> macro: </b> {macro}
+      <b> Região do país: </b> {regiao}
       <br>
       <b> UF: </b> {uf}
       <br>
-      <b> regional: </b> {regiao}
+      <b> Macrorregião de saúde estadual: </b> {macro}
       "
       } else if (filtros()$nivel == "macro") {
         uf <- unique(tabela_aux_municipios$uf[which(tabela_aux_municipios$macro_r_saude == filtros()$macro & tabela_aux_municipios$uf == filtros()$estado_macro)])
@@ -1762,9 +1762,9 @@ mod_nivel_1_server <- function(id, filtros) {
           "
       <b style='{dplyr::if_else(stringr::str_length(filtros()$macro) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$macro} </b>
       <br>
-      <b> UF: </b> {uf}
+      <b> Região do país: </b> {regiao}
       <br>
-      <b> regional: </b> {regiao}
+      <b> UF: </b> {uf}
       "
       } else if (filtros()$nivel == "estadual") {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$uf == filtros()$estado)])
@@ -1772,7 +1772,7 @@ mod_nivel_1_server <- function(id, filtros) {
           "
       <b style='{dplyr::if_else(stringr::str_length(filtros()$estado) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$estado} </b>
       <br>
-      <b> regional: </b> {regiao}
+      <b> Região do país: </b> {regiao}
       "
       } else if (filtros()$nivel == "regional") {
         texto <- "<b style='{dplyr::if_else(stringr::str_length(filtros()$regiao) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$regiao} </b>"
