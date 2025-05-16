@@ -702,12 +702,14 @@ mod_bloco_4_ui <- function(id){
               )
             ),
             ## caixinhas
+
             fluidRow(
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_profissional")), proxy.height = "300px")
               )
             )
+
           ),
           column(
             width = 8,
@@ -738,7 +740,68 @@ mod_bloco_4_ui <- function(id){
                   hr(),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "640px"))
                 )
+              ),
+            #AQUI
+            fluidRow(
+              bs4Dash::bs4Card(
+                width = 12,
+                status = "primary",
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                div(
+                  style = "display: flex; align-items: center;",
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência segundo local &nbsp;</b>")),
+                  shinyjs::hidden(
+                    span(
+                      id = ns("mostrar_botao_deslocamento_prop1"),
+                      shinyWidgets::actionBttn(
+                        inputId = ns("botao_prop1"),
+                        icon = icon("triangle-exclamation", style = "color: red"),
+                        color = "warning",
+                        style = "material-circle",
+                        size = "xs"
+                      )
+                    )
+                  )
+                ),
+                hr(),
+                fluidRow(
+                  column(
+                    width = 12,
+                    shinyWidgets::pickerInput(
+                      inputId = ns("local_nasc"),
+                      label = "Selecione, aqui, os locais de interesse:",
+                      options = list(placeholder = "Selecione, aqui, os locais de interesse:",
+                                     `actions-box` = TRUE,
+                                     `deselect-all-text` = "Desselecionar todas",
+                                     `select-all-text` = "Selecionar todas",
+                                     `none-selected-text` = "Nenhuma opção selecionada"),
+                      choices = c(
+                        "Hospital" = "hospital",
+                        "Outros estabelecimentos de saúde" = "outros_est_saude",
+                        "Domicílio" = "domicilio",
+                        "Aldeia Indígena" = "aldeia",
+                        "Outros" = "outros",
+                        "Sem informação" = "sem_inf"
+
+                      ),
+                      selected = c(
+                        "hospital",
+                        "outros_est_saude",
+                        "domicilio",
+                        "aldeia",
+                        "outros",
+                        "sem_inf"
+                      ),
+                      multiple = TRUE,
+                      width = "99%"
+                    )
+                  )
+                ),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
               )
+            )
 
           )
         )
@@ -799,14 +862,93 @@ mod_bloco_4_server <- function(id, filtros){
     #[PROFF]
     bloco4_profissional_calcs <- data.frame(
       tipo = c("local", "referencia"),
+
       prop_nasc_local_hospital = rep("round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_outros_est_saude = rep("round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_domicilio = rep("round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_outros = rep("round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_aldeia = rep("round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
+
       prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2)
+
+      # dist_medico = rep("round(
+      #   sum(c(nasc_assistido_medico_hospital, nasc_assistido_medico_outros_est_saude, nasc_assistido_medico_domicilio, nasc_assistido_medico_outros, nasc_assistido_medico_aldeia, nasc_assistido_medico_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2),
+      #
+      # dist_enf_obs = rep("round(
+      #   sum(c(nasc_assistido_enf_obs_hospital, nasc_assistido_enf_obs_outros_est_saude, nasc_assistido_enf_obs_domicilio, nasc_assistido_enf_obs_outros, nasc_assistido_enf_obs_aldeia, nasc_assistido_enf_obs_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2),
+      #
+      # dist_parteira = rep("round(
+      #   sum(c(nasc_assistido_parteira_hospital, nasc_assistido_parteira_outros_est_saude, nasc_assistido_parteira_domicilio, nasc_assistido_parteira_outros, nasc_assistido_parteira_aldeia, nasc_assistido_parteira_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2),
+      #
+      # dist_outros = rep("round(
+      #   sum(c(nasc_assistido_outros_hospital, nasc_assistido_outros_outros_est_saude, nasc_assistido_outros_domicilio, nasc_assistido_outros_outros, nasc_assistido_outros_aldeia, nasc_assistido_outros_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2),
+      #
+      # dist_ignorado = rep("round(
+      #   sum(c(nasc_assistido_ignorado_hospital, nasc_assistido_ignorado_outros_est_saude, nasc_assistido_ignorado_domicilio, nasc_assistido_ignorado_outros, nasc_assistido_ignorado_aldeia, nasc_assistido_ignorado_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2),
+      #
+      # dist_sem_inf = rep("round(
+      #   sum(c(nasc_assistido_sem_inf_hospital, nasc_assistido_sem_inf_outros_est_saude, nasc_assistido_sem_inf_domicilio, nasc_assistido_sem_inf_outros, nasc_assistido_sem_inf_aldeia, nasc_assistido_sem_inf_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
+      #     sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)
+      #   *100, 1)", 2)
     )
+
+    #AQUI EU FIZ UMA GAMBIARRA
+
+    selecao_local <- reactive({
+      selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
+                              'outros', 'aldeia', 'sem_inf') %in% input$local_nasc
+      paste0(selected_locations, collapse = ", ")
+    })
+
+    bloco4_profissional_calcs2 <- reactive({
+      bloco4_profissional_calcs2_aux <- data.frame(
+        tipo = c("local", "referencia"),
+
+        dist_medico = rep(paste0("round(
+        sum(c(nasc_assistido_medico_hospital, nasc_assistido_medico_outros_est_saude, nasc_assistido_medico_domicilio, nasc_assistido_medico_outros, nasc_assistido_medico_aldeia, nasc_assistido_medico_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+          sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+        *100, 1)"), 2),
+
+        dist_enf_obs = rep(paste0("round(
+          sum(c(nasc_assistido_enf_obs_hospital, nasc_assistido_enf_obs_outros_est_saude, nasc_assistido_enf_obs_domicilio, nasc_assistido_enf_obs_outros, nasc_assistido_enf_obs_aldeia, nasc_assistido_enf_obs_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          *100, 1)"), 2),
+
+        dist_parteira = rep(paste0("round(
+          sum(c(nasc_assistido_parteira_hospital, nasc_assistido_parteira_outros_est_saude, nasc_assistido_parteira_domicilio, nasc_assistido_parteira_outros, nasc_assistido_parteira_aldeia, nasc_assistido_parteira_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          *100, 1)"), 2),
+
+        dist_outros = rep(paste0("round(
+          sum(c(nasc_assistido_outros_hospital, nasc_assistido_outros_outros_est_saude, nasc_assistido_outros_domicilio, nasc_assistido_outros_outros, nasc_assistido_outros_aldeia, nasc_assistido_outros_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          *100, 1)"), 2),
+
+        dist_ignorado = rep(paste0("round(
+          sum(c(nasc_assistido_ignorado_hospital, nasc_assistido_ignorado_outros_est_saude, nasc_assistido_ignorado_domicilio, nasc_assistido_ignorado_outros, nasc_assistido_ignorado_aldeia, nasc_assistido_ignorado_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          *100, 1)"), 2),
+
+        dist_sem_inf = rep(paste0("round(
+          sum(c(nasc_assistido_sem_inf_hospital, nasc_assistido_sem_inf_outros_est_saude, nasc_assistido_sem_inf_domicilio, nasc_assistido_sem_inf_outros, nasc_assistido_sem_inf_aldeia, nasc_assistido_sem_inf_sem_inf)[c(",selecao_local(),")], na.rm=T)/
+            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          *100, 1)"), 2)
+
+      )
+
+    })
+
 
     #[LOOK]
     bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |> #[xxx]
@@ -2701,6 +2843,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), adicionar_localidade = TRUE) |>
+        dplyr::select(!prop_nasc_local_fora_hospital) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -2727,6 +2870,106 @@ mod_bloco_4_server <- function(id, filtros){
             )
           )
         )
+    })
+
+    data4_dist_profissional <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
+        dplyr::mutate(
+          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_medico" ~ "Médico",
+              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_parteira" ~ "Parteira",
+              indicador == "dist_outros" ~ "Outros",
+              indicador == "dist_ignorado" ~ "Ignorado",
+              indicador == "dist_sem_inf" ~ "Sem informação"
+            ),
+            levels = c(
+              "Médico",
+              "Enfermagem ou Obstetriz",
+              "Parteira",
+              "Ignorado",
+              "Sem informação",
+              "Outros"
+            )
+          )
+        )
+    })
+
+    data4_dist_profissional_teste <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        )
+        # dplyr::mutate(
+        #   class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+        #   indicador = factor(
+        #     dplyr::case_when(
+        #       indicador == "dist_medico" ~ "Médico",
+        #       indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+        #       indicador == "dist_parteira" ~ "Parteira",
+        #       indicador == "dist_outros" ~ "Outros",
+        #       indicador == "dist_ignorado" ~ "Ignorado",
+        #       indicador == "dist_sem_inf" ~ "Sem informação"
+        #     ),
+        #     levels = c(
+        #       "Médico",
+        #       "Enfermagem ou Obstetriz",
+        #       "Parteira",
+        #       "Ignorado",
+        #       "Sem informação",
+        #       "Outros"
+        #     )
+        #   )
+        # )
     })
 
     ### Para a comparação selecionada -----------------------------------------
@@ -2939,6 +3182,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+        dplyr::select(!prop_nasc_local_fora_hospital) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -2960,6 +3204,58 @@ mod_bloco_4_server <- function(id, filtros){
               "Outros estabelecimentos de saúde",
               "Domicílio",
               "Aldeia Indígena",
+              "Sem informação",
+              "Outros"
+            )
+          )
+        )
+    })
+
+    data4_dist_profissional_comp <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if (filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
+        dplyr::mutate(
+          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_medico" ~ "Médico",
+              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_parteira" ~ "Parteira",
+              indicador == "dist_outros" ~ "Outros",
+              indicador == "dist_ignorado" ~ "Ignorado",
+              indicador == "dist_sem_inf" ~ "Sem informação"
+            ),
+            levels = c(
+              "Médico",
+              "Enfermagem ou Obstetriz",
+              "Parteira",
+              "Ignorado",
               "Sem informação",
               "Outros"
             )
@@ -3126,6 +3422,7 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), referencia = TRUE,
                          adicionar_localidade = FALSE) |>
+        dplyr::select(!prop_nasc_local_fora_hospital) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -3159,6 +3456,50 @@ mod_bloco_4_server <- function(id, filtros){
 
     data4_dist_local_comp_completo <- reactive({
       dplyr::full_join(data4_dist_local_comp(), data4_dist_local_referencia())
+    })
+
+    data4_dist_profissional_referencia <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), referencia = TRUE,
+                         adicionar_localidade = FALSE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "br_prop_indicador"
+        ) |>
+        dplyr::mutate(
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_medico" ~ "Médico",
+              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_parteira" ~ "Parteira",
+              indicador == "dist_outros" ~ "Outros",
+              indicador == "dist_ignorado" ~ "Ignorado",
+              indicador == "dist_sem_inf" ~ "Sem informação"
+            ),
+            levels = c(
+              "Médico",
+              "Enfermagem ou Obstetriz",
+              "Parteira",
+              "Ignorado",
+              "Sem informação",
+              "Outros"
+            )
+          )
+        )
+    })
+
+    data4_dist_profissional_completo <- reactive({
+      dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia())
+    })
+
+    data4_dist_profissional_comp_completo <- reactive({
+      dplyr::full_join(data4_dist_profissional_comp(), data4_dist_profissional_referencia())
     })
 
 
@@ -4196,6 +4537,179 @@ mod_bloco_4_server <- function(id, filtros){
           ) |>
           highcharter::hc_add_series(
             data = data4_dist_local_comp_completo() |> dplyr::filter(indicador == "Sem informação"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#231151FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+    })
+
+    # TPNASCASSI Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
+
+    output$grafico_dist_profissional <- highcharter::renderHighchart({
+
+      # print(seleciona(aba= 'profissional e local'))
+      # print(input$local_nasc)
+      # print(data4_dist_profissional_teste()$prop_indicador)
+      # print(seleciona(aba= 'profissional e local') %in% input$local_nasc)
+      # print(c("a", "b", "c", "d", "e", "f")[seleciona(aba= 'profissional e local') %in% input$local_nasc])
+      # print(selecao_local())
+
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            )
+          )|>
+          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Médico"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#FEAF77FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Médico"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#FEAF77FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Parteira"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#B63679FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Parteira"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#B63679FF",
+            tooltip = list(
+
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Outros"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#721F81FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Outros"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#721F81FF",
+            tooltip = list(
+
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )|>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Ignorado"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#2D1160FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Ignorado"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#2D1160FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Sem informação"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#231151FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Sem informação"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
