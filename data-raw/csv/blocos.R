@@ -27,18 +27,20 @@ aux_municipios_1 <- dplyr::full_join(municipios_kmeans, municipios_adicionais)
 
 aux_municipios_1$regiao[which(aux_municipios_1$regiao == "Centro-oeste")] <- "Centro-Oeste"
 
-
 aux_municipios_1$uf[which(aux_municipios_1$uf == "SAO PAULO")] <- "São Paulo"
 
 #Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
-aux_r_saude <- readODS::read_ods("data-raw/extracao-dos-dados/cobertura/regioes_macrorregioes.ods") |>
+aux_r_saude <- readxl::read_xlsx("data-raw/csv/regiao_macro_municipio.xlsx") |>
   janitor::clean_names() |>
-  dplyr::rename(
-    codmunres = codmun,
-    municipio2 = nomemun,
-    cod_r_saude = codr_saude,
-    r_saude = rsaude
-  )
+  dplyr::select(
+    codmunres = cod_mun,
+    municipio2 = nome_municipio,
+    cod_r_saude = codigo_regiao_de_saude,
+    r_saude = regiao_saude,
+    cod_macro_r_saude = codigo_regiao_de_saude,
+    macro_r_saude = macro
+  ) |>
+  dplyr::mutate(codmunres = as.numeric(codmunres))
 
 #Juntando as duas bases auxiliares
 aux_municipios <- dplyr::left_join(aux_municipios_1, aux_r_saude, by = "codmunres") |>
@@ -72,6 +74,7 @@ bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_201
   janitor::clean_names()
 
 bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv") |>
+  janitor::clean_names()
 
 bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
   janitor::clean_names() |>
@@ -240,9 +243,9 @@ base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indi
 base_incompletude_bloco7_morbidade_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_morbidade_2012-2023.csv')
 base_incompletude_bloco7_outros_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv') |>
   dplyr::filter(ano <= 2023) |>
-  mutate(across(everything(), ~replace_na(.x, 0)))
+  dplyr::mutate(across(everything(), ~tidyr::replace_na(.x, 0)))
 
-base_incompletude_bloco7_aux <- full_join(base_incompletude_bloco7_outros_aux, base_incompletude_bloco7_morbidade_aux)
+base_incompletude_bloco7_aux <- dplyr::full_join(base_incompletude_bloco7_outros_aux, base_incompletude_bloco7_morbidade_aux)
 
 #Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde estaduais
 bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
@@ -338,14 +341,14 @@ bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "c
 bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
 
 bloco7_morbidade_neonatal <- bloco7_morbidade_neonatal |>
-  select(-c("nascidos", "nascidos_menos1000", "nascidos_1000_1499", "nascidos_1500_2499", "nascidos_mais2500"))
+  dplyr::select(-c("nascidos", "nascidos_menos1000", "nascidos_1000_1499", "nascidos_1500_2499", "nascidos_mais2500"))
 
 ########  A JUNÇÃO ABAIXO APRESENTA ERRO QUE SUPERESTIMA OS CASOS DE 2024: AS LINHAS DE 2024 ESTÃO DUPLICADAS
 bloco7 <- bloco7_neonatal |>
-  distinct() |>
-  left_join(bloco7_perinatal |> distinct()) |>
-  left_join(bloco7_fetal     |> distinct()) |>
-  left_join(bloco7_morbidade_neonatal |> distinct())
+  dplyr::distinct() |>
+  dplyr::left_join(bloco7_perinatal |> dplyr::distinct()) |>
+  dplyr::left_join(bloco7_fetal     |> dplyr::distinct()) |>
+  dplyr::left_join(bloco7_morbidade_neonatal |> dplyr::distinct())
 
 
 bloco7 <- dplyr::distinct(bloco7)
