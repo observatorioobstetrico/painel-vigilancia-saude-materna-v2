@@ -345,10 +345,9 @@ bloco7_morbidade_neonatal <- bloco7_morbidade_neonatal |>
 
 ########  A JUNÇÃO ABAIXO APRESENTA ERRO QUE SUPERESTIMA OS CASOS DE 2024: AS LINHAS DE 2024 ESTÃO DUPLICADAS
 bloco7 <- bloco7_neonatal |>
-  dplyr::distinct() |>
-  dplyr::left_join(bloco7_perinatal |> dplyr::distinct()) |>
-  dplyr::left_join(bloco7_fetal     |> dplyr::distinct()) |>
-  dplyr::left_join(bloco7_morbidade_neonatal |> dplyr::distinct())
+  dplyr::left_join(bloco7_perinatal) |>
+  dplyr::left_join(bloco7_fetal) |>
+  dplyr::left_join(bloco7_morbidade_neonatal)
 
 
 bloco7 <- dplyr::distinct(bloco7)
