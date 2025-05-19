@@ -703,10 +703,16 @@ mod_bloco_4_ui <- function(id){
             ),
             ## caixinhas
 
+            ##AQUI
+
             fluidRow(
               column(
                 width = 6,
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_profissional")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_profissional")), proxy.height = "300px")
               )
             )
 
@@ -870,7 +876,9 @@ mod_bloco_4_server <- function(id, filtros){
       prop_nasc_local_aldeia = rep("round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
       prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
 
-      prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2)
+      prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
+
+      prop_nasc_assistido_enf_obs = rep("round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100,1)",2)
 
       # dist_medico = rep("round(
       #   sum(c(nasc_assistido_medico_hospital, nasc_assistido_medico_outros_est_saude, nasc_assistido_medico_domicilio, nasc_assistido_medico_outros, nasc_assistido_medico_aldeia, nasc_assistido_medico_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
@@ -1521,14 +1529,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_profissional_resumo <- reactive({
-      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-        # dplyr::left_join(
-        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        #   dplyr::left_join(
-        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        #   )
-        # ) |>
+      bloco4_profissional |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
@@ -1577,9 +1578,9 @@ mod_bloco_4_server <- function(id, filtros){
                 grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
             }
           }
-        ) |>
+        ) |> # aqui
         cria_indicadores(
-          df_calcs = bloco4_calcs_resumo,
+          df_calcs = bloco4_profissional_calcs,
           filtros = filtros(),
           localidade_resumo = input$localidade_resumo4
         )
@@ -1615,17 +1616,10 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_profissional_resumo_referencia <- reactive({
-      dplyr::left_join(bloco4, bloco4_deslocamento_muni) |>
-        # dplyr::left_join(
-        #   dplyr::left_join(bloco4, bloco4_deslocamento_muni),
-        #   dplyr::left_join(
-        #     bloco7 |> dplyr::select(codmunres, ano, fetal_durante, obitos_fetais_mais_22sem),
-        #     bloco8_graficos |> dplyr::select(codmunres, ano, evitaveis_fetal_parto, obitos_fetais_totais)
-        #   )
-        # ) |>
+      bloco4_profissional |>
         dplyr::mutate(dplyr::across(dplyr::everything(), ~ replace(., is.na(.), 0))) |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
-        cria_indicadores(df_calcs = bloco4_calcs_resumo, filtros = filtros(), referencia = TRUE)
+        cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), referencia = TRUE)
     })
 
 
@@ -2540,7 +2534,7 @@ mod_bloco_4_server <- function(id, filtros){
       )
     })
 
-    ### Relacionados aos indicadores de local de anscimento e profissionais ----
+    ### Relacionados aos indicadores de local de nascimento e profissionais ----
 
     output$caixa_b4_i1_profissional <- renderUI({
       cria_caixa_server(
@@ -2549,6 +2543,31 @@ mod_bloco_4_server <- function(id, filtros){
         titulo = "Porcentagem de partos fora do hospital",
         tem_meta = FALSE,
         valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_local_fora_hospital,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        fonte_titulo = "15px",
+        pagina = "bloco_4",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo4 == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+    ##TAGGG
+    output$caixa_b4_i2_profissional <- renderUI({
+      cria_caixa_server(
+        dados = data4_profissional_resumo(),
+        indicador = "prop_nasc_assistido_enf_obs",
+        titulo = "Porcentagem de partos assistidos por enfermeiras obstétricas",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_assistido_enf_obs,
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
@@ -2843,7 +2862,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), adicionar_localidade = TRUE) |>
-        dplyr::select(!prop_nasc_local_fora_hospital) |>
+        dplyr::select(!c(prop_nasc_local_fora_hospital,prop_nasc_assistido_enf_obs)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -3182,7 +3201,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
-        dplyr::select(!prop_nasc_local_fora_hospital) |>
+        dplyr::select(!c(prop_nasc_local_fora_hospital,prop_nasc_assistido_enf_obs)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
@@ -3422,7 +3441,7 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs, filtros = filtros(), referencia = TRUE,
                          adicionar_localidade = FALSE) |>
-        dplyr::select(!prop_nasc_local_fora_hospital) |>
+        dplyr::select(!c(prop_nasc_local_fora_hospital,prop_nasc_assistido_enf_obs)) |>
         tidyr::pivot_longer(
           cols = starts_with("prop"),
           names_to = "indicador",
