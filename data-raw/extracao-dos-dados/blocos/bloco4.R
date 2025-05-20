@@ -44,15 +44,10 @@ rm(df_list)
 
 df$TPROBSON <- as.numeric(df$TPROBSON)
 
-# Dados ainda não consolidados
+# Dados 2024 ainda não estão no microdatasus
 options(timeout=99999)
 
-#sinasc23 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN23.csv", sep = ";")
-#sinasc23 <- sinasc23 |>
-#  mutate(ano = 2023) |>
-#  select(CODMUNRES, TPROBSON, PARTO, ano)
-
-sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";")
+sinasc24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";")
 sinasc24 <- sinasc24 |>
   mutate(ano = 2024) |>
   select(CODMUNRES, TPROBSON, PARTO, ano)
