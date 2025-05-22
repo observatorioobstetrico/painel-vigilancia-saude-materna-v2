@@ -557,12 +557,32 @@ mod_nivel_1_ui <- function(id) {
                       ) #[fff]
                     ),
                   )
+                ),
+                ##TAGGG
+                tabPanel(
+                  HTML("<b>Profissional e local do parto</b>"),
+                  fluidRow(
+                    column(
+                      width = 4,
+                      shinycssloaders::withSpinner(
+                        uiOutput(ns("caixa_b4_i1_profissional")),
+                        proxy.height = "280px"
+                      )
+                    ),
+                    column(
+                      width = 4,
+                      shinycssloaders::withSpinner(
+                        uiOutput(ns("caixa_b4_i2_profissional")),
+                        proxy.height = "280px"
+                      )
+                    )
+                  )
                 )
+                ####
               )
             )
           )
         )
-        #)
       ),
       fluidRow(
         column(
@@ -2442,6 +2462,49 @@ mod_nivel_1_server <- function(id, filtros) {
 
     })
 
+    ##TAGGG
+    data4_profissional <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(ano == filtros()$ano) |>
+        #if(filtros()$nivel == "estadual") dplyr::filter(uf==filtros()$estado)
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano == filtros()$ano
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
+          prop_nasc_local_hospital = round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros_est_saude = round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_domicilio = round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros = round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_aldeia = round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_sem_inf = round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_fora_hospital = round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_assistido_enf_obs = round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100,1),
+
+          localidade = dplyr::case_when(
+            filtros()$nivel == "nacional" ~ "Brasil",
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
+          )
+        ) |>
+        dplyr::ungroup()
+    })
+
     data4_deslocamento_macrorregiao <- reactive({
       # if (filtros()$nivel != "estadual" & filtros()$nivel != "municipal") {
       bloco4_deslocamento_macrorregiao |>
@@ -2532,6 +2595,24 @@ mod_nivel_1_server <- function(id, filtros) {
           prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
         )
     })
+
+    ##TAGGG
+    data4_comp_profissional <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(ano == filtros()$ano) |>
+        dplyr::summarise(
+          prop_nasc_local_hospital = round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros_est_saude = round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_domicilio = round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros = round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_aldeia = round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_sem_inf = round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_fora_hospital = round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
+          prop_nasc_assistido_enf_obs = round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100,1)
+        )
+    })
+
+
 
     ##### Criando a tabela para os indicadores do quarto bloco #####
     output$table4 <- reactable::renderReactable({
@@ -2939,6 +3020,55 @@ mod_nivel_1_server <- function(id, filtros) {
             pagina = "nivel_1",
             nivel_de_analise = filtros()$nivel,
             width_caixa = 11
+          )
+        )
+      )
+    })
+
+    ##TAGGG
+    output$caixa_b4_i1_profissional <- renderUI({
+      cria_caixa_server(
+        dados = data4_profissional(),
+        indicador = "prop_nasc_local_fora_hospital",
+        titulo = "Porcentagem de partos fora do hospital",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_profissional()$prop_nasc_local_fora_hospital,
+        tipo = "porcentagem",
+        invertido = FALSE,
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        fonte_titulo = "15px",
+        pagina = "bloco_4",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo4 == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
+          )
+        )
+      )
+    })
+
+    output$caixa_b4_i2_profissional <- renderUI({
+      cria_caixa_server(
+        dados = data4_profissional(),
+        indicador = "prop_nasc_assistido_enf_obs",
+        titulo = "Porcentagem de partos assistidos por enfermeiras obstétricas",
+        tem_meta = FALSE,
+        valor_de_referencia = data4_comp_profissional()$prop_nasc_assistido_enf_obs,
+        tipo = "porcentagem",
+        invertido = TRUE,
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        fonte_titulo = "15px",
+        pagina = "bloco_4",
+        nivel_de_analise = ifelse(
+          filtros()$comparar == "Não",
+          filtros()$nivel,
+          ifelse(
+            input$localidade_resumo4 == "escolha1",
+            filtros()$nivel,
+            filtros()$nivel2
           )
         )
       )
