@@ -913,10 +913,16 @@ mod_bloco_4_server <- function(id, filtros){
 
     #AQUI EU FIZ UMA GAMBIARRA
 
-    selecao_local <- reactive({
+    # selecao_local <- reactive({
+    #   selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
+    #                           'outros', 'aldeia', 'sem_inf') %in% input$local_nasc
+    #   paste0(selected_locations, collapse = ", ")
+    #   print(paste0(selected_locations, collapse = ", "))
+    # })
+
+    selecao_local1 <- reactive({
       selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
                               'outros', 'aldeia', 'sem_inf') %in% input$local_nasc
-      paste0(selected_locations, collapse = ", ")
     })
 
     bloco4_profissional_calcs2 <- reactive({
@@ -924,35 +930,118 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = c("local", "referencia"),
 
         dist_medico = rep(paste0("round(
-        sum(c(nasc_assistido_medico_hospital, nasc_assistido_medico_outros_est_saude, nasc_assistido_medico_domicilio, nasc_assistido_medico_outros, nasc_assistido_medico_aldeia, nasc_assistido_medico_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-          sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
-        *100, 1)"), 2),
+          sum(c(
+          nasc_assistido_medico_hospital[", selecao_local1()[1],"],
+          nasc_assistido_medico_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_medico_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_medico_outros[", selecao_local1()[4],"],
+          nasc_assistido_medico_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_medico_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
+          *100, 1)"), 2),
 
         dist_enf_obs = rep(paste0("round(
-          sum(c(nasc_assistido_enf_obs_hospital, nasc_assistido_enf_obs_outros_est_saude, nasc_assistido_enf_obs_domicilio, nasc_assistido_enf_obs_outros, nasc_assistido_enf_obs_aldeia, nasc_assistido_enf_obs_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          sum(c(
+          nasc_assistido_enf_obs_hospital[", selecao_local1()[1],"],
+          nasc_assistido_enf_obs_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_enf_obs_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_enf_obs_outros[", selecao_local1()[4],"],
+          nasc_assistido_enf_obs_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_enf_obs_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
           *100, 1)"), 2),
 
         dist_parteira = rep(paste0("round(
-          sum(c(nasc_assistido_parteira_hospital, nasc_assistido_parteira_outros_est_saude, nasc_assistido_parteira_domicilio, nasc_assistido_parteira_outros, nasc_assistido_parteira_aldeia, nasc_assistido_parteira_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          sum(c(
+          nasc_assistido_parteira_hospital[", selecao_local1()[1],"],
+          nasc_assistido_parteira_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_parteira_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_parteira_outros[", selecao_local1()[4],"],
+          nasc_assistido_parteira_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_parteira_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
           *100, 1)"), 2),
 
         dist_outros = rep(paste0("round(
-          sum(c(nasc_assistido_outros_hospital, nasc_assistido_outros_outros_est_saude, nasc_assistido_outros_domicilio, nasc_assistido_outros_outros, nasc_assistido_outros_aldeia, nasc_assistido_outros_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          sum(c(
+          nasc_assistido_outros_hospital[", selecao_local1()[1],"],
+          nasc_assistido_outros_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_outros_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_outros_outros[", selecao_local1()[4],"],
+          nasc_assistido_outros_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_outros_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
           *100, 1)"), 2),
 
         dist_ignorado = rep(paste0("round(
-          sum(c(nasc_assistido_ignorado_hospital, nasc_assistido_ignorado_outros_est_saude, nasc_assistido_ignorado_domicilio, nasc_assistido_ignorado_outros, nasc_assistido_ignorado_aldeia, nasc_assistido_ignorado_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          sum(c(
+          nasc_assistido_ignorado_hospital[", selecao_local1()[1],"],
+          nasc_assistido_ignorado_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_ignorado_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_ignorado_outros[", selecao_local1()[4],"],
+          nasc_assistido_ignorado_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_ignorado_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
           *100, 1)"), 2),
 
         dist_sem_inf = rep(paste0("round(
-          sum(c(nasc_assistido_sem_inf_hospital, nasc_assistido_sem_inf_outros_est_saude, nasc_assistido_sem_inf_domicilio, nasc_assistido_sem_inf_outros, nasc_assistido_sem_inf_aldeia, nasc_assistido_sem_inf_sem_inf)[c(",selecao_local(),")], na.rm=T)/
-            sum(c(nasc_local_hospital, nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros, nasc_local_aldeia, nasc_local_sem_inf)[c(",selecao_local(),")], na.rm=T)
+          sum(c(
+          nasc_assistido_sem_inf_hospital[", selecao_local1()[1],"],
+          nasc_assistido_sem_inf_outros_est_saude[", selecao_local1()[2],"],
+          nasc_assistido_sem_inf_domicilio[", selecao_local1()[3],"],
+          nasc_assistido_sem_inf_outros[", selecao_local1()[4],"],
+          nasc_assistido_sem_inf_aldeia[", selecao_local1()[5],"],
+          nasc_assistido_sem_inf_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)/
+            sum(c(
+          nasc_local_hospital[", selecao_local1()[1],"],
+          nasc_local_outros_est_saude[", selecao_local1()[2],"],
+          nasc_local_domicilio[", selecao_local1()[3],"],
+          nasc_local_outros[", selecao_local1()[4],"],
+          nasc_local_aldeia[", selecao_local1()[5],"],
+          nasc_local_sem_inf[", selecao_local1()[6],"]),
+          na.rm=T)
           *100, 1)"), 2)
-
       )
 
     })
@@ -2941,56 +3030,6 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    data4_dist_profissional_teste <- reactive({
-      bloco4_profissional |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::filter(
-          if (filtros()$nivel == "nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "macro")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "micro")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano) |>
-        # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), adicionar_localidade = TRUE) |>
-        tidyr::pivot_longer(
-          cols = starts_with("dist"),
-          names_to = "indicador",
-          values_to = "prop_indicador"
-        )
-        # dplyr::mutate(
-        #   class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-        #   indicador = factor(
-        #     dplyr::case_when(
-        #       indicador == "dist_medico" ~ "Médico",
-        #       indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
-        #       indicador == "dist_parteira" ~ "Parteira",
-        #       indicador == "dist_outros" ~ "Outros",
-        #       indicador == "dist_ignorado" ~ "Ignorado",
-        #       indicador == "dist_sem_inf" ~ "Sem informação"
-        #     ),
-        #     levels = c(
-        #       "Médico",
-        #       "Enfermagem ou Obstetriz",
-        #       "Parteira",
-        #       "Ignorado",
-        #       "Sem informação",
-        #       "Outros"
-        #     )
-        #   )
-        # )
-    })
-
     ### Para a comparação selecionada -----------------------------------------
     data4_comp <- reactive({
       bloco4 |>
@@ -4580,7 +4619,7 @@ mod_bloco_4_server <- function(id, filtros){
 
       # print(seleciona(aba= 'profissional e local'))
       # print(input$local_nasc)
-      # print(data4_dist_profissional_teste()$prop_indicador)
+      # print(data4_dist_profissional_teste())
       # print(seleciona(aba= 'profissional e local') %in% input$local_nasc)
       # print(c("a", "b", "c", "d", "e", "f")[seleciona(aba= 'profissional e local') %in% input$local_nasc])
       # print(selecao_local())
