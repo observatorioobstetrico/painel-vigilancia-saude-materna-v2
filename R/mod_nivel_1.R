@@ -563,6 +563,7 @@ mod_nivel_1_ui <- function(id) {
                   HTML("<b>Profissional e local do parto</b>"),
                   fluidRow(
                     column(
+                      offset = 2,
                       width = 4,
                       shinycssloaders::withSpinner(
                         uiOutput(ns("caixa_b4_i1_profissional")),
