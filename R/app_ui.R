@@ -153,7 +153,7 @@ app_ui <- function(request) {
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
           bs4Dash::bs4Card(
             width = 12,
-            title = HTML("<b style='font-size:22px'> Filtros </b>"),
+            title = HTML("<b style='font-size:22px'> Selecione os filtros de interesse: </b>"),
             icon = icon("filter"),
             status = "primary",
             fluidRow(
