@@ -16,7 +16,8 @@ df <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2023,
                                       vars = c("CODMUNRES",
                                                "DTNASC",
                                                "TPNASCASSI",
-                                               "LOCNASC"
+                                               "LOCNASC",
+                                               "PARTO"
                                                )
                                   )
 
@@ -26,11 +27,12 @@ df <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2023,
 options(timeout=99999)
 
 df_2024 <- data.table::fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv", sep = ";") |>
-  select(CODMUNRES, DTNASC, TPNASCASSI, LOCNASC) |>
+  select(CODMUNRES, DTNASC, TPNASCASSI, LOCNASC, PARTO) |>
   mutate(CODMUNRES = as.character(CODMUNRES),
          DTNASC = as.character(DTNASC),
          TPNASCASSI = as.character(TPNASCASSI),
-         LOCNASC = as.character(LOCNASC)
+         LOCNASC = as.character(LOCNASC),
+         PARTO = as.character(PARTO)
          )
 
 df <- rbind(df, df_2024)
@@ -52,6 +54,8 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 
 # Tratando os dados ------------------------------------------------------------
 df_bloco4_profissional <- df |>
+  # Selecionando somente parto vaginal, PARTO == 1
+  filter(PARTO == "1") |>
   mutate(
     ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
     TPNASCASSI = as.numeric(TPNASCASSI),

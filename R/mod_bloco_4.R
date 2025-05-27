@@ -757,7 +757,7 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência segundo local &nbsp;</b>")),
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência em partos ocorridos em hospitais &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
@@ -772,39 +772,39 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                fluidRow(
-                  column(
-                    width = 12,
-                    shinyWidgets::pickerInput(
-                      inputId = ns("local_nasc"),
-                      label = "Selecione, aqui, os locais de interesse:",
-                      options = list(placeholder = "Selecione, aqui, os locais de interesse:",
-                                     `actions-box` = TRUE,
-                                     `deselect-all-text` = "Desselecionar todas",
-                                     `select-all-text` = "Selecionar todas",
-                                     `none-selected-text` = "Nenhuma opção selecionada"),
-                      choices = c(
-                        "Hospital" = "hospital",
-                        "Outros estabelecimentos de saúde" = "outros_est_saude",
-                        "Domicílio" = "domicilio",
-                        "Aldeia Indígena" = "aldeia",
-                        "Outros" = "outros",
-                        "Sem informação" = "sem_inf"
-
-                      ),
-                      selected = c(
-                        "hospital",
-                        "outros_est_saude",
-                        "domicilio",
-                        "aldeia",
-                        "outros",
-                        "sem_inf"
-                      ),
-                      multiple = TRUE,
-                      width = "99%"
-                    )
-                  )
-                ),
+                # fluidRow(
+                #   column(
+                #     width = 12,
+                #     shinyWidgets::pickerInput(
+                #       inputId = ns("local_nasc"),
+                #       label = "Selecione, aqui, os locais de interesse:",
+                #       options = list(placeholder = "Selecione, aqui, os locais de interesse:",
+                #                      `actions-box` = TRUE,
+                #                      `deselect-all-text` = "Desselecionar todas",
+                #                      `select-all-text` = "Selecionar todas",
+                #                      `none-selected-text` = "Nenhuma opção selecionada"),
+                #       choices = c(
+                #         "Hospital" = "hospital",
+                #         "Outros estabelecimentos de saúde" = "outros_est_saude",
+                #         "Domicílio" = "domicilio",
+                #         "Aldeia Indígena" = "aldeia",
+                #         "Outros" = "outros",
+                #         "Sem informação" = "sem_inf"
+                #
+                #       ),
+                #       selected = c(
+                #         "hospital",
+                #         "outros_est_saude",
+                #         "domicilio",
+                #         "aldeia",
+                #         "outros",
+                #         "sem_inf"
+                #       ),
+                #       multiple = TRUE,
+                #       width = "99%"
+                #     )
+                #   )
+                # ),
                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
               )
             )
@@ -920,131 +920,154 @@ mod_bloco_4_server <- function(id, filtros){
     #   print(paste0(selected_locations, collapse = ", "))
     # })
 
-    selecao_local1 <- reactive({
-      selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
-                              'outros', 'aldeia', 'sem_inf') %in% input$local_nasc
-    })
+    bloco4_profissional_calcs2 <- data.frame(
+      tipo = c("local", "referencia"),
 
-    bloco4_profissional_calcs2 <- reactive({
-      bloco4_profissional_calcs2_aux <- data.frame(
-        tipo = c("local", "referencia"),
+      dist_medico = rep("round(sum(nasc_assistido_medico_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2),
 
-        dist_medico = rep(paste0("round(
-          sum(c(
-          nasc_assistido_medico_hospital[", selecao_local1()[1],"],
-          nasc_assistido_medico_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_medico_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_medico_outros[", selecao_local1()[4],"],
-          nasc_assistido_medico_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_medico_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2),
+      dist_enf_obs = rep("round(sum(nasc_assistido_enf_obs_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2),
 
-        dist_enf_obs = rep(paste0("round(
-          sum(c(
-          nasc_assistido_enf_obs_hospital[", selecao_local1()[1],"],
-          nasc_assistido_enf_obs_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_enf_obs_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_enf_obs_outros[", selecao_local1()[4],"],
-          nasc_assistido_enf_obs_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_enf_obs_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2),
+      dist_parteira = rep("round(sum(nasc_assistido_parteira_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2),
 
-        dist_parteira = rep(paste0("round(
-          sum(c(
-          nasc_assistido_parteira_hospital[", selecao_local1()[1],"],
-          nasc_assistido_parteira_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_parteira_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_parteira_outros[", selecao_local1()[4],"],
-          nasc_assistido_parteira_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_parteira_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2),
+      dist_outros = rep("round(sum(nasc_assistido_outros_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2),
 
-        dist_outros = rep(paste0("round(
-          sum(c(
-          nasc_assistido_outros_hospital[", selecao_local1()[1],"],
-          nasc_assistido_outros_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_outros_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_outros_outros[", selecao_local1()[4],"],
-          nasc_assistido_outros_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_outros_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2),
+      dist_ignorado = rep("round(sum(nasc_assistido_ignorado_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2),
 
-        dist_ignorado = rep(paste0("round(
-          sum(c(
-          nasc_assistido_ignorado_hospital[", selecao_local1()[1],"],
-          nasc_assistido_ignorado_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_ignorado_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_ignorado_outros[", selecao_local1()[4],"],
-          nasc_assistido_ignorado_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_ignorado_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2),
+      dist_sem_inf = rep("round(sum(nasc_assistido_sem_inf_hospital, na.rm = TRUE)/
+                               sum(nasc_local_hospital, na.rm = TRUE) * 100, 1)", 2)
 
-        dist_sem_inf = rep(paste0("round(
-          sum(c(
-          nasc_assistido_sem_inf_hospital[", selecao_local1()[1],"],
-          nasc_assistido_sem_inf_outros_est_saude[", selecao_local1()[2],"],
-          nasc_assistido_sem_inf_domicilio[", selecao_local1()[3],"],
-          nasc_assistido_sem_inf_outros[", selecao_local1()[4],"],
-          nasc_assistido_sem_inf_aldeia[", selecao_local1()[5],"],
-          nasc_assistido_sem_inf_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)/
-            sum(c(
-          nasc_local_hospital[", selecao_local1()[1],"],
-          nasc_local_outros_est_saude[", selecao_local1()[2],"],
-          nasc_local_domicilio[", selecao_local1()[3],"],
-          nasc_local_outros[", selecao_local1()[4],"],
-          nasc_local_aldeia[", selecao_local1()[5],"],
-          nasc_local_sem_inf[", selecao_local1()[6],"]),
-          na.rm=T)
-          *100, 1)"), 2)
-      )
+    )
 
-    })
+    # selecao_local1 <- reactive({
+    #   selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
+    #                           'outros', 'aldeia', 'sem_inf') %in% input$local_nasc
+    # })
+    #
+    # bloco4_profissional_calcs2 <- reactive({
+    #   bloco4_profissional_calcs2_aux <- data.frame(
+    #     tipo = c("local", "referencia"),
+    #
+    #     dist_medico = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_medico_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_medico_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_medico_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_medico_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_medico_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_medico_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2),
+    #
+    #     dist_enf_obs = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_enf_obs_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_enf_obs_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_enf_obs_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_enf_obs_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_enf_obs_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_enf_obs_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2),
+    #
+    #     dist_parteira = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_parteira_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_parteira_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_parteira_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_parteira_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_parteira_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_parteira_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2),
+    #
+    #     dist_outros = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_outros_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_outros_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_outros_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_outros_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_outros_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_outros_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2),
+    #
+    #     dist_ignorado = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_ignorado_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_ignorado_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_ignorado_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_ignorado_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_ignorado_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_ignorado_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2),
+    #
+    #     dist_sem_inf = rep(paste0("round(
+    #       sum(c(
+    #       nasc_assistido_sem_inf_hospital[", selecao_local1()[1],"],
+    #       nasc_assistido_sem_inf_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_assistido_sem_inf_domicilio[", selecao_local1()[3],"],
+    #       nasc_assistido_sem_inf_outros[", selecao_local1()[4],"],
+    #       nasc_assistido_sem_inf_aldeia[", selecao_local1()[5],"],
+    #       nasc_assistido_sem_inf_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)/
+    #         sum(c(
+    #       nasc_local_hospital[", selecao_local1()[1],"],
+    #       nasc_local_outros_est_saude[", selecao_local1()[2],"],
+    #       nasc_local_domicilio[", selecao_local1()[3],"],
+    #       nasc_local_outros[", selecao_local1()[4],"],
+    #       nasc_local_aldeia[", selecao_local1()[5],"],
+    #       nasc_local_sem_inf[", selecao_local1()[6],"]),
+    #       na.rm=T)
+    #       *100, 1)"), 2)
+    #   )
+    #
+    # })
 
 
     #[LOOK]
@@ -3001,7 +3024,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), adicionar_localidade = TRUE) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2, filtros = filtros(), adicionar_localidade = TRUE) |>
         tidyr::pivot_longer(
           cols = starts_with("dist"),
           names_to = "indicador",
@@ -3019,8 +3042,8 @@ mod_bloco_4_server <- function(id, filtros){
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Médico",
               "Enfermagem ou Obstetriz",
+              "Médico",
               "Parteira",
               "Ignorado",
               "Sem informação",
@@ -3292,7 +3315,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
         tidyr::pivot_longer(
           cols = starts_with("dist"),
           names_to = "indicador",
@@ -3310,8 +3333,8 @@ mod_bloco_4_server <- function(id, filtros){
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Médico",
               "Enfermagem ou Obstetriz",
+              "Médico",
               "Parteira",
               "Ignorado",
               "Sem informação",
@@ -3523,7 +3546,7 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs2(), filtros = filtros(), referencia = TRUE,
+        cria_indicadores(df_calcs = bloco4_profissional_calcs2, filtros = filtros(), referencia = TRUE,
                          adicionar_localidade = FALSE) |>
         tidyr::pivot_longer(
           cols = starts_with("dist"),
@@ -3541,8 +3564,8 @@ mod_bloco_4_server <- function(id, filtros){
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Médico",
               "Enfermagem ou Obstetriz",
+              "Médico",
               "Parteira",
               "Ignorado",
               "Sem informação",
@@ -4639,7 +4662,7 @@ mod_bloco_4_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Médico"),
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4650,7 +4673,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Médico"),
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4662,7 +4685,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Médico"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4673,7 +4696,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Médico"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
