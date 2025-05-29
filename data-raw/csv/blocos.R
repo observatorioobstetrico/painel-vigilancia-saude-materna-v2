@@ -240,7 +240,12 @@ base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indi
   janitor::clean_names() |>
   dplyr::select(!uf)
 
+base_incompletude_bloco4_profissional <- read.csv("data-raw/csv/indicadores_incompletude_bloco4_profissional_2013-2023.csv") |>
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% aux_municipios$codmunres)
+
 base_incompletude_bloco7_morbidade_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_morbidade_2012-2023.csv')
+
 base_incompletude_bloco7_outros_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv') |>
   dplyr::filter(ano <= 2023) |>
   dplyr::mutate(across(everything(), ~tidyr::replace_na(.x, 0)))
@@ -476,6 +481,7 @@ base_incompletude_bloco7 <- base_incompletude_bloco7 |>
 
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
+  dplyr::full_join(
     dplyr::full_join(
     dplyr::full_join(
       base_incompletude_sinasc,
@@ -488,6 +494,8 @@ base_incompletude <- dplyr::full_join(
   base_incompletude_deslocamento
 ),
 base_incompletude_bloco7
+),
+base_incompletude_bloco4_profissional
 )
 
 

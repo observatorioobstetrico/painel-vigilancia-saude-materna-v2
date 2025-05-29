@@ -36,10 +36,10 @@ df_sinasc <- df_sinasc_aux |>
     tpnascassi = as.numeric(TPNASCASSI),
     locnasc = as.numeric(LOCNASC),
     .keep = "unused",
-  )
+  ) |> clean_names()
 
 
-# Criando as variáveis de incompletude ------------------------------------
+# Criando as variáveis de incompletude -----------------------------------------
 ## Checando quais os possíveis valores incompletos para cada variável
 ### Para TPNASCASSI
 sort(unique(df_sinasc$tpnascassi), na.last = FALSE)  # Existem NAs
@@ -50,3 +50,27 @@ length(df_sinasc$tpnascassi[which(df_sinasc$tpnascassi == 9999)]) # Existem
 sort(unique(df_sinasc$locnasc), na.last = FALSE)  # Existem NAs
 sort(unique(df_sinasc$locnasc), decreasing = TRUE)
 length(df_sinasc$locnasc[which(df_sinasc$locnasc == 9999)]) # Existem
+
+# Criando data.frame de incompletude -------------------------------------------
+
+df_incompletude_bloco4_profissional <- df_sinasc |>
+  mutate(
+    locnasc_incompletos = if_else(is.na(locnasc), 1, 0),
+    tpnascassi_incompletos = if_else(is.na(tpnascassi), 1, 0),
+    locnasc_totais = 1,
+    tpnascassi_totais = 1
+  ) |>
+  group_by(ano, codmunres) |>
+  summarise(
+    locnasc_incompletos = sum(locnasc_incompletos),
+    locnasc_totais = sum(locnasc_totais),
+    tpnascassi_incompletos = sum(tpnascassi_incompletos),
+    tpnascassi_totais = sum(tpnascassi_totais)
+  )
+
+write.csv(df_incompletude_bloco4_profissional, 'data-raw/csv/indicadores_incompletude_bloco4_profissional_2013-2023.csv', row.names = FALSE)
+
+
+
+
+
