@@ -505,8 +505,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
       ## Bloco4
       "Porcentagem de nascidos vivos segundo local de ocorrência do parto",
-      "Medianas de deslocamento segundo o local de ocorrência do parto"
+      "Medianas de deslocamento segundo o local de ocorrência do parto",
       #"Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
+
+      "Porcentagem de nascidos vivos de partos por local de ocorrência",
+      "Porcentagem de nascicidos vivos de partos ocorridos em hospital por profissional de assistência"
     )
 
     indicadores_duas_caixinhas_adicionais_bloco7 <- c(

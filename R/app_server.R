@@ -185,7 +185,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
           "Relacionados aos grupos de Robson e cesariana" = "robson",
-          "Relacionados ao deslocamento para o parto" = "deslocamento"
+          "Relacionados ao deslocamento para o parto" = "deslocamento",
+          "Relacionados ao profissional e local de parto" = "profissional"# [AQUI]
         )
       )
     } else if (input$bloco == "bloco6") {
@@ -497,6 +498,42 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
           #"Demais causas" = "outros"
         ),
         label = "Grupos de interesse"
+      )
+    }
+
+    if (
+      input$indicador_blocos4_6_7 ==
+      "Porcentagem de nascidos vivos de partos por local de ocorrência"
+    ) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c(
+          "Hospital" = "hospital",
+          "Outros estabelecimentos de saúde" = "outros_est_saude",
+          "Domicílio" = "domicilio",
+          "Outros estabelecimentos" = "outros",
+          "Aldeia indígena" = "aldeia",
+          "Afecções originais no período perinatal" = "afeccoes"
+        ),
+        label = "Local de parto"
+      )
+    }
+
+    if (
+      input$indicador_blocos4_6_7 ==
+      "Porcentagem de nascicidos vivos de partos ocorridos em hospital por profissional de assistência"
+    ) {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_uma_caixinha_adicional_bloco7",
+        choices = c(
+          "Médico" = "medico",
+          "Enfermeiro Obstétrico" = "enf_obs",
+          "Parteira" = "parteira",
+          "Outros profissionais de assistência" = "outros",
+        ),
+        label = "Profissional assistêncial"
       )
     }
 

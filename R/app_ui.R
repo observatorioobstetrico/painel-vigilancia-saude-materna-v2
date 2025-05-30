@@ -708,7 +708,9 @@ app_ui <- function(request) {
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas evitáveis'",
                         "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas evitáveis'",
                         "'Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas'",
-                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas'"
+                        "'Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas'",
+                        "'Porcentagem de nascidos vivos de partos por local de ocorrência'",
+                        "'Porcentagem de nascicidos vivos de partos ocorridos em hospital por profissional de assistência'"
                       )
 
                       glue::glue(
