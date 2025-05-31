@@ -267,7 +267,7 @@ mod_bloco_1_ui <- function(id){
               style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Cobertura populacional da atenção básica &nbsp;</b>"),
+                HTML("<b style='font-size:19px'> Cobertura populacional da Atenção Básica &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao5"),
@@ -1005,12 +1005,12 @@ mod_bloco_1_server <- function(id, filtros){
       )
     })
 
-    ### Cobertura populacional da atenção básica ------------------------------
+    ### Cobertura populacional da Atenção Básica ------------------------------
     output$caixa_b1_i8 <- renderUI({
       cria_caixa_server(
         dados = data1_resumo(),
         indicador = "porc_cobertura_esf",
-        titulo = "Cobertura populacional da atenção básica",
+        titulo = "Cobertura populacional da Atenção Básica",
         tem_meta = TRUE,
         valor_de_referencia = 95,
         tipo = "porcentagem",
@@ -1122,10 +1122,17 @@ mod_bloco_1_server <- function(id, filtros){
     output$plot1 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1146,6 +1153,7 @@ mod_bloco_1_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
@@ -1155,6 +1163,12 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_idademae_comp(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1208,10 +1222,17 @@ mod_bloco_1_server <- function(id, filtros){
     output$plot2 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_racacor(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1231,6 +1252,7 @@ mod_bloco_1_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_racacor(),
             type = "line",
@@ -1240,6 +1262,12 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_racacor_comp(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1293,10 +1321,17 @@ mod_bloco_1_server <- function(id, filtros){
     output$plot3 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_esc(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1316,6 +1351,7 @@ mod_bloco_1_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1_esc(),
             type = "line",
@@ -1325,6 +1361,12 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_esc_comp(),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1350,10 +1392,17 @@ mod_bloco_1_server <- function(id, filtros){
     output$plot4 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1374,6 +1423,7 @@ mod_bloco_1_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1(),
             type = "line",
@@ -1383,6 +1433,12 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_comp(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_dependentes_sus, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1406,10 +1462,11 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
 
-    ### Cobertura populacional da atenção básica ------------------------------
+    ### Cobertura populacional da Atenção Básica ------------------------------
     output$plot5 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1(),
             name = dplyr::if_else(filtros()$nivel == "nacional", "Brasil", unique(data1()$class)),
@@ -1424,12 +1481,19 @@ mod_bloco_1_server <- function(id, filtros){
             dashStyle = "ShortDot",
             opacity = 0.8
           ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
+          ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0, max = 100) |>
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data1(),
             name = dplyr::if_else(filtros()$nivel == "nacional", "Brasil", unique(data1()$class)),
@@ -1441,6 +1505,12 @@ mod_bloco_1_server <- function(id, filtros){
             name = dplyr::if_else(filtros()$nivel2 == "nacional", "Brasil", unique(data1_comp()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_cobertura_esf, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>

@@ -15,7 +15,7 @@ mod_bloco_2_ui <- function(id) {
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
       h2(
         tags$b(
-          HTML("Planejamento Reprodutivo: série histórica"),
+          HTML("Planejamento reprodutivo: série histórica"),
           htmlOutput(ns("titulo_localidade"), inline = TRUE)
         ),
         style = "padding-left: 0.4em"
