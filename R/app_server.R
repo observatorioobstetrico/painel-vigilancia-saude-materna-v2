@@ -260,6 +260,13 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
           server = FALSE
         )
       }
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "profissional") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6_7",
+        choices = tabela_indicadores$indicador[which(tabela_indicadores$bloco == "bloco4_profissional")],
+        server = FALSE
+      )
     } else if (input$tipo_do_indicador_blocos4_6_7 == "mortalidade") {
       updateSelectizeInput(
         session,

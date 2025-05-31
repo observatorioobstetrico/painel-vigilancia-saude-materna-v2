@@ -601,6 +601,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         }
       } else if (infos_indicador()$bloco == "bloco4_deslocamento_macro") {
         bloco4_deslocamento_macrorregiao
+      } else if (infos_indicador()$bloco == "bloco4_profissional") {
+        bloco4_profissional
       } else if (infos_indicador()$bloco == "bloco7_neonatal_evitaveis") {
         bloco8_grafico_evitaveis_neonatal
       } else if(infos_indicador()$bloco == "bloco7_morbidade_neonatal_grupos"){
