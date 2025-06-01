@@ -56,6 +56,7 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 df_bloco4_profissional <- df |>
   # Selecionando somente parto vaginal, PARTO == 1
   filter(PARTO == "1") |>
+  select(-PARTO) |>
   mutate(
     ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
     TPNASCASSI = as.numeric(TPNASCASSI),
