@@ -757,7 +757,7 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência em partos ocorridos em hospitais &nbsp;</b>")),
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência em partos vaginais ocorridos em hospitais &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
