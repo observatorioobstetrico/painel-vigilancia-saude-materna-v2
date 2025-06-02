@@ -1484,7 +1484,7 @@ mod_bloco_6_server <- function(id, filtros){
         dplyr::full_join(data6_comp(), data6_comp_rmm_corrigida_aux(), by = "ano") |>
           dplyr::mutate(rmm = ifelse(ano <= 2022, RMM, rmm))
       } else{
-        data6_comp
+        data6_comp()
       }
     })
 
