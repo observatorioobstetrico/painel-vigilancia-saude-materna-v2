@@ -364,10 +364,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
           "Taxa de mortalidade neonatal por 1000 nascidos vivos",
           "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos",
           "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos",
-          "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
-          #"Número de óbitos perinatais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida",
-          "Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos",
-          #"Taxa de mortalidade perinatal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou idade até 6 dias de vida por 1000 nascidos vivos",
+          "Número de óbitos perinatais",
+          "Taxa de mortalidade perinatal por 1000 nascidos vivos",
           "Taxa de mortalidade neonatal por 1000 nascidos vivos ",
           "Taxa de mortalidade neonatal precoce por 1000 nascidos vivos  ",
           "Taxa de mortalidade neonatal tardia por 1000 nascidos vivos  " #,
@@ -396,7 +394,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     if (
       input$indicador_blocos4_6_7 %in%
         c(
-          "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas evitáveis",
+          "Porcentagem de óbitos perinatais por grupos de causas evitáveis",
           "Porcentagem de óbitos neonatais por grupos de causas evitáveis"
         )
     ) {
@@ -420,7 +418,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     if (
       input$indicador_blocos4_6_7 %in%
         c(
-          "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por grupos de causas",
+          "Porcentagem de óbitos perinatais por grupos de causas",
           "Porcentagem de óbitos neonatais por grupos de causas"
         )
     ) {
@@ -470,7 +468,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
     if (
       input$indicador_blocos4_6_7 ==
-        "Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas evitáveis"
+        "Porcentagem de óbitos fetais por grupos de causas evitáveis"
     ) {
       updateSelectizeInput(
         session,
@@ -488,7 +486,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
     if (
       input$indicador_blocos4_6_7 ==
-        "Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por grupos de causas"
+        "Porcentagem de óbitos fetais por grupos de causas"
     ) {
       updateSelectizeInput(
         session,
@@ -547,10 +545,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
     if (
       input$indicador_blocos4_6_7 %in%
         c(
-          "Número de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
-          "Número de óbitos fetais com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g",
-          "Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por 1000 nascidos vivos",
-          "Taxa de mortalidade fetal com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g por 1000 nascidos vivos"
+          "Número de óbitos fetais",
+          "Taxa de mortalidade fetal por 1000 nascidos vivos"
         )
     ) {
       updateSelectizeInput(

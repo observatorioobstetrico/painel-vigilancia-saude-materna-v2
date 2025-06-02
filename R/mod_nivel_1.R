@@ -4598,7 +4598,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_fetal",
-        titulo = "Porcentagem de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g potencialmente evitáveis",
+        titulo = "Porcentagem de óbitos fetais potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_fetal,
         tipo = "porcentagem",
@@ -4615,7 +4615,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_perinatal",
-        titulo = "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida potencialmente evitáveis",
+        titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
         tipo = "porcentagem",
@@ -4650,7 +4650,7 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_fetal_i5 <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,"
+        titulo = "Dentre os óbitos fetais,"
       )
     })
 
@@ -4659,7 +4659,7 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_perinatal_i5 <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,"
+        titulo = "Dentre os óbitos perinatais,"
       )
     })
 
@@ -4677,7 +4677,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_fetais",
-        titulo = "Número de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+        titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_fetais,
         tipo = "número",
@@ -4698,7 +4698,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_fetais_oms",
-        titulo = "Número de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+        titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_fetais_oms,
         tipo = "número",
@@ -4720,7 +4720,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_mort_fetal",
-        titulo = "Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+        titulo = "Taxa de mortalidade fetal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
         valor_de_referencia = #ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
@@ -4738,7 +4738,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_mort_fetal_oms",
-        titulo = "Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g",
+        titulo = "Taxa de mortalidade fetal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
         valor_de_referencia = #dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]] >0 ,
@@ -4757,7 +4757,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4767,7 +4767,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "330px"
       )
     })
@@ -4880,7 +4880,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "perinatal_todos_total",
-        titulo = "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
+        titulo = "Número de óbitos perinatais",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$perinatal_todos_total,
         tipo = "número",
@@ -4903,7 +4903,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_perinatal_total",
-        titulo = "Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade perinatal por 1000 nascidos vivos",
         tem_meta = T,
         tipo_referencia = "meta ODS",
         valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
@@ -4922,7 +4922,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "obitos_perinatal_oms",
-        titulo = "Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
+        titulo = "Número de óbitos perinatais",
         tem_meta = FALSE,
         valor_de_referencia = data7_comp()$obitos_perinatal_oms,
         tipo = "número",
@@ -4945,7 +4945,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data7(),
         indicador = "taxa_perinatal_oms",
-        titulo = "Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida",
+        titulo = "Taxa de mortalidade perinatal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
         valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
@@ -4963,7 +4963,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "perinatal momento do obito por peso",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais,",
         tamanho_caixa = "330px",
       )
     })
@@ -4973,7 +4973,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco7(
         dados = data7(),
         indicador = "perinatal peso por momento do obito",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais,",
         tamanho_caixa = "330px",
       )
     })

@@ -49,6 +49,8 @@ mod_bloco_7_ui <- function(id) {
             width=12,
             HTML(
               "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                Neste painel, consideramos apenas óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500 g.
+                <span style='display: block; margin-bottom: 15px;'> </span>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
@@ -116,10 +118,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Número de óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g &nbsp;</b>")
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Número de óbitos fetais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -164,10 +166,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade fetal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -215,8 +217,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual do momento do óbito fetal por faixa de peso (para fetos com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito fetal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal1"),
@@ -267,8 +269,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual das faixas de peso por momento do óbito fetal (para fetos com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito fetal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal2"),
@@ -315,7 +317,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> (para fetos com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -429,10 +431,10 @@ mod_bloco_7_ui <- function(id) {
               #     status = "primary",
               #     collapsible = FALSE,
               #     headerBorder = FALSE,
-              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
+              #        HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -500,7 +502,7 @@ mod_bloco_7_ui <- function(id) {
                    style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
                    style = "height: 10%; display: flex; align-items: center;",
-                   HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> (para fetos com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g) &nbsp;</b>")),
+                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
@@ -591,6 +593,8 @@ mod_bloco_7_ui <- function(id) {
             width=12,
             HTML(
               "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                Neste painel, consideramos apenas óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500 g ou idade de até 6 dias de vida.
+                <span style='display: block; margin-bottom: 15px;'> </span>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
@@ -661,7 +665,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Número de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Número de óbitos perinatais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -697,7 +701,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida por 1000 nascidos vivos  &nbsp;</b>")
+                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -728,10 +732,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 750px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 17%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Distribuição percentual do momento do óbito perinatal por faixa de peso (para óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou óbitos neonatais com até 6 dias de vida) &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito perinatal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal1"),
@@ -780,10 +784,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 750px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 17%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Distribuição percentual das faixas de peso por momento do óbito perinatal (para óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou óbitos neonatais com até 6 dias de vida) &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito perinatal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal2"),
@@ -835,7 +839,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> (para óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou óbitos neonatais com até 6 dias de vida) &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -934,7 +938,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) (para óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou óbitos neonatais com até 6 dias de vida) &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1121,7 +1125,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Número de óbitos neonatais &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Número de óbitos neonatais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1155,7 +1159,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1188,8 +1192,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1222,8 +1226,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1256,8 +1260,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual do momento do óbito neonatal por faixa de peso &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito neonatal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_neonatal1"),
@@ -1308,8 +1312,8 @@ mod_bloco_7_ui <- function(id) {
                   headerBorder = FALSE,
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual das faixas de peso por momento do óbito neonatal &nbsp;</b>"),
+                    style = "height: 12%; display: flex; align-items: center;",
+                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito neonatal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_neonatal2"),
@@ -1358,10 +1362,10 @@ mod_bloco_7_ui <- function(id) {
               #     status = "primary",
               #     collapsible = FALSE,
               #     headerBorder = FALSE,
-              #     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #       HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
+              #        HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -1407,7 +1411,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1504,7 +1508,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual dos óbitos neonatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1662,7 +1666,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                     HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns("botao_explicacao_indicador"),
                       icon = icon("info"),
@@ -1697,7 +1701,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1749,7 +1753,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1786,7 +1790,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 420))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 430))
                 )
               ),
 
@@ -1797,10 +1801,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:18px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1868,7 +1872,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 540))
                 )
               )
             )
@@ -3000,7 +3004,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_obitos_fetais <- reactive({
-      paste0(titulo_obitos_fetais_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+      titulo_obitos_fetais_aux()
     })
 
     output$caixa_b7_fetal_i1 <- renderUI({ #[vvv]
@@ -3102,7 +3106,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_obitos_fetais_oms <- reactive({
-      paste0(titulo_obitos_fetais_oms_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+      titulo_obitos_fetais_oms_aux()
     })
 
     output$caixa_b7_fetal_i5 <- renderUI({
@@ -3228,7 +3232,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_taxa_mortalidade_fetal <- reactive({
-      paste0(titulo_taxa_mortalidade_fetal_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+      titulo_taxa_mortalidade_fetal_aux()
     })
 
     output$caixa_b7_fetal_i2 <- renderUI({
@@ -3381,7 +3385,7 @@ mod_bloco_7_server <- function(id, filtros){
     })
 
     titulo_taxa_mortalidade_fetal_oms <- reactive({
-      paste0(titulo_taxa_mortalidade_fetal_oms_aux(), " (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g)")
+      titulo_taxa_mortalidade_fetal_oms_aux()
     })
 
     output$caixa_b7_fetal_i6 <- renderUI({
@@ -3406,7 +3410,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "350px"
       )
     })
@@ -3416,7 +3420,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "350px"
       )
     })
@@ -3562,11 +3566,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Número de óbitos perinatais (definição 1) ----------------------------
     titulo_caixa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_total == "perinatal_todos_total" ~ "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_total == "perinatal_todos_peso_menos_1000" ~ "Número de óbitos perinatais com peso menor que 1000 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_total == "perinatal_todos_peso_1000_1499" ~ "Número de óbitos perinatais com peso de 1000 a 1499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_total == "perinatal_todos_peso_1500_2499" ~ "Número de óbitos perinatais com peso de 1500 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_total == "perinatal_todos_peso_mais_2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
+        input$faixa_peso_perinatal_total == "perinatal_todos_total" ~ "Número de óbitos perinatais",
+        input$faixa_peso_perinatal_total == "perinatal_todos_peso_menos_1000" ~ "Número de óbitos perinatais com peso menor que 1000 g",
+        input$faixa_peso_perinatal_total == "perinatal_todos_peso_1000_1499" ~ "Número de óbitos perinatais com peso de 1000 a 1499 g",
+        input$faixa_peso_perinatal_total == "perinatal_todos_peso_1500_2499" ~ "Número de óbitos perinatais com peso de 1500 a 2499 g",
+        input$faixa_peso_perinatal_total == "perinatal_todos_peso_mais_2500" ~ "Número de óbitos perinatais com peso maior ou igual a 2500 g",
       )
     })
 
@@ -3626,11 +3630,11 @@ mod_bloco_7_server <- function(id, filtros){
     #### Taxa de mortalidade perinatal (definição 1) --------------------------
     titulo_caixa_taxa_perinatal_total <- reactive({
       dplyr::case_when(
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1000" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1000 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1000_1499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1000 a 1499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 2499 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)",
-        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g (feto com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou neonatal com até 6 dias de vida)"
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_menos1000" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso menor que 1000 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1000_1499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1000 a 1499 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_1500_2499" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso de 1500 a 2499 g",
+        input$faixa_peso_perinatal_taxa_total == "taxa_perinatal_total_mais2500" ~ "Taxa de mortalidade perinatal por 1000 nascidos vivos com peso maior ou igual a 2500 g"
       )
     })
 
@@ -3691,7 +3695,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "perinatal momento do obito por peso",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais,",
         tamanho_caixa = "350px",
       )
     })
@@ -3701,7 +3705,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo(),
         indicador = "perinatal peso por momento do obito",
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais,",
         tamanho_caixa = "350px",
       )
     })
@@ -3815,7 +3819,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_server(
         dados = bloco7_evitaveis_resumo(),
         indicador = "porc_evitavel_perinatal",
-        titulo = "Porcentagem de óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida potencialmente evitáveis",
+        titulo = "Porcentagem de óbitos perinatais potencialmente evitáveis",
         tem_meta = FALSE,
         valor_de_referencia = bloco7_evitaveis_resumo_comp()$porc_evitavel_perinatal,
         tipo = "porcentagem",
@@ -3850,7 +3854,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_fetal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_fetal(),
-        titulo = "Dentre os óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g,",
+        titulo = "Dentre os óbitos fetais,",
         tamanho_caixa = "350px"
       )
     })
@@ -3860,7 +3864,7 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_principais_perinatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_perinatal(),
-        titulo = "Dentre os óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500g ou idade até 6 dias de vida,",
+        titulo = "Dentre os óbitos perinatais,",
         tamanho_caixa = "350px"
       )
     })
@@ -3871,8 +3875,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
         titulo = "Dentre os óbitos neonatais,",
-        tamanho_caixa = "330px",
-        height_titulo = 15,
+        tamanho_caixa = "330px"
       )
     })
 
@@ -3882,8 +3885,7 @@ mod_bloco_7_server <- function(id, filtros){
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
         titulo = "Dentre as internações neonatais,",
-        tamanho_caixa = "320px",
-        height_titulo = 15,
+        tamanho_caixa = "320px"
       )
     })
 
