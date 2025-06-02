@@ -559,7 +559,7 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 765px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e disponibilidade de leito de UTI neonatal &nbsp;</b>")),
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop2"),
@@ -573,28 +573,8 @@ mod_bloco_4_ui <- function(id){
                     )
                   )
                 ),
-                fluidRow(
-                  column(
-                    width = 12,
-                    hr(),
-                    br(),
-                    tags$style(HTML(".radio-inline, .checkbox-inline {overflow-x: auto; align-items: center;}")),
-                    radioButtons(
-                      inputId = ns("opcoes_plot_uti_neonatal"),
-                      label = NULL,
-                      choiceNames = list(
-                        HTML("<span style = 'font-size: 16px'> Considerar estabelecimentos com pelo menos um leito de UTI neonatal </span>"),
-                        HTML("<span style = 'font-size: 16px'> Considerar estabelecimentos com pelo menos quatro leitos de UTI neonatal </span>")
-                      ),
-                      choiceValues = list("1mais_uti", "4mais_uti"),
-                      selected = "1mais_uti",
-                      inline = TRUE
-                    ),
-                    align = "center"
-                  )
-                ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "525px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "650px"))
               )
             ),
             shinyjs::hidden(
@@ -2872,22 +2852,6 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    # pegar valor atual (1mais_uti ou 4mais_uti)
-    uti_val <- reactive(input$opcoes_plot_uti_neonatal)
-
-    # definir expressão textual dinâmica
-    texto_leito <- reactive(ifelse(uti_val() == "1mais_uti", "um leito de", "quatro leitos de"))
-    texto_sem_leito <- reactive(ifelse(uti_val() == "1mais_uti", "sem leitos de", "com menos de quatro leitos de"))
-
-    # gerar símbolos dinamicamente
-    vars <- reactive({
-      list(
-        na_macro_com   = rlang::sym(paste0("partos_na_macro_com_", uti_val())),
-        na_macro_sem   = rlang::sym(paste0("partos_na_macro_sem_", uti_val())),
-        fora_macro_com = rlang::sym(paste0("partos_fora_macro_com_", uti_val())),
-        fora_macro_sem = rlang::sym(paste0("partos_fora_macro_sem_", uti_val()))
-      )
-    })
 
     data4_deslocamento_macro <- reactive({
       bloco4_deslocamento_muni |>
@@ -2908,10 +2872,10 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_partos_na_macro_com = round(sum(!!vars()$na_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_na_macro_sem = round(sum(!!vars()$na_macro_sem) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_com = round(sum(!!vars()$fora_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_sem = round(sum(!!vars()$fora_macro_sem) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_com_4mais_uti = round(sum(partos_na_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_4mais_uti = round(sum(partos_na_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_4mais_uti = round(sum(partos_fora_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_4mais_uti = round(sum(partos_fora_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
           prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf) / sum(nascimentos) * 100, 1),
           prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf) / sum(nascimentos) * 100, 1)
         ) |>
@@ -2924,22 +2888,22 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              grepl("^prop_partos_na_macro_com", indicador) ~ paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_com", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem_inf", indicador) ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              grepl("^prop_partos_fora_macro_sem_inf", indicador) ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             ),
             levels = c(
-              paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
+              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
               "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
               "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             )
-          ),
+            ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -3194,10 +3158,10 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_partos_na_macro_com   = round(sum(!!vars()$na_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_na_macro_sem   = round(sum(!!vars()$na_macro_sem) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_com = round(sum(!!vars()$fora_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_sem = round(sum(!!vars()$fora_macro_sem) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_com_4mais_uti = round(sum(partos_na_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_4mais_uti = round(sum(partos_na_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_4mais_uti = round(sum(partos_fora_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_4mais_uti = round(sum(partos_fora_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
           prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf) / sum(nascimentos) * 100, 1),
           prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf) / sum(nascimentos) * 100, 1)
         ) |>
@@ -3210,22 +3174,22 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              grepl("^prop_partos_na_macro_com", indicador) ~ paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_com", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem_inf", indicador) ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              grepl("^prop_partos_fora_macro_sem_inf", indicador) ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             ),
             levels = c(
-              paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
+              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
               "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
               "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             )
-          ),
+            ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -3450,10 +3414,10 @@ mod_bloco_4_server <- function(id, filtros){
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          prop_partos_na_macro_com   = round(sum(!!vars()$na_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_na_macro_sem   = round(sum(!!vars()$na_macro_sem) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_com = round(sum(!!vars()$fora_macro_com) / sum(nascimentos) * 100, 1),
-          prop_partos_fora_macro_sem = round(sum(!!vars()$fora_macro_sem) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_com_4mais_uti = round(sum(partos_na_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_na_macro_sem_4mais_uti = round(sum(partos_na_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_com_4mais_uti = round(sum(partos_fora_macro_com_4mais_uti) / sum(nascimentos) * 100, 1),
+          prop_partos_fora_macro_sem_4mais_uti = round(sum(partos_fora_macro_sem_4mais_uti) / sum(nascimentos) * 100, 1),
           prop_partos_na_macro_sem_inf = round(sum(partos_na_macro_sem_inf) / sum(nascimentos) * 100, 1),
           prop_partos_fora_macro_sem_inf = round(sum(partos_fora_macro_sem_inf) / sum(nascimentos) * 100, 1)
         ) |>
@@ -3466,22 +3430,22 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              grepl("^prop_partos_na_macro_com", indicador) ~ paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_com", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_fora_macro_sem", indicador) & !grepl("inf", indicador) ~ paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              grepl("^prop_partos_na_macro_sem_inf", indicador) ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              grepl("^prop_partos_fora_macro_sem_inf", indicador) ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             ),
             levels = c(
-              paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal"),
-              paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
-              paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal"),
+              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
+              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
+              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
               "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
               "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
             )
-          )
+            )
         )
     })
 
@@ -4278,7 +4242,7 @@ mod_bloco_4_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4289,7 +4253,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == paste0("Em estabs. na macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4302,7 +4266,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4313,7 +4277,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == paste0("Em estabs. fora da macrorregião de saúde com pelo menos ", texto_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4325,7 +4289,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4336,7 +4300,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == paste0("Em estabs. na macrorregião de saúde ", texto_sem_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4349,7 +4313,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4360,7 +4324,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == paste0("Em estabs. fora da macrorregião de saúde ", texto_sem_leito(), " UTI neonatal")),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
