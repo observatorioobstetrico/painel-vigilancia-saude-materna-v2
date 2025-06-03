@@ -706,7 +706,7 @@ mod_bloco_5_server <- function(id, filtros){
                                                                                            nascidos_vivos_33_a_34_semanas,
                                                                                            nascidos_vivos_35_a_36_semanas)))) / sum(nascidos_vivos_prematuros) * 100, 1)", 2),
       # porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
-      porc_termo_precoce = rep("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_termo_precoce = c("round(sum(nascidos_vivos_termo_precoce) / sum(total_de_nascidos_vivos) * 100, 1)", "20"),
       porc_nascidos_vivos_asfixia1 = rep("round(sum(nascidos_vivos_asfixia1) / sum(total_nascidos) * 100, 1)", 2),
       porc_malformacao_geral = rep("round(sum(total_de_nascidos_malformacao) / sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_malformacao_vigilancia = rep("round(sum(nascidos_vivos_anomalia) / sum(total_de_nascidos_vivos) * 100, 1)", 2)
@@ -2198,24 +2198,18 @@ mod_bloco_5_server <- function(id, filtros){
             type = "line",
             highcharter::hcaes(x = ano, y = porc_termo_precoce, group = class, colour = class)
           ) |>
+          highcharter::hc_add_series(
+            data = data5_referencia(),
+            type = "line",
+            name = "Referência (países desenvolvidos)",
+            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
+            dashStyle = "ShortDot",
+            opacity = 0.8
+          ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
-        if (filtros()$nivel == "nacional") {
-          grafico_base
-        } else {
-          grafico_base <- grafico_base |>
-            highcharter::hc_add_series(
-            data = data5_referencia(),
-            type = "line",
-            # name = "Referência (países desenvolvidos)",
-            name = "Referência (média nacional)",
-            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
-            dashStyle = "ShortDot",
-            opacity = 0.8
-            )
-        }
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
@@ -2233,18 +2227,18 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
           highcharter::hc_colors(cols)
 
-        if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
+        if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
           grafico_base
         } else {
-          grafico_base |> highcharter::hc_add_series(
-            data = data5_referencia(),
-            type = "line",
-            # name = "Referência (países desenvolvidos)",
-            name = "Referência (média nacional)",
-            highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
-            dashStyle = "ShortDot",
-            opacity = 0.6
-          )
+          grafico_base |>
+            highcharter::hc_add_series(
+              data = data5_referencia(),
+              type = "line",
+              name = "Referência (países desenvolvidos)",
+              highcharter::hcaes(x = ano, y = porc_termo_precoce, group = localidade_comparacao, colour = localidade_comparacao),
+              dashStyle = "ShortDot",
+              opacity = 0.8
+            )
         }
       }
     })
