@@ -3227,7 +3227,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_conjunta_bloco5(
         dados = data5(),
         indicador = "prematuridade",
-        titulo = "Dentre os nascimentos prematuros,"
+        titulo = "Dentre os nascimentos prematuros (com menos de 37 semanas de gestação),"
       )
     })
 
