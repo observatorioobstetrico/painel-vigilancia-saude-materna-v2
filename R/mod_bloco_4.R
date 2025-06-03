@@ -3560,7 +3560,8 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             color = c("#2c115f"),
             showInLegend = TRUE
-          )
+          ) |>
+          highcharter::hc_yAxis(min = 0, max = 100)
 
         if (filtros()$comparar == "Sim") {
           grafico_base |>
@@ -3603,7 +3604,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = "#fc8961",
           showInLegend = TRUE,
           opacity = 0.8
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot2_indicador1 <- highcharter::renderHighchart({
@@ -3617,7 +3619,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot3_indicador1 <- highcharter::renderHighchart({
@@ -3631,7 +3634,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           fillOpacity = 0.2,
           enableMouseTracking = TRUE
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot4_indicador1 <- highcharter::renderHighchart({
@@ -3645,7 +3649,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot5_indicador1 <- highcharter::renderHighchart({
@@ -3659,7 +3664,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot6_indicador1 <- highcharter::renderHighchart({
@@ -3673,7 +3679,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           fillOpacity = 0.2,
           enableMouseTracking = TRUE
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     #[REFF]
@@ -3708,7 +3715,8 @@ mod_bloco_4_server <- function(id, filtros){
           # color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     output$plot8_indicador1 <- highcharter::renderHighchart({
@@ -3722,8 +3730,8 @@ mod_bloco_4_server <- function(id, filtros){
           color = dplyr::if_else(filtros()$comparar == "Não", true = "#b73779", false = "black"),
           showInLegend = TRUE,
           opacity = 0.8
-
-        )
+        ) |>
+        highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
     #### Ativando os pop-ups com a descrição de cada grupo de Robson
