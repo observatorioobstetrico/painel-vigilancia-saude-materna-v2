@@ -3539,12 +3539,64 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    ##marx
+
+    total_nasc_local_hospital <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(total_nasc = sum(nasc_local_hospital, na.rm = TRUE))
+    })
+
     data4_dist_profissional_completo <- reactive({
-      dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia())
+      dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia()) |>
+        dplyr::left_join(total_nasc_local_hospital(), by = "ano")
+    })
+
+    total_nasc_local_hospital_comp <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if (filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(total_nasc = sum(nasc_local_hospital, na.rm = TRUE))
     })
 
     data4_dist_profissional_comp_completo <- reactive({
-      dplyr::full_join(data4_dist_profissional_comp(), data4_dist_profissional_referencia())
+      dplyr::full_join(data4_dist_profissional_comp(), data4_dist_profissional_referencia())|>
+        dplyr::left_join(total_nasc_local_hospital_comp(), by = "ano")
     })
 
 
@@ -4627,7 +4679,7 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             )
           )|>
           highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
@@ -4640,7 +4692,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#FEAF77FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4651,7 +4703,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#FEAF77FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -4663,7 +4715,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4674,7 +4726,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -4686,7 +4738,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#B63679FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4698,7 +4750,7 @@ mod_bloco_4_server <- function(id, filtros){
             color = "#B63679FF",
             tooltip = list(
 
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -4710,7 +4762,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#721F81FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4722,7 +4774,7 @@ mod_bloco_4_server <- function(id, filtros){
             color = "#721F81FF",
             tooltip = list(
 
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -4734,7 +4786,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#2D1160FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4745,7 +4797,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#2D1160FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -4757,7 +4809,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#231151FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 0
           ) |>
@@ -4768,7 +4820,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#231151FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <br> Denominador: <b> {point.total_nasc} </b>"
             ),
             stack = 1,
             linkedTo = ":previous"
