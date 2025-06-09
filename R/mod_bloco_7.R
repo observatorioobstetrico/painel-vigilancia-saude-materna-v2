@@ -317,7 +317,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -839,7 +839,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1411,7 +1411,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1804,7 +1804,7 @@ mod_bloco_7_ui <- function(id) {
                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://bvsms.saude.gov.br/bvs/publicacoes/informe_situacao_tendencias_demografia.pdf , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                     HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -2090,7 +2090,7 @@ mod_bloco_7_server <- function(id, filtros){
                ifelse(
                length(input$idade_dias_sih) == 2,
                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[2]})) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
-               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}T) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
+               round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_sih[1]}) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
 
                )
              )"
@@ -2110,12 +2110,12 @@ mod_bloco_7_server <- function(id, filtros){
            tipo = c("local", "referencia"),
            porc_internacoes_uti_menores_28_dias_sih = rep(glue::glue(
               "ifelse(
-                length(input$idade_dias_sih) == 3,
-                round(sum(internacoes_{input$local_internacao_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+                length(input$idade_dias_uti_sih) == 3,
+                round(sum(internacoes_{input$local_internacao_uti_sih}_geral_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
                 ifelse(
-                length(input$idade_dias_sih) == 2,
-                round((sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) + sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[2]}_internado_uti)) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
-                round(sum(internacoes_{input$local_internacao_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
+                length(input$idade_dias_uti_sih) == 2,
+                round((sum(internacoes_{input$local_internacao_uti_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) + sum(internacoes_{input$local_internacao_uti_sih}_{input$idade_dias_uti_sih[2]}_internado_uti)) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1),
+                round(sum(internacoes_{input$local_internacao_uti_sih}_{input$idade_dias_uti_sih[1]}_internado_uti) / sum(nascidos_estabelecimentos_publicos_sih) * 100, 1)
                 )
               )"
             ), 2)
@@ -2159,7 +2159,7 @@ mod_bloco_7_server <- function(id, filtros){
         *100, 1)", 2),
 
       dia_1_6_dist_moment_obito_perinat = rep("round(
-        sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
+        sum(c(obitos_1_6dias_menos1000, obitos_1_6dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[seleciona(aba = 'perinatal', indicador = 'momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)/
           sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[seleciona(aba = 'perinatal', indicador ='momento de obito por peso', input$faixa_peso_dist_moment_obit_perinat) %in% input$faixa_peso_dist_moment_obit_perinat], na.rm=T)
         *100, 1)", 2),
 
