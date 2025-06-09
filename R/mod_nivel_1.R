@@ -972,21 +972,9 @@ mod_nivel_1_ui <- function(id) {
                 Neste bloco, apresentamos o número absoluto de óbitos e a taxa
                 de mortalidade fetal, neonatal e perinatal; a distribuição desses óbitos segundo
                 o peso ao nascer e o momento de ocorrência do óbito; e as principais causas dos
-                óbitos e sua evitabilidade.
+                óbitos e sua evitabilidade. Para a avaliação da evitabilidade, ou seja, da possibilidade do óbito ser evitado, utilizamos a Lista Brasileira de Causas de Mortes Evitáveis por intervenção do Sistema Único de Saúde.
                 <span style='display: block; margin-bottom: 14px;'> </span>
-                Para a avaliação da evitabilidade, ou seja, da possibilidade
-                do óbito ser evitado, utilizamos a Lista Brasileira de Causas de Mortes Evitáveis por intervenção do Sistema Único de Saúde.
-                Para a morbidade neonatal, são apresentadas a
-                porcentagem de nascidos com condições potencialmente ameaçadoras à vida
-                (peso < 1500g ou idade gestacional < 32 semanas ou asfixia ao nascer);
-                o número de internações neonatais e de internações em unidade de terapia
-                intensiva neonatal até o 27º dia de vida em três faixas etárias
-                (menos de um dia de vida, 1 a 6 dias de vida, 7 a 27 dias de vida) e
-                segundo local de ocorrência (na macrorregião de saúde de residência ou fora da
-                macrorregião de saúde); e as principais causas de morbidade. A análise da morbidade
-                é particularmente importante para locais com baixo número de nascimentos,
-                onde a frequência de óbitos neonatais pode ser muito baixa ou inexistente,
-                ampliando a capacidade de análise do cuidado e dos riscos da população.
+                PPara a morbidade neonatal, são apresentadas a porcentagem de nascidos com condições potencialmente ameaçadoras à vida (peso < 1500g ou idade gestacional < 32 semanas ou asfixia ao nascer); o número de internações neonatais e de internações em unidade de terapia intensiva neonatal até o 27º dia de vida em três faixas etárias (menos de um dia de vida, 1 a 6 dias de vida, 7 a 27 dias de vida) e segundo local de ocorrência (na macrorregião de saúde de residência ou fora da macrorregião de saúde); e as principais causas de morbidade. A análise da morbidade é particularmente importante para locais com baixo número de nascimentos, onde a frequência de óbitos neonatais pode ser muito baixa ou inexistente, ampliando a capacidade de análise do cuidado e dos riscos da população.
 
                 </p>
                 "
