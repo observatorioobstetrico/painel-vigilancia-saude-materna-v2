@@ -370,7 +370,7 @@ mod_nivel_1_ui <- function(id) {
             column(
               width = 7,
               fluidRow(
-                column(
+                column( #Cobertura de assistência pré-natal
                   #offset = 2,
                   width = 4,
                   shinycssloaders::withSpinner(
@@ -378,35 +378,36 @@ mod_nivel_1_ui <- function(id) {
                     proxy.height = "270px"
                   )
                 ),
-                column(
+                column( #Porcentagem de mulheres com início do pré-natal até 12 semanas de gestação
                   width = 4,
                   shinycssloaders::withSpinner(
-                    uiOutput(ns("caixa_b3_i4")),
+                    uiOutput(ns("caixa_b3_i2")),
                     proxy.height = "270px"
                   )
                 ),
-                column(
-                  #offset = 2,
-                  width = 4,
-                  shinycssloaders::withSpinner(
-                    uiOutput(ns("caixa_b3_i3")),
-                    proxy.height = "280px"
-                  )
-                )
-              ),
-              fluidRow(
-                column(
-                  offset = 2,
+
+                column( #Porcentagem de mulheres com oito ou mais consultas de pré-natal
+                  # offset = 2,
                   width = 4,
                   shinycssloaders::withSpinner(
                     uiOutput(ns("caixa_b3_i5")),
                     proxy.height = "280px"
                   )
-                ),
-                column(
+                )
+              ),
+              fluidRow(
+                column( #Porcentagem de mulheres com número adequado de consultas de pré-natal para a idade gestacional no parto
+                  offset = 2,
                   width = 4,
                   shinycssloaders::withSpinner(
-                    uiOutput(ns("caixa_b3_i2")),
+                    uiOutput(ns("caixa_b3_i3")),
+                    proxy.height = "280px"
+                  )
+                ),
+                column( #Incidência de sífilis congênita por mil nascidos vivos
+                  width = 4,
+                  shinycssloaders::withSpinner(
+                    uiOutput(ns("caixa_b3_i4")),
                     proxy.height = "280px"
                   )
                 )
@@ -2305,7 +2306,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Porcentagem de mulheres com oito ou mais consultas de pré-natal",
         tem_meta = TRUE,
         valor_de_referencia = 95,
-        tipo = "taxa",
+        tipo = "porcentagem",
         invertido = TRUE,
         pagina = "nivel_1",
         tipo_referencia = "recomendações OMS",
@@ -3239,7 +3240,7 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data5(),
         indicador = "porc_condicoes_ameacadoras",
         titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
-        tem_meta = FALSE,
+        tem_meta = TRUE,
         valor_de_referencia = data5_comp()$porc_condicoes_ameacadoras,
         tipo = "porcentagem",
         invertido = FALSE,
@@ -3895,7 +3896,7 @@ mod_nivel_1_server <- function(id, filtros) {
             * 100, 1) ,
 
           dia_1_6_dist_moment_obito_perinat =  round(
-            sum(c(obitos_1_6dias_menos1000, obitos_1_6dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[c(rep(F, 4), T)], na.rm = T)/
+            sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[c(rep(F, 4), T)], na.rm = T)/
               sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[c(rep(F, 4), T)], na.rm = T)
             * 100, 1) ,
 
@@ -4992,13 +4993,12 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data7(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
         titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS",
-        tem_meta = FALSE,
+        tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
-        cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -5012,11 +5012,10 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data7(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
         titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS",
-        tem_meta = FALSE,
+        tem_meta = TRUE,
         valor_de_referencia = data7_comp()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
-        cor = "lightgrey",
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
         pagina = "nivel_1",
