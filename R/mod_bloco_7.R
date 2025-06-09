@@ -6512,10 +6512,17 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -6523,6 +6530,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -6532,6 +6540,12 @@ mod_bloco_7_server <- function(id, filtros){
             data = data7_plot_comp_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -6579,11 +6593,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -6620,6 +6641,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -6632,6 +6654,12 @@ mod_bloco_7_server <- function(id, filtros){
             name = ifelse(taxa_mortalidade_fetal() != "taxa_mort_fetal", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
            ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
+          ) |>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
           #   type = "line",
@@ -6940,10 +6968,17 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -6951,6 +6986,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -6960,6 +6996,12 @@ mod_bloco_7_server <- function(id, filtros){
             data = data7_plot_comp_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7007,11 +7049,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7048,6 +7097,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -7059,6 +7109,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(taxa_mortalidade_fetal_oms() != "taxa_mort_fetal_oms", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_plot_percentil5_aux,
@@ -7123,10 +7179,17 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7134,6 +7197,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -7143,6 +7207,12 @@ mod_bloco_7_server <- function(id, filtros){
             data = data7_plot_comp_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7210,12 +7280,19 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
        grafico_base <- highcharter::highchart() |>
+         highcharter::hc_add_dependency("modules/series-label.js") |>
          highcharter::hc_add_series(
            data = data7_plot_aux,
            type = "line",
            name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
            #name = ifelse(data7_plot_aux$class == "Brasil (valor de referência)", gsub(" \\(valor de referência\\)", "", data7_plot_aux$class), data7_plot_aux$class),
            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+         ) |>
+         highcharter::hc_plotOptions(
+           series = list(
+             label = list(enabled = TRUE),
+             allowPointSelect = TRUE
+           )
          ) |>
          highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7269,6 +7346,7 @@ mod_bloco_7_server <- function(id, filtros){
        }
       } else {
        grafico_base <- highcharter::highchart() |>
+         highcharter::hc_add_dependency("modules/series-label.js") |>
          highcharter::hc_add_series(
            data = data7_plot_aux,
            type = "line",
@@ -7282,6 +7360,12 @@ mod_bloco_7_server <- function(id, filtros){
           name = ifelse(input$faixa_peso != "mort_neonat", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
           #name = ifelse(data7_plot_comp_aux$class == "Brasil (valor de referência)", gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class), data7_plot_comp_aux$class),
           highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+         ) |>
+         highcharter::hc_plotOptions(
+           series = list(
+             label = list(enabled = TRUE),
+             allowPointSelect = TRUE
+           )
          ) |>
          # highcharter::hc_add_series(
          #   data = data7_plot_referencia_aux,
@@ -7402,11 +7486,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7459,6 +7550,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -7470,6 +7562,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(input$faixa_peso_precoc != "mort_neonat_precoc", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7583,11 +7681,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7640,6 +7745,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -7651,6 +7757,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(input$faixa_peso_tardia != "mort_neonat_tardia", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7939,10 +8051,17 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7950,6 +8069,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -7959,6 +8079,12 @@ mod_bloco_7_server <- function(id, filtros){
             data = data7_plot_comp_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -7992,10 +8118,17 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8003,6 +8136,7 @@ mod_bloco_7_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -8012,6 +8146,12 @@ mod_bloco_7_server <- function(id, filtros){
             data = data7_plot_comp_aux,
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8082,11 +8222,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8139,6 +8286,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -8150,6 +8298,12 @@ mod_bloco_7_server <- function(id, filtros){
             name = ifelse(input$faixa_peso_perinatal_taxa_total != "taxa_perinatal_total", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8309,11 +8463,18 @@ mod_bloco_7_server <- function(id, filtros){
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
             name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", data7_plot_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_aux$class)),
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8366,6 +8527,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_plot_aux,
             type = "line",
@@ -8377,6 +8539,12 @@ mod_bloco_7_server <- function(id, filtros){
             name = ifelse(input$faixa_peso_perinatal_taxa_oms != "taxa_perinatal_oms", data7_plot_comp_aux$class, gsub(" \\(valor de referência\\)", "", data7_plot_comp_aux$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8689,11 +8857,18 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot1_morbidade_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7(),
             type = "line",
             name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -8746,6 +8921,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7(),
             type = "line",
@@ -8757,6 +8933,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_comp()$class),
             highcharter::hcaes(x = ano, y = porc_condicoes_ameacadoras, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_percentil(),
@@ -8816,11 +8998,18 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot2_morbidade_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_internacoes_publicos_sih(),
             type = "line",
             name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_publicos_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_percentil(),
@@ -8860,6 +9049,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_internacoes_publicos_sih(),
             type = "line",
@@ -8871,6 +9061,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_internacoes_publicos_sih_comp()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_percentil(),
@@ -8917,11 +9113,18 @@ mod_bloco_7_server <- function(id, filtros){
     output$plot3_morbidade_neonatal <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_internacoes_uti_sih(),
             type = "line",
             name = ifelse(filtros()$nivel == "nacional", "Brasil (valor de referência)", data7_internacoes_uti_sih()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_percentil(),
@@ -8958,6 +9161,7 @@ mod_bloco_7_server <- function(id, filtros){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data7_internacoes_uti_sih(),
             type = "line",
@@ -8969,6 +9173,12 @@ mod_bloco_7_server <- function(id, filtros){
             type = "line",
             name = ifelse(filtros()$nivel2 == "Brasil", "Brasil (valor de referência)", data7_internacoes_uti_sih_comp()$class),
             highcharter::hcaes(x = ano, y = porc_internacoes_uti_menores_28_dias_sih, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           # highcharter::hc_add_series(
           #   data = data7_percentil(),

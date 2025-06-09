@@ -976,6 +976,7 @@ mod_bloco_2_server <- function(id, filtros) {
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2(),
             name = dplyr::if_else(
@@ -985,6 +986,12 @@ mod_bloco_2_server <- function(id, filtros) {
             ),
             type = "line",
             highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1017,6 +1024,7 @@ mod_bloco_2_server <- function(id, filtros) {
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2(),
             name = dplyr::if_else(
@@ -1044,6 +1052,12 @@ mod_bloco_2_server <- function(id, filtros) {
             ),
             type = "line",
             highcharter::hcaes(x = ano, y = !!faixa_selecionada, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE ) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1085,10 +1099,17 @@ mod_bloco_2_server <- function(id, filtros) {
     output$plot2 <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1109,6 +1130,7 @@ mod_bloco_2_server <- function(id, filtros) {
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2(),
             type = "line",
@@ -1118,6 +1140,12 @@ mod_bloco_2_server <- function(id, filtros) {
             data = data2_comp(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_mais_3pt, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1195,12 +1223,19 @@ mod_bloco_2_server <- function(id, filtros) {
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2_taxa_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
             highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
+            )
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
@@ -1237,6 +1272,7 @@ mod_bloco_2_server <- function(id, filtros) {
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2_taxa_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
@@ -1251,6 +1287,12 @@ mod_bloco_2_server <- function(id, filtros) {
             highcharter::hcaes(x = ano, y = tx_abortos_mil_mulheres_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>"
+            )
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
@@ -1347,12 +1389,19 @@ mod_bloco_2_server <- function(id, filtros) {
 
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
             highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
+            )
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
@@ -1384,6 +1433,7 @@ mod_bloco_2_server <- function(id, filtros) {
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data2_razao_aborto() |> dplyr::filter(ano >= 2015),
             type = "line",
@@ -1398,6 +1448,12 @@ mod_bloco_2_server <- function(id, filtros) {
             highcharter::hcaes(x = ano, y = tx_abortos_cem_nascidos_vivos_valor_medio, group = class, colour = class),
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> média de {point.y} (limite inferior de {point.tx_abortos_cem_nascidos_vivos_lim_inf:,f} e limite superior de {point.tx_abortos_cem_nascidos_vivos_lim_sup:,f})</b> </br>"
+            )
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
