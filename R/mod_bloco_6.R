@@ -1503,11 +1503,18 @@ mod_bloco_6_server <- function(id, filtros){
     output$plot1_mort <- highcharter::renderHighchart({
       if (filtros()$comparar == "Não") {
         highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data6(),
             name = dplyr::if_else(filtros()$nivel == "nacional", "Brasil", unique(data6()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1515,6 +1522,7 @@ mod_bloco_6_server <- function(id, filtros){
           highcharter::hc_colors(cols)
       } else {
         highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             data = data6(),
             name = dplyr::if_else(filtros()$nivel == "nacional", "Brasil", unique(data6()$class)),
@@ -1526,6 +1534,12 @@ mod_bloco_6_server <- function(id, filtros){
             name = dplyr::if_else(filtros()$nivel == "nacional", "Brasil", unique(data6_comp()$class)),
             type = "line",
             highcharter::hcaes(x = ano, y = soma_obitos_mat_totais, group = class, colour = class)
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
