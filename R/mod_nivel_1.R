@@ -3240,7 +3240,7 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data5(),
         indicador = "porc_condicoes_ameacadoras",
         titulo = "Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida",
-        tem_meta = TRUE,
+        tem_meta = FALSE,
         valor_de_referencia = data5_comp()$porc_condicoes_ameacadoras,
         tipo = "porcentagem",
         invertido = FALSE,
@@ -3896,7 +3896,7 @@ mod_nivel_1_server <- function(id, filtros) {
             * 100, 1) ,
 
           dia_1_6_dist_moment_obito_perinat =  round(
-            sum(c(obitos_1_6dias_menos1000, obitos_0dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[c(rep(F, 4), T)], na.rm = T)/
+            sum(c(obitos_1_6dias_menos1000, obitos_1_6dias_1000_1499, obitos_1_6dias_1500_2499, obitos_1_6dias_mais2500, obitos_1_6dias)[c(rep(F, 4), T)], na.rm = T)/
               sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[c(rep(F, 4), T)], na.rm = T)
             * 100, 1) ,
 
@@ -4993,12 +4993,13 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data7(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih_geral",
         titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI no SUS",
-        tem_meta = TRUE,
+        tem_meta = FALSE,
         valor_de_referencia = data7_comp()$porc_internacoes_uti_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -5012,12 +5013,13 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data7(),
         indicador = "porc_internacoes_menores_28_dias_sih_geral",
         titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) ocorridas no SUS",
-        tem_meta = TRUE,
+        tem_meta = FALSE,
         valor_de_referencia = data7_comp()$porc_internacoes_menores_28_dias_sih_geral,
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
