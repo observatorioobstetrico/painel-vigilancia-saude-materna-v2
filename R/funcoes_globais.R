@@ -239,12 +239,15 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
     texto <- texto_caixa
   }
 
-  if (invertido == FALSE) {
-    final_texto_comp <- glue::glue("de no máximo {valor_de_referencia_formatado}")
+  if (tipo_referencia == "média nacional") {
+    final_texto_comp <- glue::glue(" ({valor_de_referencia_formatado}{ifelse(tipo == 'porcentagem', '%', '')}, média nacional)")
   } else {
-    final_texto_comp <- glue::glue("de no mínimo {valor_de_referencia_formatado}")
+    if (invertido == FALSE) {
+      final_texto_comp <- glue::glue(", de no máximo {valor_de_referencia_formatado}{ifelse(tipo == 'porcentagem', '%', '')} ({tipo_referencia})")
+    } else {
+      final_texto_comp <- glue::glue(", de no mínimo {valor_de_referencia_formatado}{ifelse(tipo == 'porcentagem', '%', '')} ({tipo_referencia})")
+    }
   }
-
 
   if (is.null(texto_footer)) {
     if (length(valor_de_referencia) != 1) {
@@ -273,15 +276,15 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
     } else {
       if (razao >= 2) {
         texto_comp <- dplyr::case_when(
-          tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado} vezes maior que o valor de referência, {final_texto_comp}% ({tipo_referencia})",
-          tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado} vezes maior que o valor de referência, {final_texto_comp} ({tipo_referencia})"
+          tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado} vezes maior que o valor de referência{final_texto_comp}",
+          tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado} vezes maior que o valor de referência{final_texto_comp}"
         )
       } else {
         texto_comp <- dplyr::case_when(
-          valor_comp < 0 & tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado}% maior que o valor de referência, {final_texto_comp}% ({tipo_referencia})",
-          valor_comp < 0 & tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado}% maior que o valor de referência, {final_texto_comp} ({tipo_referencia})",
-          valor_comp > 0 & tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-down'> </i> {valor_comp_formatado}% menor que o valor de referência, {final_texto_comp}% ({tipo_referencia})",
-          valor_comp > 0 & tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-down'> </i> {valor_comp_formatado}% menor que o valor de referência, {final_texto_comp} ({tipo_referencia})",
+          valor_comp < 0 & tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado}% maior que o valor de referência{final_texto_comp}",
+          valor_comp < 0 & tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-up'> </i> {valor_comp_formatado}% maior que o valor de referência{final_texto_comp}",
+          valor_comp > 0 & tipo == "porcentagem" ~ "<i class='fa-solid fa-caret-down'> </i> {valor_comp_formatado}% menor que o valor de referência{final_texto_comp}",
+          valor_comp > 0 & tipo != "porcentagem" ~ "<i class='fa-solid fa-caret-down'> </i> {valor_comp_formatado}% menor que o valor de referência{final_texto_comp}",
           valor_comp == 0 ~ "Igual ao valor de referência ({tipo_referencia})",
           is.nan(valor_comp) ~ "Comparação não aplicável"
         )
