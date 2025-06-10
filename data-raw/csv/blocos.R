@@ -116,8 +116,7 @@ malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2024.csv", sep = ';')
   dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
   dplyr::select(-c(3:10))
 
-bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv") |>
-  dplyr::select(!c(uf, municipio, regiao))
+bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv")
 
 bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv", sep = ",") |>
   janitor::clean_names()
