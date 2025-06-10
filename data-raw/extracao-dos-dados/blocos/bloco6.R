@@ -2,37 +2,37 @@ library(tidyverse)
 library(janitor)
 library(data.table)
 library(readr)
-
-############ DADOS DE MORTALIDADE MATERNA
-
-#setwd("./Databases")
-
-# remotes::install_github("rfsaldanha/microdatasus")
 library(microdatasus)
 
-#Criando função soma_var para poder fazer tratamento dos dados ----
-soma_var <- function(vars,dados) {
-  out <- rowSums(dados[,vars],na.rm=TRUE)
-  return(out)
-}
+# Criando alguns objetos auxiliares ---------------------------------------
+## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
+codigos_municipios <- read.csv(
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv"
+) |>
+  pull(codmunres) |>
+  as.character()
 
-#Carregando os dados do SIM de 2021 a 2023
+## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
+df_aux_municipios <- data.frame(
+  codmunres = rep(codigos_municipios, each = length(2012:2024)),
+  ano = 2012:2024
+)
 
-df_causas_especif_aux1 <- fetch_datasus(
-  year_start = 2021,
+
+# Para os dados de mortalidade materna ------------------------------------
+## Baixando os dados consolidados do SIM-DOMAT
+df_sim_domat_consolidados <- fetch_datasus(
+  year_start = 2012,
   year_end = 2023,
   information_system = "SIM-DOMAT"
 )
 
-options(timeout = 600)
+## Baixando os dados preliminares do SIM
+df_sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv") |>
+  mutate_if(is.numeric, as.character)
 
-sim_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/DO24OPEN.csv")
-
-sim_2024$OBITOPUERP <- as.character(sim_2024$OBITOPUERP)
-sim_2024$OBITOGRAV <- as.character(sim_2024$OBITOGRAV)
-sim_2024$SEXO <- as.character(sim_2024$SEXO)
-
-sim_mat2024 <- sim_2024 |>
+## Filtrando, nos dados preliminares, apenas os óbitos maternos
+df_sim_domat_preliminares <- df_sim_2024 |>
   filter(
     SEXO == "2",
     ((CAUSABAS >= "O000"  &  CAUSABAS <= "O959") |
@@ -45,134 +45,102 @@ sim_mat2024 <- sim_2024 |>
        (CAUSABAS == "M830" & OBITOPUERP != "2"))
   )
 
-sim_mat2024 <- sim_mat2024 |> select(-c(contador, OPOR_DO, TP_ALTERA, CB_ALT))
+## Juntando os dados preliminares e consolidados
+df_sim_domat <- full_join(
+  df_sim_domat_consolidados,
+  df_sim_domat_preliminares
+)
 
-df_causas_especif_aux1 <- df_causas_especif_aux1 |> select(-c(ESTABDESCR, NUDIASOBIN,
-                                                              NUDIASINF, FONTESINF,
-                                                              CONTADOR))
+## Baixando os dados consolidados do SINASC
+df_sinasc_consolidados <- fetch_datasus(
+  year_start = 2012,
+  year_end = 2023,
+  information_system = "SINASC",
+  vars = c("CODMUNRES", "DTNASC")
+)
 
-df_causas_especif_aux <- rbind(df_causas_especif_aux1, sim_mat2024)
+## Baixando os dados preliminares do SINASC
+df_sinasc_preliminares <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv") |>
+  select(CODMUNRES, DTNASC) |>
+  mutate_if(is.numeric, as.character)
 
+## Juntando os dados preliminares e consolidados
+df_sinasc <- full_join(
+  df_sinasc_consolidados,
+  df_sinasc_preliminares
+)
 
-df_causas_especif_aux <- df_causas_especif_aux |>
+## Removendo arquivos já utilizados e limpando a memória
+rm(df_sim_2024, df_sim_domat_consolidados, df_sim_domat_preliminares, df_sinasc_consolidados, df_sinasc_preliminares)
+gc()
+
+## Criando as variáveis necessárias
+### Para o SIM
+df_bloco6_sim <- df_sim_domat |>
   mutate(
-    tipo_de_morte_materna = if_else(
-      condition = (CAUSABAS >= "B200" & CAUSABAS <= "B249") |
-        (CAUSABAS >= "O100" & CAUSABAS <= "O109") |
-        ((CAUSABAS >= "O240" & CAUSABAS != "O244") & CAUSABAS <= "O259") |
-        (CAUSABAS == "O94") |
-        (CAUSABAS >= "O980" & CAUSABAS <= "O999"),
-      true = "Indireta",
-      false = if_else(CAUSABAS == "O95", true = "Não especificada", false = "Direta")
+    ano = as.numeric(substr(DTOBITO, nchar(DTOBITO) - 3, nchar(DTOBITO))),
+    obitos_mat_totais = 1,
+    obitos_mat_diretos = if_else(
+      !((CAUSABAS >= "B200" & CAUSABAS <= "B249") |
+          (CAUSABAS >= "O100" & CAUSABAS <= "O109") |
+          ((CAUSABAS >= "O240" & CAUSABAS != "O244") & CAUSABAS <= "O259") |
+          (CAUSABAS == "O94") |
+          (CAUSABAS >= "O980" & CAUSABAS <= "O999")) & !(CAUSABAS == "O95"),
+      1, 0, missing = 0
     ),
-    causa_especifica = case_when(
-      CAUSABAS >= "O030"  &  CAUSABAS <= "O079" ~ "aborto",
-      CAUSABAS == "O11" | (CAUSABAS >= "O13" & CAUSABAS <= "O16") ~ "causas_hipertensivas",
-      (CAUSABAS >= "O200" & CAUSABAS <= "O209") |
-        (CAUSABAS >= "O440" & CAUSABAS <= "O469") |
-        (CAUSABAS >= "O670" & CAUSABAS <= "O679") |
-        (CAUSABAS >= "O710" & CAUSABAS <= "O711") |
-        (CAUSABAS >= "O720" & CAUSABAS <= "O723") ~ "causas_hemorragicas",
-      CAUSABAS >= "O85" & CAUSABAS <= "O868" ~ "infeccao_puerperal"
+    obitos_mat_aborto = if_else(
+      obitos_mat_diretos == 1 & (CAUSABAS >= "O030"  &  CAUSABAS <= "O079"),
+      1, 0, missing = 0
     ),
-    ano = as.numeric(sub('.*(\\d{4}).*', '\\1', DTOBITO)),
-    obitos = 1
+    obitos_mat_hipertensao = if_else(
+      obitos_mat_diretos == 1 & (CAUSABAS == "O11" | (CAUSABAS >= "O13" & CAUSABAS <= "O16")),
+      1, 0, missing = 0
+    ),
+    obitos_mat_hemorragia = if_else(
+      obitos_mat_diretos == 1 & ((CAUSABAS >= "O200" & CAUSABAS <= "O209") |
+                                   (CAUSABAS >= "O440" & CAUSABAS <= "O469") |
+                                   (CAUSABAS >= "O670" & CAUSABAS <= "O679") |
+                                   (CAUSABAS >= "O710" & CAUSABAS <= "O711") |
+                                   (CAUSABAS >= "O720" & CAUSABAS <= "O723")),
+      1, 0, missing = 0
+    ),
+    obitos_mat_infec_puerperal = if_else(
+      obitos_mat_diretos == 1 & (CAUSABAS >= "O85" & CAUSABAS <= "O868"),
+      1, 0, missing = 0
+    )
   ) |>
-  group_by(CODMUNRES, ano, causa_especifica, tipo_de_morte_materna) |>
-  summarise(obitos = sum(obitos)) |>
+  clean_names() |>
+  group_by(codmunres, ano) |>
+  summarise_at(vars(starts_with("obitos")), sum) |>
   ungroup() |>
-  pivot_wider(names_from = c(causa_especifica, tipo_de_morte_materna), values_from = obitos, values_fill = 0)
+  right_join(df_aux_municipios)
 
-df_causas_especificas <- df_causas_especif_aux |>
+### Substituindo todos os NAs, gerados após o right_join, por 0
+df_bloco6_sim[is.na(df_bloco6_sim)] <- 0
+
+### Para o SINASC
+df_bloco6_sinasc <- df_sinasc |>
   mutate(
-    obitos_mat_diretos = soma_var(c("causas_hipertensivas_Direta",
-                                    "aborto_Direta",
-                                    "causas_hemorragicas_Direta",
-                                    "NA_Direta",
-                                    "infeccao_puerperal_Direta"),
-                                  df_causas_especif_aux),
-    obitos_mat_totais = soma_var(c("NA_Indireta",
-                                   "causas_hipertensivas_Direta",
-                                   "aborto_Direta",
-                                   "causas_hemorragicas_Direta",
-                                   "NA_Não especificada",
-                                   "NA_Direta",
-                                   "infeccao_puerperal_Direta"),
-                                 df_causas_especif_aux)
+    ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
+    nascidos = 1
   ) |>
-  select(
-    codigo = CODMUNRES,
-    ano,
-    obitos_mat_totais,
-    obitos_mat_diretos,
-    obitos_mat_aborto = aborto_Direta,
-    obitos_mat_hipertensao = causas_hipertensivas_Direta,
-    obitos_mat_hemorragia = causas_hemorragicas_Direta,
-    obitos_mat_infec_puerperal = infeccao_puerperal_Direta
-  )
+  clean_names() |>
+  group_by(codmunres, ano) |>
+  summarise(nascidos = sum(nascidos)) |>
+  ungroup() |>
+  right_join(df_aux_municipios)
 
-#Obtendo dados de nascidos vivos do SINASC de 2021 (foram usados os dados do github do painel de indicadores obstétricos)
-# df_nascimentos <- read_delim("data-raw/extracao-dos-dados/databases_auxiliares/dados_sinasc.csv",
-#                              delim = ",", escape_double = FALSE, trim_ws = TRUE) |>
-#   clean_names()
+### Substituindo todos os NAs, gerados após o right_join, por 0
+df_bloco6_sinasc[is.na(df_bloco6_sinasc)] <- 0
 
-df_nascimentos <- read_csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/dados_oobr_indicadores_obstetricos_sinasc_1996_2024.csv") |>
-  clean_names()
+## Juntando os dados do SIM e do SINASC
+df_bloco6_mortalidade <- left_join(
+  df_bloco6_sim,
+  df_bloco6_sinasc
+)
 
-df_nascimentos$codigo <- as.character(df_nascimentos$codigo)
-
-df_nascimentos_2021 <- filter(df_nascimentos, ano >= 2021)
-
-df_completo <- left_join(df_nascimentos_2021, df_causas_especificas, by = c("codigo", "ano")) |>
-  select(
-    codmunres = codigo,
-    uf,
-    ano,
-    nascidos,
-    obitos_mat_totais,
-    obitos_mat_diretos,
-    obitos_mat_aborto,
-    obitos_mat_hipertensao,
-    obitos_mat_hemorragia,
-    obitos_mat_infec_puerperal
-  )
-
-get_dupes(df_completo, codmunres, uf, ano)
-
-aux_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
-  select(codmunres, municipio, uf, regiao)
-
-aux_municipios$codmunres <- as.character(aux_municipios$codmunres)
-
-df_completo_plus <- left_join(aux_municipios, df_completo, by=c("codmunres"))  |>
-  select(
-    codmunres,
-    municipio,
-    uf=uf.x,
-    regiao,
-    ano,
-    nascidos,
-    obitos_mat_totais,
-    obitos_mat_diretos,
-    obitos_mat_aborto,
-    obitos_mat_hipertensao,
-    obitos_mat_hemorragia,
-    obitos_mat_infec_puerperal
-  )
-
-df_completo_plus[is.na(df_completo_plus)] <- 0
-
-get_dupes(df_completo_plus, codmunres, municipio, uf, regiao, ano)
-
-# write.table(df_completo_plus, 'data-raw/csv/indicadores_bloco6_mortalidade_materna_2023.csv', sep = ",", dec = ".", row.names = FALSE) |>
-#   filter(ano == 2023)
-
-indicadores_bloco6_mortalidade_materna_2012_2023 <- read_csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv") |>
-  filter(ano <= 2020)
-
-bloco6_mortalidade_materna_2012_2024 <- rbind(indicadores_bloco6_mortalidade_materna_2012_2023, df_completo_plus)
-
-write.table(bloco6_mortalidade_materna_2012_2024, 'data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv', sep = ",", dec = ".", row.names = FALSE)
+## Exportando os dados
+write.csv(df_bloco6_mortalidade, 'data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv', row.names = FALSE)
 
 
 ################## DADOS DE RMM CORRIGIDOS
