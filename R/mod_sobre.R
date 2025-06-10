@@ -24,18 +24,25 @@ mod_sobre_ui <- function(id){
           <p align='justify'; style='font-size:18px'>
           A morte materna – morte de uma mulher durante a gestação, parto ou até 42 dias após o
           término da gestação – não é um evento isolado. Ela é o resultado de uma série de
-          determinantes sociais em saúde que atuam durante a vida de uma mulher.
+          determinantes sociais em saúde que atuam durante a vida de uma mulher. Da mesma forma,
+          desfechos perinatais dependem da saúde materna e da assistência à mulher durante o pré-natal
+          e o parto, além da adequada assistência ao bebê após o nascimento.
 
           <span style='display: block; margin-bottom: 12px;'> </span>
 
           Neste painel, você encontrará um conjunto de indicadores que expressam a vulnerabilidade das
-          mulheres ao óbito materno, seja por suas condições socioeconômicas, seja pela atenção à saúde
+          mulheres ao óbito materno, seja por suas condições socioeconômicas, por sua raça/cor e etnia ou pela atenção à saúde
           recebida ao longo da sua vida reprodutiva. Encontrará também indicadores relacionados aos
-          desfechos perinatais, determinados em grande parte pela atenção recebida pela mulher durante a
-          gestação e o parto. Os indicadores estão disponíveis para municípios, estados, regiões de saúde e
+          desfechos perinatais, determinados em grande parte pela atenção de saúde durante a
+          gestação e o parto.
+
+          <span style='display: block; margin-bottom: 12px;'> </span>
+
+          Os indicadores estão disponíveis para municípios, estados, regiões de saúde e
           país e foram calculados a partir de vários sistemas de informação brasileiros (SINASC, SIM, SINAN,
           SIH, SIAB, ANS e estimativas populacionais). O painel contém indicadores a partir do ano 2012 e
-          será atualizado anualmente.
+          será atualizado anualmente. Para anos com as bases ainda não finalizadas pelo Ministério da Saúde, esses dados estarão identificados como “preliminares”.
+
 
           <span style='display: block; margin-bottom: 12px;'> </span>
 
