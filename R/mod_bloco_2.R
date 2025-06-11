@@ -1113,7 +1113,7 @@ mod_bloco_2_server <- function(id, filtros) {
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
@@ -1149,7 +1149,7 @@ mod_bloco_2_server <- function(id, filtros) {
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
