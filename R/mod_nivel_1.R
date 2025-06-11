@@ -422,6 +422,7 @@ mod_nivel_1_ui <- function(id) {
         width = 12,
         bs4Dash::bs4Card(
           width = 12,
+          style = "padding-bottom: 100px",
           title = tags$b(
             HTML("4 - Assistência ao parto &nbsp;"),
             style = "font-size: 22px;",
