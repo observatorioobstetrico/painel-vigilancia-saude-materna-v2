@@ -865,7 +865,7 @@ cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = 
            </span> Nesses anos, a porcentagem de DNs com CNES inválido foi, respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude2}. </span>
            Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são considerados bons.")
       } else {
-        texto_incompletude2 <- glue::glue("{dplyr::if_else(length(anos1_aux) > 0, '</br></br>Além disso, a', 'A')} a variável <span style = 'font-weight: 700'> {variavel_incompletude2}</span>, do {base}, apresenta problemas de incompletude nos anos de
+        texto_incompletude2 <- glue::glue("{dplyr::if_else(length(anos1_aux) > 0, '</br></br>Além disso, a', 'A')} variável <span style = 'font-weight: 700'> {variavel_incompletude2}</span>, do {base}, apresenta problemas de incompletude nos anos de
            <span style = 'font-weight: 700'> {anos2}. </span> Nesses anos, a porcentagem de valores {descricao_incompletude2} dessa variável foi,
            respectivamente, de <span style = 'font-weight: 700'> {valores_incompletude2}. </span> Valores abaixo de 5% são considerados excelentes, enquanto valores abaixo de 10% são
            considerados bons.")
