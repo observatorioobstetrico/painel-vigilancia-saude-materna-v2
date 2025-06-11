@@ -49,59 +49,40 @@ df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares) |>
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
 df_bloco1_sinasc <- df_sinasc |>
-  filter(codmunres %in% codigos_municipios) %>%
+  filter(codmunres %in% codigos_municipios) |>
   mutate(
     ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc))),
-    nvm_menor_que_20_anos = if_else(idademae < 20, 1, 0, missing = 0),
-    nvm_entre_20_e_34_anos = if_else(
-      idademae >= 20 & idademae < 35,
-      1,
-      0,
-      missing = 0
-    ),
-    nvm_maior_que_34_anos = if_else(
-      idademae >= 35 & idademae <= 55,
-      1,
-      0,
-      missing = 0
-    ),
+    total_de_nascidos_vivos = 1,
+
+    # Idade da mãe
+    nvm_menor_que_20_anos = if_else(idademae >= 10 & idademae < 20, 1, 0, missing = 0),
+    nvm_10_a_14_anos = if_else(idademae >= 10 & idademae <= 14, 1, 0, missing = 0),
+    nvm_15_a_19_anos = if_else(idademae >= 15 & idademae <= 19, 1, 0, missing = 0),
+    nvm_entre_20_e_34_anos = if_else(idademae >= 20 & idademae < 35, 1, 0, missing = 0),
+    nvm_maior_que_34_anos = if_else(idademae >= 35 & idademae <= 55, 1, 0, missing = 0),
+
+    # Raça/cor da mãe
     nvm_com_cor_da_pele_branca = if_else(racacormae == 1, 1, 0, missing = 0),
     nvm_com_cor_da_pele_preta = if_else(racacormae == 2, 1, 0, missing = 0),
     nvm_com_cor_da_pele_parda = if_else(racacormae == 4, 1, 0, missing = 0),
     nvm_com_cor_da_pele_amarela = if_else(racacormae == 3, 1, 0, missing = 0),
     nvm_indigenas = if_else(racacormae == 5, 1, 0, missing = 0),
-    nvm_com_escolaridade_ate_3 = if_else(
-      escmae == 1 | escmae == 2,
-      1,
-      0,
-      missing = 0
-    ),
+
+    # Escolaridade da mãe
+    nvm_com_escolaridade_ate_3 = if_else(escmae == 1 | escmae == 2, 1, 0, missing = 0),
     nvm_com_escolaridade_de_4_a_7 = if_else(escmae == 3, 1, 0, missing = 0),
     nvm_com_escolaridade_de_8_a_11 = if_else(escmae == 4, 1, 0, missing = 0),
     nvm_com_escolaridade_acima_de_11 = if_else(escmae == 5, 1, 0, missing = 0)
-  ) %>%
-  group_by(codmunres, ano) %>%
-  summarise(
-    total_de_nascidos_vivos = n(),
-    nvm_menor_que_20_anos = sum(nvm_menor_que_20_anos),
-    nvm_entre_20_e_34_anos = sum(nvm_entre_20_e_34_anos),
-    nvm_maior_que_34_anos = sum(nvm_maior_que_34_anos),
-    nvm_com_cor_da_pele_branca = sum(nvm_com_cor_da_pele_branca),
-    nvm_com_cor_da_pele_preta = sum(nvm_com_cor_da_pele_preta),
-    nvm_com_cor_da_pele_parda = sum(nvm_com_cor_da_pele_parda),
-    nvm_com_cor_da_pele_amarela = sum(nvm_com_cor_da_pele_amarela),
-    nvm_indigenas = sum(nvm_indigenas),
-    nvm_com_escolaridade_ate_3 = sum(nvm_com_escolaridade_ate_3),
-    nvm_com_escolaridade_de_4_a_7 = sum(nvm_com_escolaridade_de_4_a_7),
-    nvm_com_escolaridade_de_8_a_11 = sum(nvm_com_escolaridade_de_8_a_11),
-    nvm_com_escolaridade_acima_de_11 = sum(nvm_com_escolaridade_acima_de_11)
-  ) %>%
+  ) |>
+  group_by(codmunres, ano) |>
+  summarise_at(vars(starts_with("total_") | starts_with("nvm")), sum) |>
+  ungroup() |>
   mutate_if(is.character, as.numeric)
 
-# Incluindo dados de municipios
+# Juntando com a base auxiliar de municípios
 df_bloco1_sinasc <- left_join(df_aux_municipios, df_bloco1_sinasc)
 
-# Todos os NA's transformam em 0
+# Transformando todos os NAs, gerados após o left_join, em 0
 df_bloco1_sinasc[is.na(df_bloco1_sinasc)] <- 0
 
 

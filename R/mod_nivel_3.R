@@ -781,6 +781,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
 
       highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = data_cobertura(),
           type = "line",
@@ -792,6 +793,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = referencia, group = localidade, colour = localidade),
           dashStyle = "ShortDot",
           opacity = 0.8
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> Cobertura do {base} </b>"))) |>
@@ -1067,6 +1074,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       )
 
       highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = data_grafico_incompletude,
           type = "line",
@@ -1078,6 +1086,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           highcharter::hcaes(x = ano, y = valor, group = class, colour = class),
           dashStyle = "ShortDot",
           opacity = 0.8
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(
@@ -1907,10 +1921,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$porcentagem_garbage_fetal <- highcharter::renderHighchart({
 
       grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
           highcharter::hcaes(x = ano, y = prop_garbage_fetal, group = class, colour = class)
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1924,10 +1945,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$porcentagem_garbage_neonatal <- highcharter::renderHighchart({
 
       grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
           highcharter::hcaes(x = ano, y = prop_garbage_neonatal, group = class, colour = class)
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1941,10 +1969,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$porcentagem_garbage_perinatal <- highcharter::renderHighchart({
 
       grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
           highcharter::hcaes(x = ano, y = prop_garbage_perinatal, group = class, colour = class)
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -1958,10 +1993,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     output$porcentagem_garbage_materno <- highcharter::renderHighchart({
 
       grafico_base <- highcharter::highchart() |>
+        highcharter::hc_add_dependency("modules/series-label.js") |>
         highcharter::hc_add_series(
           data = garbage_porcentagens(),
           type = "line",
           highcharter::hcaes(x = ano, y = prop_garbage_materno, group = class, colour = class)
+        ) |>
+        highcharter::hc_plotOptions(
+          series = list(
+            label = list(enabled = TRUE),
+            allowPointSelect = TRUE
+          )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
@@ -2250,10 +2292,17 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       if (!(base::startsWith(infos_indicador()$indicador, "Medianas"))) {
         if (infos_indicador()$nome_abreviado == "rmm") {
           grafico_base <- highcharter::highchart() |>
+            highcharter::hc_add_dependency("modules/series-label.js") |>
             highcharter::hc_add_series(
               data = data_rmm_corrigida(),
               type = "line",
               highcharter::hcaes(x = ano, y = rmm, group = class, colour = class)
+            ) |>
+            highcharter::hc_plotOptions(
+              series = list(
+                label = list(enabled = TRUE),
+                allowPointSelect = TRUE
+              )
             ) |>
             highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", ""), shared = TRUE, sort = TRUE) |>
             highcharter::hc_xAxis(
@@ -2270,6 +2319,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             highcharter::hc_colors(cols)
         } else {
           grafico_base <- highcharter::highchart() |>
+            highcharter::hc_add_dependency("modules/series-label.js") |>
             highcharter::hc_add_series(
               data = data_grafico_serie(),
               type = "line",
@@ -2280,6 +2330,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
                   grepl("tx_abortos_mil_mulheres_valor_medio", infos_indicador()$nome_abreviado) ~ "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} (limite inferior de {point.tx_abortos_mil_mulheres_lim_inf:,f} e limite superior de {point.tx_abortos_mil_mulheres_lim_sup:,f})</b> </br>",
                   !grepl("tx_abortos", infos_indicador()$nome_abreviado) ~ "<span style = 'color: {series.color}'>&#9679</span> {series.name}: <b> {point.y} </b> </br>"
                 )
+              )
+            ) |>
+            highcharter::hc_plotOptions(
+              series = list(
+                label = list(enabled = TRUE),
+                allowPointSelect = TRUE
               )
             ) |>
             highcharter::hc_tooltip(valueSuffix = dplyr::if_else(infos_indicador()$tipo_do_indicador == "porcentagem", "%", ""), shared = TRUE, sort = TRUE) |>
@@ -2299,6 +2355,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         }
       } else {
         grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
             name = "Total de partos",
             data = data_grafico_serie(),
@@ -2322,6 +2379,12 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
             highcharter::hcaes(x = ano, y = km_alta_complexidade),
             legendIndex = 3,
             index = 3
+          ) |>
+          highcharter::hc_plotOptions(
+            series = list(
+              label = list(enabled = TRUE),
+              allowPointSelect = TRUE
+            )
           ) |>
           highcharter::hc_tooltip(valueSuffix = " km", shared = TRUE, sort = TRUE, valueDecimals = 2) |>
           highcharter::hc_xAxis(

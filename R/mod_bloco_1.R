@@ -125,8 +125,9 @@ mod_bloco_1_ui <- function(id){
                     label = "Faixa etária da mãe",
                     options = list(placeholder = "Selecione a faixa etária da mãe"),
                     choices = c(
-                      "Menor que 20 anos" = "porc_nvm_menor_que_20_anos",
-                      "Entre 20 e 34 anos" = "porc_nvm_entre_20_e_34_anos",
+                      "De 10 a 14 anos" = "porc_nvm_10_a_14_anos",
+                      "De 15 a 19 anos" = "porc_nvm_15_a_19_anos",
+                      "De 20 e 34 anos" = "porc_nvm_entre_20_e_34_anos",
                       "Maior que 34 anos" = "porc_nvm_maior_que_34_anos"
                     ),
                     width = "100%"
@@ -304,7 +305,8 @@ mod_bloco_1_server <- function(id, filtros){
       sum_total_de_nascidos_vivos = rep("sum(total_de_nascidos_vivos)", 2),
       porc_dependentes_sus = rep("round((sum(populacao_feminina_10_a_49) - sum(pop_fem_10_49_com_plano_saude))/sum(populacao_feminina_10_a_49) * 100, 1)", 2),
       porc_cobertura_esf = c("round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1)", "dplyr::first(95)"),
-      porc_nvm_menor_que_20_anos = rep("round(sum(nvm_menor_que_20_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nvm_10_a_14_anos = rep("round(sum(nvm_10_a_14_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
+      porc_nvm_15_a_19_anos = rep("round(sum(nvm_15_a_19_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_entre_20_e_34_anos = rep("round(sum(nvm_entre_20_e_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_maior_que_34_anos = rep("round(sum(nvm_maior_que_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_com_escolaridade_ate_3 = rep("round(sum(nvm_com_escolaridade_ate_3)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
@@ -881,8 +883,9 @@ mod_bloco_1_server <- function(id, filtros){
     ### Porcentagem de nascidos vivos por faixa etária da mãe -----------------
     titulo_faixa_etaria <- reactive({
       dplyr::case_when(
-        input$faixa_et == "porc_nvm_menor_que_20_anos" ~ "Porcentagem de nascidos vivos de mães com idade inferior a 20 anos",
-        input$faixa_et == "porc_nvm_entre_20_e_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade entre 20 e 34 anos",
+        input$faixa_et == "porc_nvm_10_a_14_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 10 a 14 anos",
+        input$faixa_et == "porc_nvm_15_a_19_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 15 a 19 anos",
+        input$faixa_et == "porc_nvm_entre_20_e_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 20 a 34 anos",
         input$faixa_et == "porc_nvm_maior_que_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade maior que 34 anos"
       )
     })
@@ -1136,7 +1139,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
@@ -1172,7 +1175,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia"))  {
           grafico_base
@@ -1236,7 +1239,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
@@ -1271,7 +1274,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
@@ -1335,7 +1338,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
@@ -1370,7 +1373,7 @@ mod_bloco_1_server <- function(id, filtros){
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
           highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0) |>
+          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base

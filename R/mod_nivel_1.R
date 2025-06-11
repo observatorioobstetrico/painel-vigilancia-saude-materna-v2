@@ -1683,7 +1683,8 @@ mod_nivel_1_server <- function(id, filtros) {
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
           porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
           porc_cobertura_esf = round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1),
-          porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
+          porc_nvm_10_a_14_anos = round(sum(nvm_10_a_14_anos)/total_de_nascidos_vivos * 100, 1),
+          porc_nvm_15_a_19_anos = round(sum(nvm_15_a_19_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_maior_que_34_anos = round(sum(nvm_maior_que_34_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_com_escolaridade_ate_3 = round(sum(nvm_com_escolaridade_ate_3)/total_de_nascidos_vivos * 100, 1),
@@ -1719,7 +1720,8 @@ mod_nivel_1_server <- function(id, filtros) {
           populacao_feminina_10_a_49 = sum(populacao_feminina_10_a_49),
           porc_dependentes_sus = round((populacao_feminina_10_a_49 - sum(pop_fem_10_49_com_plano_saude, na.rm = TRUE))/populacao_feminina_10_a_49 * 100, 1),
           porc_cobertura_esf = 95,
-          porc_nvm_menor_que_20_anos = round(sum(nvm_menor_que_20_anos)/total_de_nascidos_vivos * 100, 1),
+          porc_nvm_10_a_14_anos = round(sum(nvm_10_a_14_anos)/total_de_nascidos_vivos * 100, 1),
+          porc_nvm_15_a_19_anos = round(sum(nvm_15_a_19_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_entre_20_e_34_anos = round(sum(nvm_entre_20_e_34_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_maior_que_34_anos = round(sum(nvm_maior_que_34_anos)/total_de_nascidos_vivos * 100, 1),
           porc_nvm_com_escolaridade_ate_3 = round(sum(nvm_com_escolaridade_ate_3)/total_de_nascidos_vivos * 100, 1),
@@ -1987,15 +1989,17 @@ mod_nivel_1_server <- function(id, filtros) {
       df2 <- reactive({
         data.frame(
           "total" = c(
-            data1()$porc_nvm_menor_que_20_anos,
+            data1()$porc_nvm_10_a_14_anos,
+            data1()$porc_nvm_15_a_19_anos,
             data1()$porc_nvm_entre_20_e_34_anos,
             data1()$porc_nvm_maior_que_34_anos,
-            data1_comp()$porc_nvm_menor_que_20_anos,
+            data1_comp()$porc_nvm_10_a_14_anos,
+            data1_comp()$porc_nvm_15_a_19_anos,
             data1_comp()$porc_nvm_entre_20_e_34_anos,
             data1_comp()$porc_nvm_maior_que_34_anos
           ),
-          "categorias" = rep(c("< 20 anos", "20 a 34 anos", "> 34 anos"), times = 2),
-          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 3)
+          "categorias" = rep(c("10 a 14 anos", "15 a 19 anos", "20 a 34 anos", "> 34 anos"), times = 2),
+          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 4)
         )
       })
 
