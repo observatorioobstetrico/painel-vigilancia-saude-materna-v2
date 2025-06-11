@@ -2518,7 +2518,8 @@ mod_nivel_1_server <- function(id, filtros) {
         dplyr::group_by(ano) |>
         dplyr::summarise(
           #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
-          prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
+          # prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
+          prop_partos_com_uti = round((sum(partos_na_macro_com_1mais_uti) + sum(partos_fora_macro_com_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -2582,7 +2583,9 @@ mod_nivel_1_server <- function(id, filtros) {
       bloco4_deslocamento_macrorregiao |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::summarise(
-          prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
+          # prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
+          prop_partos_com_uti = round((sum(partos_na_macro_com_1mais_uti) + sum(partos_fora_macro_com_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1),
+
         )
     })
 
@@ -3000,7 +3003,8 @@ mod_nivel_1_server <- function(id, filtros) {
           cria_caixa_server(
             dados = data4_deslocamento_macrorregiao(),
             indicador = "prop_partos_com_uti",
-            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
+            # titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
+            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em estabelecimentos com pelo menos um leito de UTI neonatal",
             tem_meta = TRUE,
             valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
             # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
