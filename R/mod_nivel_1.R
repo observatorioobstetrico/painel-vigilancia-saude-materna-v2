@@ -440,25 +440,32 @@ mod_nivel_1_ui <- function(id) {
                 "
                 <p align='justify' style = 'font-size: 17px'>
                 A adequada assistência ao parto, com recursos disponíveis e atendimento oportuno, é essencial para
-                o manejo de complicações e redução da mortalidade materna. O uso apropriado de tecnologias médicas
-                e o cuidado centrado nas necessidades da mulher e da sua família estão entre as recomendações mais
+                o manejo de complicações e redução da mortalidade materna, fetal e neonatal. O uso apropriado de tecnologias de assistência
+                de saúde e o cuidado centrado nas necessidades da mulher e da sua família estão entre as recomendações mais
                 recentes da Organização Mundial de Saúde para a assistência ao parto.
                 <span style='display: block; margin-bottom: 14px;'> </span>
-                Neste bloco, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
+                Os indicadores de assistência ao parto são apresentados em três abas:
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Grupo de Robson: nessa aba, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
                 distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
-                Robson e a contribuição de cada grupo para a taxa global de cesariana. Apresentamos, também,
+                Robson e a contribuição de cada grupo para a taxa global de cesariana.
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Deslocamento para parto: nessa aba, apresentamos
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
                 assistência ao parto, a distância percorrida para chegar nos serviços de saúde de alta e
-                baixa complexidade e a porcentagem de nascidos vivos com peso < 1500g segundo local de
-                ocorrência do parto e disponibilidade de leito de UTI.
+                baixa complexidade. Para o nível de análise municipal, apresentamos duas informações adicionais:
+                município com primeira, segunda e terceira maior proporção de partos fora do município de residência da mulher
+                e hospital com maior número de partos ocorridos fora do município de residência da mulher. Também é apresentada
+                a porcentagem de nascidos vivos com peso ao nascer < 1500g segundo local de ocorrência do parto e disponibilidade
+                des leitos de UTI neonatal. Essas informações podem auxiliar os gestores municipais e estaduais a verificarem se
+                a regionalização da atenção ao parto está ocorrendo conforme o planejado, ou seja, se os partos estão ocorrendo
+                em serviços e municípios previstos na regionalização e atendendo à orientação de que RN com peso ao nascer < 1500 g
+                devem nascer em local com disponibilidade de leitos de UTI neonatal.
                 <span style='display: block; margin-bottom: 14px;'> </span>
-                Para o nível de análise municipal, apresentamos duas informações adicionais:
-                município com primeira, segunda e terceira maior ocorrência de partos fora do município de
-                residência da mulher (% de partos) e hospital com maior número de partos ocorridos fora do
-                município de residência da mulher. Essas informações podem auxiliar os gestores municipais
-                e estaduais a verificar se a regionalização da atenção ao parto está ocorrendo conforme o
-                planejado, ou seja, se os partos estão ocorrendo em serviços e municípios previstos na regionalização.
-
+                Profissional e local do parto: nessa aba apresentamos a porcentagem de nascimentos segundo local de ocorrência
+                conforme variáveis do SINASC: (hospital ; outros estabelecimentos de saúde; domicílio; outros: presídios,
+                via pública, veículo, outro; aldeia indígena;  ignorado e a porcentagem de partos vaginais hospitalares
+                segundo tipo de profissional.
                 </p>
                 "
               ),
