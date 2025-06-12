@@ -898,7 +898,12 @@ mod_bloco_1_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia()[[input$faixa_et]],
         tipo = "porcentagem",
-        invertido = TRUE,
+        invertido = dplyr::case_when(
+          input$faixa_et == "porc_nvm_10_a_14_anos" ~ FALSE,
+          input$faixa_et == "porc_nvm_15_a_19_anos" ~ FALSE,
+          input$faixa_et == "porc_nvm_entre_20_e_34_anos" ~ TRUE,
+          input$faixa_et == "porc_nvm_maior_que_34_anos" ~ TRUE
+        ),
         tamanho_caixa = "303px",
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
@@ -968,7 +973,12 @@ mod_bloco_1_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia()[[input$esc]],
         tipo = "porcentagem",
-        invertido = TRUE,
+        invertido = dplyr::case_when(
+          input$esc == "porc_nvm_com_escolaridade_ate_3" ~ FALSE,
+          input$esc == "porc_nvm_com_escolaridade_de_4_a_7" ~ FALSE,
+          input$esc == "porc_nvm_com_escolaridade_de_8_a_11" ~ TRUE,
+          input$esc == "porc_nvm_com_escolaridade_acima_de_11" ~ TRUE
+        ),
         tamanho_caixa = "303px",
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
