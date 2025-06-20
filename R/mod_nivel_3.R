@@ -128,7 +128,7 @@ mod_nivel_3_ui <- function(id){
                   ),
                   hr(),
                   br(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_incompletude")))
+                  highcharter::highchartOutput(ns("grafico_incompletude"))
                 )
               )
             ),
@@ -1181,7 +1181,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           anos_incompletude1 <- data_grafico_incompletude1()$ano[which(data_grafico_incompletude1()$proporcao > 5)]
           anos_incompletude2 <- data_grafico_incompletude2()$ano[which(data_grafico_incompletude2()$proporcao > 5)]
           anos_incompletude3 <- data_grafico_incompletude3()$ano[which(data_grafico_incompletude3()$proporcao > 5)]
-          anos_incompletude4 <- data_grafico_incompletude4()$ano[which(data_grafico_incompletude4()$proporcao > 5)]
+          anos_incompletude4 <- data_grafico_incompletude3()$ano[which(data_grafico_incompletude3()$proporcao > 5)]
 
           anos_cobertura <- data_cobertura()$ano[which(data_cobertura()$cobertura < 90)]
           valor <- round(length(unique(c(anos_incompletude1, anos_incompletude2, anos_incompletude3, anos_incompletude4, anos_cobertura)))/length(anos_disponiveis()) * 100)
@@ -1280,7 +1280,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         incompletude3 = data_grafico_incompletude3()$proporcao,
         variavel_incompletude3 = ifelse(infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')),
         descricao_incompletude3 = descricao_incompletude3,
-        incompletude4 = data_grafico_incompletude4()$proporcao,
+        incompletude4 = data_grafico_incompletude3()$proporcao,
         variavel_incompletude4 = ifelse(infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')),
         descricao_incompletude4 = descricao_incompletude4,
         df = data_grafico_incompletude1(),
