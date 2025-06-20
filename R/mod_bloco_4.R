@@ -20,413 +20,413 @@ mod_bloco_4_ui <- function(id){
       id = ns("tabset1"),
       width = 12,
       collapsible = FALSE,
-      tabPanel(
-        HTML("<b>Relacionados aos grupos de Robson</b>"),
-        fluidRow(
-          column(
-            width = 5,
-            selectizeInput(
-              inputId = ns("indicador_robson"),
-              label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
-              options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
-              choices = c(
-                "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
-                "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
-                "Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas" = "indicador3"
-              ),
-              width = "81%"
-            )
-          )
-        ),
-        hr(),
-        conditionalPanel(
-          ns = ns,
-          condition = "input.indicador_robson == 'indicador1'",
-          fluidRow(
-            column(
-              width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              div(
-                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
-                shinyWidgets::actionBttn(
-                  inputId = ns('botao_resumo1'),
-                  icon = icon('question'),
-                  style = 'material-circle',
-                  color = "primary",
-                  size = 'xs'
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-                  uiOutput(ns("input_localidade_resumo1")),
-                  align = "center"
-                )
-              ),
-              # fluidRow(
-              #   bs4Dash::box(
-              #     width = 12,
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart1"), height = 530))
-              #   )
-              # ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador1")), proxy.height = "300px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador1")), proxy.height = "300px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador1")), proxy.height = "332px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador1")), proxy.height = "332px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador1")), proxy.height = "332px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador1")), proxy.height = "332px")
-                )
-              ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador1")), proxy.height = "332px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_indicador1")), proxy.height = "332px")
-                )
-              )
-            ),
-            column(
-              width = 8,
-              bs4Dash::bs4Card(
-                width = 12,
-                status = "primary",
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao1"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao1"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                ),
-                hr(),
-                fluidRow(
-                  column(
-                    width = 6,
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Geral </b>"),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson2'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson4'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson6_a_9'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
-                    )
-                  ),
-                  column(
-                    width = 6,
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson1'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson3'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson5'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
-                    ),
-                    div(
-                      style = "text-align: center;",
-                      HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns('texto_robson10'),
-                        icon = icon('question'),
-                        style = 'material-circle',
-                        color = "primary",
-                        size = 'xs'
-                      ),
-                      shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
-                    )
-                  )
-                )
-              )
-            )
-          )
-        ),
-        conditionalPanel(
-          ns = ns,
-          condition = "input.indicador_robson == 'indicador2'",
-          fluidRow(
-            column(
-              width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              div(
-                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
-                shinyWidgets::actionBttn(
-                  inputId = ns('botao_resumo2'),
-                  icon = icon('question'),
-                  style = 'material-circle',
-                  color = "primary",
-                  size = 'xs'
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-                  uiOutput(ns("input_localidade_resumo2")),
-                  align = "center"
-                )
-              ),
-              # fluidRow(
-              #   bs4Dash::box(
-              #     width = 12,
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
-              #   )
-              # ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador2")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador2")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador2")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador2")), proxy.height = "325px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador2")), proxy.height = "325px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador2")), proxy.height = "325px")
-                ),
-                column(
-                  offset = 3,
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador2")), proxy.height = "325px")
-                )
-              )
-            ),
-            column(
-              width = 8,
-              bs4Dash::bs4Card(
-                width = 12,
-                status = "primary",
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao2"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao2"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                ),
-                hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 650))
-              )
-            )
-          )
-        ),
-        conditionalPanel(
-          ns = ns,
-          condition = "input.indicador_robson == 'indicador3'",
-          fluidRow(
-            column(
-              width = 4,
-              HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
-              div(
-                HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
-                shinyWidgets::actionBttn(
-                  inputId = ns('botao_resumo3'),
-                  icon = icon('question'),
-                  style = 'material-circle',
-                  color = "primary",
-                  size = 'xs'
-                )
-              ),
-              hr(),
-              fluidRow(
-                column(
-                  width = 12,
-                  HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-                  uiOutput(ns("input_localidade_resumo3")),
-                  align = "center"
-                )
-              ),
-              # fluidRow(
-              #   bs4Dash::box(
-              #     width = 12,
-              #     collapsible = FALSE,
-              #     headerBorder = FALSE,
-              #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-              #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
-              #   )
-              # ),
-              fluidRow(
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador3")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador3")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador3")), proxy.height = "293px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador3")), proxy.height = "325px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador3")), proxy.height = "325px")
-                ),
-                column(
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador3")), proxy.height = "325px")
-                ),
-                column(
-                  offset = 3,
-                  width = 6,
-                  shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador3")), proxy.height = "325px")
-                )
-              )
-            ),
-            column(
-              width = 8,
-              bs4Dash::bs4Card(
-                width = 12,
-                status = "primary",
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao3"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao3"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
-                ),
-                hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 650))
-              )
-            )
-          )
-        )
-      ),
+      # tabPanel(
+      #   HTML("<b>Relacionados aos grupos de Robson</b>"),
+      #   fluidRow(
+      #     column(
+      #       width = 5,
+      #       selectizeInput(
+      #         inputId = ns("indicador_robson"),
+      #         label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
+      #         options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
+      #         choices = c(
+      #           "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
+      #           "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
+      #           "Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas" = "indicador3"
+      #         ),
+      #         width = "81%"
+      #       )
+      #     )
+      #   ),
+      #   hr(),
+      #   conditionalPanel(
+      #     ns = ns,
+      #     condition = "input.indicador_robson == 'indicador1'",
+      #     fluidRow(
+      #       column(
+      #         width = 4,
+      #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+      #         div(
+      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           shinyWidgets::actionBttn(
+      #             inputId = ns('botao_resumo1'),
+      #             icon = icon('question'),
+      #             style = 'material-circle',
+      #             color = "primary",
+      #             size = 'xs'
+      #           )
+      #         ),
+      #         hr(),
+      #         fluidRow(
+      #           column(
+      #             width = 12,
+      #             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      #             uiOutput(ns("input_localidade_resumo1")),
+      #             align = "center"
+      #           )
+      #         ),
+      #         # fluidRow(
+      #         #   bs4Dash::box(
+      #         #     width = 12,
+      #         #     collapsible = FALSE,
+      #         #     headerBorder = FALSE,
+      #         #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+      #         #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart1"), height = 530))
+      #         #   )
+      #         # ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador1")), proxy.height = "300px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador1")), proxy.height = "300px")
+      #           )
+      #         ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador1")), proxy.height = "332px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador1")), proxy.height = "332px")
+      #           )
+      #         ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador1")), proxy.height = "332px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador1")), proxy.height = "332px")
+      #           )
+      #         ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador1")), proxy.height = "332px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_indicador1")), proxy.height = "332px")
+      #           )
+      #         )
+      #       ),
+      #       column(
+      #         width = 8,
+      #         bs4Dash::bs4Card(
+      #           width = 12,
+      #           status = "primary",
+      #           collapsible = FALSE,
+      #           headerBorder = FALSE,
+      #           style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
+      #           HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
+      #           shinyjs::hidden(
+      #             span(
+      #               id = ns("mostrar_botao1"),
+      #               shinyWidgets::actionBttn(
+      #                 inputId = ns("botao1"),
+      #                 icon = icon("triangle-exclamation", style = "color: red"),
+      #                 color = "warning",
+      #                 style = "material-circle",
+      #                 size = "xs"
+      #               )
+      #             )
+      #           ),
+      #           hr(),
+      #           fluidRow(
+      #             column(
+      #               width = 6,
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Geral </b>"),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson2'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson4'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson6_a_9'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
+      #               )
+      #             ),
+      #             column(
+      #               width = 6,
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson1'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson3'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson5'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
+      #               ),
+      #               div(
+      #                 style = "text-align: center;",
+      #                 HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+      #                 shinyWidgets::actionBttn(
+      #                   inputId = ns('texto_robson10'),
+      #                   icon = icon('question'),
+      #                   style = 'material-circle',
+      #                   color = "primary",
+      #                   size = 'xs'
+      #                 ),
+      #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
+      #               )
+      #             )
+      #           )
+      #         )
+      #       )
+      #     )
+      #   ),
+      #   conditionalPanel(
+      #     ns = ns,
+      #     condition = "input.indicador_robson == 'indicador2'",
+      #     fluidRow(
+      #       column(
+      #         width = 4,
+      #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+      #         div(
+      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           shinyWidgets::actionBttn(
+      #             inputId = ns('botao_resumo2'),
+      #             icon = icon('question'),
+      #             style = 'material-circle',
+      #             color = "primary",
+      #             size = 'xs'
+      #           )
+      #         ),
+      #         hr(),
+      #         fluidRow(
+      #           column(
+      #             width = 12,
+      #             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      #             uiOutput(ns("input_localidade_resumo2")),
+      #             align = "center"
+      #           )
+      #         ),
+      #         # fluidRow(
+      #         #   bs4Dash::box(
+      #         #     width = 12,
+      #         #     collapsible = FALSE,
+      #         #     headerBorder = FALSE,
+      #         #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+      #         #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
+      #         #   )
+      #         # ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador2")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador2")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador2")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador2")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador2")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador2")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             offset = 3,
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador2")), proxy.height = "325px")
+      #           )
+      #         )
+      #       ),
+      #       column(
+      #         width = 8,
+      #         bs4Dash::bs4Card(
+      #           width = 12,
+      #           status = "primary",
+      #           collapsible = FALSE,
+      #           headerBorder = FALSE,
+      #           style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+      #           HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
+      #           shinyjs::hidden(
+      #             span(
+      #               id = ns("mostrar_botao2"),
+      #               shinyWidgets::actionBttn(
+      #                 inputId = ns("botao2"),
+      #                 icon = icon("triangle-exclamation", style = "color: red"),
+      #                 color = "warning",
+      #                 style = "material-circle",
+      #                 size = "xs"
+      #               )
+      #             )
+      #           ),
+      #           hr(),
+      #           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 650))
+      #         )
+      #       )
+      #     )
+      #   ),
+      #   conditionalPanel(
+      #     ns = ns,
+      #     condition = "input.indicador_robson == 'indicador3'",
+      #     fluidRow(
+      #       column(
+      #         width = 4,
+      #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+      #         div(
+      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           shinyWidgets::actionBttn(
+      #             inputId = ns('botao_resumo3'),
+      #             icon = icon('question'),
+      #             style = 'material-circle',
+      #             color = "primary",
+      #             size = 'xs'
+      #           )
+      #         ),
+      #         hr(),
+      #         fluidRow(
+      #           column(
+      #             width = 12,
+      #             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+      #             uiOutput(ns("input_localidade_resumo3")),
+      #             align = "center"
+      #           )
+      #         ),
+      #         # fluidRow(
+      #         #   bs4Dash::box(
+      #         #     width = 12,
+      #         #     collapsible = FALSE,
+      #         #     headerBorder = FALSE,
+      #         #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+      #         #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
+      #         #   )
+      #         # ),
+      #         fluidRow(
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador3")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador3")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador3")), proxy.height = "293px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador3")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador3")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador3")), proxy.height = "325px")
+      #           ),
+      #           column(
+      #             offset = 3,
+      #             width = 6,
+      #             shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador3")), proxy.height = "325px")
+      #           )
+      #         )
+      #       ),
+      #       column(
+      #         width = 8,
+      #         bs4Dash::bs4Card(
+      #           width = 12,
+      #           status = "primary",
+      #           collapsible = FALSE,
+      #           headerBorder = FALSE,
+      #           style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+      #           HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
+      #           shinyjs::hidden(
+      #             span(
+      #               id = ns("mostrar_botao3"),
+      #               shinyWidgets::actionBttn(
+      #                 inputId = ns("botao3"),
+      #                 icon = icon("triangle-exclamation", style = "color: red"),
+      #                 color = "warning",
+      #                 style = "material-circle",
+      #                 size = "xs"
+      #               )
+      #             )
+      #           ),
+      #           hr(),
+      #           shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 650))
+      #         )
+      #       )
+      #     )
+      #   )
+      # ),
       tabPanel(
         HTML("<b>Relacionados ao deslocamento para o parto</b>"),
         conditionalPanel(
@@ -791,7 +791,415 @@ mod_bloco_4_ui <- function(id){
 
           )
         )
+      ), # incluir robson aqui
+      tabPanel(
+      HTML("<b>Relacionados aos grupos de Robson</b>"),
+      fluidRow(
+        column(
+          width = 5,
+          selectizeInput(
+            inputId = ns("indicador_robson"),
+            label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
+            options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
+            choices = c(
+              "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
+              "Porcentagem de cesarianas por grupo de Robson" = "indicador1",
+              "Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas" = "indicador3"
+            ),
+            width = "81%"
+          )
+        )
+      ),
+      hr(),
+      conditionalPanel(
+        ns = ns,
+        condition = "input.indicador_robson == 'indicador1'",
+        fluidRow(
+          column(
+            width = 4,
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+            div(
+              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              shinyWidgets::actionBttn(
+                inputId = ns('botao_resumo1'),
+                icon = icon('question'),
+                style = 'material-circle',
+                color = "primary",
+                size = 'xs'
+              )
+            ),
+            hr(),
+            fluidRow(
+              column(
+                width = 12,
+                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                uiOutput(ns("input_localidade_resumo1")),
+                align = "center"
+              )
+            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart1"), height = 530))
+            #   )
+            # ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador1")), proxy.height = "300px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador1")), proxy.height = "300px")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador1")), proxy.height = "332px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador1")), proxy.height = "332px")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador1")), proxy.height = "332px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador1")), proxy.height = "332px")
+              )
+            ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador1")), proxy.height = "332px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i8_indicador1")), proxy.height = "332px")
+              )
+            )
+          ),
+          column(
+            width = 8,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
+              shinyjs::hidden(
+                span(
+                  id = ns("mostrar_botao1"),
+                  shinyWidgets::actionBttn(
+                    inputId = ns("botao1"),
+                    icon = icon("triangle-exclamation", style = "color: red"),
+                    color = "warning",
+                    style = "material-circle",
+                    size = "xs"
+                  )
+                )
+              ),
+              hr(),
+              fluidRow(
+                column(
+                  width = 6,
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Geral </b>"),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson2'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson4'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson6_a_9'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
+                  )
+                ),
+                column(
+                  width = 6,
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson1'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson3'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson5'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
+                  ),
+                  div(
+                    style = "text-align: center;",
+                    HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns('texto_robson10'),
+                      icon = icon('question'),
+                      style = 'material-circle',
+                      color = "primary",
+                      size = 'xs'
+                    ),
+                    shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
+                  )
+                )
+              )
+            )
+          )
+        )
+      ),
+      conditionalPanel(
+        ns = ns,
+        condition = "input.indicador_robson == 'indicador2'",
+        fluidRow(
+          column(
+            width = 4,
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+            div(
+              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              shinyWidgets::actionBttn(
+                inputId = ns('botao_resumo2'),
+                icon = icon('question'),
+                style = 'material-circle',
+                color = "primary",
+                size = 'xs'
+              )
+            ),
+            hr(),
+            fluidRow(
+              column(
+                width = 12,
+                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                uiOutput(ns("input_localidade_resumo2")),
+                align = "center"
+              )
+            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart2"), height = 578))
+            #   )
+            # ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador2")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador2")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador2")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador2")), proxy.height = "325px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador2")), proxy.height = "325px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador2")), proxy.height = "325px")
+              ),
+              column(
+                offset = 3,
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador2")), proxy.height = "325px")
+              )
+            )
+          ),
+          column(
+            width = 8,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
+              shinyjs::hidden(
+                span(
+                  id = ns("mostrar_botao2"),
+                  shinyWidgets::actionBttn(
+                    inputId = ns("botao2"),
+                    icon = icon("triangle-exclamation", style = "color: red"),
+                    color = "warning",
+                    style = "material-circle",
+                    size = "xs"
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 650))
+            )
+          )
+        )
+      ),
+      conditionalPanel(
+        ns = ns,
+        condition = "input.indicador_robson == 'indicador3'",
+        fluidRow(
+          column(
+            width = 4,
+            HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
+            div(
+              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              shinyWidgets::actionBttn(
+                inputId = ns('botao_resumo3'),
+                icon = icon('question'),
+                style = 'material-circle',
+                color = "primary",
+                size = 'xs'
+              )
+            ),
+            hr(),
+            fluidRow(
+              column(
+                width = 12,
+                HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
+                uiOutput(ns("input_localidade_resumo3")),
+                align = "center"
+              )
+            ),
+            # fluidRow(
+            #   bs4Dash::box(
+            #     width = 12,
+            #     collapsible = FALSE,
+            #     headerBorder = FALSE,
+            #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
+            #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart3"), height = 578))
+            #   )
+            # ),
+            fluidRow(
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i1_indicador3")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_indicador3")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i3_indicador3")), proxy.height = "293px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i4_indicador3")), proxy.height = "325px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i5_indicador3")), proxy.height = "325px")
+              ),
+              column(
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i6_indicador3")), proxy.height = "325px")
+              ),
+              column(
+                offset = 3,
+                width = 6,
+                shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i7_indicador3")), proxy.height = "325px")
+              )
+            )
+          ),
+          column(
+            width = 8,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
+              shinyjs::hidden(
+                span(
+                  id = ns("mostrar_botao3"),
+                  shinyWidgets::actionBttn(
+                    inputId = ns("botao3"),
+                    icon = icon("triangle-exclamation", style = "color: red"),
+                    color = "warning",
+                    style = "material-circle",
+                    size = "xs"
+                  )
+                )
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 650))
+            )
+          )
+        )
       )
+      )
+
 
     )
   )
@@ -2669,7 +3077,7 @@ mod_bloco_4_server <- function(id, filtros){
       cria_caixa_server(
         dados = data4_profissional_resumo(),
         indicador = "prop_nasc_assistido_enf_obs",
-        titulo = "Porcentagem de partos assistidos por enfermeiras obstétricas",
+        titulo = "Porcentagem de partos vaginais hospitalares assistidos por enfermeiras obstétricas",
         tem_meta = FALSE,
         valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_assistido_enf_obs,
         tipo = "porcentagem",

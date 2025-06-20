@@ -505,21 +505,21 @@ mod_nivel_1_ui <- function(id) {
                 id = ns("tabset1"),
                 width = 12,
                 collapsible = FALSE,
-                tabPanel(
-                  HTML("<b>Grupo de Robson</b>"),
-                  fluidRow(
-                    column(
-                      width = 12,
-                      status = "primary",
-                      collapsible = FALSE,
-                      #style = "height: 360px; overflow-y: auto",
-                      shinycssloaders::withSpinner(
-                        reactable::reactableOutput(ns("table4")),
-                        proxy.height = "320px"
-                      ),
-                    ),
-                  ),
-                ),
+                # tabPanel(
+                #   HTML("<b>Grupo de Robson</b>"),
+                #   fluidRow(
+                #     column(
+                #       width = 12,
+                #       status = "primary",
+                #       collapsible = FALSE,
+                #       #style = "height: 360px; overflow-y: auto",
+                #       shinycssloaders::withSpinner(
+                #         reactable::reactableOutput(ns("table4")),
+                #         proxy.height = "320px"
+                #       ),
+                #     ),
+                #   ),
+                # ),
                 tabPanel(
                   HTML("<b>Deslocamento para parto</b>"),
                   fluidRow(
@@ -587,6 +587,21 @@ mod_nivel_1_ui <- function(id) {
                       )
                     )
                   )
+                ),
+                tabPanel(
+                  HTML("<b>Grupo de Robson</b>"),
+                  fluidRow(
+                    column(
+                      width = 12,
+                      status = "primary",
+                      collapsible = FALSE,
+                      #style = "height: 360px; overflow-y: auto",
+                      shinycssloaders::withSpinner(
+                        reactable::reactableOutput(ns("table4")),
+                        proxy.height = "320px"
+                      ),
+                    ),
+                  ),
                 )
                 ####
               )
@@ -3060,7 +3075,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data4_profissional(),
         indicador = "prop_nasc_assistido_enf_obs",
-        titulo = "Porcentagem de partos assistidos por enfermeiras obstétricas",
+        titulo = "Porcentagem de partos vaginais hospitalares assistidos por enfermeiras obstétricas",
         tem_meta = FALSE,
         valor_de_referencia = data4_comp_profissional()$prop_nasc_assistido_enf_obs,
         tipo = "porcentagem",

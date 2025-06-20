@@ -184,9 +184,10 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
-          "Relacionados aos grupos de Robson e cesariana" = "robson",
+         # "Relacionados aos grupos de Robson e cesariana" = "robson",
           "Relacionados ao deslocamento para o parto" = "deslocamento",
-          "Relacionados ao profissional e local de parto" = "profissional"# [AQUI]
+          "Relacionados ao profissional e local de parto" = "profissional",
+          "Relacionados aos grupos de Robson e cesariana" = "robson"
         )
       )
     } else if (input$bloco == "bloco6") {
