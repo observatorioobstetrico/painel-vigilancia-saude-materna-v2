@@ -2430,6 +2430,21 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               dashStyle = "ShortDot",
               opacity = 0.8
             )
+        } else if (infos_indicador()$nome_abreviado == "porc_nasc_malformacoes") {
+          grafico_base |> highcharter::hc_add_series(
+            data = data_referencia_serie(),
+            name = "Referência (mundo)",
+            highcharter::hcaes(x = ano, low = 3, high = 6),
+            type = "arearange",
+            dashStyle = "ShortDot",
+            color = "#721f81",
+            fillOpacity = 0.2,
+            enableMouseTracking = TRUE
+            ) |>
+            highcharter::hc_yAxis(
+              minPadding = 0.1,
+              maxPadding = 0.1
+            )
         } else {
           grafico_base |>
             highcharter::hc_add_series(

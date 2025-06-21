@@ -3320,12 +3320,14 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "porc_malformacao_geral",
         titulo = "Porcentagem de nascidos vivos com anomalias congênitas",
         tem_meta = FALSE,
-        valor_de_referencia = data5_comp()$porc_malformacao_geral,
+        # valor_de_referencia = data5_comp()$porc_malformacao_geral,
+        valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
         invertido = FALSE,
         fonte_titulo = "15px",
         pagina = "nivel_1",
-        tipo_referencia = "média nacional",
+        # tipo_referencia = "média nacional",
+        tipo_referencia = "mundo",
         nivel_de_analise = filtros()$nivel
       )
     })
