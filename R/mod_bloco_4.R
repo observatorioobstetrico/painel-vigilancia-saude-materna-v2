@@ -656,8 +656,6 @@ mod_bloco_4_ui <- function(id){
       tabPanel(
         HTML("<b>Relacionados ao profissional e local do parto</b>"),
 
-        #[PROFF]
-
         fluidRow(
           column(
             width = 4,
@@ -737,7 +735,7 @@ mod_bloco_4_ui <- function(id){
                 style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional de assistência em partos vaginais ocorridos em hospitais &nbsp;</b>")),
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
@@ -787,7 +785,7 @@ mod_bloco_4_ui <- function(id){
                 # ),
                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
               )
-            )
+            ) ## [XXX]
 
           )
         )
@@ -1254,7 +1252,7 @@ mod_bloco_4_server <- function(id, filtros){
     )
 
     #[PROFF]
-    bloco4_profissional_calcs <- data.frame(
+    bloco4_profissional_calcs <- data.frame( # corrigir total_de_nascidos_vivos para total_de_nascidos_vivos_partos_vaginais
       tipo = c("local", "referencia"),
 
       prop_nasc_local_hospital = rep("round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
@@ -3419,14 +3417,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -3471,14 +3469,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -3524,14 +3522,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -3561,14 +3559,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -3854,14 +3852,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -4085,14 +4083,14 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermagem ou Obstetriz",
+              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
               indicador == "dist_parteira" ~ "Parteira",
               indicador == "dist_outros" ~ "Outros",
               indicador == "dist_ignorado" ~ "Ignorado",
               indicador == "dist_sem_inf" ~ "Sem informação"
             ),
             levels = c(
-              "Enfermagem ou Obstetriz",
+              "Enfermeira ou Obstetriz",
               "Médico",
               "Parteira",
               "Ignorado",
@@ -5179,7 +5177,7 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
 
-    # TPNASCASSI Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
+    # TPNASCASSI Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermeira ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
 
     output$grafico_dist_profissional <- highcharter::renderHighchart({
 
@@ -5208,7 +5206,7 @@ mod_bloco_4_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            data = data4_dist_profissional_completo() |> dplyr::filter(indicador == "Enfermeira ou Obstetriz"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5219,7 +5217,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Enfermagem ou Obstetriz"),
+            data = data4_dist_profissional_comp_completo() |> dplyr::filter(indicador == "Enfermeira ou Obstetriz"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
