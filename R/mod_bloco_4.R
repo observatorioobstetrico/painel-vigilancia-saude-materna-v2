@@ -1255,16 +1255,18 @@ mod_bloco_4_server <- function(id, filtros){
     bloco4_profissional_calcs <- data.frame( # corrigir total_de_nascidos_vivos para total_de_nascidos_vivos_partos_vaginais
       tipo = c("local", "referencia"),
 
-      prop_nasc_local_hospital = rep("round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_outros_est_saude = rep("round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_domicilio = rep("round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_outros = rep("round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_aldeia = rep("round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
-      prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_hospital = rep("round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_outros_est_saude = rep("round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_domicilio = rep("round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_outros = rep("round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_aldeia = rep("round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_sem_inf = rep("round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
 
-      prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1)", 2),
+      prop_nasc_local_fora_hospital = rep("round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1)", 2),
 
-      prop_nasc_assistido_enf_obs = rep("round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100,1)",2)
+      prop_nasc_assistido_enf_obs = rep("round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100,1)",2)
+
+      #prop_nasc_partos_vaginais = rep("round(sum(total_de_nascidos_vivos_partos_vaginais, na.tm = TRUE)/total_de_nascidos_vivos, na.rm = TRUE)", 2)
 
       # dist_medico = rep("round(
       #   sum(c(nasc_assistido_medico_hospital, nasc_assistido_medico_outros_est_saude, nasc_assistido_medico_domicilio, nasc_assistido_medico_outros, nasc_assistido_medico_aldeia, nasc_assistido_medico_sem_inf)[seleciona(aba = 'profissional e local') %in% input$local_nasc], na.rm=T)/
@@ -1340,6 +1342,13 @@ mod_bloco_4_server <- function(id, filtros){
       dist_sem_inf = rep("sum(nasc_assistido_sem_inf_hospital, na.rm = TRUE)", 2)
 
     )
+
+    # bloco4_profissional_calcs4 <- data.frame(
+    #   tipo = c("local", "referencia"),
+    #
+    #   dist_partos_vaginais = rep("sum(total_de_nascimentos_partos_vaginais, na.rm = TRUE)", 2),
+    #   dist_outros = rep("sum(total_de_nascimentos, na.rm = TRUE) - sum(total_de_nascimentos_partos_vaginais, na.rm = TRUE)", 2)
+    # )
 
     # selecao_local1 <- reactive({
     #   selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
@@ -3435,6 +3444,50 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    # novo gráfico
+
+    # data4_dist_partos_vaginais <- reactive({
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::filter(
+    #       if (filtros()$nivel == "nacional")
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       else if (filtros()$nivel == "regional")
+    #         regiao == filtros()$regiao
+    #       else if (filtros()$nivel == "estadual")
+    #         uf == filtros()$estado
+    #       else if (filtros()$nivel == "macro")
+    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #       else if(filtros()$nivel == "micro")
+    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #       else if(filtros()$nivel == "municipal")
+    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), adicionar_localidade = TRUE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "prop_indicador"
+    #     ) |>
+    #     dplyr::mutate(
+    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+    #           indicador == "dist_outros" ~ "Outros",
+    #         ),
+    #         levels = c(
+    #           "Partos Vaginais",
+    #           "Outros",
+    #         )
+    #       )
+    #     )
+    # })
+
     ##marx
 
     data4_total_profissional <- reactive({
@@ -3870,6 +3923,50 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
+    # data4_dist_partos_vaginais_comp <- reactive({
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::filter(
+    #       if (filtros()$nivel2 == "nacional")
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       else if (filtros()$nivel2 == "regional")
+    #         regiao == filtros()$regiao2
+    #       else if (filtros()$nivel2 == "estadual")
+    #         uf == filtros()$estado2
+    #       else if (filtros()$nivel2 == "macro")
+    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #       else if(filtros()$nivel2 == "micro")
+    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #       else if (filtros()$nivel2 == "municipal")
+    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #       else if (filtros()$nivel2 == "municipios_semelhantes")
+    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "prop_indicador"
+    #     ) |>
+    #     dplyr::mutate(
+    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+    #           indicador == "dist_outros" ~ "Outros",
+    #         ),
+    #         levels = c(
+    #           "Partos Vaginais",
+    #           "Outros",
+    #         )
+    #       )
+    #     )
+    # })
+
     ### Para a referência -----------------------------------------------------
     data4_referencia <- reactive({
       bloco4 |>
@@ -4101,8 +4198,6 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    ##marx
-
     data4_dist_profissional_completo <- reactive({
       dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia()) |>
         dplyr::left_join(data4_total_profissional(), by = c("ano", "indicador")) |>
@@ -4115,6 +4210,44 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::left_join(data4_total_profissional_referencia(), by = c("ano", "indicador"))
 
     })
+
+    # data4_dist_partos_vaginais_referencia <- reactive({
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), referencia = TRUE,
+    #                      adicionar_localidade = FALSE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "br_prop_indicador"
+    #     ) |>
+    #     dplyr::mutate(
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+    #           indicador == "dist_outros" ~ "Outros",
+    #         ),
+    #         levels = c(
+    #           "Partos Vaginais",
+    #           "Outros",
+    #         )
+    #       )
+    #     )
+    # })
+    #
+    # data4_dist_partos_vaginais_completo <- reactive({
+    #   dplyr::full_join(data4_partos_vaginais(), data4_dist_partos_vaginais_referencia())
+    # })
+    #
+    # data4_dist_profissional_comp_completo <- reactive({
+    #   dplyr::full_join(data4_dist_partos_vaginais_comp(), data4_dist_partos_vaginais_referencia())
+    #
+    # })
+
 
 
     ## Criando os outputs dos gráficos ----------------------------------------
@@ -5350,6 +5483,77 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
+
+    # gráfico de nascimentos de partos vaginais
+
+    # output$grafico_dist_partos_vaginais <- highcharter::renderHighchart({
+    #   if (filtros()$comparar == "Não") {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data4_dist_partos_vaginais_completo(),
+    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+    #         type = "column",
+    #         showInLegend = TRUE,
+    #         tooltip = list(
+    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+    #         )
+    #       ) |>
+    #       highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
+    #   } else {
+    #     grafico_base <- highcharter::highchart() |>
+    #       highcharter::hc_add_series(
+    #         data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
+    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+    #         type = "column",
+    #         showInLegend = TRUE,
+    #         color = "#FEAF77FF",
+    #         tooltip = list(
+    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+    #         ),
+    #         stack = 0
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
+    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+    #         type = "column",
+    #         showInLegend = FALSE,
+    #         color = "#FEAF77FF",
+    #         tooltip = list(
+    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+    #         ),
+    #         stack = 1,
+    #         linkedTo = ":previous"
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Outros"),
+    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+    #         type = "column",
+    #         showInLegend = TRUE,
+    #         color = "#F1605DFF",
+    #         tooltip = list(
+    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+    #         ),
+    #         stack = 0
+    #       ) |>
+    #       highcharter::hc_add_series(
+    #         data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Outros"),
+    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+    #         type = "column",
+    #         showInLegend = FALSE,
+    #         color = "#F1605DFF",
+    #         tooltip = list(
+    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+    #         ),
+    #         stack = 1,
+    #         linkedTo = ":previous"
+    #       )
+    #   }
+    #
+    #   grafico_base |>
+    #     highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+    #     highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+    #     highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+    # })
 
     ### Tabela com informações adicionais -------------------------------------
     output$municipio_informacoes_adicionais <- renderUI({

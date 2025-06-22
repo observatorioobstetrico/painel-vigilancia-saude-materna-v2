@@ -9,7 +9,7 @@ library(janitor)
 
 # Baixar dados -----------------------------------------------------------------
 
-## TPNASCASSI foi criada em 2013
+## tpnascassi foi criada em 2013
 
 df <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2023,
                                       information_system = "SINASC",
@@ -35,9 +35,9 @@ df_2024 <- data.table::fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.
          PARTO = as.character(PARTO)
          )
 
-df <- rbind(df, df_2024)
+df <- rbind(df, df_2024) |> clean_names()
 
-rm(df_2024)
+#rm(df_2024)
 
 # Criando alguns objetos auxiliares --------------------------------------------
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -49,84 +49,84 @@ codigos_municipios <- read.csv("data-raw/csv//tabela_aux_municipios.csv") |>
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2013:2024)), ano = 2013:2024)
 
 
-# TPNASCASSI Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
-# LOCNASC Local de nascimento: 1 – Hospital; 2 – Outros estabelecimentos de saúde; 3 – Domicílio; 4 – Outros; 5- Aldeia Indígena.
+# tpnascassi Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
+# locnasc Local de nascimento: 1 – Hospital; 2 – Outros estabelecimentos de saúde; 3 – Domicílio; 4 – Outros; 5- Aldeia Indígena.
 
 # Tratando os dados ------------------------------------------------------------
 
 nascidos_vivos_total <- df |>
-  mutate(ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC)))) |>
+  mutate(ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc)))) |>
   group_by(codmunres, ano) |>
-  summarise(total_de_nascidos_vivos = n(), .groups = "drop")
+  summarise(total_de_nascidos_vivos = n())
 
 df_bloco4_profissional <- df |>
   # Selecionando somente parto vaginal, PARTO == 1
-  filter(PARTO == "1") |>
-  select(-PARTO) |>
+  filter(parto == "1") |>
+  select(-parto) |>
   mutate(
-    ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
-    TPNASCASSI = as.numeric(TPNASCASSI),
-    LOCNASC = as.numeric(LOCNASC),
+    ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc))),
+    tpnascassi = as.numeric(tpnascassi),
+    locnasc = as.numeric(locnasc),
     .keep = "unused",
   ) |>
   mutate(
     total_de_nascidos_vivos_partos_vaginais = 1,
     # Nascimento assistido
-    nasc_assistido_medico = if_else(TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs = if_else(TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira = if_else(TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros = if_else(TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado = if_else(TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf = if_else(is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico = if_else(tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs = if_else(tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira = if_else(tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros = if_else(tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado = if_else(tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf = if_else(is.na(tpnascassi), 1, 0, missing = 0),
     # Local de nascimento
-    nasc_local_hospital = if_else(LOCNASC == 1, 1, 0, missing = 0),
-    nasc_local_outros_est_saude = if_else(LOCNASC == 2, 1, 0, missing = 0),
-    nasc_local_domicilio = if_else(LOCNASC == 3, 1, 0, missing = 0),
-    nasc_local_outros = if_else(LOCNASC == 4, 1, 0, missing = 0),
-    nasc_local_aldeia = if_else(LOCNASC == 5, 1, 0, missing = 0),
-    nasc_local_sem_inf = if_else(is.na(LOCNASC), 1, 0, missing = 0),
+    nasc_local_hospital = if_else(locnasc == 1, 1, 0, missing = 0),
+    nasc_local_outros_est_saude = if_else(locnasc == 2, 1, 0, missing = 0),
+    nasc_local_domicilio = if_else(locnasc == 3, 1, 0, missing = 0),
+    nasc_local_outros = if_else(locnasc == 4, 1, 0, missing = 0),
+    nasc_local_aldeia = if_else(locnasc == 5, 1, 0, missing = 0),
+    nasc_local_sem_inf = if_else(is.na(locnasc), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == Hospital
-    nasc_assistido_medico_hospital = if_else(LOCNASC == 1 & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_hospital = if_else(LOCNASC == 1 & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_hospital = if_else(LOCNASC == 1 & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_hospital = if_else(LOCNASC == 1 & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_hospital = if_else(LOCNASC == 1 & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_hospital = if_else(LOCNASC == 1 & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_hospital = if_else(locnasc == 1 & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_hospital = if_else(locnasc == 1 & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_hospital = if_else(locnasc == 1 & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_hospital = if_else(locnasc == 1 & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_hospital = if_else(locnasc == 1 & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_hospital = if_else(locnasc == 1 & is.na(tpnascassi), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == Outros estabelecimentos de saúde
-    nasc_assistido_medico_outros_est_saude = if_else(LOCNASC == 2 & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_outros_est_saude = if_else(LOCNASC == 2 & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_outros_est_saude = if_else(LOCNASC == 2 & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_outros_est_saude = if_else(LOCNASC == 2 & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_outros_est_saude = if_else(LOCNASC == 2 & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_outros_est_saude = if_else(LOCNASC == 2 & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_outros_est_saude = if_else(locnasc == 2 & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_outros_est_saude = if_else(locnasc == 2 & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_outros_est_saude = if_else(locnasc == 2 & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_outros_est_saude = if_else(locnasc == 2 & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_outros_est_saude = if_else(locnasc == 2 & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_outros_est_saude = if_else(locnasc == 2 & is.na(tpnascassi), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == Domicílio
-    nasc_assistido_medico_domicilio = if_else(LOCNASC == 3 & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_domicilio = if_else(LOCNASC == 3 & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_domicilio = if_else(LOCNASC == 3 & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_domicilio = if_else(LOCNASC == 3 & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_domicilio = if_else(LOCNASC == 3 & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_domicilio = if_else(LOCNASC == 3 & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_domicilio = if_else(locnasc == 3 & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_domicilio = if_else(locnasc == 3 & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_domicilio = if_else(locnasc == 3 & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_domicilio = if_else(locnasc == 3 & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_domicilio = if_else(locnasc == 3 & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_domicilio = if_else(locnasc == 3 & is.na(tpnascassi), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == Outros
-    nasc_assistido_medico_outros = if_else(LOCNASC == 4 & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_outros = if_else(LOCNASC == 4 & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_outros = if_else(LOCNASC == 4 & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_outros = if_else(LOCNASC == 4 & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_outros = if_else(LOCNASC == 4 & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_outros = if_else(LOCNASC == 4 & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_outros = if_else(locnasc == 4 & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_outros = if_else(locnasc == 4 & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_outros = if_else(locnasc == 4 & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_outros = if_else(locnasc == 4 & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_outros = if_else(locnasc == 4 & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_outros = if_else(locnasc == 4 & is.na(tpnascassi), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == Aldeia Indígena
-    nasc_assistido_medico_aldeia = if_else(LOCNASC == 5 & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_aldeia = if_else(LOCNASC == 5 & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_aldeia = if_else(LOCNASC == 5 & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_aldeia = if_else(LOCNASC == 5 & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_aldeia = if_else(LOCNASC == 5 & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_aldeia = if_else(LOCNASC == 5 & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_aldeia = if_else(locnasc == 5 & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_aldeia = if_else(locnasc == 5 & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_aldeia = if_else(locnasc == 5 & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_aldeia = if_else(locnasc == 5 & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_aldeia = if_else(locnasc == 5 & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_aldeia = if_else(locnasc == 5 & is.na(tpnascassi), 1, 0, missing = 0),
     # Nascimento assistido com Local de nascimento == NA (Sem Informação)
-    nasc_assistido_medico_sem_inf = if_else(is.na(LOCNASC) & TPNASCASSI == 1, 1, 0, missing = 0),
-    nasc_assistido_enf_obs_sem_inf = if_else(is.na(LOCNASC) & TPNASCASSI == 2, 1, 0, missing = 0),
-    nasc_assistido_parteira_sem_inf = if_else(is.na(LOCNASC) & TPNASCASSI == 3, 1, 0, missing = 0),
-    nasc_assistido_outros_sem_inf = if_else(is.na(LOCNASC) & TPNASCASSI == 4, 1, 0, missing = 0),
-    nasc_assistido_ignorado_sem_inf = if_else(is.na(LOCNASC) & TPNASCASSI == 9, 1, 0, missing = 0),
-    nasc_assistido_sem_inf_sem_inf = if_else(is.na(LOCNASC) & is.na(TPNASCASSI), 1, 0, missing = 0),
+    nasc_assistido_medico_sem_inf = if_else(is.na(locnasc) & tpnascassi == 1, 1, 0, missing = 0),
+    nasc_assistido_enf_obs_sem_inf = if_else(is.na(locnasc) & tpnascassi == 2, 1, 0, missing = 0),
+    nasc_assistido_parteira_sem_inf = if_else(is.na(locnasc) & tpnascassi == 3, 1, 0, missing = 0),
+    nasc_assistido_outros_sem_inf = if_else(is.na(locnasc) & tpnascassi == 4, 1, 0, missing = 0),
+    nasc_assistido_ignorado_sem_inf = if_else(is.na(locnasc) & tpnascassi == 9, 1, 0, missing = 0),
+    nasc_assistido_sem_inf_sem_inf = if_else(is.na(locnasc) & is.na(tpnascassi), 1, 0, missing = 0),
     .keep = "unused"
   ) |>
   clean_names() |>
@@ -148,9 +148,9 @@ data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_prof
 #
 # ## analisando incompletude -----------------------------------------------------
 #
-# table(sinasc_profissional_local$TPNASCASSI, useNA = "ifany")
+# table(sinasc_profissional_local$tpnascassi, useNA = "ifany")
 #
-# table(sinasc_profissional_local$LOCNASC, useNA = "ifany")
+# table(sinasc_profissional_local$locnasc, useNA = "ifany")
 #
 # ##
 #
@@ -163,12 +163,12 @@ data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_prof
 # tabela_faltantes_por_uf <- sinasc %>%
 #   group_by(uf_sigla) %>%
 #   summarise(
-#     TPNASCASSI_faltantes = sum(TPNASCASSI == 9 | is.na(TPNASCASSI)),
-#     LOCNASC_faltantes    = sum(LOCNASC == 9 | is.na(LOCNASC)),
+#     tpnascassi_faltantes = sum(tpnascassi == 9 | is.na(tpnascassi)),
+#     locnasc_faltantes    = sum(locnasc == 9 | is.na(locnasc)),
 #     total_obs            = n(),
 #     .groups = "drop"
 #   ) %>%
-#   pivot_longer(cols = c(TPNASCASSI_faltantes, LOCNASC_faltantes),
+#   pivot_longer(cols = c(tpnascassi_faltantes, locnasc_faltantes),
 #                names_to = "variavel",
 #                values_to = "n_faltantes") %>%
 #   mutate(
@@ -179,7 +179,7 @@ data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_prof
 #
 # # Transforma para matriz (linha: estado; coluna: variável)
 # matriz_tpnascassi <- tabela_faltantes_por_uf %>%
-#   filter(variavel == "TPNASCASSI_faltantes") %>%
+#   filter(variavel == "tpnascassi_faltantes") %>%
 #   select(uf_sigla, porcentagem)
 #
 # matriz_tpnascassi <- as.matrix(matriz_tpnascassi[, "porcentagem"])
