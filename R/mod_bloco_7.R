@@ -156,7 +156,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 380))
                 )
               ),
               column(
@@ -204,7 +204,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 380))
                 )
               ),
 
@@ -688,7 +688,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 380))
                 )
               ),
               column(
@@ -722,7 +722,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 380))
                 )
               ),
               column(
@@ -1146,7 +1146,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 380))
                 )
               ),
               column(
@@ -1180,7 +1180,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 380))
                 )
               ),
               column(
@@ -1214,7 +1214,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 380))
                 )
               ),
               column(
@@ -1248,7 +1248,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 380))
                 )
               ),
               column(

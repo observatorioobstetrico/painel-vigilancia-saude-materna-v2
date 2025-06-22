@@ -242,7 +242,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 365))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 380))
                 )
               )
             )
@@ -398,7 +398,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 385))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 380))
                 )
               ),
               column(

@@ -136,7 +136,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 385))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 380))
             )
           ),
           column(
@@ -184,7 +184,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 385))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 380))
             )
           ),
           column(
@@ -231,7 +231,7 @@ mod_bloco_1_ui <- function(id){
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 385))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 380))
             )
           ),
           column(
@@ -1202,7 +1202,7 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1222,7 +1222,7 @@ mod_bloco_1_server <- function(id, filtros){
               data = data1_idademae_referencia(),
               name = "Referência (média nacional)",
               type = "line",
-              highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1233,12 +1233,12 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data1_idademae_comp(),
             type = "line",
-            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1258,7 +1258,7 @@ mod_bloco_1_server <- function(id, filtros){
               data = data1_idademae_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
