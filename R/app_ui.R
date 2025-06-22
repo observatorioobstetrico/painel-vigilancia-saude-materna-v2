@@ -153,7 +153,7 @@ app_ui <- function(request) {
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
           bs4Dash::bs4Card(
             width = 12,
-            title = HTML("<b style='font-size:22px'> Selecione os filtros de interesse: </b>"),
+            title = HTML("<b class = 'fonte-indicador-nivel3'> Selecione os filtros de interesse: </b>"),
             icon = icon("filter"),
             status = "primary",
             fluidRow(
@@ -163,7 +163,7 @@ app_ui <- function(request) {
                   condition = "input.abas == 'nivel_1'",
                   numericInput(
                     inputId = "ano",
-                    label = HTML("<span style = 'font-size: 17'> Ano </span>"),
+                    label = HTML("<span class = 'fonte-muito-grande'> Ano </span>"),
                     value = 2023,
                     min = 2012,
                     max = 2024,
@@ -177,7 +177,7 @@ app_ui <- function(request) {
                   sliderInput(
                     inputId = "ano2",
                     label = HTML(
-                      "<span style = 'font-size: 17'> Intervalo de anos </span>"
+                      "<span class = 'fonte-muito-grande'> Intervalo de anos </span>"
                     ),
                     min = 2012,
                     max = 2024,
@@ -194,7 +194,7 @@ app_ui <- function(request) {
                 selectizeInput(
                   inputId = "nivel",
                   label = HTML(
-                    "<span style = 'font-size: 17'> Nível de análise </span>"
+                    "<span class = 'fonte-muito-grande'> Nível de análise </span>"
                   ),
                   options = list(placeholder = "Selecione o nível de análise"),
                   choices = c(
@@ -218,7 +218,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "regiao",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Região </span>"
+                          "<span class = 'fonte-muito-grande'> Região </span>"
                         ),
                         options = list(
                           placeholder = "Selecione uma região do país"
@@ -246,7 +246,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "estado_macro",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Estado </span>"
+                          "<span class = 'fonte-muito-grande'> Estado </span>"
                         ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
@@ -258,7 +258,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "macro",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Macrorregião de saúde estadual </span>"
+                          "<span class = 'fonte-muito-grande'> Macrorregião de saúde estadual </span>"
                         ),
                         choices = NULL,
                         options = list(
@@ -277,7 +277,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "estado_micro",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Estado </span>"
+                          "<span class = 'fonte-muito-grande'> Estado </span>"
                         ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
@@ -289,7 +289,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "micro",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Região de saúde estadual </span>"
+                          "<span class = 'fonte-muito-grande'> Região de saúde estadual </span>"
                         ),
                         choices = NULL,
                         options = list(
@@ -308,7 +308,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "estado",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Estado </span>"
+                          "<span class = 'fonte-muito-grande'> Estado </span>"
                         ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
@@ -328,7 +328,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "estado_municipio",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Estado </span>"
+                          "<span class = 'fonte-muito-grande'> Estado </span>"
                         ),
                         choices = sort(estados_choices),
                         options = list(placeholder = "Selecione um estado"),
@@ -340,7 +340,7 @@ app_ui <- function(request) {
                       selectizeInput(
                         inputId = "municipio",
                         label = HTML(
-                          "<span style = 'font-size: 17'> Município </span>"
+                          "<span class = 'fonte-muito-grande'> Município </span>"
                         ),
                         choices = NULL,
                         options = list(placeholder = "Selecione um município"),
@@ -358,7 +358,7 @@ app_ui <- function(request) {
                   width = 3,
                   HTML(
                     "
-                    <div style = 'text-align: left;'> <b style = 'font-size: 16px'>
+                    <div style = 'text-align: left;'> <b class = 'fonte-grande'>
                         <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2024 são preliminares (atualizados em 09 de maio de 2025)
                     </b> </div>
                     <span style='display: block; margin-bottom: 15px;'> </span>
@@ -375,7 +375,7 @@ app_ui <- function(request) {
                   selectizeInput(
                     inputId = "comparar",
                     label = HTML(
-                      "<span style = 'font-size: 17'> Comparar com outra localidade? </span>"
+                      "<span class = 'fonte-muito-grande'> Comparar com outra localidade? </span>"
                     ),
                     choices = c("Sim", "Não"),
                     selected = "Não",
@@ -389,7 +389,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "nivel2",
                       label = HTML(glue::glue(
-                        "<span style = 'font-size: 17'> {uiOutput('label_nivel_comp')} </span>"
+                        "<span class = 'fonte-muito-grande'> {uiOutput('label_nivel_comp')} </span>"
                       )),
                       options = list(
                         placeholder = "Selecione o nível de análise"
@@ -416,7 +416,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "regiao2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Região </span>"
+                            "<span class = 'fonte-muito-grande'> Região </span>"
                           ),
                           options = list(
                             placeholder = "Selecione uma região do país"
@@ -444,7 +444,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "estado_macro2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Estado </span>"
+                            "<span class = 'fonte-muito-grande'> Estado </span>"
                           ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
@@ -456,7 +456,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "macro2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Macrorregião de saúde estadual </span>"
+                            "<span class = 'fonte-muito-grande'> Macrorregião de saúde estadual </span>"
                           ),
                           options = list(
                             placeholder = "Selecione uma macrorregião de saúde estadual estadual"
@@ -475,7 +475,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "estado_micro2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Estado </span>"
+                            "<span class = 'fonte-muito-grande'> Estado </span>"
                           ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
@@ -487,7 +487,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "micro2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Região de saúde estadual </span>"
+                            "<span class = 'fonte-muito-grande'> Região de saúde estadual </span>"
                           ),
                           options = list(
                             placeholder = "Selecione uma região de saúde estadual"
@@ -506,7 +506,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "estado2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Estado </span>"
+                            "<span class = 'fonte-muito-grande'> Estado </span>"
                           ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
@@ -526,7 +526,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "estado_municipio2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Estado </span>"
+                            "<span class = 'fonte-muito-grande'> Estado </span>"
                           ),
                           options = list(placeholder = "Selecione um estado"),
                           choices = sort(estados_choices),
@@ -538,7 +538,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "municipio2",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Município </span>"
+                            "<span class = 'fonte-muito-grande'> Município </span>"
                           ),
                           options = list(
                             placeholder = "Selecione um município"
@@ -588,7 +588,7 @@ app_ui <- function(request) {
                   selectizeInput(
                     inputId = "bloco",
                     label = HTML(
-                      "<span style = 'font-size: 17'> Bloco de indicadores </span>"
+                      "<span class = 'fonte-muito-grande'> Bloco de indicadores </span>"
                     ),
                     options = list(
                       placeholder = "Selecione o bloco de indicadores"
@@ -612,7 +612,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "indicador",
                       label = HTML(
-                        "<span style = 'font-size: 17'> Indicador </span>"
+                        "<span class = 'fonte-muito-grande'> Indicador </span>"
                       ),
                       options = list(placeholder = "Selecione o indicador"),
                       choices = tabela_indicadores$indicador[which(
@@ -629,7 +629,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "tipo_do_indicador_blocos4_6_7",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Selecione o grupo de indicadores </span>"
+                            "<span class = 'fonte-muito-grande'> Selecione o grupo de indicadores </span>"
                           ),
                           options = list(
                             placeholder = "Selecione um grupo de indicadores"
@@ -646,7 +646,7 @@ app_ui <- function(request) {
                         selectizeInput(
                           inputId = "indicador_blocos4_6_7",
                           label = HTML(
-                            "<span style = 'font-size: 17'> Indicador </span>"
+                            "<span class = 'fonte-muito-grande'> Indicador </span>"
                           ),
                           options = list(placeholder = "Selecione o indicador"),
                           choices = NULL,
@@ -675,7 +675,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "indicador_uma_caixinha_adicional_bloco5",
                       label = HTML(
-                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                        "<span class = 'fonte-muito-grande'> Aguarde... </span>"
                       ),
                       choices = NULL,
                       width = "99%"
@@ -718,7 +718,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "indicador_uma_caixinha_adicional_bloco7",
                       label = HTML(
-                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                        "<span class = 'fonte-muito-grande'> Aguarde... </span>"
                       ),
                       choices = NULL,
                       width = "97%"
@@ -736,7 +736,7 @@ app_ui <- function(request) {
                         "'Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS'",
                         "'Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS'",
 
-                        "'Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto'"
+                        "'Porcentagem de partos com peso < 1500g segundo região de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal'"
                       )
 
                       glue::glue(
@@ -746,7 +746,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais1",
                       label = HTML(
-                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                        "<span class = 'fonte-muito-grande'> Aguarde... </span>"
                       ),
                       choices = NULL,
                       width = "94%"
@@ -762,7 +762,7 @@ app_ui <- function(request) {
                     selectizeInput(
                       inputId = "indicador_duas_caixinhas_adicionais2",
                       label = HTML(
-                        "<span style = 'font-size: 17'> Aguarde... </span>"
+                        "<span class = 'fonte-muito-grande'> Aguarde... </span>"
                       ),
                       choices = NULL,
                       width = "94%"
@@ -780,7 +780,7 @@ app_ui <- function(request) {
                   icon = icon("magnifying-glass"),
                   color = "primary",
                   label = HTML(
-                    "<span style = 'font-size: 17'> &nbsp; Atualizar resultados </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Atualizar resultados </span>"
                   ),
                   style = "unite",
                   size = "sm"
@@ -872,10 +872,10 @@ app_ui <- function(request) {
             ),
             HTML(
               "
-              <p align='justify'; style='font-size:18px; padding: 0 0.5em'>
+              <p align='justify'; class = 'fonte-muito-grande' style='padding: 0 0.5em'>
               Para melhor entender os resultados dos indicadores apresentados neste painel em diferentes contextos e em como eles
               refletem as situações de vulnerabilidade da mulher ao óbito materno, acesse, clicando na imagem abaixo ou
-              <a href = 'https://observatorioobstetricobr.org/a-historia-de-aparecida/' target = _blank>neste link</a>, a história de Aparecida -
+              <a href = 'https://observatorioobstetricobr.org/projetos/aparecida-uma-historia-sobre-a-vunerabilidade-da-mulher-brasileira-a-morte-materna/' target = _blank>neste link</a>, a história de Aparecida -
               uma mulher preta, que mora num município pequeno, localizado no interior de um estado brasileiro. A história de Aparecida,
               apesar de não ser uma história real, retrata as condições de vida e saúde de muitas brasileiras, evidenciando a grande
               vulnerabilidade à morte materna a qual essas mulheres estão submetidas.
@@ -886,7 +886,7 @@ app_ui <- function(request) {
               '
               <div style = "display: flex; justify-content: center; align-items: center;">
                 <div class="card2 blue2" style = "display: flex; justify-content: center; align-items: center; width: 55vw; height: 67vh;">
-                  <a href = "https://observatorioobstetricobr.org/a-historia-de-aparecida/" target = "_blank">
+                  <a href = "https://observatorioobstetricobr.org/projetos/aparecida-uma-historia-sobre-a-vunerabilidade-da-mulher-brasileira-a-morte-materna/" target = "_blank">
                     <image src = "www/aparecida.png" style = "max-width: 100%; max-height: 100%;">
                   </a>
                 </div>
