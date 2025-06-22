@@ -139,7 +139,7 @@ mod_bloco_2_ui <- function(id) {
 
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot1"),
-                height = 385
+                height = 380
               ))
             )
           ),
@@ -223,7 +223,7 @@ mod_bloco_2_ui <- function(id) {
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot3"),
-                height = 385
+                height = 380
               ))
             )
           ),
@@ -274,7 +274,7 @@ mod_bloco_2_ui <- function(id) {
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot4"),
-                height = 385
+                height = 380
               ))
             )
           )
