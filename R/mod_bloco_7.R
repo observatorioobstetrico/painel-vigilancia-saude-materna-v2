@@ -34,7 +34,7 @@ mod_bloco_7_ui <- function(id) {
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -48,7 +48,7 @@ mod_bloco_7_ui <- function(id) {
           column(
             width=12,
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 Neste painel, consideramos apenas óbitos fetais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500 g.
                 <span style='display: block; margin-bottom: 15px;'> </span>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
@@ -63,7 +63,7 @@ mod_bloco_7_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo1'),
                 icon = icon('question'),
@@ -118,10 +118,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Número de óbitos fetais &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Número de óbitos fetais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -129,7 +129,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("parto_fetal"),
-                        label = "Momento do óbito",
+                        label = span(class = "fonte-grande", "Momento do óbito"),
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
                           "Geral" = "fetal_parto_geral",
@@ -143,7 +143,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("faixa_peso_fetal"),
-                        label = "Faixa de peso",
+                        label = span(class = "fonte-grande", "Faixa de peso"),
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "peso_fetal",
@@ -156,7 +156,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_fetal"), height = 385))
                 )
               ),
               column(
@@ -166,10 +166,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Taxa de mortalidade fetal por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Taxa de mortalidade fetal por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -177,7 +177,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("parto_fetal2"),
-                        label = "Momento do óbito",
+                        label = span(class = "fonte-grande", "Momento do óbito"),
                         options = list(placeholder = "Selecione o momento do óbito"),
                         choices = c(
                           "Geral" = "fetal_parto_geral",
@@ -191,7 +191,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("faixa_peso_fetal2"),
-                        label = "Faixa de peso",
+                        label = span(class = "fonte-grande", "Faixa de peso"),
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "peso_fetal",
@@ -204,7 +204,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_fetal"), height = 385))
                 )
               ),
 
@@ -215,10 +215,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito fetal por faixa de peso &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual do momento do óbito fetal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal1"),
@@ -236,7 +236,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -257,7 +257,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_fetal"), height = 360))
                 )
               ),
               column(
@@ -267,10 +267,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito fetal &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual das faixas de peso por momento do óbito fetal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_fetal2"),
@@ -288,7 +288,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -304,7 +304,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 480))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_fetal"), height = 390))
                 )
               ),
               column(
@@ -314,10 +314,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos fetais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -325,7 +325,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_fetal"),
-                        label = "Selecione, aqui, os grupos de interesse:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, os grupos de interesse:</span>"),
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse:",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -364,7 +364,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_fetal_grupos"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -384,7 +384,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -421,7 +421,7 @@ mod_bloco_7_ui <- function(id) {
                     #   )
                     # )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_fetal"), height = 420))
                 )
               ),
               # column(
@@ -431,10 +431,10 @@ mod_bloco_7_ui <- function(id) {
               #     status = "primary",
               #     collapsible = FALSE,
               #     headerBorder = FALSE,
-              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #        HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
+              #        HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade (Fonte: <a href = 'http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf' , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -442,7 +442,7 @@ mod_bloco_7_ui <- function(id) {
               #         width = 6,
               #         shinyWidgets::pickerInput(
               #           inputId = ns("cids_evitaveis_fetal"),
-              #           label = "Selecione, aqui, os grupos de interesse:",
+              #           label = HTML("<span class = 'fonte-grande'>Selecione, aqui, os grupos de interesse:</span>"),
               #           options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
               #           choices = c(
               #             "Reduzível pelas ações de imunização" = "imunoprevencao",
@@ -470,7 +470,7 @@ mod_bloco_7_ui <- function(id) {
               #       ),
               #       column(
               #         width = 6,
-              #         strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+              #         strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
               #         tags$div(
               #           align = 'left',
               #           class = 'multicol',
@@ -499,17 +499,17 @@ mod_bloco_7_ui <- function(id) {
                    status = "primary",
                    collapsible = FALSE,
                    headerBorder = FALSE,
-                   style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                   style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                     div(
-                   style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
+                   style = "height: 7%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos fetais segundo análise de evitabilidade do <a href = 'https://www.scielo.br/j/ress/a/cF66ngM4VB3YXV7Js8WynXC/?format=pdf&lang=pt' target = _blank>artigo de Vieira et Al (2011)</a> &nbsp;</b>")),
                    hr(),
                   fluidRow(
                     column(
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_fetal2"),
-                        label = "Selecione, aqui, os grupos de interesse:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, os grupos de interesse:</span>"),
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Imunoprevenção" = "imunoprevencao2",
@@ -537,7 +537,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_fetal_evitaveis2"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -557,7 +557,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -576,7 +576,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_fetal2"), height = 420))
                  )
               )
             )
@@ -592,7 +592,7 @@ mod_bloco_7_ui <- function(id) {
           column(
             width=12,
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 Neste painel, consideramos apenas óbitos perinatais com idade gestacional maior ou igual a 22 semanas ou peso maior ou igual a 500 g ou idade de até 6 dias de vida.
                 <span style='display: block; margin-bottom: 15px;'> </span>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
@@ -607,7 +607,7 @@ mod_bloco_7_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo2'),
                 icon = icon('question'),
@@ -662,10 +662,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Número de óbitos perinatais &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Número de óbitos perinatais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -673,7 +673,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("faixa_peso_perinatal_total"),
-                        label = "Faixa de peso",
+                        label = span(class = "fonte-grande", "Faixa de peso"),
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "perinatal_todos_total",
@@ -688,7 +688,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 390))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_perinatal"), height = 385))
                 )
               ),
               column(
@@ -698,10 +698,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 20%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:17px'> Taxa de mortalidade perinatal por 1000 nascidos vivos  &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Taxa de mortalidade perinatal por 1000 nascidos vivos  &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -709,7 +709,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("faixa_peso_perinatal_taxa_total"),
-                        label = "Faixa de peso",
+                        label = span(class = "fonte-grande", "Faixa de peso"),
                         options = list(placeholder = "Selecione o intervalo de peso"),
                         choices = c(
                           "Geral" = "taxa_perinatal_total",
@@ -722,7 +722,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 390))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_perinatal"), height = 385))
                 )
               ),
               column(
@@ -732,10 +732,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito perinatal por faixa de peso &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Distribuição percentual do momento do óbito perinatal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal1"),
@@ -753,7 +753,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -774,7 +774,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_perinatal"), height = 360))
                 )
               ),
               column(
@@ -784,10 +784,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito perinatal &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Distribuição percentual das faixas de peso por momento do óbito perinatal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_perinatal2"),
@@ -805,7 +805,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -826,7 +826,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_perinatal"), height = 360))
                 )
               ),
               column(
@@ -836,10 +836,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos perinatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -847,7 +847,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_perinatal"),
-                        label = "Selecione, aqui, os grupos de interesse:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, os grupos de interesse:</span>"),
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "prematuridade",
@@ -882,7 +882,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_perinatal_grupos"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -902,7 +902,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -925,7 +925,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_perinatal"), height = 390))
                 )
               ),
               column(
@@ -935,10 +935,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos perinatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -946,7 +946,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_perinatal"),
-                        label = "Selecione, aqui, os grupos de interesse:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, os grupos de interesse:</span>"),
                         options = list(placeholder = "Selecione, aqui, os grupos de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "imunoprevencao",
@@ -978,7 +978,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_perinatal_evitaveis"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -998,7 +998,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1021,7 +1021,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_perinatal"), height = 390))
                 )
               )
             )
@@ -1035,7 +1035,7 @@ mod_bloco_7_ui <- function(id) {
           column(
             width = 12,
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
@@ -1048,7 +1048,7 @@ mod_bloco_7_ui <- function(id) {
           #   width = 12,
           #   HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
           #   HTML(
-          #     "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+          #     "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
           #       <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
           #       </b> </div>"
           #   ),
@@ -1059,7 +1059,7 @@ mod_bloco_7_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo3'),
                 icon = icon('question'),
@@ -1122,10 +1122,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Número de óbitos neonatais &nbsp;</b>")
+                     HTML("<b class = 'fonte-muito-grande'> Número de óbitos neonatais &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1133,7 +1133,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("obitos_faixa_peso"),
-                        label = "Faixa de peso ao nascer",
+                        label = span(class = "fonte-grande", "Faixa de peso ao nascer"),
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "obitos_neonat",
@@ -1146,7 +1146,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_neonat"), height = 385))
                 )
               ),
               column(
@@ -1156,10 +1156,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
+                     HTML("<b class = 'fonte-muito-grande'> Taxa de mortalidade neonatal por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1167,7 +1167,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("faixa_peso"),
-                        label = "Faixa de peso ao nascer",
+                        label = span(class = "fonte-grande", "Faixa de peso ao nascer"),
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat",
@@ -1180,7 +1180,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_neonat"), height = 385))
                 )
               ),
               column(
@@ -1190,10 +1190,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1201,7 +1201,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("faixa_peso_precoc"),
-                        label = "Faixa de peso ao nascer",
+                        label = span(class = "fonte-grande", "Faixa de peso ao nascer"),
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat_precoc",
@@ -1214,7 +1214,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_neonat"), height = 385))
                 )
               ),
               column(
@@ -1224,10 +1224,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1235,7 +1235,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("faixa_peso_tardia"),
-                        label = "Faixa de peso ao nascer",
+                        label = span(class = "fonte-grande", "Faixa de peso ao nascer"),
                         options = list(placeholder = "Selecione o intervalo de peso ao nascer"),
                         choices = c(
                           "Geral" = "mort_neonat_tardia",
@@ -1248,7 +1248,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 410))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_neonat"), height = 385))
                 )
               ),
               column(
@@ -1258,10 +1258,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual do momento do óbito neonatal por faixa de peso &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual do momento do óbito neonatal por faixa de peso &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_neonatal1"),
@@ -1279,7 +1279,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione as faixas de peso:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1300,7 +1300,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 460))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_neonat"), height = 360))
                 )
               ),
               column(
@@ -1310,10 +1310,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual das faixas de peso por momento do óbito neonatal &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual das faixas de peso por momento do óbito neonatal &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_comparacao_neonatal2"),
@@ -1331,7 +1331,7 @@ mod_bloco_7_ui <- function(id) {
                   fluidRow(
                     column(
                       width = 12,
-                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione os momentos de óbito:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1352,7 +1352,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 460))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_neonat"), height = 370))
                 )
               ),
               # column(
@@ -1362,10 +1362,10 @@ mod_bloco_7_ui <- function(id) {
               #     status = "primary",
               #     collapsible = FALSE,
               #     headerBorder = FALSE,
-              #     style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               #     div(
               #       style = "height: 10%; display: flex; align-items: center;",
-              #        HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
+              #        HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos neonatais por causas principais definidas pelo DATASUS (Fonte: <a href = http://www2.datasus.gov.br/cid10/V2008/WebHelp/p00_p96.htm , target = _blank>link</a>) &nbsp;</b>")
               #     ),
               #     hr(),
               #     fluidRow(
@@ -1408,10 +1408,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1419,7 +1419,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_neonatal"),
-                        label = "Selecione os grupos de causas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione os grupos de causas:</span>"),
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "prematuridade",
@@ -1454,7 +1454,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_neonatal_grupos"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -1474,7 +1474,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1495,7 +1495,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_neonatal"), height = 420))
                 )
               ),
               column(
@@ -1505,10 +1505,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual dos óbitos neonatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos óbitos neonatais por análise de evitabilidade (Fonte: <a href = http://tabnet.datasus.gov.br/cgi/sim/Obitos_Evitaveis_0_a_4_anos.pdf , target = _blank>link</a>) &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1516,7 +1516,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 12,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_evitaveis_neonatal"),
-                        label = "Selecione os grupos por análise de evitabilidade:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione os grupos por análise de evitabilidade:</span>"),
                         options = list(placeholder = "Selecione os grupos por análise de evitabilidade", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Reduzível pelas ações de imunização" = "imunoprevencao",
@@ -1548,7 +1548,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("faixa_peso_neonatal_evitaveis"),
-                        label = "Selecione, aqui, as faixas de peso consideradas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione, aqui, as faixas de peso consideradas:</span>"),
                         options = list(placeholder = "Selecione, aqui, as faixas de peso consideradas",
                                        `actions-box` = TRUE,
                                        `deselect-all-text` = "Desselecionar todas",
@@ -1568,7 +1568,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de óbito considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1589,7 +1589,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 470))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_evitaveis_neonatal"), height = 420))
                 )
               )
             )
@@ -1603,7 +1603,7 @@ mod_bloco_7_ui <- function(id) {
           column(
             width = 12,
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
             ),
@@ -1616,7 +1616,7 @@ mod_bloco_7_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo4'),
                 icon = icon('question'),
@@ -1663,10 +1663,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns("botao_explicacao_indicador"),
                       icon = icon("info"),
@@ -1688,7 +1688,7 @@ mod_bloco_7_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_morbidade_neonatal"), height = 550))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_morbidade_neonatal"), height = 460))
                 )
               ),
               column(
@@ -1698,10 +1698,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1709,7 +1709,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("local_internacao_sih"),
-                        label = "Local da internação",
+                        label = span(class = "fonte-grande", "Local da internação"),
                         options = list(placeholder = "Selecione o local de internação"),
                         choices = c(
                           "Todos" = "geral",
@@ -1721,7 +1721,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1738,7 +1738,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_morbidade_neonatal"), height = 420))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_morbidade_neonatal"), height = 360))
                 )
               ),
 
@@ -1750,10 +1750,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 12%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>")
+                    style = "height: 10%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1761,7 +1761,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       selectizeInput(
                         inputId = ns("local_internacao_uti_sih"),
-                        label = "Local da internação",
+                        label = span(class = "fonte-grande", "Local da internação"),
                         options = list(placeholder = "Selecione o local de internação"),
                         choices = c(
                           "Todos" = "geral",
@@ -1773,7 +1773,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem")),
+                      strong(p("Idade, em dias, do bebê", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1790,7 +1790,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 430))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_morbidade_neonatal"), height = 360))
                 )
               ),
 
@@ -1801,10 +1801,10 @@ mod_bloco_7_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 10%; display: flex; align-items: center;",
-                     HTML("<b style='font-size:19px'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
+                    style = "height: 7%; display: flex; align-items: center;",
+                     HTML("<b class = 'fonte-muito-grande'> Distribuição percentual das internações neonatais por grupos de causas segundo <a href = https://www.scielo.br/j/csp/a/Ss5zQXrmrGrGJvcVMKmJdqR/?format=pdf&lang=pt , target = _blank>França e Lansky (2009)</a> &nbsp;</b>")
                   ),
                   hr(),
                   fluidRow(
@@ -1812,7 +1812,7 @@ mod_bloco_7_ui <- function(id) {
                       width = 6,
                       shinyWidgets::pickerInput(
                         inputId = ns("cids_grupos_morbidade_neonatal"),
-                        label = "Selecione os grupos de causas:",
+                        label = HTML("<span class = 'fonte-grande'>Selecione os grupos de causas:</span>"),
                         options = list(placeholder = "Selecione os grupos de causas", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                         choices = c(
                           "Prematuridade" = "prematuridade",
@@ -1851,7 +1851,7 @@ mod_bloco_7_ui <- function(id) {
                     ),
                     column(
                       width = 6,
-                      strong(p("Selecione, aqui, os momentos de internação considerados:", style = "margin-bottom: 0.5rem")),
+                      strong(p("Selecione, aqui, os momentos de internação considerados:", style = "margin-bottom: 0.5rem", class = "fonte-grande")),
                       tags$div(
                         align = 'left',
                         class = 'multicol',
@@ -1872,7 +1872,7 @@ mod_bloco_7_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 540))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot_grupos_morbidade_neonatal"), height = 480))
                 )
               )
             )
@@ -2444,7 +2444,7 @@ mod_bloco_7_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
 
@@ -2657,7 +2657,7 @@ mod_bloco_7_server <- function(id, filtros){
       {
         shinyalert::shinyalert(
           html = TRUE,
-          title = "<div style = 'font-size: 25px;'> Sobre a comparação </div>",
+          title = "<div class = 'fonte-titulos-modal'> Sobre a comparação </div>",
           text = glue::glue(
             "<div style = 'text-align: justify; text-justify: inter-word;'>
              Para visualizar os valores referentes à localidade de comparação selecionada, passe o cursor do mouse sobre a barra que contém a categoria de interesse.
@@ -2680,7 +2680,7 @@ mod_bloco_7_server <- function(id, filtros){
     observeEvent(c(input$botao_resumo1, input$botao_resumo2, input$botao_resumo3), {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -2706,7 +2706,7 @@ mod_bloco_7_server <- function(id, filtros){
     observeEvent(c(input$botao_resumo4), {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -2731,7 +2731,7 @@ mod_bloco_7_server <- function(id, filtros){
     observeEvent(input$botao_explicacao_indicador, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Sobre este indicador </div>",
+        title = "<div class = 'fonte-titulos-modal'> Sobre este indicador </div>",
         text = glue::glue(
           "<div style = 'text-align: justify; text-justify: inter-word;'>
           Foram considerados nascidos com condições potencialmente ameaçadoras à vida aqueles com peso < 1500 g, com idade gestacional < 32 semanas ou com Apgar de quinto minuto < 7.
@@ -3723,7 +3723,7 @@ mod_bloco_7_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = nivel_selecionado()
@@ -3750,7 +3750,7 @@ mod_bloco_7_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = nivel_selecionado()
@@ -3778,7 +3778,7 @@ mod_bloco_7_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = nivel_selecionado()

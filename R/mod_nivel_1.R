@@ -28,10 +28,12 @@ mod_nivel_1_ui <- function(id) {
           HTML("Resumo dos blocos de indicadores"),
           htmlOutput(ns("titulo_localidade"), inline = TRUE)
         ),
+        class = "fonte-titulos-pagina",
         style = "padding-left: 0.4em"
       ),
       hr(style = "margin-bottom: 0px;")
     ),
+    HTML("<span style='display: block; margin-bottom: 20px;'> </span>"),
     fluidRow(
       column(
         width = 12,
@@ -39,7 +41,7 @@ mod_nivel_1_ui <- function(id) {
           outputId = ns("report"),
           color = "primary",
           label = HTML(
-            "<span style = 'font-size: 17px'> &nbsp; Fazer download do relatório contendo o resumo dos indicadores para a localidade e ano escolhidos </span>"
+            "<span class = 'fonte-muito-grande'> &nbsp; Fazer download do relatório contendo o resumo dos indicadores para a localidade e ano escolhidos </span>"
           ),
           style = "unite",
           size = "sm"
@@ -47,7 +49,7 @@ mod_nivel_1_ui <- function(id) {
         align = "center"
       )
     ),
-    HTML("<span style='display: block; margin-bottom: 12px;'> </span>"),
+    HTML("<span style='display: block; margin-bottom: 20px;'> </span>"),
     fluidRow(
       column(
         width = 12,
@@ -57,7 +59,7 @@ mod_nivel_1_ui <- function(id) {
             HTML(
               "1 - Condições socioeconômicas e de acesso ao serviço de saúde &nbsp;"
             ),
-            style = "font-size: 22px;",
+            class = 'fonte-titulos-modal',
             a(
               icon("chart-line", color = "#007bff"),
               onclick = "openTab('bloco_1')",
@@ -72,7 +74,7 @@ mod_nivel_1_ui <- function(id) {
               width = 5,
               HTML(
                 "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 As condições socioeconômicas e de acesso a serviços de saúde são os determinantes mais distais
                 do óbito materno, por interferirem no futuro da saúde reprodutiva.
                 <span style='display: block; margin-bottom: 14px;'> </span>
@@ -90,7 +92,7 @@ mod_nivel_1_ui <- function(id) {
                   class = "btn action-button btn-outline-primary btn-flat",
                   icon("chart-line"),
                   HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                   ),
                   onclick = "openTab('bloco_1')",
                   href = "#"
@@ -103,7 +105,7 @@ mod_nivel_1_ui <- function(id) {
                 bs4Dash::actionButton(
                   inputId = ns("popup_b1"),
                   label = HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
@@ -201,7 +203,7 @@ mod_nivel_1_ui <- function(id) {
           width = 12,
           title = tags$b(
             HTML("2 - Planejamento reprodutivo &nbsp;"),
-            style = "font-size: 22px;",
+            class = 'fonte-titulos-modal',
             a(
               icon("chart-line", color = "#007bff"),
               onclick = "openTab('bloco_2')",
@@ -215,7 +217,7 @@ mod_nivel_1_ui <- function(id) {
               width = 5,
               HTML(
                 "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 O acesso ao planejamento reprodutivo e a prevenção de gestações indesejadas ou de alto risco
                 é fundamental para que as mulheres tenham uma gestação segura.
                 <span style='display: block; margin-bottom: 14px;'> </span>
@@ -234,7 +236,7 @@ mod_nivel_1_ui <- function(id) {
                   class = "btn action-button btn-outline-primary btn-flat",
                   icon("chart-line"),
                   HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                   ),
                   onclick = "openTab('bloco_2')",
                   href = "#"
@@ -247,7 +249,7 @@ mod_nivel_1_ui <- function(id) {
                 bs4Dash::actionButton(
                   inputId = ns("popup_b2"),
                   label = HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
@@ -303,7 +305,7 @@ mod_nivel_1_ui <- function(id) {
           width = 12,
           title = tags$b(
             HTML("3 - Assistência pré-natal &nbsp;"),
-            style = "font-size: 22px;",
+            class = 'fonte-titulos-modal',
             a(
               icon("chart-line", color = "#007bff"),
               onclick = "openTab('bloco_3')",
@@ -317,9 +319,9 @@ mod_nivel_1_ui <- function(id) {
               width = 5,
               HTML(
                 "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 A assistência pré-natal é uma ação de saúde efetiva para a redução da mortalidade materna ao permitir:
-                <ul align='justify' style = 'font-size: 17px'>
+                <ul align='justify' class = 'fonte-muito-grande'>
                   <li> O diagnóstico e o tratamento precoce de doenças pré-existentes e de complicações na gravidez (tais como
                   hipertensão arterial, diabetes, sífilis e outras doenças infecciosas); </li>
                   <li> A adoção de medidas preventivas, como vacinas e suplementos alimentares; </li>
@@ -328,7 +330,7 @@ mod_nivel_1_ui <- function(id) {
                 </ul>
                 </p>
 
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 Neste bloco, o gestor pode acompanhar a porcentagem de mulheres que receberam assistência pré-natal, a porcentagem
                 de mulheres com início do acompanhamento pré-natal até 12 semanas gestacionais, a porcentagem de mulheres que recebeu o número mínimo
                 de 8 consultas recomendado pela Organização Mundial de Saúde, e a porcentagem de mulheres que recebeu o número
@@ -344,7 +346,7 @@ mod_nivel_1_ui <- function(id) {
                   class = "btn action-button btn-outline-primary btn-flat",
                   icon("chart-line"),
                   HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                   ),
                   onclick = "openTab('bloco_3')",
                   href = "#"
@@ -357,7 +359,7 @@ mod_nivel_1_ui <- function(id) {
                 bs4Dash::actionButton(
                   inputId = ns("popup_b3"),
                   label = HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
@@ -425,7 +427,7 @@ mod_nivel_1_ui <- function(id) {
           style = "padding-bottom: 100px",
           title = tags$b(
             HTML("4 - Assistência ao parto &nbsp;"),
-            style = "font-size: 22px;",
+            class = 'fonte-titulos-modal',
             a(
               icon("chart-line", color = "#007bff"),
               onclick = "openTab('bloco_4')",
@@ -439,7 +441,7 @@ mod_nivel_1_ui <- function(id) {
               width = 5,
               HTML(
                 "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 A adequada assistência ao parto, com recursos disponíveis e atendimento oportuno, é essencial para
                 o manejo de complicações e redução da mortalidade materna, fetal e neonatal. O uso apropriado de tecnologias de assistência
                 de saúde e o cuidado centrado nas necessidades da mulher e da sua família estão entre as recomendações mais
@@ -476,7 +478,7 @@ mod_nivel_1_ui <- function(id) {
                   class = "btn action-button btn-outline-primary btn-flat",
                   icon("chart-line"),
                   HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                   ),
                   onclick = "openTab('bloco_4')",
                   href = "#"
@@ -489,7 +491,7 @@ mod_nivel_1_ui <- function(id) {
                 bs4Dash::actionButton(
                   inputId = ns("popup_b4"),
                   label = HTML(
-                    "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                    "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
@@ -616,7 +618,7 @@ mod_nivel_1_ui <- function(id) {
             width = 12,
             title = tags$b(
               HTML("5 - Condições de nascimento &nbsp;"),
-              style = "font-size: 22px;",
+              class = 'fonte-titulos-modal',
               a(
                 icon("chart-line", color = "#007bff"),
                 onclick = "openTab('bloco_5')",
@@ -630,7 +632,7 @@ mod_nivel_1_ui <- function(id) {
                 width = 5,
                 HTML(
                   "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 As condições de nascimento do recém-nato dependem da saúde materna e devem ser monitoradas porque refletem a
                 qualidade dos cuidados recebidos pela gestante durante a assistência pré-natal e ao parto. Além disso, seu
                 monitoramento é importante para o planejamento da atenção à saúde do recém-nascido.
@@ -652,7 +654,7 @@ mod_nivel_1_ui <- function(id) {
                     class = "btn action-button btn-outline-primary btn-flat",
                     icon("chart-line"),
                     HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                     ),
                     onclick = "openTab('bloco_5')",
                     href = "#"
@@ -665,7 +667,7 @@ mod_nivel_1_ui <- function(id) {
                   bs4Dash::actionButton(
                     inputId = ns("popup_b5"),
                     label = HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
@@ -748,7 +750,7 @@ mod_nivel_1_ui <- function(id) {
             width = 12,
             title = tags$b(
               HTML("6 - Mortalidade e morbidade materna &nbsp;"),
-              style = "font-size: 22px;",
+              class = 'fonte-titulos-modal',
               a(
                 icon("chart-line", color = "#007bff"),
                 onclick = "openTab('bloco_6')",
@@ -761,7 +763,7 @@ mod_nivel_1_ui <- function(id) {
               column(
                 width = 12,
                 HTML(
-                  "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                  "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
                 </b> </div>"
                 ),
@@ -776,7 +778,7 @@ mod_nivel_1_ui <- function(id) {
                 width = 5,
                 HTML(
                   "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 A morte materna e a morbidade materna grave são os desfechos adversos de curto prazo para a saúde da mulher e são
                 resultantes da cadeia de determinantes apresentados nos blocos anteriores.
                 <span style='display: block; margin-bottom: 14px;'> </span>
@@ -797,7 +799,7 @@ mod_nivel_1_ui <- function(id) {
                     class = "btn action-button btn-outline-primary btn-flat",
                     icon("chart-line"),
                     HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                     ),
                     onclick = "openTab('bloco_6')",
                     href = "#"
@@ -810,7 +812,7 @@ mod_nivel_1_ui <- function(id) {
                   bs4Dash::actionButton(
                     inputId = ns("popup_b6"),
                     label = HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
@@ -959,7 +961,7 @@ mod_nivel_1_ui <- function(id) {
               HTML(
                 "7 - Mortalidade fetal, perinatal, neonatal e morbidade neonatal &nbsp;"
               ),
-              style = "font-size: 22px;",
+              class = 'fonte-titulos-modal',
               a(
                 icon("chart-line", color = "#007bff"),
                 onclick = "openTab('bloco_7')",
@@ -972,7 +974,7 @@ mod_nivel_1_ui <- function(id) {
               column(
                 width = 12,
                 HTML(
-                  "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                  "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos fetais e neonatais no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-fetais-neonatais/' target = _blank>OOBr Óbitos Fetais e Neonatais</a>.
                 </b> </div>"
                 ),
@@ -987,7 +989,7 @@ mod_nivel_1_ui <- function(id) {
                 width = 5,
                 HTML(
                   "
-                <p align='justify' style = 'font-size: 17px'>
+                <p align='justify' class = 'fonte-muito-grande'>
                 A mortalidade fetal, neonatal e perinatal são os desfechos adversos mais graves
                 da atenção à gestação, parto e nascimento, enquanto a morbidade neonatal é um
                 indicador que reflete a carga de doença em recém-nascidos e suas necessidades
@@ -1009,7 +1011,7 @@ mod_nivel_1_ui <- function(id) {
                     class = "btn action-button btn-outline-primary btn-flat",
                     icon("chart-line"),
                     HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Ver série histórica dos indicadores </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
                     ),
                     onclick = "openTab('bloco_7')",
                     href = "#"
@@ -1022,7 +1024,7 @@ mod_nivel_1_ui <- function(id) {
                   bs4Dash::actionButton(
                     inputId = ns("popup_b7"),
                     label = HTML(
-                      "<span style = 'font-size: 17px'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
+                      "<span class = 'fonte-muito-grande'> &nbsp; Como interpretar os indicadores desse bloco? </span>"
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
@@ -1280,14 +1282,14 @@ mod_nivel_1_server <- function(id, filtros) {
         filtros()$nivel == "nacional" ~ glue::glue("(Brasil, {ano})")
       )
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ##### Criando os modais com as informações sobre os indicadores de cada bloco ####
     observeEvent(input$popup_b1, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 1: Condições socioeconômicas e de acesso ao serviço de saúde </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 1: Condições socioeconômicas e de acesso ao serviço de saúde </div>",
         includeHTML("inst/app/www/html/texto_popup_b1.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1303,7 +1305,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b2, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 2: Planejamento reprodutivo </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 2: Planejamento reprodutivo </div>",
         includeHTML("inst/app/www/html/texto_popup_b2.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1320,7 +1322,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b3, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 3: Assistência pré-natal </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 3: Assistência pré-natal </div>",
         includeHTML("inst/app/www/html/texto_popup_b3.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1337,7 +1339,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b4, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 4: Assistência ao parto </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 4: Assistência ao parto </div>",
         includeHTML("inst/app/www/html/texto_popup_b4.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1354,7 +1356,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b5, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 5: Condições de nascimento </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 5: Condições de nascimento </div>",
         includeHTML("inst/app/www/html/texto_popup_b5.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1371,7 +1373,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b6, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 6: Mortalidade e morbidade materna </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 6: Mortalidade e morbidade materna </div>",
         includeHTML("inst/app/www/html/texto_popup_b6.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1388,7 +1390,7 @@ mod_nivel_1_server <- function(id, filtros) {
     observeEvent(input$popup_b7, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px;'> Interpretação dos indicadores do Bloco 7: Mortalidade fetal, perinatal, neonatal e morbidade neonatal </div>",
+        title = "<div class = 'fonte-titulos-modal'> Interpretação dos indicadores do Bloco 7: Mortalidade fetal, perinatal, neonatal e morbidade neonatal </div>",
         includeHTML("inst/app/www/html/texto_popup_b7.html"),
         size = "m",
         closeOnEsc = TRUE,
@@ -1766,7 +1768,7 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)])
         texto <-
           "
-      <b style='{dplyr::if_else(stringr::str_length(filtros()$municipio) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$municipio} </b>
+      <b class = 'fonte-destaque-caixas1' {filtros()$municipio} </b>
       <br>
       <b> Região do país: </b> {regiao}
       <br>
@@ -1782,7 +1784,7 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$r_saude == filtros()$micro & tabela_aux_municipios$uf == filtros()$estado_micro)])
         texto <-
           "
-      <b style='{dplyr::if_else(stringr::str_length(filtros()$micro) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$micro} </b>
+      <b class = 'fonte-destaque-caixas1' {filtros()$micro} </b>
       <br>
       <b> Região do país: </b> {regiao}
       <br>
@@ -1795,7 +1797,7 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$macro_r_saude == filtros()$macro & tabela_aux_municipios$uf == filtros()$estado_macro)])
         texto <-
           "
-      <b style='{dplyr::if_else(stringr::str_length(filtros()$macro) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$macro} </b>
+      <b class = 'fonte-destaque-caixas1' {filtros()$macro} </b>
       <br>
       <b> Região do país: </b> {regiao}
       <br>
@@ -1805,14 +1807,14 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$uf == filtros()$estado)])
         texto <-
           "
-      <b style='{dplyr::if_else(stringr::str_length(filtros()$estado) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$estado} </b>
+      <b class = 'fonte-destaque-caixas1' {filtros()$estado} </b>
       <br>
       <b> Região do país: </b> {regiao}
       "
       } else if (filtros()$nivel == "regional") {
-        texto <- "<b style='{dplyr::if_else(stringr::str_length(filtros()$regiao) > 11, 'font-size:33px', 'font-size:40px')}'> {filtros()$regiao} </b>"
+        texto <- "<b class = 'fonte-destaque-caixas1' {filtros()$regiao} </b>"
       } else if (filtros()$nivel == "nacional") {
-        texto <- "<b style='font-size:40px'> Brasil </b>"
+        texto <- "<b class = 'fonte-destaque-caixas1'> Brasil </b>"
       }
 
       bs4Dash::box(
@@ -1984,7 +1986,7 @@ mod_nivel_1_server <- function(id, filtros) {
           highcharter::hcaes(x = categorias, y = total, group = local)
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%") |>
-        highcharter::hc_title(text = HTML("<b style='font-size:16px'> Porcentagem de nascidos vivos por escolaridade da mãe </b>")) |>
+        highcharter::hc_title(text = HTML("<b class = 'fonte-grande'> Porcentagem de nascidos vivos por escolaridade da mãe </b>")) |>
         highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos")) |>
         highcharter::hc_colors(cols)
@@ -2027,7 +2029,7 @@ mod_nivel_1_server <- function(id, filtros) {
           highcharter::hcaes(x = categorias, y = total, group = local)
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%") |>
-        highcharter::hc_title(text = HTML("<b style='font-size:16px'> Porcentagem de nascidos vivos por faixa etária da mãe </b>")) |>
+        highcharter::hc_title(text = HTML("<b class = 'fonte-grande'> Porcentagem de nascidos vivos por faixa etária da mãe </b>")) |>
         highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos")) |>
         highcharter::hc_colors(cols)
@@ -2075,7 +2077,7 @@ mod_nivel_1_server <- function(id, filtros) {
           highcharter::hcaes(x = categorias, y = total, group = local)
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%") |>
-        highcharter::hc_title(text = HTML("<b style='font-size:16px'> Porcentagem de nascidos vivos por raça/cor da mãe</b>")) |>
+        highcharter::hc_title(text = HTML("<b class = 'fonte-grande'> Porcentagem de nascidos vivos por raça/cor da mãe</b>")) |>
         highcharter::hc_xAxis(title = list(text = ""), allowDecimals = FALSE) |>
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos")) |>
         highcharter::hc_colors(cols)
@@ -2448,8 +2450,6 @@ mod_nivel_1_server <- function(id, filtros) {
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
-            #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$municipio,
             .keep = "unused"
           ) |>
@@ -2468,8 +2468,6 @@ mod_nivel_1_server <- function(id, filtros) {
             prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
             prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-            #prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
-            #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
             localidade = filtros()$estado,
             .keep = "unused"
           ) |>
@@ -2544,9 +2542,7 @@ mod_nivel_1_server <- function(id, filtros) {
         ) |>
         dplyr::group_by(ano) |>
         dplyr::summarise(
-          #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
-          # prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1),
-          prop_partos_com_uti = round((sum(partos_na_macro_com_1mais_uti) + sum(partos_fora_macro_com_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1),
+          prop_partos_com_4mais_uti = round((sum(partos_na_macro_com_4mais_uti) + sum(partos_fora_macro_com_4mais_uti)) / (sum(partos_na_macro_com_4mais_uti) + sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_com_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -2555,22 +2551,6 @@ mod_nivel_1_server <- function(id, filtros) {
           )
         ) |>
         dplyr::ungroup()
-      # } else if (filtros()$nivel == "municipal") {
-      #   bloco4_deslocamento_macrorregiao |>
-      #     dplyr::filter(
-      #       ano == filtros()$ano,
-      #       municipio == filtros()$municipio & uf == filtros()$estado_municipio
-      #     ) |>
-      #     dplyr::group_by(ano) |>
-      #     dplyr::mutate(
-      #       #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1),
-      #       prop_partos_com_uti = round((sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE)) / (sum(partos_na_macro_com_uti, na.rm = TRUE) + sum(partos_na_macro_sem_uti, na.rm = TRUE) + sum(partos_fora_macro_com_uti, na.rm = TRUE) + sum(partos_fora_macro_sem_uti, na.rm = TRUE)) * 100, 1),
-      #       localidade = filtros()$municipio,
-      #       .keep = "unused"
-      #     ) |>
-      #     dplyr::ungroup()
-      #   }
-
     })
 
     ##### Dados do quarto bloco de indicadores para a comparação com o Brasil #####
@@ -2600,9 +2580,7 @@ mod_nivel_1_server <- function(id, filtros) {
           prop_partos_rsaude_res = round(sum(dentro_regiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_macro_rsaude_res = round(sum(dentro_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
           prop_partos_fora_macro_rsaude_res = round(sum(fora_macrorregiao_saude, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-          prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1),
-          #prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
-          #prop_partos_sem_uti = round(((sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_sem_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti))) * 100, 1)
+          prop_partos_fora_uf_res = round(sum(outra_uf, na.rm = TRUE)/sum(destino_total, na.rm = TRUE) * 100, 1)
         )
     })
 
@@ -2610,8 +2588,7 @@ mod_nivel_1_server <- function(id, filtros) {
       bloco4_deslocamento_macrorregiao |>
         dplyr::filter(ano == filtros()$ano) |>
         dplyr::summarise(
-          # prop_partos_com_uti = round((sum(partos_na_macro_com_uti) + sum(partos_fora_macro_com_uti)) / (sum(partos_na_macro_com_uti) + sum(partos_na_macro_sem_uti) + sum(partos_fora_macro_com_uti) + sum(partos_fora_macro_sem_uti)) * 100, 1)
-          prop_partos_com_uti = round((sum(partos_na_macro_com_1mais_uti) + sum(partos_fora_macro_com_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1),
+          prop_partos_com_4mais_uti = round((sum(partos_na_macro_com_4mais_uti) + sum(partos_fora_macro_com_4mais_uti)) / (sum(partos_na_macro_com_4mais_uti) + sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_com_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) * 100, 1),
 
         )
     })
@@ -3029,11 +3006,11 @@ mod_nivel_1_server <- function(id, filtros) {
           style = "position: relative;",
           cria_caixa_server(
             dados = data4_deslocamento_macrorregiao(),
-            indicador = "prop_partos_com_uti",
+            indicador = "prop_partos_com_4mais_uti",
             # titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em hospital com leito de UTI neonatal",
-            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em estabelecimentos com pelo menos um leito de UTI neonatal",
+            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em serviço com quatro ou mais leitos de UTI neonatal",
             tem_meta = TRUE,
-            valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_uti,
+            valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_com_4mais_uti,
             # valor_de_referencia = data4_comp_deslocamento_macrorregiao()$prop_partos_sem_uti,
             tipo = "porcentagem",
             tipo_referencia = "média nacional",
@@ -3057,7 +3034,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -3081,7 +3058,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -3275,7 +3252,7 @@ mod_nivel_1_server <- function(id, filtros) {
         valor_de_referencia = data5_comp()$porc_condicoes_ameacadoras,
         tipo = "porcentagem",
         invertido = FALSE,
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -3291,7 +3268,7 @@ mod_nivel_1_server <- function(id, filtros) {
         valor_de_referencia = data5_comp()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
         invertido = FALSE,
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -3307,7 +3284,7 @@ mod_nivel_1_server <- function(id, filtros) {
         valor_de_referencia = data5_comp()$porc_malformacao_vigilancia,
         tipo = "porcentagem",
         invertido = FALSE,
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -3324,7 +3301,7 @@ mod_nivel_1_server <- function(id, filtros) {
         valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
         invertido = FALSE,
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "nivel_1",
         # tipo_referencia = "média nacional",
         tipo_referencia = "mundo",
@@ -4690,8 +4667,7 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_neonatal_i7 <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_obito_neonatal(),
-        titulo = "Dentre os óbitos neonatais,",
-        height_titulo = 15,
+        titulo = "Dentre os óbitos neonatais,"
       )
     })
 
@@ -5013,7 +4989,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -5031,7 +5007,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
@@ -5051,7 +5027,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
@@ -5062,8 +5038,7 @@ mod_nivel_1_server <- function(id, filtros) {
     output$caixa_b7_principais_morbidade_neonatal <- renderUI({
       cria_caixa_principais_evitaveis_bloco7(
         dados = bloco7_principais_internacoes_neonatal(),
-        titulo = "Dentre as internações neonatais,",
-        height_titulo = 15,
+        titulo = "Dentre as internações neonatais,"
       )
     })
 

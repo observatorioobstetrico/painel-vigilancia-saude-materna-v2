@@ -13,7 +13,7 @@ mod_bloco_4_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Assistência ao parto: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Assistência ao parto: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -27,7 +27,7 @@ mod_bloco_4_ui <- function(id){
       #       width = 5,
       #       selectizeInput(
       #         inputId = ns("indicador_robson"),
-      #         label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
+      #         label = HTML("<p class = 'fonte-muito-grande' style='margin-bottom: 0px'>Indicador</p>"),
       #         options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
       #         choices = c(
       #           "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
@@ -47,7 +47,7 @@ mod_bloco_4_ui <- function(id){
       #         width = 4,
       #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
       #         div(
-      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
       #           shinyWidgets::actionBttn(
       #             inputId = ns('botao_resumo1'),
       #             icon = icon('question'),
@@ -123,7 +123,7 @@ mod_bloco_4_ui <- function(id){
       #           collapsible = FALSE,
       #           headerBorder = FALSE,
       #           style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
-      #           HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
       #           shinyjs::hidden(
       #             span(
       #               id = ns("mostrar_botao1"),
@@ -142,12 +142,12 @@ mod_bloco_4_ui <- function(id){
       #               width = 6,
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Geral </b>"),
+      #                 HTML("<b class = 'fonte-grande'> Geral </b>"),
       #                 shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 2 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson2'),
       #                   icon = icon('question'),
@@ -159,7 +159,7 @@ mod_bloco_4_ui <- function(id){
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 4 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson4'),
       #                   icon = icon('question'),
@@ -171,7 +171,7 @@ mod_bloco_4_ui <- function(id){
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupos 6 a 9 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson6_a_9'),
       #                   icon = icon('question'),
@@ -186,7 +186,7 @@ mod_bloco_4_ui <- function(id){
       #               width = 6,
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 1 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson1'),
       #                   icon = icon('question'),
@@ -198,7 +198,7 @@ mod_bloco_4_ui <- function(id){
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 3 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson3'),
       #                   icon = icon('question'),
@@ -210,7 +210,7 @@ mod_bloco_4_ui <- function(id){
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 5 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson5'),
       #                   icon = icon('question'),
@@ -222,7 +222,7 @@ mod_bloco_4_ui <- function(id){
       #               ),
       #               div(
       #                 style = "text-align: center;",
-      #                 HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+      #                 HTML("<b class = 'fonte-grande'> Grupo 10 de Robson &nbsp;</b>"),
       #                 shinyWidgets::actionBttn(
       #                   inputId = ns('texto_robson10'),
       #                   icon = icon('question'),
@@ -246,7 +246,7 @@ mod_bloco_4_ui <- function(id){
       #         width = 4,
       #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
       #         div(
-      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
       #           shinyWidgets::actionBttn(
       #             inputId = ns('botao_resumo2'),
       #             icon = icon('question'),
@@ -313,7 +313,7 @@ mod_bloco_4_ui <- function(id){
       #           collapsible = FALSE,
       #           headerBorder = FALSE,
       #           style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-      #           HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
       #           shinyjs::hidden(
       #             span(
       #               id = ns("mostrar_botao2"),
@@ -340,7 +340,7 @@ mod_bloco_4_ui <- function(id){
       #         width = 4,
       #         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
       #         div(
-      #           HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
       #           shinyWidgets::actionBttn(
       #             inputId = ns('botao_resumo3'),
       #             icon = icon('question'),
@@ -407,7 +407,7 @@ mod_bloco_4_ui <- function(id){
       #           collapsible = FALSE,
       #           headerBorder = FALSE,
       #           style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-      #           HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
+      #           HTML("<b class = 'fonte-muito-grande'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
       #           shinyjs::hidden(
       #             span(
       #               id = ns("mostrar_botao3"),
@@ -439,7 +439,7 @@ mod_bloco_4_ui <- function(id){
               ns = ns,
               condition = "output.nivel == 'estadual' | output.nivel == 'municipal'",
               HTML(
-                "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+                "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; A função de comparação não está disponível para os indicadores de medianas de deslocamento.
                 </b> </div>"
               )
@@ -453,7 +453,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo4'),
                 icon = icon('question'),
@@ -529,10 +529,10 @@ mod_bloco_4_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 750px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
-                  style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
+                  style = "height: 7%; display: flex; align-items: center;",
+                  HTML(glue::glue("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos segundo local de ocorrência do parto &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
@@ -547,7 +547,7 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_prop"), height = "650px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_prop"), height = "550px"))
               )
             ),
             fluidRow(
@@ -556,10 +556,10 @@ mod_bloco_4_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 765px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
-                  style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal &nbsp;</b>")),
+                  style = "height: 7%; display: flex; align-items: center;",
+                  HTML(glue::glue("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com peso < 1500g segundo região de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop2"),
@@ -574,7 +574,7 @@ mod_bloco_4_ui <- function(id){
                   )
                 ),
                 hr(),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "650px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_macrorregiao"), height = "550px"))
               )
             ),
             shinyjs::hidden(
@@ -585,10 +585,10 @@ mod_bloco_4_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
+                    style = "height: 7%; display: flex; align-items: center;",
+                    HTML(glue::glue("<b class = 'fonte-muito-grande'> Mediana de deslocamento para o destino, segundo destinos &nbsp;</b>")),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_mediana1"),
@@ -605,7 +605,7 @@ mod_bloco_4_ui <- function(id){
                   hr(),
                   selectizeInput(
                     inputId = ns("local_med"),
-                    label = "Local de ocorrência do parto",
+                    label = span(class = "fonte-grande", "Local de ocorrência do parto"),
                     options = list(placeholder = "Selecione o local de ocorrência do parto"),
                     choices = c(
                       "Fora do município de residência da mulher" = "fora_municipio",
@@ -616,7 +616,7 @@ mod_bloco_4_ui <- function(id){
                     ),
                     width = "100%"
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_med"), height = "500px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_deslocamento_med"), height = "480px"))
                 )
               )
             ),
@@ -628,10 +628,10 @@ mod_bloco_4_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 680px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "display: flex; align-items: center;",
-                    tags$b(HTML(glue::glue("Informações adicionais sobre os partos")), htmlOutput(ns("municipio_informacoes_adicionais"), inline = TRUE), HTML("&nbsp"), style = 'font-size: 19px'),
+                    style = "height: 7%; display: flex; align-items: center;",
+                    tags$b(HTML(glue::glue("Informações adicionais sobre os partos")), htmlOutput(ns("municipio_informacoes_adicionais"), inline = TRUE), HTML("&nbsp"), class = 'fonte-muito-grande'),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_infos"),
@@ -646,7 +646,7 @@ mod_bloco_4_ui <- function(id){
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(reactable::reactableOutput(ns("infos_deslocamento_muni"), height = "600px"))
+                  shinycssloaders::withSpinner(reactable::reactableOutput(ns("infos_deslocamento_muni"), height = "520px"))
                 )
               )
             )
@@ -661,7 +661,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo'),
                 icon = icon('question'),
@@ -704,10 +704,10 @@ mod_bloco_4_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "display: flex; align-items: center;",
-                    HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual de nascimentos segundo local &nbsp;</b>")),
+                    style = "height: 7%; display: flex; align-items: center;",
+                    HTML(glue::glue("<b class = 'fonte-muito-grande'> Distribuição percentual de nascimentos segundo local &nbsp;</b>")),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao_deslocamento_prop1"),
@@ -722,7 +722,7 @@ mod_bloco_4_ui <- function(id){
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "640px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
                 )
               ),
             #AQUI
@@ -732,10 +732,10 @@ mod_bloco_4_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
-                  style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
+                  style = "height: 7%; display: flex; align-items: center;",
+                  HTML(glue::glue("<b class = 'fonte-muito-grande'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
@@ -783,7 +783,7 @@ mod_bloco_4_ui <- function(id){
                 #     )
                 #   )
                 # ),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "550px"))
               )
             ) ## [XXX]
 
@@ -797,7 +797,7 @@ mod_bloco_4_ui <- function(id){
           width = 5,
           selectizeInput(
             inputId = ns("indicador_robson"),
-            label = HTML("<p style='font-size:19px; margin-bottom: 0px'>Indicador</p>"),
+            label = HTML("<p class = 'fonte-muito-grande' style='margin-bottom: 0px'>Indicador</p>"),
             options = list(placeholder = "Selecione o indicador relacionado aos grupos de Robson"),
             choices = c(
               "Porcentagem de nascidos vivos por grupo de Robson" = "indicador2",
@@ -817,7 +817,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo1'),
                 icon = icon('question'),
@@ -893,7 +893,7 @@ mod_bloco_4_ui <- function(id){
               collapsible = FALSE,
               headerBorder = FALSE,
               style = "padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              HTML("<b style='font-size:19px'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Porcentagem de cesarianas por grupo de Robson &nbsp;</b>"),
               shinyjs::hidden(
                 span(
                   id = ns("mostrar_botao1"),
@@ -912,12 +912,12 @@ mod_bloco_4_ui <- function(id){
                   width = 6,
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Geral </b>"),
+                    HTML("<b class = 'fonte-grande'> Geral </b>"),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador1"), height = 340)),
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 2 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 2 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson2'),
                       icon = icon('question'),
@@ -929,7 +929,7 @@ mod_bloco_4_ui <- function(id){
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 4 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 4 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson4'),
                       icon = icon('question'),
@@ -941,7 +941,7 @@ mod_bloco_4_ui <- function(id){
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupos 6 a 9 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupos 6 a 9 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson6_a_9'),
                       icon = icon('question'),
@@ -956,7 +956,7 @@ mod_bloco_4_ui <- function(id){
                   width = 6,
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 1 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 1 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson1'),
                       icon = icon('question'),
@@ -968,7 +968,7 @@ mod_bloco_4_ui <- function(id){
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 3 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 3 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson3'),
                       icon = icon('question'),
@@ -980,7 +980,7 @@ mod_bloco_4_ui <- function(id){
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 5 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 5 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson5'),
                       icon = icon('question'),
@@ -992,7 +992,7 @@ mod_bloco_4_ui <- function(id){
                   ),
                   div(
                     style = "text-align: center;",
-                    HTML("<b style='font-size:17px'> Grupo 10 de Robson &nbsp;</b>"),
+                    HTML("<b class = 'fonte-grande'> Grupo 10 de Robson &nbsp;</b>"),
                     shinyWidgets::actionBttn(
                       inputId = ns('texto_robson10'),
                       icon = icon('question'),
@@ -1016,7 +1016,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo2'),
                 icon = icon('question'),
@@ -1082,8 +1082,8 @@ mod_bloco_4_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
+              style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos por grupo de Robson &nbsp;</b>"),
               shinyjs::hidden(
                 span(
                   id = ns("mostrar_botao2"),
@@ -1097,7 +1097,7 @@ mod_bloco_4_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 650))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador2"), height = 550))
             )
           )
         )
@@ -1110,7 +1110,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo3'),
                 icon = icon('question'),
@@ -1176,8 +1176,8 @@ mod_bloco_4_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 741px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-              HTML("<b style='font-size:19px'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
+              style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              HTML("<b class = 'fonte-muito-grande'> Contribuição relativa de cada grupo de Robson para a taxa global de cesarianas &nbsp;</b>"),
               shinyjs::hidden(
                 span(
                   id = ns("mostrar_botao3"),
@@ -1191,7 +1191,7 @@ mod_bloco_4_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 650))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_indicador3"), height = 550))
             )
           )
         )
@@ -1480,24 +1480,24 @@ mod_bloco_4_server <- function(id, filtros){
     #[LOOK]
     bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |> #[xxx]
       dplyr::mutate(
-        prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1)", 2),
-        percentil_5_partos_sem_uti = rep("round(quantile(((partos_na_macro_sem_1mais_uti + partos_fora_macro_sem_1mais_uti) / (partos_na_macro_com_1mais_uti + partos_na_macro_sem_1mais_uti + partos_fora_macro_com_1mais_uti + partos_fora_macro_sem_1mais_uti)) * 100, probs = 0.1, na.rm = T), 1)", 2),
-        prop_partos_com_uti = rep("round((sum(partos_na_macro_com_1mais_uti) + sum(partos_fora_macro_com_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1)", 2),
-        percentil_95_partos_com_uti = rep("round(quantile(((partos_na_macro_com_1mais_uti + partos_fora_macro_com_1mais_uti) / (partos_na_macro_com_1mais_uti + partos_na_macro_sem_1mais_uti + partos_fora_macro_com_1mais_uti + partos_fora_macro_sem_1mais_uti)) * 100, probs = 0.95, na.rm = T), 1)", 2),
-        percentil_90_partos_com_uti = rep("round(quantile(((partos_na_macro_com_1mais_uti + partos_fora_macro_com_1mais_uti) / (partos_na_macro_com_1mais_uti + partos_na_macro_sem_1mais_uti + partos_fora_macro_com_1mais_uti + partos_fora_macro_sem_1mais_uti)) * 100, probs = 0.9, na.rm = T), 1)", 2)
+        prop_partos_sem_4mais_uti = rep("round((sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) / (sum(partos_na_macro_com_4mais_uti) + sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_com_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) * 100, 1)", 2),
+        percentil_5_partos_sem_uti = rep("round(quantile(((partos_na_macro_sem_4mais_uti + partos_fora_macro_sem_4mais_uti) / (partos_na_macro_com_4mais_uti + partos_na_macro_sem_4mais_uti + partos_fora_macro_com_4mais_uti + partos_fora_macro_sem_4mais_uti)) * 100, probs = 0.1, na.rm = T), 1)", 2),
+        prop_partos_com_4mais_uti = rep("round((sum(partos_na_macro_com_4mais_uti) + sum(partos_fora_macro_com_4mais_uti)) / (sum(partos_na_macro_com_4mais_uti) + sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_com_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) * 100, 1)", 2),
+        percentil_95_partos_com_uti = rep("round(quantile(((partos_na_macro_com_4mais_uti + partos_fora_macro_com_4mais_uti) / (partos_na_macro_com_4mais_uti + partos_na_macro_sem_4mais_uti + partos_fora_macro_com_4mais_uti + partos_fora_macro_sem_4mais_uti)) * 100, probs = 0.95, na.rm = T), 1)", 2),
+        percentil_90_partos_com_uti = rep("round(quantile(((partos_na_macro_com_4mais_uti + partos_fora_macro_com_4mais_uti) / (partos_na_macro_com_4mais_uti + partos_na_macro_sem_4mais_uti + partos_fora_macro_com_4mais_uti + partos_fora_macro_sem_4mais_uti)) * 100, probs = 0.9, na.rm = T), 1)", 2)
       )
 
 
 
     # bloco4_calcs_resumo <- dplyr::full_join(bloco4_calcs, bloco4_deslocamento_calcs) |>
     #   dplyr::mutate(
-    #     prop_partos_na_macro_com_1mais_uti = rep("round(sum(partos_na_macro_com_1mais_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_na_macro_sem_1mais_uti = rep("round(sum(partos_na_macro_sem_1mais_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_fora_macro_com_1mais_uti = rep("round(sum(partos_fora_macro_com_1mais_uti)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_fora_macro_sem_1mais_uti = rep("round(sum(partos_fora_macro_sem_1mais_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_na_macro_com_4mais_uti = rep("round(sum(partos_na_macro_com_4mais_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_na_macro_sem_4mais_uti = rep("round(sum(partos_na_macro_sem_4mais_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_fora_macro_com_4mais_uti = rep("round(sum(partos_fora_macro_com_4mais_uti)/sum(nascimentos) * 100, 1)", 2),
+    #     prop_partos_fora_macro_sem_4mais_uti = rep("round(sum(partos_fora_macro_sem_4mais_uti)/sum(nascimentos) * 100, 1)", 2),
     #     prop_partos_na_macro_sem_inf = rep("round(sum(partos_na_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
     #     prop_partos_fora_macro_sem_inf = rep("round(sum(partos_fora_macro_sem_inf)/sum(nascimentos) * 100, 1)", 2),
-    #     prop_partos_sem_uti = rep("round((sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) / (sum(partos_na_macro_com_1mais_uti) + sum(partos_na_macro_sem_1mais_uti) + sum(partos_fora_macro_com_1mais_uti) + sum(partos_fora_macro_sem_1mais_uti)) * 100, 1)", 2),
+    #     prop_partos_sem_4mais_uti = rep("round((sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) / (sum(partos_na_macro_com_4mais_uti) + sum(partos_na_macro_sem_4mais_uti) + sum(partos_fora_macro_com_4mais_uti) + sum(partos_fora_macro_sem_4mais_uti)) * 100, 1)", 2),
     #     prop_obitos_fetais_durante = rep("round(sum(fetal_durante) / sum(obitos_fetais_mais_22sem) * 100, 1)", 2),
     #     porc_obitos_fetais_evitaveis_parto = rep("round(sum(evitaveis_fetal_parto) / sum(obitos_fetais_totais) * 100, 1)", 2)
     #   )
@@ -1580,7 +1580,7 @@ mod_bloco_4_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando os outputs que receberão os nomes dos locais selecionados quando há comparação --------
@@ -1675,7 +1675,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(c(input$botao_resumo1, input$botao_resumo2, input$botao_resumo3), {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -1701,7 +1701,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(c(input$botao_resumo4), {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -2147,8 +2147,8 @@ mod_bloco_4_server <- function(id, filtros){
     selected_indicators <- c(
       "prop_tx_cesariana_geral",
       "prop_partos_fora_macro_rsaude_res",
-      "prop_partos_sem_uti",
-      "prop_partos_com_uti",
+      "prop_partos_sem_4mais_uti",
+      "prop_partos_com_4mais_uti",
       "prop_obitos_fetais_durante",
       "porc_obitos_fetais_evitaveis_parto"
     )
@@ -2191,7 +2191,7 @@ mod_bloco_4_server <- function(id, filtros){
           tipo_de_referencia = lapply(
             selected_indicators,
             function(indicador_abrev) {
-              if (indicador_abrev %in% c("prop_partos_sem_uti","prop_partos_com_uti", "prop_obitos_fetais_durante")) {
+              if (indicador_abrev %in% c("prop_partos_sem_4mais_uti","prop_partos_com_4mais_uti", "prop_obitos_fetais_durante")) {
                 "média nacional"
               } else {
                 tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]
@@ -2210,9 +2210,9 @@ mod_bloco_4_server <- function(id, filtros){
         function(indicador_abrev) {
           if (indicador_abrev == "prop_obitos_fetais_durante") {
             "% de óbitos fetais ocorridos durante o parto"
-          } else if (indicador_abrev == "prop_partos_sem_uti") {
+          } else if (indicador_abrev == "prop_partos_sem_4mais_uti") {
             "% de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço sem UTI neonatal"
-          } else if (indicador_abrev == "prop_partos_com_uti") {
+          } else if (indicador_abrev == "prop_partos_com_4mais_uti") {
             "% de nascidos vivos com peso ao nascer < 1500 g nascidos em serviço com UTI neonatal"
           } else {
             gsub("Porcentagem", "%", tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev])
@@ -2471,7 +2471,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2495,7 +2495,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2519,7 +2519,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2543,7 +2543,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2567,7 +2567,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2591,7 +2591,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2615,7 +2615,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2640,7 +2640,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2664,7 +2664,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2688,7 +2688,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2712,7 +2712,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2736,7 +2736,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2760,7 +2760,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2784,7 +2784,7 @@ mod_bloco_4_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
         pagina = "bloco_4",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -2808,7 +2808,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -2832,7 +2832,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -2856,7 +2856,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -2880,7 +2880,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -2904,7 +2904,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -2925,14 +2925,14 @@ mod_bloco_4_server <- function(id, filtros){
           # Caixinha criada pela função cria_caixa_server
           cria_caixa_server(
             dados = data4_deslocamento_resumo(),
-            indicador = "prop_partos_com_uti",
-            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em estabelecimentos com pelo menos um leito de UTI neonatal",
+            indicador = "prop_partos_com_4mais_uti",
+            titulo = "Porcentagem de nascidos vivos com peso <1500g ocorridos em serviço com quatro ou mais leitos de UTI neonatal",
             tem_meta = TRUE,
-            valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_uti, # 16.3,
+            valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_4mais_uti, # 16.3,
             tipo = "porcentagem",
             invertido = TRUE,
             tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-            fonte_titulo = "15px",
+            #fonte_titulo = "15px",
             pagina = "bloco_4",
             tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
             nivel_de_analise = ifelse(
@@ -2974,7 +2974,7 @@ mod_bloco_4_server <- function(id, filtros){
     #         tipo = "porcentagem",
     #         invertido = TRUE,
     #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-    #         fonte_titulo = "15px",
+    #         #fonte_titulo = "15px",
     #         pagina = "bloco_4",
     #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
     #         nivel_de_analise = ifelse(
@@ -3016,7 +3016,7 @@ mod_bloco_4_server <- function(id, filtros){
     #         tipo = "porcentagem",
     #         invertido = TRUE,
     #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-    #         fonte_titulo = "15px",
+    #         #fonte_titulo = "15px",
     #         pagina = "bloco_4",
     #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
     #         nivel_de_analise = ifelse(
@@ -3065,7 +3065,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -3090,7 +3090,7 @@ mod_bloco_4_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -3315,20 +3315,20 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             ),
             levels = c(
-              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             )
             ),
           class = dplyr::case_when(
@@ -3789,20 +3789,20 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             ),
             levels = c(
-              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             )
             ),
           class = dplyr::case_when(
@@ -4089,20 +4089,20 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::mutate(
           indicador =
             factor(dplyr::case_when(
-              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              indicador == "prop_partos_na_macro_sem_inf" ~ "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              indicador == "prop_partos_fora_macro_sem_inf" ~ "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              indicador == "prop_partos_na_macro_com_4mais_uti" ~ "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_com_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_4mais_uti" ~ "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_4mais_uti" ~ "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              indicador == "prop_partos_na_macro_sem_inf" ~ "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              indicador == "prop_partos_fora_macro_sem_inf" ~ "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             ),
             levels = c(
-              "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal",
-              "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal",
-              "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"
+              "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal",
+              "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal",
+              "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"
             )
             )
         )
@@ -4440,7 +4440,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson1, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 1 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 1 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 1 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
@@ -4460,7 +4460,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson2, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 2 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 2 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 2 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea anterior ao trabalho de parto.
@@ -4480,7 +4480,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson3, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 3 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 3 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 3 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
@@ -4500,7 +4500,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson4, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 4 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 4 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 4 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea realizada antes do início do trabalho de parto.
@@ -4520,7 +4520,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson5, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 5 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 5 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 5 de Robson é formado por todas as multíparas com antecedente de cesárea, gestação única, cefálica e \U2265 37 semanas.
@@ -4540,7 +4540,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson6_a_9, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre os grupos 6 a 9 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre os grupos 6 a 9 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 6 de Robson é formado por todas as nulíparas com partos pélvicos.
@@ -4569,7 +4569,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$texto_robson10, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = "<div style = 'font-size: 25px; color: #656565'> Sobre o grupo 10 de Robson </div>",
+        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 10 de Robson </div>",
         text = "
           <div style = 'text-align: justify; text-justify: inter-word;'>
             O grupo 10 de Robson é formado por todas as mulheres com gestação única, cefálica e < 37 semanas (incluindo aquelas com antecedente de cesárea).
@@ -4935,7 +4935,7 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
     })
 
-    ### Porcentagem de nascidos vivos com peso < 1500g segundo local de ocorrência do parto ----
+    ### Porcentagem de nascidos vivos com peso < 1500g segundo região de ocorrência do parto ----
     output$grafico_deslocamento_macrorregiao <- highcharter::renderHighchart({ # [xxx]
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
@@ -4952,7 +4952,7 @@ mod_bloco_4_server <- function(id, filtros){
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4963,7 +4963,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4976,7 +4976,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -4987,7 +4987,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com pelo menos quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com quatro ou mais leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -4999,7 +4999,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5010,7 +5010,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -5023,7 +5023,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5034,7 +5034,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde com menos de quatro leitos de UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com menos de quatro leitos de UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -5047,7 +5047,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5058,7 +5058,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. na macrorregião de saúde sem informação sobre UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Na macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -5071,7 +5071,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"),
+            data = data4_deslocamento_macro_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5082,7 +5082,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Em estabs. fora da macrorregião de saúde sem informação sobre UTI neonatal"),
+            data = data4_deslocamento_macro_comp_completo() |> dplyr::filter(indicador == "Fora da macrorregião de saúde e em serviço com informação ignorada sobre UTI neonatal"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
@@ -5689,7 +5689,7 @@ mod_bloco_4_server <- function(id, filtros){
           striped = TRUE,
           borderless = TRUE,
           pagination = FALSE,
-          height = 600
+          height = 520
         )
     })
 
