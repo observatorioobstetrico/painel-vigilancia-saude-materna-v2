@@ -87,6 +87,14 @@
   }
 }
 
+.card.card-tabs:not(.card-outline)>.card-header .nav-item:first-child .nav-link {
+    border-left-color: inherit !important;
+}
+
+.nav-link .active {
+  border-radius: .25rem;
+}
+
 .normal {
     font-weight: normal;
 }
@@ -236,3 +244,23 @@
 }
 }
 
+
+.btn-no-style {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 1em;
+  vertical-align: middle;
+}
+
+/* Ícone com cor personalizada */
+.info-icon {
+  color: #007bff;
+}
