@@ -153,7 +153,7 @@ mod_bloco_3_ui <- function(id) {
                 ),
                 shinyjs::hidden(
                   span(
-                    id = ns("mostrar_botao3"),
+                    id = ns("mostrar_botao5"),
                     shinyWidgets::actionBttn(
                       inputId = ns("botao3"),
                       icon = icon("triangle-exclamation", style = "color: red"),
@@ -485,6 +485,25 @@ mod_bloco_3_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)] > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+    observeEvent(input$botao3, {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
+        variavel_incompletude1 = "CONSPRENAT",
+        descricao_incompletude1 = "em branco",
+        df = data_incompletude() |> dplyr::filter(ano >= 2014),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
+
+    #### Porcentagem de mulheres com oito ou mais consultas de pré-natal  -----
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao5", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)] > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao5", anim = TRUE, animType = "fade", time = 0.8)
     },
     ignoreNULL = FALSE
     )

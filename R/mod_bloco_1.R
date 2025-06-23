@@ -443,7 +443,7 @@ mod_bloco_1_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           idademae = round(sum(idademae_incompletos, na.rm = TRUE)/sum(idademae_totais, na.rm = TRUE) * 100, 1),
-          racacor = round(sum(racacor_incompletos, na.rm = TRUE)/sum(racacor_totais, na.rm = TRUE) * 100, 1),
+          racacormae = round(sum(racacormae_incompletos, na.rm = TRUE)/sum(racacormae_totais, na.rm = TRUE) * 100, 1),
           escmae = round(sum(escmae_incompletos, na.rm = TRUE)/sum(escmae_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
@@ -512,12 +512,12 @@ mod_bloco_1_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$idademae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$idademae,
-        variavel_incompletude1 = "IDADEMAE",
+        variavel_incompletude1 = "IDADEMAE (idade da mãe)",
         descricao_incompletude1 = "ignorados, em branco ou maiores que 55",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -527,14 +527,14 @@ mod_bloco_1_server <- function(id, filtros){
     #### Porcentagem de nascidos vivos por raça/cor da mãe --------------------
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$racacor > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      req(any(data_incompletude()$racacormae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao2, {
       cria_modal_incompletude(
-        incompletude1 = data_incompletude()$racacor,
-        variavel_incompletude1 = "RACACOR",
+        incompletude1 = data_incompletude()$racacormae,
+        variavel_incompletude1 = "RACACORMAE (raça/cor da mãe)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -546,12 +546,12 @@ mod_bloco_1_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$escmae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$escmae,
-        variavel_incompletude1 = "ESCMAE",
+        variavel_incompletude1 = "ESCMAE (escolaridade da mãe)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura

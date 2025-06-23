@@ -532,12 +532,12 @@ mod_bloco_2_server <- function(id, filtros) {
         animType = "fade",
         time = 0.8
       )
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$idademae,
-        variavel_incompletude1 = "IDADEMAE",
+        variavel_incompletude1 = "IDADEMAE (idade da mãe)",
         descricao_incompletude1 = "ignorados, em branco ou maiores que 55",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -571,10 +571,10 @@ mod_bloco_2_server <- function(id, filtros) {
     observeEvent(input$botao2, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$qtdpartces,
-        variavel_incompletude1 = "QTDPARTCES",
+        variavel_incompletude1 = "QTDPARTCES (número de partos cesáreos)",
         descricao_incompletude1 = "em branco ou preenchidos com 99",
         incompletude2 = data_incompletude()$qtdpartnor,
-        variavel_incompletude2 = "QTDPARTNOR",
+        variavel_incompletude2 = "QTDPARTNOR (número de partos vaginais)",
         descricao_incompletude2 = "em branco ou preenchidos com 99",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura

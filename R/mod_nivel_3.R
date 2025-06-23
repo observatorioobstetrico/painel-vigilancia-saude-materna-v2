@@ -1271,17 +1271,33 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         variavel_incompletude1 = ifelse(
           infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos",
           "PARTO e TPROBSON",
-          ifelse(infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','))
+          ifelse(
+            infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig",
+            "GESTACAO, SEMAGESTAC e PESO",
+            sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude1)
+          )
         ),
         descricao_incompletude1 = descricao_incompletude1,
         incompletude2 = data_grafico_incompletude2()$proporcao,
-        variavel_incompletude2 = ifelse(infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')),
+        variavel_incompletude2 = ifelse(
+          infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude2)
+        ),
         descricao_incompletude2 = descricao_incompletude2,
         incompletude3 = data_grafico_incompletude3()$proporcao,
-        variavel_incompletude3 = ifelse(infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')),
+        variavel_incompletude3 = ifelse(
+          infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude3)
+        ),
         descricao_incompletude3 = descricao_incompletude3,
         incompletude4 = data_grafico_incompletude3()$proporcao,
-        variavel_incompletude4 = ifelse(infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')),
+        variavel_incompletude4 = ifelse(
+          infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude4)
+        ),
         descricao_incompletude4 = descricao_incompletude4,
         df = data_grafico_incompletude1(),
         cobertura = data_cobertura()$cobertura,

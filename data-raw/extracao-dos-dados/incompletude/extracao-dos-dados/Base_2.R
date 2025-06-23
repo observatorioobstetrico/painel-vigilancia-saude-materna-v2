@@ -17,22 +17,22 @@ library(tidyr)
 # IMPORTACAO --------------------------------------------------------------
 
 
-IDADEMAE <- read_delim(("bases_novas/IDADEMAE_muni.csv"),
+IDADEMAE <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/IDADEMAE_muni.csv"),
                        delim = ",", escape_double = FALSE, trim_ws = TRUE)
-ESCMAE <- read_delim(("bases_novas/ESCMAE_muni.csv"),
+ESCMAE <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/ESCMAE_muni.csv"),
                      delim = ",", escape_double = FALSE, trim_ws = TRUE)
-PARTO <- read_delim(("bases_novas/PARTO_muni.csv"),
+PARTO <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/PARTO_muni.csv"),
                     delim = ",", escape_double = FALSE, trim_ws = TRUE)
-TPROBSON <- read_delim(("bases_novas/TPROBSON_muni.csv"),
+TPROBSON <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/TPROBSON_muni.csv"),
                        delim = ",", escape_double = FALSE, trim_ws = TRUE)
-PESO <- read_delim(("bases_novas/PESO_muni.csv"),
+PESO <- read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/PESO_muni.csv"),
                    delim = ",", escape_double = FALSE, trim_ws = TRUE)
-RACACOR <- read_delim("bases_novas/RACACOR_muni.csv",
+RACACORMAE <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/RACACORMAE_muni.csv",
                         delim = ",", escape_double = FALSE, trim_ws = TRUE)
 
 # CRIACAO TABELA BASE MUNICIPIOS COMPARACAO -------------------------------
 #COMPARANDO COM BASE ANTIGA
-dados_nasc <- read_delim("bases_novas/total_nascidos_CODMUNRES.csv",
+dados_nasc <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
                          delim = ",", escape_double = FALSE, trim_ws = TRUE)
 
 dados_nasc_agr <- dados_nasc %>%
@@ -41,14 +41,14 @@ dados_nasc_agr <- dados_nasc %>%
 janitor::get_dupes(dados_nasc_agr, codmunres)
 
 dados <- dplyr::distinct(dados_nasc_agr, ano, codmunres, .keep_all = TRUE)
-dados_nasc_antigo <- read_delim("bases/total_nascidos_CODMUNRES.csv",
+dados_nasc_antigo <- read_delim("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/total_nascidos_CODMUNRES.csv",
                                 delim = ",", escape_double = FALSE, trim_ws = TRUE)
 dados_nasc_agr_antigo <- dados_nasc_antigo %>% select(-...1) |>
   rename(nasc = TOTAL_DE_NASCIDOS_VIVOS)
 sum(dados_nasc_agr |> filter(ano < 2021 ) |> pull(nasc)) - sum(dados_nasc_agr_antigo$nasc)
 #DEU DIFERENCA, TESTANDO AGORA PEGAR SOMENTE OS MUNICIPIOS UTILIZADO NO PAINEL DE VIGILANCIA
 
-codigos_municipios <- read.csv("bases/tabela_aux_municipios.csv") |>
+codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres)
 #Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2022)), ano = 2012:2022)
@@ -165,7 +165,7 @@ dados_PARTO$variavel <- 'PARTO'
 
 # TPROBSON ----------------------------------------------------------------
 ## CORRIGINDO O ERRO DE 2013
-TPROBSON_antigo <-  read_delim(("bases/TPROBSON_muni.csv"),
+TPROBSON_antigo <-  read_delim(("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/TPROBSON_muni.csv"),
                                delim = ";", escape_double = FALSE, trim_ws = TRUE) |>
   rename(CODMUNRES = Municipio,
          ANO = Ano,
@@ -218,17 +218,17 @@ dados_PESO <- dados %>%
          IGNORADOS =  ifelse(is.na(IGNORADOS), 0, IGNORADOS)) %>% rename(TOTAIS = NASC)
 dados_PESO$variavel <- 'PESO'
 
-# RACACOR -----------------------------------------------------------------
-IGNORADOS <- RACACOR %>%
-  filter(RACACOR  == 9)
+# RACACORMAE -----------------------------------------------------------------
+IGNORADOS <- RACACORMAE %>%
+  filter(RACACORMAE  == 9)
 
 
 IGNORADOS <- IGNORADOS %>%
   group_by(CODMUNRES   , ANO ) %>%
   summarise(IGNORADOS = sum(NASCIDOS))
 
-NULOS <- RACACOR %>%
-  filter( RACACOR  %>% is.na() )
+NULOS <- RACACORMAE %>%
+  filter( RACACORMAE  %>% is.na() )
 
 NULOS <- NULOS %>%
   group_by(CODMUNRES   , ANO ) %>%
@@ -237,10 +237,10 @@ NULOS <- NULOS %>%
 
 dados <- full_join(NULOS, IGNORADOS, by = c("CODMUNRES","ANO")) %>%
   right_join(dados_nasc_agr, by = c("ANO", "CODMUNRES"))
-dados_RACACOR <- dados %>%
+dados_RACACORMAE <- dados %>%
   mutate(NULOS =  ifelse(is.na(NULOS), 0, NULOS),
          IGNORADOS =  ifelse(is.na(IGNORADOS), 0, IGNORADOS)) %>% rename(TOTAIS = NASC)
-dados_RACACOR$variavel <- 'RACACOR'
+dados_RACACORMAE$variavel <- 'RACACORMAE'
 
 
 
@@ -248,7 +248,7 @@ dados_RACACOR$variavel <- 'RACACOR'
 
 
 dados_final <- bind_rows(dados_PARTO ,dados_TPROBSON,
-                         dados_RACACOR,dados_IDADEMAE2,
+                         dados_RACACORMAE,dados_IDADEMAE2,
                          dados_ESCMAE ,dados_IDADEMAE ,dados_PESO)
 dados_final[dados_final$UF %>% is.na() & round(dados_final$CODMUNRES/10000)== 36,'CODMUNRES']
 dados_final$aux <- dados_final$CODMUNRES %>% substr(start = 1,stop =2)
@@ -260,5 +260,5 @@ dados_final$CODMUNRES <- dados_final$CODMUNRES %>% as.character()
 dados_final <-merge(dados_final, UFS, by.x = "aux", by.y = "COD", all.x = TRUE)
 dados_final_2 <- dados_final %>% select(-c(aux))
 
-write.csv(dados_final_2,'Base_2_20120-2022.csv')
+write.csv(dados_final_2,'data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/Base_2_2012-2023.csv')
 dados_final_2[dados_final_2$TOTAIS %>% is.na(),]
