@@ -13,12 +13,12 @@ library(microdatasus)
 df_microdatasus_aux <- data.frame()
 
 # anos <- 2012:2023
-anos <- 2021:2023
+anos <- 2012:2023
 
 vars <- c("CONSPRENAT","ESCMAE","GESTACAO","IDADEMAE",
           "MESPRENAT","PARTO", "PESO","QTDPARTCES",
-          "QTDPARTNOR","RACACOR","SEMAGESTAC","TPROBSON"
-          #"IDANOMAL"
+          "QTDPARTNOR","RACACORMAE","SEMAGESTAC","TPROBSON",
+          "IDANOMAL"
           )
 
 # vars <- "IDANOMAL"

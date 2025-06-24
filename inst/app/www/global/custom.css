@@ -8,6 +8,93 @@
     font-family: 'Courier Prime';
 }
 
+
+/* Tamanhos de fonte para telas grandes */
+.fonte-titulos-pagina       { font-size: 33px;}
+.fonte-titulos-modal        { font-size: 26px;}
+.fonte-destaque-caixas1     { font-size: 34px;}
+.fonte-destaque-caixas2     { font-size: 30px;}
+.fonte-indicador-nivel3     { font-size: 22px;}
+.fonte-muito-grande         { font-size: 18px;}
+.fonte-grande               { font-size: 16px;}
+.fonte-media                { font-size: 14px;}
+.fonte-aviso                { font-size: 13px;}
+.fonte-pequena              { font-size: 11px;}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 1920px) {
+  .fonte-titulos-pagina     { font-size: 29.7px; }
+  .fonte-titulos-modal      { font-size: 23.4px; }
+  .fonte-destaque-caixas1   { font-size: 30.6px; }
+  .fonte-destaque-caixas2   { font-size: 27px;   }
+  .fonte-indicador-nivel3   { font-size: 19.8px; }
+  .fonte-muito-grande       { font-size: 16.2px; }
+  .fonte-grande             { font-size: 14.4px; }
+  .fonte-media              { font-size: 12.6px; }
+  .fonte-aviso              { font-size: 11.7px; }
+  .fonte-pequena            { font-size: 9.9px; }
+}
+
+@media (max-width: 1280px) {
+  .fonte-titulos-pagina     { font-size: 26.4px; }
+  .fonte-titulos-modal      { font-size: 20.8px; }
+  .fonte-destaque-caixas1   { font-size: 27.2px; }
+  .fonte-destaque-caixas2   { font-size: 24px;   }
+  .fonte-indicador-nivel3   { font-size: 17.6px; }
+  .fonte-muito-grande       { font-size: 14.4px; }
+  .fonte-grande             { font-size: 12.8px; }
+  .fonte-media              { font-size: 11.2px; }
+  .fonte-aviso              { font-size: 10.4px; }
+  .fonte-pequena            { font-size: 8.8px;  }
+}
+
+/* Tamanho da fonte no dropdown */
+.selectize-dropdown .option,
+.selectize-input {
+  font-size: 16px !important;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 1920px) {
+  .selectize-dropdown .option,
+  .selectize-input {
+    font-size: 14.4px !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .selectize-dropdown .option,
+  .selectize-input {
+    font-size: 12.8px !important;
+  }
+}
+
+/* Tamanho da fonte no multicol */
+.multicol {
+  font-size: 16px !important;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 1920px) {
+  .multicol {
+    font-size: 14.4px !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .multicol {
+    font-size: 12.8px !important;
+  }
+}
+
+.card.card-tabs:not(.card-outline)>.card-header .nav-item:first-child .nav-link {
+    border-left-color: inherit !important;
+}
+
+.nav-link .active {
+  border-radius: .25rem;
+}
+
 .normal {
     font-weight: normal;
 }
@@ -38,7 +125,7 @@
 .div-titulo {
   position: fixed;
   top: 56px;
-  width: 93.75%;
+  width: 95%;
   background-color: white;
   z-index: 100;
   height: fit-content;
@@ -157,3 +244,23 @@
 }
 }
 
+
+.btn-no-style {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 1em;
+  vertical-align: middle;
+}
+
+/* Ícone com cor personalizada */
+.info-icon {
+  color: #007bff;
+}

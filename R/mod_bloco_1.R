@@ -15,7 +15,7 @@ mod_bloco_1_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Condições socioeconômicas e de acesso ao serviço de saúde: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Condições socioeconômicas e de acesso ao serviço de saúde: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     div(style = "top: 56px; position: fixed"),
@@ -24,7 +24,7 @@ mod_bloco_1_ui <- function(id){
         width = 4,
         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
         div(
-          HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+          HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
           shinyWidgets::actionBttn(
             inputId = ns('botao_resumo'),
             icon = icon('question'),
@@ -99,10 +99,10 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por faixa etária da mãe &nbsp;</b>"),
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos por faixa etária da mãe &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao1"),
@@ -120,21 +120,23 @@ mod_bloco_1_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  selectizeInput(
-                    inputId = ns("faixa_et"),
-                    label = "Faixa etária da mãe",
-                    options = list(placeholder = "Selecione a faixa etária da mãe"),
+                  shinyWidgets::pickerInput(
+                    inputId = ns("input_idademae"),
+                    label = span(class = "fonte-grande", "Faixa etária da mãe"),
+                    options = list(placeholder = "Selecione, aqui, as faixas etárias de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                     choices = c(
-                      "De 10 a 14 anos" = "porc_nvm_10_a_14_anos",
-                      "De 15 a 19 anos" = "porc_nvm_15_a_19_anos",
-                      "De 20 e 34 anos" = "porc_nvm_entre_20_e_34_anos",
-                      "Maior que 34 anos" = "porc_nvm_maior_que_34_anos"
+                      "10 a 14 anos" = "nvm_10_a_14_anos",
+                      "15 a 19 anos" = "nvm_15_a_19_anos",
+                      "20 a 34 anos" = "nvm_entre_20_e_34_anos",
+                      "Maior que 34 anos" = "nvm_maior_que_34_anos"
                     ),
-                    width = "100%"
+                    selected = "nvm_10_a_14_anos",
+                    multiple = TRUE,
+                    width = "99%"
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 365))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 380))
             )
           ),
           column(
@@ -144,10 +146,10 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por raça/cor da mãe &nbsp;</b>"),
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos por raça/cor da mãe &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao2"),
@@ -165,23 +167,24 @@ mod_bloco_1_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  selectizeInput(
-                    inputId = ns("raca"),
-                    label = "Raça/cor da mãe",
-                    options = list(placeholder = "Selecione a raça/cor da mãe"),
+                  shinyWidgets::pickerInput(
+                    inputId = ns("input_racacormae"),
+                    label = span(class = "fonte-grande", "Raça/cor da mãe"),
+                    options = list(placeholder = "Selecione, aqui, as raças/cores de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                     choices = c(
-                      "Amarela" = "porc_nvm_com_cor_da_pele_amarela",
-                      "Branca" = "porc_nvm_com_cor_da_pele_branca",
-                      "Indígena" = "porc_nvm_indigenas",
-                      "Parda" = "porc_nvm_com_cor_da_pele_parda",
-                      "Preta" = "porc_nvm_com_cor_da_pele_preta",
-                      "Negra (pardas e pretas)" = "porc_nvm_com_cor_da_pele_negra"
+                      "Amarela" = "nvm_com_cor_da_pele_amarela",
+                      "Branca" = "nvm_com_cor_da_pele_branca",
+                      "Indígena" = "nvm_indigenas",
+                      "Parda" = "nvm_com_cor_da_pele_parda",
+                      "Preta" = "nvm_com_cor_da_pele_preta"
                     ),
-                    width = "100%"
+                    selected = "nvm_com_cor_da_pele_amarela",
+                    multiple = TRUE,
+                    width = "99%"
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 365))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 380))
             )
           ),
           column(
@@ -191,10 +194,10 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Porcentagem de nascidos vivos por escolaridade da mãe &nbsp;</b>"),
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos por escolaridade da mãe &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao3"),
@@ -212,21 +215,23 @@ mod_bloco_1_ui <- function(id){
               fluidRow(
                 column(
                   width = 12,
-                  selectizeInput(
-                    inputId = ns("esc"),
-                    label = "Escolaridade da mãe",
-                    options = list(placeholder = "Selecione a escolaridade da mãe"),
+                  shinyWidgets::pickerInput(
+                    inputId = ns("input_escmae"),
+                    label = span(class = "fonte-grande", "Escolaridade da mãe"),
+                    options = list(placeholder = "Selecione, aqui, as escolaridades de interesse", `actions-box` = TRUE, `deselect-all-text` = "Desselecionar todas", `select-all-text` = "Selecionar todas", `none-selected-text` = "Nenhuma opção selecionada"),
                     choices = c(
-                      "Até 3 anos de estudo" = "porc_nvm_com_escolaridade_ate_3",
-                      "4 a 7 anos de estudo" = "porc_nvm_com_escolaridade_de_4_a_7",
-                      "8 a 11 anos de estudo" = "porc_nvm_com_escolaridade_de_8_a_11",
-                      "Acima de 11 anos de estudo" = "porc_nvm_com_escolaridade_acima_de_11"
+                      "Até 3 anos de estudo" = "nvm_com_escolaridade_ate_3",
+                      "De 4 a 7 anos de estudo" = "nvm_com_escolaridade_de_4_a_7",
+                      "De 8 a 11 anos de estudo" = "nvm_com_escolaridade_de_8_a_11",
+                      "Mais de 11 anos de estudo" = "nvm_com_escolaridade_acima_de_11"
                     ),
-                    width = "100%"
+                    selected = "nvm_com_escolaridade_ate_3",
+                    multiple = TRUE,
+                    width = "99%"
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 365))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 380))
             )
           ),
           column(
@@ -236,10 +241,10 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS &nbsp;</b>"),
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de mulheres de 10 a 49 anos usuárias exclusivas do SUS &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao4"),
@@ -254,7 +259,7 @@ mod_bloco_1_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 460))
             )
           ),
           column(
@@ -265,10 +270,10 @@ mod_bloco_1_ui <- function(id){
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Cobertura populacional da Atenção Básica &nbsp;</b>"),
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Cobertura populacional da Atenção Básica &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao5"),
@@ -283,7 +288,7 @@ mod_bloco_1_ui <- function(id){
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 460))
             )
           )
         )
@@ -306,19 +311,8 @@ mod_bloco_1_server <- function(id, filtros){
       porc_dependentes_sus = rep("round((sum(populacao_feminina_10_a_49) - sum(pop_fem_10_49_com_plano_saude))/sum(populacao_feminina_10_a_49) * 100, 1)", 2),
       porc_cobertura_esf = c("round(sum(media_cobertura_esf)/sum(populacao_total) * 100, 1)", "dplyr::first(95)"),
       porc_nvm_10_a_14_anos = rep("round(sum(nvm_10_a_14_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_15_a_19_anos = rep("round(sum(nvm_15_a_19_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_entre_20_e_34_anos = rep("round(sum(nvm_entre_20_e_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_maior_que_34_anos = rep("round(sum(nvm_maior_que_34_anos)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
       porc_nvm_com_escolaridade_ate_3 = rep("round(sum(nvm_com_escolaridade_ate_3)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_escolaridade_de_4_a_7 = rep("round(sum(nvm_com_escolaridade_de_4_a_7)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_escolaridade_de_8_a_11 = rep("round(sum(nvm_com_escolaridade_de_8_a_11)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_escolaridade_acima_de_11 = rep("round(sum(nvm_com_escolaridade_acima_de_11)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_cor_da_pele_branca = rep("round(sum(nvm_com_cor_da_pele_branca)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_cor_da_pele_preta = rep("round(sum(nvm_com_cor_da_pele_preta)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_cor_da_pele_amarela = rep("round(sum(nvm_com_cor_da_pele_amarela)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_cor_da_pele_parda = rep("round(sum(nvm_com_cor_da_pele_parda)/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_com_cor_da_pele_negra = rep("round((sum(nvm_com_cor_da_pele_parda) + sum(nvm_com_cor_da_pele_preta))/sum(total_de_nascidos_vivos) * 100, 1)", 2),
-      porc_nvm_indigenas = rep("round(sum(nvm_indigenas)/sum(total_de_nascidos_vivos) * 100, 1)", 2)
+      porc_nvm_com_cor_da_pele_preta = rep("round(sum(nvm_com_cor_da_pele_preta)/sum(total_de_nascidos_vivos) * 100, 1)", 2)
     )
 
 
@@ -363,7 +357,7 @@ mod_bloco_1_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando o output que receberá os nomes dos locais selecionados quando há comparação --------
@@ -407,14 +401,12 @@ mod_bloco_1_server <- function(id, filtros){
     observeEvent(input$botao_resumo, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
             <span style="display: block; margin-bottom: 14px;"> </span>
             Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
-            <span style="display: block; margin-bottom: 14px;"> </span>
-            Para este bloco, as caixinhas relacionadas à raça/cor e à escolaridade da mãe mudam de acordo com a raça/cor e escolaridade selecionadas nos gráficos.
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -451,7 +443,7 @@ mod_bloco_1_server <- function(id, filtros){
         dplyr::group_by(ano) |>
         dplyr::summarise(
           idademae = round(sum(idademae_incompletos, na.rm = TRUE)/sum(idademae_totais, na.rm = TRUE) * 100, 1),
-          racacor = round(sum(racacor_incompletos, na.rm = TRUE)/sum(racacor_totais, na.rm = TRUE) * 100, 1),
+          racacormae = round(sum(racacormae_incompletos, na.rm = TRUE)/sum(racacormae_totais, na.rm = TRUE) * 100, 1),
           escmae = round(sum(escmae_incompletos, na.rm = TRUE)/sum(escmae_totais, na.rm = TRUE) * 100, 1),
           localidade = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
@@ -520,12 +512,12 @@ mod_bloco_1_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$idademae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao1", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$idademae,
-        variavel_incompletude1 = "IDADEMAE",
+        variavel_incompletude1 = "IDADEMAE (idade da mãe)",
         descricao_incompletude1 = "ignorados, em branco ou maiores que 55",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -535,14 +527,14 @@ mod_bloco_1_server <- function(id, filtros){
     #### Porcentagem de nascidos vivos por raça/cor da mãe --------------------
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-      req(any(data_incompletude()$racacor > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      req(any(data_incompletude()$racacormae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao2", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao2, {
       cria_modal_incompletude(
-        incompletude1 = data_incompletude()$racacor,
-        variavel_incompletude1 = "RACACOR",
+        incompletude1 = data_incompletude()$racacormae,
+        variavel_incompletude1 = "RACACORMAE (raça/cor da mãe)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -554,12 +546,12 @@ mod_bloco_1_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$escmae > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$escmae,
-        variavel_incompletude1 = "ESCMAE",
+        variavel_incompletude1 = "ESCMAE (escolaridade da mãe)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -881,29 +873,24 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por faixa etária da mãe -----------------
-    titulo_faixa_etaria <- reactive({
-      dplyr::case_when(
-        input$faixa_et == "porc_nvm_10_a_14_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 10 a 14 anos",
-        input$faixa_et == "porc_nvm_15_a_19_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 15 a 19 anos",
-        input$faixa_et == "porc_nvm_entre_20_e_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 20 a 34 anos",
-        input$faixa_et == "porc_nvm_maior_que_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade maior que 34 anos"
-      )
-    })
+    # titulo_faixa_etaria <- reactive({
+    #   dplyr::case_when(
+    #     input$input_idademae == "porc_nvm_10_a_14_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 10 a 14 anos",
+    #     input$input_idademae == "porc_nvm_15_a_19_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 15 a 19 anos",
+    #     input$input_idademae == "porc_nvm_entre_20_e_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 20 a 34 anos",
+    #     input$input_idademae == "porc_nvm_maior_que_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade maior que 34 anos"
+    #   )
+    # })
 
     output$caixa_b1_i4 <- renderUI({
       cria_caixa_server(
         dados = data1_resumo(),
-        indicador = input$faixa_et,
-        titulo = titulo_faixa_etaria(),
+        indicador = "porc_nvm_10_a_14_anos",
+        titulo = "Porcentagem de nascidos vivos de mães com idade de 10 a 14 anos",
         tem_meta = FALSE,
-        valor_de_referencia = data1_resumo_referencia()[[input$faixa_et]],
+        valor_de_referencia = data1_resumo_referencia()$porc_nvm_10_a_14_anos,
         tipo = "porcentagem",
-        invertido = dplyr::case_when(
-          input$faixa_et == "porc_nvm_10_a_14_anos" ~ FALSE,
-          input$faixa_et == "porc_nvm_15_a_19_anos" ~ FALSE,
-          input$faixa_et == "porc_nvm_entre_20_e_34_anos" ~ TRUE,
-          input$faixa_et == "porc_nvm_maior_que_34_anos" ~ TRUE
-        ),
+        invertido = FALSE,
         tamanho_caixa = "303px",
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
@@ -920,24 +907,24 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por raça/cor da mãe ---------------------
-    titulo_racacor <- reactive({
-      dplyr::case_when(
-        input$raca == "porc_nvm_com_cor_da_pele_amarela" ~ "Porcentagem de nascidos vivos de mães de raça/cor amarela",
-        input$raca == "porc_nvm_com_cor_da_pele_branca" ~ "Porcentagem de nascidos vivos de mães de raça/cor branca",
-        input$raca == "porc_nvm_indigenas" ~ "Porcentagem de nascidos vivos de mães indígenas",
-        input$raca == "porc_nvm_com_cor_da_pele_parda" ~ "Porcentagem de nascidos vivos de mães de raça/cor parda",
-        input$raca == "porc_nvm_com_cor_da_pele_preta" ~ "Porcentagem de nascidos vivos de mães de raça/cor preta",
-        input$raca == "porc_nvm_com_cor_da_pele_negra" ~ "Porcentagem de nascidos vivos de mães de raça/cor negra (pardas e pretas)"
-      )
-    })
+    # titulo_racacor <- reactive({
+    #   dplyr::case_when(
+    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_amarela" ~ "Porcentagem de nascidos vivos de mães de raça/cor amarela",
+    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_branca" ~ "Porcentagem de nascidos vivos de mães de raça/cor branca",
+    #     input$input_racacormae == "porc_nvm_indigenas" ~ "Porcentagem de nascidos vivos de mães indígenas",
+    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_parda" ~ "Porcentagem de nascidos vivos de mães de raça/cor parda",
+    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_preta" ~ "Porcentagem de nascidos vivos de mães de raça/cor preta",
+    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_negra" ~ "Porcentagem de nascidos vivos de mães de raça/cor negra (pardas e pretas)"
+    #   )
+    # })
 
     output$caixa_b1_i5 <- renderUI({
       cria_caixa_server(
         dados = data1_resumo(),
-        indicador = input$raca,
-        titulo = titulo_racacor(),
+        indicador = "porc_nvm_com_cor_da_pele_preta",
+        titulo = "Porcentagem de nascidos vivos de mães de raça/cor preta",
         tem_meta = FALSE,
-        valor_de_referencia = data1_resumo_referencia()[[input$raca]],
+        valor_de_referencia = data1_resumo_referencia()$porc_nvm_com_cor_da_pele_preta,
         tipo = "porcentagem",
         invertido = TRUE,
         tamanho_caixa = "303px",
@@ -956,29 +943,24 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por escolaridade da mãe -----------------
-    titulo_escmae <- reactive({
-      dplyr::case_when(
-        input$esc == "porc_nvm_com_escolaridade_ate_3" ~ "Porcentagem de nascidos vivos de mães com menos de 4 anos de estudo",
-        input$esc == "porc_nvm_com_escolaridade_de_4_a_7" ~ "Porcentagem de nascidos vivos de mães com 4 a 7 anos de estudo",
-        input$esc == "porc_nvm_com_escolaridade_de_8_a_11" ~ "Porcentagem de nascidos vivos de mães com 8 a 11 anos de estudo",
-        input$esc == "porc_nvm_com_escolaridade_acima_de_11" ~ "Porcentagem de nascidos vivos de mães de com mais de 11 anos de estudo"
-      )
-    })
+    # titulo_escmae <- reactive({
+    #   dplyr::case_when(
+    #     input$input_escmae == "porc_nvm_com_escolaridade_ate_3" ~ "Porcentagem de nascidos vivos de mães com menos de 4 anos de estudo",
+    #     input$input_escmae == "porc_nvm_com_escolaridade_de_4_a_7" ~ "Porcentagem de nascidos vivos de mães com 4 a 7 anos de estudo",
+    #     input$input_escmae == "porc_nvm_com_escolaridade_de_8_a_11" ~ "Porcentagem de nascidos vivos de mães com 8 a 11 anos de estudo",
+    #     input$input_escmae == "porc_nvm_com_escolaridade_acima_de_11" ~ "Porcentagem de nascidos vivos de mães de com mais de 11 anos de estudo"
+    #   )
+    # })
 
     output$caixa_b1_i6 <- renderUI({
       cria_caixa_server(
         dados = data1_resumo(),
-        indicador = input$esc,
-        titulo = titulo_escmae(),
+        indicador = "porc_nvm_com_escolaridade_ate_3",
+        titulo = "Porcentagem de nascidos vivos de mães com até 3 anos de estudo",
         tem_meta = FALSE,
-        valor_de_referencia = data1_resumo_referencia()[[input$esc]],
+        valor_de_referencia = data1_resumo_referencia()$porc_nvm_com_escolaridade_ate_3,
         tipo = "porcentagem",
-        invertido = dplyr::case_when(
-          input$esc == "porc_nvm_com_escolaridade_ate_3" ~ FALSE,
-          input$esc == "porc_nvm_com_escolaridade_de_4_a_7" ~ FALSE,
-          input$esc == "porc_nvm_com_escolaridade_de_8_a_11" ~ TRUE,
-          input$esc == "porc_nvm_com_escolaridade_acima_de_11" ~ TRUE
-        ),
+        invertido = FALSE,
         tamanho_caixa = "303px",
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
@@ -1106,29 +1088,110 @@ mod_bloco_1_server <- function(id, filtros){
     ## Criando os outputs dos gráficos ----------------------------------------
     ### Porcentagem de nascidos vivos por faixa etária da mãe -----------------
     data1_idademae <- reactive(
-      data1() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$faixa_et),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_idademae = round(sum(dplyr::across(dplyr::all_of(input$input_idademae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
+          )
         )
     )
 
     data1_idademae_comp <- reactive(
-      data1_comp() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$faixa_et),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_idademae = round(sum(dplyr::across(dplyr::all_of(input$input_idademae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel2 == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
+          )
         )
     )
 
     data1_idademae_referencia <- reactive({
-      data1_referencia() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$faixa_et),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_idademae = round(sum(dplyr::across(dplyr::all_of(input$input_idademae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::if_else(
+            filtros()$comparar == "Não",
+            "Brasil (valor de referência)",
+            dplyr::if_else(
+              filtros()$mostrar_referencia == "nao_mostrar_referencia",
+              "Brasil",
+              "Brasil (valor de referência)"
+            )
+          )
         )
     })
 
@@ -1139,7 +1202,7 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1159,7 +1222,7 @@ mod_bloco_1_server <- function(id, filtros){
               data = data1_idademae_referencia(),
               name = "Referência (média nacional)",
               type = "line",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1170,12 +1233,12 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_idademae(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data1_idademae_comp(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1195,7 +1258,7 @@ mod_bloco_1_server <- function(id, filtros){
               data = data1_idademae_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nvm_idademae, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -1206,29 +1269,110 @@ mod_bloco_1_server <- function(id, filtros){
 
     ### Porcentagem de nascidos vivos por raça/cor da mãe --------------------
     data1_racacor <- reactive(
-      data1() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$raca),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_racacormae = round(sum(dplyr::across(dplyr::all_of(input$input_racacormae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
+          )
         )
     )
 
     data1_racacor_comp <- reactive(
-      data1_comp() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$raca),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_racacormae = round(sum(dplyr::across(dplyr::all_of(input$input_racacormae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel2 == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
+          )
         )
     )
 
     data1_racacor_referencia <- reactive({
-      data1_referencia() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$raca),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_racacormae = round(sum(dplyr::across(dplyr::all_of(input$input_racacormae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::if_else(
+            filtros()$comparar == "Não",
+            "Brasil (valor de referência)",
+            dplyr::if_else(
+              filtros()$mostrar_referencia == "nao_mostrar_referencia",
+              "Brasil",
+              "Brasil (valor de referência)"
+            )
+          )
         )
     })
 
@@ -1239,7 +1383,7 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_racacor(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1258,7 +1402,7 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_racacor_referencia(),
             type = "line",
             name = "Referência (média nacional)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class),
             dashStyle = "ShortDot",
             opacity = 0.8
           )
@@ -1269,12 +1413,12 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_racacor(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data1_racacor_comp(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1294,7 +1438,7 @@ mod_bloco_1_server <- function(id, filtros){
               data = data1_racacor_referencia(),
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -1305,29 +1449,110 @@ mod_bloco_1_server <- function(id, filtros){
 
     ### Porcentagem de nascidos vivos por escolaridade da mãe -----------------
     data1_esc <- reactive(
-      data1() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$esc),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_escmae = round(sum(dplyr::across(dplyr::all_of(input$input_escmae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel == "regional" ~ filtros()$regiao,
+            filtros()$nivel == "estadual" ~ filtros()$estado,
+            filtros()$nivel == "macro" ~ filtros()$macro,
+            filtros()$nivel == "micro" ~ filtros()$micro,
+            filtros()$nivel == "municipal" ~ filtros()$municipio
+          )
         )
     )
 
     data1_esc_comp <- reactive(
-      data1_comp() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$esc),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if(filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_escmae = round(sum(dplyr::across(dplyr::all_of(input$input_escmae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::case_when(
+            filtros()$nivel2 == "nacional" ~ dplyr::if_else(
+              filtros()$comparar == "Não",
+              "Brasil (valor de referência)",
+              dplyr::if_else(
+                filtros()$mostrar_referencia == "nao_mostrar_referencia",
+                "Brasil",
+                "Brasil (valor de referência)"
+              )
+            ),
+            filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+            filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+            filtros()$nivel2 == "macro" ~ filtros()$macro2,
+            filtros()$nivel2 == "micro" ~ filtros()$micro2,
+            filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+            filtros()$nivel2 == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
+          )
         )
     )
 
     data1_esc_referencia <- reactive({
-      data1_referencia() |>
-        dplyr::select(
-          ano,
-          eixo_y = dplyr::all_of(input$esc),
-          class
+      bloco1 |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
+        dplyr::group_by(ano) |>
+        dplyr::summarise(
+          porc_nvm_escmae = round(sum(dplyr::across(dplyr::all_of(input$input_escmae))) / sum(total_de_nascidos_vivos) * 100, 1)
+        ) |>
+        dplyr::ungroup() |>
+        dplyr::mutate(
+          class = dplyr::if_else(
+            filtros()$comparar == "Não",
+            "Brasil (valor de referência)",
+            dplyr::if_else(
+              filtros()$mostrar_referencia == "nao_mostrar_referencia",
+              "Brasil",
+              "Brasil (valor de referência)"
+            )
+          )
         )
     })
 
@@ -1338,7 +1563,7 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_esc(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1357,7 +1582,7 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_esc_referencia(),
             type = "line",
             name = "Referência (média nacional)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class),
             dashStyle = "ShortDot",
             opacity = 0.8
           )
@@ -1368,12 +1593,12 @@ mod_bloco_1_server <- function(id, filtros){
           highcharter::hc_add_series(
             data = data1_esc(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
             data = data1_esc_comp(),
             type = "line",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1392,7 +1617,7 @@ mod_bloco_1_server <- function(id, filtros){
             data = data1_esc_referencia(),
             type = "line",
             name = "Referência (média nacional)",
-            highcharter::hcaes(x = ano, y = eixo_y, group = class, colour = class),
+            highcharter::hcaes(x = ano, y = porc_nvm_escmae, group = class, colour = class),
             dashStyle = "ShortDot",
             opacity = 0.6
           )

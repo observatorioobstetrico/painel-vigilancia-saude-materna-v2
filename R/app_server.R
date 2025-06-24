@@ -34,7 +34,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$botao_agrupamento, {
     shinyalert::shinyalert(
       html = TRUE,
-      title = "<div style = 'font-size: 25px; color: #656565'> Sobre o agrupamento de municípios semelhantes </div>",
+      title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o agrupamento de municípios semelhantes </div>",
       text = "<div style = 'text-align: justify; text-justify: inter-word;'> Os municípios foram agrupados a partir de seu IDHM e de sua latitude por meio do algoritmo de agrupamento K-médias. Por meio da análise do gráfico do cotovelo e dos índices de Davies-Bouldin, Dunn,
 Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       size = "s",
@@ -184,9 +184,10 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
-          "Relacionados aos grupos de Robson e cesariana" = "robson",
+         # "Relacionados aos grupos de Robson e cesariana" = "robson",
           "Relacionados ao deslocamento para o parto" = "deslocamento",
-          "Relacionados ao profissional e local de parto" = "profissional"# [AQUI]
+          "Relacionados ao profissional e local de parto" = "profissional",
+          "Relacionados aos grupos de Robson e cesariana" = "robson"
         )
       )
     } else if (input$bloco == "bloco6") {
@@ -642,7 +643,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
 
     if (
       input$indicador_blocos4_6_7 ==
-        "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
+        "Porcentagem de partos com peso < 1500g segundo região de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal"
     ) {
       # updateSelectizeInput(
       #   session,
@@ -670,11 +671,11 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         session,
         inputId = "indicador_duas_caixinhas_adicionais2",
         choices = c(
-          "Pelo menos um leito" = "com_uti",
-          "Sem leito" = "sem_uti",
+          "Quatro leitos ou mais" = "com_4mais_uti",
+          "Menos de quatro leitos" = "sem_4mais_uti",
           "Sem informação" = "sem_inf"
         ),
-        label = "Disponibilidade de leito de UTI"
+        label = "Número de leitos de UTI neonatal"
       )
     }
   })

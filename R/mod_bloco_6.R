@@ -22,7 +22,7 @@ mod_bloco_6_ui <- function(id) {
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Mortalidade e morbidade materna: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Mortalidade e morbidade materna: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -37,7 +37,7 @@ mod_bloco_6_ui <- function(id) {
             width = 12,
             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, incluindo desagregação de raça/cor, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
                 </b> </div>"
             ),
@@ -48,7 +48,7 @@ mod_bloco_6_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo1'),
                 icon = icon('question'),
@@ -123,10 +123,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Número de óbitos maternos &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Número de óbitos maternos &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao1"),
@@ -141,7 +141,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mort"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mort"), height = 460))
                 )
               ),
               column(
@@ -151,10 +151,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Razão de mortalidade materna por 100.000 nascidos vivos &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Razão de mortalidade materna por 100.000 nascidos vivos &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao2"),
@@ -169,7 +169,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mort"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mort"), height = 460))
                 )
               ),
               column(
@@ -179,10 +179,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de óbitos maternos por causas obstétricas diretas &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos maternos por causas obstétricas diretas &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao3"),
@@ -197,7 +197,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mort"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mort"), height = 460))
                 )
               ),
               column(
@@ -207,10 +207,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de óbitos maternos diretos por causas específicas &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos maternos diretos por causas específicas &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao4"),
@@ -230,7 +230,7 @@ mod_bloco_6_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("causa_obito_mort"),
-                        label = "Causa de óbito materno",
+                        label = span(class = "fonte-grande", "Causa de óbito materno"),
                         options = list(placeholder = "Selecione a causa de óbito materno"),
                         choices = c(
                           "Aborto" = "prop_obitos_aborto",
@@ -242,7 +242,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 365))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mort"), height = 380))
                 )
               )
             )
@@ -257,7 +257,7 @@ mod_bloco_6_ui <- function(id) {
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo2'),
                 icon = icon('question'),
@@ -335,10 +335,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave no SUS &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave no SUS &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao5"),
@@ -353,7 +353,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 460))
                 )
               ),
               column(
@@ -364,10 +364,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave por causas específicas &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave por causas específicas &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao10"),
@@ -387,7 +387,7 @@ mod_bloco_6_ui <- function(id) {
                       width = 12,
                       selectizeInput(
                         inputId = ns("causa_mmg"),
-                        label = "Causa de morbidade materna grave",
+                        label = span(class = "fonte-grande", "Causa de morbidade materna grave"),
                         options = list(placeholder = "Selecione a causa de morbidade materna grave"),
                         choices = c(
                           "Hipertensão" = "prop_mmg_hipertensao",
@@ -398,7 +398,7 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 365))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 380))
                 )
               ),
               column(
@@ -408,10 +408,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com internação em UTI &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com internação em UTI &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao6"),
@@ -426,7 +426,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 460))
                 )
               ),
               column(
@@ -436,10 +436,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao7"),
@@ -454,7 +454,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 460))
                 )
               ),
               column(
@@ -464,10 +464,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com transfusão sanguínea &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com transfusão sanguínea &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao8"),
@@ -482,7 +482,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 460))
                 )
               ),
               column(
@@ -492,10 +492,10 @@ mod_bloco_6_ui <- function(id) {
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
+                    style = "height: 10%; display: flex; align-items: center;",
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao9"),
@@ -510,7 +510,7 @@ mod_bloco_6_ui <- function(id) {
                     )
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 450))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 460))
                 )
               )
             )
@@ -596,7 +596,7 @@ mod_bloco_6_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando os outputs que receberão os nomes dos locais selecionados quando há comparação --------
@@ -697,7 +697,7 @@ mod_bloco_6_server <- function(id, filtros){
     observeEvent(c(input$botao_resumo1, input$botao_resumo2), {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.

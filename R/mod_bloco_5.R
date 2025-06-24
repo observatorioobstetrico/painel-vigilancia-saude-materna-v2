@@ -30,7 +30,7 @@ mod_bloco_5_ui <- function(id) {
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Condições de nascimento: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Condições de nascimento: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     conditionalPanel(
@@ -41,7 +41,7 @@ mod_bloco_5_ui <- function(id) {
         HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
         HTML(
           "<div style = 'text-align: center;'>
-            <b style = 'font-size: 19px'> <br>
+            <b class = 'fonte-muito-grande'> <br>
               <i class='fa-solid fa-circle-info'></i> &nbsp; Para visualizar os valores referentes à localidade de comparação selecionada nos gráficos de distribuição percentual,
               passe o cursor do mouse sobre a barra que contém a categoria de interesse.
             </b>
@@ -56,7 +56,7 @@ mod_bloco_5_ui <- function(id) {
         width = 4,
         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
         div(
-          HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+          HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
           shinyWidgets::actionBttn(
             inputId = ns('botao_resumo'),
             icon = icon('question'),
@@ -153,11 +153,11 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 12%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de baixo peso ao nascer (< 2500 g) &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de baixo peso ao nascer (< 2500 g) &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -178,7 +178,8 @@ mod_bloco_5_ui <- function(id) {
                   width = 12,
                   strong(p(
                     "Selecione as faixas de peso:",
-                    style = "margin-bottom: 0.5rem"
+                    style = "margin-bottom: 0.5rem",
+                    class = "fonte-grande"
                   )),
                   tags$div(
                     align = 'left',
@@ -201,7 +202,7 @@ mod_bloco_5_ui <- function(id) {
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 380))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 360))
             )
           ),
           column(
@@ -211,11 +212,11 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 12%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Distribuição percentual do baixo peso ao nascer (< 2500g) &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Distribuição percentual do baixo peso ao nascer (< 2500g) &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -231,7 +232,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_1"), height = 480))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_1"), height = 460))
             )
           ),
           column(
@@ -241,11 +242,11 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 12%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de nascimentos prematuros (com menos de 37 semanas de gestação)&nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de nascimentos prematuros (com menos de 37 semanas de gestação)&nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -266,7 +267,8 @@ mod_bloco_5_ui <- function(id) {
                   width = 12,
                   strong(p(
                     "Selecione a idade gestacional:",
-                    style = "margin-bottom: 0.5rem"
+                    style = "margin-bottom: 0.5rem",
+                    class = "fonte-grande"
                   )),
                   tags$div(
                     align = 'left',
@@ -287,7 +289,7 @@ mod_bloco_5_ui <- function(id) {
                   )
                 )
               ),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 380))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 360))
             )
           ),
           column(
@@ -297,11 +299,11 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 12%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Distribuição percentual da prematuridade &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Distribuição percentual da prematuridade &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -317,7 +319,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_1"), height = 480))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_1"), height = 460))
             )
           ),
           column(
@@ -327,11 +329,11 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 11%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de nascimentos termo precoce (com 37 ou 38 semanas de gestação)&nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de nascimentos termo precoce (com 37 ou 38 semanas de gestação)&nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -347,7 +349,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 455))
             )
           ),
           # column(
@@ -357,10 +359,10 @@ mod_bloco_5_ui <- function(id) {
           #     status = "primary",
           #     collapsible = FALSE,
           #     headerBorder = FALSE,
-          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           #     div(
-          #       style = "height: 15%; display: flex; align-items: center;",
-          #       HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
+          #       style = "height: 10%; display: flex; align-items: center;",
+          #       HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com condições potencialmente ameaçadoras à vida &nbsp;</b>"),
           #       shinyjs::hidden(
           #         span(
           #           id = ns("mostrar_botao7"),
@@ -385,10 +387,10 @@ mod_bloco_5_ui <- function(id) {
           #     status = "primary",
           #     collapsible = FALSE,
           #     headerBorder = FALSE,
-          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           #     div(
-          #       style = "height: 15%; display: flex; align-items: center;",
-          #       HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
+          #       style = "height: 10%; display: flex; align-items: center;",
+          #       HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos com vínculo com o SUS &nbsp;</b>"),
           #       shinyjs::hidden(
           #         span(
           #           id = ns("mostrar_botao11"),
@@ -446,11 +448,11 @@ mod_bloco_5_ui <- function(id) {
           #     status = "primary",
           #     collapsible = FALSE,
           #     headerBorder = FALSE,
-          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           #     div(
-          #       style = "height: 15%; display: flex; align-items: center;",
-          #       # HTML("<b style='font-size:18px'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
-          #       HTML("<b style='font-size:18px'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+          #       style = "height: 10%; display: flex; align-items: center;",
+          #       # HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações em bebês com até 27 dias de vida nascidos em estabelecimentos públicos &nbsp;</b>"),
+          #       HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações até o 27º dia de vida de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
           #       shinyjs::hidden(
           #         span(
           #           id = ns("mostrar_botao10"),
@@ -508,10 +510,10 @@ mod_bloco_5_ui <- function(id) {
           #     status = "primary",
           #     collapsible = FALSE,
           #     headerBorder = FALSE,
-          #     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+          #     style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
           #     div(
-          #       style = "height: 15%; display: flex; align-items: center;",
-          #       HTML("<b style='font-size:18px'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
+          #       style = "height: 10%; display: flex; align-items: center;",
+          #       HTML("<b class = 'fonte-muito-grande'> Porcentagem de internações em UTI neonatal até o 27º dia de bebês nascidos em hospitais com vínculo com o SUS &nbsp;</b>"),
           #       shinyjs::hidden(
           #         span(
           #           id = ns("mostrar_botao12"),
@@ -569,10 +571,10 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g &nbsp;</b>"),
+                style = "height: 11%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com asfixia dentre os nascidos vivos sem anomalias e com peso ≥ 2500 g &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao6"),
@@ -587,7 +589,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 455))
             )
           ),
           column(
@@ -597,10 +599,10 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com anomalias congênitas &nbsp;</b>"),
+                style = "height: 11%; display: flex; align-items: center",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com anomalias congênitas &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao8"),
@@ -615,7 +617,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6"), height = 455))
             )
           ),
 
@@ -626,10 +628,10 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 20%; display: flex; align-items: center",
-                HTML("<b style='font-size:18px'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>"),
+                style = "height: 11%; display: flex; align-items: center",
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao9"),
@@ -644,7 +646,7 @@ mod_bloco_5_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7"), height = 455))
             )
           ),
           column(
@@ -654,10 +656,10 @@ mod_bloco_5_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 630px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:18px'> Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>")
+                style = "height: 10%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo Ministério da Saúde (Fonte: <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>link</a>) &nbsp;</b>")
               ),
               hr(),
               shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
@@ -832,7 +834,7 @@ mod_bloco_5_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando o output que receberá os nomes dos locais selecionados quando há comparação --------
@@ -875,7 +877,7 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(input$botao_resumo, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -1395,7 +1397,7 @@ mod_bloco_5_server <- function(id, filtros){
         dados = data5_resumo(),
         indicador = "baixo peso",
         titulo = "Dentre os nascidos vivos com baixo peso (< 2500 g),",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         tamanho_caixa = "320px"
       )
     })
@@ -1473,7 +1475,7 @@ mod_bloco_5_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1499,7 +1501,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     tipo = "porcentagem",
     #     invertido = FALSE,
     #     tamanho_caixa = "320px",
-    #     fonte_titulo = "15px",
+    #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
     #     nivel_de_analise = ifelse(
@@ -1525,7 +1527,7 @@ mod_bloco_5_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1547,13 +1549,15 @@ mod_bloco_5_server <- function(id, filtros){
         indicador = "porc_malformacao_geral",
         titulo = "Porcentagem de nascidos vivos com anomalias congênitas",
         tem_meta = TRUE,
-        valor_de_referencia = data5_resumo_referencia()$porc_malformacao_geral,
+        # valor_de_referencia = data5_resumo_referencia()$porc_malformacao_geral,
+        valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "320px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_5",
-        tipo_referencia = "média nacional",
+        # tipo_referencia = "média nacional",
+        tipo_referencia = "mundo",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -1577,7 +1581,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     tipo = "porcentagem",
     #     invertido = FALSE,
     #     tamanho_caixa = "320px",
-    #     fonte_titulo = "15px",
+    #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
     #     nivel_de_analise = ifelse(
@@ -1603,7 +1607,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     tipo = "porcentagem",
     #     invertido = FALSE,
     #     tamanho_caixa = "320px",
-    #     fonte_titulo = "15px",
+    #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
     #     nivel_de_analise = ifelse(
@@ -1629,7 +1633,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     tipo = "porcentagem",
     #     invertido = FALSE,
     #     tamanho_caixa = "320px",
-    #     fonte_titulo = "15px",
+    #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
     #     nivel_de_analise = ifelse(
@@ -2915,7 +2919,7 @@ mod_bloco_5_server <- function(id, filtros){
           striped = TRUE,
           borderless = TRUE,
           pagination = FALSE,
-          height = 500,
+          height = 460,
           rowStyle = htmlwidgets::JS(
             "function(rowInfo) {
                 if (rowInfo.aggregated === true) {

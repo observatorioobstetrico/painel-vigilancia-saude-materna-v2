@@ -65,9 +65,9 @@ dados_nasc_agr <- df_verificacao #%>%
 rm(df_verificacao,codigos_municipios #,dados_nasc_antigo,dados_nasc_agr_antigo
    )
 
-# RACACOR -----------------------------------------------------------------
+# RACACORMAE -----------------------------------------------------------------
 
-raca_muni <- read.csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/RACACOR_muni.csv")
+raca_muni <- read.csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_novas/RACACORMAE_muni.csv")
 
 #esse passo é importante pq na API da PCDaS corremos pela UF de residência,
 #mas usamos o municipio de ocorrência (CODMUNRES)
@@ -91,14 +91,14 @@ dados2_cor <- dados %>%
 
 # agora vamos só trabalhar com os dados faltantes
 IGNORADOS <- raca_muni %>%
-  filter(RACACOR  == 9)
+  filter(RACACORMAE  == 9)
 
 IGNORADOS <- IGNORADOS %>%
   group_by(CODMUNRES , ANO) %>%
   summarise(IGNORADOS = sum(NASC))
 
 NULOS <- raca_muni %>%
-  filter( RACACOR  %>% is.na() )
+  filter( RACACORMAE  %>% is.na() )
 
 NULOS <- NULOS %>%
   group_by(CODMUNRES , ANO) %>%
@@ -109,10 +109,10 @@ names(dados_nasc_agr)<- dados_nasc_agr |> names() |> toupper()
 dados <- full_join(NULOS, IGNORADOS, by = c("CODMUNRES","ANO")) %>%
   right_join(dados_nasc_agr, by = c("ANO", "CODMUNRES"))
 
-dados_RACACOR <- dados %>%
+dados_RACACORMAE <- dados %>%
   mutate(NULOS =  ifelse(is.na(NULOS), 0, NULOS),
          IGNORADOS =  ifelse(is.na(IGNORADOS), 0, IGNORADOS)) %>% rename(TOTAIS = NASC)
-dados_RACACOR$variavel <- 'RACACOR'
+dados_RACACORMAE$variavel <- 'RACACORMAE'
 
 #IMPORTACAO DOS BANCOS ------------------------------------------------------------------
 variaveis <- c( "IDADEMAE" , "ESCMAE" ,"QTDPARTNOR",  "QTDPARTCES",
@@ -676,7 +676,7 @@ dados_IDANOMAL$variavel <- 'IDANOMAL'
 
 
 dados_final <- bind_rows(dados_CONSPRENAT,dados_PARTO ,dados_TPROBSON,
-                         dados_RACACOR,dados_GESTACAO,dados_MESPRENAT,dados_QTDPARTCES,
+                         dados_RACACORMAE,dados_GESTACAO,dados_MESPRENAT,dados_QTDPARTCES,
                          dados_QTDPARTNOR,dados_SEMAGESTAC,
                          dados_ESCMAE ,dados_IDADEMAE ,dados_PESO, dados_IDANOMAL)
 dados_final$aux <- dados_final$CODMUNRES %>% substr(start = 1,stop =2)

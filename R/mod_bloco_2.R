@@ -18,6 +18,7 @@ mod_bloco_2_ui <- function(id) {
           HTML("Planejamento reprodutivo: série histórica"),
           htmlOutput(ns("titulo_localidade"), inline = TRUE)
         ),
+        class = "fonte-titulos-pagina",
         style = "padding-left: 0.4em"
       ),
       hr(style = "margin-bottom: 0px;")
@@ -27,7 +28,7 @@ mod_bloco_2_ui <- function(id) {
         width = 4,
         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
         div(
-          HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+          HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
           shinyWidgets::actionBttn(
             inputId = ns('botao_resumo'),
             icon = icon('question'),
@@ -97,11 +98,11 @@ mod_bloco_2_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:18px'> Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Taxa específica de fecundidade de mulheres com menos de 20 anos de idade (por mil) &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -138,7 +139,7 @@ mod_bloco_2_ui <- function(id) {
 
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot1"),
-                height = 375
+                height = 380
               ))
             )
           ),
@@ -149,11 +150,11 @@ mod_bloco_2_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:18px'> Porcentagem de mulheres com mais de 3 partos anteriores &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de mulheres com mais de 3 partos anteriores &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -171,7 +172,7 @@ mod_bloco_2_ui <- function(id) {
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot2"),
-                height = 450
+                height = 460
               ))
             )
           ),
@@ -182,11 +183,11 @@ mod_bloco_2_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:18px'> Taxa de abortos inseguros por mil mulheres em idade fértil &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Taxa de abortos inseguros por mil mulheres em idade fértil &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -222,7 +223,7 @@ mod_bloco_2_ui <- function(id) {
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot3"),
-                height = 365
+                height = 380
               ))
             )
           ),
@@ -233,11 +234,11 @@ mod_bloco_2_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 10%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:18px'> Razão de abortos inseguros por 100 nascidos vivos &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Razão de abortos inseguros por 100 nascidos vivos &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -273,7 +274,7 @@ mod_bloco_2_ui <- function(id) {
               ),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot4"),
-                height = 365
+                height = 380
               ))
             )
           )
@@ -359,7 +360,7 @@ mod_bloco_2_server <- function(id, filtros) {
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando o output que receberá os nomes dos locais selecionados quando há comparação --------
@@ -403,7 +404,7 @@ mod_bloco_2_server <- function(id, filtros) {
     observeEvent(input$botao_resumo, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -531,12 +532,12 @@ mod_bloco_2_server <- function(id, filtros) {
         animType = "fade",
         time = 0.8
       )
-    })
+    }, ignoreNULL = FALSE)
 
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$idademae,
-        variavel_incompletude1 = "IDADEMAE",
+        variavel_incompletude1 = "IDADEMAE (idade da mãe)",
         descricao_incompletude1 = "ignorados, em branco ou maiores que 55",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -570,10 +571,10 @@ mod_bloco_2_server <- function(id, filtros) {
     observeEvent(input$botao2, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$qtdpartces,
-        variavel_incompletude1 = "QTDPARTCES",
+        variavel_incompletude1 = "QTDPARTCES (número de partos cesáreos)",
         descricao_incompletude1 = "em branco ou preenchidos com 99",
         incompletude2 = data_incompletude()$qtdpartnor,
-        variavel_incompletude2 = "QTDPARTNOR",
+        variavel_incompletude2 = "QTDPARTNOR (número de partos vaginais)",
         descricao_incompletude2 = "em branco ou preenchidos com 99",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -801,7 +802,7 @@ mod_bloco_2_server <- function(id, filtros) {
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "300px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_2",
         tipo_referencia = "países desenvolvidos",
         nivel_de_analise = ifelse(
@@ -827,7 +828,7 @@ mod_bloco_2_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = "300px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -852,7 +853,7 @@ mod_bloco_2_server <- function(id, filtros) {
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "300px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -877,7 +878,7 @@ mod_bloco_2_server <- function(id, filtros) {
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "300px",
-        fonte_titulo = "15px",
+        #fonte_titulo = "15px",
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",

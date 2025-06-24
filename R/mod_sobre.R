@@ -21,7 +21,7 @@ mod_sobre_ui <- function(id){
     fluidRow(
       HTML(
         "
-          <p align='justify'; style='font-size:18px'>
+          <p align='justify'; class = 'fonte-muito-grande'>
           A morte materna – morte de uma mulher durante a gestação, parto ou até 42 dias após o
           término da gestação – não é um evento isolado. Ela é o resultado de uma série de
           determinantes sociais em saúde que atuam durante a vida de uma mulher. Da mesma forma,
@@ -54,7 +54,7 @@ mod_sobre_ui <- function(id){
 
           Em seu menu lateral, o painel está organizado em três níveis:
           </p>
-          <ol align='justify'; style='font-size:18px; font-weight: bold;'>
+          <ol align='justify'; class = 'fonte-muito-grande' style = 'font-weight: bold;'>
             <li> Resumo dos blocos de indicadores: <span style = 'font-weight: normal;'>nesse nível, são mostrados todos os indicadores, de todos os blocos, em uma única tela, para o ano e região geográfica selecionados.
                  Um relatório com o resumo dos indicadores está disponível para impressão;</span></li>
             <li> Séries históricas: <span style = 'font-weight: normal;'>nesse nível, é mostrada a evolução dos indicadores de cada bloco para a localidade e período de tempo selecionados, sendo possível a comparação entre
@@ -63,18 +63,18 @@ mod_sobre_ui <- function(id){
                  Deve-se primeiro selecionar o bloco ao qual o indicador pertence e depois o indicador escolhido. Além das visualizações, a documentação de cada indicador é apresentada de forma resumida: sua definição, a fonte dos dados, o método de cálculo e informações sobre a qualidade da informação são apresentados.</span></li>
           </ol>
 
-          <p align='justify'; style='font-size:18px'>
+          <p align='justify'; class = 'fonte-muito-grande'>
 
           Além disso, ainda no menu lateral, também estão disponíveis:
           </p>
 
-          <ol start='4', align='justify'; style='font-size:18px; font-weight: bold;'>
+          <ol start='4', align='justify'; class = 'fonte-muito-grande' style = 'font-weight: bold;'>
             <li> Documentação dos indicadores: <span style = 'font-weight: normal;'> nesse menu, disponibilizamos um documento para impressão, contendo a documentação completa de todos os indicadores do painel;</span></li>
             <li> A história da Aparecida: <span style = 'font-weight: normal;'>nesse menu, disponibilizamos um link para a \"História de Aparecida\", onde mostramos os indicadores apresentados neste painel em diferentes contextos e em como eles refletem as situações de vulnerabilidade da mulher ao óbito materno, permitindo maior conhecimento sobre a morte materna e seus determinantes.</span></li>
           </ol>
 
 
-          <p align='justify'; style='font-size:18px'>
+          <p align='justify'; class = 'fonte-muito-grande'>
           Para análises adicionais não disponíveis neste painel, acesse o site do Tabnet/DATASUS, disponível em <a href = https://datasus.saude.gov.br/informacoes-de-saude-tabnet/, target = _blank>https://datasus.saude.gov.br/informacoes-de-saude-tabnet/</a>.
           </p>
 

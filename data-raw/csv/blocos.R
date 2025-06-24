@@ -220,10 +220,20 @@ bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
 #     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
 #   )
 
+base_incompletude_antiga <- read.csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_antigas/base_incompletude_2012_2023.csv")
+
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2023.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres) #|>
-  # dplyr::select(-c(uf))
+  dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
+  dplyr::select(!c(dplyr::contains("consprenat"), dplyr::contains("idanomal"), dplyr::contains("qtdpartces"), dplyr::contains("tprobson"))) |>
+  dplyr::full_join(
+    base_incompletude_antiga |>
+      dplyr::select(
+        codmunres, ano, dplyr::contains("consprenat"),
+        dplyr::contains("idanomal"), dplyr::contains("qtdpartces"),
+        dplyr::contains("tprobson")
+      )
+    )
 
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>
@@ -480,21 +490,21 @@ base_incompletude_bloco7 <- base_incompletude_bloco7 |>
 
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
-  dplyr::full_join(
     dplyr::full_join(
-    dplyr::full_join(
-      base_incompletude_sinasc,
-      base_incompletude_deslocamento,
-      by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+      dplyr::full_join(
+        dplyr::full_join(
+          base_incompletude_sinasc,
+          base_incompletude_deslocamento,
+          by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+        ),
+        base_incompletude_sim,
+        by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+      ),
+      base_incompletude_deslocamento
     ),
-    base_incompletude_sim,
-    by = c("ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao", "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude")
+    base_incompletude_bloco7
   ),
-  base_incompletude_deslocamento
-),
-base_incompletude_bloco7
-),
-base_incompletude_bloco4_profissional
+  base_incompletude_bloco4_profissional
 )
 
 

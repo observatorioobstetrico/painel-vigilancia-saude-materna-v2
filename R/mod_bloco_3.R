@@ -13,7 +13,7 @@ mod_bloco_3_ui <- function(id) {
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Assistência pré-natal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Assistência pré-natal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
       hr(style = "margin-bottom: 0px;")
     ),
     fluidRow(
@@ -21,7 +21,7 @@ mod_bloco_3_ui <- function(id) {
         width = 4,
         HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
         div(
-          HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+          HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
           shinyWidgets::actionBttn(
             inputId = ns('botao_resumo'),
             icon = icon('question'),
@@ -87,10 +87,10 @@ mod_bloco_3_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'> Cobertura de assistência pré-natal &nbsp;</b>"),
+                style = "height: 11%; display: flex; align-items: center;",
+                HTML("<b class = 'fonte-muito-grande'> Cobertura de assistência pré-natal &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao1"),
@@ -105,7 +105,7 @@ mod_bloco_3_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 450)))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1"), height = 455)))
           ),
           column(
             width = 6,
@@ -114,11 +114,11 @@ mod_bloco_3_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 11%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com início do pré-natal até 12 semanas de gestação &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de mulheres com início do pré-natal até 12 semanas de gestação &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -134,7 +134,7 @@ mod_bloco_3_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2"), height = 455))
             )
           ),
 
@@ -145,15 +145,15 @@ mod_bloco_3_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 11%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com oito ou mais consultas de pré-natal &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de mulheres com oito ou mais consultas de pré-natal &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
-                    id = ns("mostrar_botao3"),
+                    id = ns("mostrar_botao5"),
                     shinyWidgets::actionBttn(
                       inputId = ns("botao3"),
                       icon = icon("triangle-exclamation", style = "color: red"),
@@ -165,7 +165,7 @@ mod_bloco_3_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5"), height = 455))
             )
           ),
           column(
@@ -175,11 +175,11 @@ mod_bloco_3_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 11%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Porcentagem de mulheres com número adequado de consultas de pré-natal para a idade gestacional no parto &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Porcentagem de mulheres com número adequado de consultas de pré-natal para a idade gestacional no parto &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -195,7 +195,7 @@ mod_bloco_3_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3"), height = 455))
             )
           ),
           column(
@@ -206,11 +206,11 @@ mod_bloco_3_ui <- function(id) {
               status = "primary",
               collapsible = FALSE,
               headerBorder = FALSE,
-              style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "height: 15%; display: flex; align-items: center;",
+                style = "height: 11%; display: flex; align-items: center;",
                 HTML(
-                  "<b style='font-size:19px'> Incidência de sífilis congênita por mil nascidos vivos &nbsp;</b>"
+                  "<b class = 'fonte-muito-grande'> Incidência de sífilis congênita por mil nascidos vivos &nbsp;</b>"
                 ),
                 shinyjs::hidden(
                   span(
@@ -226,7 +226,7 @@ mod_bloco_3_ui <- function(id) {
                 )
               ),
               hr(),
-              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 450))
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4"), height = 455))
             )
           )
         )
@@ -295,7 +295,7 @@ mod_bloco_3_server <- function(id, filtros){
         texto <- glue::glue("({local1} e {local2}, {ano})")
       }
 
-      tags$b(texto, style = "font-size: 33px")
+      tags$b(texto, class = "fonte-titulos-pagina")
     })
 
     ## Criando o output que receberá os nomes dos locais selecionados quando há comparação --------
@@ -338,7 +338,7 @@ mod_bloco_3_server <- function(id, filtros){
     observeEvent(input$botao_resumo, {
       shinyalert::shinyalert(
         html = TRUE,
-        title = '<div style = "font-size: 25px; color: #656565"> Sobre o "Resumo do período" </div>',
+        title = '<div class = "fonte-titulos-modal" style = "color: #657065"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
             Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
@@ -485,6 +485,25 @@ mod_bloco_3_server <- function(id, filtros){
       shinyjs::hide(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
       req(any(data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)] > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
       shinyjs::show(id = "mostrar_botao3", anim = TRUE, animType = "fade", time = 0.8)
+    },
+    ignoreNULL = FALSE
+    )
+
+    observeEvent(input$botao3, {
+      cria_modal_incompletude(
+        incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
+        variavel_incompletude1 = "CONSPRENAT",
+        descricao_incompletude1 = "em branco",
+        df = data_incompletude() |> dplyr::filter(ano >= 2014),
+        cobertura = data_incompletude()$cobertura
+      )
+    })
+
+    #### Porcentagem de mulheres com oito ou mais consultas de pré-natal  -----
+    observeEvent(filtros()$pesquisar, {
+      shinyjs::hide(id = "mostrar_botao5", anim = TRUE, animType = "fade", time = 0.8)
+      req(any(data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)] > 5, na.rm = TRUE) | any(data_incompletude()$cobertura < 90, na.rm = TRUE))
+      shinyjs::show(id = "mostrar_botao5", anim = TRUE, animType = "fade", time = 0.8)
     },
     ignoreNULL = FALSE
     )
@@ -691,7 +710,6 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        fonte_titulo = "15px",
         tamanho_caixa = "300px",
         pagina = "bloco_3",
         tipo_referencia = "recomendações OMS",

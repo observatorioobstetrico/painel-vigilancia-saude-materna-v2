@@ -29,7 +29,8 @@ dados1 <- dados %>%
   group_by(CODMUNRES, ANO, VARIAVEL) %>%
   summarise(nulos = sum(NULOS),
             ignorados = sum(IGNORADOS),
-            totais = sum(TOTAIS))
+            totais = sum(TOTAIS)) |>
+  ungroup()
 dados1 <- dados1 %>%
   rename(NULOS = nulos,
          IGNORADOS = ignorados,
@@ -43,7 +44,7 @@ dados2 <- dados1 %>%
   filter(ANO >= 2012 & ANO <= 2023)
 
 dados3 <- dados2 %>%
-  filter(VARIAVEL == "IDADEMAE" | VARIAVEL == "RACACOR" | VARIAVEL == "ESCMAE" |
+  filter(VARIAVEL == "IDADEMAE" | VARIAVEL == "RACACORMAE" | VARIAVEL == "ESCMAE" |
            VARIAVEL == "QTDPARTNOR" | VARIAVEL == "QTDPARTCES" |
            VARIAVEL == "CONSPRENAT" | VARIAVEL == "MESPRENAT" |
            VARIAVEL == "PARTO" |  VARIAVEL == "TPROBSON" |

@@ -13,7 +13,7 @@ mod_nivel_3_ui <- function(id){
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(tags$b(HTML("Visão detalhada dos indicadores")), htmlOutput(ns("titulo_localidade"), inline = TRUE), style = "padding-left: 0.4em; font-size: 30px"),
+      h2(class = "fonte-titulos-pagina", tags$b(HTML("Visão detalhada dos indicadores")), htmlOutput(ns("titulo_localidade"), inline = TRUE), class = 'fonte-titulos-pagina', style = "padding-left: 0.4em;"),
       hr(style = "margin-bottom: 0px;")
     ),
     bs4Dash::bs4TabCard(
@@ -29,7 +29,7 @@ mod_nivel_3_ui <- function(id){
             width = 12,
             HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
             HTML(
-              "<div style = 'text-align: center;'> <b style = 'font-size: 19px'>
+              "<div style = 'text-align: center;'> <b class = 'fonte-muito-grande'>
                 <i class='fa-solid fa-circle-info'></i> &nbsp; Para mais detalhes a respeito dos óbitos maternos no país, acesse o painel <a href = 'https://observatorioobstetrico.shinyapps.io/obitos-grav-puerp/' target = _blank>OOBr Óbitos de Gestantes e Puérperas</a>.
                 </b> </div>"
             ),
@@ -51,7 +51,7 @@ mod_nivel_3_ui <- function(id){
                   style = "height: 480px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 15%; display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'> Resumo da qualidade da informação &nbsp;</b>"),
+                    HTML("<b class = 'fonte-muito-grande'> Resumo da qualidade da informação &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao"),
@@ -96,7 +96,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
                     condition = "output.bloco_selecionado != 'bloco6' & (output.num_indicadores_incompletude == '0' | output.num_indicadores_incompletude == '1')",
-                    HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                    HTML("<b class = 'fonte-muito-grande'> Incompletude da informação </b>")
                   ),
                   conditionalPanel(
                     style = "height: 20%;",
@@ -105,12 +105,12 @@ mod_nivel_3_ui <- function(id){
                     conditionalPanel(
                       ns = ns,
                       condition = "output.bloco_selecionado != 'bloco6'",
-                      HTML("<b style='font-size:19px'> Incompletude da informação </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Incompletude da informação </b>")
                     ),
                     conditionalPanel(
                       ns = ns,
                       condition = "output.bloco_selecionado == 'bloco6'",
-                      HTML("<b style='font-size:19px'> Percentual de óbitos investigados </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Percentual de óbitos investigados </b>")
                     ),
                     hr(),
                     column(
@@ -145,7 +145,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 15%; display: flex; align-items: center;",
                     ns = ns,
                     condition = "output.nome_abreviado != 'rmm'",
-                    HTML("<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp; </b>")
+                    HTML("<b class = 'fonte-muito-grande'> Cobertura dos sistemas de informação &nbsp; </b>")
                   ),
                   conditionalPanel(
                     style = "height: 18%;",
@@ -153,7 +153,7 @@ mod_nivel_3_ui <- function(id){
                     condition = "output.nome_abreviado == 'rmm'",
                     div(
                       HTML(
-                        "<b style='font-size:19px'> Cobertura dos sistemas de informação &nbsp;</b>"
+                        "<b class = 'fonte-muito-grande'> Cobertura dos sistemas de informação &nbsp;</b>"
                       )
                     ),
                     br(),
@@ -187,7 +187,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 15%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de óbitos fetais preenchidos com garbage codes </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos fetais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -212,7 +212,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 15%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de óbitos perinatais preenchidos com garbage codes </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos perinatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -237,7 +237,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 15%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de óbitos neonatais preenchidos com garbage codes </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos neonatais preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -262,7 +262,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 600px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 15%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Porcentagem de óbitos maternos preenchidos com garbage codes </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Porcentagem de óbitos maternos preenchidos com garbage codes </b>")
                     ),
                     hr(),
                     div(
@@ -287,7 +287,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos maternos </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos garbage codes nos óbitos maternos </b>")
                     ),
                     hr(),
                     div(
@@ -312,7 +312,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos fetais </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos garbage codes nos óbitos fetais </b>")
                     ),
                     hr(),
                     div(
@@ -337,7 +337,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos perinatais </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos garbage codes nos óbitos perinatais </b>")
                     ),
                     hr(),
                     div(
@@ -362,7 +362,7 @@ mod_nivel_3_ui <- function(id){
                     style = "height: 700px; padding-top: 0; padding-bottom: 0; overflow: hidden",
                     div(
                       style = "height: 8%; display: flex; align-items: center;",
-                      HTML("<b style='font-size:18px'> Distribuição percentual dos garbage codes nos óbitos neonatais </b>")
+                      HTML("<b class = 'fonte-muito-grande'> Distribuição percentual dos garbage codes nos óbitos neonatais </b>")
                     ),
                     hr(),
                     div(
@@ -386,7 +386,7 @@ mod_nivel_3_ui <- function(id){
                 div(
                   style = "height: 15%; display: flex; align-items: center;",
                   HTML(
-                    "<b style='font-size:19px'> Distribuição do indicador por região do país em todo o período &nbsp;</b>"
+                    "<b class = 'fonte-muito-grande'> Distribuição do indicador por região do país em todo o período &nbsp;</b>"
                   )
                 ),
                 hr(),
@@ -401,7 +401,7 @@ mod_nivel_3_ui <- function(id){
                 div(
                   style = "height: 15%; display: flex; align-items: center;",
                   HTML(
-                    "<b style='font-size:19px'> Evolução do indicador ao longo do período &nbsp;</b>"
+                    "<b class = 'fonte-muito-grande'> Evolução do indicador ao longo do período &nbsp;</b>"
                   )
                 ),
                 hr(),
@@ -422,7 +422,7 @@ mod_nivel_3_ui <- function(id){
                     column(
                       width = 10,
                       HTML(
-                        "<b style='font-size:19px'> Distribuição do indicador por UF, macrorregião de saúde estadual e município em todo o período &nbsp;</b>"
+                        "<b class = 'fonte-muito-grande'> Distribuição do indicador por UF, macrorregião de saúde estadual e município em todo o período &nbsp;</b>"
                       )
                     ),
                     column(
@@ -517,7 +517,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS",
 
       ## Bloco4
-      "Porcentagem de partos com peso < 1500g segundo local de ocorrência do parto"
+      "Porcentagem de partos com peso < 1500g segundo região de ocorrência e disponibilidade de pelo menos quatro leitos de UTI neonatal"
     )
 
     infos_indicador <- reactive({
@@ -627,11 +627,11 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         filtros()$nivel == "municipal" ~ filtros()$municipio
       )
 
-      tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), style = "font-size: 30px")
+      tags$b(paste("-", infos_indicador()$indicador, glue::glue("({local1}, {ano})")), class = "fonte-titulos-pagina")
     })
 
     ## Criando alguns outputs de texto que precisam ser usados na UI ----------
-    output$indicador <- renderUI(HTML(glue::glue("<p style = 'font-size: 22px'> <b>Indicador: </b> {filtros()$indicador}")))
+    output$indicador <- renderUI(HTML(glue::glue("<p class = 'fonte-indicador-nivel3'> <b>Indicador: </b> {filtros()$indicador}")))
 
     output$nome_abreviado <- renderText(infos_indicador()$nome_abreviado)
 
@@ -801,7 +801,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           )
         ) |>
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-        highcharter::hc_title(text = HTML(glue::glue("<b style = 'font-size: 16px'> Cobertura do {base} </b>"))) |>
+        highcharter::hc_title(text = HTML(glue::glue("<b class = 'fonte-grande'> Cobertura do {base} </b>"))) |>
         highcharter::hc_xAxis(
           title = list(text = ""),
           categories = anos_disponiveis(),
@@ -1102,7 +1102,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
         highcharter::hc_title(
           text = HTML(
-            glue::glue("<b style = 'font-size: 16px'>{titulo_grafico_incompletude}</b>")
+            glue::glue("<b class = 'fonte-grande'>{titulo_grafico_incompletude}</b>")
           )
         ) |>
         highcharter::hc_colors(cols)
@@ -1271,17 +1271,33 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         variavel_incompletude1 = ifelse(
           infos_indicador()$numerador_incompletude1 == "parto_tprobson_incompletos",
           "PARTO e TPROBSON",
-          ifelse(infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude1, ' '))[4], ','))
+          ifelse(
+            infos_indicador()$numerador_incompletude1 == "incompletude_fetal_peso_ig",
+            "GESTACAO, SEMAGESTAC e PESO",
+            sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude1)
+          )
         ),
         descricao_incompletude1 = descricao_incompletude1,
         incompletude2 = data_grafico_incompletude2()$proporcao,
-        variavel_incompletude2 = ifelse(infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude2, ' '))[4], ',')),
+        variavel_incompletude2 = ifelse(
+          infos_indicador()$numerador_incompletude2 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude2)
+        ),
         descricao_incompletude2 = descricao_incompletude2,
         incompletude3 = data_grafico_incompletude3()$proporcao,
-        variavel_incompletude3 = ifelse(infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude3, ' '))[4], ',')),
+        variavel_incompletude3 = ifelse(
+          infos_indicador()$numerador_incompletude3 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude3)
+        ),
         descricao_incompletude3 = descricao_incompletude3,
         incompletude4 = data_grafico_incompletude3()$proporcao,
-        variavel_incompletude4 = ifelse(infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig", "GESTACAO, SEMAGESTAC e PESO", stringr::str_remove(unlist(strsplit(infos_indicador()$nome_incompletude4, ' '))[4], ',')),
+        variavel_incompletude4 = ifelse(
+          infos_indicador()$numerador_incompletude4 == "incompletude_fetal_peso_ig",
+          "GESTACAO, SEMAGESTAC e PESO",
+          sub("^([^ ]+ ){3}([^,]+).*", "\\2", infos_indicador()$nome_incompletude4)
+        ),
         descricao_incompletude4 = descricao_incompletude4,
         df = data_grafico_incompletude1(),
         cobertura = data_cobertura()$cobertura,
@@ -2429,6 +2445,21 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               name = "Referência para a localidade (meta de redução global)",
               dashStyle = "ShortDot",
               opacity = 0.8
+            )
+        } else if (infos_indicador()$nome_abreviado == "porc_nasc_malformacoes") {
+          grafico_base |> highcharter::hc_add_series(
+            data = data_referencia_serie(),
+            name = "Referência (mundo)",
+            highcharter::hcaes(x = ano, low = 3, high = 6),
+            type = "arearange",
+            dashStyle = "ShortDot",
+            color = "#721f81",
+            fillOpacity = 0.2,
+            enableMouseTracking = TRUE
+            ) |>
+            highcharter::hc_yAxis(
+              minPadding = 0.1,
+              maxPadding = 0.1
             )
         } else {
           grafico_base |>
