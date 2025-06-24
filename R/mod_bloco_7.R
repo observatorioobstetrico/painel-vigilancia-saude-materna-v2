@@ -3752,6 +3752,7 @@ mod_bloco_7_server <- function(id, filtros){
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
         pagina = "bloco_5",
+        cor = "lightgrey",
         tipo_referencia = "média nacional",
         nivel_de_analise = nivel_selecionado()
         # nivel_de_analise = ifelse(
@@ -3780,6 +3781,7 @@ mod_bloco_7_server <- function(id, filtros){
         tamanho_caixa = "320px",
         fonte_titulo = "15px",
         pagina = "bloco_5",
+        cor = "lightgrey",
         tipo_referencia = "média nacional",
         nivel_de_analise = nivel_selecionado()
         # nivel_de_analise = ifelse(
