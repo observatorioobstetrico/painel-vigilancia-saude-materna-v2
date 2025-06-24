@@ -3891,12 +3891,12 @@ mod_nivel_1_server <- function(id, filtros) {
           faltante_dist_moment_obito_fetal =  round(100-antes_dist_moment_obito_fetal-durante_dist_moment_obito_fetal, 1) ,
 
           antes_dist_moment_obito_perinat =  round(
-            sum(c(perinatal_todos_antes_menos_1000, perinatal_todos_antes_1000_1499, perinatal_todos_antes_1500_2499, perinatal_todos_antes_mais_2500, perinatal_todos_antes)[c(rep(F, 4), T)], na.rm = T)/
+            sum(c(fetal_antes_peso_menos_1000, fetal_antes_peso_1000_1499, fetal_antes_peso_1500_2499, fetal_antes_peso_mais_2500, fetal_antes)[c(rep(F, 4), T)], na.rm = T)/
               sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[c(rep(F, 4), T)], na.rm = T)
             * 100, 1) ,
 
           durante_dist_moment_obito_perinat =  round(
-            sum(c(perinatal_todos_durante_menos_1000, perinatal_todos_durante_1000_1499, perinatal_todos_durante_1500_2499, perinatal_todos_durante_mais_2500, perinatal_todos_durante)[c(rep(F, 4), T)], na.rm = T)/
+            sum(c(fetal_durante_peso_menos_1000, fetal_durante_peso_1000_1499, fetal_durante_peso_1500_2499, fetal_durante_peso_mais_2500, fetal_durante)[c(rep(F, 4), T)], na.rm = T)/
               sum(c(perinatal_todos_peso_menos_1000, perinatal_todos_peso_1000_1499, perinatal_todos_peso_1500_2499, perinatal_todos_peso_mais_2500, perinatal_todos_total)[c(rep(F, 4), T)], na.rm = T)
             * 100, 1) ,
 
