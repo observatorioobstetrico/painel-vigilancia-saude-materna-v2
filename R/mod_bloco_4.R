@@ -661,7 +661,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
+              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo'),
                 icon = icon('question'),
@@ -693,38 +693,44 @@ mod_bloco_4_ui <- function(id){
                 shinycssloaders::withSpinner(uiOutput(ns("caixa_b4_i2_profissional")), proxy.height = "300px")
               )
             )
-
           ),
           column(
             width = 8,
-
-              fluidRow(
+            fluidRow(
+              column(
+                width = 6,
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
-                    style = "height: 7%; display: flex; align-items: center;",
-                    HTML(glue::glue("<b class = 'fonte-muito-grande'> Distribuição percentual de nascimentos segundo local &nbsp;</b>")),
-                    shinyjs::hidden(
-                      span(
-                        id = ns("mostrar_botao_deslocamento_prop1"),
-                        shinyWidgets::actionBttn(
-                          inputId = ns("botao_prop1"),
-                          icon = icon("triangle-exclamation", style = "color: red"),
-                          color = "warning",
-                          style = "material-circle",
-                          size = "xs"
-                        )
-                      )
-                    )
+                    style = "display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'>Distribuição percentual de nascimentos segundo local</b>"),
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "640px"))
                 )
               ),
+              column(
+                width = 6,
+                bs4Dash::bs4Card(
+                  width = 12,
+                  status = "primary",
+                  collapsible = FALSE,
+                  headerBorder = FALSE,
+                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  div(
+                    style = "display: flex; align-items: center;",
+                    HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais</b>")
+                  ),
+                  hr(),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "640px"))
+                )
+              )
+            ),
+
             #AQUI
             fluidRow(
               bs4Dash::bs4Card(
@@ -732,10 +738,10 @@ mod_bloco_4_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
-                  style = "height: 7%; display: flex; align-items: center;",
-                  HTML(glue::glue("<b class = 'fonte-muito-grande'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
+                  style = "display: flex; align-items: center;",
+                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
                   shinyjs::hidden(
                     span(
                       id = ns("mostrar_botao_deslocamento_prop1"),
@@ -783,7 +789,7 @@ mod_bloco_4_ui <- function(id){
                 #     )
                 #   )
                 # ),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "550px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
               )
             ) ## [XXX]
 
@@ -1343,12 +1349,12 @@ mod_bloco_4_server <- function(id, filtros){
 
     )
 
-    # bloco4_profissional_calcs4 <- data.frame(
-    #   tipo = c("local", "referencia"),
-    #
-    #   dist_partos_vaginais = rep("sum(total_de_nascimentos_partos_vaginais, na.rm = TRUE)", 2),
-    #   dist_outros = rep("sum(total_de_nascimentos, na.rm = TRUE) - sum(total_de_nascimentos_partos_vaginais, na.rm = TRUE)", 2)
-    # )
+    bloco4_profissional_calcs4 <- data.frame(
+      tipo = c("local", "referencia"),
+
+    dist_partos_vaginais = rep("sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)", 2),
+    dist_outros = rep("sum(total_de_nascidos_vivos, na.rm = TRUE) - sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)", 2)
+    )
 
     # selecao_local1 <- reactive({
     #   selected_locations <- c('hospital', 'outros_est_saude', 'domicilio',
@@ -3446,47 +3452,47 @@ mod_bloco_4_server <- function(id, filtros){
 
     # novo gráfico
 
-    # data4_dist_partos_vaginais <- reactive({
-    #   bloco4_profissional |>
-    #     dplyr::filter(
-    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #     ) |>
-    #     dplyr::filter(
-    #       if (filtros()$nivel == "nacional")
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #       else if (filtros()$nivel == "regional")
-    #         regiao == filtros()$regiao
-    #       else if (filtros()$nivel == "estadual")
-    #         uf == filtros()$estado
-    #       else if (filtros()$nivel == "macro")
-    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-    #       else if(filtros()$nivel == "micro")
-    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
-    #       else if(filtros()$nivel == "municipal")
-    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
-    #     ) |>
-    #     dplyr::group_by(ano) |>
-    #     # dplyr::select(ano, dplyr::contains("dist")) |>
-    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), adicionar_localidade = TRUE) |>
-    #     tidyr::pivot_longer(
-    #       cols = starts_with("dist"),
-    #       names_to = "indicador",
-    #       values_to = "prop_indicador"
-    #     ) |>
-    #     dplyr::mutate(
-    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-    #       indicador = factor(
-    #         dplyr::case_when(
-    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-    #           indicador == "dist_outros" ~ "Outros",
-    #         ),
-    #         levels = c(
-    #           "Partos Vaginais",
-    #           "Outros",
-    #         )
-    #       )
-    #     )
-    # })
+    data4_dist_partos_vaginais <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel == "regional")
+            regiao == filtros()$regiao
+          else if (filtros()$nivel == "estadual")
+            uf == filtros()$estado
+          else if (filtros()$nivel == "macro")
+            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+          else if(filtros()$nivel == "micro")
+            r_saude == filtros()$micro & uf == filtros()$estado_micro
+          else if(filtros()$nivel == "municipal")
+            municipio == filtros()$municipio & uf == filtros()$estado_municipio
+        ) |>
+        dplyr::group_by(ano) |>
+        #dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
+        dplyr::mutate(
+          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+              indicador == "dist_outros" ~ "Outros"
+            ),
+            levels = c(
+              "Partos Vaginais",
+              "Outros"
+            )
+          )
+        )
+    })
 
     ##marx
 
@@ -3595,11 +3601,13 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_total_profissional_referencia <- reactive({
+      names(bloco4_profissional)[startsWith(names(bloco4_profissional), "dist_")]
       bloco4_profissional |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
         dplyr::group_by(ano) |>
+
         # dplyr::select(ano, dplyr::contains("dist")) |>
         cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
         tidyr::pivot_longer(
@@ -3923,49 +3931,49 @@ mod_bloco_4_server <- function(id, filtros){
         )
     })
 
-    # data4_dist_partos_vaginais_comp <- reactive({
-    #   bloco4_profissional |>
-    #     dplyr::filter(
-    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #     ) |>
-    #     dplyr::filter(
-    #       if (filtros()$nivel2 == "nacional")
-    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #       else if (filtros()$nivel2 == "regional")
-    #         regiao == filtros()$regiao2
-    #       else if (filtros()$nivel2 == "estadual")
-    #         uf == filtros()$estado2
-    #       else if (filtros()$nivel2 == "macro")
-    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-    #       else if(filtros()$nivel2 == "micro")
-    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-    #       else if (filtros()$nivel2 == "municipal")
-    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-    #       else if (filtros()$nivel2 == "municipios_semelhantes")
-    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-    #     ) |>
-    #     dplyr::group_by(ano) |>
-    #     # dplyr::select(ano, dplyr::contains("dist")) |>
-    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
-    #     tidyr::pivot_longer(
-    #       cols = starts_with("dist"),
-    #       names_to = "indicador",
-    #       values_to = "prop_indicador"
-    #     ) |>
-    #     dplyr::mutate(
-    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-    #       indicador = factor(
-    #         dplyr::case_when(
-    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-    #           indicador == "dist_outros" ~ "Outros",
-    #         ),
-    #         levels = c(
-    #           "Partos Vaginais",
-    #           "Outros",
-    #         )
-    #       )
-    #     )
-    # })
+    data4_dist_partos_vaginais_comp <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::filter(
+          if (filtros()$nivel2 == "nacional")
+            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+          else if (filtros()$nivel2 == "regional")
+            regiao == filtros()$regiao2
+          else if (filtros()$nivel2 == "estadual")
+            uf == filtros()$estado2
+          else if (filtros()$nivel2 == "macro")
+            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+          else if(filtros()$nivel2 == "micro")
+            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+          else if (filtros()$nivel2 == "municipal")
+            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+          else if (filtros()$nivel2 == "municipios_semelhantes")
+            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), comp = TRUE, adicionar_localidade = TRUE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "prop_indicador"
+        ) |>
+        dplyr::mutate(
+          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+              indicador == "dist_outros" ~ "Outros"
+              ),
+            levels = c(
+              "Partos Vaginais",
+              "Outros"
+            )
+          )
+        )
+    })
 
     ### Para a referência -----------------------------------------------------
     data4_referencia <- reactive({
@@ -4211,42 +4219,42 @@ mod_bloco_4_server <- function(id, filtros){
 
     })
 
-    # data4_dist_partos_vaginais_referencia <- reactive({
-    #   bloco4_profissional |>
-    #     dplyr::filter(
-    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-    #     ) |>
-    #     dplyr::group_by(ano) |>
-    #     # dplyr::select(ano, dplyr::contains("dist")) |>
-    #     cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), referencia = TRUE,
-    #                      adicionar_localidade = FALSE) |>
-    #     tidyr::pivot_longer(
-    #       cols = starts_with("dist"),
-    #       names_to = "indicador",
-    #       values_to = "br_prop_indicador"
-    #     ) |>
-    #     dplyr::mutate(
-    #       indicador = factor(
-    #         dplyr::case_when(
-    #           indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-    #           indicador == "dist_outros" ~ "Outros",
-    #         ),
-    #         levels = c(
-    #           "Partos Vaginais",
-    #           "Outros",
-    #         )
-    #       )
-    #     )
-    # })
-    #
-    # data4_dist_partos_vaginais_completo <- reactive({
-    #   dplyr::full_join(data4_partos_vaginais(), data4_dist_partos_vaginais_referencia())
-    # })
-    #
-    # data4_dist_profissional_comp_completo <- reactive({
-    #   dplyr::full_join(data4_dist_partos_vaginais_comp(), data4_dist_partos_vaginais_referencia())
-    #
-    # })
+    data4_dist_partos_vaginais_referencia <- reactive({
+      bloco4_profissional |>
+        dplyr::filter(
+          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+        ) |>
+        dplyr::group_by(ano) |>
+        # dplyr::select(ano, dplyr::contains("dist")) |>
+        cria_indicadores(df_calcs = bloco4_profissional_calcs4, filtros = filtros(), referencia = TRUE,
+                         adicionar_localidade = FALSE) |>
+        tidyr::pivot_longer(
+          cols = starts_with("dist"),
+          names_to = "indicador",
+          values_to = "br_prop_indicador"
+        ) |>
+        dplyr::mutate(
+          indicador = factor(
+            dplyr::case_when(
+              indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
+              indicador == "dist_outros" ~ "Outros"
+            ),
+            levels = c(
+              "Partos Vaginais",
+              "Outros"
+            )
+          )
+        )
+    })
+
+    data4_dist_partos_vaginais_completo <- reactive({
+      dplyr::full_join(data4_partos_vaginais(), data4_dist_partos_vaginais_referencia())
+    })
+
+    data4_dist_partos_vaginais_comp_completo <- reactive({
+      dplyr::full_join(data4_dist_partos_vaginais_comp(), data4_dist_partos_vaginais_referencia())
+
+    })
 
 
 
@@ -5486,74 +5494,74 @@ mod_bloco_4_server <- function(id, filtros){
 
     # gráfico de nascimentos de partos vaginais
 
-    # output$grafico_dist_partos_vaginais <- highcharter::renderHighchart({
-    #   if (filtros()$comparar == "Não") {
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data4_dist_partos_vaginais_completo(),
-    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-    #         type = "column",
-    #         showInLegend = TRUE,
-    #         tooltip = list(
-    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-    #         )
-    #       ) |>
-    #       highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
-    #   } else {
-    #     grafico_base <- highcharter::highchart() |>
-    #       highcharter::hc_add_series(
-    #         data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
-    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-    #         type = "column",
-    #         showInLegend = TRUE,
-    #         color = "#FEAF77FF",
-    #         tooltip = list(
-    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-    #         ),
-    #         stack = 0
-    #       ) |>
-    #       highcharter::hc_add_series(
-    #         data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
-    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-    #         type = "column",
-    #         showInLegend = FALSE,
-    #         color = "#FEAF77FF",
-    #         tooltip = list(
-    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
-    #         ),
-    #         stack = 1,
-    #         linkedTo = ":previous"
-    #       ) |>
-    #       highcharter::hc_add_series(
-    #         data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Outros"),
-    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-    #         type = "column",
-    #         showInLegend = TRUE,
-    #         color = "#F1605DFF",
-    #         tooltip = list(
-    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
-    #         ),
-    #         stack = 0
-    #       ) |>
-    #       highcharter::hc_add_series(
-    #         data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Outros"),
-    #         highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
-    #         type = "column",
-    #         showInLegend = FALSE,
-    #         color = "#F1605DFF",
-    #         tooltip = list(
-    #           pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
-    #         ),
-    #         stack = 1,
-    #         linkedTo = ":previous"
-    #       )
-    #   }
-    #
-    #   grafico_base |>
-    #     highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
-    #     highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-    #     highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
-    # })
+    output$grafico_dist_partos_vaginais <- highcharter::renderHighchart({
+      if (filtros()$comparar == "Não") {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_dist_partos_vaginais_completo(),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            )
+          ) |>
+          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
+      } else {
+        grafico_base <- highcharter::highchart() |>
+          highcharter::hc_add_series(
+            data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#FEAF77FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Partos Vaginais"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#FEAF77FF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Outros"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = TRUE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+            ),
+            stack = 0
+          ) |>
+          highcharter::hc_add_series(
+            data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Outros"),
+            highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
+            type = "column",
+            showInLegend = FALSE,
+            color = "#F1605DFF",
+            tooltip = list(
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+            ),
+            stack = 1,
+            linkedTo = ":previous"
+          )
+      }
+
+      grafico_base |>
+        highcharter::hc_plotOptions(column = list(stacking = "percent")) |>
+        highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
+        highcharter::hc_yAxis(title = list(text = "% de nascidos vivos"), min = 0, max = 100)
+    })
 
     ### Tabela com informações adicionais -------------------------------------
     output$municipio_informacoes_adicionais <- renderUI({
