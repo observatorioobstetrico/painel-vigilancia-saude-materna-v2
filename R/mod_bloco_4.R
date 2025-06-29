@@ -704,13 +704,13 @@ mod_bloco_4_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'>Distribuição percentual de nascimentos segundo local</b>"),
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "640px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
                 )
               ),
               column(
@@ -720,13 +720,13 @@ mod_bloco_4_ui <- function(id){
                   status = "primary",
                   collapsible = FALSE,
                   headerBorder = FALSE,
-                  style = "height: 740px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "display: flex; align-items: center;",
                     HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais</b>")
                   ),
                   hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "640px"))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "550px"))
                 )
               )
             ),
@@ -738,7 +738,7 @@ mod_bloco_4_ui <- function(id){
                 status = "primary",
                 collapsible = FALSE,
                 headerBorder = FALSE,
-                style = "height: 800px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                 div(
                   style = "display: flex; align-items: center;",
                   HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
@@ -789,7 +789,7 @@ mod_bloco_4_ui <- function(id){
                 #     )
                 #   )
                 # ),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "640px"))
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "550px"))
               )
             ) ## [XXX]
 
@@ -4248,7 +4248,7 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_dist_partos_vaginais_completo <- reactive({
-      dplyr::full_join(data4_partos_vaginais(), data4_dist_partos_vaginais_referencia())
+      dplyr::full_join(data4_dist_partos_vaginais(), data4_dist_partos_vaginais_referencia())
     })
 
     data4_dist_partos_vaginais_comp_completo <- reactive({
