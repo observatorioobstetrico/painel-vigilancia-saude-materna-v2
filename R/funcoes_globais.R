@@ -6,7 +6,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
       dplyr::filter(tipo == "local") |>
       dplyr::select(!tipo)
 
-    if (bloco == "bloco7") {
+    if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
       df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
         dplyr::filter(tipo == "local") |>
         dplyr::select(!tipo)
@@ -16,7 +16,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
       dplyr::filter(tipo == "referencia") |>
       dplyr::select(!tipo)
 
-    if (bloco == "bloco7") {
+    if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
       df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
         dplyr::filter(tipo == "referencia") |>
         dplyr::select(!tipo)
@@ -46,7 +46,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
     }
   }
 
-  if (bloco == "bloco7") {
+  if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
     colunas_summarise_dist_bloco7 <- names(df_calcs_dist_bloco7)
     if (nrow(df_localidade_aux) == 1) {
       for (coluna in colunas_summarise_dist_bloco7) {
@@ -1045,31 +1045,31 @@ seleciona <- function(aba, indicador, input){
 
     if(indicador == "momento de obito por peso"){
 
-        if(length(input)<4){
+      if(length(input)<4){
 
-          return(
+        return(
 
-            opcoes <- c("dist_moment_obito_perinat_menos1000", "dist_moment_obito_perinat_1000_1499", "dist_moment_obito_perinat_1500_2499", "dist_moment_obito_perinat_mais2500", "falso")
-          )
+          opcoes <- c("dist_moment_obito_perinat_menos1000", "dist_moment_obito_perinat_1000_1499", "dist_moment_obito_perinat_1500_2499", "dist_moment_obito_perinat_mais2500", "falso")
+        )
 
-        } else{
-          return( opcoes <- c(rep("falso", 4), "dist_moment_obito_perinat_menos1000"))
-        }
+      } else{
+        return( opcoes <- c(rep("falso", 4), "dist_moment_obito_perinat_menos1000"))
+      }
 
 
 
     } else if(indicador == "peso por momento do obito"){
 
-          if(length(input) < 4){
+      if(length(input) < 4){
 
-            return(
+        return(
 
-              opcoes <- c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto", "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6", "falso")
-            )
+          opcoes <- c("dist_peso_perinat_antes_parto", "dist_peso_perinat_durante_parto", "dist_peso_perinat_dia_0", "dist_peso_perinat_dia_1_6", "falso")
+        )
 
-          } else{
-            return(opcoes <- c(rep("falso", 4), "dist_peso_perinat_antes_parto"))
-          }
+      } else{
+        return(opcoes <- c(rep("falso", 4), "dist_peso_perinat_antes_parto"))
+      }
 
     }
 

@@ -123,48 +123,38 @@ bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_mate
 
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv") #|>
-  #dplyr::select(!c(uf, municipio, regiao))
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv")
 
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv")
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv") |>
+  dplyr::left_join(
+    bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos"))
+  )
 
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv")
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv") |>
+  dplyr::left_join(
+    bloco7_neonatal_aux |> dplyr::select(
+      codmunres, ano, dplyr::starts_with("nascidos"),
+      dplyr::starts_with("obitos_0"),
+      dplyr::starts_with("obitos_1_6"),
+      dplyr::starts_with("obitos_6")
+    )
+  ) |>
+  dplyr::left_join(
+    bloco7_fetal_aux |> dplyr::select(codmunres, ano, obitos_fetais_mais_22sem, dplyr::starts_with("fetal_peso"))
+  )
 
 bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv")  |>
   dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
 
-# juncao_bloco7_aux1 <- dplyr::left_join(bloco7_neonatal_aux, bloco7_fetal_aux, by = c("ano", "codmunres"))
-# juncao_bloco7_aux2 <- dplyr::left_join(juncao_bloco7_aux1, bloco7_morbidade_neonatal_aux, by = c("ano", "codmunres"))
-# bloco7_aux <- dplyr::left_join(juncao_bloco7_aux2, bloco7_perinatal_aux, by = c("ano", "codmunres"))
-
+## Lendo os dados dos indicadores de causas evitáveis e grupos de causas
+bloco7_distribuicao_cids_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv")
+bloco7_distribuicao_cids_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
+bloco7_distribuicao_cids_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv")
 bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") |>
   dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
 
-
-## Lendo os dados dos indicadores de causas evitáveis e grupos de causas para os óbitos fetais
-bloco7_distribuicao_cids_fetais_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv")
-bloco7_distribuicao_cids_neonatais_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
-bloco7_distribuicao_cids_perinatais_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv")
-
-
-## Lendo os dados dos indicadores de causas evitáveis e grupos de causas para os outros tipos de óbito
-### OBS.: essa parte vai ser substituída conforme vocês forem salvando os arquivos específicos pra cada tipo de óbito
-#bloco7_distribuicao_cids_outros_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_2012-2024.csv") |>
-#  janitor::clean_names() |>
-#  dplyr::select(!dplyr::contains("fetal")) |>
-#  dplyr::select(!dplyr::contains("fetais")) |>
-#  dplyr::select(!dplyr::contains("neonat"))
-
-## Juntando todos os dados dos indicadores de causas evitáveis e grupos de causas
-bloco7_distribuicao_cids_aux <- dplyr::full_join(
-  bloco7_distribuicao_cids_fetais_aux,
-  bloco7_distribuicao_cids_neonatais_aux, by = c("ano", "codmunres")
-) |>
-  dplyr::full_join(bloco7_distribuicao_cids_perinatais_aux, by = c("ano", "codmunres"))
-
-
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
-   janitor::clean_names()
+  janitor::clean_names()
 
 # bloco8_garbage_materno_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>
 #   janitor::clean_names()
@@ -203,12 +193,12 @@ bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
 # bloco8_evitaveis_fetal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz")) |>
 #   janitor::clean_names()
 #
- # bloco8_evitaveis_neonatal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_neonatal_2012_2024.csv.gz")) |>
- #   janitor::clean_names() |>
- #   dplyr::mutate(
- #     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
- #     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
- #   )
+# bloco8_evitaveis_neonatal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_neonatal_2012_2024.csv.gz")) |>
+#   janitor::clean_names() |>
+#   dplyr::mutate(
+#     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
+#     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
+#   )
 
 # bloco8_fetal_grupos_aux <- read.csv(gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz")) |>
 #   janitor::clean_names()
@@ -233,7 +223,7 @@ base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012
         dplyr::contains("idanomal"), dplyr::contains("qtdpartces"),
         dplyr::contains("tprobson")
       )
-    )
+  )
 
 base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
   janitor::clean_names() |>
@@ -354,30 +344,13 @@ bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, aux_municipios, by = 
 bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "codmunres")
 bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
 
-bloco7_morbidade_neonatal <- bloco7_morbidade_neonatal |>
-  dplyr::select(-c("nascidos", "nascidos_menos1000", "nascidos_1000_1499", "nascidos_1500_2499", "nascidos_mais2500"))
-
-########  A JUNÇÃO ABAIXO APRESENTA ERRO QUE SUPERESTIMA OS CASOS DE 2024: AS LINHAS DE 2024 ESTÃO DUPLICADAS
-bloco7 <- bloco7_neonatal |>
-  dplyr::left_join(bloco7_perinatal) |>
-  dplyr::left_join(bloco7_fetal) |>
-  dplyr::left_join(bloco7_morbidade_neonatal)
-
-
-bloco7 <- dplyr::distinct(bloco7)
-
- # bloco7 <- bloco7 |>
- #   dplyr::select(
- #     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
- #     (which(names(bloco7) == "ano") + 1):(which(names(bloco7) == "municipio") - 1)
- #   )
-
-bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres") #|>
- # dplyr::rename(morbidade_neonatal_grupos_0_dias_afeccoes_respiratorias = morbidade_neonatal_grupos_afeccoes_0_dias_respiratorias)
+bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres")
 
 bloco7_dist_morbidade[is.na(bloco7_dist_morbidade)] <- 0
 
-bloco7_distribuicao_cids <- dplyr::left_join(bloco7_distribuicao_cids_aux, aux_municipios, by = "codmunres")
+bloco7_distribuicao_cids_fetal <- dplyr::left_join(bloco7_distribuicao_cids_fetal_aux, aux_municipios, by = "codmunres")
+bloco7_distribuicao_cids_perinatal <- dplyr::left_join(bloco7_distribuicao_cids_perinatal_aux, aux_municipios, by = "codmunres")
+bloco7_distribuicao_cids_neonatal <- dplyr::left_join(bloco7_distribuicao_cids_neonatal_aux, aux_municipios, by = "codmunres")
 
 bloco8_graficos <- dplyr::left_join(bloco8_garbage_aux, aux_municipios, by = "codmunres")
 bloco8_graficos <- bloco8_graficos |>
@@ -386,12 +359,12 @@ bloco8_graficos <- bloco8_graficos |>
     (which(names(bloco8_graficos) == "ano") + 1):(which(names(bloco8_graficos) == "municipio") - 1)
   )
 
- bloco8_grafico_evitaveis_neonatal <- dplyr::left_join(bloco8_grafico_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
- bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
-   dplyr::select(
-     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-     (which(names(bloco8_grafico_evitaveis_neonatal) == "ano") + 1):(which(names(bloco8_grafico_evitaveis_neonatal) == "municipio") - 1)
-   )
+bloco8_grafico_evitaveis_neonatal <- dplyr::left_join(bloco8_grafico_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
+bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_grafico_evitaveis_neonatal) == "ano") + 1):(which(names(bloco8_grafico_evitaveis_neonatal) == "municipio") - 1)
+  )
 #
 # bloco8_garbage_materno_aux <- dplyr::left_join(bloco8_garbage_materno_aux, aux_municipios, by = "codmunres")
 # bloco8_garbage_materno <- bloco8_garbage_materno_aux |>
@@ -437,12 +410,12 @@ bloco8_graficos <- bloco8_graficos |>
 #   )
 #
 #
- # bloco8_evitaveis_neonatal_aux <- dplyr::left_join(bloco8_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
- # bloco8_evitaveis_neonatal <- bloco8_evitaveis_neonatal_aux |>
- #   dplyr::select(
- #     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
- #     (which(names(bloco8_evitaveis_neonatal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_neonatal_aux) == "municipio") - 1)
- #   )
+# bloco8_evitaveis_neonatal_aux <- dplyr::left_join(bloco8_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
+# bloco8_evitaveis_neonatal <- bloco8_evitaveis_neonatal_aux |>
+#   dplyr::select(
+#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+#     (which(names(bloco8_evitaveis_neonatal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_neonatal_aux) == "municipio") - 1)
+#   )
 
 # bloco8_fetal_grupos_aux <- dplyr::left_join(bloco8_fetal_grupos_aux, aux_municipios, by = "codmunres")
 # bloco8_fetal_grupos <- bloco8_fetal_grupos_aux |>
@@ -588,14 +561,15 @@ usethis::use_data(bloco4_profissional, overwrite = TRUE)
 usethis::use_data(bloco5, overwrite = TRUE)
 usethis::use_data(malformacao, overwrite = TRUE)
 usethis::use_data(bloco6, overwrite = TRUE)
-usethis::use_data(bloco7, overwrite = TRUE)
 usethis::use_data(bloco7_fetal, overwrite = TRUE)
 usethis::use_data(bloco7_neonatal, overwrite = TRUE)
 usethis::use_data(bloco7_perinatal, overwrite = TRUE)
 usethis::use_data(bloco7_morbidade_neonatal, overwrite = TRUE)
 usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
+usethis::use_data(bloco7_distribuicao_cids_fetal, overwrite = TRUE)
+usethis::use_data(bloco7_distribuicao_cids_perinatal, overwrite = TRUE)
+usethis::use_data(bloco7_distribuicao_cids_neonatal, overwrite = TRUE)
 usethis::use_data(bloco8_graficos, overwrite = TRUE)
-usethis::use_data(bloco7_distribuicao_cids, overwrite = TRUE)
 usethis::use_data(bloco8_grafico_evitaveis_neonatal, overwrite = TRUE)
 usethis::use_data(df_cid10, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
@@ -609,6 +583,7 @@ usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
+
 
 
 
