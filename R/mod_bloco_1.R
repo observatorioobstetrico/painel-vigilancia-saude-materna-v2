@@ -930,6 +930,7 @@ mod_bloco_1_server <- function(id, filtros){
         tamanho_caixa = "303px",
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
+        cor = "lightgrey",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
@@ -988,6 +989,7 @@ mod_bloco_1_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "303px",
         pagina = "bloco_1",
+        cor = "lightgrey",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
           filtros()$nivel,
