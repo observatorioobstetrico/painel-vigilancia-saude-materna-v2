@@ -31,7 +31,7 @@ mod_sobre_ui <- function(id){
           <span style='display: block; margin-bottom: 12px;'> </span>
 
           Neste painel, você encontrará um conjunto de indicadores que expressam a vulnerabilidade das
-          mulheres ao óbito materno, seja por suas condições socioeconômicas, por sua raça/cor e etnia ou pela atenção à saúde
+          mulheres ao óbito materno, seja por suas condições socioeconômicas, por sua raça/cor ou pela atenção à saúde
           recebida ao longo da sua vida reprodutiva. Encontrará também indicadores relacionados aos
           desfechos perinatais, determinados em grande parte pela atenção de saúde durante a
           gestação e o parto.
