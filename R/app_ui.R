@@ -608,6 +608,7 @@ app_ui <- function(request) {
                 column(
                   width = 6,
                   conditionalPanel(
+                    style = "padding-left: 10px; padding-right: 15px;",
                     condition = "input.bloco != 'bloco4' & input.bloco != 'bloco6' & input.bloco != 'bloco7'",
                     selectizeInput(
                       inputId = "indicador",
@@ -662,6 +663,7 @@ app_ui <- function(request) {
                   offset = 6,
                   width = 6,
                   conditionalPanel(
+                    style = "padding-left: 10px;",
                     condition = {
                       indicadores_caixinha_adicional <- c(
                         "'Porcentagem de nascidos vivos com baixo peso ao nascer'",
@@ -686,6 +688,7 @@ app_ui <- function(request) {
                   offset = 6,
                   width = 6,
                   conditionalPanel(
+                    style = "padding-left: 10px;",
                     condition = {
                       indicadores_uma_caixinha_adicional_bloco7 <- c(
                         "'Número de óbitos neonatais'",
@@ -729,6 +732,7 @@ app_ui <- function(request) {
                   offset = 6,
                   width = 3,
                   conditionalPanel(
+                    style = "padding-left: 10px;",
                     condition = {
                       indicadores_duas_caixinhas_adicionais <- c(
                         "'Número de óbitos fetais'",
