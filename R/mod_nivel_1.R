@@ -455,20 +455,28 @@ mod_nivel_1_ui <- function(id) {
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Deslocamento para parto: nessa aba, apresentamos
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
-                assistência ao parto, a distância percorrida para chegar nos serviços de saúde de alta e
+                assistência ao parto e a distância percorrida para chegar nos serviços de saúde de alta e
                 baixa complexidade. Para o nível de análise municipal, apresentamos duas informações adicionais:
                 município com primeira, segunda e terceira maior proporção de partos fora do município de residência da mulher
                 e hospital com maior número de partos ocorridos fora do município de residência da mulher. Também é apresentada
                 a porcentagem de nascidos vivos com peso ao nascer < 1500g segundo local de ocorrência do parto e disponibilidade
-                des leitos de UTI neonatal. Essas informações podem auxiliar os gestores municipais e estaduais a verificarem se
+                de leitos de UTI neonatal. Essas informações podem auxiliar os gestores municipais e estaduais a verificar se
                 a regionalização da atenção ao parto está ocorrendo conforme o planejado, ou seja, se os partos estão ocorrendo
                 em serviços e municípios previstos na regionalização e atendendo à orientação de que RN com peso ao nascer < 1500 g
                 devem nascer em local com disponibilidade de leitos de UTI neonatal.
                 <span style='display: block; margin-bottom: 14px;'> </span>
-                Profissional e local do parto: nessa aba apresentamos a porcentagem de nascimentos segundo local de ocorrência
-                conforme variáveis do SINASC: (hospital ; outros estabelecimentos de saúde; domicílio; outros: presídios,
-                via pública, veículo, outro; aldeia indígena;  ignorado e a porcentagem de partos vaginais hospitalares
-                segundo tipo de profissional.
+                Profissional e local do parto: Esses indicadores mostram a porcentagem de nascidos vivos segundo local de ocorrência
+                e a porcentagem de partos vaginais hospitalares segundo profissional que prestou assistência.
+                A assistência ao parto por profissionais capacitados é uma das principais estratégias para a redução da mortalidade materna e perinatal.
+                Partos hospitalares ocorrem em um ambiente onde existem profissionais capacitados e, em teoria, são assistidos por esses profissionais.
+                Partos não hospitalares podem ser planejados e serem assistidos por profissionais capacitados, mas também podem ocorrer sem assistência.
+                Uma porcentagem elevada de partos não hospitalares deverá ser investigada localmente para avaliar se foram partos sem assistência.
+                Existem evidências científicas de que a assistência ao parto vaginal por enfermeiras e obstetrizes está associada a melhores resultados
+                maternos e perinatais, ao menor uso de intervenções no trabalho de parto e parto, além da maior satisfação com a experiência de parto.
+                Sendo assim, em um contexto de reforma do modelo de atenção obstétrica, é recomendável o aumento da atuação de enfermeiras e obstetrizes
+                na assistência ao parto vaginal, conforme as revisões sistemáticas e os posicionamento da Organização Mundial da Saúde Como valor de
+                referência, utilizamos a porcentagem de partos por enfermeiras observada em países com elevada participação da enfermagem no modelo de
+                atenção ao parto,  taxas adequadas de cesariana e baixas taxas de mortalidade materna e perinatal.
                 </p>
                 "
               ),
