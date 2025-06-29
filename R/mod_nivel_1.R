@@ -1776,15 +1776,16 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)])
         texto <-
           "
-      <b class = 'fonte-destaque-caixas1' {filtros()$municipio} </b>
-      <br>
-      <b> Região do país: </b> {regiao}
-      <br>
-      <b> UF: </b> {uf}
-      <br>
-      <b> Macrorregião de saúde estadual: </b> {macro}
-      <br>
-      <b> Região de saúde estadual: </b> {micro}
+      <span class = 'fonte-destaque-caixas1' style = 'font-weight: 600'>{filtros()$municipio}</span>
+      <div class = 'fonte-grande'>
+        <b> Região do país: </b> {regiao}
+        <br>
+        <b> UF: </b> {uf}
+        <br>
+        <b> Macrorregião de saúde estadual: </b> {macro}
+        <br>
+        <b> Região de saúde estadual: </b> {micro}
+      </div>
       "
       } else if (filtros()$nivel == "micro") {
         uf <- unique(tabela_aux_municipios$uf[which(tabela_aux_municipios$r_saude == filtros()$micro & tabela_aux_municipios$uf == filtros()$estado_micro)])
@@ -1792,35 +1793,38 @@ mod_nivel_1_server <- function(id, filtros) {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$r_saude == filtros()$micro & tabela_aux_municipios$uf == filtros()$estado_micro)])
         texto <-
           "
-      <b class = 'fonte-destaque-caixas1' {filtros()$micro} </b>
-      <br>
-      <b> Região do país: </b> {regiao}
-      <br>
-      <b> UF: </b> {uf}
-      <br>
-      <b> Macrorregião de saúde estadual: </b> {macro}
+      <b class = 'fonte-destaque-caixas1'> {filtros()$micro} </b>
+      <div class = 'fonte-grande'>
+        <b> Região do país: </b> {regiao}
+        <br>
+        <b> UF: </b> {uf}
+        <br>
+        <b> Macrorregião de saúde estadual: </b> {macro}
+      </div>
       "
       } else if (filtros()$nivel == "macro") {
         uf <- unique(tabela_aux_municipios$uf[which(tabela_aux_municipios$macro_r_saude == filtros()$macro & tabela_aux_municipios$uf == filtros()$estado_macro)])
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$macro_r_saude == filtros()$macro & tabela_aux_municipios$uf == filtros()$estado_macro)])
         texto <-
           "
-      <b class = 'fonte-destaque-caixas1' {filtros()$macro} </b>
-      <br>
-      <b> Região do país: </b> {regiao}
-      <br>
-      <b> UF: </b> {uf}
+      <b class = 'fonte-destaque-caixas1'> {filtros()$macro} </b>
+      <div class = 'fonte-grande'>
+        <b> Região do país: </b> {regiao}
+        <br>
+        <b> UF: </b> {uf}
+      </div>
       "
       } else if (filtros()$nivel == "estadual") {
         regiao <- unique(tabela_aux_municipios$regiao[which(tabela_aux_municipios$uf == filtros()$estado)])
         texto <-
           "
-      <b class = 'fonte-destaque-caixas1' {filtros()$estado} </b>
-      <br>
-      <b> Região do país: </b> {regiao}
+      <b class = 'fonte-destaque-caixas1'> {filtros()$estado} </b>
+      <div class = 'fonte-grande'>
+        <b> Região do país: </b> {regiao}
+      </div>
       "
       } else if (filtros()$nivel == "regional") {
-        texto <- "<b class = 'fonte-destaque-caixas1' {filtros()$regiao} </b>"
+        texto <- "<b class = 'fonte-destaque-caixas1'> {filtros()$regiao} </b>"
       } else if (filtros()$nivel == "nacional") {
         texto <- "<b class = 'fonte-destaque-caixas1'> Brasil </b>"
       }
@@ -1941,6 +1945,7 @@ mod_nivel_1_server <- function(id, filtros) {
         valor_de_referencia = data1_comp()$porc_dependentes_sus,
         tipo = "porcentagem",
         invertido = FALSE,
+        cor = "lightgrey",
         pagina = "nivel_1",
         nivel_de_analise = filtros()$nivel
       )
