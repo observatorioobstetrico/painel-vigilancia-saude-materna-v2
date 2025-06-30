@@ -697,8 +697,6 @@ mod_bloco_4_ui <- function(id){
           column(
             width = 8,
             fluidRow(
-              column(
-                width = 6,
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
@@ -711,90 +709,92 @@ mod_bloco_4_ui <- function(id){
                   ),
                   hr(),
                   shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
-                )
-              ),
-              column(
-                width = 6,
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais</b>")
-                  ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "550px"))
-                )
-              )
-            ),
+                ),
+            )
+          )
+        ),
 
-            #AQUI
-            fluidRow(
-              bs4Dash::bs4Card(
-                width = 12,
-                status = "primary",
-                collapsible = FALSE,
-                headerBorder = FALSE,
-                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                div(
-                  style = "display: flex; align-items: center;",
-                  HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
-                  shinyjs::hidden(
-                    span(
-                      id = ns("mostrar_botao_deslocamento_prop1"),
-                      shinyWidgets::actionBttn(
-                        inputId = ns("botao_prop1"),
-                        icon = icon("triangle-exclamation", style = "color: red"),
-                        color = "warning",
-                        style = "material-circle",
-                        size = "xs"
-                      )
+        #AQUI
+        fluidRow(
+          column(
+            width = 4,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "display: flex; align-items: center;",
+                HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais</b>")
+              ),
+              hr(),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "550px"))
+            )
+          ),
+          column(
+            width = 8,
+            bs4Dash::bs4Card(
+              width = 12,
+              status = "primary",
+              collapsible = FALSE,
+              headerBorder = FALSE,
+              style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+              div(
+                style = "display: flex; align-items: center;",
+                HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
+                shinyjs::hidden(
+                  span(
+                    id = ns("mostrar_botao_deslocamento_prop1"),
+                    shinyWidgets::actionBttn(
+                      inputId = ns("botao_prop1"),
+                      icon = icon("triangle-exclamation", style = "color: red"),
+                      color = "warning",
+                      style = "material-circle",
+                      size = "xs"
                     )
                   )
-                ),
-                hr(),
-                # fluidRow(
-                #   column(
-                #     width = 12,
-                #     shinyWidgets::pickerInput(
-                #       inputId = ns("local_nasc"),
-                #       label = "Selecione, aqui, os locais de interesse:",
-                #       options = list(placeholder = "Selecione, aqui, os locais de interesse:",
-                #                      `actions-box` = TRUE,
-                #                      `deselect-all-text` = "Desselecionar todas",
-                #                      `select-all-text` = "Selecionar todas",
-                #                      `none-selected-text` = "Nenhuma opção selecionada"),
-                #       choices = c(
-                #         "Hospital" = "hospital",
-                #         "Outros estabelecimentos de saúde" = "outros_est_saude",
-                #         "Domicílio" = "domicilio",
-                #         "Aldeia Indígena" = "aldeia",
-                #         "Outros" = "outros",
-                #         "Sem informação" = "sem_inf"
-                #
-                #       ),
-                #       selected = c(
-                #         "hospital",
-                #         "outros_est_saude",
-                #         "domicilio",
-                #         "aldeia",
-                #         "outros",
-                #         "sem_inf"
-                #       ),
-                #       multiple = TRUE,
-                #       width = "99%"
-                #     )
-                #   )
-                # ),
-                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "550px"))
+                )
+              ),
+              # hr(),
+              # fluidRow(
+              #   column(
+              #     width = 12,
+              #     shinyWidgets::pickerInput(
+              #       inputId = ns("local_nasc"),
+              #       label = "Selecione, aqui, os locais de interesse:",
+              #       options = list(placeholder = "Selecione, aqui, os locais de interesse:",
+              #                      `actions-box` = TRUE,
+              #                      `deselect-all-text` = "Desselecionar todas",
+              #                      `select-all-text` = "Selecionar todas",
+              #                      `none-selected-text` = "Nenhuma opção selecionada"),
+              #       choices = c(
+              #         "Hospital" = "hospital",
+              #         "Outros estabelecimentos de saúde" = "outros_est_saude",
+              #         "Domicílio" = "domicilio",
+              #         "Aldeia Indígena" = "aldeia",
+              #         "Outros" = "outros",
+              #         "Sem informação" = "sem_inf"
+              #
+              #       ),
+              #       selected = c(
+              #         "hospital",
+              #         "outros_est_saude",
+              #         "domicilio",
+              #         "aldeia",
+              #         "outros",
+              #         "sem_inf"
+              #       ),
+              #       multiple = TRUE,
+              #       width = "99%"
+              #     )
+              #   )
+              # ),
+              shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_profissional"), height = "550px"))
               )
-            ) ## [XXX]
-
-          )
-        )
+            )
+        ) ## [XXX]
+        ## AQUI
       ), # incluir robson aqui
       tabPanel(
       HTML("<b>Relacionados aos grupos de Robson</b>"),
@@ -1337,23 +1337,23 @@ mod_bloco_4_server <- function(id, filtros){
 
     )
 
-    bloco4_profissional_calcs3 <- data.frame(
-      tipo = c("local", "referencia"),
-
-      dist_medico = rep("sum(nasc_assistido_medico_hospital, na.rm = TRUE)", 2),
-      dist_enf_obs = rep("sum(nasc_assistido_enf_obs_hospital, na.rm = TRUE)", 2),
-      dist_parteira = rep("sum(nasc_assistido_parteira_hospital, na.rm = TRUE)", 2),
-      dist_outros = rep("sum(nasc_assistido_outros_hospital, na.rm = TRUE)", 2),
-      dist_ignorado = rep("sum(nasc_assistido_ignorado_hospital, na.rm = TRUE)", 2),
-      dist_sem_inf = rep("sum(nasc_assistido_sem_inf_hospital, na.rm = TRUE)", 2)
-
-    )
+    # bloco4_profissional_calcs3 <- data.frame(
+    #   tipo = c("local", "referencia"),
+    #
+    #   dist_medico = rep("sum(nasc_assistido_medico_hospital, na.rm = TRUE)", 2),
+    #   dist_enf_obs = rep("sum(nasc_assistido_enf_obs_hospital, na.rm = TRUE)", 2),
+    #   dist_parteira = rep("sum(nasc_assistido_parteira_hospital, na.rm = TRUE)", 2),
+    #   dist_outros = rep("sum(nasc_assistido_outros_hospital, na.rm = TRUE)", 2),
+    #   dist_ignorado = rep("sum(nasc_assistido_ignorado_hospital, na.rm = TRUE)", 2),
+    #   dist_sem_inf = rep("sum(nasc_assistido_sem_inf_hospital, na.rm = TRUE)", 2)
+    #
+    # )
 
     bloco4_profissional_calcs4 <- data.frame(
       tipo = c("local", "referencia"),
 
-    dist_partos_vaginais = rep("sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)", 2),
-    dist_outros = rep("sum(total_de_nascidos_vivos, na.rm = TRUE) - sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)", 2)
+    dist_partos_vaginais = rep("round(sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE)*100, 1)", 2),
+    dist_outros = rep("round((sum(total_de_nascidos_vivos, na.rm = TRUE) - sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE))/sum(total_de_nascidos_vivos, na.rm = TRUE)*100, 1)", 2)
     )
 
     # selecao_local1 <- reactive({
@@ -3496,148 +3496,148 @@ mod_bloco_4_server <- function(id, filtros){
 
     ##marx
 
-    data4_total_profissional <- reactive({
-      bloco4_profissional |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::filter(
-          if (filtros()$nivel == "nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel == "regional")
-            regiao == filtros()$regiao
-          else if (filtros()$nivel == "estadual")
-            uf == filtros()$estado
-          else if (filtros()$nivel == "macro")
-            macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
-          else if(filtros()$nivel == "micro")
-            r_saude == filtros()$micro & uf == filtros()$estado_micro
-          else if(filtros()$nivel == "municipal")
-            municipio == filtros()$municipio & uf == filtros()$estado_municipio
-        ) |>
-        dplyr::group_by(ano) |>
-        # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
-        tidyr::pivot_longer(
-          cols = starts_with("dist"),
-          names_to = "indicador",
-          values_to = "total_indicador"
-        ) |>
-        dplyr::mutate(
-          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-          indicador = factor(
-            dplyr::case_when(
-              indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
-              indicador == "dist_parteira" ~ "Parteira",
-              indicador == "dist_outros" ~ "Outros",
-              indicador == "dist_ignorado" ~ "Ignorado",
-              indicador == "dist_sem_inf" ~ "Sem informação"
-            ),
-            levels = c(
-              "Enfermeira ou Obstetriz",
-              "Médico",
-              "Parteira",
-              "Ignorado",
-              "Sem informação",
-              "Outros"
-            )
-          )
-        ) |>
-        dplyr::select(-class)
-    })
-
-    data4_total_profissional_comp <- reactive({
-      bloco4_profissional |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::filter(
-          if (filtros()$nivel2 == "nacional")
-            ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-          else if (filtros()$nivel2 == "regional")
-            regiao == filtros()$regiao2
-          else if (filtros()$nivel2 == "estadual")
-            uf == filtros()$estado2
-          else if (filtros()$nivel2 == "macro")
-            macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
-          else if(filtros()$nivel2 == "micro")
-            r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
-          else if (filtros()$nivel2 == "municipal")
-            municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
-          else if (filtros()$nivel2 == "municipios_semelhantes")
-            grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
-        ) |>
-        dplyr::group_by(ano) |>
-        # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
-        tidyr::pivot_longer(
-          cols = starts_with("dist"),
-          names_to = "indicador",
-          values_to = "total_indicador"
-        ) |>
-        dplyr::mutate(
-          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-          indicador = factor(
-            dplyr::case_when(
-              indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
-              indicador == "dist_parteira" ~ "Parteira",
-              indicador == "dist_outros" ~ "Outros",
-              indicador == "dist_ignorado" ~ "Ignorado",
-              indicador == "dist_sem_inf" ~ "Sem informação"
-            ),
-            levels = c(
-              "Enfermeira ou Obstetriz",
-              "Médico",
-              "Parteira",
-              "Ignorado",
-              "Sem informação",
-              "Outros"
-            )
-          )
-        ) |>
-        dplyr::select(-class)
-    })
-
-    data4_total_profissional_referencia <- reactive({
-      names(bloco4_profissional)[startsWith(names(bloco4_profissional), "dist_")]
-      bloco4_profissional |>
-        dplyr::filter(
-          ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
-        ) |>
-        dplyr::group_by(ano) |>
-
-        # dplyr::select(ano, dplyr::contains("dist")) |>
-        cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
-        tidyr::pivot_longer(
-          cols = starts_with("dist"),
-          names_to = "indicador",
-          values_to = "total_indicador_br"
-        ) |>
-        dplyr::mutate(
-          class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
-          indicador = factor(
-            dplyr::case_when(
-              indicador == "dist_medico" ~ "Médico",
-              indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
-              indicador == "dist_parteira" ~ "Parteira",
-              indicador == "dist_outros" ~ "Outros",
-              indicador == "dist_ignorado" ~ "Ignorado",
-              indicador == "dist_sem_inf" ~ "Sem informação"
-            ),
-            levels = c(
-              "Enfermeira ou Obstetriz",
-              "Médico",
-              "Parteira",
-              "Ignorado",
-              "Sem informação",
-              "Outros"
-            )
-          )
-        ) |>
-        dplyr::select(-class)
-    })
+    # data4_total_profissional <- reactive({
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::filter(
+    #       if (filtros()$nivel == "nacional")
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       else if (filtros()$nivel == "regional")
+    #         regiao == filtros()$regiao
+    #       else if (filtros()$nivel == "estadual")
+    #         uf == filtros()$estado
+    #       else if (filtros()$nivel == "macro")
+    #         macro_r_saude == filtros()$macro & uf == filtros()$estado_macro
+    #       else if(filtros()$nivel == "micro")
+    #         r_saude == filtros()$micro & uf == filtros()$estado_micro
+    #       else if(filtros()$nivel == "municipal")
+    #         municipio == filtros()$municipio & uf == filtros()$estado_municipio
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "total_indicador"
+    #     ) |>
+    #     dplyr::mutate(
+    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_medico" ~ "Médico",
+    #           indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
+    #           indicador == "dist_parteira" ~ "Parteira",
+    #           indicador == "dist_outros" ~ "Outros",
+    #           indicador == "dist_ignorado" ~ "Ignorado",
+    #           indicador == "dist_sem_inf" ~ "Sem informação"
+    #         ),
+    #         levels = c(
+    #           "Enfermeira ou Obstetriz",
+    #           "Médico",
+    #           "Parteira",
+    #           "Ignorado",
+    #           "Sem informação",
+    #           "Outros"
+    #         )
+    #       )
+    #     ) |>
+    #     dplyr::select(-class)
+    # })
+    #
+    # data4_total_profissional_comp <- reactive({
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::filter(
+    #       if (filtros()$nivel2 == "nacional")
+    #         ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #       else if (filtros()$nivel2 == "regional")
+    #         regiao == filtros()$regiao2
+    #       else if (filtros()$nivel2 == "estadual")
+    #         uf == filtros()$estado2
+    #       else if (filtros()$nivel2 == "macro")
+    #         macro_r_saude == filtros()$macro2 & uf == filtros()$estado_macro2
+    #       else if(filtros()$nivel2 == "micro")
+    #         r_saude == filtros()$micro2 & uf == filtros()$estado_micro2
+    #       else if (filtros()$nivel2 == "municipal")
+    #         municipio == filtros()$municipio2 & uf == filtros()$estado_municipio2
+    #       else if (filtros()$nivel2 == "municipios_semelhantes")
+    #         grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtros()$municipio & tabela_aux_municipios$uf == filtros()$estado_municipio)]
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "total_indicador"
+    #     ) |>
+    #     dplyr::mutate(
+    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_medico" ~ "Médico",
+    #           indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
+    #           indicador == "dist_parteira" ~ "Parteira",
+    #           indicador == "dist_outros" ~ "Outros",
+    #           indicador == "dist_ignorado" ~ "Ignorado",
+    #           indicador == "dist_sem_inf" ~ "Sem informação"
+    #         ),
+    #         levels = c(
+    #           "Enfermeira ou Obstetriz",
+    #           "Médico",
+    #           "Parteira",
+    #           "Ignorado",
+    #           "Sem informação",
+    #           "Outros"
+    #         )
+    #       )
+    #     ) |>
+    #     dplyr::select(-class)
+    # })
+    #
+    # data4_total_profissional_referencia <- reactive({
+    #   names(bloco4_profissional)[startsWith(names(bloco4_profissional), "dist_")]
+    #   bloco4_profissional |>
+    #     dplyr::filter(
+    #       ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
+    #     ) |>
+    #     dplyr::group_by(ano) |>
+    #
+    #     # dplyr::select(ano, dplyr::contains("dist")) |>
+    #     cria_indicadores(df_calcs = bloco4_profissional_calcs3, filtros = filtros(), adicionar_localidade = TRUE) |>
+    #     tidyr::pivot_longer(
+    #       cols = starts_with("dist"),
+    #       names_to = "indicador",
+    #       values_to = "total_indicador_br"
+    #     ) |>
+    #     dplyr::mutate(
+    #       class = ifelse(class == "Brasil (valor de referência)", "Brasil", class),
+    #       indicador = factor(
+    #         dplyr::case_when(
+    #           indicador == "dist_medico" ~ "Médico",
+    #           indicador == "dist_enf_obs" ~ "Enfermeira ou Obstetriz",
+    #           indicador == "dist_parteira" ~ "Parteira",
+    #           indicador == "dist_outros" ~ "Outros",
+    #           indicador == "dist_ignorado" ~ "Ignorado",
+    #           indicador == "dist_sem_inf" ~ "Sem informação"
+    #         ),
+    #         levels = c(
+    #           "Enfermeira ou Obstetriz",
+    #           "Médico",
+    #           "Parteira",
+    #           "Ignorado",
+    #           "Sem informação",
+    #           "Outros"
+    #         )
+    #       )
+    #     ) |>
+    #     dplyr::select(-class)
+    # })
 
 
     ### Para a comparação selecionada -----------------------------------------
@@ -4207,15 +4207,15 @@ mod_bloco_4_server <- function(id, filtros){
     })
 
     data4_dist_profissional_completo <- reactive({
-      dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia()) |>
-        dplyr::left_join(data4_total_profissional(), by = c("ano", "indicador")) |>
-        dplyr::left_join(data4_total_profissional_referencia(), by = c("ano", "indicador"))
+      dplyr::full_join(data4_dist_profissional(), data4_dist_profissional_referencia())
+        # dplyr::left_join(data4_total_profissional(), by = c("ano", "indicador")) |>
+        # dplyr::left_join(data4_total_profissional_referencia(), by = c("ano", "indicador"))
     })
 
     data4_dist_profissional_comp_completo <- reactive({
-      dplyr::full_join(data4_dist_profissional_comp(), data4_dist_profissional_referencia())|>
-        dplyr::left_join(data4_total_profissional_comp(), by = c("ano", "indicador")) |>
-        dplyr::left_join(data4_total_profissional_referencia(), by = c("ano", "indicador"))
+      dplyr::full_join(data4_dist_profissional_comp(), data4_dist_profissional_referencia())
+        # dplyr::left_join(data4_total_profissional_comp(), by = c("ano", "indicador")) |>
+        # dplyr::left_join(data4_total_profissional_referencia(), by = c("ano", "indicador"))
 
     })
 
@@ -5340,7 +5340,7 @@ mod_bloco_4_server <- function(id, filtros){
             type = "column",
             showInLegend = TRUE,
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             )
           )|>
           highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
@@ -5353,7 +5353,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#FEAF77FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5364,7 +5364,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#FEAF77FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5376,7 +5376,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5387,7 +5387,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5399,7 +5399,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#B63679FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5410,7 +5410,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#B63679FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5422,7 +5422,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#721F81FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5433,7 +5433,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#721F81FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5445,7 +5445,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#2D1160FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5456,7 +5456,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#2D1160FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5468,7 +5468,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#231151FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5479,7 +5479,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#231151FF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
@@ -5539,7 +5539,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = TRUE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 0
           ) |>
@@ -5550,7 +5550,7 @@ mod_bloco_4_server <- function(id, filtros){
             showInLegend = FALSE,
             color = "#F1605DFF",
             tooltip = list(
-              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <b> ({point.total_indicador}) </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> <b> ({point.total_indicador_br}) </b> "
+              pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
             stack = 1,
             linkedTo = ":previous"
