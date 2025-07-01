@@ -3302,6 +3302,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -3319,6 +3320,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         # tipo_referencia = "média nacional",
         tipo_referencia = "mundo",

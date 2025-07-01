@@ -1528,6 +1528,7 @@ mod_bloco_5_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "320px",
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1555,6 +1556,7 @@ mod_bloco_5_server <- function(id, filtros){
         invertido = FALSE,
         tamanho_caixa = "320px",
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "bloco_5",
         # tipo_referencia = "média nacional",
         tipo_referencia = "mundo",
