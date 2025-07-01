@@ -997,7 +997,7 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(c(input$botao1, input$botao2), {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$peso,
-        variavel_incompletude1 = "PESO",
+        variavel_incompletude1 = "PESO (peso ao nascer em gramas)",
         descricao_incompletude1 = "em branco ou preenchida com 9999",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1016,7 +1016,7 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$gestacao,
-        variavel_incompletude1 = "GESTACAO",
+        variavel_incompletude1 = "GESTACAO (semanas de gestação)",
         descricao_incompletude1 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1036,10 +1036,10 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(input$botao4, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$gestacao,
-        variavel_incompletude1 = "GESTACAO",
+        variavel_incompletude1 = "GESTACAO (semanas de gestação)",
         descricao_incompletude1 = "em branco ou ignorados",
         incompletude2 = data_incompletude()$semagestac,
-        variavel_incompletude2 = "SEMAGESTAC",
+        variavel_incompletude2 = "SEMAGESTAC (número de semanas de gestação)",
         descricao_incompletude2 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1058,7 +1058,7 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(input$botao5, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$semagestac,
-        variavel_incompletude1 = "SEMAGESTAC",
+        variavel_incompletude1 = "SEMAGESTAC (número de semanas de gestação)",
         descricao_incompletude1 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1079,10 +1079,10 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(input$botao6, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$peso,
-        variavel_incompletude1 = "PESO",
+        variavel_incompletude1 = "PESO (peso ao nascer em gramas)",
         descricao_incompletude1 = "em branco ou preenchida com 9999",
         incompletude2 = data_incompletude()$idanomal,
-        variavel_incompletude2 = "IDANOMAL",
+        variavel_incompletude2 = "IDANOMAL (anomalia identificada)",
         descricao_incompletude2 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1128,7 +1128,7 @@ mod_bloco_5_server <- function(id, filtros){
     observeEvent(c(input$botao8,input$botao9), {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$idanomal,
-        variavel_incompletude1 = "IDANOMAL",
+        variavel_incompletude1 = "IDANOMAL (anomalia identificada)",
         descricao_incompletude1 = "em branco ou ignorados",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura

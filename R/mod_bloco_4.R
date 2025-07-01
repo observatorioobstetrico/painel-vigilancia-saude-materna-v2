@@ -1831,7 +1831,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$parto_tprobson,
-        variavel_incompletude1 = "PARTO e TPROBSON",
+        variavel_incompletude1 = "PARTO (tipo de parto) e TPROBSON (código do Grupo de Robson)",
         descricao_incompletude1 = "em branco ou sem informação",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1850,7 +1850,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao2, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$tprobson,
-        variavel_incompletude1 = "TPROBSON",
+        variavel_incompletude1 = "TPROBSON (código do Grupo de Robson)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1869,7 +1869,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$parto_tprobson,
-        variavel_incompletude1 = "PARTO e TPROBSON",
+        variavel_incompletude1 = "PARTO (tipo de parto) e TPROBSON (código do Grupo de Robson)",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
       )

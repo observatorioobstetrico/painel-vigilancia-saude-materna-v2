@@ -454,7 +454,7 @@ mod_bloco_3_server <- function(id, filtros){
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
-        variavel_incompletude1 = "CONSPRENAT",
+        variavel_incompletude1 = "CONSPRENAT (número de consultas pré‐natal)",
         descricao_incompletude1 = "em branco",
         df = data_incompletude() |> dplyr::filter(ano >= 2014),
         cobertura = data_incompletude()$cobertura
@@ -473,7 +473,7 @@ mod_bloco_3_server <- function(id, filtros){
     observeEvent(input$botao2, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$mesprenat,
-        variavel_incompletude1 = "MESPRENAT",
+        variavel_incompletude1 = "MESPRENAT (mês de gestação em que iniciou o pré‐natal)",
         descricao_incompletude1 = "em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -492,7 +492,7 @@ mod_bloco_3_server <- function(id, filtros){
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
-        variavel_incompletude1 = "CONSPRENAT",
+        variavel_incompletude1 = "CONSPRENAT (número de consultas pré‐natal)",
         descricao_incompletude1 = "em branco",
         df = data_incompletude() |> dplyr::filter(ano >= 2014),
         cobertura = data_incompletude()$cobertura
@@ -511,7 +511,7 @@ mod_bloco_3_server <- function(id, filtros){
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
-        variavel_incompletude1 = "CONSPRENAT",
+        variavel_incompletude1 = "CONSPRENAT (número de consultas pré‐natal)",
         descricao_incompletude1 = "em branco",
         df = data_incompletude() |> dplyr::filter(ano >= 2014),
         cobertura = data_incompletude()$cobertura
