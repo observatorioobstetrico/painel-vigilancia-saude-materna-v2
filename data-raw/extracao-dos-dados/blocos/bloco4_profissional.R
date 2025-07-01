@@ -59,6 +59,18 @@ nascidos_vivos_total <- df |>
   group_by(codmunres, ano) |>
   summarise(total_de_nascidos_vivos = n())
 
+nascidos_vivos_total_hospital <- df |>
+  mutate(ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc)))) |>
+  filter(locnasc == 1) |>
+  group_by(codmunres, ano) |>
+  summarise(total_de_nascidos_vivos_hospital = n())
+
+nascidos_vivos_total_hospital_vaginal <- df |>
+  mutate(ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc)))) |>
+  filter(locnasc == 1, parto == "1") |>
+  group_by(codmunres, ano) |>
+  summarise(total_de_nascidos_vivos_partos_vaginais_hospital = n())
+
 df_bloco4_profissional <- df |>
   # Selecionando somente parto vaginal, PARTO == 1
   filter(parto == "1") |>
@@ -136,7 +148,10 @@ df_bloco4_profissional <- df |>
   # Juntando com a base aulixiar de municípios
   right_join(df_aux_municipios) |>
   # Juntando com a variável de total de nascidos vivos
-  left_join(nascidos_vivos_total, by = c("codmunres", "ano"))
+  left_join(nascidos_vivos_total, by = c("codmunres", "ano")) |>
+  left_join(nascidos_vivos_total_hospital, by = c("codmunres", "ano")) |>
+  left_join(nascidos_vivos_total_hospital_vaginal, by = c("codmunres", "ano"))
+
 
 ## Substituindo todos os NAs, gerados após o right_join, por 0
 df_bloco4_profissional[is.na(df_bloco4_profissional)] <- 0
