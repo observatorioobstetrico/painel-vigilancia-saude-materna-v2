@@ -3309,7 +3309,7 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data5(),
         indicador = "porc_malformacao_geral",
         titulo = "Porcentagem de nascidos vivos com anomalias congênitas",
-        tem_meta = FALSE,
+        tem_meta = TRUE,
         # valor_de_referencia = data5_comp()$porc_malformacao_geral,
         valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
