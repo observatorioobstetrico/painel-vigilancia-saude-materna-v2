@@ -3001,7 +3001,10 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_resumo <- eventReactive(
-      c(filtros()$pesquisar, input$tabset1, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal),
+      c(filtros()$pesquisar,
+        input$tabset1 ,
+        input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal
+        ),
       data7_resumo_aux(),
       ignoreNULL = FALSE
     )
@@ -3015,7 +3018,9 @@ mod_bloco_7_server <- function(id, filtros){
 
     # Não queremos que as caixinhas se atualizem quando os inputs dos gráficos de distribuição percentual mudarem
     data7_resumo_referencia <- eventReactive(
-      c(filtros()$pesquisar, input$tabset1, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal),
+      c(filtros()$pesquisar,
+        input$tabset1, input$localidade_resumo_fetal, input$localidade_resumo_neonat, input$localidade_resumo_perinatal, input$localidade_resumo_morbidade_neonatal
+        ),
       data7_resumo_referencia_aux(),
       ignoreNULL = FALSE
     )
@@ -3081,10 +3086,10 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_fetal_i1 <- renderUI({ #[vvv]
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = numero_obitos_fetais(),
-        titulo = titulo_obitos_fetais(),
+        indicador = "obitos_fetais",
+        titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_resumo_referencia()[[numero_obitos_fetais()]],
+        valor_de_referencia = data7_resumo_referencia()[["obitos_fetais"]],
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -3183,8 +3188,8 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_fetal_i5 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = numero_obitos_fetais_oms(),
-        titulo = titulo_obitos_fetais_oms(),
+        indicador = "obitos_fetais_oms",
+        titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
         valor_de_referencia = data7_resumo_referencia()[[numero_obitos_fetais_oms()]],
         tipo = "número",
@@ -3309,15 +3314,15 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_fetal_i2 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = taxa_mortalidade_fetal(),
-        titulo = titulo_taxa_mortalidade_fetal(),
+        indicador = "taxa_mort_fetal",
+        titulo = "Taxa de mortalidade fetal",
         #tem_meta = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", TRUE, FALSE),
         tem_meta = TRUE,
         #tipo_referencia = ifelse(taxa_mortalidade_fetal() == "taxa_mort_fetal", "meta ODS", ""),
         tipo_referencia = "meta ODS",
         valor_de_referencia = ifelse(
-          data7_resumo_referencia()[[taxa_mortalidade_fetal()]] > 0,
-          data7_resumo_referencia()[[taxa_mortalidade_fetal()]],
+          data7_resumo_referencia()[["taxa_mort_fetal"]] > 0,
+          data7_resumo_referencia()[["taxa_mort_fetal"]],
           NaN
         ),
         tipo = "taxa",
@@ -3462,12 +3467,12 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_fetal_i6 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = taxa_mortalidade_fetal_oms(),
-        titulo = titulo_taxa_mortalidade_fetal_oms(),
+        indicador = "taxa_mort_fetal_oms",
+        titulo = "Taxa de mortalidade fetal",
         tem_meta = TRUE,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]] >0 ,
-                                             data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]], NaN),
+        valor_de_referencia = dplyr::if_else(data7_resumo_referencia()[[taxa_mort_fetal_oms]] >0 ,
+                                             data7_resumo_referencia()[[taxa_mort_fetal_oms]], NaN),
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "350px",
@@ -3516,11 +3521,11 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_neonat_i1 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso,
-        titulo = titulo_caixa_neonat(),
+        indicador = "mort_neonat",
+        titulo = "Taxa de mortalidade neonatal por 1000 nascidos vivos",
         tem_meta = TRUE,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso]],
+        valor_de_referencia = data7_resumo_referencia()[["mort_neonat"]],
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
@@ -3543,10 +3548,10 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_neonat_i2 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_precoc,
-        titulo = titulo_caixa_neonat_precoc(),
+        indicador = "mort_neonat_precoc",
+        titulo = "Taxa de mortalidade neonatal (0 a 6 dias) por 1000 nascidos vivos",
         tem_meta = TRUE,
-        valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_precoc]],
+        valor_de_referencia = data7_resumo_referencia()[["mort_neonat_precoc"]],
         tipo_referencia = "meta ODS",
         tipo = "taxa",
         invertido = FALSE,
@@ -3570,12 +3575,12 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_neonat_i3 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_tardia,
-        titulo = titulo_caixa_neonat_tardia(),
+        indicador = "mort_neonat_tardia",
+        titulo = "Taxa de mortalidade neonatal (7 a 27 dias) por 1000 nascidos vivos",
         tem_meta = TRUE,
         tipo_referencia = "meta ODS",
 
-        valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_tardia]],
+        valor_de_referencia = data7_resumo_referencia()[["mort_neonat_tardia"]],
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = "330px",
@@ -3598,10 +3603,10 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_neonat_i4 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$obitos_faixa_peso,
-        titulo = titulo_caixa_obitos_neonat(),
+        indicador = "obitos_neonat",
+        titulo = "Número de óbitos neonatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_resumo_referencia()[[input$obitos_faixa_peso]],
+        valor_de_referencia = data7_resumo_referencia()[["obitos_neonat"]],
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -3656,10 +3661,10 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_perinatal_i1 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_perinatal_total,
-        titulo = titulo_caixa_perinatal_total(),
+        indicador = "perinatal_todos_total",
+        titulo = "Número de óbitos perinatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_perinatal_total]],
+        valor_de_referencia = data7_resumo_referencia()[["perinatal_todos_total"]],
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -3688,10 +3693,10 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_perinatal_i2 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_perinatal_oms,
-        titulo = titulo_caixa_perinatal_oms(),
+        indicador = "obitos_perinatal_oms",
+        titulo = "Número de óbitos perinatais (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = FALSE,
-        valor_de_referencia = data7_resumo_referencia()[[input$faixa_peso_perinatal_oms]],
+        valor_de_referencia = data7_resumo_referencia()[["obitos_perinatal_oms"]],
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -3720,14 +3725,14 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_perinatal_i3 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_perinatal_taxa_total,
-        titulo = titulo_caixa_taxa_perinatal_total(),
+        indicador = "taxa_perinatal_total",
+        titulo = "Taxa de mortalidade perinatal por 1000 nascidos vivos",
         tem_meta = TRUE,
         tipo_referencia = "meta ODS adaptada para os óbitos perinatais",
 
         valor_de_referencia = ifelse(
-          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]] > 0,
-          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_total]],
+          data7_resumo_referencia()[["taxa_perinatal_total"]] > 0,
+          data7_resumo_referencia()[["taxa_perinatal_total"]],
           NaN
         ),
         tipo = "taxa",
@@ -3752,13 +3757,13 @@ mod_bloco_7_server <- function(id, filtros){
     output$caixa_b7_perinatal_i4 <- renderUI({
       cria_caixa_server(
         dados = data7_resumo(),
-        indicador = input$faixa_peso_perinatal_taxa_oms,
-        titulo = titulo_caixa_taxa_perinatal_oms(),
+        indicador = "taxa_perinatal_oms",
+        titulo = "Taxa de mortalidade perinatal por 1000 nascidos vivos (feto com idade gestacional maior ou igual a 28 semanas ou peso maior ou igual a 1000g ou neonatal com até 6 dias de vida)",
         tem_meta = TRUE,
         tipo_referencia = "meta ODS adaptada para os óbitos perinatais",
         valor_de_referencia = ifelse(
-          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]] > 0,
-          data7_resumo_referencia()[[input$faixa_peso_perinatal_taxa_oms]],
+          data7_resumo_referencia()[["taxa_perinatal_oms"]] > 0,
+          data7_resumo_referencia()[["taxa_perinatal_oms"]],
           NaN
         ),
         tipo = "taxa",

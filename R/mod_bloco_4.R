@@ -726,7 +726,7 @@ mod_bloco_4_ui <- function(id){
               style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais</b>")
+                HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais hospitalares</b>")
               ),
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "550px"))
@@ -1352,8 +1352,8 @@ mod_bloco_4_server <- function(id, filtros){
     bloco4_profissional_calcs4 <- data.frame(
       tipo = c("local", "referencia"),
 
-    dist_partos_vaginais = rep("round(sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE)*100, 1)", 2),
-    dist_outros = rep("round((sum(total_de_nascidos_vivos, na.rm = TRUE) - sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE))/sum(total_de_nascidos_vivos, na.rm = TRUE)*100, 1)", 2)
+    dist_partos_vaginais = rep("round(sum(total_de_nascidos_vivos_partos_vaginais_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos_hospital, na.rm = TRUE)*100, 1)", 2),
+    dist_outros = rep("round((sum(total_de_nascidos_vivos_hospital, na.rm = TRUE) - sum(total_de_nascidos_vivos_partos_vaginais_hospital, na.rm = TRUE))/sum(total_de_nascidos_vivos_hospital, na.rm = TRUE)*100, 1)", 2)
     )
 
     # selecao_local1 <- reactive({
@@ -1831,7 +1831,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao1, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$parto_tprobson,
-        variavel_incompletude1 = "PARTO e TPROBSON",
+        variavel_incompletude1 = "PARTO (tipo de parto) e TPROBSON (código do Grupo de Robson)",
         descricao_incompletude1 = "em branco ou sem informação",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1850,7 +1850,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao2, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$tprobson,
-        variavel_incompletude1 = "TPROBSON",
+        variavel_incompletude1 = "TPROBSON (código do Grupo de Robson)",
         descricao_incompletude1 = "ignorados ou em branco",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
@@ -1869,7 +1869,7 @@ mod_bloco_4_server <- function(id, filtros){
     observeEvent(input$botao3, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$parto_tprobson,
-        variavel_incompletude1 = "PARTO e TPROBSON",
+        variavel_incompletude1 = "PARTO (tipo de parto) e TPROBSON (código do Grupo de Robson)",
         df = data_incompletude(),
         cobertura = data_incompletude()$cobertura
       )
@@ -5506,7 +5506,7 @@ mod_bloco_4_server <- function(id, filtros){
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             )
           ) |>
-          highcharter::hc_colors(viridis::magma(8, direction = -1)[-c(1, 8)])
+          highcharter::hc_colors(c("#982D80FF","#5F187FFF"))
       } else {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(
@@ -5514,7 +5514,7 @@ mod_bloco_4_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
-            color = "#FEAF77FF",
+            color = "#982D80FF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
@@ -5525,7 +5525,7 @@ mod_bloco_4_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
-            color = "#FEAF77FF",
+            color = "#982D80FF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name} <b>({point.class})</b>: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b>"
             ),
@@ -5537,7 +5537,7 @@ mod_bloco_4_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
-            color = "#F1605DFF",
+            color = "#5F187FFF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),
@@ -5548,7 +5548,7 @@ mod_bloco_4_server <- function(id, filtros){
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,
-            color = "#F1605DFF",
+            color = "#5F187FFF",
             tooltip = list(
               pointFormat = "<span style = 'color: {series.color}'> &#9679 </span> {series.name}: <b> {point.y}% </b> <br> Média nacional: <b> {point.br_prop_indicador:,f}% </b> "
             ),

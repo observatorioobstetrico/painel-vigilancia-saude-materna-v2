@@ -448,10 +448,7 @@ mod_nivel_1_ui <- function(id) {
                 recentes da Organização Mundial de Saúde para a assistência ao parto.
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Os indicadores de assistência ao parto são apresentados em três abas:
-                <span style='display: block; margin-bottom: 14px;'> </span>
-                Grupo de Robson: nessa aba, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
-                distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
-                Robson e a contribuição de cada grupo para a taxa global de cesariana.
+
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Deslocamento para parto: nessa aba, apresentamos
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
@@ -464,9 +461,11 @@ mod_nivel_1_ui <- function(id) {
                 a regionalização da atenção ao parto está ocorrendo conforme o planejado, ou seja, se os partos estão ocorrendo
                 em serviços e municípios previstos na regionalização e atendendo à orientação de que RN com peso ao nascer < 1500 g
                 devem nascer em local com disponibilidade de leitos de UTI neonatal.
+
                 <span style='display: block; margin-bottom: 14px;'> </span>
-                Profissional e local do parto: Esses indicadores mostram a porcentagem de nascidos vivos segundo local de ocorrência
-                e a porcentagem de partos vaginais hospitalares segundo profissional que prestou assistência.
+                Profissional e local do parto: nessa aba apresentamos a porcentagem de nascimentos segundo local de ocorrência (hospital, outro
+                estabelecimento de saúde, domicílio, aldeia indígena, sem informação, outros) e a porcentagem de partos vaginais hospitalares
+                segundo tipo de profissional.
                 A assistência ao parto por profissionais capacitados é uma das principais estratégias para a redução da mortalidade materna e perinatal.
                 Partos hospitalares ocorrem em um ambiente onde existem profissionais capacitados e, em teoria, são assistidos por esses profissionais.
                 Partos não hospitalares podem ser planejados e serem assistidos por profissionais capacitados, mas também podem ocorrer sem assistência.
@@ -477,6 +476,11 @@ mod_nivel_1_ui <- function(id) {
                 na assistência ao parto vaginal, conforme as revisões sistemáticas e os posicionamento da Organização Mundial da Saúde Como valor de
                 referência, utilizamos a porcentagem de partos por enfermeiras observada em países com elevada participação da enfermagem no modelo de
                 atenção ao parto,  taxas adequadas de cesariana e baixas taxas de mortalidade materna e perinatal.
+
+                <span style='display: block; margin-bottom: 14px;'> </span>
+                Grupo de Robson: nessa aba, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
+                distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
+                Robson e a contribuição de cada grupo para a taxa global de cesariana.
                 </p>
                 "
               ),
@@ -3298,6 +3302,7 @@ mod_nivel_1_server <- function(id, filtros) {
         tipo = "porcentagem",
         invertido = FALSE,
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = filtros()$nivel
@@ -3309,12 +3314,13 @@ mod_nivel_1_server <- function(id, filtros) {
         dados = data5(),
         indicador = "porc_malformacao_geral",
         titulo = "Porcentagem de nascidos vivos com anomalias congênitas",
-        tem_meta = FALSE,
+        tem_meta = TRUE,
         # valor_de_referencia = data5_comp()$porc_malformacao_geral,
         valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
         invertido = FALSE,
         #fonte_titulo = "15px",
+        cor = "lightgrey",
         pagina = "nivel_1",
         # tipo_referencia = "média nacional",
         tipo_referencia = "mundo",
