@@ -1131,12 +1131,6 @@ sinasc24_aux <- sinasc24 |>
   select(CODMUNRES, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5) |>
   mutate(
     ano = substr(DTNASC, 5, 8)
-  ) |>
-  mutate(
-    ano = case_when(
-      ano == "024" ~ "2024",
-      TRUE ~ ano
-    )
   )
 
 sinasc24 <- sinasc24_aux|>
@@ -2595,12 +2589,6 @@ df_ameacadoras <- df_nascidos_total_aux |>
     .keep = "unused",
   ) |>
   mutate(
-    ano = case_when(
-      ano == 023 ~ 2023,
-      ano == 024 ~ 2024,
-      TRUE ~ ano
-    )) |>
-  mutate(
     nascidos_condicoes_ameacadoras = if_else(PESO < 1500 | (GESTACAO < 4 | SEMAGESTAC < 32) | APGAR5 < 7, 1, 0, missing = 0),
     .keep = "unused"
   ) |>
@@ -2823,7 +2811,6 @@ df_aih_internacoes_wide_macros <- df_aih_internacoes_wide |>
 df_aih_internacoes_wide_macros$codmunres <-as.numeric(df_aih_internacoes_wide_macros$codmunres)
 
 df_bloco5_sih_internacoes <- df_aih_internacoes_wide_macros |>
-  select(ano, codmunres, idade_cat, indicadora_mesma_macro, indicadora_uti) |>
   group_by_all() |>
   summarise(num_internacoes = n()) |>
   ungroup() |>
@@ -2835,7 +2822,7 @@ df_bloco5_sih_internacoes <- df_aih_internacoes_wide_macros |>
   ) |>
   right_join(data.frame(codmunres = rep(as.numeric(df_infos_municipios$codmunres), each = length(2024:2024)), ano = 2024:2024)) |>
   arrange(codmunres, ano) |>
-  mutate(across(.cols = -c(codmunres, ano), .fns = ~ replace_na(., 0))) |>
+  mutate(across(.cols = -c(codmunres, ano, causabas), .fns = ~ replace_na(., 0))) |>
   rowwise() |>
   mutate(
     # Para o indicador de internações geral, os nomes das variáveis seguem o padrão "internacoes_local-do-parto_idade-do-bebe"

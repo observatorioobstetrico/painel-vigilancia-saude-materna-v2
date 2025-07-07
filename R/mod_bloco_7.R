@@ -4060,25 +4060,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_morbidade_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_morbidade_neonatal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("afeccoes_respiratorias", grupo_cid10) ~ "afeccoes_respiratorias",
-              grepl("fatores_maternos", grupo_cid10) ~ "fatores_maternos",
-              grepl("afeccoes_perinatal", grupo_cid10) ~ "afeccoes_perinatal",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("ictericia", grupo_cid10) ~ "ictericia",
-              grepl("endocrinos", grupo_cid10) ~ "endocrinos",
-              grepl("alimentacao", grupo_cid10) ~ "alimentacao",
-              grepl("cardiacos_perinatal", grupo_cid10) ~ "cardiacos_perinatal",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -4089,7 +4070,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4133,25 +4114,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_morbidade_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_morbidade_neonatal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("afeccoes_respiratorias", grupo_cid10) ~ "afeccoes_respiratorias",
-              grepl("fatores_maternos", grupo_cid10) ~ "fatores_maternos",
-              grepl("afeccoes_perinatal", grupo_cid10) ~ "afeccoes_perinatal",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("ictericia", grupo_cid10) ~ "ictericia",
-              grepl("endocrinos", grupo_cid10) ~ "endocrinos",
-              grepl("alimentacao", grupo_cid10) ~ "alimentacao",
-              grepl("cardiacos_perinatal", grupo_cid10) ~ "cardiacos_perinatal",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -4163,7 +4125,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4364,18 +4326,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_fetal2, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal2)),
-            dplyr::case_when(
-              grepl("imunoprevencao2", grupo_cid10) ~ "imunoprevencao2",
-              grepl("mulher_gestacao2", grupo_cid10) ~ "mulher_gestacao2",
-              grepl("parto2", grupo_cid10) ~ "parto2",
-              grepl("mal_definidas2", grupo_cid10) ~ "mal_definidas2s",
-              grepl("nao_aplica2", grupo_cid10) ~ "nao_aplica2",
-              grepl("outros2", grupo_cid10) ~ "outros2",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -4386,7 +4336,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4439,20 +4389,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_neonatal)),
-            dplyr::case_when(
-              grepl("imunoprevencao", grupo_cid10) ~ "imunoprevencao",
-              grepl("mulher_gestacao", grupo_cid10) ~ "mulher_gestacao",
-              grepl("parto", grupo_cid10) ~ "parto",
-              grepl("recem_nascido", grupo_cid10) ~ "recem_nascido",
-              grepl("tratamento", grupo_cid10) ~ "tratamento",
-              grepl("saude", grupo_cid10) ~ "saude",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -4463,7 +4399,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4517,20 +4453,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
-            dplyr::case_when(
-              grepl("imunoprevencao", grupo_cid10) ~ "imunoprevencao",
-              grepl("mulher_gestacao", grupo_cid10) ~ "mulher_gestacao",
-              grepl("parto", grupo_cid10) ~ "parto",
-              grepl("recem_nascido", grupo_cid10) ~ "recem_nascido",
-              grepl("tratamento", grupo_cid10) ~ "tratamento",
-              grepl("saude", grupo_cid10) ~ "saude",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupo_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -4541,7 +4463,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4670,18 +4592,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_fetal2, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_fetal2)),
-            dplyr::case_when(
-              grepl("imunoprevencao2", grupo_cid10) ~ "imunoprevencao2",
-              grepl("mulher_gestacao2", grupo_cid10) ~ "mulher_gestacao2",
-              grepl("parto2", grupo_cid10) ~ "parto2",
-              grepl("mal_definidas2", grupo_cid10) ~ "mal_definidas2",
-              grepl("nao_aplica2", grupo_cid10) ~ "nao_aplica2",
-              grepl("outros2", grupo_cid10) ~ "outros2",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -4693,7 +4603,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4746,20 +4656,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_neonatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_neonatal)),
-            dplyr::case_when(
-              grepl("imunoprevencao", grupo_cid10) ~ "imunoprevencao",
-              grepl("mulher_gestacao", grupo_cid10) ~ "mulher_gestacao",
-              grepl("parto", grupo_cid10) ~ "parto",
-              grepl("recem_nascido", grupo_cid10) ~ "recem_nascido",
-              grepl("tratamento", grupo_cid10) ~ "tratamento",
-              grepl("saude", grupo_cid10) ~ "saude",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -4771,7 +4667,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -4826,20 +4722,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_evitaveis_perinatal, collapse="|"), grupo_cid10) & !is.null(input$cids_evitaveis_perinatal)),
-            dplyr::case_when(
-              grepl("imunoprevencao", grupo_cid10) ~ "imunoprevencao",
-              grepl("mulher_gestacao", grupo_cid10) ~ "mulher_gestacao",
-              grepl("parto", grupo_cid10) ~ "parto",
-              grepl("recem_nascido", grupo_cid10) ~ "recem_nascido",
-              grepl("tratamento", grupo_cid10) ~ "tratamento",
-              grepl("saude", grupo_cid10) ~ "saude",
-              grepl("mal_definidas", grupo_cid10) ~ "mal_definidas",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -4851,7 +4733,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos, na.rm=T), 1)
         ) |>
@@ -5635,21 +5517,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -5660,7 +5527,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
@@ -5716,21 +5583,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -5741,7 +5593,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
@@ -5797,21 +5649,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",
             filtros()$nivel == "regional" ~ filtros()$regiao,
@@ -5822,7 +5659,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
@@ -5879,21 +5716,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -5905,7 +5727,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
@@ -5962,21 +5784,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -5988,7 +5795,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
@@ -6045,21 +5852,6 @@ mod_bloco_7_server <- function(id, filtros){
             ),
             "Grupos não selecionados"
           ),
-          grupo_cid10_aux = ifelse(
-            (grepl(paste(input$cids_grupos_fetal, collapse="|"), grupo_cid10) & !is.null(input$cids_grupos_fetal)),
-            dplyr::case_when(
-              grepl("prematuridade", grupo_cid10) ~ "prematuridade",
-              grepl("infeccoes", grupo_cid10) ~ "infeccoes",
-              grepl("asfixia", grupo_cid10) ~ "asfixia",
-              grepl("ma_formacao", grupo_cid10) ~ "ma_formacao",
-              grepl("respiratorias", grupo_cid10) ~ "respiratorias",
-              grepl("gravidez", grupo_cid10) ~ "gravidez",
-              grepl("afeccoes", grupo_cid10) ~ "afeccoes",
-              grepl("mal_definida", grupo_cid10) ~ "mal_definida",
-              grepl("outros", grupo_cid10) ~ "outros",
-            ),
-            "grupos_nao_selecionados"
-          ),
           class = dplyr::case_when(
             filtros()$nivel2 == "nacional" ~ "Brasil",
             filtros()$nivel2 == "regional" ~ filtros()$regiao2,
@@ -6071,7 +5863,7 @@ mod_bloco_7_server <- function(id, filtros){
           )
         ) |>
         dplyr::ungroup() |>
-        dplyr::group_by(ano, grupo_cid10, grupo_cid10_aux, class) |>
+        dplyr::group_by(ano, grupo_cid10, class) |>
         dplyr::summarise(
           porc_obitos = round(sum(porc_obitos), 1)
         ) |>
