@@ -18,7 +18,7 @@ arq_SP <- "data-raw/morbidade/databases/02_sih_sp"
 
 
 # Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2024)
+anos <- c(2012:2024)
 
 
 ### Descolamento prematuro de placenta (cids O450; O458; O459)
@@ -170,7 +170,7 @@ intercorrencias_puerp <- c( "O700",	"O70", "O701", "O702", "O703", "O709", "O710
 
 ### filtrando quem internou por complicações ou parto
 
-curetagem <- c( "409060070", "411020013" )
+curetagem <- c("411020013")
 
 
 #### Intervenção cirúrgica (13/03/2023) - (ATOPROF 0415010012, 0415020034, 0407040161, 0407040250,
@@ -181,13 +181,15 @@ curetagem <- c( "409060070", "411020013" )
 ### criterio inter cirurgica ampliada ( curetagem + procedimentos com novos )
 
 proc_cirurgicos <- c( "415010012", "415020034", "407040161", "407040250", "407040030", "407040021", "407040013",
-                      "411010085", "411010050", "407040200", "407040242", "415040027", "411010077", "401010031",
+                      "411010085", "411010050", "407040200", "407040242", "415040027", "401010031",
                       "401010104" )
 
 
 # criar variavel com os estados
 
-estados <- c( "AC")
+estados <- c("AC","AL","AP","AM","BA","CE","DF","ES","GO","MA",
+             "MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN",
+             "RS","RO","RR","SC","SP","SE","TO")
 
 # criar tabelas totais
 
@@ -321,7 +323,7 @@ for( estado in estados ) {
 
   # ler base SP
 
-  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_{anos[1]}_{anos[length(anos)]}.csv.gz"), sep = ",") |>
+  base_sp_redu <- fread(glue("{arq_SP}/{estado}_sih_sp_filtrado_{anos[1]}_{anos[length(anos)]}.csv.gz"), sep = ";") |>
     mutate(SP_ATOPROF = as.character(SP_ATOPROF)) |>
     filter(SP_NAIH %in% sp_obs_cluster_atual$N_AIH)
 
@@ -476,7 +478,7 @@ for( estado in estados ) {
     mutate( casos_MMG_hemorragia = if_else(casos_MMG_Transfusao == 1 | CPAV_DESC_PLAC_SIH_BR == 1 | CPAV_ECTOPICA_SIH_BR_SP == 1 |
                                               CPAV_HEMORRAGIA_SIH_BR == 1 | CPAV_ROTURA_SIH_BR_SP == 1, 1L, NA_integer_ ),
             casos_MMG_infeccoes = if_else( CPAV_ENDOMETRITE_SIH_BR == 1 | CPAV_SEPSE_SIH_BR == 1, 1L, NA_integer_ ),
-            casos_MMG_cirurgia = if_else( CPAV_HISTERECTOMIA_SIH_BR_SP == 1 | CPAV_INTER_CIRURGICA_SIH_BR_SP == 1, 1L, NA_integer_ ) )
+            casos_MMG_cirurgia = if_else( CPAV_HISTERECTOMIA_SIH_BR_SP == 1, 1L, NA_integer_ ) )
 
 
   # selecionar apenas as variaveis de interesse
@@ -604,19 +606,10 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(codmunres)
 
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2024)), ano = 2024)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
 df_bloco6_morbidade <- left_join(df_aux_municipios, obs_cluster_total_mun_ano |> janitor::clean_names())
 
 df_bloco6_morbidade[is.na(df_bloco6_morbidade)] <- 0
 
-bloco6_morbidade_materna_antigo <- read_csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv")|>
-  filter(ANO <= 2023) |>
-  clean_names()
-
-bloco6_morbidade_materna_novo <- rbind(bloco6_morbidade_materna_antigo, df_bloco6_morbidade)
-
-write.csv(bloco6_morbidade_materna_novo, glue("{output_dir}/indicadores_bloco6_morbidade_materna_2012-2024.csv"), row.names = FALSE)
-
-
-
+write.csv(df_bloco6_morbidade, glue("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv"), row.names = FALSE)

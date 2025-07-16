@@ -1,61 +1,80 @@
 library(microdatasus)
+library(data.table)
 library(dplyr)
 library(glue)
+library(future)
+library(future.apply)
+library(purrr)
 
-# Criando um vetor com as siglas de todos os estados do Brasil
-estados <- c("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-             "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-             "RS", "RO", "RR", "SC", "SP", "SE", "TO")
+# Criando o planejamento dos futures
+plan(multisession)
+options(future.rng.onMisuse = "ignore")
 
-# Criando um vetor com os anos considerados (2012 a 2024)
-anos <- c(2024)
+# Definindo vetores estáticos -------------------------------------------------
+## Criando um vetor com as siglas de todos os estados do Brasil
+estados <- c("AC","AL","AP","AM","BA","CE","DF","ES","GO","MA",
+             "MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN",
+             "RS","RO","RR","SC","SP","SE","TO")
 
-## Baixando os dados do SIH-SP para cada UF
-for (estado in estados) {
-  # Criando um data.frame que guardará a base final de cada UF
-  df_sih_sp_uf <- data.frame()
+## Criando um vetor com os anos considerados (2012 a 2024)
+anos <- 2012:2024
 
-  # Criando um vetor que contém todos os N_AIHs de interesse na respectiva base do SIH-RD
-  naih_sih_rd <- read.csv2(glue("data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos/{estado}_sih_rd_bruto_{anos[1]}_{anos[length(anos)]}.csv")) |>
-    pull(N_AIH)
+# Definindo os diretórios de entrada e saída ----------------------------------
+sih_rd_dir <- "data-raw/morbidade/databases/01_sih_rd/01_arquivos_brutos"
+sih_sp_dir <- "data-raw/morbidade/databases/02_sih_sp"
+if (!dir.exists(sih_sp_dir)) dir.create(sih_sp_dir, recursive = TRUE)
 
+# Criando uma função para baixar os dados do SIH-SP para cada UF --------------
+processa_uf_sih_sp <- function(uf_sigla, anos, sih_rd_dir, sih_sp_dir) {
+
+  # Criando um data.table que guardará a base final de cada UF
+  df_sih_sp_uf <- data.table()
+
+  # Lendo vetor de N_AIH da base SIH-RD já baixada para a UF e anos
+  naih_sih_rd <- fread(glue("{sih_rd_dir}/{uf_sigla}_sih_rd_bruto_{min(anos)}_{max(anos)}.csv.gz"))[, N_AIH]
+
+  # Loop para baixar dados SIH-SP e filtrar apenas pelos SP_NAIH que têm correspondência na base do SIH-RD
   for (ano in anos) {
-    # Baixando os dados para o dado ano e para a dada UF
-    df_sih_sp_uf_aux <- fetch_datasus(
+    df_aux <- fetch_datasus(
       year_start = ano,
       year_end = ano,
       month_start = 1,
       month_end = 12,
-      uf = estado,
+      uf = uf_sigla,
       information_system = "SIH-SP",
       vars = c("SP_NAIH", "SP_ATOPROF")
-    ) |>
-      # Filtrando apenas pelos SP_NAIH que têm correspondência na base do SIH-RD
-      filter(SP_NAIH %in% naih_sih_rd)
+    ) %>%
+      filter(SP_NAIH %in% naih_sih_rd) %>%
+      as.data.table()
 
-    # Juntando com os dados dos anos anteriores para a dada UF
-    if (ano == anos[1]) {
-      df_sih_sp_uf <- df_sih_sp_uf_aux
-    } else {
-      df_sih_sp_uf <- full_join(df_sih_sp_uf, df_sih_sp_uf_aux)
-    }
+    # Juntando dados do ano com os anteriores
+    df_sih_sp_uf <- rbindlist(list(df_sih_sp_uf, df_aux), use.names = TRUE, fill = TRUE)
 
-    # Limpando a memória
-    rm(df_sih_sp_uf_aux)
+    # Limpeza de memória intermediária
+    rm(df_aux)
     gc()
   }
 
-  # Salvando a base do completa para a dada UF
-  output_dir <- "data-raw/morbidade/databases/02_sih_sp"
-  if (!dir.exists(output_dir)) {dir.create(output_dir)}
-
-  write.csv(
+  # Salvando arquivo final para a UF
+  fwrite(
     df_sih_sp_uf,
-    gzfile(glue("{output_dir}/{estado}_sih_sp_filtrado_{anos[1]}_{anos[length(anos)]}.csv.gz")),
-    row.names = FALSE
+    file = glue("{sih_sp_dir}/{uf_sigla}_sih_sp_filtrado_{min(anos)}_{max(anos)}.csv.gz"),
+    sep = ";",
+    compress = "gzip"
   )
 
-  # Limpando a memória
+  # Limpeza final de memória
   rm(df_sih_sp_uf, naih_sih_rd)
   gc()
+
+  message("✅  Concluído UF: ", uf_sigla)
+  invisible(TRUE)
 }
+
+# Baixando todos os dados -----------------------------------------------------
+invisible(
+  future_lapply(
+    estados,
+    function(uf) processa_uf_sih_sp(uf_sigla = uf, anos = anos, sih_rd_dir = sih_rd_dir, sih_sp_dir = sih_sp_dir)
+  )
+)
