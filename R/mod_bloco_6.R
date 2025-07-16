@@ -495,7 +495,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com intervenções cirúrgicas &nbsp;</b>"),
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao9"),
@@ -1352,12 +1352,12 @@ mod_bloco_6_server <- function(id, filtros){
       )
     })
 
-    #### Porcentagem de casos de morbidade materna grave com intervenção cirúrgica ----
+    #### Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) ----
     output$caixa_b6_mmg_i8 <- renderUI({
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = "prop_mmg_cirurgia",
-        titulo = "Porcentagem de casos de morbidade materna grave com intervenção cirúrgica",
+        titulo = "Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero)",
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_cirurgia,
         tipo = "porcentagem",

@@ -1360,7 +1360,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando os data.frames para a construção do gráfico de garbage codes p/ óbitos maternos --------
     data_filtrada_aux <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2],
           if (filtros()$nivel == "nacional")
@@ -1417,7 +1417,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
 
     data_plot_garbage_materno_referencia <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -1520,7 +1520,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
 
     data_plot_garbage_fetal_referencia <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -1625,7 +1625,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_plot_garbage_perinatal_referencia <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -1728,7 +1728,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_plot_garbage_neonatal_referencia <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -1832,7 +1832,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_plot_garbage_morbidade_neonatal_referencia <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(
           ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
         ) |>
@@ -1898,7 +1898,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ############ Porcentagem de garbage codes em relação ao total de óbitos
 
     garbage_porcentagens <- reactive({
-      bloco8_graficos |>
+      base_garbage_code |>
         dplyr::filter(ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]) |>
         dplyr::filter(
           if (filtros()$nivel == "nacional")
