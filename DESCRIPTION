@@ -37,7 +37,7 @@ Imports:
     viridis
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 3.5)
 URL: https://github.com/observatorioobstetrico/painel-vigilancia-saude-materna

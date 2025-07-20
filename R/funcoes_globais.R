@@ -1,4 +1,151 @@
 #' @exportS3Method pkg::generic
+#' @import data.table
+.datatable.aware <- TRUE # avisa o cedta() que o pacote é DT‑aware
+filtra_localidade <- function(data, filtros, comp = FALSE, referencia = FALSE, localidade_resumo = "escolha1", add_class = TRUE) {
+  # Definindo o sufixo
+  sufixo <- ifelse(comp == TRUE | localidade_resumo == "escolha2", "2", "")
+
+  # Criando uma função auxiliar que devolve filtros$input ou filtros$input2 a depender do sufixo
+  get_filtro <- function(var) filtros[[paste0(var, sufixo)]]
+
+  # Obtendo o nível selecionado
+  nivel_selecionado <- get_filtro("nivel")
+
+  # Filtrando o período de análise escolhido
+  data <- dplyr::filter(
+    data,
+    ano >= filtros$ano2[1] & ano <= filtros$ano2[2]
+  )
+
+  # Se for para a referência, não precisamos fazer nenhum filtro adicional
+  if (referencia) return(data |> dplyr::mutate(class = "Brasil (valor de referência)"))
+
+  # Se não for para a referência, filtrando a localidade selecionada
+  data <- switch(
+    nivel_selecionado,
+    "nacional" = data,
+    "regional" = dplyr::filter(data, regiao == get_filtro("regiao")),
+    "estadual" = dplyr::filter(data, uf == get_filtro("estado")),
+    "macro" = dplyr::filter(data, macro_r_saude == get_filtro("macro") & uf == get_filtro("estado_macro")),
+    "micro" = dplyr::filter(data, r_saude == get_filtro("micro") & uf == get_filtro("estado_micro")),
+    "municipal" = dplyr::filter(data, municipio == get_filtro("municipio") & uf == get_filtro("estado_municipio")),
+    "municipios_semelhantes" = dplyr::filter(
+      data,
+      grupo_kmeans == tabela_aux_municipios$grupo_kmeans[
+        tabela_aux_municipios$municipio == get_filtro("municipio") &
+          tabela_aux_municipios$uf == get_filtro("estado_municipio")
+        ]
+    )
+  )
+
+  # Adicionando a coluna "class" (caso solicitado)
+  if (add_class) {
+    data <- dplyr::mutate(
+      data,
+      class = dplyr::case_when(
+        nivel_selecionado == "nacional" | referencia ~ dplyr::if_else(
+          filtros$comparar == "Não",
+          "Brasil (valor de referência)",
+          dplyr::if_else(
+            filtros$mostrar_referencia == "nao_mostrar_referencia",
+            "Brasil",
+            "Brasil (valor de referência)"
+          )
+        ),
+        nivel_selecionado == "regional" ~ get_filtro("regiao"),
+        nivel_selecionado == "estadual" ~ get_filtro("estado"),
+        nivel_selecionado == "macro" ~ get_filtro("macro"),
+        nivel_selecionado == "micro" ~ get_filtro("micro"),
+        nivel_selecionado == "municipal" ~ get_filtro("municipio"),
+        nivel_selecionado == "municipios_semelhantes" ~ "Média dos municípios semelhantes"
+      )
+    )
+  }
+
+  data
+}
+
+processa_fetal <- function(data, input, filtros,
+                           comp = FALSE, referencia = FALSE) {
+
+  ## 1.  Filtra e garante data.table ----------
+  dt <- filtra_localidade(data, filtros, comp, referencia) |>
+    data.table::as.data.table()
+
+  ## 2.  Conjuntos de colunas -----------------
+  cols <- list(
+    tot      = sprintf("obitos_fetais_%s_%s",
+                       input$input_num_obitos_peso,
+                       input$input_num_obitos_momento),
+
+    num_taxa = sprintf("obitos_fetais_%s_%s",
+                       input$input_taxa_de_mortalidade_peso,
+                       input$input_taxa_de_mortalidade_momento),
+
+    den_taxa = sprintf("nv_peso_%s",
+                       input$input_taxa_de_mortalidade_peso),
+
+    antes    = sprintf("obitos_fetais_%s_antes",   input$input_distribuicao_peso),
+    durante  = sprintf("obitos_fetais_%s_durante", input$input_distribuicao_peso),
+    todos    = sprintf("obitos_fetais_%s_todos",   input$input_distribuicao_peso),
+
+    p_m1000  = sprintf("obitos_fetais_menos_1000_%s", input$input_distribuicao_momento),
+    p_1k15   = sprintf("obitos_fetais_1000_1499_%s",  input$input_distribuicao_momento),
+    p_15k25  = sprintf("obitos_fetais_1500_2499_%s",  input$input_distribuicao_momento),
+    p_25mais = sprintf("obitos_fetais_2500_mais_%s",  input$input_distribuicao_momento),
+    p_todos  = sprintf("obitos_fetais_todos_%s",       input$input_distribuicao_momento)
+  )
+
+  ## 3.  Função única que gera os indicadores para qualquer agrupamento -------
+  calcula_indicadores <- function(grp) {
+    dt[
+      ,
+      {
+        s <- lapply(cols, \(v)
+                    sum(as.numeric(unlist(.SD[, v, with = FALSE])), na.rm = TRUE)
+        )
+        names(s) <- names(cols)
+
+        with(s, {
+          taxa          <- round(num_taxa / (num_taxa + den_taxa) * 1000, 1)
+
+          porc_antes    <- round(antes   / todos  * 100, 1)
+          porc_durante  <- round(durante / todos  * 100, 1)
+          porc_sem_mom  <- 100 - (porc_antes + porc_durante)
+
+          porc_m1000    <- round(p_m1000 / p_todos * 100, 1)
+          porc_1k15     <- round(p_1k15  / p_todos * 100, 1)
+          porc_15k25    <- round(p_15k25 / p_todos * 100, 1)
+          porc_25mais   <- round(p_25mais/ p_todos * 100, 1)
+          porc_sem_peso <- 100 - (porc_m1000 + porc_1k15 + porc_15k25 + porc_25mais)
+
+          .(
+            obitos_fetais_totais               = tot,
+            taxa_de_mortalidade                = taxa,
+            porc_obito_fetal_antes             = porc_antes,
+            porc_obito_fetal_durante           = porc_durante,
+            porc_obito_fetal_momento_faltante  = porc_sem_mom,
+            porc_obito_fetal_menos_1000        = porc_m1000,
+            porc_obito_fetal_1000_1499         = porc_1k15,
+            porc_obito_fetal_1500_2499         = porc_15k25,
+            porc_obito_fetal_2500_mais         = porc_25mais,
+            porc_obito_fetal_peso_faltante     = porc_sem_peso
+          )
+        })
+      },
+      by = grp,
+      .SDcols = unique(unlist(cols))
+    ]
+  }
+
+  ## 4.  Aplica a função para os dois níveis -------------------
+  df_graficos <- calcula_indicadores(c("ano", "class"))
+  df_resumo   <- calcula_indicadores("class")
+
+  list(graficos = df_graficos, resumo = df_resumo)
+}
+
+
 cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NULL, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros", localidade_resumo = "escolha1") {
 
   if (referencia == FALSE) {
@@ -98,7 +245,7 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
 }
 
 
-cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = "300px", fonte_titulo = "fonte-grande", fonte_comparacao = "fonte-media", pagina, width_caixa = 12) {
+cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = "300px", fonte_titulo = "fonte-grande", fonte_comparacao = "fonte-media", pagina, width_caixa = 12, retornar_caixa_completa = TRUE) {
 
   if (is.null(valor_indicador)) {
     if (isTruthy(dados[[indicador]])) {
@@ -299,18 +446,26 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 
   style_texto <- glue::glue("height: 28%; overflow: auto; padding: 0 10px; display: flex; justify-content: center; text-align: center;")
 
-  bs4Dash::box(
-    style = glue::glue("height: {tamanho_caixa}; overflow: auto; padding: 0;"),
-    width = width_caixa,
-    collapsible = FALSE,
-    headerBorder = FALSE,
-    div(class = fonte_titulo, style = glue::glue("height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
-    div(style = "height: 3%"),
-    div(class = fonte_texto, style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
-    div(class = fonte_comparacao, style = glue::glue("overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
-  )
-
-
+  if (retornar_caixa_completa == TRUE) {
+    bs4Dash::box(
+      style = glue::glue("height: {tamanho_caixa}; overflow: auto; padding: 0;"),
+      width = width_caixa,
+      collapsible = FALSE,
+      headerBorder = FALSE,
+      div(class = fonte_titulo, style = glue::glue("height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = "height: 3%"),
+      div(class = fonte_texto, style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
+      div(class = fonte_comparacao, style = glue::glue("overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
+    )
+  } else {
+    div(
+      style = glue::glue("height: 327px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;"),
+      div(class = fonte_titulo, style = glue::glue("height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+      div(style = "height: 3%"),
+      div(class = fonte_texto, style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
+      div(class = fonte_comparacao, style = glue::glue("overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
+    )
+  }
 }
 
 
@@ -424,6 +579,277 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
   }
 
 }
+
+# cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = "303px", fonte_titulo = "fonte-grande", width_caixa = 12) {
+#
+#   if (indicador == "fetal peso por idade gestacional") {
+#     valor_indicador1 <- dados[["porc_obito_fetal_menos_1000"]]
+#     valor_indicador2 <- dados[["porc_obito_fetal_1000_1499"]]
+#     valor_indicador3 <- dados[["porc_obito_fetal_1500_2499"]]
+#     valor_indicador4 <- dados[["porc_obito_fetal_2500_mais"]]
+#     valor_indicador5 <- dados[["porc_obito_fetal_peso_faltante"]]
+#   }
+#
+#   if (indicador == "fetal momento do obito por peso") {
+#     valor_indicador1 <- dados[["porc_obito_fetal_antes"]]
+#     valor_indicador2 <- dados[["porc_obito_fetal_durante"]]
+#     valor_indicador3 <- dados[["porc_obito_fetal_momento_faltante"]]
+#   }
+#
+#   if (indicador == "perinatal momento do obito por peso") {
+#     valor_indicador1 <- dados[["porc_obito_perinatal_antes"]]
+#     valor_indicador2 <- dados[["porc_obito_perinatal_durante"]]
+#     valor_indicador3 <- dados[["dia_0_dist_moment_obito_perinat"]]
+#     valor_indicador4 <- dados[["dia_1_6_dist_moment_obito_perinat"]]
+#     valor_indicador5 <- dados[["faltante_dist_moment_obito_perinat"]]
+#   }
+#
+#   if (indicador == "perinatal peso por momento do obito") {
+#     valor_indicador1 <- dados[["menos_1000_dist_peso_perinat"]]
+#     valor_indicador2 <- dados[["de_1000_1499_dist_peso_perinat"]]
+#     valor_indicador3 <- dados[["de_1500_2499_dist_peso_perinat"]]
+#     valor_indicador4 <- dados[["mais_2500_dist_peso_perinat"]]
+#     valor_indicador5 <- dados[["faltante_dist_peso_perinat"]]
+#   }
+#
+#   if (indicador == "neonatal momento do obito por peso") {
+#     valor_indicador1 <- dados[["dia_0_dist_moment_obito_neonat"]]
+#     valor_indicador2 <- dados[["dia_1_6dist_moment_obito_neonat"]]
+#     valor_indicador3 <- dados[["dia_7_27dist_moment_obito_neonat"]]
+#   }
+#
+#   if (indicador == "neonatal peso por momento do obito") {
+#     valor_indicador1 <- dados[["menos_1000_dist_peso_neonat"]]
+#     valor_indicador2 <- dados[["de_1000_1499_dist_peso_neonat"]]
+#     valor_indicador3 <- dados[["de_1500_2499_dist_peso_neonat"]]
+#     valor_indicador4 <- dados[["mais_2500_dist_peso_neonat"]]
+#     valor_indicador5 <- dados[["faltante_dist_peso_neonat"]]
+#   }
+#
+#   if (is.nan(valor_indicador1)) {
+#     texto1 <- "---"
+#   } else {
+#     texto1 <- "{formatC(valor_indicador1, big.mark = '.', decimal.mark = ',')}%"
+#   }
+#
+#   if (is.nan(valor_indicador2)) {
+#     texto2 <- "---"
+#   } else {
+#     texto2 <- "{formatC(valor_indicador2, big.mark = '.', decimal.mark = ',')}%"
+#   }
+#
+#   if (is.nan(valor_indicador3)) {
+#     texto3 <- "---"
+#   } else {
+#     texto3 <- "{formatC(valor_indicador3, big.mark = '.', decimal.mark = ',')}%"
+#   }
+#
+#   if (indicador == "fetal peso por idade gestacional" | indicador == "perinatal momento do obito por peso"|
+#       indicador == "perinatal peso por momento do obito" | indicador == "neonatal peso por momento do obito"){
+#
+#     if (is.nan(valor_indicador4)) {
+#       texto4 <- "---"
+#     } else {
+#       texto4 <- "{formatC(valor_indicador4, big.mark = '.', decimal.mark = ',')}%"
+#     }
+#
+#   }
+#
+#   if (indicador == "fetal peso por idade gestacional" | indicador == "perinatal momento do obito por peso"|
+#       indicador == "perinatal peso por momento do obito" | indicador == "neonatal peso por momento do obito"){
+#
+#     if (is.nan(valor_indicador5)) {
+#       texto5 <- "---"
+#     } else {
+#       texto5 <- "{formatC(valor_indicador5, big.mark = '.', decimal.mark = ',')}%"
+#     }
+#   }
+#
+#   style_texto <- "display: flex; justify-content: center; text-align: center; margin-bottom: 0"
+#   style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
+#
+#   if (indicador == "fetal peso por idade gestacional") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 10px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "possuem peso menor que 1000 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1000 a 1499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1500 a 2499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+#           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+#           p(style = style_descricao, "não tem informação")
+#         )
+#       )
+#     )
+#   } else if (indicador == "fetal momento do obito por peso") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 10px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "ocorreram antes do parto")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "ocorreram durante o parto")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "não têm informação")
+#         )
+#       )
+#     )
+#
+#   } else if (indicador == "perinatal momento do obito por peso") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 0px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "ocorreram antes do parto")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "ocorreram durante o parto")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "ocorreram no dia 0 de vida")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+#           p(style = style_descricao, "ocorreram de 1 a 6 dias de vida")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+#           p(style = style_descricao, "não tem informação")
+#         )
+#       )
+#     )
+#
+#   } else if (indicador == "perinatal peso por momento do obito") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 0px 10px; overflow: auto"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "possuem peso menor que 1000 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1000 a 1499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1500 a 2499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+#           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+#           p(style = style_descricao, "não tem informação")
+#         ),
+#       )
+#     )
+#   } else if (indicador == "neonatal momento do obito por peso") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "ocorreram no dia 0 de vida")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "ocorreram de 1 a 6 dias de vida")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "ocorreram de 7 a 27 dias de vida")
+#         )
+#       )
+#     )
+#
+#   } else if (indicador == "neonatal peso por momento do obito") {
+#     bs4Dash::box(
+#       style = glue::glue("height: {tamanho_caixa}; padding: 0;"),
+#       width = width_caixa,
+#       collapsible = FALSE,
+#       headerBorder = FALSE,
+#       div(class = fonte_titulo, style = glue::glue("height: 15%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
+#       hr(),
+#       div(
+#         style = "height: 70%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
+#           p(style = style_descricao, "possuem peso menor que 1000 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1000 a 1499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
+#           p(style = style_descricao, "possuem peso de 1500 a 2499 g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
+#           p(style = style_descricao, "possuem peso maior ou igual a 2500g")
+#         ),
+#         div(
+#           p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
+#           p(style = style_descricao, "não tem informação")
+#         )
+#       )
+#     )
+#   }
+#
+# }
 
 cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = "303px", fonte_titulo = "fonte-grande", width_caixa = 12) {
 
@@ -695,8 +1121,6 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
   }
 
 }
-
-
 
 cria_modal_incompletude <- function(df, incompletude1, variavel_incompletude1 = NULL, descricao_incompletude1 = NULL, incompletude2 = NULL, variavel_incompletude2 = NULL, descricao_incompletude2 = NULL, incompletude3 = NULL, variavel_incompletude3 = NULL, descricao_incompletude3 = NULL, incompletude4 = NULL, variavel_incompletude4 = NULL, descricao_incompletude4 = NULL, cobertura, base = "SINASC", bloco = "geral", nivel = 2) {
 

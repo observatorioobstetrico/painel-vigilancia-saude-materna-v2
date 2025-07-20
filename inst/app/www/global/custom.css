@@ -264,3 +264,30 @@
 .info-icon {
   color: #007bff;
 }
+
+
+.tooltip {
+  opacity: 1 !important;
+  filter: none !important;
+  background-color: transparent !important; /* só pra limpar possíveis fundos */
+}
+
+.tooltip-inner {
+  color: white !important;
+  padding: 6px 10px;
+  font-size: 14px;
+  max-width: 250px;
+  text-align: center;
+  border-radius: 0.25rem;
+  border: 1px solid black;
+  opacity: 1 !important;
+  filter: none !important;
+
+  /* Sombra suave */
+  box-shadow: 0 6px 18px rgba(10, 30, 60, 0.35);
+}
+
+#bloco_1_1-caixa_b1_i4, #bloco_1_1-caixa_b1_i5, #bloco_1_1-caixa_b1_i6 {
+  background: transparent !important;
+  box-shadow: 0 0 0 rgba(0,0,0,.125), 0 0 0 rgba(0,0,0,.2) !important;
+}
