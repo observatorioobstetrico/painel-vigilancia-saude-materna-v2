@@ -42,15 +42,6 @@ mod_bloco_1_ui <- function(id){
             align = "center"
           )
         ),
-        # fluidRow(
-        #   bs4Dash::box(
-        #     width = 12,
-        #     collapsible = FALSE,
-        #     headerBorder = FALSE,
-        #     HTML("<b style='font-size:16px'> Gráfico de radar </b>"),
-        #     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("spider_chart"), height = 530))
-        #   )
-        # ),
         fluidRow(
           column(
             width = 6,
@@ -693,19 +684,19 @@ mod_bloco_1_server <- function(id, filtros){
         cria_indicadores(df_calcs = bloco1_calcs, input = input, filtros = filtros(), localidade_resumo = input$localidade_resumo)
     })
 
-    data1_resumo_idademae <- eventReactive(c(filtros()$pesquisar, input$input_idademae), {
+    data1_resumo_idademae <- eventReactive(c(filtros()$pesquisar, input$localidade_resumo, input$input_idademae), {
       data1_resumo_aux()
     }, ignoreNULL = FALSE)
 
-    data1_resumo_escmae <- eventReactive(c(filtros()$pesquisar, input$input_escmae), {
+    data1_resumo_escmae <- eventReactive(c(filtros()$pesquisar, input$localidade_resumo, input$input_escmae), {
       data1_resumo_aux()
     }, ignoreNULL = FALSE)
 
-    data1_resumo_racacormae <- eventReactive(c(filtros()$pesquisar, input$input_racacormae), {
+    data1_resumo_racacormae <- eventReactive(c(filtros()$pesquisar, input$localidade_resumo, input$input_racacormae), {
       data1_resumo_aux()
     }, ignoreNULL = FALSE)
 
-    data1_resumo_outros <- eventReactive(c(filtros()$pesquisar), {
+    data1_resumo_outros <- eventReactive(c(filtros()$pesquisar, input$localidade_resumo), {
       data1_resumo_aux()
     }, ignoreNULL = FALSE)
 
@@ -849,7 +840,7 @@ mod_bloco_1_server <- function(id, filtros){
         texto_footer = glue::glue(texto_comp),
         cor = cor_comp,
         invertido = TRUE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -879,7 +870,7 @@ mod_bloco_1_server <- function(id, filtros){
           "Comparação não aplicável (o total nacional é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} nascidos vivos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -894,21 +885,12 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por faixa etária da mãe -----------------
-    # titulo_faixa_etaria <- reactive({
-    #   dplyr::case_when(
-    #     input$input_idademae == "porc_nvm_10_a_14_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 10 a 14 anos",
-    #     input$input_idademae == "porc_nvm_15_a_19_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 15 a 19 anos",
-    #     input$input_idademae == "porc_nvm_entre_20_e_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade de 20 a 34 anos",
-    #     input$input_idademae == "porc_nvm_maior_que_34_anos" ~ "Porcentagem de nascidos vivos de mães com idade maior que 34 anos"
-    #   )
-    # })
-
     #### Criando a tooltip para essa caxinha
     bs4Dash::addTooltip(
       session = session,
       id = "info_btn_idademae",
       options = list(
-        title = '<span class = "fonte-aviso">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos faixa etária da mãe". </span>',
+        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos faixa etária da mãe". </span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -919,11 +901,12 @@ mod_bloco_1_server <- function(id, filtros){
     output_pronto_idademae <- reactiveVal(FALSE)
 
     #### Escondendo o botão da tooltip antes de começar a renderizar de novo
-    observeEvent(c(filtros()$pesquisar, input$input_idademae), {
+    observeEvent(c(filtros()$pesquisar, input$localidade_resumo, input$input_idademae), {
       output_pronto_idademae(FALSE)  # Reseta
       shinyjs::hide(id = "mostrar_botao_idademae", anim = FALSE)
-    })
+    }, priority = 1)
 
+    #### Criando a caixinha
     output$caixa_b1_i4 <- renderUI({
       output_pronto_idademae(TRUE)
       cria_caixa_server(
@@ -934,7 +917,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = data1_resumo_referencia_idademae()$porc_nvm_idademae,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -958,23 +941,12 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por raça/cor da mãe ---------------------
-    # titulo_racacor <- reactive({
-    #   dplyr::case_when(
-    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_amarela" ~ "Porcentagem de nascidos vivos de mães de raça/cor amarela",
-    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_branca" ~ "Porcentagem de nascidos vivos de mães de raça/cor branca",
-    #     input$input_racacormae == "porc_nvm_indigenas" ~ "Porcentagem de nascidos vivos de mães indígenas",
-    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_parda" ~ "Porcentagem de nascidos vivos de mães de raça/cor parda",
-    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_preta" ~ "Porcentagem de nascidos vivos de mães de raça/cor preta",
-    #     input$input_racacormae == "porc_nvm_com_cor_da_pele_negra" ~ "Porcentagem de nascidos vivos de mães de raça/cor negra (pardas e pretas)"
-    #   )
-    # })
-
     #### Criando a tooltip para essa caxinha
     bs4Dash::addTooltip(
       session = session,
       id = "info_btn_racacormae",
       options = list(
-        title = '<span class = "fonte-aviso">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por raça/cor da mãe". </span>',
+        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por raça/cor da mãe". </span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -985,11 +957,12 @@ mod_bloco_1_server <- function(id, filtros){
     output_pronto_racacormae <- reactiveVal(FALSE)
 
     #### Escondendo o botão da tooltip antes de começar a renderizar de novo
-    observeEvent(c(filtros()$pesquisar, input$input_racacormae), {
+    observeEvent(c(filtros()$pesquisar, input$localidade_resumo, input$input_racacormae), {
       output_pronto_racacormae(FALSE)  # Reseta
       shinyjs::hide(id = "mostrar_botao_racacormae", anim = FALSE)
-    })
+    }, priority = 1)
 
+    #### Criando a caixinha
     output$caixa_b1_i5 <- renderUI({
       output_pronto_racacormae(TRUE)
       cria_caixa_server(
@@ -1000,7 +973,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = data1_resumo_referencia_racacormae()$porc_nvm_racacormae,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
         cor = "lightgrey",
@@ -1025,21 +998,12 @@ mod_bloco_1_server <- function(id, filtros){
     })
 
     ### Porcentagem de nascidos vivos por escolaridade da mãe -----------------
-    # titulo_escmae <- reactive({
-    #   dplyr::case_when(
-    #     input$input_escmae == "porc_nvm_com_escolaridade_ate_3" ~ "Porcentagem de nascidos vivos de mães com menos de 4 anos de estudo",
-    #     input$input_escmae == "porc_nvm_com_escolaridade_de_4_a_7" ~ "Porcentagem de nascidos vivos de mães com 4 a 7 anos de estudo",
-    #     input$input_escmae == "porc_nvm_com_escolaridade_de_8_a_11" ~ "Porcentagem de nascidos vivos de mães com 8 a 11 anos de estudo",
-    #     input$input_escmae == "porc_nvm_com_escolaridade_acima_de_11" ~ "Porcentagem de nascidos vivos de mães de com mais de 11 anos de estudo"
-    #   )
-    # })
-
     #### Criando a tooltip para essa caxinha
     bs4Dash::addTooltip(
       session = session,
       id = "info_btn_escmae",
       options = list(
-        title = '<span class = "fonte-aviso">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por escolaridade da mãe". </span>',
+        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por escolaridade da mãe". </span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1050,11 +1014,12 @@ mod_bloco_1_server <- function(id, filtros){
     output_pronto_escmae <- reactiveVal(FALSE)
 
     #### Escondendo o botão da tooltip antes de começar a renderizar de novo
-    observeEvent(c(filtros()$pesquisar, input$input_escmae), {
+    observeEvent(c(filtros()$pesquisar, input$localidade_resumo, input$input_escmae), {
       output_pronto_escmae(FALSE)  # Reseta
       shinyjs::hide(id = "mostrar_botao_escmae", anim = FALSE)
-    })
+    }, priority = 1)
 
+    #### Criando a caixinha
     output$caixa_b1_i6 <- renderUI({
       output_pronto_escmae(TRUE)
       cria_caixa_server(
@@ -1065,7 +1030,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = data1_resumo_referencia_escmae()$porc_nvm_escmae,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -1098,7 +1063,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = data1_resumo_referencia_outros()$porc_dependentes_sus,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         cor = "lightgrey",
         nivel_de_analise = ifelse(
@@ -1123,7 +1088,7 @@ mod_bloco_1_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "meta ODS",
         nivel_de_analise = ifelse(
@@ -1326,7 +1291,7 @@ mod_bloco_1_server <- function(id, filtros){
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data1_comp_racacormae(),
+            data = data1_racacormae(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
@@ -1356,12 +1321,12 @@ mod_bloco_1_server <- function(id, filtros){
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data1_comp_racacormae(),
+            data = data1_racacormae(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data1_racacor_comp(),
+            data = data1_comp_racacormae(),
             type = "line",
             highcharter::hcaes(x = ano, y = porc_nvm_racacormae, group = class, colour = class)
           ) |>
