@@ -1,5 +1,6 @@
-#Carregando a base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
-municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
+# Criando a base auxiliar de municípios -----------------------------------
+## Lendo uma base auxiliar que contém variáveis referentes ao nome do município, UF, região e IDHM
+df_municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmeans.csv", sep = ";") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -8,9 +9,14 @@ municipios_kmeans <- read.csv2("data-raw/csv/IDH_municipios-com-agrupamento_Kmea
     regiao = regiao_pais,
     idhm,
     grupo_kmeans
+  ) |>
+  dplyr::mutate(
+    regiao = ifelse(regiao == "Centro-oeste", "Centro-Oeste", regiao),
+    uf = ifelse(uf == "SAO PAULO", "São Paulo", uf)
   )
 
-municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv", sep = ";") |>
+## Lendo as informações de municípios sem IDHM
+df_municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e_IDH.csv", sep = ";") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = codmun6,
@@ -19,18 +25,32 @@ municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipios_e
     regiao = regiao_pais,
     idhm
   ) |>
-  dplyr::filter(idhm == "#N/A")
+  dplyr::filter(idhm == "#N/A") |>
+  dplyr::mutate(
+    idhm = NA,
+    regiao = ifelse(regiao == "Centro-oeste", "Centro-Oeste", regiao),
+    uf = ifelse(uf == "SAO PAULO", "São Paulo", uf)
+  )
 
-municipios_adicionais$idhm <- NA
+## Lendo uma base auxiliar que contém variáveis referentes ao IDH das UFs e do Brasil
+df_aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
+  janitor::clean_names() |>
+  dplyr::rename(
+    "uf" = territorialidade,
+    "idh_uf" = idhm,
+    "posicao_idh_uf" = posicao_idhm
+  )
 
-aux_municipios_1 <- dplyr::full_join(municipios_kmeans, municipios_adicionais)
+## Juntando as três bases
+df_aux_municipios <- list(
+  df_municipios_kmeans,
+  df_municipios_adicionais,
+  df_aux_idh_estados
+) |>
+  purrr::reduce(dplyr::full_join)
 
-aux_municipios_1$regiao[which(aux_municipios_1$regiao == "Centro-oeste")] <- "Centro-Oeste"
-
-aux_municipios_1$uf[which(aux_municipios_1$uf == "SAO PAULO")] <- "São Paulo"
-
-#Carregando a base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
-aux_r_saude <- readxl::read_xlsx("data-raw/csv/regiao_macro_municipio.xlsx") |>
+## Lendo uma base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
+df_aux_r_saude <- readxl::read_xlsx("data-raw/csv/regiao_macro_municipio.xlsx") |>
   janitor::clean_names() |>
   dplyr::select(
     codmunres = cod_mun,
@@ -42,179 +62,368 @@ aux_r_saude <- readxl::read_xlsx("data-raw/csv/regiao_macro_municipio.xlsx") |>
   ) |>
   dplyr::mutate(codmunres = as.numeric(codmunres))
 
-#Juntando as duas bases auxiliares
-aux_municipios <- dplyr::left_join(aux_municipios_1, aux_r_saude, by = "codmunres") |>
+## Criando a tabela final, que será exportada para o painel
+tabela_aux_municipios <- dplyr::left_join(
+  df_aux_municipios,
+  df_aux_r_saude,
+  by = "codmunres"
+) |>
   dplyr::select(!municipio2) |>
   dplyr::mutate(posicao_idhm = dplyr::min_rank(dplyr::desc(idhm)))
 
-#Carregando a base auxiliar que contém variáveis referentes ao IDH das UFs e do Brasil
-aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
-  janitor::clean_names() |>
-  dplyr::rename(
-    "uf" = territorialidade,
-    "idh_uf" = idhm,
-    "posicao_idh_uf" = posicao_idhm
-  )
 
-#Juntando todas as bases auxiliares (a tabela_aux_municipios será salva para ser utilizada ao carregar o pacote)
-tabela_aux_municipios <- dplyr::left_join(aux_municipios, aux_idh_estados, by = "uf")
-
-#Lendo os arquivos originais
+# Criando as bases de cada bloco ------------------------------------------
+## Para o bloco 1 ---------------------------------------------------------
+### Lendo o arquivo contendo todos os indicadores
 bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv") |>
   janitor::clean_names()
-bloco1_aux$media_cobertura_esf <- pmin(bloco1_aux$media_cobertura_esf, bloco1_aux$populacao_total)
 
+### Adicionando as informações dos municípios
+bloco1 <- dplyr::left_join(bloco1_aux, tabela_aux_municipios, by = "codmunres")
+bloco1 <- bloco1 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco1) == "ano") + 1):(which(names(bloco1) == "municipio") - 1)
+  )
+
+
+## Para o bloco 2 ---------------------------------------------------------
+### Lendo o arquivo contendo todos os indicadores
 bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2024.csv") |>
   janitor::clean_names()
 
+### Adicionando as informações dos municípios
+bloco2 <- dplyr::left_join(bloco2_aux, tabela_aux_municipios, by = "codmunres")
+bloco2 <- bloco2 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco2) == "ano") + 1):(which(names(bloco2) == "municipio") - 1)
+  )
+
+
+## Para o bloco 3 ---------------------------------------------------------
+### Lendo o arquivo contendo todos os indicadores
 bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2024.csv") |>
   janitor::clean_names()
 
+### Adicionando as informações dos municípios
+bloco3 <- dplyr::left_join(bloco3_aux, tabela_aux_municipios, by = "codmunres")
+bloco3 <- bloco3 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco3) == "ano") + 1):(which(names(bloco3) == "municipio") - 1)
+  )
+
+## Para o bloco 4 (aba de grupos de Robson) -------------------------------
+### Lendo o arquivo contendo todos os indicadores
 bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2024.csv") |>
   janitor::clean_names()
 
+### Adicionando as informações dos municípios
+bloco4 <- dplyr::left_join(bloco4_aux, tabela_aux_municipios, by = "codmunres")
+bloco4 <- bloco4 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4) == "ano") + 1):(which(names(bloco4) == "municipio") - 1)
+  )
+
+
+## Para o bloco 4 (aba de deslocamento para o parto) ----------------------
+### Lendo os arquivos contendo todos os indicadores para municípios
 bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2024.csv") |>
   janitor::clean_names()
 
+bloco4_deslocamento_macrorregiao_aux <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2024.csv")
+
+### Adicionando as informações dos municípios
+bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, tabela_aux_municipios, by = "codmunres")
+bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_deslocamento_muni) == "ano") + 1):(which(names(bloco4_deslocamento_muni) == "municipio") - 1)
+  )
+
+bloco4_deslocamento_macrorregiao <- dplyr::left_join(bloco4_deslocamento_macrorregiao_aux, tabela_aux_municipios, by = "codmunres")
+bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_deslocamento_macrorregiao) == "ano") + 1):(which(names(bloco4_deslocamento_macrorregiao) == "municipio") - 1)
+  )
+
+### Lendo os arquivo contendo todos os indicadores para UFs
 bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2020.csv") |>
   janitor::clean_names() |>
   dplyr::rename(cod_uf = uf) |>
   dplyr::rename(uf = nome) |>
   dplyr::mutate(
-    uf = sub('.', '', uf)
+    uf = sub('.', '', uf),
+    uf = ifelse(uf == "rasil", "Brasil", uf),
+    km_partos_fora_macrorregiao = as.numeric(km_partos_fora_macrorregiao),
+    km_partos_fora_macrorregiao_alta_complexidade = as.numeric(km_partos_fora_macrorregiao_alta_complexidade),
+    km_partos_fora_macrorregiao_baixa_complexidade = as.numeric(km_partos_fora_macrorregiao_baixa_complexidade)
   )
 
 bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2024.csv") |>
   janitor::clean_names() |> dplyr::filter(ano > 2020)
 
-bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao)
-
-bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_alta_complexidade)
-bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade <- as.numeric(bloco4_deslocamento_uf_aux1$km_partos_fora_macrorregiao_baixa_complexidade)
-
 bloco4_deslocamento_uf_aux <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux1)
 
-bloco4_deslocamento_uf_aux$uf[which(bloco4_deslocamento_uf_aux$uf == "rasil")] <- "Brasil"
+### Adicionando as informações dos municípios
+bloco4_deslocamento_uf <- dplyr::left_join(
+  bloco4_deslocamento_uf_aux,
+  tabela_aux_municipios |> dplyr::select(uf, regiao) |> unique(),
+  by = "uf"
+) |>
+  dplyr::arrange(ano, cod_uf)
 
-bloco4_deslocamento_macrorregiao <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2024.csv")
 
-bloco4_profissional <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
+## Para o bloco 4 (aba de local e profissional de assistência) ------------
+### Lendo o arquivo contendo todos os indicadores para municípios
+bloco4_profissional_aux <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
 
-################################################################################
+### Adicionando as informações dos municípios
+bloco4_profissional <- dplyr::right_join(bloco4_profissional_aux, tabela_aux_municipios, by = "codmunres")
+bloco4_profissional <- bloco4_profissional |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco4_profissional) == "ano") + 1):(which(names(bloco4_profissional) == "municipio") - 1)
+  )
 
+
+## Para o bloco 5 ---------------------------------------------------------
+### Lendo o arquivo contendo todos os indicadores
 bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2024.csv") |>
   janitor::clean_names()
 
-# asfixia_aux <- read.csv("data-raw/csv/asfixia_2012_2022.csv", sep = ';') |>
-#   janitor::clean_names() |>
-#   dplyr::rename(total_nascidos = total_de_nascidos_vivos) |>
-#   select(!total_de_nascidos_malformacao)
+### Adicionando as informações dos municípios
+bloco5 <- dplyr::left_join(bloco5_aux, tabela_aux_municipios, by = "codmunres")
+bloco5 <- bloco5 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco5) == "ano") + 1):(which(names(bloco5) == "municipio") - 1)
+  )
 
+### Lendo o arquivo com as informações para a construção da tabela de malformações
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2024.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
   dplyr::select(-c(3:10))
 
+### Adicionando as informações dos municípios
+malformacao <- dplyr::left_join(malformacao_aux, tabela_aux_municipios, by = "codmunres")
+malformacao <- malformacao |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
+  )
+
+
+## Para o bloco 6  --------------------------------------------------------
+### Lendo o arquivo contendo todos os indicadores de mortalidade materna
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv")
 
+### Lendo o arquivo contendo todos os indicadores de morbidade materna
 bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv", sep = ",") |>
   janitor::clean_names()
 
+### Juntando as duas bases
 bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
 
+### Adicionando as informações dos municípios
+bloco6 <- dplyr::left_join(bloco6_aux, tabela_aux_municipios, by = "codmunres")
+bloco6 <- bloco6 |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco6) == "ano") + 1):(which(names(bloco6) == "municipio") - 1)
+  )
+
+
+## Para o bloco 7 (aba fetal)  --------------------------------------------
+### Para os indicadores originais -----------------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_fetal <- dplyr::left_join(bloco7_fetal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_fetal <- bloco7_fetal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_fetal) == "ano") + 1):(which(names(bloco7_fetal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas evitáveis -------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_evitaveis_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_fetal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_evitaveis_fetal <- dplyr::left_join(bloco7_evitaveis_fetal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_evitaveis_fetal <- bloco7_evitaveis_fetal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_evitaveis_fetal) == "ano") + 1):(which(names(bloco7_evitaveis_fetal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas principais ------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_principais_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_fetal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_principais_fetal <- dplyr::left_join(bloco7_principais_fetal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_principais_fetal <- bloco7_principais_fetal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_principais_fetal) == "ano") + 1):(which(names(bloco7_principais_fetal) == "municipio") - 1)
+  )
+
+
+## Para o bloco 7 (aba neonatal)  -----------------------------------------
+### Para os indicadores originais -----------------------------------------
+#### Lendo o arquivo contendo todos os indicadores
 bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2024.csv")
 
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2024.csv") |>
-  dplyr::left_join(
-    bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos"))
+#### Adicionando as informações dos municípios
+bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_neonatal <- bloco7_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_neonatal) == "ano") + 1):(which(names(bloco7_neonatal) == "municipio") - 1)
   )
 
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv") |>
-  dplyr::left_join(
-    bloco7_neonatal_aux |> dplyr::select(
-      codmunres, ano, dplyr::starts_with("nascidos"),
-      dplyr::starts_with("obitos_0"),
-      dplyr::starts_with("obitos_1_6"),
-      dplyr::starts_with("obitos_6")
-    )
-  ) |>
-  dplyr::left_join(
-    bloco7_fetal_aux |> dplyr::select(codmunres, ano, obitos_fetais_mais_22sem, dplyr::starts_with("fetal_peso"))
-  )
-
-bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv")  |>
-  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
-
-## Lendo os dados dos indicadores de causas evitáveis e grupos de causas
-bloco7_distribuicao_cids_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_fetal_2012-2024.csv")
-bloco7_distribuicao_cids_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_neonatal_2012-2024.csv")
-bloco7_distribuicao_cids_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_cids_perinatal_2012-2024.csv")
-bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") |>
-  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, dplyr::starts_with("nascidos")))
-
+### Para os indicadores de causas evitáveis -------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_neonatal_2012-2024.csv")
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
   janitor::clean_names()
 
-# bloco8_garbage_materno_aux <- read.csv(gzfile("data-raw/csv/garbage_materno_2012_2022.csv.gz")) |>
-#   janitor::clean_names()
+#### Adicionando as informações dos municípios
+bloco7_evitaveis_neonatal <- dplyr::left_join(bloco7_evitaveis_neonatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_evitaveis_neonatal <- bloco7_evitaveis_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_evitaveis_neonatal) == "ano") + 1):(which(names(bloco7_evitaveis_neonatal) == "municipio") - 1)
+  )
 
-bloco8_garbage_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_2012-2024.csv") |>
+bloco8_grafico_evitaveis_neonatal <- dplyr::left_join(bloco8_grafico_evitaveis_neonatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco8_grafico_evitaveis_neonatal) == "ano") + 1):(which(names(bloco8_grafico_evitaveis_neonatal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas principais ------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_principais_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_neonatal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_principais_neonatal <- dplyr::left_join(bloco7_principais_neonatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_principais_neonatal <- bloco7_principais_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_principais_neonatal) == "ano") + 1):(which(names(bloco7_principais_neonatal) == "municipio") - 1)
+  )
+
+
+## Para o bloco 7 (aba perinatal)  -----------------------------------------
+### Para os indicadores originais -----------------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_perinatal <- bloco7_perinatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_perinatal) == "ano") + 1):(which(names(bloco7_perinatal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas evitáveis -------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_evitaveis_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_perinatal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_evitaveis_perinatal <- dplyr::left_join(bloco7_evitaveis_perinatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_evitaveis_perinatal <- bloco7_evitaveis_perinatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_evitaveis_perinatal) == "ano") + 1):(which(names(bloco7_evitaveis_perinatal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas principais ------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_principais_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_perinatal_2012-2024.csv")
+
+#### Adicionando as informações dos municípios
+bloco7_principais_perinatal <- dplyr::left_join(bloco7_principais_perinatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_principais_perinatal <- bloco7_principais_perinatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_principais_perinatal) == "ano") + 1):(which(names(bloco7_principais_perinatal) == "municipio") - 1)
+  )
+
+
+## Para o bloco 7 (aba morbidade neonatal)  -------------------------------
+### Para os indicadores originais -----------------------------------------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_morbidade_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_morbidade_neonatal_2012-2024.csv") |>
+  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, total_de_nascidos_vivos))
+
+#### Adicionando as informações dos municípios
+bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_morbidade_neonatal <- bloco7_morbidade_neonatal |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_morbidade_neonatal) == "ano") + 1):(which(names(bloco7_morbidade_neonatal) == "municipio") - 1)
+  )
+
+### Para os indicadores de causas evitáveis e causas principais -----------
+#### Lendo o arquivo contendo todos os indicadores
+bloco7_dist_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco7_distribuicao_morbidade_neonatal_2012-2024.csv") |>
+  dplyr::left_join(bloco7_neonatal_aux |> dplyr::select(codmunres, ano, total_de_nascidos_vivos))
+
+#### Adicionando as informações dos municípios
+bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, tabela_aux_municipios, by = "codmunres")
+bloco7_dist_morbidade <- bloco7_dist_morbidade |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(bloco7_dist_morbidade) == "ano") + 1):(which(names(bloco7_dist_morbidade) == "municipio") - 1)
+  )
+
+bloco7_dist_morbidade[is.na(bloco7_dist_morbidade)] <- 0
+
+
+
+# Criando as bases de indicadores de qualidade da informação --------------
+## Para os indicadores de garbage codes -----------------------------------
+### Lendo o arquivo contendo todos os indicadores de garbage code para mortalidade
+base_garbage_code_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco8_graficos_garbage_code_2012-2024.csv") |>
   janitor::clean_names()
 
-bloco8_garbage_morbidade_aux <- read.csv(gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv")) |>
+### Lendo o arquivo contendo todos os indicadores de garbage code para morbidade
+base_garbage_code_morbidade_aux <- read.csv(gzfile("data-raw/csv/indicadores_bloco8_graficos_garbage_code_morbidade_2012-2024.csv")) |>
   janitor::clean_names()
 
-bloco8_garbage_aux <- dplyr::full_join(bloco8_garbage_mortalidade_aux, bloco8_garbage_morbidade_aux)
+### Juntando as duas bases
+base_garbage_code_aux <- dplyr::full_join(base_garbage_code_mortalidade_aux, base_garbage_code_morbidade_aux)
+base_garbage_code_aux[is.na(base_garbage_code_aux)] <- 0
 
-bloco8_garbage_aux[is.na(bloco8_garbage_aux)] <- 0
+### Adicionando as informações dos municípios
+base_garbage_code <- dplyr::left_join(base_garbage_code_aux, tabela_aux_municipios, by = "codmunres")
+base_garbage_code <- base_garbage_code |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_garbage_code) == "ano") + 1):(which(names(base_garbage_code) == "municipio") - 1)
+  )
 
 
-# bloco8_garbage_fetal_aux <- read.csv(gzfile("data-raw/csv/garbage_fetal_2012_2022.csv.gz")) |>
-#   janitor::clean_names()
-
-# bloco8_garbage_neonatal_aux <- read.csv(gzfile("data-raw/csv/garbage_neonatal_2012_2022.csv.gz")) |>
-#   janitor::clean_names() |>
-#   dplyr::mutate(
-#     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
-#     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
-#   )
-#
-# bloco8_principais_fetal_aux <- read.csv(gzfile("data-raw/csv/principais_fetal_2012_2022.csv.gz")) |>
-#   janitor::clean_names()
-#
-# bloco8_principais_neonatal_aux <- read.csv(gzfile("data-raw/csv/principais_neonatal_2012_2022.csv.gz")) |>
-#   janitor::clean_names() |>
-#   dplyr::mutate(
-#     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
-#     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
-#   )
-#
-# bloco8_evitaveis_fetal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_fetal_2012_2022.csv.gz")) |>
-#   janitor::clean_names()
-#
-# bloco8_evitaveis_neonatal_aux <- read.csv(gzfile("data-raw/csv/evitaveis_neonatal_2012_2024.csv.gz")) |>
-#   janitor::clean_names() |>
-#   dplyr::mutate(
-#     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
-#     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
-#   )
-
-# bloco8_fetal_grupos_aux <- read.csv(gzfile("data-raw/csv/grupos_fetal_2012_2022.csv.gz")) |>
-#   janitor::clean_names()
-#
-# bloco8_grupos_neonatal_aux <- read.csv(gzfile("data-raw/csv/grupos_neonatal_2012_2022.csv.gz")) |>
-#   janitor::clean_names() |>
-#   dplyr::mutate(
-#     faixa_de_peso = factor(faixa_de_peso, levels = c("< 1500 g", "1500 a 1999 g", "2000 a 2499 g", "\U2265 2500 g", "Sem informação")),
-#     faixa_de_idade = factor(faixa_de_idade, levels = c("0 a 6 dias", "7 a 27 dias")),
-#   )
-
+## Para os indicadores de incompletude ------------------------------------
+### Para os indicadores de incompletude do SINASC -------------------------
+#### Lendo o arquivo contendo todos os indicadores
 base_incompletude_antiga <- read.csv("data-raw/extracao-dos-dados/incompletude/extracao-dos-dados/bases_antigas/base_incompletude_2012_2023.csv")
 
 base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012-2023.csv", sep = ",")[, -1] |>
   janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres) |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
   dplyr::select(!c(dplyr::contains("consprenat"), dplyr::contains("idanomal"), dplyr::contains("qtdpartces"), dplyr::contains("tprobson"))) |>
   dplyr::full_join(
     base_incompletude_antiga |>
@@ -225,242 +434,80 @@ base_incompletude_sinasc_aux <- read.csv2("data-raw/csv/incompletude_SINASC_2012
       )
   )
 
-base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
-  janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
-
-base_incompletude_sim_mif_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_mif.csv") |>
-  janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
-
-base_incompletude_sim_aux <- dplyr::full_join(base_incompletude_sim_maternos_aux, base_incompletude_sim_mif_aux, by = c("codmunres", "ano"))
-
-base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indicadores_deslocamento_parto.csv") |>
-  janitor::clean_names() |>
-  dplyr::select(!uf)
-
-base_incompletude_bloco4_profissional <- read.csv("data-raw/csv/indicadores_incompletude_bloco4_profissional_2013-2023.csv") |>
-  janitor::clean_names() |>
-  dplyr::filter(codmunres %in% aux_municipios$codmunres)
-
-base_incompletude_bloco7_morbidade_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_morbidade_2012-2023.csv')
-
-base_incompletude_bloco7_outros_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv') |>
-  dplyr::filter(ano <= 2023) |>
-  dplyr::mutate(across(everything(), ~tidyr::replace_na(.x, 0)))
-
-base_incompletude_bloco7_aux <- dplyr::full_join(base_incompletude_bloco7_outros_aux, base_incompletude_bloco7_morbidade_aux)
-
-#Adicionando as variáveis referentes ao nome do município, UF, região e micro e macrorregiões de saúde estaduais
-bloco1 <- dplyr::left_join(bloco1_aux, aux_municipios, by = "codmunres")
-bloco1 <- bloco1 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco1) == "ano") + 1):(which(names(bloco1) == "municipio") - 1)
-  )
-
-bloco2 <- dplyr::left_join(bloco2_aux, aux_municipios, by = "codmunres")
-bloco2 <- bloco2 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco2) == "ano") + 1):(which(names(bloco2) == "municipio") - 1)
-  )
-
-bloco3 <- dplyr::left_join(bloco3_aux, aux_municipios, by = "codmunres")
-bloco3 <- bloco3 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco3) == "ano") + 1):(which(names(bloco3) == "municipio") - 1)
-  )
-
-
-bloco4 <- dplyr::left_join(bloco4_aux, aux_municipios, by = "codmunres")
-bloco4 <- bloco4 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco4) == "ano") + 1):(which(names(bloco4) == "municipio") - 1)
-  )
-
-bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, aux_municipios, by = "codmunres")
-
-bloco4_deslocamento_muni <- bloco4_deslocamento_muni |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco4_deslocamento_muni) == "ano") + 1):(which(names(bloco4_deslocamento_muni) == "municipio") - 1)
-  )
-
-bloco4_deslocamento_uf <- dplyr::left_join(bloco4_deslocamento_uf_aux, aux_municipios |> dplyr::select(uf, regiao) |> unique(), by = "uf")
-bloco4_deslocamento_uf <- bloco4_deslocamento_uf |> dplyr::arrange(ano, cod_uf)
-
-
-bloco4_deslocamento_macrorregiao <- dplyr::left_join(bloco4_deslocamento_macrorregiao, aux_municipios, by = "codmunres")
-bloco4_deslocamento_macrorregiao <- bloco4_deslocamento_macrorregiao |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco4_deslocamento_macrorregiao) == "ano") + 1):(which(names(bloco4_deslocamento_macrorregiao) == "municipio") - 1)
-  )
-
-bloco4_profissional <- dplyr::right_join(bloco4_profissional, aux_municipios, by = "codmunres")
-
-bloco4_profissional <- bloco4_profissional |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco4_profissional) == "ano") + 1):(which(names(bloco4_profissional) == "municipio") - 1)
-  )
-
-bloco5 <- dplyr::left_join(bloco5_aux, aux_municipios, by = "codmunres")
-bloco5 <- bloco5 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco5) == "ano") + 1):(which(names(bloco5) == "municipio") - 1)
-  )
-
-# asfixia <- dplyr::left_join(asfixia_aux, aux_municipios, by = "codmunres")
-# asfixia <- asfixia |>
-#   dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(asfixia) == "ano") + 1):(which(names(asfixia) == "municipio") - 1)
-#   )
-
-malformacao <- dplyr::left_join(malformacao_aux, aux_municipios, by = "codmunres")
-malformacao <- malformacao |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(malformacao) == "ano") + 1):(which(names(malformacao) == "municipio") - 1)
-  )
-
-bloco6_aux$codmunres <- as.numeric(bloco6_aux$codmunres)
-
-bloco6 <- dplyr::left_join(bloco6_aux, aux_municipios, by = "codmunres")
-bloco6 <- bloco6 |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco6) == "ano") + 1):(which(names(bloco6) == "municipio") - 1)
-  )
-
-bloco7_fetal <- dplyr::left_join(bloco7_fetal_aux, aux_municipios, by = "codmunres")
-bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, aux_municipios, by = "codmunres")
-bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, aux_municipios, by = "codmunres")
-bloco7_morbidade_neonatal <- dplyr::left_join(bloco7_morbidade_neonatal_aux, aux_municipios, by = "codmunres")
-
-bloco7_dist_morbidade <- dplyr::left_join(bloco7_dist_morbidade_aux, aux_municipios, by = "codmunres")
-
-bloco7_dist_morbidade[is.na(bloco7_dist_morbidade)] <- 0
-
-bloco7_distribuicao_cids_fetal <- dplyr::left_join(bloco7_distribuicao_cids_fetal_aux, aux_municipios, by = "codmunres")
-bloco7_distribuicao_cids_perinatal <- dplyr::left_join(bloco7_distribuicao_cids_perinatal_aux, aux_municipios, by = "codmunres")
-bloco7_distribuicao_cids_neonatal <- dplyr::left_join(bloco7_distribuicao_cids_neonatal_aux, aux_municipios, by = "codmunres")
-
-bloco8_graficos <- dplyr::left_join(bloco8_garbage_aux, aux_municipios, by = "codmunres")
-bloco8_graficos <- bloco8_graficos |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_graficos) == "ano") + 1):(which(names(bloco8_graficos) == "municipio") - 1)
-  )
-
-bloco8_grafico_evitaveis_neonatal <- dplyr::left_join(bloco8_grafico_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
-bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(bloco8_grafico_evitaveis_neonatal) == "ano") + 1):(which(names(bloco8_grafico_evitaveis_neonatal) == "municipio") - 1)
-  )
-#
-# bloco8_garbage_materno_aux <- dplyr::left_join(bloco8_garbage_materno_aux, aux_municipios, by = "codmunres")
-# bloco8_garbage_materno <- bloco8_garbage_materno_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_garbage_materno_aux) == "ano") + 1):(which(names(bloco8_garbage_materno_aux) == "municipio") - 1)
-#   )
-#
-# bloco8_garbage_fetal_aux <- dplyr::left_join(bloco8_garbage_fetal_aux, aux_municipios, by = "codmunres")
-# bloco8_garbage_fetal <- bloco8_garbage_fetal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_garbage_fetal_aux) == "ano") + 1):(which(names(bloco8_garbage_fetal_aux) == "municipio") - 1)
-#   )
-#
-#
-# bloco8_garbage_neonatal_aux <- dplyr::left_join(bloco8_garbage_neonatal_aux, aux_municipios, by = "codmunres")
-# bloco8_garbage_neonatal <- bloco8_garbage_neonatal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_garbage_neonatal_aux) == "ano") + 1):(which(names(bloco8_garbage_neonatal_aux) == "municipio") - 1)
-#   )
-#
-# bloco8_principais_fetal_aux <- dplyr::left_join(bloco8_principais_fetal_aux, aux_municipios, by = "codmunres")
-# bloco8_principais_fetal <- bloco8_principais_fetal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_principais_fetal_aux) == "ano") + 1):(which(names(bloco8_principais_fetal_aux) == "municipio") - 1)
-#   )
-#
-# bloco8_principais_neonatal_aux <- dplyr::left_join(bloco8_principais_neonatal_aux, aux_municipios, by = "codmunres")
-# bloco8_principais_neonatal <- bloco8_principais_neonatal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_principais_neonatal_aux) == "ano") + 1):(which(names(bloco8_principais_neonatal_aux) == "municipio") - 1)
-#   )
-#
-# bloco8_evitaveis_fetal_aux <- dplyr::left_join(bloco8_evitaveis_fetal_aux, aux_municipios, by = "codmunres")
-# bloco8_evitaveis_fetal <- bloco8_evitaveis_fetal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_evitaveis_fetal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_fetal_aux) == "municipio") - 1)
-#   )
-#
-#
-# bloco8_evitaveis_neonatal_aux <- dplyr::left_join(bloco8_evitaveis_neonatal_aux, aux_municipios, by = "codmunres")
-# bloco8_evitaveis_neonatal <- bloco8_evitaveis_neonatal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_evitaveis_neonatal_aux) == "ano") + 1):(which(names(bloco8_evitaveis_neonatal_aux) == "municipio") - 1)
-#   )
-
-# bloco8_fetal_grupos_aux <- dplyr::left_join(bloco8_fetal_grupos_aux, aux_municipios, by = "codmunres")
-# bloco8_fetal_grupos <- bloco8_fetal_grupos_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_fetal_grupos_aux) == "ano") + 1):(which(names(bloco8_fetal_grupos_aux) == "municipio") - 1)
-#   )
-#
-# bloco8_grupos_neonatal_aux <- dplyr::left_join(bloco8_grupos_neonatal_aux, aux_municipios, by = "codmunres")
-# bloco8_grupos_neonatal <- bloco8_grupos_neonatal_aux |>
-#   dplyr::select(
-#     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-#     (which(names(bloco8_grupos_neonatal_aux) == "ano") + 1):(which(names(bloco8_grupos_neonatal_aux) == "municipio") - 1)
-#   )
-
-
-
-base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, aux_municipios, by = "codmunres")
+#### Adicionando as informações dos municípios
+base_incompletude_sinasc <- dplyr::left_join(base_incompletude_sinasc_aux, tabela_aux_municipios, by = "codmunres")
 base_incompletude_sinasc <- base_incompletude_sinasc |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(base_incompletude_sinasc) == "ano") + 1):(which(names(base_incompletude_sinasc) == "municipio") - 1)
   )
 
-base_incompletude_sim <- dplyr::left_join(base_incompletude_sim_aux, aux_municipios, by = "codmunres")
-base_incompletude_sim <- base_incompletude_sim |>
-  dplyr::select(
-    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
-    (which(names(base_incompletude_sim) == "ano") + 1):(which(names(base_incompletude_sim) == "municipio") - 1)
-  )
 
-base_incompletude_deslocamento <- dplyr::left_join(base_incompletude_deslocamento_aux, aux_municipios, by = "codmunres")
+### Para os indicadores de incompletude do deslocamento ------------------
+#### Lendo o arquivo contendo todos os indicadores
+base_incompletude_deslocamento_aux <- read.csv("data-raw/csv/incompletitude_indicadores_deslocamento_parto.csv") |>
+  janitor::clean_names() |>
+  dplyr::select(!uf)
+
+### Adicionando as informações dos municípios
+base_incompletude_deslocamento <- dplyr::left_join(base_incompletude_deslocamento_aux, tabela_aux_municipios, by = "codmunres")
 base_incompletude_deslocamento <- base_incompletude_deslocamento |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(base_incompletude_deslocamento) == "ano") + 1):(which(names(base_incompletude_deslocamento) == "municipio") - 1)
   )
 
-base_incompletude_bloco7 <- dplyr::left_join(base_incompletude_bloco7_aux, aux_municipios, by = "codmunres")
+### Para os indicadores de incompletude do profissional de assist --------
+#### Lendo o arquivo contendo todos os indicadores
+base_incompletude_bloco4_profissional <- read.csv("data-raw/csv/indicadores_incompletude_bloco4_profissional_2013-2023.csv") |>
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
+
+
+### Para os indicadores de incompletude do SIM (bloco 6) -----------------
+#### Lendo o arquivo contendo todos os indicadores de incompletude de óbitos maternos
+base_incompletude_sim_maternos_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_maternos.csv") |>
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
+
+#### Lendo o arquivo contendo todos os indicadores de incompletude de óbitos de MIF
+base_incompletude_sim_mif_aux <- read.csv("data-raw/csv/incompletude_sim_obitos_mif.csv") |>
+  janitor::clean_names() |>
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
+
+#### Juntando as duas bases
+base_incompletude_sim_aux <- dplyr::full_join(base_incompletude_sim_maternos_aux, base_incompletude_sim_mif_aux, by = c("codmunres", "ano"))
+
+#### Adicionando as informações dos municípios
+base_incompletude_sim <- dplyr::left_join(base_incompletude_sim_aux, tabela_aux_municipios, by = "codmunres")
+base_incompletude_sim <- base_incompletude_sim |>
+  dplyr::select(
+    ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
+    (which(names(base_incompletude_sim) == "ano") + 1):(which(names(base_incompletude_sim) == "municipio") - 1)
+  )
+
+### Para os indicadores de incompletude do SIM (bloco 7) -----------------
+#### Lendo o arquivo contendo todos os indicadores de incompletude de morbidade neonatal
+base_incompletude_bloco7_morbidade_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_morbidade_2012-2023.csv')
+
+#### Lendo o arquivo contendo todos os indicadores de incompletude das outras abas
+base_incompletude_bloco7_outros_aux <- read.csv('data-raw/csv/indicadores_incompletude_bloco7_2012-2024.csv') |>
+  dplyr::filter(ano <= 2023) |>
+  dplyr::mutate(across(everything(), ~tidyr::replace_na(.x, 0)))
+
+#### Juntando as duas bases
+base_incompletude_bloco7_aux <- dplyr::full_join(base_incompletude_bloco7_outros_aux, base_incompletude_bloco7_morbidade_aux)
+
+#### Adicionando as informações dos municípios
+base_incompletude_bloco7 <- dplyr::left_join(base_incompletude_bloco7_aux, tabela_aux_municipios, by = "codmunres")
 base_incompletude_bloco7 <- base_incompletude_bloco7 |>
   dplyr::select(
     ano, codmunres, municipio, grupo_kmeans, uf, regiao, cod_r_saude, r_saude, cod_macro_r_saude, macro_r_saude,
     (which(names(base_incompletude_bloco7) == "ano") + 1):(which(names(base_incompletude_bloco7) == "municipio") - 1)
   )
 
+
+### Juntando todas as bases de incompletude em uma base única ------------
 base_incompletude <- dplyr::full_join(
   dplyr::full_join(
     dplyr::full_join(
@@ -481,10 +528,12 @@ base_incompletude <- dplyr::full_join(
 )
 
 
-#Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
+
+# Lendo outros arquivos ---------------------------------------------------
+## Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
 base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
 
-#Carregando a base que contém os fatores de correção para a RMM
+## Carregando a base que contém os fatores de correção para a RMM
 rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep = ";", dec = ",", fileEncoding = "utf-8")[, -c(2, 3, 4)] |>
   janitor::clean_names() |>
   tidyr::pivot_longer(
@@ -506,12 +555,12 @@ rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep 
     )
   )
 
-#Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
+## Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
 rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2021.csv") |>
   dplyr::select(ano, localidade, RMM) |>
   dplyr::mutate(RMM = round(RMM, 1))
 
-#Criando os dataframes/vetores contendo as escolhas de municípios, estados e micro e macrorregões de saúde
+## Criando os dataframes/vetores contendo as escolhas de municípios, estados e micro e macrorregões de saúde
 municipios_choices <- tabela_aux_municipios |>
   dplyr::select(uf, municipio)
 
@@ -527,10 +576,10 @@ macro_r_saude_choices <- tabela_aux_municipios |>
   dplyr::select(uf, macro_r_saude) |>
   unique()
 
-#Lendo a tabela contendo as informações sobre os indicadores
+## Lendo a tabela contendo as informações sobre os indicadores
 tabela_indicadores <- read.csv("data-raw/csv/tabela_indicadores.csv")
 
-#Lendo a tabela contendo as informações para o grafico de radar
+## Lendo a tabela contendo as informações para o grafico de radar
 tabela_radar <- read.csv("data-raw/csv/tabela_radar.csv") |>
   dplyr::mutate(
     nome_abreviado = dplyr::case_when(
@@ -546,10 +595,11 @@ tabela_radar <- read.csv("data-raw/csv/tabela_radar.csv") |>
     )
   )
 
-
-#Lendo a tabela contendo informações sobre as CIDs
+## Lendo a tabela contendo informações sobre as CIDs
 df_cid10 <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_cid10_completo.csv")
 
+
+# Exportando os arquivos para dentro do painel ----------------------------
 usethis::use_data(bloco1, overwrite = TRUE)
 usethis::use_data(bloco2, overwrite = TRUE)
 usethis::use_data(bloco3, overwrite = TRUE)
@@ -565,12 +615,15 @@ usethis::use_data(bloco7_fetal, overwrite = TRUE)
 usethis::use_data(bloco7_neonatal, overwrite = TRUE)
 usethis::use_data(bloco7_perinatal, overwrite = TRUE)
 usethis::use_data(bloco7_morbidade_neonatal, overwrite = TRUE)
-usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
-usethis::use_data(bloco7_distribuicao_cids_fetal, overwrite = TRUE)
-usethis::use_data(bloco7_distribuicao_cids_perinatal, overwrite = TRUE)
-usethis::use_data(bloco7_distribuicao_cids_neonatal, overwrite = TRUE)
-usethis::use_data(bloco8_graficos, overwrite = TRUE)
+usethis::use_data(bloco7_evitaveis_fetal, overwrite = TRUE)
+usethis::use_data(bloco7_evitaveis_neonatal, overwrite = TRUE)
 usethis::use_data(bloco8_grafico_evitaveis_neonatal, overwrite = TRUE)
+usethis::use_data(bloco7_evitaveis_perinatal, overwrite = TRUE)
+usethis::use_data(bloco7_principais_fetal, overwrite = TRUE)
+usethis::use_data(bloco7_principais_neonatal, overwrite = TRUE)
+usethis::use_data(bloco7_principais_perinatal, overwrite = TRUE)
+usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
+usethis::use_data(base_garbage_code, overwrite = TRUE)
 usethis::use_data(df_cid10, overwrite = TRUE)
 usethis::use_data(base_incompletude, overwrite = TRUE)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
@@ -583,8 +636,4 @@ usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
 usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
 usethis::use_data(rmm_corrigida, overwrite = TRUE)
-
-
-
-
 

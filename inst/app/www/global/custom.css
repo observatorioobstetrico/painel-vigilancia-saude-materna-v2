@@ -287,7 +287,9 @@
   box-shadow: 0 6px 18px rgba(10, 30, 60, 0.35);
 }
 
-#bloco_1_1-caixa_b1_i4, #bloco_1_1-caixa_b1_i5, #bloco_1_1-caixa_b1_i6 {
+#bloco_1_1-caixa_b1_i4, #bloco_1_1-caixa_b1_i5, #bloco_1_1-caixa_b1_i6, [id^="bloco_7_1-bloco_7_fetal_1-caixa_b7_fetal_"],
+[id^="bloco_7_1-bloco_7_perinatal_1-caixa_b7_perinatal_"], [id^="bloco_7_1-bloco_7_neonatal_1-caixa_b7_neonatal_"],
+[id^="bloco_7_1-bloco_7_morbidade_neonatal_1-caixa_b7_morbidade_neonatal_"] {
   background: transparent !important;
   box-shadow: 0 0 0 rgba(0,0,0,.125), 0 0 0 rgba(0,0,0,.2) !important;
 }
