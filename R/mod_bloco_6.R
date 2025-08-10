@@ -1132,7 +1132,7 @@ mod_bloco_6_server <- function(id, filtros){
           "Comparação não aplicável (este é o valor de referência)",
           "{formatC(round(100*dados[[indicador]]/valor_de_referencia, 1), big.mark = '.', decimal.mark = ',')}% do total nacional, de {formatC(as.integer(valor_de_referencia), big.mark = '.', decimal.mark = ',')} óbitos"
         ),
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1148,7 +1148,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$rmm,
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         tipo_referencia = "meta ODS",
         nivel_de_analise = nivel_selecionado()
@@ -1165,7 +1165,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_obitos_diretos,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1181,7 +1181,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_obitos_aborto,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1197,7 +1197,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_obitos_hemo,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1213,7 +1213,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_obitos_hipertens,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1229,7 +1229,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_obitos_infec,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1247,7 +1247,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_int_publicas,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1263,7 +1263,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_hipertensao,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1279,7 +1279,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_hemorragia,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1295,7 +1295,7 @@ mod_bloco_6_server <- function(id, filtros){
         valor_de_referencia = data6_resumo_referencia()$prop_mmg_infeccao,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1312,7 +1312,7 @@ mod_bloco_6_server <- function(id, filtros){
         tipo = "porcentagem",
         invertido = FALSE,
         cor = "lightgrey",
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1329,7 +1329,7 @@ mod_bloco_6_server <- function(id, filtros){
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1346,7 +1346,7 @@ mod_bloco_6_server <- function(id, filtros){
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )
@@ -1363,7 +1363,7 @@ mod_bloco_6_server <- function(id, filtros){
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
-        tamanho_caixa = "303px",
+        tamanho_caixa = 303,
         pagina = "bloco_6",
         nivel_de_analise = nivel_selecionado()
       )

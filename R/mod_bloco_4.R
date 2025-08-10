@@ -2282,7 +2282,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2306,7 +2306,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 10,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2330,7 +2330,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(20, 35),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2354,7 +2354,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 3,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2378,7 +2378,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 15,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2402,7 +2402,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = c(50, 60),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2426,7 +2426,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "315px", "327px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "média nacional",
         nivel_de_analise = ifelse(
@@ -2450,7 +2450,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = 30,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "314px", "328px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 314, 328),
         pagina = "bloco_4",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -2475,7 +2475,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson1,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2499,7 +2499,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson2,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2523,7 +2523,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson3,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2547,7 +2547,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson4,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2571,7 +2571,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson5,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2595,7 +2595,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson6_a_9,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2619,7 +2619,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson10,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2644,7 +2644,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson1_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2668,7 +2668,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson2_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2692,7 +2692,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson3_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2716,7 +2716,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson4_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2740,7 +2740,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson5_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2764,7 +2764,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2788,7 +2788,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson10_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
         nivel_de_analise = ifelse(
@@ -2813,7 +2813,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_municipio_res,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2837,7 +2837,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2861,7 +2861,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_macro_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2885,7 +2885,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_fora_macro_rsaude_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2909,7 +2909,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_fora_uf_res,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -2937,7 +2937,7 @@ mod_bloco_4_server <- function(id, filtros){
             valor_de_referencia = data4_deslocamento_resumo_referencia()$prop_partos_com_4mais_uti, # 16.3,
             tipo = "porcentagem",
             invertido = TRUE,
-            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+            tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
             #fonte_titulo = "15px",
             pagina = "bloco_4",
             tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
@@ -2979,7 +2979,7 @@ mod_bloco_4_server <- function(id, filtros){
     #         valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_95_partos_com_uti, # 16.3,
     #         tipo = "porcentagem",
     #         invertido = TRUE,
-    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
     #         #fonte_titulo = "15px",
     #         pagina = "bloco_4",
     #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
@@ -3021,7 +3021,7 @@ mod_bloco_4_server <- function(id, filtros){
     #         valor_de_referencia = data4_deslocamento_resumo_referencia()$percentil_90_partos_com_uti, # 16.3,
     #         tipo = "porcentagem",
     #         invertido = TRUE,
-    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+    #         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
     #         #fonte_titulo = "15px",
     #         pagina = "bloco_4",
     #         tipo_referencia = "média nacional", #"HEALTHY PEOPLE, 2020",
@@ -3070,7 +3070,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_local_fora_hospital,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(
@@ -3095,7 +3095,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_profissional_resumo_referencia()$prop_nasc_assistido_enf_obs,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", "273px", "300px"),
+        tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         #fonte_titulo = "15px",
         pagina = "bloco_4",
         nivel_de_analise = ifelse(

@@ -1376,7 +1376,7 @@ mod_bloco_5_server <- function(id, filtros){
         valor_de_referencia = data5_resumo_referencia_baixo_peso()$porc_nasc_baixo_peso,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         pagina = "bloco_5",
         tipo_referencia = "meta de redução global",
         nivel_de_analise = ifelse(
@@ -1398,7 +1398,7 @@ mod_bloco_5_server <- function(id, filtros){
         indicador = "baixo peso",
         titulo = "Dentre os nascidos vivos com baixo peso (< 2500 g),",
         #fonte_titulo = "15px",
-        tamanho_caixa = "320px"
+        tamanho_caixa = 320
       )
     })
 
@@ -1412,7 +1412,7 @@ mod_bloco_5_server <- function(id, filtros){
         valor_de_referencia = 8,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         pagina = "bloco_5",
         tipo_referencia = "países desenvolvidos",
         nivel_de_analise = ifelse(
@@ -1433,7 +1433,7 @@ mod_bloco_5_server <- function(id, filtros){
         dados = data5_resumo(),
         indicador = "prematuridade",
         titulo = "Dentre os nascimentos prematuros (com menos de 37 semanas de gestação),",
-        tamanho_caixa = "320px"
+        tamanho_caixa = 320
       )
     })
 
@@ -1448,7 +1448,7 @@ mod_bloco_5_server <- function(id, filtros){
         #valor_de_referencia = data5_resumo_referencia()$porc_termo_precoce,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         pagina = "bloco_5",
         tipo_referencia = "países desenvolvidos",
         #tipo_referencia = "média nacional",
@@ -1474,7 +1474,7 @@ mod_bloco_5_server <- function(id, filtros){
         valor_de_referencia = data5_resumo_referencia()$porc_nascidos_vivos_asfixia1,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         #fonte_titulo = "15px",
         pagina = "bloco_5",
         tipo_referencia = "média nacional",
@@ -1500,7 +1500,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     valor_de_referencia = data5_resumo_referencia()$porc_condicoes_ameacadoras,
     #     tipo = "porcentagem",
     #     invertido = FALSE,
-    #     tamanho_caixa = "320px",
+    #     tamanho_caixa = 320,
     #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
@@ -1526,7 +1526,7 @@ mod_bloco_5_server <- function(id, filtros){
         valor_de_referencia = data5_resumo_referencia()$porc_malformacao_vigilancia,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         #fonte_titulo = "15px",
         cor = "lightgrey",
         pagina = "bloco_5",
@@ -1554,7 +1554,7 @@ mod_bloco_5_server <- function(id, filtros){
         valor_de_referencia = c(3, 6),
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "320px",
+        tamanho_caixa = 320,
         #fonte_titulo = "15px",
         cor = "lightgrey",
         pagina = "bloco_5",
@@ -1582,7 +1582,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_sih_geral,
     #     tipo = "porcentagem",
     #     invertido = FALSE,
-    #     tamanho_caixa = "320px",
+    #     tamanho_caixa = 320,
     #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
@@ -1608,7 +1608,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_menores_28_dias_vinc_sus_geral,
     #     tipo = "porcentagem",
     #     invertido = FALSE,
-    #     tamanho_caixa = "320px",
+    #     tamanho_caixa = 320,
     #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",
@@ -1634,7 +1634,7 @@ mod_bloco_5_server <- function(id, filtros){
     #     valor_de_referencia = data5_resumo_referencia()$porc_internacoes_uti_menores_28_dias_sih_geral,
     #     tipo = "porcentagem",
     #     invertido = FALSE,
-    #     tamanho_caixa = "320px",
+    #     tamanho_caixa = 320,
     #     #fonte_titulo = "15px",
     #     pagina = "bloco_5",
     #     tipo_referencia = "média nacional",

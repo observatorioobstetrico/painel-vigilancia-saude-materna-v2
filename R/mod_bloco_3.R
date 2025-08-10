@@ -685,7 +685,7 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "300px",
+        tamanho_caixa = 300,
         pagina = "bloco_3",
         tipo_referencia = "recomendações OMS",
         nivel_de_analise = ifelse(
@@ -710,7 +710,7 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "300px",
+        tamanho_caixa = 300,
         pagina = "bloco_3",
         tipo_referencia = "recomendações OMS",
         nivel_de_analise = ifelse(
@@ -735,7 +735,7 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "300px",
+        tamanho_caixa = 300,
         pagina = "bloco_3",
         tipo_referencia = "recomendações OMS",
         nivel_de_analise = ifelse(
@@ -760,7 +760,7 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 0.5,
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "300px",
+        tamanho_caixa = 300,
         pagina = "bloco_3",
         tipo_referencia = "meta OMS",
         nivel_de_analise = ifelse(
@@ -784,7 +784,7 @@ mod_bloco_3_server <- function(id, filtros){
         valor_de_referencia = 95,
         tipo = "porcentagem",
         invertido = TRUE,
-        tamanho_caixa = "300px",
+        tamanho_caixa = 300,
         pagina = "bloco_3",
         tipo_referencia = "recomendações OMS",
         nivel_de_analise = ifelse(

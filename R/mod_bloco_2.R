@@ -801,8 +801,7 @@ mod_bloco_2_server <- function(id, filtros) {
         valor_de_referencia = 30,
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "300px",
-        #fonte_titulo = "15px",
+        tamanho_caixa = 300,
         pagina = "bloco_2",
         tipo_referencia = "países desenvolvidos",
         nivel_de_analise = ifelse(
@@ -827,8 +826,7 @@ mod_bloco_2_server <- function(id, filtros) {
         valor_de_referencia = data2_resumo_referencia()$porc_mais_3pt,
         tipo = "porcentagem",
         invertido = FALSE,
-        tamanho_caixa = "300px",
-        #fonte_titulo = "15px",
+        tamanho_caixa = 300,
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -852,8 +850,7 @@ mod_bloco_2_server <- function(id, filtros) {
         valor_de_referencia = data2_resumo_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "300px",
-        #fonte_titulo = "15px",
+        tamanho_caixa = 300,
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
@@ -877,8 +874,7 @@ mod_bloco_2_server <- function(id, filtros) {
         valor_de_referencia = data2_resumo_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
         tipo = "taxa",
         invertido = FALSE,
-        tamanho_caixa = "300px",
-        #fonte_titulo = "15px",
+        tamanho_caixa = 300,
         pagina = "bloco_2",
         nivel_de_analise = ifelse(
           filtros()$comparar == "Não",
