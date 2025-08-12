@@ -436,9 +436,11 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
         title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
-            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            Todos os resultados apresentados no "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões com o nome das localidades que estão sendo comparadas.
+            <span style="display: block; margin-bottom: 14px;"> </span>
+            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas à(s) categoria(s) selecionada(s).
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -1076,7 +1078,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1124,7 +1126,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes_uti",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1172,7 +1174,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Distribuição percentual das internações neonatais por grupos de causas". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,

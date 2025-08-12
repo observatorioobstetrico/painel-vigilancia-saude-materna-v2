@@ -24,10 +24,6 @@ mod_bloco_7_ui <- function(id) {
         .shiny-input-checkboxgroup label~.shiny-options-group, .shiny-input-radiogroup label~.shiny-options-group {
           margin-top: 0px;
         }
-
-        #bloco_6_1-tabset1 .nav-link {
-          border-style: solid
-        }
         "
       )
     ),

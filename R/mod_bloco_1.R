@@ -471,11 +471,11 @@ mod_bloco_1_server <- function(id, filtros){
         title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
-            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            Todos os resultados apresentados no "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões com o nome das localidades que estão sendo comparadas.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Para este bloco, as caixinhas relacionadas à raça/cor e à escolaridade da mãe mudam de acordo com a raça/cor e escolaridade selecionadas nos gráficos.
+            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas à(s) categoria(s) selecionada(s).
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -484,7 +484,7 @@ mod_bloco_1_server <- function(id, filtros){
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -890,7 +890,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_idademae",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos faixa etária da mãe". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -908,6 +908,18 @@ mod_bloco_1_server <- function(id, filtros){
 
     #### Criando a caixinha
     output$caixa_b1_i4 <- renderUI({
+      cor <- if ("nvm_entre_20_e_34_anos" %in% input$input_idademae & length(input$input_idademae) != 1) {
+        "lightgrey"
+      } else {
+        NULL
+      }
+
+      cor_invertida <- if (all(input$input_idademae %in% c("nvm_10_a_14_anos", "nvm_15_a_19_anos", "nvm_maior_que_34_anos"))) {
+        FALSE
+      } else {
+        TRUE
+      }
+
       output_pronto_idademae(TRUE)
       cria_caixa_server(
         dados = data1_resumo_idademae(),
@@ -916,7 +928,8 @@ mod_bloco_1_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia_idademae()$porc_nvm_idademae,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = cor_invertida,
+        cor = cor,
         tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "média nacional",
@@ -946,7 +959,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_racacormae",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por raça/cor da mãe". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1003,7 +1016,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_escmae",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Porcentagem de nascidos vivos por escolaridade da mãe". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1021,6 +1034,18 @@ mod_bloco_1_server <- function(id, filtros){
 
     #### Criando a caixinha
     output$caixa_b1_i6 <- renderUI({
+      cor <- if (any(input$input_escmae %in% c("nvm_com_escolaridade_ate_3", "nvm_com_escolaridade_de_4_a_7")) & any(input$input_escmae %in% c("nvm_com_escolaridade_de_8_a_11", "nvm_com_escolaridade_acima_de_11"))) {
+        "lightgrey"
+      } else {
+        NULL
+      }
+
+      cor_invertida <- if (all(input$input_escmae %in% c("nvm_com_escolaridade_ate_3", "nvm_com_escolaridade_de_4_a_7"))) {
+        FALSE
+      } else {
+        TRUE
+      }
+
       output_pronto_escmae(TRUE)
       cria_caixa_server(
         dados = data1_resumo_escmae(),
@@ -1029,7 +1054,8 @@ mod_bloco_1_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia_escmae()$porc_nvm_escmae,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = cor_invertida,
+        cor = cor,
         tamanho_caixa = 303,
         pagina = "bloco_1",
         tipo_referencia = "média nacional",

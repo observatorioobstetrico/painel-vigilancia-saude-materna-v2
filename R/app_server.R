@@ -44,7 +44,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
       showConfirmButton = TRUE,
       confirmButtonText = "OK",
       confirmButtonCol = "#007bff",
-      animation = TRUE,
+      animation = "slide-from-bottom",
       immediate = TRUE
     )
   })

@@ -966,7 +966,7 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
         purrr::map(blocos, ~{
           div(
             p(class = "fonte-destaque-caixas2", style = style_porc, HTML(glue::glue("<b> { .x$porc } </b>"))),
-            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causa { .x$grupo }")))
+            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causas \"{ .x$grupo }\"")))
           )
         })
       )
@@ -985,7 +985,7 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
         purrr::map(blocos, ~{
           div(
             p(class = "fonte-destaque-caixas2", style = style_porc, HTML(glue::glue("<b> { .x$porc } </b>"))),
-            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causa { .x$grupo }")))
+            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causas \"{ .x$grupo }\"")))
           )
         })
       )

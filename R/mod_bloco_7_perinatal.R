@@ -716,11 +716,11 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
         title = '<div class = "fonte-titulos-modal" style = "color: #656565"> Sobre o "Resumo do período" </div>',
         text = '
           <div style = "text-align: justify; text-justify: inter-word;">
-            Todas as caixinhas que estão sob o "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
+            Todos os resultados apresentados no "Resumo do período", na esquerda da página, referem-se aos valores dos indicadores calculados considerando todo o período selecionado.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões que irão aparecer em cima das caixinhas.
+            Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões com o nome das localidades que estão sendo comparadas.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Para este bloco, as caixinhas relacionadas ao número de óbitos ou às taxas de mortalidade mudam de acordo com o momento do óbito e a faixa de peso selecionados nos gráficos.
+            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas à(s) categoria(s) selecionada(s).
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -1103,7 +1103,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_num_obitos",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Número de óbitos perinatais". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1157,7 +1157,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_taxa_de_mortalidade",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Taxa de mortalidade perinatal por 1000 nascidos vivos". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1210,7 +1210,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_peso",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Distribuição percentual das faixas de peso por momento do óbito perinatal". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1252,7 +1252,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_momento",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Distribuição percentual do momento do óbito perinatal por faixa de peso". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1294,7 +1294,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_evitaveis",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Distribuição percentual dos óbitos perinatais segundo análise de evitabilidade". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1342,7 +1342,7 @@ mod_bloco_7_perinatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">Esta caixinha depende das escolhas feitas no gráfico "Distribuição percentual dos óbitos perinatais por grupos de causas". </span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,

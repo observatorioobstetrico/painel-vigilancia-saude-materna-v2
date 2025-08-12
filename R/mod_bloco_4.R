@@ -661,7 +661,7 @@ mod_bloco_4_ui <- function(id){
             width = 4,
             HTML("<span style='display: block; margin-bottom: 27px;'> </span>"),
             div(
-              HTML("<b style='font-size:19px'> Resumo do período &nbsp;</b>"),
+              HTML("<b class = 'fonte-muito-grande'> Resumo do período &nbsp;</b>"),
               shinyWidgets::actionBttn(
                 inputId = ns('botao_resumo'),
                 icon = icon('question'),
@@ -697,24 +697,24 @@ mod_bloco_4_ui <- function(id){
           column(
             width = 8,
             fluidRow(
-                bs4Dash::bs4Card(
-                  width = 12,
-                  status = "primary",
-                  collapsible = FALSE,
-                  headerBorder = FALSE,
-                  style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
-                  div(
-                    style = "display: flex; align-items: center;",
-                    HTML("<b style='font-size:19px'>Distribuição percentual de nascimentos segundo local</b>"),
-                  ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
+              bs4Dash::bs4Card(
+                width = 12,
+                status = "primary",
+                collapsible = FALSE,
+                headerBorder = FALSE,
+                style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
+                div(
+                  style = "height: 7%; display: flex; align-items: center;",
+                  HTML(
+                    "<b class = 'fonte-muito-grande'>Distribuição percentual dos nascimentos segundo local</b>"
+                  )
                 ),
+                hr(),
+                shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_local"), height = "550px"))
+              )
             )
           )
         ),
-
-        #AQUI
         fluidRow(
           column(
             width = 4,
@@ -725,8 +725,10 @@ mod_bloco_4_ui <- function(id){
               headerBorder = FALSE,
               style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "display: flex; align-items: center;",
-                HTML("<b style='font-size:19px'>Distribuição percentual de partos vaginais hospitalares</b>")
+                style = "height: 7%; display: flex; align-items: center;",
+                HTML(
+                  "<b class = 'fonte-muito-grande'>Distribuição percentual dos partos hospitalares por tipo de parto</b>"
+                )
               ),
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(ns("grafico_dist_partos_vaginais"), height = "550px"))
@@ -741,22 +743,12 @@ mod_bloco_4_ui <- function(id){
               headerBorder = FALSE,
               style = "height: 650px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
-                style = "display: flex; align-items: center;",
-                HTML(glue::glue("<b style = 'font-size: 19px'> Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares &nbsp;</b>")),
-                shinyjs::hidden(
-                  span(
-                    id = ns("mostrar_botao_deslocamento_prop1"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns("botao_prop1"),
-                      icon = icon("triangle-exclamation", style = "color: red"),
-                      color = "warning",
-                      style = "material-circle",
-                      size = "xs"
-                    )
-                  )
+                style = "height: 7%; display: flex; align-items: center;",
+                HTML(
+                  "<b class = 'fonte-muito-grande'>Distribuição percentual do tipo de profissional na assistência em partos vaginais hospitalares</b>"
                 )
               ),
-              # hr(),
+              hr(),
               # fluidRow(
               #   column(
               #     width = 12,
@@ -924,36 +916,33 @@ mod_bloco_4_ui <- function(id){
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 2 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson2'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson2"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_indicador1"), height = 340))
                   ),
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 4 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson4'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson4"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_indicador1"), height = 340)),
                   ),
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupos 6 a 9 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson6_a_9'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson6_a_9"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot7_indicador1"), height = 339))
                   )
@@ -963,48 +952,44 @@ mod_bloco_4_ui <- function(id){
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 1 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson1'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson1"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_indicador1"), height = 340)),
                   ),
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 3 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson3'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson3"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_indicador1"), height = 340)),
                   ),
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 5 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson5'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson5"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_indicador1"), height = 340)),
                   ),
                   div(
                     style = "text-align: center;",
                     HTML("<b class = 'fonte-grande'> Grupo 10 de Robson &nbsp;</b>"),
-                    shinyWidgets::actionBttn(
-                      inputId = ns('texto_robson10'),
-                      icon = icon('question'),
-                      style = 'material-circle',
-                      color = "primary",
-                      size = 'xs'
+                    actionButton(
+                      inputId = ns("texto_robson10"),
+                      label = NULL,
+                      icon = icon("info-circle", class = "info-icon"),
+                      class = "btn btn-sm btn-no-style info-btn fonte-media"
                     ),
                     shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot8_indicador1"), height = 339))
                   )
@@ -1697,7 +1682,7 @@ mod_bloco_4_server <- function(id, filtros){
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     },
@@ -1725,7 +1710,7 @@ mod_bloco_4_server <- function(id, filtros){
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     },
@@ -2426,6 +2411,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
+        cor = "lightgrey",
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 315, 327),
         pagina = "bloco_4",
         tipo_referencia = "média nacional",
@@ -2474,7 +2460,7 @@ mod_bloco_4_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson1,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -2522,7 +2508,7 @@ mod_bloco_4_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson3,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -2595,6 +2581,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$prop_nasc_robson6_a_9,
         tipo = "porcentagem",
         invertido = FALSE,
+        cor = "lightgrey",
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -2643,7 +2630,7 @@ mod_bloco_4_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data4_resumo_referencia()$contrib_robson1_tx_cesariana,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -2691,7 +2678,7 @@ mod_bloco_4_server <- function(id, filtros){
         tem_meta = FALSE,
         valor_de_referencia = data4_resumo_referencia()$contrib_robson3_tx_cesariana,
         tipo = "porcentagem",
-        invertido = FALSE,
+        invertido = TRUE,
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -2764,6 +2751,7 @@ mod_bloco_4_server <- function(id, filtros){
         valor_de_referencia = data4_resumo_referencia()$contrib_robson6_a_9_tx_cesariana,
         tipo = "porcentagem",
         invertido = FALSE,
+        cor = "lightgrey",
         tamanho_caixa = dplyr::if_else(filtros()$comparar == "Sim", 273, 300),
         pagina = "bloco_4",
         #fonte_titulo = "15px",
@@ -3274,8 +3262,8 @@ mod_bloco_4_server <- function(id, filtros){
         dplyr::select(
           ano,
           no_local = glue::glue("km_partos_{input$local_med}"),
-          baixa_complexidade = "km_partos_fora_municipio_baixa_complexidade",
-          alta_complexidade = "km_partos_fora_municipio_alta_complexidade"
+          baixa_complexidade = glue::glue("km_partos_{input$local_med}_baixa_complexidade"),
+          alta_complexidade = glue::glue("km_partos_{input$local_med}_alta_complexidade")
         ) |>
         dplyr::mutate(
           class = dplyr::case_when(
@@ -3484,11 +3472,11 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-              indicador == "dist_outros" ~ "Outros"
+              indicador == "dist_outros" ~ "Cesariana"
             ),
             levels = c(
               "Partos Vaginais",
-              "Outros"
+              "Cesariana"
             )
           )
         )
@@ -3965,11 +3953,11 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-              indicador == "dist_outros" ~ "Outros"
+              indicador == "dist_outros" ~ "Cesariana"
               ),
             levels = c(
               "Partos Vaginais",
-              "Outros"
+              "Cesariana"
             )
           )
         )
@@ -4237,11 +4225,11 @@ mod_bloco_4_server <- function(id, filtros){
           indicador = factor(
             dplyr::case_when(
               indicador == "dist_partos_vaginais" ~ "Partos Vaginais",
-              indicador == "dist_outros" ~ "Outros"
+              indicador == "dist_outros" ~ "Cesariana"
             ),
             levels = c(
               "Partos Vaginais",
-              "Outros"
+              "Cesariana"
             )
           )
         )
@@ -4292,7 +4280,6 @@ mod_bloco_4_server <- function(id, filtros){
       })
     })
 
-    #### Criando os gráficos
     output$plot1_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[1]] |>
         highcharter::hc_add_series(
@@ -4393,7 +4380,6 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
-    #[REFF]
     output$plot7_indicador1 <- highcharter::renderHighchart({
       list_of_plots()[[7]] |>
         highcharter::hc_add_series(
@@ -4444,113 +4430,79 @@ mod_bloco_4_server <- function(id, filtros){
         highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE)
     })
 
-    #### Ativando os pop-ups com a descrição de cada grupo de Robson
-    observeEvent(input$texto_robson1, {
-      shinyalert::shinyalert(
-        html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 1 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 1 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+    ### Criando as tooltips com a descrição de cada grupo -----------------------
+    #### Grupo 1
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson1",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 1 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.</span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson2, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 2 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 2 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea anterior ao trabalho de parto.
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
+
+    #### Grupo 2
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson2",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 2 de Robson é formado por nulíparas com gestação única, cefálica, \U2265 37 semanas e com indução ou cesárea anterior ao trabalho de parto.</span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson3, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 3 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 3 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
+
+    #### Grupo 3
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson3",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 3 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas e em trabalho de parto espontâneo.</span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson4, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 4 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 4 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas, com indução ou cesárea realizada antes do início do trabalho de parto.
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
+
+    #### Grupo 4
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson4",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 4 de Robson é formado por multíparas sem antecedente de cesárea, com gestação única, cefálica, \U2265 37 semanas e com indução ou cesárea realizada antes do início do trabalho de parto.</span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson5, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 5 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 5 de Robson é formado por todas as multíparas com antecedente de cesárea, gestação única, cefálica e \U2265 37 semanas.
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
+
+
+    ## Grupo 5
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson5",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 5 de Robson é formado por todas as multíparas com antecedente de cesárea, gestação única, cefálica e \U2265 37 semanas.</span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson6_a_9, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre os grupos 6 a 9 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
+
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson6_a_9",
+      options = list(
+        title = '<span class = "fonte-media">
+          <div style = "text-align: justify; text-justify: inter-word;">
             O grupo 6 de Robson é formado por todas as nulíparas com partos pélvicos.
             <br>
             <br>
@@ -4561,39 +4513,27 @@ mod_bloco_4_server <- function(id, filtros){
             <br>
             <br>
             O grupo 9 de Robson é formado por todas as gestantes com feto em apresentações anormais (incluindo aquelas com antecedente de cesárea).
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
+          </div>
+        </span>',
+        placement = "top",
         animation = TRUE,
-        immediate = TRUE
-      )
-    })
-
-    observeEvent(input$texto_robson10, {
-      shinyalert::shinyalert(
         html = TRUE,
-        title = "<div class = 'fonte-titulos-modal' style = 'color: #656565'> Sobre o grupo 10 de Robson </div>",
-        text = "
-          <div style = 'text-align: justify; text-justify: inter-word;'>
-            O grupo 10 de Robson é formado por todas as mulheres com gestação única, cefálica e < 37 semanas (incluindo aquelas com antecedente de cesárea).
-          </div>",
-        size = "s",
-        closeOnEsc = TRUE,
-        closeOnClickOutside = TRUE,
-        type = "info",
-        showConfirmButton = TRUE,
-        confirmButtonText = "OK",
-        confirmButtonCol = "#007bff",
-        animation = TRUE,
-        immediate = TRUE
+        delay = list(show = 75, hide = 75) # delay em ms
       )
-    })
+    )
 
+    ## Grupo 10
+    bs4Dash::addTooltip(
+      session = session,
+      id = "texto_robson10",
+      options = list(
+        title = '<span class = "fonte-media">O grupo 10 de Robson é formado por todas as mulheres com gestação única, cefálica e < 37 semanas (incluindo aquelas com antecedente de cesárea).</span>',
+        placement = "top",
+        animation = TRUE,
+        html = TRUE,
+        delay = list(show = 75, hide = 75) # delay em ms
+      )
+    )
 
 
     ### Porcentagem de nascidos vivos por grupo de Robson --------------------
@@ -5533,7 +5473,7 @@ mod_bloco_4_server <- function(id, filtros){
             linkedTo = ":previous"
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Outros"),
+            data = data4_dist_partos_vaginais_completo() |> dplyr::filter(indicador == "Cesariana"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = TRUE,
@@ -5544,7 +5484,7 @@ mod_bloco_4_server <- function(id, filtros){
             stack = 0
           ) |>
           highcharter::hc_add_series(
-            data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Outros"),
+            data = data4_dist_partos_vaginais_comp_completo() |> dplyr::filter(indicador == "Cesariana"),
             highcharter::hcaes(x = ano, y = prop_indicador, group = indicador),
             type = "column",
             showInLegend = FALSE,

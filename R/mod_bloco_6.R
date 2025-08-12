@@ -10,15 +10,6 @@
 mod_bloco_6_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    tags$style(
-      HTML(
-        "
-        #bloco_7_1-tabset1 .nav-link {
-          border-style: solid
-        }
-        "
-      )
-    ),
     div(
       class = "div-titulo",
       HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
@@ -30,7 +21,7 @@ mod_bloco_6_ui <- function(id) {
       width = 12,
       collapsible = FALSE,
       tabPanel(
-        HTML("<b>Indicadores relacionados à mortalidade materna</b>"),
+        HTML("<b>Relacionados à mortalidade materna</b>"),
         value = "tabpanel_mortalidade",
         fluidRow(
           column(
@@ -250,7 +241,7 @@ mod_bloco_6_ui <- function(id) {
         )
       ),
       tabPanel(
-        HTML("<b>Indicadores relacionados à morbidade materna grave</b>"),
+        HTML("<b>Relacionados à morbidade materna grave</b>"),
         value = "tabpanel_morbidade",
         fluidRow(
           column(

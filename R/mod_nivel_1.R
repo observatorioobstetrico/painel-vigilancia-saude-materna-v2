@@ -89,7 +89,7 @@ mod_nivel_1_ui <- function(id) {
               fluidRow(
                 a(
                   style = "width: 100%;",
-                  class = "btn action-button btn-outline-primary btn-flat",
+                  class = "btn action-button btn-outline-primary",
                   icon("chart-line"),
                   HTML(
                     "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -109,7 +109,6 @@ mod_nivel_1_ui <- function(id) {
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
-                  flat = TRUE,
                   outline = TRUE,
                   width = "100%"
                 )
@@ -169,8 +168,8 @@ mod_nivel_1_ui <- function(id) {
             column(
               width = 4,
               shinycssloaders::withSpinner(
-                highcharter::highchartOutput(ns("plot3"), height = "280px"),
-                proxy.height = "340px"
+                highcharter::highchartOutput(ns("plot3"), height = "320px"),
+                proxy.height = "360px"
               )
             ),
             column(
@@ -179,15 +178,15 @@ mod_nivel_1_ui <- function(id) {
                 column(
                   width = 6,
                   shinycssloaders::withSpinner(
-                    highcharter::highchartOutput(ns("plot1"), height = "280px"),
-                    proxy.height = "340px"
+                    highcharter::highchartOutput(ns("plot1"), height = "320px"),
+                    proxy.height = "360px"
                   )
                 ),
                 column(
                   width = 6,
                   shinycssloaders::withSpinner(
-                    highcharter::highchartOutput(ns("plot2"), height = "280px"),
-                    proxy.height = "340px"
+                    highcharter::highchartOutput(ns("plot2"), height = "320px"),
+                    proxy.height = "360px"
                   )
                 )
               )
@@ -233,7 +232,7 @@ mod_nivel_1_ui <- function(id) {
               fluidRow(
                 a(
                   style = "width: 100%;",
-                  class = "btn action-button btn-outline-primary btn-flat",
+                  class = "btn action-button btn-outline-primary",
                   icon("chart-line"),
                   HTML(
                     "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -253,7 +252,6 @@ mod_nivel_1_ui <- function(id) {
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
-                  flat = TRUE,
                   outline = TRUE,
                   width = "100%"
                 )
@@ -343,7 +341,7 @@ mod_nivel_1_ui <- function(id) {
               fluidRow(
                 a(
                   style = "width: 100%;",
-                  class = "btn action-button btn-outline-primary btn-flat",
+                  class = "btn action-button btn-outline-primary",
                   icon("chart-line"),
                   HTML(
                     "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -363,7 +361,6 @@ mod_nivel_1_ui <- function(id) {
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
-                  flat = TRUE,
                   outline = TRUE,
                   width = "100%"
                 )
@@ -449,45 +446,38 @@ mod_nivel_1_ui <- function(id) {
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Os indicadores de assistência ao parto são apresentados em três abas:
 
-                <span style='display: block; margin-bottom: 14px;'> </span>
-                Deslocamento para parto: nessa aba, apresentamos
+
+                <ol align='justify'; class = 'fonte-muito-grande' style = 'font-weight: bold;'>
+                  <li style = 'margin-bottom: 15px;'> Deslocamento para parto: <span style = 'font-weight: normal;'>nessa aba, apresentamos
                 a porcentagem de mulheres que precisam se deslocar de seu município de residência para ter
                 assistência ao parto e a distância percorrida para chegar nos serviços de saúde de alta e
                 baixa complexidade. Para o nível de análise municipal, apresentamos duas informações adicionais:
-                município com primeira, segunda e terceira maior proporção de partos fora do município de residência da mulher
-                e hospital com maior número de partos ocorridos fora do município de residência da mulher. Também é apresentada
+                três principais municípios para onde a mulher se deslocou quando o parto ocorreu fora
+                do município de residência e hospital com maior número de partos ocorridos fora do
+                município de residência da mulher. Também é apresentada
                 a porcentagem de nascidos vivos com peso ao nascer < 1500g segundo local de ocorrência do parto e disponibilidade
                 de leitos de UTI neonatal. Essas informações podem auxiliar os gestores municipais e estaduais a verificar se
                 a regionalização da atenção ao parto está ocorrendo conforme o planejado, ou seja, se os partos estão ocorrendo
                 em serviços e municípios previstos na regionalização e atendendo à orientação de que RN com peso ao nascer < 1500 g
-                devem nascer em local com disponibilidade de leitos de UTI neonatal.
+                devem nascer em local com disponibilidade de leitos de UTI neonatal.</span></li>
 
-                <span style='display: block; margin-bottom: 14px;'> </span>
-                Profissional e local do parto: nessa aba apresentamos a porcentagem de nascimentos segundo local de ocorrência (hospital, outro
-                estabelecimento de saúde, domicílio, aldeia indígena, sem informação, outros) e a porcentagem de partos vaginais hospitalares
-                segundo tipo de profissional.
-                A assistência ao parto por profissionais capacitados é uma das principais estratégias para a redução da mortalidade materna e perinatal.
-                Partos hospitalares ocorrem em um ambiente onde existem profissionais capacitados e, em teoria, são assistidos por esses profissionais.
-                Partos não hospitalares podem ser planejados e serem assistidos por profissionais capacitados, mas também podem ocorrer sem assistência.
-                Uma porcentagem elevada de partos não hospitalares deverá ser investigada localmente para avaliar se foram partos sem assistência.
-                Existem evidências científicas de que a assistência ao parto vaginal por enfermeiras e obstetrizes está associada a melhores resultados
-                maternos e perinatais, ao menor uso de intervenções no trabalho de parto e parto, além da maior satisfação com a experiência de parto.
-                Sendo assim, em um contexto de reforma do modelo de atenção obstétrica, é recomendável o aumento da atuação de enfermeiras e obstetrizes
-                na assistência ao parto vaginal, conforme as revisões sistemáticas e os posicionamento da Organização Mundial da Saúde Como valor de
-                referência, utilizamos a porcentagem de partos por enfermeiras observada em países com elevada participação da enfermagem no modelo de
-                atenção ao parto,  taxas adequadas de cesariana e baixas taxas de mortalidade materna e perinatal.
+                  <li style = 'margin-bottom: 15px;'> Profissional e local do parto: <span style = 'font-weight: normal;'> nessa aba, apresentamos a porcentagem de nascimentos segundo local de
+                ocorrência (hospital, outro estabelecimento de saúde, domicílio, aldeia indígena, sem
+                informação, outros) e a porcentagem de partos vaginais hospitalares segundo tipo de
+                profissional.
+                </span></li>
 
-                <span style='display: block; margin-bottom: 14px;'> </span>
-                Grupo de Robson: nessa aba, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
+                  <li> Grupo de Robson: <span style = 'font-weight: normal;'>nessa aba, apresentamos a porcentagem total de nascimentos por cesarianas, bem como a
                 distribuição das mulheres segundo grupos de Robson, a taxa de cesariana em cada grupo de
-                Robson e a contribuição de cada grupo para a taxa global de cesariana.
+                Robson e a contribuição de cada grupo para a taxa global de cesariana.</span></li>
+                </ol>
                 </p>
                 "
               ),
               fluidRow(
                 a(
                   style = "width: 100%;",
-                  class = "btn action-button btn-outline-primary btn-flat",
+                  class = "btn action-button btn-outline-primary",
                   icon("chart-line"),
                   HTML(
                     "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -507,7 +497,6 @@ mod_nivel_1_ui <- function(id) {
                   ),
                   icon = icon("circle-question"),
                   status = "primary",
-                  flat = TRUE,
                   outline = TRUE,
                   width = "100%"
                 )
@@ -663,7 +652,7 @@ mod_nivel_1_ui <- function(id) {
                 fluidRow(
                   a(
                     style = "width: 100%;",
-                    class = "btn action-button btn-outline-primary btn-flat",
+                    class = "btn action-button btn-outline-primary",
                     icon("chart-line"),
                     HTML(
                       "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -683,7 +672,6 @@ mod_nivel_1_ui <- function(id) {
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
-                    flat = TRUE,
                     outline = TRUE,
                     width = "100%"
                   )
@@ -808,7 +796,7 @@ mod_nivel_1_ui <- function(id) {
                 fluidRow(
                   a(
                     style = "width: 100%;",
-                    class = "btn action-button btn-outline-primary btn-flat",
+                    class = "btn action-button btn-outline-primary",
                     icon("chart-line"),
                     HTML(
                       "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -828,7 +816,6 @@ mod_nivel_1_ui <- function(id) {
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
-                    flat = TRUE,
                     outline = TRUE,
                     width = "100%"
                   )
@@ -1020,7 +1007,7 @@ mod_nivel_1_ui <- function(id) {
                 fluidRow(
                   a(
                     style = "width: 100%;",
-                    class = "btn action-button btn-outline-primary btn-flat",
+                    class = "btn action-button btn-outline-primary",
                     icon("chart-line"),
                     HTML(
                       "<span class = 'fonte-muito-grande'> &nbsp; Ver série histórica dos indicadores </span>"
@@ -1040,7 +1027,6 @@ mod_nivel_1_ui <- function(id) {
                     ),
                     icon = icon("circle-question"),
                     status = "primary",
-                    flat = TRUE,
                     outline = TRUE,
                     width = "100%"
                   )
@@ -1072,23 +1058,15 @@ mod_nivel_1_ui <- function(id) {
                       column(
                         width = 4,
                         shinycssloaders::withSpinner(
-                          uiOutput(ns("caixa_b7_fetal_i3")),
-                          proxy.height = "270px"
+                          uiOutput(ns("caixa_b7_fetal_i4")),
+                          proxy.height = "280px"
                         )
                       ),
-                      # column(
-                      #   width = 4,
-                      #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i7")), proxy.height = "270px")
-                      # ),
-                      # column(
-                      #   width = 4,
-                      #   shinycssloaders::withSpinner(uiOutput(ns("caixa_b7_fetal_i8")), proxy.height = "270px")
-                      # ),
                       column(
                         width = 4,
                         shinycssloaders::withSpinner(
-                          uiOutput(ns("caixa_b7_fetal_i4")),
-                          proxy.height = "280px"
+                          uiOutput(ns("caixa_b7_fetal_i3")),
+                          proxy.height = "270px"
                         )
                       ),
                       column(
@@ -1310,7 +1288,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE
+        animation = "slide-from-bottom"
       )
     })
 
@@ -1326,7 +1304,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -1343,7 +1321,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -1360,7 +1338,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -1377,7 +1355,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -1394,7 +1372,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -1411,7 +1389,7 @@ mod_nivel_1_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })

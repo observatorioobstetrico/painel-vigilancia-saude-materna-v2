@@ -420,7 +420,7 @@ mod_bloco_2_server <- function(id, filtros) {
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })

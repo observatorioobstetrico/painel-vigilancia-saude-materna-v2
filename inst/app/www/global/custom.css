@@ -87,6 +87,14 @@
   }
 }
 
+#bloco_4_1-tabset1 .nav-link, #bloco_6_1-tabset1 .nav-link, #bloco_7_1-tabset1 .nav-link {
+  border-style: solid
+}
+
+.nav {
+  gap: 3px
+}
+
 .card.card-tabs:not(.card-outline)>.card-header .nav-item:first-child .nav-link {
     border-left-color: inherit !important;
 }

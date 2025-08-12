@@ -891,7 +891,7 @@ mod_bloco_5_server <- function(id, filtros){
         showConfirmButton = TRUE,
         confirmButtonText = "OK",
         confirmButtonCol = "#007bff",
-        animation = TRUE,
+        animation = "slide-from-bottom",
         immediate = TRUE
       )
     })
@@ -2646,10 +2646,13 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
-            max = max(c(
-              c(6,data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
-              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
-            ), na.rm = TRUE) + 0.1
+            max = max(
+              c(
+                c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+                c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
+              ),
+              na.rm = TRUE
+            ) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
@@ -2702,11 +2705,14 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
-            max = max(c(
-              c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
-              c(data5_comp()$porc_malformacao_geral, data5_comp()$porc_malformacao_vigilancia),
-              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
-            ), na.rm = TRUE) + 1
+            max = max(
+              c(
+                c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+                c(data5_comp()$porc_malformacao_geral, data5_comp()$porc_malformacao_vigilancia),
+                c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
+              ),
+              na.rm = TRUE
+            ) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$mostrar_referencia == "nao_mostrar_referencia") {
@@ -2772,10 +2778,13 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
-            max = max(c(
-              c(data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
-              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
-            ), na.rm = TRUE) + 0.1
+            max = max(
+              c(
+                c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+                c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
+              ),
+              na.rm = TRUE
+            ) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
@@ -2817,11 +2826,14 @@ mod_bloco_5_server <- function(id, filtros){
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
-            max = max(c(
-              c(data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
-              c(data5_comp()$porc_malformacao_geral, data5_comp()$porc_malformacao_vigilancia),
-              c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
-            ), na.rm = TRUE) + 0.1
+            max = max(
+              c(
+                c(6, data5()$porc_malformacao_geral, data5()$porc_malformacao_vigilancia),
+                c(data5_comp()$porc_malformacao_geral, data5_comp()$porc_malformacao_vigilancia),
+                c(data5_referencia()$porc_malformacao_geral, data5_referencia()$porc_malformacao_vigilancia)
+              ),
+              na.rm = TRUE
+            ) + 1
           ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
