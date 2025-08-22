@@ -329,7 +329,7 @@ mod_bloco_6_ui <- function(id) {
                   style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
                   div(
                     style = "height: 10%; display: flex; align-items: center;",
-                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave no SUS &nbsp;</b>"),
+                    HTML("<b class = 'fonte-muito-grande'> Porcentagem de casos de morbidade materna grave &nbsp;</b>"),
                     shinyjs::hidden(
                       span(
                         id = ns("mostrar_botao5"),
@@ -343,13 +343,26 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 460))
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot1_mmg"), height = 430))
                 )
               ),
               column(
                 width = 6,
-
                 bs4Dash::bs4Card(
                   width = 12,
                   status = "primary",
@@ -372,7 +385,21 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg_causas_especificas"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
                   fluidRow(
                     column(
                       width = 12,
@@ -381,15 +408,15 @@ mod_bloco_6_ui <- function(id) {
                         label = span(class = "fonte-grande", "Causa de morbidade materna grave"),
                         options = list(placeholder = "Selecione a causa de morbidade materna grave"),
                         choices = c(
-                          "Hipertensão" = "prop_mmg_hipertensao",
-                          "Hemorragia" = "prop_mmg_hemorragia",
-                          "Infecção" = "prop_mmg_infeccao"
+                          "Hipertensão" = "porc_mmg_hipertensao",
+                          "Hemorragia" = "porc_mmg_hemorragia",
+                          "Infecção" = "porc_mmg_infeccao"
                         ),
                         width = "100%"
                       )
                     )
                   ),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 380))
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot2_mmg"), height = 350))
                 )
               ),
               column(
@@ -416,8 +443,22 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 460))
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg_uti"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot3_mmg"), height = 430))
                 )
               ),
               column(
@@ -444,8 +485,22 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 460))
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg_tmp"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot4_mmg"), height = 430))
                 )
               ),
               column(
@@ -472,8 +527,22 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 460))
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg_transfusao"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot5_mmg"), height = 430))
                 )
               ),
               column(
@@ -500,8 +569,22 @@ mod_bloco_6_ui <- function(id) {
                       )
                     )
                   ),
-                  hr(),
-                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 460))
+                  div(
+                    style = "display: flex; justify-content: center;",
+                    shinyWidgets::prettyRadioButtons(
+                      inputId = ns("input_porc_mmg_cirurgia"),
+                      label = NULL,
+                      inline = TRUE,
+                      choices = c(
+                        "No SUS" = "sus",
+                        "Na saúde suplementar" = "ans"
+                      ),
+                      icon = icon("check", style = "background-color: #007bff;"),
+                      animation = "rotate"
+                    )
+                  ),
+                  hr(style = "margin-top: 0;"),
+                  shinycssloaders::withSpinner(highcharter::highchartOutput(ns("plot6_mmg"), height = 430))
                 )
               )
             )
@@ -522,6 +605,8 @@ mod_bloco_6_server <- function(id, filtros){
     # Criando um data.frame com os cálculos dos indicadores -------------------
     bloco6_calcs <- data.frame(
       tipo = c("local", "referencia"),
+
+      # Óbitos maternos
       soma_obitos_mat_totais = rep("sum(obitos_mat_totais)", 2),
       rmm = c("round(sum(obitos_mat_totais) / sum(nascidos) * 100000, 1)", "30"),
       prop_obitos_diretos = rep("round(sum(obitos_mat_diretos) / sum(obitos_mat_totais) * 100, 1)", 2),
@@ -529,15 +614,28 @@ mod_bloco_6_server <- function(id, filtros){
       prop_obitos_hipertens = rep("round(sum(obitos_mat_hipertensao) / sum(obitos_mat_diretos) * 100, 1)", 2),
       prop_obitos_hemo = rep("round(sum(obitos_mat_hemorragia) / sum(obitos_mat_diretos) * 100, 1)", 2),
       prop_obitos_infec = rep("round(sum(obitos_mat_infec_puerperal) / sum(obitos_mat_diretos) * 100, 1)", 2),
-      soma_casos_mmg = rep("sum(casos_mmg)", 2),
-      prop_mmg_int_publicas = rep("round(sum(casos_mmg) / sum(total_internacoes) * 100, 1)", 2),
-      prop_mmg_hipertensao = rep("round(sum(casos_mmg_hipertensao) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_hemorragia = rep("round(sum(casos_mmg_hemorragia) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_infeccao = rep("round(sum(casos_mmg_infeccoes) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_uti = rep("round(sum(casos_mmg_uti) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_tmp = rep("round(sum(casos_mmg_tmp) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_transfusao = rep("round(sum(casos_mmg_transfusao) / sum(casos_mmg) * 100, 1)", 2),
-      prop_mmg_cirurgia = rep("round(sum(casos_mmg_cirurgia) / sum(casos_mmg) * 100, 1)", 2)
+
+      # Morbidade materna no SUS
+      soma_casos_mmg_sus = rep("sum(casos_mmg_sus)", 2),
+      porc_mmg_sus = rep("round(sum(casos_mmg_sus) / sum(total_internacoes_sus) * 100, 1)", 2),
+      porc_mmg_hipertensao_sus = rep("round(sum(casos_mmg_sus_hipertensao) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_hemorragia_sus = rep("round(sum(casos_mmg_sus_hemorragia) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_infeccao_sus = rep("round(sum(casos_mmg_sus_infeccoes) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_uti_sus = rep("round(sum(casos_mmg_sus_uti) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_tmp_sus = rep("round(sum(casos_mmg_sus_tmp) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_transfusao_sus = rep("round(sum(casos_mmg_sus_transfusao) / sum(casos_mmg_sus) * 100, 1)", 2),
+      porc_mmg_cirurgia_sus = rep("round(sum(casos_mmg_sus_cirurgia) / sum(casos_mmg_sus) * 100, 1)", 2),
+
+      # Morbidade materna na ANS
+      soma_casos_mmg_ans = rep("sum(casos_mmg_ans[ano >= 2015])", 2),
+      porc_mmg_ans = rep("round(sum(casos_mmg_ans[ano >= 2015]) / sum(total_internacoes_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_hipertensao_ans = rep("round(sum(casos_mmg_ans_hipertensao[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_hemorragia_ans = rep("round(sum(casos_mmg_ans_hemorragia[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_infeccao_ans = rep("round(sum(casos_mmg_ans_infeccoes[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_uti_ans = rep("round(sum(casos_mmg_ans_uti[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_tmp_ans = rep("round(sum(casos_mmg_ans_tmp[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_transfusao_ans = rep("round(sum(casos_mmg_ans_transfusao[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2),
+      porc_mmg_cirurgia_ans = rep("round(sum(casos_mmg_ans_cirurgia[ano >= 2015]) / sum(casos_mmg_ans[ano >= 2015]) * 100, 1)", 2)
     )
 
     bloco6_calcs_resumo <- bloco6_calcs |>
@@ -995,116 +1093,6 @@ mod_bloco_6_server <- function(id, filtros){
     })
 
 
-    ## Criando o output do gráfico de radar -----------------------------------
-    ### Definindo os indicadores que aparecerão no gráfico
-    selected_indicators <- c(
-      "rmm",
-      "prop_obitos_diretos",
-      "prop_mmg_int_publicas",
-      "prop_mif_investigado",
-      "prop_obito_materno_investigado"
-    )
-
-    ## Selecionando colunas relevantes nos dataframes de resumo e arrumando seus formatos
-    df <- reactive({
-      data6_resumo_rmm_corrigida()[, c('class', selected_indicators)] |>
-        dplyr::mutate(
-          class = ifelse(grepl("Brasil \\(valor de referência\\)", class), "Brasil", class)
-        ) |>
-        tidyr::pivot_longer(
-          !class,
-          names_to = "indicador",
-          values_to = "values1"
-        ) |>
-        dplyr::mutate(
-          values1 = round(values1, 1),
-          sufixo = c("", rep("%", 4))
-        )
-    })
-
-    df2 <- reactive({
-      data6_resumo_referencia()[, selected_indicators] |>
-        dplyr::mutate(class = "Referência") |>
-        tidyr::pivot_longer(
-          !class,
-          names_to = "indicador",
-          values_to = "values2"
-        ) |>
-        dplyr::mutate(
-          tipo_de_referencia = lapply(
-            selected_indicators,
-            function(indicador_abrev) {
-              if (indicador_abrev %in% c("prop_mif_investigado", "prop_obito_materno_investigado")) {
-                "incompletude"
-              } else {
-                tabela_indicadores$descricao_referencia[tabela_indicadores$nome_abreviado == indicador_abrev]
-              }
-            }
-          ) |> unlist(),
-          sufixo = c("", rep("%", 4))
-        )
-    })
-
-    ### Criando o output
-    output$spider_chart_mort <- output$spider_chart_mmg <- highcharter::renderHighchart({
-      # Categorias para o eixo x
-      categories <- lapply(
-        selected_indicators,
-        function(indicador_abrev) {
-          if (indicador_abrev == "prop_mif_investigado") {
-            "% de óbitos de mulheres em idade fértil investigados"
-          } else if (indicador_abrev == "prop_obito_materno_investigado") {
-            "% de óbitos maternos investigados"
-          } else {
-            gsub("Porcentagem", "%", tabela_radar$indicador[tabela_radar$nome_abreviado == indicador_abrev])
-          }
-        }) |> unlist()
-
-      # Obter valores para o gráfico
-      values1 <- round(as.numeric(unlist(df()[, "values1"])), 3)
-      values2 <- round(as.numeric(unlist(df2()[, "values2"])), 3)
-
-      # Encontrar o valor máximo dos dados
-      max_value1 <- max(values1, na.rm = TRUE)
-      max_value2 <- max(values2, na.rm = TRUE)
-
-      # Definir o valor máximo do eixo y como o próximo múltiplo de 100 maior que o valor máximo
-      yAxis_max <- ceiling(max(max_value1, max_value2) / 100) * 100
-
-      # Criar gráfico
-      highcharter::highchart() |>
-        highcharter::hc_chart(polar = TRUE, type = "line", backgroundColor = "transparent") |>
-        highcharter::hc_pane(size = '65%') |>
-        highcharter::hc_xAxis(categories = categories, tickmarkPlacement = 'on', lineWidth = 0, labels = list(style = list(fontWeight = 'bold', fontSize = '12px'))) |>
-        highcharter::hc_yAxis(gridLineInterpolation = 'polygon', lineWidth = 0, min = 0, max = yAxis_max) |>
-        highcharter::hc_add_series(
-          name = df()$class[1],
-          data = df() |> dplyr::select(y = values1, sufixo),
-          color = "#2c115f",
-          lineWidth = 2,
-          marker = list(enabled = FALSE, symbol = "circle", radius = 4),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'>&#9679 </span> {series.name}: <b> {point.y}{point.sufixo} </b><br>"
-          )
-        ) |>
-        highcharter::hc_add_series(
-          name = df2()$class[1],
-          data = df2() |> dplyr::select(y = values2, tipo_de_referencia, sufixo),
-          color = "#b73779",
-          lineWidth = 2,
-          opacity = 0.6,
-          dashStyle = "ShortDash",
-          marker = list(enabled = FALSE, symbol = "diamond", radius = 4),
-          tooltip = list(
-            pointFormat = "<span style = 'color: {series.color}'>&#9670 </span> {series.name} ({point.tipo_de_referencia}): <b> {point.y}{point.sufixo} </b>"
-          )
-        ) |>
-        highcharter::hc_legend(align = 'center', layout = 'horizontal', itemStyle = list(fontWeight = 'bold', fontSize = '14px')) |>
-        highcharter::hc_tooltip(shared = TRUE) |>
-        highcharter::hc_legend(itemMarginTop = 25)  # Ajustar a margem entre itens da legenda
-    })
-
-
     ## Criando os outputs das caixinhas ---------------------------------------
     ### Para os indicadores de mortalidade materna ----------------------------
     #### Número de total óbitos maternos ---------------------------------------
@@ -1228,14 +1216,17 @@ mod_bloco_6_server <- function(id, filtros){
 
 
     ### Para os indicadores de morbidade materna ------------------------------
-    #### Porcentagem de casos de morbidade materna grave no SUS ----
+    #### Porcentagem de casos de morbidade materna grave ----
     output$caixa_b6_mmg_i1 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg == "sus", "porc_mmg_sus", "porc_mmg_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_int_publicas",
-        titulo = "Porcentagem de casos de morbidade materna grave no SUS",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_int_publicas,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = 303,
@@ -1246,12 +1237,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave por hipertensão ------
     output$caixa_b6_mmg_i2 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "porc_mmg_hipertensao_sus", "porc_mmg_hipertensao_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_hipertensao",
-        titulo = "Porcentagem de casos de morbidade materna grave por hipertensão",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por hipertensão {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hipertensao,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = 303,
@@ -1262,12 +1256,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave por hemorragia -------
     output$caixa_b6_mmg_i3 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "porc_mmg_hemorragia_sus", "porc_mmg_hemorragia_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_hemorragia",
-        titulo = "Porcentagem de casos de morbidade materna grave por hemorragia",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por hemorragia {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_hemorragia,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = 303,
@@ -1278,12 +1275,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave por infecção ---------
     output$caixa_b6_mmg_i4 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_causas_especificas == "sus", "porc_mmg_infeccao_sus", "porc_mmg_infeccao_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_infeccao",
-        titulo = "Porcentagem de casos de morbidade materna grave por infecção",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por infecção {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_infeccao,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         invertido = FALSE,
         tamanho_caixa = 303,
@@ -1294,12 +1294,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com internação em UTI ----
     output$caixa_b6_mmg_i5 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_uti == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_uti == "sus", "porc_mmg_uti_sus", "porc_mmg_uti_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_uti",
-        titulo = "Porcentagem de casos de morbidade materna grave com internação em UTI",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com internação em UTI {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_uti,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         invertido = FALSE,
         cor = "lightgrey",
@@ -1311,12 +1314,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado ----
     output$caixa_b6_mmg_i6 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_tmp == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_tmp == "sus", "porc_mmg_tmp_sus", "porc_mmg_tmp_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_tmp",
-        titulo = "Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_tmp,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
@@ -1328,12 +1334,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com transfusão sanguínea ----
     output$caixa_b6_mmg_i7 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_transfusao == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_transfusao == "sus", "porc_mmg_transfusao_sus", "porc_mmg_transfusao_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_transfusao",
-        titulo = "Porcentagem de casos de morbidade materna grave com transfusão sanguínea",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com transfusão sanguínea {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_transfusao,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
@@ -1345,12 +1354,15 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) ----
     output$caixa_b6_mmg_i8 <- renderUI({
+      sufixo_titulo <- ifelse(input$input_porc_mmg_cirurgia == "sus", "no SUS", "na saúde suplementar")
+      indicador <- ifelse(input$input_porc_mmg_cirurgia == "sus", "porc_mmg_cirurgia_sus", "porc_mmg_cirurgia_ans")
+
       cria_caixa_server(
         dados = data6_resumo(),
-        indicador = "prop_mmg_cirurgia",
-        titulo = "Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero)",
+        indicador = indicador,
+        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) {sufixo_titulo}"),
         tem_meta = FALSE,
-        valor_de_referencia = data6_resumo_referencia()$prop_mmg_cirurgia,
+        valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
         cor = "lightgrey",
         invertido = FALSE,
@@ -1804,15 +1816,31 @@ mod_bloco_6_server <- function(id, filtros){
 
 
     ### Para os indicadores de morbidade materna ------------------------------
-    #### Porcentagem de casos de morbidade materna grave no SUS ----
+    renomeia_indicador <- function(df, indicador, tipo) {
+      if (tipo == "ans") {
+        df <- df |> dplyr::filter(ano >= 2015)
+      }
+
+      # monta o nome da coluna dinamicamente: indicador_tipo
+      col <- paste0(indicador, "_", tipo)
+
+      df |>
+        dplyr::mutate(!!rlang::sym(indicador) := !!rlang::sym(col))
+    }
+
+    #### Porcentagem de casos de morbidade materna grave ----
     output$plot1_mmg <- highcharter::renderHighchart({
+      data6_mmg_plot <- renomeia_indicador(data6(), "porc_mmg", input$input_porc_mmg)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), "porc_mmg", input$input_porc_mmg)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), "porc_mmg", input$input_porc_mmg)
+
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_int_publicas, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1821,18 +1849,27 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_sus"]], data6_mmg_plot[["porc_mmg_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_sus"]], data6_mmg_plot_referencia[["porc_mmg_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_int_publicas, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
@@ -1841,14 +1878,14 @@ mod_bloco_6_server <- function(id, filtros){
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_int_publicas, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp(),
+            data = data6_mmg_plot_comp,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_int_publicas, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -1857,18 +1894,28 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_sus"]], data6_mmg_plot[["porc_mmg_ans"]],
+              data6_mmg_plot_comp[["porc_mmg_sus"]], data6_mmg_plot_comp[["porc_mmg_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_sus"]], data6_mmg_plot_referencia[["porc_mmg_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_int_publicas, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -1878,21 +1925,25 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave por causas específicas ----
     output$plot2_mmg <- highcharter::renderHighchart({
-      data6_aux2 <- data6() |>
+      data6_mmg_plot <- renomeia_indicador(data6(), input$causa_mmg, input$input_porc_mmg_causas_especificas)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), input$causa_mmg, input$input_porc_mmg_causas_especificas)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), input$causa_mmg, input$input_porc_mmg_causas_especificas)
+
+      data6_aux2 <- data6_mmg_plot |>
         dplyr::select(
           ano,
           eixo_y2 = dplyr::all_of(input$causa_mmg),
           class
         )
 
-      data6_comp_aux2 <- data6_comp() |>
+      data6_comp_aux2 <- data6_mmg_plot_comp |>
         dplyr::select(
           ano,
           eixo_y2 = dplyr::all_of(input$causa_mmg),
           class
         )
 
-      data6_referencia_aux2 <- data6_referencia() |>
+      data6_referencia_aux2 <- data6_mmg_plot_referencia |>
         dplyr::select(
           ano,
           eixo_y2 = dplyr::all_of(input$causa_mmg),
@@ -1902,8 +1953,8 @@ mod_bloco_6_server <- function(id, filtros){
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_causas_especificas}")]] != 0,
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_causas_especificas == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
@@ -1920,8 +1971,17 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[[glue::glue("{input$causa_mmg}_sus")]], data6_mmg_plot[[glue::glue("{input$causa_mmg}_ans")]],
+              data6_mmg_plot_referencia[[glue::glue("{input$causa_mmg}_sus")]], data6_mmg_plot_referencia[[glue::glue("{input$causa_mmg}_ans")]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
@@ -1939,8 +1999,8 @@ mod_bloco_6_server <- function(id, filtros){
       } else {
         validate(
           need(
-            data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_causas_especificas}")]] | data6_mmg_plot_comp[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_causas_especificas}")]],
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_causas_especificas == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
@@ -1962,8 +2022,18 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[[glue::glue("{input$causa_mmg}_sus")]], data6_mmg_plot[[glue::glue("{input$causa_mmg}_ans")]],
+              data6_mmg_plot_comp[[glue::glue("{input$causa_mmg}_sus")]], data6_mmg_plot_comp[[glue::glue("{input$causa_mmg}_ans")]],
+              data6_mmg_plot_referencia[[glue::glue("{input$causa_mmg}_sus")]], data6_mmg_plot_referencia[[glue::glue("{input$causa_mmg}_ans")]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
@@ -1983,19 +2053,23 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com internação em UTI ----
     output$plot3_mmg <- highcharter::renderHighchart({
+      data6_mmg_plot <- renomeia_indicador(data6(), "porc_mmg_uti", input$input_porc_mmg_uti)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), "porc_mmg_uti", input$input_porc_mmg_uti)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), "porc_mmg_uti", input$input_porc_mmg_uti)
+
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_uti}")]] != 0,
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_uti == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_uti, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_uti, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2004,38 +2078,49 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_uti_sus"]], data6_mmg_plot[["porc_mmg_uti_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_uti_sus"]], data6_mmg_plot_referencia[["porc_mmg_uti_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_uti, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_uti, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
         }
       } else {
-        need(
-          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
-          "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+        validate(
+          need(
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_uti}")]] | data6_mmg_plot_comp[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_uti}")]],
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_uti == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
+          )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_uti, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_uti, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp(),
+            data = data6_mmg_plot_comp,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_uti, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_uti, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2044,18 +2129,28 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_uti_sus"]], data6_mmg_plot[["porc_mmg_uti_ans"]],
+              data6_mmg_plot_comp[["porc_mmg_uti_sus"]], data6_mmg_plot_comp[["porc_mmg_uti_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_uti_sus"]], data6_mmg_plot_referencia[["porc_mmg_uti_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_uti, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_uti, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -2065,19 +2160,23 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado ----
     output$plot4_mmg <- highcharter::renderHighchart({
+      data6_mmg_plot <- renomeia_indicador(data6(), "porc_mmg_tmp", input$input_porc_mmg_tmp)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), "porc_mmg_tmp", input$input_porc_mmg_tmp)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), "porc_mmg_tmp", input$input_porc_mmg_tmp)
+
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_tmp}")]] != 0,
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_tmp == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_tmp, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_tmp, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2086,38 +2185,49 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_tmp_sus"]], data6_mmg_plot[["porc_mmg_tmp_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_tmp_sus"]], data6_mmg_plot_referencia[["porc_mmg_tmp_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_tmp, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_tmp, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
         }
       } else {
-        need(
-          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
-          "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+        validate(
+          need(
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_tmp}")]] | data6_mmg_plot_comp[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_tmp}")]],
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_tmp == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
+          )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_tmp, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_tmp, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp(),
+            data = data6_mmg_plot_comp,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_tmp, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_tmp, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2126,18 +2236,28 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_tmp_sus"]], data6_mmg_plot[["porc_mmg_tmp_ans"]],
+              data6_mmg_plot_comp[["porc_mmg_tmp_sus"]], data6_mmg_plot_comp[["porc_mmg_tmp_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_tmp_sus"]], data6_mmg_plot_referencia[["porc_mmg_tmp_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_tmp, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_tmp, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -2147,19 +2267,23 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com transfusão sanguínea ----
     output$plot5_mmg <- highcharter::renderHighchart({
+      data6_mmg_plot <- renomeia_indicador(data6(), "porc_mmg_transfusao", input$input_porc_mmg_transfusao)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), "porc_mmg_transfusao", input$input_porc_mmg_transfusao)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), "porc_mmg_transfusao", input$input_porc_mmg_transfusao)
+
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_transfusao}")]] != 0,
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_transfusao == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_transfusao, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_transfusao, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2168,38 +2292,49 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_transfusao_sus"]], data6_mmg_plot[["porc_mmg_transfusao_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_transfusao_sus"]], data6_mmg_plot_referencia[["porc_mmg_transfusao_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_transfusao, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_transfusao, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
         }
       } else {
-        need(
-          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
-          "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+        validate(
+          need(
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_transfusao}")]] | data6_mmg_plot_comp[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_transfusao}")]],
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_transfusao == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
+          )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_transfusao, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_transfusao, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp(),
+            data = data6_mmg_plot_comp,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_transfusao, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_transfusao, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2208,18 +2343,28 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_transfusao_sus"]], data6_mmg_plot[["porc_mmg_transfusao_ans"]],
+              data6_mmg_plot_comp[["porc_mmg_transfusao_sus"]], data6_mmg_plot_comp[["porc_mmg_transfusao_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_transfusao_sus"]], data6_mmg_plot_referencia[["porc_mmg_transfusao_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_transfusao, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_transfusao, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )
@@ -2229,19 +2374,23 @@ mod_bloco_6_server <- function(id, filtros){
 
     #### Porcentagem de casos de morbidade materna grave com intervenção cirúrgica ----
     output$plot6_mmg <- highcharter::renderHighchart({
+      data6_mmg_plot <- renomeia_indicador(data6(), "porc_mmg_cirurgia", input$input_porc_mmg_cirurgia)
+      data6_mmg_plot_comp <- renomeia_indicador(data6_comp(), "porc_mmg_cirurgia", input$input_porc_mmg_cirurgia)
+      data6_mmg_plot_referencia <- renomeia_indicador(data6_referencia(), "porc_mmg_cirurgia", input$input_porc_mmg_cirurgia)
+
       if (filtros()$comparar == "Não") {
         validate(
           need(
-            data6()$soma_casos_mmg != 0,
-            "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_cirurgia}")]] != 0,
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_cirurgia == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
           )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_cirurgia, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_cirurgia, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2250,38 +2399,49 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_cirurgia_sus"]], data6_mmg_plot[["porc_mmg_cirurgia_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_cirurgia_sus"]], data6_mmg_plot_referencia[["porc_mmg_cirurgia_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (filtros()$nivel == "nacional") {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_cirurgia, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_cirurgia, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.8
             )
         }
       } else {
-        need(
-          data6()$soma_casos_mmg != 0 | data6_comp()$soma_casos_mmg != 0,
-          "Não foram registrados casos de morbidade materna grave no período. Dessa forma, este indicador não se aplica."
+        validate(
+          need(
+            data6_mmg_plot[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_cirurgia}")]] | data6_mmg_plot_comp[[glue::glue("soma_casos_mmg_{input$input_porc_mmg_cirurgia}")]],
+            glue::glue("Não foram registrados casos de morbidade materna grave {ifelse(input$input_porc_mmg_cirurgia == 'sus', 'no SUS', 'na saúde suplementar')} no período. Dessa forma, este indicador não se aplica.")
+          )
         )
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_dependency("modules/series-label.js") |>
           highcharter::hc_add_series(
-            data = data6(),
+            data = data6_mmg_plot,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_cirurgia, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_cirurgia, group = class, colour = class)
           ) |>
           highcharter::hc_add_series(
-            data = data6_comp(),
+            data = data6_mmg_plot_comp,
             type = "line",
-            highcharter::hcaes(x = ano, y = prop_mmg_cirurgia, group = class, colour = class)
+            highcharter::hcaes(x = ano, y = porc_mmg_cirurgia, group = class, colour = class)
           ) |>
           highcharter::hc_plotOptions(
             series = list(
@@ -2290,18 +2450,28 @@ mod_bloco_6_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:filtros()$ano2[2], allowDecimals = FALSE) |>
-          highcharter::hc_yAxis(title = list(text = "%"), min = 0, ceiling = 100) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = min(data6_mmg_plot_referencia$ano):max(data6_mmg_plot_referencia$ano), allowDecimals = FALSE) |>
+          highcharter::hc_yAxis(
+            title = list(text = "%"),
+            min = 0,
+            ceiling = 100,
+            max = max(
+              data6_mmg_plot[["porc_mmg_cirurgia_sus"]], data6_mmg_plot[["porc_mmg_cirurgia_ans"]],
+              data6_mmg_plot_comp[["porc_mmg_cirurgia_sus"]], data6_mmg_plot_comp[["porc_mmg_cirurgia_ans"]],
+              data6_mmg_plot_referencia[["porc_mmg_cirurgia_sus"]], data6_mmg_plot_referencia[["porc_mmg_cirurgia_ans"]],
+              na.rm = TRUE
+            ) + 1
+          ) |>
           highcharter::hc_colors(cols)
         if (any(c(filtros()$nivel, filtros()$nivel2) == "nacional") | (filtros()$mostrar_referencia == "nao_mostrar_referencia")) {
           grafico_base
         } else {
           grafico_base |>
             highcharter::hc_add_series(
-              data = data6_referencia(),
+              data = data6_mmg_plot_referencia,
               type = "line",
               name = "Referência (média nacional)",
-              highcharter::hcaes(x = ano, y = prop_mmg_cirurgia, group = class, colour = class),
+              highcharter::hcaes(x = ano, y = porc_mmg_cirurgia, group = class, colour = class),
               dashStyle = "ShortDot",
               opacity = 0.6
             )

@@ -157,15 +157,16 @@ mod_nivel_3_ui <- function(id){
                       )
                     ),
                     br(),
-                    column(
-                      width = 12,
-                      radioButtons(
+                    div(
+                      style = "display: flex; justify-content: center;",
+                      shinyWidgets::prettyRadioButtons(
                         inputId = ns("sistema_cobertura"),
                         label = NULL,
+                        inline = TRUE,
                         choices = c("SIM", "SINASC"),
-                        inline = TRUE
-                      ),
-                      align = "center"
+                        icon = icon("check", style = "background-color: #007bff;"),
+                        animation = "rotate"
+                      )
                     )
                   ),
                   hr(),
@@ -437,19 +438,22 @@ mod_nivel_3_ui <- function(id){
                     width = 12,
                     hr(),
                     br(),
-                    tags$style(HTML(".radio-inline, .checkbox-inline {overflow-x: auto; align-items: center;}")),
-                    radioButtons(
-                      inputId = ns("opcoes_tab1"),
-                      label = NULL,
-                      choiceNames = list(
-                        HTML("<span> Mostrar informações referentes a todo o país </span>"),
-                        HTML("<span> Mostrar informações referentes apenas à localidade escolhida </span>")
-                      ),
-                      choiceValues = list("escolha1", "escolha2"),
-                      selected = "escolha2",
-                      inline = TRUE
-                    ),
-                    align = "center"
+                    div(
+                      style = "display: flex; justify-content: center;",
+                      shinyWidgets::prettyRadioButtons(
+                        inputId = ns("opcoes_tab1"),
+                        label = NULL,
+                        inline = TRUE,
+                        choiceNames = list(
+                          HTML("<span> Mostrar informações referentes a todo o país </span>"),
+                          HTML("<span> Mostrar informações referentes apenas à localidade escolhida </span>")
+                        ),
+                        choiceValues = list("escolha1", "escolha2"),
+                        selected = "escolha2",
+                        icon = icon("check", style = "background-color: #007bff;"),
+                        animation = "rotate"
+                      )
+                    )
                   )
                 ),
                 hr(),
@@ -668,7 +672,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       tabela_indicadores$nome_abreviado[tabela_indicadores$bloco == "bloco4"][-1]
     )
 
-    indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos", tabela_indicadores$nome_abreviado)]
+    indicadores_2015 <- tabela_indicadores$nome_abreviado[grep("abortos|ans", tabela_indicadores$nome_abreviado)]
 
     indicadores_2024 <- c(
       "porc_sc",
@@ -1142,12 +1146,20 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               se tornam mais imprecisas conforme aumento o período intercensitário."
             )
           )
-        } else if (infos_indicador()$bloco == "bloco6_morbidade") {
+        } else if (infos_indicador()$bloco == "bloco6_morbidade_sus") {
           div(
             style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
             HTML(
               "
           Este indicador depende da qualidade do preenchimento da Autorização de Internação Hospitalar."
+            )
+          )
+        } else if (infos_indicador()$bloco == "bloco6_morbidade_ans") {
+          div(
+            style = "text-align: center; height: 260px; display: flex; align-items:center; justify-content:center; text-align: center;",
+            HTML(
+              "
+          Este indicador depende da qualidade do preenchimento das internações hospitalares em serviços do sistema de saúde suplementar."
             )
           )
         }

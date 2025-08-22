@@ -223,12 +223,17 @@ malformacao <- malformacao |>
 ### Lendo o arquivo contendo todos os indicadores de mortalidade materna
 bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2024.csv")
 
-### Lendo o arquivo contendo todos os indicadores de morbidade materna
-bloco6_morbidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv", sep = ",") |>
+### Lendo o arquivo contendo todos os indicadores de morbidade materna do SUS
+bloco6_morbidade_sus_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_sus_2012-2024.csv", sep = ",") |>
+  janitor::clean_names()
+
+### Lendo o arquivo contendo todos os indicadores de morbidade materna da ANS
+bloco6_morbidade_ans_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_ans_2012-2024.csv", sep = ",") |>
   janitor::clean_names()
 
 ### Juntando as duas bases
-bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_aux, by = c("ano", "codmunres"))
+bloco6_aux <- dplyr::left_join(bloco6_mortalidade_aux, bloco6_morbidade_sus_aux, by = c("ano", "codmunres")) |>
+  dplyr::left_join(bloco6_morbidade_ans_aux, by = c("ano", "codmunres"))
 
 ### Adicionando as informações dos municípios
 bloco6 <- dplyr::left_join(bloco6_aux, tabela_aux_municipios, by = "codmunres")

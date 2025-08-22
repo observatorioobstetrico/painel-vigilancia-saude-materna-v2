@@ -196,7 +196,8 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         inputId = "tipo_do_indicador_blocos4_6_7",
         choices = c(
           "Relacionados à mortalidade materna" = "mortalidade",
-          "Relacionados à morbidade materna" = "morbidade"
+          "Relacionados à morbidade materna no SUS" = "morbidade_sus",
+          "Relacionados à morbidade materna na saúde suplementar" = "morbidade_ans"
         )
       )
     } else if (input$bloco == "bloco7") {
@@ -277,12 +278,21 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
         )]),
         server = FALSE
       )
-    } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade") {
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade_sus") {
       updateSelectizeInput(
         session,
         inputId = "indicador_blocos4_6_7",
         choices = trimws(tabela_indicadores$indicador[which(
-          tabela_indicadores$bloco == "bloco6_morbidade"
+          tabela_indicadores$bloco == "bloco6_morbidade_sus"
+        )]),
+        server = FALSE
+      )
+    } else if (input$tipo_do_indicador_blocos4_6_7 == "morbidade_ans") {
+      updateSelectizeInput(
+        session,
+        inputId = "indicador_blocos4_6_7",
+        choices = trimws(tabela_indicadores$indicador[which(
+          tabela_indicadores$bloco == "bloco6_morbidade_ans"
         )]),
         server = FALSE
       )

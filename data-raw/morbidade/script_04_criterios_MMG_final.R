@@ -608,8 +608,17 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
 # Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2024)), ano = 2012:2024)
 
-df_bloco6_morbidade <- left_join(df_aux_municipios, obs_cluster_total_mun_ano |> janitor::clean_names())
+df_bloco6_morbidade <- left_join(
+  df_aux_municipios,
+  obs_cluster_total_mun_ano |>
+    janitor::clean_names() |>
+    rename(total_internacoes_sus = total_internacoes) |>
+    rename_with(
+      ~ sub("^casos_mmg", "casos_mmg_sus", .x),
+      .cols = starts_with("casos_mmg")
+    )
+)
 
 df_bloco6_morbidade[is.na(df_bloco6_morbidade)] <- 0
 
-write.csv(df_bloco6_morbidade, glue("data-raw/csv/indicadores_bloco6_morbidade_materna_2012-2024.csv"), row.names = FALSE)
+write.csv(df_bloco6_morbidade, "data-raw/csv/indicadores_bloco6_morbidade_materna_sus_2012-2024.csv", row.names = FALSE)

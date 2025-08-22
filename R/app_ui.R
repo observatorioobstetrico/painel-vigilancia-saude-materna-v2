@@ -177,7 +177,7 @@ app_ui <- function(request) {
                   sliderInput(
                     inputId = "ano2",
                     label = HTML(
-                      "<span class = 'fonte-muito-grande'> Intervalo de anos </span>"
+                      "<span class = 'fonte-muito-grande'> Período de análise </span>"
                     ),
                     min = 2012,
                     max = 2024,

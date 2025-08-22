@@ -87,8 +87,8 @@
   }
 }
 
-#bloco_4_1-tabset1 .nav-link, #bloco_6_1-tabset1 .nav-link, #bloco_7_1-tabset1 .nav-link {
-  border-style: solid
+#nivel_1_1-tabset1 .nav-link, #nivel_1_1-tabset2 .nav-link, #nivel_1_1-tabset3 .nav-link, #bloco_4_1-tabset1 .nav-link, #bloco_6_1-tabset1 .nav-link, #bloco_7_1-tabset1 .nav-link {
+  border: 2px solid
 }
 
 .nav {
@@ -300,4 +300,46 @@
 [id^="bloco_7_1-bloco_7_morbidade_neonatal_1-caixa_b7_morbidade_neonatal_"] {
   background: transparent !important;
   box-shadow: 0 0 0 rgba(0,0,0,.125), 0 0 0 rgba(0,0,0,.2) !important;
+}
+
+/*------------------------------------*\
+  # PrettyRadioButtons
+\*------------------------------------*/
+
+.pretty {
+  font-size: 14px;
+}
+
+/* Estilo para telas pequenas (até 1280px) */
+@media (max-width: 1920px) {
+  .pretty {
+    font-size: 12.6px !important;
+  }
+}
+
+@media (max-width: 1280px) {
+  .pretty {
+    font-size: 11.2px !important;
+  }
+}
+
+.pretty.p-rotate:not(.p-default) input:checked~.state .icon, .pretty.p-rotate:not(.p-default) input:checked~.state .svg, .pretty.p-rotate:not(.p-default) input:checked~.state img, .pretty.p-rotate:not(.p-default) input:checked~.state label:after, .pretty.p-rotate:not(.p-default) input:checked~.state label:before {
+    animation: rotate .4s linear;
+}
+
+/* Aplica font-weight 500 às labels dos prettyRadioButtons */
+.pretty .state label {
+    font-weight: 500;
+}
+
+.pretty .state label:before {
+    border-color: #0A1E3C;
+}
+
+.shiny-input-checkboxgroup label~.shiny-options-group, .shiny-input-radiogroup label~.shiny-options-group {
+    padding: 0rem 0.25rem;
+}
+
+.pretty.p-icon input:checked + .state label {
+  font-weight: bold !important;
 }
