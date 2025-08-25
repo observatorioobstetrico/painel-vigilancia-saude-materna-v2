@@ -883,7 +883,7 @@ mod_nivel_1_ui <- function(id) {
                     )
                   ),
                   tabPanel(
-                    HTML("<b class = 'fonte-grande'>Morbidade materna grave no SUS</b>"),
+                    HTML("<b class = 'fonte-grande'>Morbidade materna grave (MMG) no SUS</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -945,7 +945,7 @@ mod_nivel_1_ui <- function(id) {
                     )
                   ),
                   tabPanel(
-                    HTML("<b class = 'fonte-grande'>Morbidade materna grave na saúde suplementar</b>"),
+                    HTML("<b class = 'fonte-grande'>Morbidade materna grave (MMG) na saúde suplementar</b>"),
                     fluidRow(
                       column(
                         width = 4,

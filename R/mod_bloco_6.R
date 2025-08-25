@@ -241,7 +241,7 @@ mod_bloco_6_ui <- function(id) {
         )
       ),
       tabPanel(
-        HTML("<b class = 'fonte-grande'>Relacionados à morbidade materna grave</b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à morbidade materna grave (MMG)</b>"),
         value = "tabpanel_morbidade",
         fluidRow(
           column(

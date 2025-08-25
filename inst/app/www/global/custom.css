@@ -95,6 +95,14 @@
   gap: 3px
 }
 
+#nivel_1_1-tabset2 {
+  gap: 1px
+}
+
+#nivel_1_1-tabset2 .nav-link {
+  padding: 0.5rem !important
+}
+
 .card.card-tabs:not(.card-outline)>.card-header .nav-item:first-child .nav-link {
     border-left-color: inherit !important;
 }
