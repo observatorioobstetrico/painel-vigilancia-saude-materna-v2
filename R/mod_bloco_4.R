@@ -428,7 +428,7 @@ mod_bloco_4_ui <- function(id){
       #   )
       # ),
       tabPanel(
-        HTML("<b>Relacionados ao deslocamento para o parto</b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados ao deslocamento para o parto</b>"),
         conditionalPanel(
           ns = ns,
           condition = "output.comparar == 'Sim'",
@@ -654,7 +654,7 @@ mod_bloco_4_ui <- function(id){
         )
       ),
       tabPanel(
-        HTML("<b>Relacionados ao profissional e local do parto</b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados ao profissional e local do parto</b>"),
 
         fluidRow(
           column(
@@ -789,7 +789,7 @@ mod_bloco_4_ui <- function(id){
         ## AQUI
       ), # incluir robson aqui
       tabPanel(
-      HTML("<b>Relacionados aos grupos de Robson</b>"),
+      HTML("<b class = 'fonte-grande'>Relacionados aos grupos de Robson</b>"),
       fluidRow(
         column(
           width = 5,

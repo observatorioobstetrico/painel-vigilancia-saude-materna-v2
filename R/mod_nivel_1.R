@@ -524,7 +524,7 @@ mod_nivel_1_ui <- function(id) {
                 #   ),
                 # ),
                 tabPanel(
-                  HTML("<b>Deslocamento para parto</b>"),
+                  HTML("<b class = 'fonte-grande'>Deslocamento para parto</b>"),
                   fluidRow(
                     column(
                       width = 4,
@@ -572,7 +572,7 @@ mod_nivel_1_ui <- function(id) {
                 ),
                 ##TAGGG
                 tabPanel(
-                  HTML("<b>Profissional e local do parto</b>"),
+                  HTML("<b class = 'fonte-grande'>Profissional e local do parto</b>"),
                   fluidRow(
                     column(
                       offset = 2,
@@ -592,7 +592,7 @@ mod_nivel_1_ui <- function(id) {
                   )
                 ),
                 tabPanel(
-                  HTML("<b>Grupo de Robson</b>"),
+                  HTML("<b class = 'fonte-grande'>Grupo de Robson</b>"),
                   fluidRow(
                     column(
                       width = 12,
@@ -779,7 +779,7 @@ mod_nivel_1_ui <- function(id) {
                 HTML(
                   "
                 <p align='justify' class = 'fonte-muito-grande'>
-                A morte materna e a morbidade materna grave são os desfechos adversos de curto prazo para a saúde da mulher e são
+                A morte materna e a morbidade materna grave (MMG) são os desfechos adversos de curto prazo para a saúde da mulher e são
                 resultantes da cadeia de determinantes apresentados nos blocos anteriores.
                 <span style='display: block; margin-bottom: 14px;'> </span>
                 Neste bloco, apresentamos o número absoluto de óbitos maternos e a Razão de Mortalidade Materna. Apresentamos também
@@ -828,7 +828,7 @@ mod_nivel_1_ui <- function(id) {
                   width = 12,
                   collapsible = FALSE,
                   tabPanel(
-                    HTML("<b>Mortalidade materna</b>"),
+                    HTML("<b class = 'fonte-grande'>Mortalidade materna</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -883,7 +883,7 @@ mod_nivel_1_ui <- function(id) {
                     )
                   ),
                   tabPanel(
-                    HTML("<b>Morbidade materna grave no SUS</b>"),
+                    HTML("<b class = 'fonte-grande'>Morbidade materna grave no SUS</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -945,7 +945,7 @@ mod_nivel_1_ui <- function(id) {
                     )
                   ),
                   tabPanel(
-                    HTML("<b>Morbidade materna grave na saúde suplementar</b>"),
+                    HTML("<b class = 'fonte-grande'>Morbidade materna grave na saúde suplementar</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -1101,7 +1101,7 @@ mod_nivel_1_ui <- function(id) {
                   width = 12,
                   collapsible = FALSE,
                   tabPanel(
-                    HTML("<b>Mortalidade fetal</b>"),
+                    HTML("<b class = 'fonte-grande'>Mortalidade fetal</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -1148,7 +1148,7 @@ mod_nivel_1_ui <- function(id) {
                     )
                   ),
                   tabPanel(
-                    HTML("<b>Mortalidade perinatal</b>"),
+                    HTML("<b class = 'fonte-grande'>Mortalidade perinatal</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -1204,7 +1204,7 @@ mod_nivel_1_ui <- function(id) {
                   ),
 
                   tabPanel(
-                    HTML("<b>Mortalidade neonatal</b>"),
+                    HTML("<b class = 'fonte-grande'>Mortalidade neonatal</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -1267,7 +1267,7 @@ mod_nivel_1_ui <- function(id) {
                   ),
 
                   tabPanel(
-                    HTML("<b>Morbidade neonatal</b>"),
+                    HTML("<b class = 'fonte-grande'>Morbidade neonatal</b>"),
                     fluidRow(
                       column(
                         width = 4,
@@ -3643,7 +3643,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_int_publicas_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave no SUS",
+        titulo = "Porcentagem de casos de MMG no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_int_publicas_sus,
         tipo = "porcentagem",
@@ -3657,7 +3657,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_hipertensao_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave por hipertensão no SUS",
+        titulo = "Porcentagem de casos de MMG por hipertensão no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_hipertensao_sus,
         tipo = "porcentagem",
@@ -3671,7 +3671,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_hemorragia_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave por hemorragia no SUS",
+        titulo = "Porcentagem de casos de MMG por hemorragia no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_hemorragia_sus,
         tipo = "porcentagem",
@@ -3685,7 +3685,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_infeccao_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave por infecção no SUS",
+        titulo = "Porcentagem de casos de MMG por infecção no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_infeccao_sus,
         tipo = "porcentagem",
@@ -3699,7 +3699,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_uti_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave com internação em UTI no SUS",
+        titulo = "Porcentagem de casos de MMG com internação em UTI no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_uti_sus,
         tipo = "porcentagem",
@@ -3713,7 +3713,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_tmp_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave com Tempo de Permanência Prolongada no SUS",
+        titulo = "Porcentagem de casos de MMG com Tempo de Permanência Prolongada no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_tmp_sus,
         tipo = "porcentagem",
@@ -3727,7 +3727,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_transfusao_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave com transfusão sanguínea no SUS",
+        titulo = "Porcentagem de casos de MMG com transfusão sanguínea no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_transfusao_sus,
         tipo = "porcentagem",
@@ -3741,7 +3741,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_cirurgia_sus",
-        titulo = "Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) no SUS",
+        titulo = "Porcentagem de casos de MMG com histerectomia (retirada do útero) no SUS",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_cirurgia_sus,
         tipo = "porcentagem",
@@ -3755,7 +3755,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_int_publicas_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_int_publicas_ans,
         tipo = "porcentagem",
@@ -3769,7 +3769,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_hipertensao_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave por hipertensão na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG por hipertensão na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_hipertensao_ans,
         tipo = "porcentagem",
@@ -3783,7 +3783,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_hemorragia_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave por hemorragia na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG por hemorragia na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_hemorragia_ans,
         tipo = "porcentagem",
@@ -3797,7 +3797,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_infeccao_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave por infecção na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG por infecção na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_infeccao_ans,
         tipo = "porcentagem",
@@ -3811,7 +3811,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_uti_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave com internação em UTI na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG com internação em UTI na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_uti_ans,
         tipo = "porcentagem",
@@ -3825,7 +3825,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_tmp_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave com Tempo de Permanência Prolongada na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG com Tempo de Permanência Prolongada na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_tmp_ans,
         tipo = "porcentagem",
@@ -3839,7 +3839,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_transfusao_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave com transfusão sanguínea na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG com transfusão sanguínea na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_transfusao_ans,
         tipo = "porcentagem",
@@ -3853,7 +3853,7 @@ mod_nivel_1_server <- function(id, filtros) {
       cria_caixa_server(
         dados = data6(),
         indicador = "prop_mmg_cirurgia_ans",
-        titulo = "Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) na saúde suplementar",
+        titulo = "Porcentagem de casos de MMG com histerectomia (retirada do útero) na saúde suplementar",
         tem_meta = FALSE,
         valor_de_referencia = data6_comp()$prop_mmg_cirurgia_ans,
         tipo = "porcentagem",

@@ -38,19 +38,19 @@ mod_bloco_7_ui <- function(id) {
       width = 12,
       collapsible = FALSE,
       tabPanel(
-        HTML("<b>Relacionados à mortalidade fetal </b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à mortalidade fetal </b>"),
         mod_bloco_7_fetal_ui(ns("bloco_7_fetal_1"))
       ),
       tabPanel(
-        HTML("<b>Relacionados à mortalidade perinatal </b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à mortalidade perinatal </b>"),
         mod_bloco_7_perinatal_ui(ns("bloco_7_perinatal_1"))
       ),
       tabPanel(
-        HTML("<b>Relacionados à mortalidade neonatal </b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à mortalidade neonatal </b>"),
         mod_bloco_7_neonatal_ui(ns("bloco_7_neonatal_1"))
       ),
       tabPanel(
-        HTML("<b>Relacionados à morbidade neonatal </b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à morbidade neonatal </b>"),
         mod_bloco_7_morbidade_neonatal_ui(ns("bloco_7_morbidade_neonatal_1"))
       )
     )

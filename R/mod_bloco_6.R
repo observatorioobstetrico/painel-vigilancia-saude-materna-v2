@@ -21,7 +21,7 @@ mod_bloco_6_ui <- function(id) {
       width = 12,
       collapsible = FALSE,
       tabPanel(
-        HTML("<b>Relacionados à mortalidade materna</b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à mortalidade materna</b>"),
         value = "tabpanel_mortalidade",
         fluidRow(
           column(
@@ -241,7 +241,7 @@ mod_bloco_6_ui <- function(id) {
         )
       ),
       tabPanel(
-        HTML("<b>Relacionados à morbidade materna grave</b>"),
+        HTML("<b class = 'fonte-grande'>Relacionados à morbidade materna grave</b>"),
         value = "tabpanel_morbidade",
         fluidRow(
           column(
@@ -1224,7 +1224,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1243,7 +1243,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por hipertensão {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG por hipertensão {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1262,7 +1262,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por hemorragia {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG por hemorragia {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1281,7 +1281,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave por infecção {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG por infecção {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1300,7 +1300,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com internação em UTI {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG com internação em UTI {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1320,7 +1320,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com tempo de permanência prolongado {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG com tempo de permanência prolongado {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1340,7 +1340,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com transfusão sanguínea {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG com transfusão sanguínea {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
@@ -1360,7 +1360,7 @@ mod_bloco_6_server <- function(id, filtros){
       cria_caixa_server(
         dados = data6_resumo(),
         indicador = indicador,
-        titulo = glue::glue("Porcentagem de casos de morbidade materna grave com histerectomia (retirada do útero) {sufixo_titulo}"),
+        titulo = glue::glue("Porcentagem de casos de MMG com histerectomia (retirada do útero) {sufixo_titulo}"),
         tem_meta = FALSE,
         valor_de_referencia = data6_resumo_referencia()[[indicador]],
         tipo = "porcentagem",
