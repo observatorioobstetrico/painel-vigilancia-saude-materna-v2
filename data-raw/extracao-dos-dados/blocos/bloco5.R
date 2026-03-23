@@ -154,4 +154,4 @@ df_bloco5[is.na(df_bloco5)] <- 0
 # sum(df_bloco5 |> filter(ano <= 2020) |> pull(nascidos_vivos_termo_precoce)) - sum(df_bloco5_antigo$nascidos_vivos_termo_precoce)
 
 ## Exportando os dados
-write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2025.csv", row.names = FALSE)
+write.csv(df_bloco5, "data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2025.csv", row.names = FALSE)

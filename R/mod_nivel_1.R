@@ -657,7 +657,7 @@ mod_nivel_1_ui <- function(id) {
                 peso ao nascer (<2500g), principais determinantes da mortalidade infantil. Apresentamos também os nascimentos a termo
                 precoce (bebês nascidos com 37 e 38 semanas gestacionais), que têm maior risco de complicações e ocorrem com maior frequência em locais com taxa elevada de cesariana;
                 a porcentagem de nascidos com anomalias congênitas (total e as
-                definidas pelo Ministério da Saúde como de relevância para a vigilância em saúde); e a porcentagem de recém-nascidos com peso ≥2500g
+                definidas pelo Ministério da Saúde como de relevância para a vigilância em saúde); e a porcentagem de recém-nascidos com peso ≥ 2500g
                 e sem anomalias congênitas que nasceram com asfixia no quinto minuto de vida (Apgar <7).
 
 
@@ -1962,7 +1962,11 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = NULL,
         titulo = dplyr::if_else(filtros()$nivel == "nacional", true = "IDH", false = "IDHM"),
         tem_meta = FALSE,
+<<<<<<< Updated upstream
         valor_de_referencia = 0.766 ,
+=======
+        valor_de_referencia = 0.766,
+>>>>>>> Stashed changes
         valor_indicador = idhm,
         tipo = "taxa",
         texto_footer = glue::glue(texto_comp),
