@@ -164,7 +164,7 @@ df_sinasc_incompletude_calculo <- df_sinasc |>
       is.na(qtdpartnor) | as.numeric(qtdpartnor) == 99 ~ 1,
       TRUE ~ 0
     ),
-    qtdpartnor = 1,
+    qtdpartnor_totais = 1,
     racacormae_incompletos = case_when(
       is.na(racacormae) | is.na(racacormae) == 9 ~ 1,
       TRUE ~ 0
@@ -204,7 +204,7 @@ df_sinasc_incompletude_calculo <- df_sinasc |>
     qtdpartces_incompletos = sum(qtdpartces_incompletos),
     qtdpartces_totais = sum(qtdpartces_totais),
     qtdpartnor_incompletos = sum(qtdpartnor_incompletos),
-    qtdpartnor = sum(qtdpartnor),
+    qtdpartnor_totais = sum(qtdpartnor),
     racacormae_incompletos = sum(racacormae_incompletos),
     racacormae_totais = sum(racacormae_totais),
     semagestac_incompletos = sum(semagestac_incompletos),
