@@ -13,7 +13,7 @@ rsconnect::deployApp(
     "report.Rmd",
     "DESCRIPTION",
     "NAMESPACE",
-    "README",
+    "README.md",
     "dev/",
     "man/",
     "inst/",
