@@ -2675,7 +2675,7 @@ mod_bloco_5_server <- function(id, filtros){
             highcharter::hcaes(x = ano, low = 3, high = 6),
             type = "arearange",
             dashStyle = "ShortDot",
-            # color = "black",
+            color = "black",
             fillOpacity = 0.2,
             enableMouseTracking = TRUE
           )
