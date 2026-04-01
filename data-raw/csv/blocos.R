@@ -33,7 +33,15 @@ df_municipios_adicionais <- read.csv2("data-raw/csv/tabela_auxiliar_de_municipio
   )
 
 ## Lendo uma base auxiliar que contém variáveis referentes ao IDH das UFs e do Brasil
-df_aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
+# df_aux_idh_estados <- read.csv("data-raw/csv/tabela_IDH-censo2010_UFs-e-Brasil.csv", dec = ",")[-1, c(1, 3, 2)] |>
+#   janitor::clean_names() |>
+#   dplyr::rename(
+#     "uf" = territorialidade,
+#     "idh_uf" = idhm,
+#     "posicao_idh_uf" = posicao_idhm
+#   )
+
+df_aux_idh_estados <- readxl::read_xlsx("data-raw/csv/tabela_IDH-pnad2021_UFs-e-Brasil.xlsx")[-1, c(1, 3, 2)] |>
   janitor::clean_names() |>
   dplyr::rename(
     "uf" = territorialidade,
@@ -46,7 +54,7 @@ df_aux_municipios <- list(
   df_municipios_kmeans,
   df_municipios_adicionais,
   df_aux_idh_estados
-) |>
+  ) |>
   purrr::reduce(dplyr::full_join)
 
 ## Lendo uma base auxiliar que contém variáveis referentes às micro e macrorregiões de saúde estaduais
@@ -67,7 +75,7 @@ tabela_aux_municipios <- dplyr::left_join(
   df_aux_municipios,
   df_aux_r_saude,
   by = "codmunres"
-) |>
+  ) |>
   dplyr::select(!municipio2) |>
   dplyr::mutate(posicao_idhm = dplyr::min_rank(dplyr::desc(idhm)))
 
@@ -192,7 +200,7 @@ bloco4_profissional <- bloco4_profissional |>
 
 ## Para o bloco 5 ---------------------------------------------------------
 ### Lendo o arquivo contendo todos os indicadores
-bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012_2025.csv") |>
+bloco5_aux <- read.csv("data-raw/csv/indicadores_bloco5_condicao_de_nascimento_2012-2025.csv") |>
   janitor::clean_names()
 
 ### Adicionando as informações dos municípios
@@ -207,8 +215,8 @@ bloco5 <- bloco5 |>
 malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2025.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
-  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres) |>
-  dplyr::select(-c(3:10))
+  dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
+  # dplyr::select(-c(3:10))
 
 ### Adicionando as informações dos municípios
 malformacao <- dplyr::left_join(malformacao_aux, tabela_aux_municipios, by = "codmunres")

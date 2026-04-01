@@ -736,7 +736,7 @@ mod_bloco_1_server <- function(id, filtros){
           idhm <- as.numeric(unique(tabela_aux_municipios$idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)]))
           posicao_idhm <- unique(tabela_aux_municipios$posicao_idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)])
         } else if (filtros()$nivel == "nacional") {
-          idhm <- 0.727
+          idhm <- 0.766
         } else {
           idhm <- NaN
         }
@@ -767,7 +767,7 @@ mod_bloco_1_server <- function(id, filtros){
             idhm <- as.numeric(unique(tabela_aux_municipios$idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)]))
             posicao_idhm <- unique(tabela_aux_municipios$posicao_idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)])
           } else if (filtros()$nivel == "nacional") {
-            idhm <- 0.727
+            idhm <- 0.766
           } else {
             idhm <- NaN
           }
@@ -796,7 +796,7 @@ mod_bloco_1_server <- function(id, filtros){
             idhm <- as.numeric(unique(tabela_aux_municipios$idh_uf[which(tabela_aux_municipios$uf == filtros()$estado2)]))
             posicao_idhm <- unique(tabela_aux_municipios$posicao_idh_uf[which(tabela_aux_municipios$uf == filtros()$estado2)])
           } else if (filtros()$nivel2 == "nacional") {
-            idhm <- 0.727
+            idhm <- 0.766
           } else {
             idhm <- NaN
           }
@@ -834,7 +834,7 @@ mod_bloco_1_server <- function(id, filtros){
         indicador = NULL,
         titulo = dplyr::if_else(filtros()$nivel == "nacional", true = "IDH", false = "IDHM"),
         tem_meta = FALSE,
-        valor_de_referencia = 0.727,
+        valor_de_referencia = 0.766 ,
         valor_indicador = idhm,
         tipo = "taxa",
         texto_footer = glue::glue(texto_comp),

@@ -657,7 +657,7 @@ mod_nivel_1_ui <- function(id) {
                 peso ao nascer (<2500g), principais determinantes da mortalidade infantil. Apresentamos também os nascimentos a termo
                 precoce (bebês nascidos com 37 e 38 semanas gestacionais), que têm maior risco de complicações e ocorrem com maior frequência em locais com taxa elevada de cesariana;
                 a porcentagem de nascidos com anomalias congênitas (total e as
-                definidas pelo Ministério da Saúde como de relevância para a vigilância em saúde); e a porcentagem de recém-nascidos com peso ≥2500g
+                definidas pelo Ministério da Saúde como de relevância para a vigilância em saúde); e a porcentagem de recém-nascidos com peso ≥ 2500g
                 e sem anomalias congênitas que nasceram com asfixia no quinto minuto de vida (Apgar <7).
 
 
@@ -1506,7 +1506,7 @@ mod_nivel_1_server <- function(id, filtros) {
         if (filtros()$nivel == "nacional") {
 
           localidade <- "Brasil"
-          idhm <- 0.727
+          idhm <- 0.766
           posicao_idhm <- ""
           comparacao_idhm <- "---"
           classificacao_idhm <- "Alto"
@@ -1926,7 +1926,7 @@ mod_nivel_1_server <- function(id, filtros) {
         idhm <- as.numeric(unique(tabela_aux_municipios$idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)]))
         posicao_idhm <- unique(tabela_aux_municipios$posicao_idh_uf[which(tabela_aux_municipios$uf == filtros()$estado)])
       } else if (filtros()$nivel == "nacional") {
-        idhm <- 0.727
+        idhm <- 0.766
       } else {
         idhm <- NaN
       }
@@ -1962,7 +1962,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = NULL,
         titulo = dplyr::if_else(filtros()$nivel == "nacional", true = "IDH", false = "IDHM"),
         tem_meta = FALSE,
-        valor_de_referencia = 0.727,
+        valor_de_referencia = 0.766,
         valor_indicador = idhm,
         tipo = "taxa",
         texto_footer = glue::glue(texto_comp),
@@ -2618,14 +2618,14 @@ mod_nivel_1_server <- function(id, filtros) {
         dplyr::group_by(ano) |>
         dplyr::summarise(
           total_de_nascidos_vivos = sum(total_de_nascidos_vivos),
-          prop_nasc_local_hospital = round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_outros_est_saude = round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_domicilio = round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_outros = round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_aldeia = round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_sem_inf = round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_local_fora_hospital = round(sum(nasc_local_outros_est_saude, nasc_local_domicilio, nasc_local_outros,  nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100, 1),
-          prop_nasc_assistido_enf_obs = round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos, na.rm = TRUE) * 100,1),
+          prop_nasc_local_hospital = round(sum(nasc_local_hospital, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros_est_saude = round(sum(nasc_local_outros_est_saude, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_domicilio = round(sum(nasc_local_domicilio, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_outros = round(sum(nasc_local_outros, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_aldeia = round(sum(nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_sem_inf = round(sum(nasc_local_sem_inf, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_local_fora_hospital = round(sum(nasc_local_outros_est_saude + nasc_local_domicilio + nasc_local_outros + nasc_local_aldeia, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100, 1),
+          prop_nasc_assistido_enf_obs = round(sum(nasc_assistido_enf_obs, na.rm = TRUE)/sum(total_de_nascidos_vivos_partos_vaginais, na.rm = TRUE) * 100,1),
 
           localidade = dplyr::case_when(
             filtros()$nivel == "nacional" ~ "Brasil",

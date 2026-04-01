@@ -1,3 +1,7 @@
+#####
+## RODAR O CÓDIGO "bloco5_asfixia.R" antes do código "bloco5.R"
+#####
+
 # Carregando os pacotes necessários
 library(microdatasus)
 library(dplyr)
