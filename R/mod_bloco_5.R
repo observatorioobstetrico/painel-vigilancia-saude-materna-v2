@@ -1659,7 +1659,7 @@ mod_bloco_5_server <- function(id, filtros){
     ### Para a tabela de anomalias congênitas -----------------------------------------
     data5_nascidos_vivos <- reactive({
       bloco5 |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2])) |>
         dplyr::filter(
           if (filtros()$nivel == "nacional")
             ano >= filtros()$ano2[1] & ano <= filtros()$ano2[2]
@@ -1683,10 +1683,10 @@ mod_bloco_5_server <- function(id, filtros){
 
     data5_malformacao <- reactive({
       malformacao |>
-        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)) |>
+        dplyr::filter(ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2])) |>
         dplyr::filter(
           if (filtros()$nivel == "nacional")
-            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2], 2023)
+            ano >= filtros()$ano2[1] & ano <= min(filtros()$ano2[2])
           else if (filtros()$nivel == "regional")
             regiao == filtros()$regiao
           else if (filtros()$nivel == "estadual")
@@ -2642,7 +2642,7 @@ mod_bloco_5_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2]), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2701,7 +2701,7 @@ mod_bloco_5_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2]), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2774,7 +2774,7 @@ mod_bloco_5_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2]), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2822,7 +2822,7 @@ mod_bloco_5_server <- function(id, filtros){
             )
           ) |>
           highcharter::hc_tooltip(valueSuffix = "%", shared = TRUE, sort = TRUE) |>
-          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2], 2023), allowDecimals = FALSE) |>
+          highcharter::hc_xAxis(title = list(text = ""), categories = filtros()$ano2[1]:min(filtros()$ano2[2]), allowDecimals = FALSE) |>
           highcharter::hc_yAxis(
             title = list(text = "%"),
             min = 0,
@@ -2910,7 +2910,7 @@ mod_bloco_5_server <- function(id, filtros){
               name = "Período",
               minWidth = 60,
               aggregate = htmlwidgets::JS("function() { return ''}"),
-              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2], 2023)}")))
+              format = list(aggregated = reactable::colFormat(prefix = glue::glue("{filtros()$ano2[1]} a {min(filtros()$ano2[2])}")))
             ),
             frequencia = reactable::colDef(
               name = "Frequência",
