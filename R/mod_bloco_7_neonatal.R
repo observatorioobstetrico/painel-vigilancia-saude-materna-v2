@@ -1531,7 +1531,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_taxa_de_mortalidade(),
         indicador = "taxa_de_mortalidade",
-        titulo = "Taxa de mortalidade neonatal",
+        titulo = "Taxa de mortalidade neonatal&nbsp;",
         tem_meta = ifelse(referencia_oms() == TRUE, TRUE, FALSE),
         tipo_referencia = ifelse(referencia_oms() == TRUE, "meta ODS", ""),
         valor_de_referencia = ifelse(
@@ -1586,7 +1586,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_taxa_de_mortalidade_precoce(),
         indicador = "taxa_de_mortalidade_precoce",
-        titulo = "Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos&nbsp;",
         tem_meta = ifelse(referencia_oms_precoce() == TRUE, TRUE, FALSE),
         tipo_referencia = ifelse(referencia_oms_precoce() == TRUE, "meta ODS", ""),
         valor_de_referencia = ifelse(
@@ -1641,7 +1641,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_taxa_de_mortalidade_tardia(),
         indicador = "taxa_de_mortalidade_tardia",
-        titulo = "Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos&nbsp;",
         tem_meta = ifelse(referencia_oms_tardia() == TRUE, TRUE, FALSE),
         tipo_referencia = ifelse(referencia_oms_tardia() == TRUE, "meta ODS", ""),
         valor_de_referencia = ifelse(
@@ -1696,7 +1696,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_distribuicao_peso(),
         indicador = "neonatal peso por momento do obito",
-        titulo = "Dentre os óbitos neonatais selecionados,",
+        titulo = "Dentre os óbitos neonatais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )
@@ -1740,7 +1740,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_distribuicao_momento(),
         indicador = "neonatal momento do obito por peso",
-        titulo = "Dentre os óbitos neonatais selecionados,",
+        titulo = "Dentre os óbitos neonatais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )
@@ -1833,7 +1833,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       output_pronto_principais(TRUE)
       cria_caixa_principais_evitaveis_bloco7(
         dados = data7_resumo_principais(),
-        titulo = "Dentre os óbitos neonatais selecionados,",
+        titulo = "Dentre os óbitos neonatais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )

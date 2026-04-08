@@ -1356,7 +1356,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_taxa_de_mortalidade(),
         indicador = "taxa_de_mortalidade",
-        titulo = "Taxa de mortalidade fetal por 1000 nascidos vivos",
+        titulo = "Taxa de mortalidade fetal por 1000 nascidos vivos&nbsp;",
         tem_meta = ifelse(referencia_oms() == TRUE, TRUE, FALSE),
         tipo_referencia = ifelse(referencia_oms() == TRUE, "meta ODS", ""),
         valor_de_referencia = ifelse(
@@ -1411,7 +1411,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_distribuicao_peso(),
         indicador = "fetal peso por idade gestacional",
-        titulo = "Dentre os óbitos fetais selecionados,",
+        titulo = "Dentre os óbitos fetais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )
@@ -1455,7 +1455,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       cria_caixa_conjunta_bloco7(
         dados = data7_resumo_distribuicao_momento(),
         indicador = "fetal momento do obito por peso",
-        titulo = "Dentre os óbitos fetais selecionados,",
+        titulo = "Dentre os óbitos fetais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )
@@ -1548,7 +1548,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       output_pronto_principais(TRUE)
       cria_caixa_principais_evitaveis_bloco7(
         dados = data7_resumo_principais(),
-        titulo = "Dentre os óbitos fetais selecionados,",
+        titulo = "Dentre os óbitos fetais selecionados,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )

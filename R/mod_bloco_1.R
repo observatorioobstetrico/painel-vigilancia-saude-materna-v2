@@ -924,7 +924,7 @@ mod_bloco_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data1_resumo_idademae(),
         indicador = "porc_nvm_idademae",
-        titulo = "Porcentagem de nascidos vivos de mães nas faixas etárias selecionadas",
+        titulo = "Porcentagem de nascidos vivos de mães nas faixas etárias selecionadas&nbsp;",
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia_idademae()$porc_nvm_idademae,
         tipo = "porcentagem",
@@ -981,7 +981,7 @@ mod_bloco_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data1_resumo_racacormae(),
         indicador = "porc_nvm_racacormae",
-        titulo = "Porcentagem de nascidos vivos de mães das raças/cores selecionadas",
+        titulo = "Porcentagem de nascidos vivos de mães das raças/cores selecionadas&nbsp;",
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia_racacormae()$porc_nvm_racacormae,
         tipo = "porcentagem",
@@ -1050,7 +1050,7 @@ mod_bloco_1_server <- function(id, filtros){
       cria_caixa_server(
         dados = data1_resumo_escmae(),
         indicador = "porc_nvm_escmae",
-        titulo = "Porcentagem de nascidos vivos de mães com as escolaridades selecionadas",
+        titulo = "Porcentagem de nascidos vivos de mães com as escolaridades selecionadas&nbsp;",
         tem_meta = FALSE,
         valor_de_referencia = data1_resumo_referencia_escmae()$porc_nvm_escmae,
         tipo = "porcentagem",

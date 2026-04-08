@@ -1121,7 +1121,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_internacoes(),
         indicador = "porc_internacoes_menores_28_dias_sih",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS&nbsp;",
         tem_meta = FALSE,
         valor_de_referencia = data7_resumo_referencia_internacoes()$porc_internacoes_menores_28_dias_sih,
         tipo = "taxa",
@@ -1169,7 +1169,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       cria_caixa_server(
         dados = data7_resumo_internacoes_uti(),
         indicador = "porc_internacoes_uti_menores_28_dias_sih",
-        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS",
+        titulo = "Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS&nbsp;",
         tem_meta = FALSE,
         valor_de_referencia = data7_resumo_referencia_internacoes_uti()$porc_internacoes_uti_menores_28_dias_sih,
         tipo = "taxa",
@@ -1216,7 +1216,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       output_pronto_principais(TRUE)
       cria_caixa_principais_evitaveis_bloco7(
         dados = data7_resumo_principais(),
-        titulo = "Dentre as internações neonatais selecionadas,",
+        titulo = "Dentre as internações neonatais selecionadas,&nbsp;",
         tamanho_caixa = 330,
         retornar_caixa_completa = FALSE
       )
