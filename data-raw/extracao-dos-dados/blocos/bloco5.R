@@ -28,7 +28,7 @@ df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = lengt
 
 df_sinasc_consolidados <- list()
 
-anos <- 2012:2024
+anos <- 2015
 
 for (i in anos){
   a <- fetch_datasus(
@@ -42,13 +42,12 @@ for (i in anos){
 
   print(paste0("Ano ", i, " finalizado"))
 }
-
+# 2015
 rm(a)
 
 df_sinasc_consolidados <- bind_rows(df_sinasc_consolidados)
 
 ## Baixando os dados preliminares do SINASC de 2024 e selecionando as variáveis de interesse
-
 # df_sinasc_preliminares24 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/DNOPEN24.csv", sep = ";") |>
 #   select(CODMUNRES, CODMUNNASC, CODESTAB, DTNASC, PESO, GESTACAO, SEMAGESTAC, APGAR5, IDANOMAL, CODANOMAL) |>
 #   mutate(IDANOMAL = as.character(IDANOMAL))
@@ -86,7 +85,7 @@ df_bloco5_sinasc <- df_sinasc |>
   mutate(
     total_de_nascidos_vivos = 1,
     nascidos_vivos_com_baixo_peso = if_else(PESO < 2500, 1, 0, missing = 0),
-    nascidos_vivos_prematuros = if_else(GESTACAO < 5, 1, 0, missing = 0),
+    nascidos_vivos_prematuros = if_else((GESTACAO < 5 | SEMAGESTAC < 37), 1, 0, missing = 0),
     nascidos_vivos_termo_precoce = if_else(SEMAGESTAC %in% c(37, 38), 1, 0, missing = 0),
     nascidos_vivos_peso_menor_1000 = if_else(PESO < 1000, 1, 0, missing = 0),
     nascidos_vivos_peso_1000_a_1499 = if_else(PESO >= 1000 & PESO < 1500, 1, 0, missing = 0),
