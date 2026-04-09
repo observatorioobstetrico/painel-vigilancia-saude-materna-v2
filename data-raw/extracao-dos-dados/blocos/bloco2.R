@@ -133,9 +133,9 @@ df_bloco2_sinasc <- df_sinasc|>
   clean_names() |>
   group_by(codmunres, ano) |>
   summarise_at(vars(-group_cols()), sum) |>
-  ungroup() #|>
+  ungroup() |>
   # Juntando com a base aulixiar de municípios
-  #right_join(df_aux_municipios)
+  right_join(df_aux_municipios)
 
 ## Substituindo todos os NAs, gerados após o right_join, por 0
 df_bloco2_sinasc[is.na(df_bloco2_sinasc)] <- 0
@@ -147,19 +147,11 @@ rm(df_sinasc)
 # =============================================================================
 
 # Para as variáveis provenientes do Tabnet -----------------------------------
-## Baixando os dados de 2012 a 2024
-
-## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(
-  codmunres = rep(codigos_municipios, each = length(2012:2024)),
-  ano = 2012:2024
-)
-
 ## Criando função auxiliar para baixar as estimativas populacionais em diferentes faixas
 baixar_pop <- function(idade_min, idade_max, df_aux){
 
   est_pop_tabnet(
-    periodo = 12:24,
+    periodo = 12:25,
     idade_min = idade_min,
     idade_max = idade_max
   ) |>
@@ -868,7 +860,7 @@ df_numerador_aborto <- full_join(
 ## Para os denominadores -----------------------------------------------------
 ### Calculando as estimativas de mulheres com plano de saúde em cada faixa etária
 df_denominador_aborto <- left_join(
-  df_bloco2_sinasc1 |> mutate(codmunres = as.character(codmunres)),
+  df_bloco2_sinasc |> mutate(codmunres = as.character(codmunres)),
   df_bloco2_tabnet
 ) |>
 
@@ -929,15 +921,15 @@ df_bloco2_aborto <- full_join(df_numerador_aborto, df_denominador_aborto)
 # Juntando todos os dados baixados -------------------------------------------
 df_bloco2 <- full_join(
   full_join(
-    df_bloco2_sinasc1 |> mutate(codmunres = as.character(codmunres)),
+    df_bloco2_sinasc |> mutate(codmunres = as.character(codmunres)),
     df_bloco2_tabnet
   ),
   df_bloco2_aborto |> mutate(codmunres = as.character(codmunres))
 )
 
-# Salvando a base de dados final ======---------------------------------------
+# Salvando a base de dados final ---------------------------------------------
 write.csv(
-  base_final_2012_2025,
+  df_bloco2,
   "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2025.csv",
   row.names = FALSE
 )

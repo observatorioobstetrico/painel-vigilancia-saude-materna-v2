@@ -125,7 +125,7 @@ df_beneficiarias_aux1 <- pop_com_plano_saude_tabnet(
     "40 a 44 anos",
     "45 a 49 anos"
   ),
-  periodo = 2012:2016
+  periodo = 2012:2018
   ) |>
   select(!municipio)
 
@@ -140,7 +140,7 @@ df_beneficiarias_aux2 <- pop_com_plano_saude_tabnet(
     "40 a 44 anos",
     "45 a 49 anos"
   ),
-  periodo = 2017:2025
+  periodo = 2019:2025
   ) |>
   select(!municipio)
 
@@ -149,8 +149,6 @@ df_beneficiarias_aux <- full_join(
   df_beneficiarias_aux2
 ) |>
   arrange()
-
-rm(df_beneficiarias_aux1, df_beneficiarias_aux2)
 
 #### Verificando se existem NAs
 if (any(is.na(df_beneficiarias_aux))) {
@@ -161,6 +159,8 @@ if (any(is.na(df_beneficiarias_aux))) {
 
 #### Aconteceram NAs porque tive que baixar os períodos separadamente
 df_beneficiarias_aux[is.na(df_beneficiarias_aux)] <- 0
+
+rm(df_beneficiarias_aux1, df_beneficiarias_aux2)
 
 #### Passando o data.frame para o formato long
 df_beneficiarias <- df_beneficiarias_aux |>
@@ -392,56 +392,6 @@ df_bloco1 <- df_bloco1_sinasc |>
       )
   )
 
-# Verificando se os dados novos e antigos estão batendo -------------------
-## Lendo o arquivo com os dados de 2012 a 2020, que utilizamos no painel original
-# df_bloco1_antigo <- read.csv(
-#   "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2024.csv"
-#   ) |>
-#   clean_names()
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(total_de_nascidos_vivos)) -
-#   sum(df_bloco1_antigo$total_de_nascidos_vivos)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_menor_que_20_anos)) -
-#   sum(df_bloco1_antigo$nvm_menor_que_20_anos)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_entre_20_e_34_anos)) -
-#   sum(df_bloco1_antigo$nvm_entre_20_e_34_anos)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_maior_que_34_anos)) -
-#   sum(df_bloco1_antigo$nvm_maior_que_34_anos)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_cor_da_pele_branca)) -
-#   sum(df_bloco1_antigo$nvm_com_cor_da_pele_branca)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_cor_da_pele_preta)) -
-#   sum(df_bloco1_antigo$nvm_com_cor_da_pele_preta)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_cor_da_pele_parda)) -
-#   sum(df_bloco1_antigo$nvm_com_cor_da_pele_parda)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_cor_da_pele_amarela)) -
-#   sum(df_bloco1_antigo$nvm_com_cor_da_pele_amarela)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_indigenas)) -
-#   sum(df_bloco1_antigo$nvm_indigenas)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_escolaridade_ate_3)) -
-#   sum(df_bloco1_antigo$nvm_com_escolaridade_ate_3)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_escolaridade_de_4_a_7)) -
-#   sum(df_bloco1_antigo$nvm_com_escolaridade_de_4_a_7)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_escolaridade_de_8_a_11)) -
-#   sum(df_bloco1_antigo$nvm_com_escolaridade_de_8_a_11)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(nvm_com_escolaridade_acima_de_11)) -
-#   sum(df_bloco1_antigo$nvm_com_escolaridade_acima_de_11)
-#
-# sum(df_bloco1 |> filter(ano <= 2020) |> pull(populacao_feminina_10_a_49)) -
-#   sum(df_bloco1_antigo$populacao_feminina_10_a_49, na.rm = T)
-
-# As estimativas foram atualizadas com o censo de 2022
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 write.csv(

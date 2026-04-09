@@ -219,7 +219,7 @@ mod_bloco_2_ui <- function(id) {
               hr(style = "margin-top: 0;"),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot3"),
-                height = 380
+                height = 420
               ))
             )
           ),
@@ -266,7 +266,7 @@ mod_bloco_2_ui <- function(id) {
               hr(),
               shinycssloaders::withSpinner(highcharter::highchartOutput(
                 ns("plot4"),
-                height = 380
+                height = 420
               ))
             )
           )
