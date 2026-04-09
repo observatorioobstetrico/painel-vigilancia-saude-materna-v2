@@ -440,7 +440,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
             <span style="display: block; margin-bottom: 14px;"> </span>
             Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões com o nome das localidades que estão sendo comparadas.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas à(s) categoria(s) selecionada(s).
+            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas às categorias selecionadas.
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -1099,7 +1099,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1147,7 +1147,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes_uti",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1195,7 +1195,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,

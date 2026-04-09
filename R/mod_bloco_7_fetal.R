@@ -739,7 +739,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
             <span style="display: block; margin-bottom: 14px;"> </span>
             Quando alguma comparação é feita, o usuário pode selecionar para qual localidade o resumo do período será calculado clicando em um dos botões com o nome das localidades que estão sendo comparadas.
             <span style="display: block; margin-bottom: 14px;"> </span>
-            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas à(s) categoria(s) selecionada(s).
+            Quando o indicador permite a seleção de uma ou mais categorias, o resumo do período refere-se apenas às categorias selecionadas.
           </div>',
         size = "s",
         closeOnEsc = TRUE,
@@ -1278,7 +1278,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_num_obitos",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1334,7 +1334,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_taxa_de_mortalidade",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1389,7 +1389,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_peso",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1433,7 +1433,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_momento",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1477,7 +1477,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_evitaveis",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1527,7 +1527,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se à(s) categoria(s) selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
