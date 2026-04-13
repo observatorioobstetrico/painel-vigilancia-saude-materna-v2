@@ -652,6 +652,17 @@ mod_bloco_2_server <- function(id, filtros) {
         )
     })
 
+    ## Para o resumo do período -----------------------------------------------
+    data2_resumo_taxa <- reactive({
+      input$tipo_taxa_aborto
+      data2_resumo()
+    })
+
+    data2_resumo_referencia_taxa <- reactive({
+      input$tipo_taxa_aborto
+      data2_resumo_referencia()
+    })
+
     ## Criando o output do gráfico de radar -----------------------------------
     ### Definindo os indicadores que aparecerão no gráfico
     selected_indicators <- c(
@@ -834,12 +845,21 @@ mod_bloco_2_server <- function(id, filtros) {
 
     ### Valor médio da taxa de abortos inseguros por mil MIF ------------------
     output$caixa_b2_i3 <- renderUI({
+
+      tipo <- input$tipo_taxa_aborto
+
+      indicador_escolhido <- if (tipo == "sus") {
+        "sus_tx_abortos_mil_mulheres_valor_medio"
+      } else {
+        "ans_tx_abortos_mil_mulheres_valor_medio"
+      }
+
       cria_caixa_server(
-        dados = data2_resumo(),
-        indicador = "geral_tx_abortos_mil_mulheres_valor_medio",
+        dados = data2_resumo_taxa(),
+        indicador = indicador_escolhido,
         titulo = "Valor médio da taxa de abortos inseguros por mil MIF",
         tem_meta = FALSE,
-        valor_de_referencia = data2_resumo_referencia()$geral_tx_abortos_mil_mulheres_valor_medio,
+        valor_de_referencia = data2_resumo_referencia_taxa()[[indicador_escolhido]],
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 300,
@@ -858,12 +878,21 @@ mod_bloco_2_server <- function(id, filtros) {
 
     ### Valor médio da razão de abortos inseguros por 100 nascidos vivos ------
     output$caixa_b2_i4 <- renderUI({
+
+      tipo <- input$tipo_razao_aborto
+
+      indicador_escolhido <- if (tipo == "sus") {
+        "sus_tx_abortos_cem_nascidos_vivos_valor_medio"
+      } else {
+        "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
+      }
+
       cria_caixa_server(
         dados = data2_resumo(),
-        indicador = "geral_tx_abortos_cem_nascidos_vivos_valor_medio",
+        indicador = indicador_escolhido,
         titulo = "Valor médio da razão de abortos inseguros por 100 nascidos vivos",
         tem_meta = FALSE,
-        valor_de_referencia = data2_resumo_referencia()$geral_tx_abortos_cem_nascidos_vivos_valor_medio,
+        valor_de_referencia = data2_resumo_referencia()[[indicador_escolhido]],
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 300,
