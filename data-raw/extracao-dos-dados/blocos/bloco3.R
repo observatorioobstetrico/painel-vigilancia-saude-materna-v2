@@ -15,9 +15,13 @@ codigos_municipios <- read_csv("data-raw/extracao-dos-dados/blocos/databases_aux
   pull(municipio)
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios,
-                                                each = length(2012:2025)),
-                                ano = 2012:2025)
+df_aux_municipios <- data.frame(
+  codmunres = rep(
+    codigos_municipios,
+    each = length(2012:2026)
+  ),
+  ano = 2012:2026
+)
 
 # Para os indicadores provenientes do SINASC ------------------------------
 ## Baixando os dados consolidados do SINASC de 2012 a 2024 e selecionando as variáveis de interesse
@@ -45,27 +49,60 @@ df_2014_2024 <- fetch_datasus(
   information_system = "SINASC",
   vars = c("CODMUNRES", "DTNASC", "CONSPRENAT", "MESPRENAT", "SEMAGESTAC"))
 
-## Baixando os dados preliminares do SINASC de 2025 e selecionando as variáveis de interesse
-options(timeout=99999)
+## Baixando os dados preliminares do SINASC de 2025 e 2026
+options(timeout = 99999)
 
+### Baixando SINASC 2025
 temp_zip <- tempfile(fileext = ".zip")
 temp_dir <- tempdir()
 
-### Baixando SINASC 2025
-download.file("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
-              temp_zip, mode = "wb")
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  temp_zip,
+  mode = "wb"
+)
 
 files <- unzip(temp_zip, exdir = temp_dir)
 
-df_sinasc_preliminares <- fread(files[1], sep = ";") |>
+df_sinasc_preliminares_2025 <- fread(files[1], sep = ";") |>
+  select(CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
+
+
+### Baixando SINASC 2026
+temp_zip <- tempfile(fileext = ".zip")
+temp_dir <- tempdir()
+
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  temp_zip,
+  mode = "wb"
+)
+
+files <- unzip(temp_zip, exdir = temp_dir)
+
+df_sinasc_preliminares_2026 <- fread(files[1], sep = ";") |>
   select(CODMUNRES, DTNASC, CONSPRENAT, MESPRENAT, SEMAGESTAC)
 
 ## Juntando os dataframes
-df <- rbind(df_2012, df_2013, df_2014_2024, df_sinasc_preliminares) |>
+df <- rbind(
+  df_2012,
+  df_2013,
+  df_2014_2024,
+  df_sinasc_preliminares_2025,
+  df_sinasc_preliminares_2026
+) |>
   clean_names() |>
-  ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc)))
+  mutate(
+    ano = as.numeric(substr(dtnasc, nchar(dtnasc) - 3, nchar(dtnasc)))
+  )
 
-rm(df_2012, df_2013, df_2014_2024, df_sinasc_preliminares)
+rm(
+  df_2012,
+  df_2013,
+  df_2014_2024,
+  df_sinasc_preliminares_2025,
+  df_sinasc_preliminares_2026
+)
 
 # Tratando os dados e calculando indicadores ------------------------------
 df2 <- df |>
@@ -203,4 +240,4 @@ df_bloco3$casos_sc[is.na(df_bloco3$casos_sc)] <- 0
 df_bloco3$casos_sc[df_bloco3$ano == 2024] <- NA
 
 # Salvando a base de dados completa -----------------
-write.csv(df_bloco3, "data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2025.csv", row.names = FALSE)
+write.csv(df_bloco3, "data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2026.csv", row.names = FALSE)
