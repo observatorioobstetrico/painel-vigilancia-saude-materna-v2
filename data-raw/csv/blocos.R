@@ -111,7 +111,7 @@ bloco2 <- bloco2 |>
 
 ## Para o bloco 3 ---------------------------------------------------------
 ### Lendo o arquivo contendo todos os indicadores
-bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2025.csv") |>
+bloco3_aux <- read.csv("data-raw/csv/indicadores_bloco3_assistencia_pre-natal_2012-2026.csv") |>
   janitor::clean_names()
 
 ### Adicionando as informações dos municípios
