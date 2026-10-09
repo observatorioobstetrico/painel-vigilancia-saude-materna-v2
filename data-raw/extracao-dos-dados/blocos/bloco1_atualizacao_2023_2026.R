@@ -20,42 +20,65 @@ codigos_municipios <- read.csv(
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(
-  codmunres = rep(codigos_municipios, each = length(2012:2025)),
-  ano = 2012:2025
+  codmunres = rep(codigos_municipios, each = length(2023:2026)),
+  ano = 2023:2026
   ) |>
   mutate_if(is.character, as.numeric)
 
 
 # Para os indicadores provenientes do SINASC ------------------------------
-## Baixando os dados consolidados do SINASC de 2012 a 2024 e selecionando as variáveis de interesse
+## Baixando os dados consolidados do SINASC de 2023 a 2024 e selecionando as variáveis de interesse
 df_sinasc_consolidados <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2023,
   year_end = 2024,
   vars = c("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE"),
   information_system = "SINASC"
   ) |>
   mutate_if(is.character, as.numeric)
 
-## Baixando os dados preliminares do SINASC de 2025 e selecionando as variáveis de interesse
-temp_zip <- tempfile(fileext = ".zip")
-temp_dir <- tempdir()
+## Baixando os dados preliminares do SINASC de 2025 e 2026
+## OBS: a 2ª prévia de 2026 foi publicada em XML; confirmar se já existe CSV.
+df_sinasc_preliminares <- data.frame()
 
-download.file("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
-              temp_zip, mode = "wb")
+for (ano_sinasc in 2025:2026) {
+  temp_zip <- tempfile(fileext = ".zip")
+  temp_dir <- tempfile()
+  dir.create(temp_dir)
 
-files <- unzip(temp_zip, exdir = temp_dir)
+  url <- paste0(
+    "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_",
+    ano_sinasc, "_csv.zip"
+  )
 
-df_sinasc_preliminares <- fread(files[1], sep = ";") |>
-  select(CODMUNRES, DTNASC, IDADEMAE, RACACORMAE, ESCMAE)
+  status_download <- tryCatch(
+    download.file(url, temp_zip, mode = "wb", quiet = TRUE),
+    error = function(e) 1
+  )
 
-# df_sinasc_preliminares <- fread(
-#   "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv",
-#   sep = ";") |>
-#   select("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE")
+  if (!identical(status_download, 0L) || !file.exists(temp_zip) ||
+      file.size(temp_zip) == 0) {
+    stop(paste0(
+      "Não foi possível baixar o CSV do SINASC ", ano_sinasc,
+      ". Verifique o formato disponível no Portal de Dados Abertos do SUS: ", url,
+      ". Não prossiga usando dados incompletos."
+    ))
+  }
+
+  files <- unzip(temp_zip, exdir = temp_dir)
+  files <- files[grepl("\\.csv$", files, ignore.case = TRUE)]
+  if (length(files) == 0) stop("ZIP do SINASC sem arquivo CSV: ", ano_sinasc)
+
+  df_aux_sinasc <- rbindlist(lapply(files, function(arq) {
+    fread(arq, sep = ";", select = c("CODMUNRES", "DTNASC", "IDADEMAE",
+                                      "RACACORMAE", "ESCMAE"))
+  }), use.names = TRUE, fill = TRUE)
+
+  df_sinasc_preliminares <- bind_rows(df_sinasc_preliminares, df_aux_sinasc)
+}
 
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares) |>
+df_sinasc <- bind_rows(df_sinasc_consolidados, df_sinasc_preliminares) |>
   clean_names()
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
@@ -148,7 +171,7 @@ df_beneficiarias_aux2 <- pop_com_plano_saude_tabnet(
     "40 a 44 anos",
     "45 a 49 anos"
   ),
-  periodo = 2019:2025
+  periodo = 2019:2026
   ) |>
   select(!municipio)
 
@@ -212,14 +235,14 @@ df_cob_suplementar <- df_beneficiarias_pop |>
   mutate(
     q1 = round(
       quantile(
-        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2025)],
+        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2026)],
         0.25
       ),
       3
     ),
     q3 = round(
       quantile(
-        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2025)],
+        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2026)],
         0.75
       ),
       3
@@ -239,7 +262,7 @@ df_cob_suplementar <- df_beneficiarias_pop |>
       outlier == 0,
       cob_suplementar,
       round(
-        median(cob_suplementar[which(outlier == 0 & ano %in% 2012:2025)]),
+        median(cob_suplementar[which(outlier == 0 & ano %in% 2012:2026)]),
         3
       )
     ),
@@ -262,7 +285,8 @@ df_bloco1_tabnet <- df_aux_municipios |>
 
 ### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
 df_bloco1_tabnet$pop_fem_10_49_com_plano_saude[is.na(
-  df_bloco1_tabnet$pop_fem_10_49_com_plano_saude)] <- 0
+  df_bloco1_tabnet$pop_fem_10_49_com_plano_saude) &
+  df_bloco1_tabnet$ano <= 2025] <- 0
 
 
 # Para o indicador de cobertura da AB -------------------------------------
@@ -331,7 +355,7 @@ cobertura_potencial_aps_municipio2 <- readxl::read_xls(
   select(ano, codmunres, qt_cobertura_ab, qt_populacao)
 
 ### Para os meses de mai/2024 até dez/2025
-cobertura_potencial_aps_municipio3 <- readxl::read_xlsx(
+cobertura_potencial_aps_municipio3 <- readxl::read_excel(
   "data-raw/extracao-dos-dados/blocos/databases_auxiliares/cobertura_potencial_aps_municipio5.xls"
   ) |>
   select(codmunres = Município,
@@ -349,11 +373,27 @@ cobertura_potencial_aps_municipio3 <- readxl::read_xlsx(
 
 ################################################################################
 
-## Juntando os dados de 2021 até dez/2025
+### Para os meses de jan/2026 até jul/2026
+cobertura_potencial_aps_municipio4 <- readxl::read_xlsx(
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/cobertura_potencial_aps_municipio6.xlsx"
+) |>
+  select(codmunres = Município,
+         ano = "Comp. CNES",
+         qt_populacao = População,
+         qt_cobertura_ab = "Qt. capacidade da equipe"
+  ) |>
+  mutate(
+    ano = as.numeric(substr(ano, 4, 7))
+  ) |>
+  select(ano, codmunres, qt_cobertura_ab, qt_populacao)
+
+
+## Juntando os dados de 2021 até 2026
 cobertura_potencial_aps_municipio <- rbind(
   cobertura_potencial_aps_municipio1,
   cobertura_potencial_aps_municipio2,
-  cobertura_potencial_aps_municipio3
+  cobertura_potencial_aps_municipio3,
+  cobertura_potencial_aps_municipio4
   )
 
 ## Juntando todas as bases
@@ -383,27 +423,127 @@ df_cobertura_ab <- left_join(
   )
 
 ### Substituindo os NA's da coluna 'qt_cobertura_ab' por 0 (gerados após o left_join)
-df_cobertura_ab$qt_cobertura_ab[is.na(df_cobertura_ab$qt_cobertura_ab)] <- 0
+df_cobertura_ab$qt_cobertura_ab[is.na(df_cobertura_ab$qt_cobertura_ab) &
+                                    df_cobertura_ab$ano <= 2025] <- 0
 
 ### Substituindo os NA's da coluna 'qt_populacao' por 0 (gerados após o left_join)
-df_cobertura_ab$qt_populacao[is.na(df_cobertura_ab$qt_populacao)] <- 0
+df_cobertura_ab$qt_populacao[is.na(df_cobertura_ab$qt_populacao) &
+                                 df_cobertura_ab$ano <= 2025] <- 0
 
 
 # Juntando os dados de todas as bases -------------------------------------
 df_bloco1 <- df_bloco1_sinasc |>
-  left_join(df_bloco1_tabnet) |>
+  left_join(df_bloco1_tabnet, by = c("codmunres", "ano")) |>
   left_join(
     df_cobertura_ab |>
       rename(
         media_cobertura_esf = qt_cobertura_ab,
         populacao_total = qt_populacao
-      )
+      ),
+    by = c("codmunres", "ano")
   )
 
+
+## Mantendo somente 2023 a 2026 na nova base
+df_bloco1 <- df_bloco1 |> filter(ano %in% 2023:2026)
 
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 write.csv(
   df_bloco1,
-  "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2025.csv",
+  "data-raw/csv/indicadores_bloco1_socioeconomicos_2023-2026.csv",
   row.names = FALSE
 )
+
+
+# Comparando com a base já salva (somente anos em comum: 2023 a 2025) ------
+## Não sobrescrever o arquivo anterior.
+arquivo_anterior <- "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2025.csv"
+if (!file.exists(arquivo_anterior)) stop("Base anterior não encontrada: ", arquivo_anterior)
+
+df_bloco1_anterior <- read.csv(arquivo_anterior) |>
+  filter(ano %in% 2023:2025) |>
+  mutate(codmunres = as.numeric(codmunres), ano = as.numeric(ano))
+
+df_bloco1_novo <- df_bloco1 |>
+  filter(ano %in% 2023:2025) |>
+  mutate(codmunres = as.numeric(codmunres), ano = as.numeric(ano))
+
+## Verificando a unicidade das chaves e os municípios-ano ausentes
+if (anyDuplicated(df_bloco1_anterior[c("codmunres", "ano")]) > 0)
+  stop("A base anterior tem município/ano duplicado")
+if (anyDuplicated(df_bloco1_novo[c("codmunres", "ano")]) > 0)
+  stop("A base nova tem município/ano duplicado")
+
+chaves_anteriores <- df_bloco1_anterior |> select(codmunres, ano)
+chaves_novas <- df_bloco1_novo |> select(codmunres, ano)
+municipios_ausentes_novo <- anti_join(chaves_anteriores, chaves_novas,
+                                      by = c("codmunres", "ano"))
+municipios_novos <- anti_join(chaves_novas, chaves_anteriores,
+                              by = c("codmunres", "ano"))
+
+## Comparação indicador a indicador: diferenças = valor novo - valor anterior
+indicadores_comuns <- intersect(names(df_bloco1_anterior), names(df_bloco1_novo))
+indicadores_comuns <- setdiff(indicadores_comuns, c("codmunres", "ano"))
+
+comparacao_bloco1 <- inner_join(
+  df_bloco1_anterior |> select(codmunres, ano, all_of(indicadores_comuns)),
+  df_bloco1_novo |> select(codmunres, ano, all_of(indicadores_comuns)),
+  by = c("codmunres", "ano"), suffix = c("_anterior", "_novo")
+) |>
+  pivot_longer(
+    cols = -c(codmunres, ano),
+    names_to = c("indicador", "versao"),
+    names_pattern = "^(.*)_(anterior|novo)$",
+    values_to = "valor"
+  ) |>
+  pivot_wider(names_from = versao, values_from = valor) |>
+  mutate(
+    diferenca = novo - anterior,
+    status = case_when(
+      is.na(anterior) & is.na(novo) ~ "igual",
+      is.na(anterior) | is.na(novo) ~ "NA em uma base",
+      abs(diferenca) <= 1e-8 ~ "igual",
+      TRUE ~ "diferente"
+    )
+  )
+
+divergencias_bloco1 <- comparacao_bloco1 |>
+  filter(status != "igual") |>
+  arrange(ano, indicador, codmunres)
+
+resumo_comparacao <- comparacao_bloco1 |>
+  group_by(ano, indicador, status) |>
+  summarise(n_municipios = n(), .groups = "drop")
+
+## Conferência adicional da nova base de 2026
+resumo_anos <- df_bloco1 |>
+  group_by(ano) |>
+  summarise(
+    municipios = n_distinct(codmunres),
+    total_nascidos_vivos = sum(total_de_nascidos_vivos, na.rm = TRUE),
+    municipios_sem_populacao_feminina = sum(is.na(populacao_feminina_10_a_49)),
+    municipios_sem_cobertura_aps = sum(is.na(media_cobertura_esf)),
+    .groups = "drop"
+  )
+
+print(resumo_anos)
+print(resumo_comparacao)
+cat("Divergências (município/ano/indicador): ", nrow(divergencias_bloco1), "\n")
+cat("Municípios/anos só na base antiga: ", nrow(municipios_ausentes_novo), "\n")
+cat("Municípios/anos só na base nova: ", nrow(municipios_novos), "\n")
+
+write.csv(divergencias_bloco1,
+          "data-raw/csv/comparacao_bloco1_divergencias_2023-2025.csv",
+          row.names = FALSE)
+write.csv(resumo_comparacao,
+          "data-raw/csv/comparacao_bloco1_resumo_2023-2025.csv",
+          row.names = FALSE)
+write.csv(resumo_anos,
+          "data-raw/csv/comparacao_bloco1_resumo_anos_2023-2026.csv",
+          row.names = FALSE)
+write.csv(municipios_ausentes_novo,
+          "data-raw/csv/comparacao_bloco1_chaves_ausentes.csv",
+          row.names = FALSE)
+write.csv(municipios_novos,
+          "data-raw/csv/comparacao_bloco1_chaves_novas.csv",
+          row.names = FALSE)

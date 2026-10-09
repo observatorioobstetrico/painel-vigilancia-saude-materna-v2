@@ -33,13 +33,38 @@ est_pop_tabnet <- function(periodo = 12:25, filtro_sexo = 2, idade_min = 10, ida
     # Baixar o arquivo ZIP
     download.file(url_zip, temp_zip, mode = "wb")
 
+    # # Descompactar o ZIP
+    # unzip(temp_zip, exdir = temp_dir)
+    #
+    # # Ler o arquivo DBF
+    # caminho_dbf <- file.path(temp_dir, arquivo_dbf)
+    # df <- read.dbf(caminho_dbf, as.is = TRUE) |>
+    #   janitor::clean_names()
+
+
     # Descompactar o ZIP
-    unzip(temp_zip, exdir = temp_dir)
+    arquivos_extraidos <- unzip(temp_zip, exdir = temp_dir)
+
+    # Localizar o arquivo DBF correspondente ao ano
+    arquivos_dbf <- arquivos_extraidos[
+      grepl("\\.dbf$", arquivos_extraidos, ignore.case = TRUE)
+    ]
+
+    if (length(arquivos_dbf) != 1) {
+      stop(
+        "Erro no ano ", ano,
+        ": encontrados ", length(arquivos_dbf),
+        " arquivos DBF no ZIP. Arquivos: ",
+        paste(basename(arquivos_extraidos), collapse = ", ")
+      )
+    }
 
     # Ler o arquivo DBF
-    caminho_dbf <- file.path(temp_dir, arquivo_dbf)
+    caminho_dbf <- arquivos_dbf[1]
+
     df <- read.dbf(caminho_dbf, as.is = TRUE) |>
       janitor::clean_names()
+
 
     # print(colnames(df))
 
