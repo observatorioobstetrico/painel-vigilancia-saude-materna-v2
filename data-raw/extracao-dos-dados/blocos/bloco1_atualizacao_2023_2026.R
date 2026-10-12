@@ -36,49 +36,49 @@ df_sinasc_consolidados <- fetch_datasus(
   ) |>
   mutate_if(is.character, as.numeric)
 
+
 ## Baixando os dados preliminares do SINASC de 2025 e 2026
-## OBS: a 2ª prévia de 2026 foi publicada em XML; confirmar se já existe CSV.
-df_sinasc_preliminares <- data.frame()
+options(timeout = 6000)
+options(download.file.method = "libcurl")
 
-for (ano_sinasc in 2025:2026) {
-  temp_zip <- tempfile(fileext = ".zip")
-  temp_dir <- tempfile()
-  dir.create(temp_dir)
+temp_zip <- tempfile(fileext = ".zip")
+temp_dir <- tempdir()
 
-  url <- paste0(
-    "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_",
-    ano_sinasc, "_csv.zip"
-  )
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  temp_zip, mode = "wb"
+)
 
-  status_download <- tryCatch(
-    download.file(url, temp_zip, mode = "wb", quiet = TRUE),
-    error = function(e) 1
-  )
+files <- unzip(temp_zip, exdir = temp_dir)
 
-  if (!identical(status_download, 0L) || !file.exists(temp_zip) ||
-      file.size(temp_zip) == 0) {
-    stop(paste0(
-      "Não foi possível baixar o CSV do SINASC ", ano_sinasc,
-      ". Verifique o formato disponível no Portal de Dados Abertos do SUS: ", url,
-      ". Não prossiga usando dados incompletos."
-    ))
-  }
+df_sinasc_preliminares_2025 <- fread(files[1], sep = ";") |>
+  select(CODMUNRES, DTNASC, IDADEMAE, RACACORMAE, ESCMAE)
 
-  files <- unzip(temp_zip, exdir = temp_dir)
-  files <- files[grepl("\\.csv$", files, ignore.case = TRUE)]
-  if (length(files) == 0) stop("ZIP do SINASC sem arquivo CSV: ", ano_sinasc)
 
-  df_aux_sinasc <- rbindlist(lapply(files, function(arq) {
-    fread(arq, sep = ";", select = c("CODMUNRES", "DTNASC", "IDADEMAE",
-                                      "RACACORMAE", "ESCMAE"))
-  }), use.names = TRUE, fill = TRUE)
+### Dados preliminares de 2026
+options(timeout = 6000)
+options(download.file.method = "libcurl")
 
-  df_sinasc_preliminares <- bind_rows(df_sinasc_preliminares, df_aux_sinasc)
-}
+
+temp_zip <- tempfile(fileext = ".zip")
+
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  temp_zip, mode = "wb"
+)
+
+files <- unzip(temp_zip, exdir = temp_dir)
+
+df_sinasc_preliminares_2026 <- fread(files[1], sep = ";") |>
+  select(CODMUNRES, DTNASC, IDADEMAE, RACACORMAE, ESCMAE)
 
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- bind_rows(df_sinasc_consolidados, df_sinasc_preliminares) |>
+df_sinasc <- bind_rows(
+  df_sinasc_consolidados,
+  df_sinasc_preliminares_2025,
+  df_sinasc_preliminares_2026
+) |>
   clean_names()
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
@@ -171,7 +171,7 @@ df_beneficiarias_aux2 <- pop_com_plano_saude_tabnet(
     "40 a 44 anos",
     "45 a 49 anos"
   ),
-  periodo = 2019:2026
+  periodo = 2019:2025
   ) |>
   select(!municipio)
 
@@ -532,18 +532,3 @@ cat("Divergências (município/ano/indicador): ", nrow(divergencias_bloco1), "\n
 cat("Municípios/anos só na base antiga: ", nrow(municipios_ausentes_novo), "\n")
 cat("Municípios/anos só na base nova: ", nrow(municipios_novos), "\n")
 
-write.csv(divergencias_bloco1,
-          "data-raw/csv/comparacao_bloco1_divergencias_2023-2025.csv",
-          row.names = FALSE)
-write.csv(resumo_comparacao,
-          "data-raw/csv/comparacao_bloco1_resumo_2023-2025.csv",
-          row.names = FALSE)
-write.csv(resumo_anos,
-          "data-raw/csv/comparacao_bloco1_resumo_anos_2023-2026.csv",
-          row.names = FALSE)
-write.csv(municipios_ausentes_novo,
-          "data-raw/csv/comparacao_bloco1_chaves_ausentes.csv",
-          row.names = FALSE)
-write.csv(municipios_novos,
-          "data-raw/csv/comparacao_bloco1_chaves_novas.csv",
-          row.names = FALSE)

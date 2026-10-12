@@ -1,5 +1,5 @@
 # Criando a função que baixa os dados de estimativas populacionais por município, idade e sexo a partir de um endereço FTP
-est_pop_tabnet <- function(periodo = 12:25, filtro_sexo = 2, idade_min = 10, idade_max = 49, temp_dir = "data-raw/extracao-dos-dados/blocos/databases_auxiliares/dados_populacao") {
+est_pop_tabnet <- function(periodo = 12:26, filtro_sexo = 2, idade_min = 10, idade_max = 49, temp_dir = "data-raw/extracao-dos-dados/blocos/databases_auxiliares/dados_populacao") {
   library(dplyr)
   library(foreign)
   library(RCurl)
@@ -19,6 +19,8 @@ est_pop_tabnet <- function(periodo = 12:25, filtro_sexo = 2, idade_min = 10, ida
   # Lista para armazenar os dataframes
   lista_dfs <- list()
 
+  options(timeout = max(300, getOption("timeout")))
+
   for (ano in anos) {
     # Nome do arquivo
     arquivo_zip <- paste0("POPSBR", ano, ".zip")
@@ -33,38 +35,31 @@ est_pop_tabnet <- function(periodo = 12:25, filtro_sexo = 2, idade_min = 10, ida
     # Baixar o arquivo ZIP
     download.file(url_zip, temp_zip, mode = "wb")
 
-    # # Descompactar o ZIP
-    # unzip(temp_zip, exdir = temp_dir)
-    #
-    # # Ler o arquivo DBF
-    # caminho_dbf <- file.path(temp_dir, arquivo_dbf)
-    # df <- read.dbf(caminho_dbf, as.is = TRUE) |>
-    #   janitor::clean_names()
-
+    # Descompactar o ZIP
+    unzip(temp_zip, exdir = temp_dir)
 
     # Descompactar o ZIP
-    arquivos_extraidos <- unzip(temp_zip, exdir = temp_dir)
+    unzip(temp_zip, exdir = temp_dir)
 
-    # Localizar o arquivo DBF correspondente ao ano
-    arquivos_dbf <- arquivos_extraidos[
-      grepl("\\.dbf$", arquivos_extraidos, ignore.case = TRUE)
-    ]
+    # Localizar o arquivo DBF sem diferenciar maiúsculas e minúsculas
+    arquivos_dbf <- list.files(
+      temp_dir,
+      pattern = paste0("^pop", ano, "\\.dbf$"),
+      ignore.case = TRUE,
+      full.names = TRUE
+    )
 
-    if (length(arquivos_dbf) != 1) {
-      stop(
-        "Erro no ano ", ano,
-        ": encontrados ", length(arquivos_dbf),
-        " arquivos DBF no ZIP. Arquivos: ",
-        paste(basename(arquivos_extraidos), collapse = ", ")
-      )
+    if (length(arquivos_dbf) == 0) {
+      stop("Arquivo DBF não encontrado para o ano ", ano)
     }
 
-    # Ler o arquivo DBF
     caminho_dbf <- arquivos_dbf[1]
+
+    # Ler o arquivo DBF
+    #caminho_dbf <- file.path(temp_dir, arquivo_dbf)
 
     df <- read.dbf(caminho_dbf, as.is = TRUE) |>
       janitor::clean_names()
-
 
     # print(colnames(df))
 
