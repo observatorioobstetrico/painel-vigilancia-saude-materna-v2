@@ -854,10 +854,16 @@ mod_bloco_2_server <- function(id, filtros) {
         "ans_tx_abortos_mil_mulheres_valor_medio"
       }
 
+      nome_indicador <- if (tipo == "sus") {
+        "Taxa de abortos inseguros por mil mulheres em idade fértil no SUS"
+      } else {
+        "Taxa de abortos inseguros por mil mulheres em idade fértil na ANS"
+      }
+
       cria_caixa_server(
         dados = data2_resumo_taxa(),
         indicador = indicador_escolhido,
-        titulo = "Valor médio da taxa de abortos inseguros por mil MIF",
+        titulo = nome_indicador,
         tem_meta = FALSE,
         valor_de_referencia = data2_resumo_referencia_taxa()[[indicador_escolhido]],
         tipo = "taxa",
@@ -887,10 +893,16 @@ mod_bloco_2_server <- function(id, filtros) {
         "ans_tx_abortos_cem_nascidos_vivos_valor_medio"
       }
 
+      nome_indicador <- if (tipo == "sus") {
+        "Valor médio da razão de abortos inseguros por 100 nascidos vivos no SUS"
+      } else {
+        "Valor médio da razão de abortos inseguros por 100 nascidos vivos na ANS"
+      }
+
       cria_caixa_server(
         dados = data2_resumo(),
         indicador = indicador_escolhido,
-        titulo = "Valor médio da razão de abortos inseguros por 100 nascidos vivos",
+        titulo = nome_indicador,
         tem_meta = FALSE,
         valor_de_referencia = data2_resumo_referencia()[[indicador_escolhido]],
         tipo = "taxa",
