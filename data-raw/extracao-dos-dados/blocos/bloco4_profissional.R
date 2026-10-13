@@ -11,7 +11,7 @@ library(janitor)
 
 ## tpnascassi foi criada em 2013
 
-df <- microdatasus::fetch_datasus(year_start = 2024, year_end = 2024,
+df <- microdatasus::fetch_datasus(year_start = 2023, year_end = 2024,
                                       information_system = "SINASC",
                                       vars = c("CODMUNRES",
                                                "DTNASC",
@@ -35,7 +35,23 @@ df_2025 <- data.table::fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.
          PARTO = as.character(PARTO)
          )
 
-df <- rbind(df, df_2025) |> clean_names()
+df_2026 <- data.table::fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip", sep = ";") |>
+  select(CODMUNRES, DTNASC, TPNASCASSI, LOCNASC, PARTO) |>
+  mutate(CODMUNRES = as.character(CODMUNRES),
+         DTNASC = as.character(DTNASC),
+         TPNASCASSI = as.character(TPNASCASSI),
+         LOCNASC = as.character(LOCNASC),
+         PARTO = as.character(PARTO)
+  )
+
+
+df_preliminar <- rbind(df_2025, df_2026) |> clean_names()
+
+df <- df |>
+  clean_names() |>
+  select(codmunres, dtnasc, tpnascassi, locnasc, parto)
+
+df <- bind_rows(df, df_preliminar)
 
 #rm(df_2024)
 
@@ -46,7 +62,7 @@ codigos_municipios <- read.csv("data-raw/csv//tabela_aux_municipios.csv") |>
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2024:2025)), ano = 2024:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2026)), ano = 2023:2026)
 
 
 # tpnascassi Nascimento foi assistido por? Valores: 1– Médico; 2– Enfermagem ou Obstetriz; 3–Parteira; 4– Outros; 9– Ignorado
@@ -156,7 +172,7 @@ df_bloco4_profissional <- df |>
 ## Substituindo todos os NAs, gerados após o right_join, por 0
 df_bloco4_profissional[is.na(df_bloco4_profissional)] <- 0
 
-data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_profissional_2012-2024.csv")
+data.table::fwrite(df_bloco4_profissional, "data-raw/csv/indicadores_bloco4_profissional_2023-2026.csv")
 
 
 # sinasc_profissional_local <- df

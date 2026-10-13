@@ -187,7 +187,7 @@ bloco4_deslocamento_uf <- dplyr::left_join(
 
 ## Para o bloco 4 (aba de local e profissional de assistência) ------------
 ### Lendo o arquivo contendo todos os indicadores para municípios
-bloco4_profissional_aux <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2025.csv")
+bloco4_profissional_aux <- read.csv("data-raw/csv/indicadores_bloco4_profissional_2012-2026.csv")
 
 ### Adicionando as informações dos municípios
 bloco4_profissional <- dplyr::right_join(bloco4_profissional_aux, tabela_aux_municipios, by = "codmunres")
