@@ -83,7 +83,7 @@ tabela_aux_municipios <- dplyr::left_join(
 # Criando as bases de cada bloco ------------------------------------------
 ## Para o bloco 1 ---------------------------------------------------------
 ### Lendo o arquivo contendo todos os indicadores
-bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2025.csv") |>
+bloco1_aux <- read.csv("data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2026.csv") |>
   janitor::clean_names()
 
 ### Adicionando as informações dos municípios

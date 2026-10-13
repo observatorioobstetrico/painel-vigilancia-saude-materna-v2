@@ -20,8 +20,8 @@ codigos_municipios <- read.csv(
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- data.frame(
-  codmunres = rep(codigos_municipios, each = length(2012:2025)),
-  ano = 2012:2025
+  codmunres = rep(codigos_municipios, each = length(2012:2026)),
+  ano = 2012:2026
   ) |>
   mutate_if(is.character, as.numeric)
 
@@ -36,26 +36,48 @@ df_sinasc_consolidados <- fetch_datasus(
   ) |>
   mutate_if(is.character, as.numeric)
 
-## Baixando os dados preliminares do SINASC de 2025 e selecionando as variáveis de interesse
+## Baixando os dados preliminares do SINASC de 2025 e 2026
+options(timeout = 6000)
+options(download.file.method = "libcurl")
+
 temp_zip <- tempfile(fileext = ".zip")
 temp_dir <- tempdir()
 
-download.file("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
-              temp_zip, mode = "wb")
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  temp_zip, mode = "wb"
+)
 
 files <- unzip(temp_zip, exdir = temp_dir)
 
-df_sinasc_preliminares <- fread(files[1], sep = ";") |>
+df_sinasc_preliminares_2025 <- fread(files[1], sep = ";") |>
   select(CODMUNRES, DTNASC, IDADEMAE, RACACORMAE, ESCMAE)
 
-# df_sinasc_preliminares <- fread(
-#   "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2024.csv",
-#   sep = ";") |>
-#   select("CODMUNRES", "DTNASC", "IDADEMAE", "RACACORMAE", "ESCMAE")
+
+### Dados preliminares de 2026
+options(timeout = 6000)
+options(download.file.method = "libcurl")
+
+
+temp_zip <- tempfile(fileext = ".zip")
+
+download.file(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  temp_zip, mode = "wb"
+)
+
+files <- unzip(temp_zip, exdir = temp_dir)
+
+df_sinasc_preliminares_2026 <- fread(files[1], sep = ";") |>
+  select(CODMUNRES, DTNASC, IDADEMAE, RACACORMAE, ESCMAE)
 
 
 ## Juntando os dados consolidados com os dados preliminares
-df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares) |>
+df_sinasc <- bind_rows(
+  df_sinasc_consolidados,
+  df_sinasc_preliminares_2025,
+  df_sinasc_preliminares_2026
+) |>
   clean_names()
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
@@ -194,71 +216,27 @@ df_beneficiarias <- df_beneficiarias_aux |>
   ) |>
   ungroup()
 
-#### Juntando com os dados de estimativas populacionais
 df_beneficiarias_pop <- left_join(
   df_est_pop |> mutate(ano = as.numeric(ano)),
   df_beneficiarias
 )
 
-### Calculando a cobertura suplementar, os limites inferiores e superiores para a consideração de outliers e inputando caso necessário
 df_cob_suplementar <- df_beneficiarias_pop |>
   mutate(
-    cob_suplementar = round(
-      beneficiarias_10_a_49 / populacao_feminina_10_a_49,
-      3
-    )
+    pop_fem_10_49_com_plano_saude = round(beneficiarias_10_a_49)
   ) |>
-  group_by(codmunres) |>
-  mutate(
-    q1 = round(
-      quantile(
-        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2025)],
-        0.25
-      ),
-      3
-    ),
-    q3 = round(
-      quantile(
-        cob_suplementar[which(cob_suplementar < 1 & ano %in% 2012:2025)],
-        0.75
-      ),
-      3
-    ),
-    iiq = q3 - q1,
-    lim_inf = round(q1 - 1.5 * iiq, 3),
-    lim_sup = round(q3 + 1.5 * iiq, 3),
-    outlier = ifelse(
-      (cob_suplementar > 1) |
-        (cob_suplementar < lim_inf | cob_suplementar > lim_sup) |
-        (is.na(q1) & is.na(q3)) |
-        (is.na(cob_suplementar)),
-      1,
-      0
-    ),
-    novo_cob_suplementar = ifelse(
-      outlier == 0,
-      cob_suplementar,
-      round(
-        median(cob_suplementar[which(outlier == 0 & ano %in% 2012:2025)]),
-        3
-      )
-    ),
-    novo_beneficiarias_10_a_49 = round(
-      novo_cob_suplementar * populacao_feminina_10_a_49
-    )
-  ) |>
-  ungroup() |>
   select(
     codmunres,
     ano,
-    pop_fem_10_49_com_plano_saude = novo_beneficiarias_10_a_49,
+    pop_fem_10_49_com_plano_saude,
     populacao_feminina_10_a_49
   )
 
-
-## Juntando todos os dados provenientes do Tabnet --------------------------
 df_bloco1_tabnet <- df_aux_municipios |>
-  left_join(df_cob_suplementar |> mutate(codmunres = as.numeric(codmunres)))
+  left_join(
+    df_cob_suplementar |>
+      mutate(codmunres = as.numeric(codmunres))
+  )
 
 ### Substituindo os NA's da coluna 'pop_fem_10_49_com_plano_saude' por 0 (gerados após o left_join)
 df_bloco1_tabnet$pop_fem_10_49_com_plano_saude[is.na(
@@ -344,17 +322,33 @@ cobertura_potencial_aps_municipio3 <- readxl::read_xlsx(
   ) |>
   select(ano, codmunres, qt_cobertura_ab, qt_populacao)
 
+### Para os meses de jan/2026 até jul/2026
+cobertura_potencial_aps_municipio4 <- readxl::read_xlsx(
+  "data-raw/extracao-dos-dados/blocos/databases_auxiliares/cobertura_potencial_aps_municipio6.xlsx"
+) |>
+  select(codmunres = Município,
+         ano = "Comp. CNES",
+         qt_populacao = População,
+         qt_cobertura_ab = "Qt. capacidade da equipe"
+  ) |>
+  mutate(
+    ano = as.numeric(substr(ano, 4, 7))
+  ) |>
+  select(ano, codmunres, qt_cobertura_ab, qt_populacao)
+
+
+## Juntando os dados de 2021 até jul/2026
+cobertura_potencial_aps_municipio <- rbind(
+  cobertura_potencial_aps_municipio1,
+  cobertura_potencial_aps_municipio2,
+  cobertura_potencial_aps_municipio3,
+  cobertura_potencial_aps_municipio4
+)
+
 ## Dados de cobertura em:
 ## https://relatorioaps.saude.gov.br/cobertura/aps
 
 ################################################################################
-
-## Juntando os dados de 2021 até dez/2025
-cobertura_potencial_aps_municipio <- rbind(
-  cobertura_potencial_aps_municipio1,
-  cobertura_potencial_aps_municipio2,
-  cobertura_potencial_aps_municipio3
-  )
 
 ## Juntando todas as bases
 dados_ab_municipios <- rbind(
@@ -404,6 +398,6 @@ df_bloco1 <- df_bloco1_sinasc |>
 # Salvando a base de dados completa na pasta data-raw/csv -----------------
 write.csv(
   df_bloco1,
-  "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2025.csv",
+  "data-raw/csv/indicadores_bloco1_socioeconomicos_2012-2026.csv",
   row.names = FALSE
 )
