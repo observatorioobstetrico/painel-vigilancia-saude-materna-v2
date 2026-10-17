@@ -592,6 +592,23 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     })
 
+    ## Colunas necessarias da tabela de distribuicao de CIDs para o indicador
+    ## selecionado: apenas as citadas nas expressoes + chaves de localidade.
+    ## Evita carregar as 1095 colunas da tabela inteira (projecao via arrow).
+    colunas_cids_indicador <- function(infos) {
+      vars_formula <- function(txt) {
+        if (is.null(txt) || is.na(txt) || !nzchar(txt)) return(character())
+        tryCatch(all.vars(rlang::parse_expr(txt)), error = function(e) character())
+      }
+      unique(c(
+        "ano", "codmunres", "municipio", "grupo_kmeans", "uf", "regiao",
+        "cod_r_saude", "r_saude", "cod_macro_r_saude", "macro_r_saude",
+        vars_formula(infos$calculo),
+        vars_formula(infos$numerador),
+        vars_formula(infos$denominador)
+      ))
+    }
+
     base_bloco_selecionado <- reactive({
       if (infos_indicador()$bloco %in% c("bloco4_deslocamento_parto", "bloco4_deslocamento_medianas")) {
         if (filtros()$nivel != "estadual") {
@@ -608,7 +625,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
       } else if(infos_indicador()$bloco == "bloco7_morbidade_neonatal_grupos"){
         bloco7_dist_morbidade
       } else if (grepl("evitaveis|grupo", infos_indicador()$nome_abreviado)) {
-        bloco7_distribuicao_cids
+        carrega_dados_projetado("bloco7_distribuicao_cids", colunas_cids_indicador(infos_indicador()))
       } else {
         get(filtros()$bloco)
       }
@@ -2065,7 +2082,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         ) |>
         dplyr::ungroup()
 
-    })
+    }) |>
+      shiny::bindCache(filtros_sem_pesquisar(filtros()))
 
     ## Criando o gráfico de barras --------------------------------------------
     output$grafico_regioes <- highcharter::renderHighchart({
@@ -2184,7 +2202,8 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
         dplyr::ungroup()
 
       data_grafico_serie_aux
-    })
+    }) |>
+      shiny::bindCache(filtros_sem_pesquisar(filtros()))
 
     data_rmm_corrigida_aux <- reactive({
       if (infos_indicador()$nome_abreviado == "rmm") {
@@ -2496,28 +2515,24 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     # Tabela ------------------------------------------------------------------
     ## Criando um data.frame com as informações necessárias para a construção da tabela --------
-    data_tabela1 <- eventReactive(c(input$opcoes_tab1, filtros()$pesquisar), {
+    data_tabela1 <- reactive({
       validate(
         need(
           !startsWith(infos_indicador()$indicador, "Medianas"),
           "Os indicadores de medianas de deslocamento para o parto não estão disponíveis para microrregiões e macrorregiões de saúde estaduais, para regiões do país e para o nível de análise nacional. Além disso, mesmo que esses indicadores sejam calculados para municípios e estados, calcular um valor médio para representar o resumo do período não é aconselhável. Dessa forma, esta visualização não se aplica."
         )
       )
+      infos <- infos_indicador()
       if (input$opcoes_tab1 == "escolha1") {
-        base_bloco_selecionado() |>
+        base_agregada <- base_bloco_selecionado() |>
           dplyr::filter(ano %in% anos_disponiveis()) |>
           dplyr::group_by(uf, macro_r_saude, municipio) |>
           dplyr::summarise(
-            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
-            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
-            indicador := dplyr::if_else(
-              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
-              true = numerador/denominador,
-              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
-            )
+            numerador = !!rlang::parse_expr(infos$numerador),
+            denominador = !!rlang::parse_expr(infos$denominador)
           )
       } else {
-        base_bloco_selecionado() |>
+        base_agregada <- base_bloco_selecionado() |>
           dplyr::filter(
             ano %in% anos_disponiveis(),
             if (filtros()$nivel == "nacional")
@@ -2535,47 +2550,50 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
           ) |>
           dplyr::group_by(uf, macro_r_saude, municipio) |>
           dplyr::summarise(
-            numerador = !!rlang::parse_expr(infos_indicador()$numerador),
-            denominador = !!rlang::parse_expr(infos_indicador()$denominador),
-            indicador := dplyr::if_else(
-              condition = infos_indicador()$tipo_do_indicador == "porcentagem",
-              true = numerador/denominador,
-              false = round(numerador/denominador * {infos_indicador()$fator}, 1)
-            )
+            numerador = !!rlang::parse_expr(infos$numerador),
+            denominador = !!rlang::parse_expr(infos$denominador)
           )
       }
-    },
-    ignoreNULL = FALSE
-    )
 
-    ## Criando um data.frame a versão da tabela que vai para download ----------
-    data_tabela_download <- eventReactive(c(filtros()$pesquisar), {
-      base_bloco_selecionado() |>
-        dplyr::filter(ano %in% anos_disponiveis()) |>
-        dplyr::group_by(codmunres, municipio, r_saude, macro_r_saude, uf, regiao) |>
-        dplyr::summarise(
-          periodo = paste(max(filtros()$ano2[1], anos_disponiveis()[1]), "a", min(filtros()$ano2[2], anos_disponiveis()[length(anos_disponiveis())])),
-          numerador = !!rlang::parse_expr(infos_indicador()$numerador),
-          denominador = !!rlang::parse_expr(infos_indicador()$denominador),
-          indicador := round(numerador/denominador * {infos_indicador()$fator}, 1)
-        ) |>
-        dplyr::rename(
-          !!infos_indicador()$nome_numerador := numerador,
-          !!infos_indicador()$nome_denominador := denominador,
-          !!infos_indicador()$indicador := indicador
-        )
-    },
-    ignoreNULL = FALSE
-    )
+      # O calculo e feito fora do summarise: a condicao e escalar e, dentro do
+      # summarise, seria reavaliada (com chamadas a infos_indicador()) por grupo.
+      base_agregada$indicador <- if (infos$tipo_do_indicador == "porcentagem") {
+        base_agregada$numerador / base_agregada$denominador
+      } else {
+        round(base_agregada$numerador / base_agregada$denominador * infos$fator, 1)
+      }
 
-    ## Criando o output de download da tabela ----------------------------------
+      base_agregada
+    }) |>
+      shiny::bindCache(filtros_sem_pesquisar(filtros()), input$opcoes_tab1) |>
+      shiny::bindEvent(input$opcoes_tab1, filtros()$pesquisar, ignoreNULL = FALSE)
+
+    ## Output de download da tabela ---------------------------------------------
+    ## O calculo acontece sob demanda (dentro do proprio download), evitando
+    ## refazer a agregacao a cada busca de quem nao baixa o arquivo.
     output$download_tabela <- downloadHandler(
       filename = function() {
         paste0("dados_tabela_nivel3_", infos_indicador()$nome_abreviado, ".csv")
       },
       content = function(file) {
-        # Write the dataset to the `file` that will be downloaded
-        write.csv(data_tabela_download(), file, row.names = FALSE)
+        infos <- infos_indicador()
+        periodo <- paste(max(filtros()$ano2[1], anos_disponiveis()[1]), "a", min(filtros()$ano2[2], anos_disponiveis()[length(anos_disponiveis())]))
+        tabela <- base_bloco_selecionado() |>
+          dplyr::filter(ano %in% anos_disponiveis()) |>
+          dplyr::group_by(codmunres, municipio, r_saude, macro_r_saude, uf, regiao) |>
+          dplyr::summarise(
+            periodo = periodo,
+            numerador = !!rlang::parse_expr(infos$numerador),
+            denominador = !!rlang::parse_expr(infos$denominador)
+          )
+        tabela$indicador <- round(tabela$numerador / tabela$denominador * infos$fator, 1)
+        tabela <- tabela |>
+          dplyr::rename(
+            !!infos$nome_numerador := numerador,
+            !!infos$nome_denominador := denominador,
+            !!infos$indicador := indicador
+          )
+        write.csv(tabela, file, row.names = FALSE)
       }
     )
 
