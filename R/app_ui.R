@@ -1,5 +1,10 @@
 #' The application User-Interface
 #'
+#' A UI e estatica (nao depende de `request`). Montar as tags e serializa-las
+#' custa ~2,7-3,6 s por requisicao; por isso o resultado e renderizado uma unica
+#' vez e reaproveitado nas sessoes seguintes (a serializacao do html cacheado
+#' custa ~0,03 s). Ver RELATORIO_OTIMIZACOES.md.
+#'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
@@ -10,7 +15,29 @@
 #'
 #' @import highcharter
 
+.ui_renderizada <- new.env(parent = emptyenv())
+
 app_ui <- function(request) {
+  if (!exists("renderizada", envir = .ui_renderizada, inherits = FALSE)) {
+    assign(
+      "renderizada",
+      htmltools::renderTags(constroi_app_ui(request)),
+      envir = .ui_renderizada
+    )
+  }
+  renderizada <- get("renderizada", envir = .ui_renderizada, inherits = FALSE)
+
+  tagList(
+    if (!is.null(renderizada$head)) {
+      htmltools::tags$head(htmltools::HTML(renderizada$head))
+    },
+    htmltools::HTML(renderizada$html),
+    renderizada$dependencies
+  )
+}
+
+#' @noRd
+constroi_app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "www/global/funcoes_javascript.js")),
