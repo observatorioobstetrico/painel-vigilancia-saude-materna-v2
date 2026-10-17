@@ -251,6 +251,39 @@ processa_bloco7 <- function(data, input, filtros, cols_fn, indicadores_fn, local
   resultado
 }
 
+# Soma colunas numericas por ano sem o custo do agrupamento do data.table.
+# `x[, lapply(.SD, sum), by = "ano"]` materializa as colunas de .SD por grupo
+# (~14 ms por grupo, mesmo com 1 linha por grupo); para as tabelas largas do
+# Bloco 7 isso custava ~190 ms por chamada. Aqui a matriz e' somada de uma vez
+# pelo rowsum (C) e a coluna `class` (sempre constante apos os filtros de
+# localidade) e' recolocada depois. Preserva a ordem de primeira aparição dos
+# anos (reorder = FALSE), igual ao resultado do by = c("ano", "class").
+soma_colunas_por_ano <- function(x, cols, classe) {
+  m <- as.matrix(x[, cols, with = FALSE])
+  rs <- rowsum(m, x[["ano"]], reorder = FALSE, na.rm = TRUE)
+  agg <- data.table::as.data.table(rs)
+  agg[, ano := as.integer(rownames(rs))]
+  data.table::setcolorder(agg, c("ano", cols))
+  agg[, class := classe]
+  data.table::setcolorder(agg, c("ano", "class", cols))
+  agg[]
+}
+
+# Caminho rapido para a agregacao anual: usa o rowsum por matriz quando a
+# tabela tem linhas, todas as colunas alvo numericas e uma unica `class`
+# (garantida por filtra_localidade/filtra_localidade_dt). Caso contrario,
+# cai na agregacao classica do data.table.
+agrega_por_ano_rapido <- function(x, cols, fallback) {
+  ok <- length(cols) > 0 &&
+    nrow(x) > 0 &&
+    !is.null(x[["class"]]) &&
+    !is.null(x[["ano"]]) &&
+    all(vapply(x[, cols, with = FALSE], is.numeric, logical(1))) &&
+    length(unique(x[["class"]])) == 1
+  if (!ok) return(fallback())
+  soma_colunas_por_ano(x, cols, x[["class"]][1L])
+}
+
 processa_bloco7_sem_cache <- function(data, cols, colunas, indicadores_fn) {
   ## 1. Garante data.table ----------
   dt <- data |>
@@ -285,7 +318,7 @@ processa_bloco7_sem_cache <- function(data, cols, colunas, indicadores_fn) {
   }
 
   ## 5. Graficos (ano x class) e resumo (class, derivado do agregado anual) ----------
-  agg_graficos <- agrega(c("ano", "class"))
+  agg_graficos <- agrega_por_ano_rapido(dt, colunas, function() agrega(c("ano", "class")))
   agg_resumo <- agg_graficos[, lapply(.SD, sum), .SDcols = colunas, by = "class"]
 
   list(
@@ -323,11 +356,21 @@ agrega_colunas_evitaveis <- function(
       (todas_fases | grepl(momentos_pat, names(dt)))
   ]
 
+  # Estreita a tabela antes de filtrar: daqui para frente só as colunas alvo
+  # são usadas (as chaves bastam para o filtro de localidade), o que barateia
+  # as copias do filtro (tabelas de até 206 colunas).
+  chaves <- intersect(
+    c("ano", "regiao", "uf", "macro_r_saude", "r_saude", "municipio", "grupo_kmeans"),
+    names(dt)
+  )
+  dt <- dt[, c(chaves, alvo_cols), with = FALSE]
+
   # Filtragem por localidade e escopo (versao data.table; sempre retorna objeto novo)
   dt <- filtra_localidade_dt(dt, filtros, comp, referencia, localidade_resumo, nivel_atual = nivel_atual)
 
+  # A tabela filtrada é sempre privada (o filtro devolve cópia ou a própria
+  # tabela estreitada criada acima), então a renomeação pode ser feita in place.
   if (any(dt[["class"]] == "Brasil (valor de referência)")) {
-    dt <- data.table::copy(dt)
     dt[class == "Brasil (valor de referência)", class := "Brasil"]
   }
 
@@ -342,7 +385,7 @@ agrega_colunas_evitaveis <- function(
 
   # Agregados: um por ano x class (graficos) e um por class, derivado dos
   # totais anuais (equivalente a somar a base direta por class)
-  agg_graficos <- soma(dt, c("ano", "class"))
+  agg_graficos <- agrega_por_ano_rapido(dt, alvo_cols, function() soma(dt, c("ano", "class")))
   agg_resumo <- soma(agg_graficos, "class")
 
   para_long <- function(agg, agrupadores) {
@@ -594,6 +637,15 @@ processa_causas_sem_cache <- function(
 
 
 
+# Atributo class como o htmltools renderiza ao converter tags em HTML:
+# NULL omite o atributo; NA vira atributo sem valor (ex.: `<div class ...>`).
+# Usado pelas caixas que montam o HTML como string.
+attr_class_html <- function(x) {
+  if (is.null(x)) return("")
+  if (length(x) == 1 && is.na(x)) return(" class")
+  paste0(' class="', x, '"')
+}
+
 cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = 300, fonte_titulo = "fonte-grande", fonte_comparacao = "fonte-media", pagina, width_caixa = 12, retornar_caixa_completa = TRUE) {
 
   if (is.null(valor_indicador)) {
@@ -793,27 +845,33 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 
   fonte_texto <- dplyr::if_else(floor(log10(valor_indicador_aux)) + 1 < 7 | is.nan(valor_indicador_aux), "fonte-destaque-caixas1", "fonte-destaque-caixas2")
 
-  style_texto <- glue::glue("height: 28%; overflow: auto; padding: 0 10px; display: flex; justify-content: center; text-align: center;")
+  style_texto <- "height: 28%; overflow: auto; padding: 0 10px; display: flex; justify-content: center; text-align: center;"
+
+  # O conteudo e' montado como uma unica string HTML (em vez de varios nos de
+  # tags htmltools): evita o custo de montagem da arvore e, principalmente, da
+  # conversao tag -> HTML que o Shiny faz ao enviar cada output (~2x mais
+  # rapido por caixa; mesma saida HTML).
+  conteudo <- HTML(paste0(
+    '<div', attr_class_html(fonte_titulo), ' style="height: 31%; overflow: auto; padding: 0 10px;"><b> ', titulo, ' </b></div>',
+    '<div style="height: 3%"></div>',
+    '<div', attr_class_html(fonte_texto), ' style="', style_texto, '"><b> ', glue::glue(texto), ' </b></div>',
+    '<div', attr_class_html(fonte_comparacao), ' style="overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: ', cor_comp, ';"><b> ', glue::glue(texto_comp), ' </b></div>'
+  ))
 
   if (retornar_caixa_completa == TRUE) {
     bs4Dash::box(
-      style = glue::glue("height: {tamanho_caixa}px; overflow: auto; padding: 0;"),
+      style = paste0("height: ", tamanho_caixa, "px; overflow: auto; padding: 0;"),
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(class = fonte_titulo, style = glue::glue("height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
-      div(style = "height: 3%"),
-      div(class = fonte_texto, style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
-      div(class = fonte_comparacao, style = glue::glue("overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
+      conteudo
     )
   } else {
-    div(
-      style = glue::glue("height: {24 + tamanho_caixa}px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;"),
-      div(class = fonte_titulo, style = glue::glue("height: 31%; overflow: auto; padding: 0 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
-      div(style = "height: 3%"),
-      div(class = fonte_texto, style = style_texto, HTML(glue::glue("<b> {glue::glue(texto)} </b>"))),
-      div(class = fonte_comparacao, style = glue::glue("overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: {cor_comp};"), HTML(glue::glue("<b> {glue::glue(texto_comp)} </b>")))
-    )
+    HTML(paste0(
+      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
+      conteudo,
+      '</div>'
+    ))
   }
 }
 
@@ -870,63 +928,52 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
   style_descricao <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
 
   if (indicador == "baixo peso") {
-    bs4Dash::box(
-      style = glue::glue("height: {tamanho_caixa}px; padding: 0;"),
-      width = width_caixa,
-      collapsible = FALSE,
-      headerBorder = FALSE,
-      div(class = fonte_titulo, style = glue::glue("height: 20%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
-      hr(),
-      div(
-        style = "height: 65%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "possuem peso < 1000 g")
-        ),
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1000 a 1499 g")
-        ),
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "possuem peso de 1500 a 2499 g")
-        )
-      )
+    blocos <- list(
+      list(texto = texto1, descricao = "possuem peso < 1000 g"),
+      list(texto = texto2, descricao = "possuem peso de 1000 a 1499 g"),
+      list(texto = texto3, descricao = "possuem peso de 1500 a 2499 g")
     )
+    altura_titulo <- "20%"
+    altura_conteudo <- "65%"
   } else if (indicador == "prematuridade") {
-    bs4Dash::box(
-      style = glue::glue("height: {tamanho_caixa}px; padding: 0;"),
-      width = width_caixa,
-      collapsible = FALSE,
-      headerBorder = FALSE,
-      div(class = fonte_titulo, style = glue::glue("height: 22%; padding: 0px 10px 10px 10px;"), HTML(glue::glue("<b> {titulo} </b>"))),
-      hr(),
-      div(
-        style = "height: 63%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto1)} </b>"))),
-          p(style = style_descricao, "nasceram com menos de 28 semanas")
-        ),
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto2)} </b>"))),
-          p(style = style_descricao, "nasceram de 28 a 32 semanas")
-        ),
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto3)} </b>"))),
-          p(style = style_descricao, "nasceram de 33 a 34 semanas")
-        ),
-        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto4)} </b>"))),
-          p(style = style_descricao, "nasceram de 35 a 36 semanas")
-        ),        div(
-          p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> {glue::glue(texto5)} </b>"))),
-          p(style = style_descricao, "não possuem informação")
-        )
-      )
+    blocos <- list(
+      list(texto = texto1, descricao = "nasceram com menos de 28 semanas"),
+      list(texto = texto2, descricao = "nasceram de 28 a 32 semanas"),
+      list(texto = texto3, descricao = "nasceram de 33 a 34 semanas"),
+      list(texto = texto4, descricao = "nasceram de 35 a 36 semanas"),
+      list(texto = texto5, descricao = "não possuem informação")
     )
-
+    altura_titulo <- "22%"
+    altura_conteudo <- "63%"
+  } else {
+    return(NULL)
   }
 
+  # HTML como string unica (mesma tecnica do cria_caixa_server). O texto de
+  # descricao e escapado como o htmltools faria com um filho de texto comum
+  # (importante para "possuem peso < 1000 g").
+  itens <- vapply(blocos, function(b) {
+    paste0(
+      '<div><p class="fonte-destaque-caixas2" style="', style_texto, '"><b> ', glue::glue(b$texto), ' </b></p>',
+      '<p style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
+    )
+  }, character(1))
+
+  conteudo <- HTML(paste0(
+    '<div', attr_class_html(fonte_titulo), ' style="height: ', altura_titulo, '; padding: 0px 10px 10px 10px;"><b> ', titulo, ' </b></div>',
+    '<hr/>',
+    '<div style="height: ', altura_conteudo, '; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    paste0(itens, collapse = ""),
+    '</div>'
+  ))
+
+  bs4Dash::box(
+    style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
+    width = width_caixa,
+    collapsible = FALSE,
+    headerBorder = FALSE,
+    conteudo
+  )
 }
 
 cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = 303, fonte_titulo = "fonte-grande", retornar_caixa_completa = TRUE, width_caixa = 12) {
@@ -1039,47 +1086,38 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
     "0px 10px 10px 10px"
   }
 
+  # HTML como string unica (mesma tecnica do cria_caixa_server: ~3x mais rapido
+  # de montar/serializar que a arvore de tags). O texto de descricao e escapado
+  # como o htmltools faria com um filho de texto comum.
+  itens <- vapply(blocos, function(b) {
+    paste0(
+      '<div><p class="fonte-destaque-caixas2" style="', style_texto, '"><b> ', b$texto, ' </b></p>',
+      '<p style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
+    )
+  }, character(1))
+
+  conteudo <- HTML(paste0(
+    '<div', attr_class_html(fonte_titulo), ' style="height: 15%; padding: ', padding_titulo, '; overflow: auto"><b> ', titulo, ' </b></div>',
+    '<hr/>',
+    '<div style="height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    paste0(itens, collapse = ""),
+    '</div>'
+  ))
+
   if (retornar_caixa_completa == TRUE) {
     bs4Dash::box(
-      style = glue::glue("height: {tamanho_caixa}px; padding: 0;"),
+      style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(
-        class = fonte_titulo,
-        style = glue::glue("height: 15%; padding: {padding_titulo}; overflow: auto"),
-        HTML(glue::glue("<b> {titulo} </b>"))
-      ),
-      hr(),
-      div(
-        style = "height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
-        purrr::map(blocos, ~{
-          div(
-            p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> { .x$texto } </b>"))),
-            p(style = style_descricao, .x$descricao)
-          )
-        })
-      )
+      conteudo
     )
   } else {
-    div(
-      style = glue::glue("height: {24 + tamanho_caixa}px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;"),
-      div(
-        class = fonte_titulo,
-        style = glue::glue("height: 15%; padding: {padding_titulo}; overflow: auto"),
-        HTML(glue::glue("<b> {titulo} </b>"))
-      ),
-      hr(),
-      div(
-        style = "height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;",
-        purrr::map(blocos, ~{
-          div(
-            p(class = "fonte-destaque-caixas2", style = style_texto, HTML(glue::glue("<b> { .x$texto } </b>"))),
-            p(style = style_descricao, .x$descricao)
-          )
-        })
-      )
-    )
+    HTML(paste0(
+      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
+      conteudo,
+      '</div>'
+    ))
   }
 }
 
@@ -1103,48 +1141,37 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
     )
   })
 
-  # Monta a caixa com map dos blocos
+  # Monta a caixa com map dos blocos (HTML como string unica; mesma tecnica
+  # do cria_caixa_server)
+  itens <- vapply(blocos, function(b) {
+    paste0(
+      '<div><p class="fonte-destaque-caixas2" style="', style_porc, '"><b> ', b$porc, ' </b></p>',
+      '<p style="', style_grupo, '">pertencem ao grupo de causas "', b$grupo, '"</p></div>'
+    )
+  }, character(1))
+
+  conteudo <- HTML(paste0(
+    '<div', attr_class_html(fonte_titulo), ' style="height: 15%; padding: 0px 10px 0px 10px; overflow: auto"><b> ', titulo, ' </b></div>',
+    '<hr/>',
+    '<div style="height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    paste0(itens, collapse = ""),
+    '</div>'
+  ))
+
   if (retornar_caixa_completa == TRUE) {
     bs4Dash::box(
-      style = glue::glue("height: {tamanho_caixa}px; padding: 0;"),
+      style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
       width = width_caixa,
       collapsible = FALSE,
       headerBorder = FALSE,
-      div(
-        class = fonte_titulo,
-        style = glue::glue("height: 15%; padding: 0px 10px 0px 10px; overflow: auto"),
-        HTML(glue::glue("<b> {titulo} </b>"))
-      ),
-      hr(),
-      div(
-        style = glue::glue("height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;"),
-        purrr::map(blocos, ~{
-          div(
-            p(class = "fonte-destaque-caixas2", style = style_porc, HTML(glue::glue("<b> { .x$porc } </b>"))),
-            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causas \"{ .x$grupo }\"")))
-          )
-        })
-      )
+      conteudo
     )
   } else {
-    div(
-      style = glue::glue("height: {24 + tamanho_caixa}px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;"),
-      div(
-        class = fonte_titulo,
-        style = glue::glue("height: 15%; padding: 0px 10px 0px 10px; overflow: auto"),
-        HTML(glue::glue("<b> {titulo} </b>"))
-      ),
-      hr(),
-      div(
-        style = glue::glue("height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;"),
-        purrr::map(blocos, ~{
-          div(
-            p(class = "fonte-destaque-caixas2", style = style_porc, HTML(glue::glue("<b> { .x$porc } </b>"))),
-            p(style = style_grupo, HTML(glue::glue("pertencem ao grupo de causas \"{ .x$grupo }\"")))
-          )
-        })
-      )
-    )
+    HTML(paste0(
+      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
+      conteudo,
+      '</div>'
+    ))
   }
 
 }
