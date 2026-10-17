@@ -3,68 +3,49 @@
 .datatable.aware <- TRUE # avisa o cedta() que o pacote é DT‑aware
 cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NULL, filtros, referencia = FALSE, comp = FALSE, adicionar_localidade = TRUE, input = NULL, bloco = "outros", localidade_resumo = "escolha1") {
 
-  if (referencia == FALSE) {
-    df_calcs <- df_calcs |>
-      dplyr::filter(tipo == "local") |>
-      dplyr::select(!tipo)
+  tipo_alvo <- if (referencia == FALSE) "local" else "referencia"
 
-    if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
-      df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
-        dplyr::filter(tipo == "local") |>
-        dplyr::select(!tipo)
-    }
-  } else {
-    df_calcs <- df_calcs |>
-      dplyr::filter(tipo == "referencia") |>
-      dplyr::select(!tipo)
+  df_calcs <- df_calcs |>
+    dplyr::filter(tipo == tipo_alvo) |>
+    dplyr::select(!tipo)
 
-    if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
-      df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
-        dplyr::filter(tipo == "referencia") |>
-        dplyr::select(!tipo)
-    }
+  if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
+    df_calcs_dist_bloco7 <- df_calcs_dist_bloco7 |>
+      dplyr::filter(tipo == tipo_alvo) |>
+      dplyr::select(!tipo)
   }
 
-  colunas_summarise <- names(df_calcs)
+  # Uma unica passada de summarise com todas as expressoes (antes era uma
+  # passada por coluna, seguidas de full_join por ano). Resultado identico:
+  # as expressoes sao independentes entre si e nao referenciam colunas criadas.
+  exprs_calcs <- lapply(df_calcs, rlang::parse_expr)
+  names(exprs_calcs) <- names(df_calcs)
 
   df_localidade_aux <- df_localidade |>
     dplyr::summarise() |>
     dplyr::ungroup()
 
   if (ncol(df_localidade_aux) == 0) {
-    for (coluna in colunas_summarise) {
-      df_localidade_aux <- cbind(
-        df_localidade_aux,
-        dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]]))
-      )
-    }
+    df_localidade_aux <- dplyr::summarise(df_localidade, !!!exprs_calcs)
   } else {
-    for (coluna in colunas_summarise) {
-      df_localidade_aux <- dplyr::full_join(
-        df_localidade_aux,
-        dplyr::summarise(df_localidade, !!coluna := !!rlang::parse_expr(df_calcs[[coluna]])),
-        by = dplyr::join_by(ano)
-      )
-    }
+    df_localidade_aux <- dplyr::summarise(df_localidade, !!!exprs_calcs, .groups = "keep")
   }
 
   if (grepl("bloco7", bloco) & !grepl("morbidade", bloco)) {
-    colunas_summarise_dist_bloco7 <- names(df_calcs_dist_bloco7)
+    exprs_dist_bloco7 <- lapply(df_calcs_dist_bloco7, rlang::parse_expr)
+    names(exprs_dist_bloco7) <- names(df_calcs_dist_bloco7)
+
     if (nrow(df_localidade_aux) == 1) {
-      for (coluna in colunas_summarise_dist_bloco7) {
-        df_localidade_aux <- cbind(
-          df_localidade_aux,
-          dplyr::summarise(df_localidade_aux, !!coluna := !!rlang::parse_expr(df_calcs_dist_bloco7[[coluna]]))
-        )
-      }
+      df_localidade_aux <- cbind(
+        df_localidade_aux,
+        dplyr::summarise(df_localidade_aux, !!!exprs_dist_bloco7)
+      )
     } else {
-      for (coluna in colunas_summarise_dist_bloco7) {
-        df_localidade_aux <- dplyr::full_join(
-          df_localidade_aux,
-          dplyr::summarise(df_localidade_aux |> dplyr::group_by(ano), !!coluna := !!rlang::parse_expr(df_calcs_dist_bloco7[[coluna]])),
-          by = dplyr::join_by(ano)
-        )
-      }
+      df_localidade_aux <- dplyr::full_join(
+        df_localidade_aux,
+        dplyr::summarise(df_localidade_aux |> dplyr::group_by(ano), !!!exprs_dist_bloco7),
+        by = dplyr::join_by(ano)
+      )
     }
   }
 
@@ -98,8 +79,25 @@ cria_indicadores <- function(df_localidade, df_calcs, df_calcs_dist_bloco7 = NUL
 }
 
 
+# Wrapper com cache: a mesma base filtrada com os mesmos filtros e reaproveitada
+# entre abas/modulos/buscas. Ver R/cache_interno.R.
 filtra_localidade <- function(data, filtros, comp = FALSE, referencia = FALSE, localidade_resumo = "escolha1", add_class = TRUE,
                               nivel_atual = "nivel_2") {
+  chave <- chave_cache_interno(
+    "filtra_localidade", identidade_base(data),
+    comp, referencia, localidade_resumo, add_class, nivel_atual,
+    rotulo_filtros(filtros)
+  )
+  resultado <- cache_interno_buscar(chave)
+  if (is.null(resultado)) {
+    resultado <- filtra_localidade_sem_cache(data, filtros, comp, referencia, localidade_resumo, add_class, nivel_atual)
+    cache_interno_guardar(chave, resultado)
+  }
+  resultado
+}
+
+filtra_localidade_sem_cache <- function(data, filtros, comp = FALSE, referencia = FALSE, localidade_resumo = "escolha1", add_class = TRUE,
+                                        nivel_atual = "nivel_2") {
   # Definindo o sufixo
   sufixo <- ifelse(comp == TRUE | localidade_resumo == "escolha2", "2", "")
 
@@ -170,42 +168,142 @@ filtra_localidade <- function(data, filtros, comp = FALSE, referencia = FALSE, l
   data
 }
 
+valor_ou_na <- function(x) {
+  if (is.null(x) || length(x) == 0) NA_character_ else as.character(x)[1]
+}
+
+# Versao em data.table do filtra_localidade(), usada nos filtros de tabelas
+# largas (evita as copias do dplyr + as.data.frame). Retorna data.table.
+filtra_localidade_dt <- function(dt, filtros, comp = FALSE, referencia = FALSE, localidade_resumo = "escolha1", add_class = TRUE, nivel_atual = "nivel_2") {
+  sufixo <- ifelse(comp == TRUE | localidade_resumo == "escolha2", "2", "")
+  filtro_de <- function(var) filtros[[paste0(var, sufixo)]]
+
+  if (nivel_atual == "nivel_1") {
+    dt <- dt[ano == filtros$ano]
+  } else if (nivel_atual == "nivel_2") {
+    dt <- dt[ano >= filtros$ano2[1] & ano <= filtros$ano2[2]]
+  } else {
+    dt <- dt[TRUE]
+  }
+
+  if (referencia) {
+    dt <- data.table::copy(dt)
+    dt[, class := "Brasil (valor de referência)"]
+    return(dt)
+  }
+
+  nivel_selecionado <- filtro_de("nivel")
+
+  dt <- switch(
+    nivel_selecionado,
+    "nacional" = dt,
+    "regional" = dt[regiao == filtro_de("regiao")],
+    "estadual" = dt[uf == filtro_de("estado")],
+    "macro" = dt[macro_r_saude == filtro_de("macro") & uf == filtro_de("estado_macro")],
+    "micro" = dt[r_saude == filtro_de("micro") & uf == filtro_de("estado_micro")],
+    "municipal" = dt[municipio == filtro_de("municipio") & uf == filtro_de("estado_municipio")],
+    "municipios_semelhantes" = dt[grupo_kmeans == tabela_aux_municipios$grupo_kmeans[which(tabela_aux_municipios$municipio == filtro_de("municipio") & tabela_aux_municipios$uf == filtro_de("estado_municipio"))]]
+  )
+
+  if (add_class) {
+    dt[, class := data.table::fcase(
+      nivel_selecionado == "nacional", valor_ou_na(if (filtros$comparar == "Não") "Brasil (valor de referência)" else if (filtros$mostrar_referencia == "nao_mostrar_referencia") "Brasil" else "Brasil (valor de referência)"),
+      nivel_selecionado == "regional", valor_ou_na(filtro_de("regiao")),
+      nivel_selecionado == "estadual", valor_ou_na(filtro_de("estado")),
+      nivel_selecionado == "macro", valor_ou_na(filtro_de("macro")),
+      nivel_selecionado == "micro", valor_ou_na(filtro_de("micro")),
+      nivel_selecionado == "municipal", valor_ou_na(filtro_de("municipio")),
+      nivel_selecionado == "municipios_semelhantes", "Média dos municípios semelhantes",
+      default = NA_character_
+    )]
+  }
+
+  dt
+}
+
+# Assinatura estavel de uma funcao pura (corpo + argumentos, sem o
+# environment), usada para compor a chave do cache de processa_bloco7.
+codigo_funcao <- function(fn) {
+  paste(c(deparse(args(fn)), deparse(body(fn))), collapse = "\n")
+}
+
+# Wrapper com cache: as funcoes de coluna/indicador dos modulos do Bloco 7 sao
+# puras; a chave cobre a base filtrada + filtros + escopo + o agrupamento de
+# colunas por indicador (nao apenas a uniao: indicadores diferentes podem
+# compartilhar colunas) + o codigo dos indicadores. Resultados nao sao mutados
+# in-place pelos modulos (sem := / setDT), entao podem ser compartilhados.
 processa_bloco7 <- function(data, input, filtros, cols_fn, indicadores_fn, localidade_resumo = "escolha1", comp = FALSE, referencia = FALSE) {
-  ## 1. Filtra e garante data.table ----------
+  cols <- cols_fn(input)
+  colunas <- unique(unlist(cols, use.names = FALSE))
+
+  chave <- chave_cache_interno(
+    "processa_bloco7", identidade_base(data),
+    comp, referencia, localidade_resumo,
+    cols, codigo_funcao(indicadores_fn),
+    rotulo_filtros(filtros)
+  )
+
+  resultado <- cache_interno_buscar(chave)
+  if (is.null(resultado)) {
+    resultado <- processa_bloco7_sem_cache(data, cols, colunas, indicadores_fn)
+    cache_interno_guardar(chave, resultado)
+  }
+  resultado
+}
+
+processa_bloco7_sem_cache <- function(data, cols, colunas, indicadores_fn) {
+  ## 1. Garante data.table ----------
   dt <- data |>
     data.table::as.data.table()
 
-  ## 2. Define colunas dinamicamente ----------
-  cols <- cols_fn(input)
-
-  ## 3. Função genérica para cálculo de indicadores -------
-  calcula_indicadores <- function(grp) {
+  ## 3. Agrega (soma) uma unica vez por grupo, em codigo nativo ----------
+  agrega <- function(grp) {
     dt[,
-       {
-         s <- lapply(cols, \(v) sum(as.numeric(unlist(.SD[, v, with = FALSE])), na.rm = TRUE))
-         names(s) <- names(cols)
-         indicadores_fn(s)
-       },
+       lapply(.SD, \(x) sum(as.numeric(x), na.rm = TRUE)),
        by = grp,
-       .SDcols = unique(unlist(cols))
+       .SDcols = colunas
     ]
   }
 
-  ## 4. Aplica para os dois níveis ----------
-  df_graficos <- calcula_indicadores(c("ano", "class"))
-  df_resumo <- calcula_indicadores("class")
+  ## 4. Aplica os indicadores sobre o agregado (poucas linhas) ----------
+  monta <- function(agg, grp) {
+    if (nrow(agg) == 0) {
+      # mantem as colunas dos indicadores tambem no caso vazio (somas zeradas)
+      s <- lapply(cols, function(v) 0)
+      names(s) <- names(cols)
+      return(cbind(agg[, grp, with = FALSE], data.table::rbindlist(list(indicadores_fn(s)), fill = TRUE)[0]))
+    }
+    linhas <- lapply(seq_len(nrow(agg)), function(i) {
+      valores <- agg[i, colunas, with = FALSE]
+      s <- lapply(cols, function(v) {
+        sum(vapply(v, function(cn) as.numeric(valores[[cn]][1]), numeric(1)))
+      })
+      names(s) <- names(cols)
+      data.table::rbindlist(list(indicadores_fn(s)), fill = TRUE)
+    })
+    cbind(agg[, grp, with = FALSE], data.table::rbindlist(linhas, fill = TRUE))
+  }
 
-  list(graficos = df_graficos, resumo = df_resumo)
+  ## 5. Graficos (ano x class) e resumo (class, derivado do agregado anual) ----------
+  agg_graficos <- agrega(c("ano", "class"))
+  agg_resumo <- agg_graficos[, lapply(.SD, sum), .SDcols = colunas, by = "class"]
+
+  list(
+    graficos = monta(agg_graficos, c("ano", "class")),
+    resumo = monta(agg_resumo, "class")
+  )
 }
 
-filtra_colunas_evitaveis_principais <- function(
+# Uma unica passada de filtro + agregacao, devolvendo ja as versoes longas
+# usadas por processa_causas (graficos por ano x class e resumo por class,
+# este derivado do agregado anual em vez de refiltrar a base inteira).
+agrega_colunas_evitaveis <- function(
     data,
     filtros,
     pesos,
     momentos,
     comp = FALSE,
     referencia = FALSE,
-    resumo = FALSE,
     localidade_resumo = "escolha1",
     prefixo_coluna = "evitaveis_fetal",
     nivel_atual = "nivel_2"
@@ -225,39 +323,74 @@ filtra_colunas_evitaveis_principais <- function(
       (todas_fases | grepl(momentos_pat, names(dt)))
   ]
 
-  # Filtragem por localidade e escopo
-  dt <- filtra_localidade(as.data.frame(dt), filtros, comp, referencia, localidade_resumo, nivel_atual = nivel_atual) |>
-    data.table::as.data.table()
+  # Filtragem por localidade e escopo (versao data.table; sempre retorna objeto novo)
+  dt <- filtra_localidade_dt(dt, filtros, comp, referencia, localidade_resumo, nivel_atual = nivel_atual)
 
-  dt <- dt[class == "Brasil (valor de referência)", class := "Brasil"]
+  if (any(dt[["class"]] == "Brasil (valor de referência)")) {
+    dt <- data.table::copy(dt)
+    dt[class == "Brasil (valor de referência)", class := "Brasil"]
+  }
 
-  # Define variáveis de agregação conforme o argumento `resumo`
-  agrupadores <- if (resumo) "class" else c("ano", "class")
+  soma <- function(x, by) {
+    x[
+      ,
+      lapply(.SD, sum, na.rm = TRUE),
+      by = by,
+      .SDcols = alvo_cols
+    ]
+  }
 
-  # Agregação e cálculo das proporções
-  out <- dt[
-    ,
-    lapply(.SD, sum, na.rm = TRUE),
-    by = agrupadores,
-    .SDcols = alvo_cols
-  ]
+  # Agregados: um por ano x class (graficos) e um por class, derivado dos
+  # totais anuais (equivalente a somar a base direta por class)
+  agg_graficos <- soma(dt, c("ano", "class"))
+  agg_resumo <- soma(agg_graficos, "class")
 
-  out[, total := rowSums(.SD), .SDcols = alvo_cols]
+  para_long <- function(agg, agrupadores) {
+    agg[, total := rowSums(.SD), .SDcols = alvo_cols]
+    agg[, (alvo_cols) := lapply(.SD, \(x) x / total * 100), .SDcols = alvo_cols]
+    data.table::melt(
+      agg,
+      id.vars = agrupadores,
+      measure.vars  = alvo_cols,
+      variable.name = "grupo_cid10",
+      value.name = "porc_obitos"
+    )
+  }
 
-  out[, (alvo_cols) := lapply(.SD, \(x) x / total * 100), .SDcols = alvo_cols]
-
-  # Reestruturação em formato longo
-  out_long <- data.table::melt(
-    out,
-    id.vars = agrupadores,
-    measure.vars  = alvo_cols,
-    variable.name = "grupo_cid10",
-    value.name = "porc_obitos"
+  list(
+    graficos = para_long(agg_graficos, c("ano", "class")),
+    resumo = para_long(agg_resumo, "class")
   )
-
-  return(as.data.frame(out_long))
 }
 
+filtra_colunas_evitaveis_principais <- function(
+    data,
+    filtros,
+    pesos,
+    momentos,
+    comp = FALSE,
+    referencia = FALSE,
+    resumo = FALSE,
+    localidade_resumo = "escolha1",
+    prefixo_coluna = "evitaveis_fetal",
+    nivel_atual = "nivel_2"
+) {
+  agregado <- agrega_colunas_evitaveis(
+    data = data,
+    filtros = filtros,
+    pesos = pesos,
+    momentos = momentos,
+    comp = comp,
+    referencia = referencia,
+    localidade_resumo = localidade_resumo,
+    prefixo_coluna = prefixo_coluna,
+    nivel_atual = nivel_atual
+  )
+  as.data.frame(if (resumo) agregado$resumo else agregado$graficos)
+}
+
+# Wrapper com cache: resultados sao pequenos (tabelas longas agregadas) e a
+# chave cobre a base + todos os argumentos que afetam o resultado.
 processa_causas <- function(
     data,
     pesos,
@@ -270,35 +403,49 @@ processa_causas <- function(
     prefixo_coluna = "evitaveis_fetal",
     nivel_atual = "nivel_2"
 ) {
-
-  # 1. Preparar os dados
-  dt_graficos <- data.table::as.data.table(
-    filtra_colunas_evitaveis_principais(
-      data = data,
-      comp = comp,
-      referencia = referencia,
-      filtros = filtros,
-      pesos = pesos,
-      momentos = momentos,
-      prefixo_coluna = prefixo_coluna,
-      nivel_atual = nivel_atual
+  chave <- chave_cache_interno(
+    "processa_causas", identidade_base(data),
+    pesos, momentos, grupos, comp, referencia, localidade_resumo, prefixo_coluna, nivel_atual,
+    rotulo_filtros(filtros)
+  )
+  resultado <- cache_interno_buscar(chave)
+  if (is.null(resultado)) {
+    resultado <- processa_causas_sem_cache(
+      data, pesos, momentos, filtros, comp, referencia, grupos, localidade_resumo, prefixo_coluna, nivel_atual
     )
+    cache_interno_guardar(chave, resultado)
+  }
+  resultado
+}
+
+processa_causas_sem_cache <- function(
+    data,
+    pesos,
+    momentos,
+    filtros,
+    comp = FALSE,
+    referencia = FALSE,
+    grupos = NULL,
+    localidade_resumo = "escolha1",
+    prefixo_coluna = "evitaveis_fetal",
+    nivel_atual = "nivel_2"
+) {
+
+  # 1. Preparar os dados (uma unica passada de filtro + agregacao)
+  agregado <- agrega_colunas_evitaveis(
+    data = data,
+    filtros = filtros,
+    pesos = pesos,
+    momentos = momentos,
+    comp = comp,
+    referencia = referencia,
+    localidade_resumo = localidade_resumo,
+    prefixo_coluna = prefixo_coluna,
+    nivel_atual = nivel_atual
   )
 
-  dt_resumo <- data.table::as.data.table(
-    filtra_colunas_evitaveis_principais(
-      data = data,
-      comp = comp,
-      referencia = referencia,
-      resumo = TRUE,
-      filtros = filtros,
-      pesos = pesos,
-      momentos = momentos,
-      localidade_resumo = localidade_resumo,
-      prefixo_coluna = prefixo_coluna,
-      nivel_atual = nivel_atual
-    )
-  )
+  dt_graficos <- data.table::copy(data.table::as.data.table(agregado$graficos))
+  dt_resumo <- data.table::copy(data.table::as.data.table(agregado$resumo))
 
   # 2. Filtragem por grupos (se houver)
   padrao <- if (!is.null(grupos)) paste(grupos, collapse = "|") else FALSE
