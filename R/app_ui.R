@@ -13,7 +13,7 @@
 app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/global/custom.css"),
-    tags$head(tags$script(src = "funcoes_javascript.js")),
+    tags$head(tags$script(src = "www/global/funcoes_javascript.js")),
     tags$style(HTML(
       "
       .shiny-output-error-validation {
@@ -164,8 +164,7 @@ app_ui <- function(request) {
                     max = 2026,
                     step = 1,
                     width = "95%"
-                  ),
-                  style = "display: none;"
+                  )
                 ),
                 conditionalPanel(
                   condition = "input.abas != 'nivel_1'",
@@ -180,8 +179,7 @@ app_ui <- function(request) {
                     step = 1,
                     sep = '',
                     width = "90%"
-                  ),
-                  style = "display: none;"
+                  )
                 )
               ),
               column(
@@ -572,8 +570,7 @@ app_ui <- function(request) {
                     align = "center"
                   )
                 )
-              ),
-              style = "display: none;"
+              )
             ),
             conditionalPanel(
               condition = "input.abas == 'nivel_3'",
@@ -768,8 +765,7 @@ app_ui <- function(request) {
                     )
                   )
                 )
-              ),
-              style = "display: none;"
+              )
             ),
             fluidRow(
               column(
@@ -787,8 +783,7 @@ app_ui <- function(request) {
                 align = "center"
               )
             )
-          ),
-          style = "display: none;"
+          )
         ),
 
         tags$script(HTML(
