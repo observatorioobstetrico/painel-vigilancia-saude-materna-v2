@@ -544,28 +544,6 @@ base_incompletude <- dplyr::full_join(
 ## Carregando a base que contém as informações necessárias para o cálcula da referência de baixo peso
 base_referencia_baixo_peso <- read.csv("data-raw/csv/Nasc_baixo_peso_muni2006_2010.csv")
 
-## Carregando a base que contém os fatores de correção para a RMM
-rmm_fator_de_correcao <- read.csv("data-raw/csv/rmm_fator_de_correcao.csv", sep = ";", dec = ",", fileEncoding = "utf-8")[, -c(2, 3, 4)] |>
-  janitor::clean_names() |>
-  tidyr::pivot_longer(
-    cols = !localidade,
-    names_to = "ano",
-    values_to = "fator_de_correcao"
-  ) |>
-  dplyr::mutate(
-    ano = dplyr::case_when(
-      ano == "x2012" ~ 2012,
-      ano == "x2013" ~ 2013,
-      ano == "x2014" ~ 2014,
-      ano == "x2015" ~ 2015,
-      ano == "x2016" ~ 2016,
-      ano == "x2017" ~ 2017,
-      ano == "x2018" ~ 2018,
-      ano == "x2019" ~ 2019,
-      ano == "x2020" ~ 2020,
-    )
-  )
-
 ## Carregando a base que contém as RMM corrigidas para estado, região e Brail de 2012 a 2021
 rmm_corrigida <- read.csv("data-raw/csv/rmm_corrigida_2012-2024.csv") |>
   dplyr::select(ano, localidade, RMM) |>
@@ -611,40 +589,44 @@ df_cid10 <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df
 
 
 # Exportando os arquivos para dentro do painel ----------------------------
-usethis::use_data(bloco1, overwrite = TRUE)
-usethis::use_data(bloco2, overwrite = TRUE)
-usethis::use_data(bloco3, overwrite = TRUE)
-usethis::use_data(bloco4, overwrite = TRUE)
-usethis::use_data(bloco4_deslocamento_muni, overwrite = TRUE)
-usethis::use_data(bloco4_deslocamento_uf, overwrite = TRUE)
-usethis::use_data(bloco4_deslocamento_macrorregiao, overwrite = TRUE)
-usethis::use_data(bloco4_profissional, overwrite = TRUE)
-usethis::use_data(bloco5, overwrite = TRUE)
-usethis::use_data(malformacao, overwrite = TRUE)
-usethis::use_data(bloco6, overwrite = TRUE)
-usethis::use_data(bloco7_fetal, overwrite = TRUE)
-usethis::use_data(bloco7_neonatal, overwrite = TRUE)
-usethis::use_data(bloco7_perinatal, overwrite = TRUE)
-usethis::use_data(bloco7_morbidade_neonatal, overwrite = TRUE)
-usethis::use_data(bloco7_evitaveis_fetal, overwrite = TRUE)
-usethis::use_data(bloco7_evitaveis_neonatal, overwrite = TRUE)
-usethis::use_data(bloco8_grafico_evitaveis_neonatal, overwrite = TRUE)
-usethis::use_data(bloco7_evitaveis_perinatal, overwrite = TRUE)
-usethis::use_data(bloco7_principais_fetal, overwrite = TRUE)
-usethis::use_data(bloco7_principais_neonatal, overwrite = TRUE)
-usethis::use_data(bloco7_principais_perinatal, overwrite = TRUE)
-usethis::use_data(bloco7_dist_morbidade, overwrite = TRUE)
-usethis::use_data(base_garbage_code, overwrite = TRUE)
+# Bases pequenas ficam em data/ (lazy-data); as volumosas vão para
+# inst/app/dados/*.parquet, com carregamento sob demanda (ver utils_parquet.R
+# e R/acesso_dados.R).
+source("data-raw/utils_parquet.R")
+
+usar_dados_parquet(bloco1)
+usar_dados_parquet(bloco2)
+usar_dados_parquet(bloco3)
+usar_dados_parquet(bloco4)
+usar_dados_parquet(bloco4_deslocamento_muni)
+usar_dados_parquet(bloco4_deslocamento_uf)
+usar_dados_parquet(bloco4_deslocamento_macrorregiao)
+usar_dados_parquet(bloco4_profissional)
+usar_dados_parquet(bloco5)
+usar_dados_parquet(malformacao)
+usar_dados_parquet(bloco6)
+usar_dados_parquet(bloco7_fetal)
+usar_dados_parquet(bloco7_neonatal)
+usar_dados_parquet(bloco7_perinatal)
+usar_dados_parquet(bloco7_morbidade_neonatal)
+usar_dados_parquet(bloco7_evitaveis_fetal)
+usar_dados_parquet(bloco7_evitaveis_neonatal)
+usar_dados_parquet(bloco8_grafico_evitaveis_neonatal)
+usar_dados_parquet(bloco7_evitaveis_perinatal)
+usar_dados_parquet(bloco7_principais_fetal)
+usar_dados_parquet(bloco7_principais_neonatal)
+usar_dados_parquet(bloco7_principais_perinatal)
+usar_dados_parquet(bloco7_dist_morbidade)
+usar_dados_parquet(base_garbage_code)
 usethis::use_data(df_cid10, overwrite = TRUE)
-usethis::use_data(base_incompletude, overwrite = TRUE)
+usar_dados_parquet(base_incompletude)
 usethis::use_data(tabela_aux_municipios, overwrite = TRUE)
 usethis::use_data(municipios_choices, overwrite = TRUE)
 usethis::use_data(estados_choices, overwrite = TRUE)
 usethis::use_data(micro_r_saude_choices, overwrite = TRUE)
 usethis::use_data(macro_r_saude_choices, overwrite = TRUE)
-usethis::use_data(base_referencia_baixo_peso, overwrite = TRUE)
+usar_dados_parquet(base_referencia_baixo_peso)
 usethis::use_data(tabela_indicadores, overwrite = TRUE)  #Utilizada no nível 3
 usethis::use_data(tabela_radar, overwrite = TRUE)  #Utilizada no gráfico de radar
-usethis::use_data(rmm_fator_de_correcao, overwrite = TRUE)
-usethis::use_data(rmm_corrigida, overwrite = TRUE)
+usar_dados_parquet(rmm_corrigida)
 

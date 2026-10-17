@@ -531,13 +531,14 @@ base_cobertura_uf_regioes_2015_2021 <- dplyr::full_join(
   dplyr::select(!c(sub_notificacao_ms.x, sub_notificacao_ms.y))
 
 
-#Exportando as bases
-usethis::use_data(base_cobertura_muni_2015_2021, overwrite = TRUE)
-usethis::use_data(base_cobertura_uf_regioes_2015_2021, overwrite = TRUE)
-usethis::use_data(sub_registro_sinasc_muni_2015_2021, overwrite = TRUE)
-usethis::use_data(sub_registro_sim_muni_2015_2021, overwrite = TRUE)
-usethis::use_data(sub_registro_sinasc_uf_regioes_2015_2021, overwrite = TRUE)
-usethis::use_data(sub_registro_sim_uf_regioes_2015_2021, overwrite = TRUE)
+#Exportando as bases (volumosas vão para inst/app/dados/*.parquet - ver utils_parquet.R)
+source("data-raw/utils_parquet.R")
+usar_dados_parquet(base_cobertura_muni_2015_2021)
+usar_dados_parquet(base_cobertura_uf_regioes_2015_2021)
+usar_dados_parquet(sub_registro_sinasc_muni_2015_2021)
+usar_dados_parquet(sub_registro_sim_muni_2015_2021)
+usar_dados_parquet(sub_registro_sinasc_uf_regioes_2015_2021)
+usar_dados_parquet(sub_registro_sim_uf_regioes_2015_2021)
 
 
 
