@@ -466,7 +466,16 @@
    • A barra .div-titulo fica fixed abaixo da navbar e se auto-oculta ao rolar
      para baixo (restaurada ao rolar para cima); o .div-titulo-spacer compensa
      a altura no fluxo.
+   • A sidebar passa a ter largura utilizável (não cobre a tela inteira), com
+     cabeçalho próprio, botão de fechar e itens com área de toque confortável;
+     o clique em um item do menu fecha o menu automaticamente
+     (ver funcoes_javascript.js).
    ============================================================================ */
+
+/* Botão de fechar do drawer: só existe no mobile */
+.btn-sidebar-fechar {
+  display: none;
+}
 
 /* === BARRA DE TÍTULO FIXA NO MOBILE === */
 @media (max-width: 991.98px) {
@@ -496,6 +505,184 @@
     font-size: 18px;
   }
 }
+
+/* === SIDEBAR MOBILE (DRAWER) ===
+   Em telas pequenas o menu lateral é um drawer com identidade própria:
+   cabeçalho com logo, título do painel e botão de fechar; itens com área de
+   toque confortável; blocos numerados em badges; destaque claro da seção
+   ativa. O overlay fecha ao toque e o scroll do fundo fica travado. */
+@media (max-width: 991.98px) {
+  /* Largura utilizável: antes (500px) a sidebar cobria a tela inteira e não
+     sobrava área do overlay para fechar o menu. O drawer começa abaixo da
+     navbar para que o cabeçalho (logo + título + fechar) fique visível. */
+  .main-sidebar {
+    top: var(--altura-navbar, calc(3.5rem + 1px)) !important;
+    height: calc(100vh - var(--altura-navbar, calc(3.5rem + 1px))) !important;
+    width: min(84vw, 330px) !important;
+    box-shadow: 4px 0 24px rgba(10, 30, 60, 0.28) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* O menu abaixo do cabeçalho ocupa o restante da altura e rola sozinho */
+  .main-sidebar .sidebar {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto !important;
+    margin-top: 0 !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* --- Cabeçalho do drawer --- */
+  body.layout-navbar-fixed .wrapper .main-sidebar .brand-link {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    position: static !important;
+    width: 100% !important;
+    min-height: 62px;
+    padding: 10px 12px 10px 14px !important;
+    background-color: #0A1E3C;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    overflow: visible;
+    text-decoration: none;
+  }
+
+  .main-sidebar .brand-link .brand-image {
+    float: none;
+    margin: 0;
+    max-height: 38px;
+    width: auto;
+    opacity: 1;
+  }
+
+  .main-sidebar .brand-link .brand-text {
+    flex: 1 1 auto;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.25;
+    white-space: normal;
+    padding: 0;
+  }
+
+  /* Botão de fechar (inserido pelo JS) */
+  .btn-sidebar-fechar {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .btn-sidebar-fechar:hover,
+  .btn-sidebar-fechar:active {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  /* --- Itens do menu --- */
+  .main-sidebar .nav-sidebar {
+    padding-top: 8px;
+  }
+
+  .main-sidebar .nav-sidebar > .nav-item > .nav-link {
+    min-height: 46px;
+    padding: 11px 14px;
+    margin: 3px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    align-items: center;
+  }
+
+  .main-sidebar .nav-sidebar > .nav-item > .nav-link .nav-icon {
+    width: 22px;
+    margin-right: 10px;
+    text-align: center;
+  }
+
+  /* Estado de toque */
+  .main-sidebar .nav-sidebar .nav-link:active {
+    opacity: 0.85;
+  }
+
+  /* --- Subitens (blocos do nível 2) --- */
+  .main-sidebar .nav-treeview > .nav-item > .nav-link {
+    min-height: 44px;
+    padding: 9px 12px;
+    margin: 2px 10px 2px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.3;
+    align-items: flex-start;
+  }
+
+  /* Números dos blocos como badges circulares (o glifo do Font Awesome já
+     fornece o dígito; aqui ele ganha um círculo de destaque) */
+  .main-sidebar .nav-treeview .nav-link > i.fas {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    margin: 1px 10px 0 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(10, 30, 60, 0.08);
+    color: #0A1E3C;
+    font-size: 12px;
+  }
+
+  .main-sidebar .nav-treeview > .nav-item > .nav-link.active {
+    background-color: #e8f1fd !important;
+    color: #0A1E3C !important;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 #2f80ed;
+  }
+
+  .main-sidebar .nav-treeview > .nav-item > .nav-link.active > i.fas {
+    background: #2f80ed;
+    color: #fff;
+  }
+
+  /* --- Item ativo --- */
+  .main-sidebar .nav-sidebar .nav-link.active {
+    font-weight: 600;
+  }
+
+  /* Fundo travado enquanto o drawer está aberto */
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  /* A navbar permanece acima da sidebar aberta: o hamburger continua
+     acessível para fechar o menu. */
+  body.sidebar-open .main-header {
+    z-index: 1039 !important;
+  }
+
+  /* Overlay: escurece o conteúdo e fica abaixo da navbar */
+  #sidebar-overlay {
+    top: var(--altura-navbar, calc(3.5rem + 1px));
+    background-color: rgba(10, 30, 60, 0.55);
+  }
+
+  /* Itens com texto longo quebram linha em vez de vazar para fora */
+  .nav-sidebar > .nav-item > .nav-link,
+  .nav-sidebar .nav-link p {
+    white-space: normal;
+  }
+}
+
 /* === BARRA DE TÍTULO — COMPACTA NO MOBILE === */
 @media (max-width: 991.98px) {
   .div-titulo {
@@ -508,3 +695,207 @@
   }
 }
 
+/* === PAINEL DE FILTROS DESLIZANTE (MOBILE) ===
+   Os filtros globais viram um painel da direita acionado pelo botão flutuante
+   "Filtros"; o card de filtros permanece intacto no desktop. */
+
+.filtros-mobile-close-header,
+.btn-filtros-fab,
+.filtros-mobile-backdrop {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .filtros-global-wrapper {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(92vw, 420px);
+    z-index: 1200;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    background-color: #fff;
+    padding: 0 !important;
+    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.22);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body.filtro-mobile-aberto .filtros-global-wrapper {
+    transform: translateX(0);
+  }
+
+  .filtros-global-wrapper .card {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    height: auto !important;
+    min-height: 100% !important;
+  }
+
+  /* Cabeçalho de fechar (visível apenas no mobile) */
+  .filtros-mobile-close-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background-color: #0A1E3C;
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .btn-filtros-fechar {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .btn-filtros-fechar:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Botão flutuante de abrir os filtros */
+  .btn-filtros-fab {
+    display: flex;
+    position: fixed;
+    bottom: 22px;
+    right: 18px;
+    padding: 0 20px;
+    height: 48px;
+    border-radius: 24px;
+    background-color: #0A1E3C;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    z-index: 1030;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-filtros-fab:hover {
+    background-color: #32A0FF;
+  }
+
+  /* Backdrop do painel */
+  .filtros-mobile-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1199;
+  }
+
+  body.filtro-mobile-aberto .filtros-mobile-backdrop {
+    display: block;
+  }
+
+  body.filtro-mobile-aberto {
+    overflow: hidden;
+  }
+
+  /* Os dropdowns dos selects precisam ficar acima do painel */
+  body.filtro-mobile-aberto .selectize-dropdown,
+  .filtros-global-wrapper .selectize-dropdown {
+    z-index: 1300 !important;
+  }
+}
+
+/* === SOBRE — logos responsivos === */
+@media (max-width: 991.98px) {
+  .outer img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* === APARECIDA — card da imagem === */
+.aparecida-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55vw;
+  height: 67vh;
+}
+
+.aparecida-img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media (max-width: 991.98px) {
+  .aparecida-card {
+    width: 92vw;
+    height: auto;
+    margin: 10px auto;
+  }
+
+  .aparecida-img {
+    max-height: 80vh;
+  }
+}
+
+/* === DOCUMENTAÇÃO === */
+.doc-iframe {
+  display: block;
+  background: #000;
+  margin: auto;
+  height: 83vh;
+  width: 90vw;
+}
+
+.doc-mobile-aviso {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .doc-mobile-aviso {
+    display: block;
+    text-align: center;
+    margin: 12px 0;
+  }
+}
+
+/* === COLUNAS DO BOOTSTRAP NO MOBILE ===
+   As classes col-sm-* só entram em vigor a partir de 576px; abaixo disso as
+   colunas caem para a largura do conteúdo (tabelas/gráficos espremidos).
+   Aqui todas as colunas empilham em largura total no celular. */
+@media (max-width: 575.98px) {
+  .row > [class*="col-sm-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Paddings menores: os cards aninhados consumiam grande parte da largura
+     útil da tela (tabelas/gráficos ficavam com ~metade do espaço). */
+  .card-body {
+    padding: 0.85rem;
+  }
+}
+
+/* === TABELAS (reactable) NO MOBILE ===
+   Sem largura mínima as colunas são esmagadas (texto quebrando letra a letra);
+   aqui a tabela mantém largura legível e o container rola na horizontal. */
+@media (max-width: 991.98px) {
+  div.reactable {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  div.reactable .ReactTable {
+    min-width: 720px;
+  }
+}

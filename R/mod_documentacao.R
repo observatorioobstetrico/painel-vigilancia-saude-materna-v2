@@ -36,12 +36,19 @@ mod_documentacao_ui <- function(id){
     #       "
     #   )
     # ),
+    div(
+      class = "doc-mobile-aviso",
+      HTML(
+        "
+        <a class = 'btn action-button btn-outline-primary' href = 'www/Documenta%C3%A7%C3%A3o%20dos%20indicadores.pdf' target = '_blank'>
+          <i class = 'fa-solid fa-file-pdf'></i> &nbsp;
+          <span class = 'fonte-muito-grande'> Abrir a documentação (PDF) </span>
+        </a>
+        "
+      )
+    ),
     tags$iframe(
-      style = "display: block;       /* iframes are inline by default */
-    background: #000;
-    margin: auto;
-    height: 83vh;        /* Viewport-relative units */
-    width: 90vw;",
+      class = "doc-iframe",
       src = "www/Documentação dos indicadores.pdf",
       align = "center"
     )

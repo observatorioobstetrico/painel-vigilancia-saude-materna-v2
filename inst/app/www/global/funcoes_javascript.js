@@ -125,3 +125,92 @@ $(document).on('shiny:inputchanged', function(event) {
     }
   });
 })();
+
+// =============================================================================
+// 3. MOBILE — SIDEBAR (DRAWER)
+//    Ao escolher uma aba no menu em telas pequenas, a sidebar se fecha para
+//    dar lugar ao conteúdo (o AdminLTE só fecha pelo overlay ou pelo
+//    hamburger). Só links folha (com data-value) disparam o fechamento —
+//    itens de grupo (treeview) continuam expandindo normalmente.
+// =============================================================================
+
+$(document).on('click', '.main-sidebar a[data-value]', function() {
+  if (window.innerWidth <= 991.98 && document.body.classList.contains('sidebar-open')) {
+    $('[data-widget="pushmenu"]').trigger('click');
+  }
+});
+
+// Cabeçalho do drawer: botão de fechar (saída explícita além do hamburger e
+// do overlay) e rolagem até a seção ativa ao abrir (orientação).
+$(document).ready(function() {
+  var brandLink = document.querySelector('.main-sidebar .brand-link');
+  if (brandLink && !brandLink.querySelector('.btn-sidebar-fechar')) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-sidebar-fechar';
+    btn.setAttribute('aria-label', 'Fechar menu');
+    btn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
+    btn.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      $('[data-widget="pushmenu"]').trigger('click');
+    });
+    brandLink.appendChild(btn);
+  }
+});
+
+// Ao abrir o drawer, rola o menu até a seção ativa (orientação)
+$(document).on('click', '[data-widget="pushmenu"]', function() {
+  if (window.innerWidth <= 991.98) {
+    setTimeout(function() {
+      if (!document.body.classList.contains('sidebar-open')) return;
+      var ativo = document.querySelector('.main-sidebar .nav-link.active');
+      if (ativo && ativo.scrollIntoView) {
+        ativo.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }, 400);
+  }
+});
+
+// =============================================================================
+// 4. MOBILE — PAINEL DE FILTROS DESLIZANTE
+//    Os filtros globais viram um painel da direita, aberto pelo botão
+//    flutuante "Filtros" e fechado pelo X, pelo backdrop ou ao buscar.
+// =============================================================================
+
+function fecharFiltrosMobile() {
+  document.body.classList.remove('filtro-mobile-aberto');
+}
+
+$(document).on('click', '#btn-filtros-fab', function() {
+  document.body.classList.add('filtro-mobile-aberto');
+});
+
+$(document).on('click', '#btn-filtros-fechar, .filtros-mobile-backdrop', function() {
+  fecharFiltrosMobile();
+});
+
+// Ao buscar, fecha o painel para revelar os resultados (pequeno atraso para o
+// clique chegar ao Shiny antes do fechamento).
+$(document).on('click', '#pesquisar', function() {
+  if (window.innerWidth <= 991.98) {
+    setTimeout(fecharFiltrosMobile, 150);
+  }
+});
+
+// Trocar de aba fecha o painel e a sidebar
+$(document).on('shiny:inputchanged', function(event) {
+  if (event.name === 'abas') {
+    fecharFiltrosMobile();
+  }
+});
+
+// Tecla ESC fecha o painel de filtros e o menu lateral
+$(document).on('keydown', function(event) {
+  if (event.key === 'Escape') {
+    fecharFiltrosMobile();
+    if (window.innerWidth <= 991.98 && document.body.classList.contains('sidebar-open')) {
+      $('[data-widget="pushmenu"]').trigger('click');
+    }
+  }
+});

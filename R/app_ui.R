@@ -257,7 +257,22 @@ constroi_app_ui <- function(request) {
         div(id = "div-titulo-spacer", class = "div-titulo-spacer"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
-          bs4Dash::bs4Card(
+          div(
+            class = "filtros-global-wrapper",
+            div(
+              class = "filtros-mobile-close-header",
+              div(
+                style = "display: flex; align-items: center; gap: 8px;",
+                tags$i(class = "fas fa-filter", style = "font-size: 0.9em; opacity: 0.85;"),
+                span(class = "fonte-muito-grande", tags$b("Filtros"))
+              ),
+              tags$button(
+                id = "btn-filtros-fechar",
+                class = "btn-filtros-fechar",
+                tags$i(class = "fas fa-times")
+              )
+            ),
+            bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b class = 'fonte-indicador-nivel3'> Selecione os filtros de interesse: </b>"),
             icon = icon("filter"),
@@ -896,6 +911,14 @@ constroi_app_ui <- function(request) {
             )
           )
         ),
+        tags$button(
+          id = "btn-filtros-fab",
+          class = "btn-filtros-fab",
+          tags$i(class = "fas fa-filter"),
+          span("Filtros")
+        ),
+        div(class = "filtros-mobile-backdrop")
+      ),
 
         tags$script(HTML(
           "
@@ -971,9 +994,9 @@ constroi_app_ui <- function(request) {
             HTML(
               '
               <div style = "display: flex; justify-content: center; align-items: center;">
-                <div class="card2 blue2" style = "display: flex; justify-content: center; align-items: center; width: 55vw; height: 67vh;">
+                <div class="card2 blue2 aparecida-card">
                   <a href = "https://observatorioobstetricobr.org/projetos/aparecida-uma-historia-sobre-a-vunerabilidade-da-mulher-brasileira-a-morte-materna/" target = "_blank">
-                    <image src = "www/aparecida.png" style = "max-width: 100%; max-height: 100%;">
+                    <img src = "www/aparecida.png" class = "aparecida-img">
                   </a>
                 </div>
               </div>
