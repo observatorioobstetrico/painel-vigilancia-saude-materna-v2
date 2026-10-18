@@ -10,12 +10,6 @@
 mod_nivel_3_ui <- function(id){
   ns <- NS(id)
   tagList(
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(class = "fonte-titulos-pagina", tags$b(HTML("Visão detalhada dos indicadores")), htmlOutput(ns("titulo_localidade"), inline = TRUE), class = 'fonte-titulos-pagina', style = "padding-left: 0.4em;"),
-      hr(style = "margin-bottom: 0px;")
-    ),
     bs4Dash::bs4TabCard(
       id = ns("tabset1"),
       width = 12,

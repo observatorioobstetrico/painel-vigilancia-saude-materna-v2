@@ -27,12 +27,6 @@ mod_bloco_7_ui <- function(id) {
         "
       )
     ),
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(class = "fonte-titulos-pagina", tags$b(HTML("Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
-      hr(style = "margin-bottom: 0px;")
-    ),
     bs4Dash::bs4TabCard(
       id = ns("tabset1"),
       width = 12,
@@ -63,6 +57,48 @@ mod_bloco_7_ui <- function(id) {
 mod_bloco_7_server <- function(id, filtros){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
+
+    ## Criando o output que recebe a localidade e o ano escolhidos ------------
+    output$titulo_localidade <- renderUI({
+      if (length(filtros()$ano2[1]:filtros()$ano2[2]) > 1) {
+        ano <- glue::glue("{filtros()$ano2[1]} a {filtros()$ano2[2]}")
+      } else {
+        ano <- filtros()$ano2[1]
+      }
+
+      if (filtros()$comparar == "Não") {
+        local1 <- dplyr::case_when(
+          filtros()$nivel == "nacional" ~ "Brasil",
+          filtros()$nivel == "regional" ~ filtros()$regiao,
+          filtros()$nivel == "estadual" ~ filtros()$estado,
+          filtros()$nivel == "macro" ~ filtros()$macro,
+          filtros()$nivel == "micro" ~ filtros()$micro,
+          filtros()$nivel == "municipal" ~ filtros()$municipio
+        )
+        texto <- glue::glue("({local1}, {ano})")
+      } else {
+        local1 <- dplyr::case_when(
+          filtros()$nivel == "nacional" ~ "Brasil",
+          filtros()$nivel == "regional" ~ filtros()$regiao,
+          filtros()$nivel == "estadual" ~ filtros()$estado,
+          filtros()$nivel == "macro" ~ filtros()$macro,
+          filtros()$nivel == "micro" ~ filtros()$micro,
+          filtros()$nivel == "municipal" ~ filtros()$municipio
+        )
+        local2 <- dplyr::case_when(
+          filtros()$nivel2 == "nacional" ~ "Brasil",
+          filtros()$nivel2 == "regional" ~ filtros()$regiao2,
+          filtros()$nivel2 == "estadual" ~ filtros()$estado2,
+          filtros()$nivel2 == "macro" ~ filtros()$macro2,
+          filtros()$nivel2 == "micro" ~ filtros()$micro2,
+          filtros()$nivel2 == "municipal" ~ filtros()$municipio2,
+          filtros()$nivel2 == "municipios_semelhantes" ~ "municípios semelhantes"
+        )
+        texto <- glue::glue("({local1} e {local2}, {ano})")
+      }
+
+      tags$b(texto, class = "fonte-titulos-pagina")
+    })
 
     mod_bloco_7_fetal_server("bloco_7_fetal_1", filtros = filtros)
     mod_bloco_7_perinatal_server("bloco_7_perinatal_1", filtros = filtros)

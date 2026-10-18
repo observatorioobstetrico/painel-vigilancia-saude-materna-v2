@@ -27,12 +27,6 @@ mod_bloco_5_ui <- function(id) {
         "
       )
     ),
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(class = "fonte-titulos-pagina", tags$b(HTML("Condições de nascimento: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
-      hr(style = "margin-bottom: 0px;")
-    ),
     conditionalPanel(
       ns = ns,
       condition = "output.comparar == 'Sim'",

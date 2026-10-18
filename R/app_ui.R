@@ -36,6 +36,30 @@ app_ui <- function(request) {
   )
 }
 
+#' Monta um titulo de aba da barra `.div-titulo`
+#'
+#' O texto do titulo e estatico; a localidade/periodo dinamico e um output
+#' namespaced renderizado pelo server do modulo correspondente (ex.:
+#' `nivel_1_1-titulo_localidade`). O elemento `htmlOutput` vive na barra
+#' global, mas o binding do Shiny funciona em qualquer lugar do DOM.
+#'
+#' @noRd
+item_titulo_aba <- function(condition, texto, output_id = NULL) {
+  conditionalPanel(
+    condition = condition,
+    div(
+      class = "div-titulo-conteudo",
+      h2(
+        tags$b(
+          HTML(texto),
+          if (!is.null(output_id)) htmlOutput(output_id, inline = TRUE)
+        ),
+        class = "div-titulo-titulo"
+      )
+    )
+  )
+}
+
 #' @noRd
 constroi_app_ui <- function(request) {
   tagList(
@@ -170,7 +194,67 @@ constroi_app_ui <- function(request) {
         )
       ),
       bs4Dash::bs4DashBody(
-        div(class = "div-dependente"),
+        div(
+          class = "div-titulo",
+          item_titulo_aba(
+            condition = "input.abas == 'sobre'",
+            texto = "Painel de Vigilância da Saúde Materna e Perinatal"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'nivel_1'",
+            texto = "Resumo dos blocos de indicadores",
+            output_id = "nivel_1_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_1'",
+            texto = "Condições socioeconômicas e de acesso ao serviço de saúde: série histórica",
+            output_id = "bloco_1_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_2'",
+            texto = "Planejamento reprodutivo: série histórica",
+            output_id = "bloco_2_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_3'",
+            texto = "Assistência pré-natal: série histórica",
+            output_id = "bloco_3_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_4'",
+            texto = "Assistência ao parto: série histórica",
+            output_id = "bloco_4_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_5'",
+            texto = "Condições de nascimento: série histórica",
+            output_id = "bloco_5_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_6'",
+            texto = "Mortalidade e morbidade materna: série histórica",
+            output_id = "bloco_6_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'bloco_7'",
+            texto = "Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica",
+            output_id = "bloco_7_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'nivel_3'",
+            texto = "Visão detalhada dos indicadores",
+            output_id = "nivel_3_1-titulo_localidade"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'documentacao'",
+            texto = "Documentação dos indicadores"
+          ),
+          item_titulo_aba(
+            condition = "input.abas == 'aparecida'",
+            texto = "A história de Aparecida"
+          )
+        ),
+        div(id = "div-titulo-spacer", class = "div-titulo-spacer"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
           bs4Dash::bs4Card(
@@ -872,17 +956,6 @@ constroi_app_ui <- function(request) {
           ),
           bs4Dash::bs4TabItem(
             tabName = "aparecida",
-            div(
-              class = "div-titulo",
-              HTML(
-                "<span style='display: block; margin-bottom: 15px;'> </span>"
-              ),
-              h2(
-                tags$b("A história de Aparecida"),
-                style = "padding-left: 0.3em"
-              ),
-              hr(style = "margin-bottom: 0px;")
-            ),
             HTML(
               "
               <p align='justify'; class = 'fonte-muito-grande' style='padding: 0 0.5em'>

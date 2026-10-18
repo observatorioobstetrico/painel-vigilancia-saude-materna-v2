@@ -10,12 +10,6 @@
 mod_bloco_6_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(class = "fonte-titulos-pagina", tags$b(HTML("Mortalidade e morbidade materna: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
-      hr(style = "margin-bottom: 0px;")
-    ),
     bs4Dash::bs4TabCard(
       id = ns("tabset1"),
       width = 12,

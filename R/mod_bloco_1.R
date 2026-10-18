@@ -12,13 +12,6 @@ mod_bloco_1_ui <- function(id){
   ns <- NS(id)
   tagList(
     shinyalert::useShinyalert(force = TRUE),  # Set up shinyalert
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(class = "fonte-titulos-pagina", tags$b(HTML("Condições socioeconômicas e de acesso ao serviço de saúde: série histórica"), htmlOutput(ns("titulo_localidade"), inline = TRUE)), style = "padding-left: 0.4em"),
-      hr(style = "margin-bottom: 0px;")
-    ),
-    div(style = "top: 56px; position: fixed"),
     fluidRow(
       column(
         width = 4,

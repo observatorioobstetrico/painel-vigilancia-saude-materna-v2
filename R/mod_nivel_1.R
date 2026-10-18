@@ -20,19 +20,6 @@ mod_nivel_1_ui <- function(id) {
     spinner.type = 6
   )
   tagList(
-    div(
-      class = "div-titulo",
-      HTML("<span style='display: block; margin-bottom: 15px;'> </span>"),
-      h2(
-        tags$b(
-          HTML("Resumo dos blocos de indicadores"),
-          htmlOutput(ns("titulo_localidade"), inline = TRUE)
-        ),
-        class = "fonte-titulos-pagina",
-        style = "padding-left: 0.4em"
-      ),
-      hr(style = "margin-bottom: 0px;")
-    ),
     HTML("<span style='display: block; margin-bottom: 20px;'> </span>"),
     fluidRow(
       column(

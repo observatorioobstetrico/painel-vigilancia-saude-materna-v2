@@ -138,17 +138,53 @@
   text-align: center;
 }
 
+/* =============================================================================
+   BARRA DE TÍTULO DA PÁGINA (.div-titulo)
+   Faixa de título abaixo da navbar: sticky no desktop; no mobile vira fixed
+   com auto-ocultamento ao rolar para baixo (compensada pelo
+   .div-titulo-spacer). A altura real da navbar é medida por JS e exposta em
+   --altura-navbar. Fundo branco, como o restante do conteúdo.
+   ============================================================================ */
+
 .div-titulo {
-  position: fixed;
-  top: 56px;
-  width: 95%;
-  background-color: white;
-  z-index: 100;
-  height: fit-content;
+  position: sticky;
+  top: var(--altura-navbar, calc(3.5rem + 1px));
+  height: auto;
+  background-color: #fff;
+  border-bottom: 1px solid #e3e8ee;
+  padding: 13px 1.4rem 11px;
+  z-index: 101;
+  margin-top: -15px;    /* Mesmo padding do .content */
+  margin-bottom: 18px;
+  /* Ponte de 2px na cor da barra projetada para cima: cobre a fresta de
+     subpixel entre a navbar e a barra sem deslocar a caixa. */
+  box-shadow: 0 -2px 0 0 #fff;
 }
 
-.div-dependente {
-  top: 56px;
+/* Título em fluxo: margens zeradas para não estufar a barra */
+.div-titulo-titulo {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.25;
+}
+
+/* O sufixo dinâmico (localidade/período/indicador) é renderizado com a classe
+   .fonte-titulos-pagina; dentro da barra ele deve seguir o tamanho do h2. */
+.div-titulo .fonte-titulos-pagina {
+  font-size: inherit;
+}
+
+@media (max-width: 1920px) {
+  .div-titulo-titulo { font-size: 23.4px; }
+}
+
+@media (max-width: 1280px) {
+  .div-titulo-titulo { font-size: 20.8px; }
+}
+
+/* Espaçador: compensa a barra quando ela é fixed (mobile) */
+.div-titulo-spacer {
+  display: none;
 }
 
 .layout-navbar-fixed .wrapper .main-sidebar:hover .brand-link {
@@ -423,3 +459,52 @@
     font-size: 8.8px !important;
   }
 }
+
+/* =============================================================================
+   MELHORIAS MOBILE
+   Em telas <= 991.98px (breakpoint de colapso do AdminLTE):
+   • A barra .div-titulo fica fixed abaixo da navbar e se auto-oculta ao rolar
+     para baixo (restaurada ao rolar para cima); o .div-titulo-spacer compensa
+     a altura no fluxo.
+   ============================================================================ */
+
+/* === BARRA DE TÍTULO FIXA NO MOBILE === */
+@media (max-width: 991.98px) {
+  .div-titulo {
+    position: fixed !important;
+    top: var(--altura-navbar, calc(3.5rem + 1px)) !important;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-top: 0 !important;
+    z-index: 101;
+    transition: transform 0.3s ease;
+  }
+
+  /* Classe adicionada pelo JS ao rolar para baixo */
+  .div-titulo.nav-scroll-hidden {
+    transform: translateY(-110%);
+  }
+
+  /* Spacer visível no mobile: mantém o espaço que a barra ocuparia no fluxo */
+  .div-titulo-spacer {
+    display: block;
+    height: var(--titulo-height, 90px);
+  }
+
+  .div-titulo-titulo {
+    font-size: 18px;
+  }
+}
+/* === BARRA DE TÍTULO — COMPACTA NO MOBILE === */
+@media (max-width: 991.98px) {
+  .div-titulo {
+    padding: 10px 0.9rem 8px;
+  }
+
+  .div-titulo-titulo {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+}
+
