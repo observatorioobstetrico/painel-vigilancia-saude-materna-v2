@@ -4,3 +4,9 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Artefatos locais de extração/pipeline de dados (pesados; não versionar)
+data-raw/csv/bases_bruno_2024.zip
+data-raw/morbidade/algorithm_episode_of_care/aihperm.csv
+data-raw/morbidade/algorithm_episode_of_care/aihpermtransf.csv
+data-raw/morbidade/algorithm_episode_of_care/work.sqlite
