@@ -49,7 +49,9 @@ mod_documentacao_ui <- function(id){
     ),
     tags$iframe(
       class = "doc-iframe",
-      src = "www/Documentação dos indicadores.pdf",
+      title = "Documentação dos indicadores (PDF)",
+      src = "www/Documenta%C3%A7%C3%A3o%20dos%20indicadores.pdf",
+      loading = "lazy",
       align = "center"
     )
   )

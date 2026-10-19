@@ -10,7 +10,9 @@
 
 mod_sobre_ui <- function(id){
   ns <- NS(id)
-  tagList(
+  htmltools::div(
+    class = "sobre-page",
+    tagList(
     tags$head(tags$style(".row {padding: 0 0.6em}")),
     fluidRow(
       HTML(
@@ -81,15 +83,15 @@ mod_sobre_ui <- function(id){
         width = 12,
         HTML(
           "
-          <h3> <b> Realização </b> </h2>
+          <h3> <b> Realização </b> </h3>
 
           <div class = 'outer'>
             <div class = 'inner'>
-              <img src = 'www/logos/realizacao/logo_oobr.png' width = '170px' style = 'margin-right:20px'>
-              <img src = 'www/logos/realizacao/logo_fiocruz.png' width = '190px'>
-              <img src = 'www/logos/realizacao/logo_ufes.png' width = '160px'>
-              <img src = 'www/logos/realizacao/logo_ufrj.png' width = '180px'>
-              <img src = 'www/logos/realizacao/logo_medicina_usp.png' width = '170px'>
+              <img src = 'www/logos/realizacao/logo_oobr.png' alt = 'Observatório Obstétrico Brasileiro' width = '170px' style = 'margin-right:20px'>
+              <img src = 'www/logos/realizacao/logo_fiocruz.png' alt = 'Fiocruz' width = '190px'>
+              <img src = 'www/logos/realizacao/logo_ufes.png' alt = 'Universidade Federal do Espírito Santo' width = '160px'>
+              <img src = 'www/logos/realizacao/logo_ufrj.png' alt = 'Universidade Federal do Rio de Janeiro' width = '180px'>
+              <img src = 'www/logos/realizacao/logo_medicina_usp.png' alt = 'Faculdade de Medicina da USP' width = '170px'>
             </div>
           </div>
 
@@ -102,14 +104,14 @@ mod_sobre_ui <- function(id){
         width = 12,
         HTML(
           "
-          <h3> <b> Financiadores  </b> </h2>
+          <h3> <b> Financiadores  </b> </h3>
 
           <div class = 'outer'>
             <div class = 'inner'>
-              <img src = 'www/logos/financiadores/logo_bill_melinda.png' width = '190px' style = 'margin-right:20px'>
-              <img src = 'www/logos/financiadores/logo_cnpq.png' width = '160px'>
-              <img src = 'www/logos/financiadores/logo_ms.png' width = '450px'>
-              <img src = 'www/logos/financiadores/logo_fapes.png' width = '480px'>
+              <img src = 'www/logos/financiadores/logo_bill_melinda.png' alt = 'Bill e Melinda Gates Foundation' width = '190px' style = 'margin-right:20px'>
+              <img src = 'www/logos/financiadores/logo_cnpq.png' alt = 'CNPq' width = '160px'>
+              <img src = 'www/logos/financiadores/logo_ms.png' alt = 'Ministério da Saúde' width = '450px'>
+              <img src = 'www/logos/financiadores/logo_fapes.png' alt = 'Fapes' width = '480px'>
             </div>
           </div>
 
@@ -122,18 +124,19 @@ mod_sobre_ui <- function(id){
         width = 12,
         HTML(
           "
-          <h3> <b> Apoio </b> </h2>
+          <h3> <b> Apoio </b> </h3>
 
           <div class = 'outer'>
             <div class = 'inner'>
-              <img src = 'www/logos/apoio/logo_pcdas.png' width = '150px' style = 'margin-right:20px'>
-              <img src = 'www/logos/apoio/logo_odd.png' width = '130px'>
+              <img src = 'www/logos/apoio/logo_pcdas.png' alt = 'Parceria para Dados Abertos em Saúde' width = '150px' style = 'margin-right:20px'>
+              <img src = 'www/logos/apoio/logo_odd.png' alt = 'Open Data Day' width = '130px'>
             </div>
           </div>
 
           "
         )
       )
+    )
     )
   )
 
