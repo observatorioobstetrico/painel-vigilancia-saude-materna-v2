@@ -17,6 +17,7 @@
 .fonte-indicador-nivel3     { font-size: 22px;}
 .fonte-muito-grande         { font-size: 18px;}
 .fonte-grande               { font-size: 16px;}
+.fonte-semi-grande          { font-size: 15px;}
 .fonte-media                { font-size: 14px;}
 .fonte-aviso                { font-size: 13px;}
 .fonte-pequena              { font-size: 11px;}
@@ -30,6 +31,7 @@
   .fonte-indicador-nivel3   { font-size: 19.8px; }
   .fonte-muito-grande       { font-size: 16.2px; }
   .fonte-grande             { font-size: 14.4px; }
+  .fonte-semi-grande        { font-size: 13.5px; }
   .fonte-media              { font-size: 12.6px; }
   .fonte-aviso              { font-size: 11.7px; }
   .fonte-pequena            { font-size: 9.9px; }
@@ -43,6 +45,7 @@
   .fonte-indicador-nivel3   { font-size: 17.6px; }
   .fonte-muito-grande       { font-size: 14.4px; }
   .fonte-grande             { font-size: 12.8px; }
+  .fonte-semi-grande        { font-size: 12px; }
   .fonte-media              { font-size: 11.2px; }
   .fonte-aviso              { font-size: 10.4px; }
   .fonte-pequena            { font-size: 8.8px;  }
@@ -161,10 +164,11 @@
   box-shadow: 0 -2px 0 0 #fff;
 }
 
-/* Título em fluxo: margens zeradas para não estufar a barra */
+/* Título em fluxo: herda o tamanho definido na barra
+   (.div-titulo.fonte-titulos-pagina); margens zeradas para não estufar a barra */
 .div-titulo-titulo {
   margin: 0;
-  font-size: 26px;
+  font-size: inherit;
   line-height: 1.25;
 }
 
@@ -172,14 +176,6 @@
    .fonte-titulos-pagina; dentro da barra ele deve seguir o tamanho do h2. */
 .div-titulo .fonte-titulos-pagina {
   font-size: inherit;
-}
-
-@media (max-width: 1920px) {
-  .div-titulo-titulo { font-size: 23.4px; }
-}
-
-@media (max-width: 1280px) {
-  .div-titulo-titulo { font-size: 20.8px; }
 }
 
 /* Espaçador: compensa a barra quando ela é fixed (mobile) */
@@ -296,6 +292,22 @@
 }
 }
 
+/* Documentação do Nível 3 no mobile: um card por linha, com altura livre para
+   o texto não ficar espremido (antes ficavam 2 por linha, ilegíveis). */
+@media screen and (max-width: 991.98px) {
+  .column2 {
+    width: 100% !important;
+    float: none;
+  }
+
+  .card2 {
+    height: auto !important;
+    max-height: none;
+    min-height: 0;
+    overflow-y: visible;
+  }
+}
+
 
 .btn-no-style {
   background-color: transparent !important;
@@ -339,11 +351,165 @@
   box-shadow: 0 6px 18px rgba(10, 30, 60, 0.35);
 }
 
-#bloco_1_1-caixa_b1_i4, #bloco_1_1-caixa_b1_i5, #bloco_1_1-caixa_b1_i6, [id^="bloco_7_1-bloco_7_fetal_1-caixa_b7_fetal_"],
-[id^="bloco_7_1-bloco_7_perinatal_1-caixa_b7_perinatal_"], [id^="bloco_7_1-bloco_7_neonatal_1-caixa_b7_neonatal_"],
-[id^="bloco_7_1-bloco_7_morbidade_neonatal_1-caixa_b7_morbidade_neonatal_"] {
+/* =============================================================================
+   COMPONENTE CAIXA DE INDICADOR (markup unificado em funcoes_globais.R)
+     .caixa-indicador
+       > .caixa-titulo      (fatia fixa do topo)
+       > .caixa-valor       (fatia central; lista nas caixas conjuntas)
+       > .caixa-comparacao  (rodapé)
+   A altura total vem de --caixa-altura (definida em px pelo R) e cada seção
+   tem uma fatia fixa: todas as caixas ficam alinhadas no desktop e no mobile.
+   ============================================================================ */
+
+.caixa-indicador {
+  display: flex;
+  flex-direction: column;
+  height: var(--caixa-altura, 300px);
+  min-height: var(--caixa-altura, 300px);
+  max-height: var(--caixa-altura, 300px);
+  overflow: hidden;
+  background: #fff;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+}
+
+.caixa-indicador .caixa-titulo {
+  flex: 0 0 auto;
+  max-height: 45%;
+  min-height: 0;
+  display: block;
+  padding: 1rem 0.75rem;
+  text-align: left;
+  overflow: hidden;
+}
+
+.caixa-indicador .caixa-valor {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.caixa-indicador .caixa-comparacao {
+  flex: 0 0 35%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.caixa-indicador .caixa-comparacao b {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Caixas conjuntas: cada item (valor + descrição) ocupa a própria linha,
+   empilhado verticalmente. `safe center` centraliza quando o conteúdo cabe e
+   alinha ao topo quando transborda — sem isso, o topo fica cortado. */
+.caixa-indicador .caixa-valor--lista {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  justify-content: safe center;
+  gap: 10px;
+  padding: 6px 10px 12px;
+  overflow-y: auto;
+}
+
+.caixa-indicador .caixa-valor--lista p {
+  margin-bottom: 0;
+}
+
+/* Caixa de localidade (Nível 1): usa o mesmo componente das caixas de
+   indicador (altura/largura/margens idênticas), com o conteúdo em fluxo
+   normal. Antes era um bs4Dash::box, cujo header vazio somava 24px de altura. */
+.caixa-indicador.caixa-localidade {
+  display: block;
+  padding: 1rem 0.75rem;
+  overflow-y: auto;
+}
+
+/* Caixas de distribuição (listas): o conteúdo ocupa o restante da caixa, com
+   respiro entre o título e o primeiro item. O título já é adaptativo (regra
+   acima), então aqui não é preciso nenhum ajuste extra. */
+
+/* O box externo criado por alguns módulos não tem chrome próprio: existe só
+   para ancorar o botão de informação sobre a caixa. */
+.content .card[id*="-caixa_"] {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
   background: transparent !important;
-  box-shadow: 0 0 0 rgba(0,0,0,.125), 0 0 0 rgba(0,0,0,.2) !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.content .card[id*="-caixa_"] > .card-header {
+  display: none;
+}
+
+.content .card[id*="-caixa_"] .card-body {
+  position: relative;
+  padding: 0 !important;
+}
+
+.content .card[id*="-caixa_"] .caixa-indicador {
+  margin-bottom: 0;
+}
+
+/* Uniformiza largura e espaçamento entre caixas: o box de módulo ganha um
+   wrapper `.col` extra (padding de 15px), que o estreitava em relação às
+   demais. Aqui o wrapper deixa de somar padding e TODAS as caixas recebem o
+   mesmo inset horizontal — mesma largura e mesmo respiro em qualquer tela.
+   --caixa-inset é usado também pela camada invisível do título (abaixo) para
+   que as duas quebrem linha exatamente no mesmo ponto. */
+.content {
+  --caixa-inset: 7.5px;
+}
+
+.content .caixa-indicador {
+  margin-left: var(--caixa-inset);
+  margin-right: var(--caixa-inset);
+}
+
+.content div[class*="col-"]:has(> .card[id*="-caixa_"]) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Camada de informação dos módulos: é o "gêmeo invisível" do título — mesmo
+   texto, fonte, largura (mesmo inset da caixa) e caixa de 31% — de modo que o
+   botão (i) cai logo após a última palavra do título. */
+.content .card[id*="-caixa_"] .card-body > div[style*="position: absolute"] {
+  top: 0;
+  left: var(--caixa-inset, 7.5px);
+  width: calc(100% - 2 * var(--caixa-inset, 7.5px));
+  height: auto !important;
+  max-height: 45% !important;
+  padding: 1rem 0.75rem !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.content .card[id*="-caixa_"] .card-body > div[style*="position: absolute"] > b {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.content .card[id*="-caixa_"] .card-body > div[style*="position: absolute"] span[id] {
+  pointer-events: auto;
 }
 
 /*------------------------------------*\
@@ -501,16 +667,21 @@
     height: var(--titulo-height, 90px);
   }
 
+  /* Título da página no mobile: escala intermediária entre o valor cheio de
+     .fonte-titulos-pagina (grande demais) e os antigos 15-16px (pequenos
+     demais) — equivale ao .fonte-titulos-modal. */
   .div-titulo-titulo {
-    font-size: 18px;
+    font-size: 20.8px;
+    line-height: 1.25;
   }
 }
 
 /* === SIDEBAR MOBILE (DRAWER) ===
-   Em telas pequenas o menu lateral é um drawer com identidade própria:
-   cabeçalho com logo, título do painel e botão de fechar; itens com área de
-   toque confortável; blocos numerados em badges; destaque claro da seção
-   ativa. O overlay fecha ao toque e o scroll do fundo fica travado. */
+   Em telas pequenas o menu lateral é um drawer com cabeçalho próprio (logo,
+   título e botão de fechar). Os itens têm área de toque confortável e usam o
+   mesmo esquema visual do desktop: ícone à esquerda e texto em uma coluna à
+   direita (o texto nunca desce para baixo do ícone). O overlay fecha ao toque
+   e o scroll do fundo fica travado. */
 @media (max-width: 991.98px) {
   /* Largura utilizável: antes (500px) a sidebar cobria a tela inteira e não
      sobrava área do overlay para fechar o menu. O drawer começa abaixo da
@@ -590,73 +761,48 @@
     background: rgba(255, 255, 255, 0.28);
   }
 
-  /* --- Itens do menu --- */
+  /* --- Itens do menu: ícone e texto em duas colunas ---
+     O texto fica sempre à direita do ícone (nunca abaixo) e quebra linha
+     dentro da própria coluna. O visual do item ativo é o mesmo do desktop. */
   .main-sidebar .nav-sidebar {
     padding-top: 8px;
   }
 
-  .main-sidebar .nav-sidebar > .nav-item > .nav-link {
-    min-height: 46px;
-    padding: 11px 14px;
-    margin: 3px 10px;
-    border-radius: 8px;
-    font-size: 14px;
+  .main-sidebar .nav-sidebar .nav-link {
+    display: flex !important;
     align-items: center;
+    min-height: 46px;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1.3;
+    white-space: normal;
   }
 
-  .main-sidebar .nav-sidebar > .nav-item > .nav-link .nav-icon {
-    width: 22px;
+  .main-sidebar .nav-sidebar .nav-link > .nav-icon,
+  .main-sidebar .nav-sidebar .nav-link > i:first-of-type {
+    flex: 0 0 24px;
+    width: 24px;
     margin-right: 10px;
     text-align: center;
+  }
+
+  .main-sidebar .nav-sidebar .nav-link p {
+    flex: 1 1 auto;
+    margin: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* Subitens (blocos do nível 2): mesmo esquema de duas colunas */
+  .main-sidebar .nav-treeview > .nav-item > .nav-link {
+    min-height: 44px;
+    padding: 9px 12px 9px 18px;
+    font-size: 13.5px;
   }
 
   /* Estado de toque */
   .main-sidebar .nav-sidebar .nav-link:active {
     opacity: 0.85;
-  }
-
-  /* --- Subitens (blocos do nível 2) --- */
-  .main-sidebar .nav-treeview > .nav-item > .nav-link {
-    min-height: 44px;
-    padding: 9px 12px;
-    margin: 2px 10px 2px 18px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    line-height: 1.3;
-    align-items: flex-start;
-  }
-
-  /* Números dos blocos como badges circulares (o glifo do Font Awesome já
-     fornece o dígito; aqui ele ganha um círculo de destaque) */
-  .main-sidebar .nav-treeview .nav-link > i.fas {
-    flex: 0 0 auto;
-    width: 22px;
-    height: 22px;
-    margin: 1px 10px 0 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(10, 30, 60, 0.08);
-    color: #0A1E3C;
-    font-size: 12px;
-  }
-
-  .main-sidebar .nav-treeview > .nav-item > .nav-link.active {
-    background-color: #e8f1fd !important;
-    color: #0A1E3C !important;
-    font-weight: 600;
-    box-shadow: inset 3px 0 0 #2f80ed;
-  }
-
-  .main-sidebar .nav-treeview > .nav-item > .nav-link.active > i.fas {
-    background: #2f80ed;
-    color: #fff;
-  }
-
-  /* --- Item ativo --- */
-  .main-sidebar .nav-sidebar .nav-link.active {
-    font-weight: 600;
   }
 
   /* Fundo travado enquanto o drawer está aberto */
@@ -688,129 +834,86 @@
   .div-titulo {
     padding: 10px 0.9rem 8px;
   }
-
-  .div-titulo-titulo {
-    font-size: 15px;
-    line-height: 1.25;
-  }
 }
 
-/* === PAINEL DE FILTROS DESLIZANTE (MOBILE) ===
-   Os filtros globais viram um painel da direita acionado pelo botão flutuante
-   "Filtros"; o card de filtros permanece intacto no desktop. */
-
-.filtros-mobile-close-header,
-.btn-filtros-fab,
-.filtros-mobile-backdrop {
-  display: none;
-}
-
+/* === FILTROS INLINE NO MOBILE ===
+   No mobile os filtros globais ficam inline no topo da página (sem botão
+   flutuante): cada campo ocupa uma linha e todos compartilham a mesma largura
+   e o mesmo alinhamento à esquerda. */
 @media (max-width: 991.98px) {
-  .filtros-global-wrapper {
-    position: fixed !important;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(92vw, 420px);
-    z-index: 1200;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    background-color: #fff;
-    padding: 0 !important;
-    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.22);
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Radios de escolha do Nível 3 (labels longos): cada alternativa ocupa uma
+     linha própria, com o texto ao lado do marcador. O pretty-checkbox posiciona
+     o marcador com uma fórmula que assume label de UMA linha — com o texto
+     quebrado o círculo flutuava acima e a opção seguinte invadia o texto. */
+  #nivel_3_1-opcoes_tab1 {
+    display: block;
+    width: 100% !important;
   }
 
-  body.filtro-mobile-aberto .filtros-global-wrapper {
-    transform: translateX(0);
+  #nivel_3_1-opcoes_tab1 .pretty {
+    display: block;
+    width: 100% !important;
+    margin: 10px 0;
+  }
+
+  #nivel_3_1-opcoes_tab1 .pretty .state label {
+    text-indent: 0 !important;
+    padding-left: 1.7em;
+    line-height: 1.45;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Marcador e ícone de check ancorados na primeira linha do texto
+     (o pretty-checkbox também usa a fórmula de uma linha no .icon) */
+  #nivel_3_1-opcoes_tab1 .pretty .state label:before,
+  #nivel_3_1-opcoes_tab1 .pretty .state label:after,
+  #nivel_3_1-opcoes_tab1 .pretty .state .icon {
+    top: 0.18em !important;
+  }
+
+  /* Botão de download da tabela: espaço em relação ao título acima */
+  .content a[id$="-download_tabela"] {
+    margin-top: 0.75rem;
+  }
+
+  .filtros-global-wrapper {
+    width: 100%;
+  }
+
+  /* Linhas aninhadas (ex.: Estado dentro de uma linha de 2 colunas) herdam
+     um padding global de .row que as indentava ~10px em relação aos campos
+     de primeiro nível; aqui todas partem da mesma borda. */
+  .filtros-global-wrapper .row {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Os inputs são criados com larguras variadas (90%, 95%, 98%...); no mobile
+     todos passam a ocupar a linha inteira para ficarem alinhados. Radios e
+     checkboxes ficam de fora: forçá-los a 100% centraliza o marcador dentro
+     da caixa (e empurra o texto para a linha de baixo). */
+  .filtros-global-wrapper .shiny-input-container,
+  .filtros-global-wrapper .shiny-input-container .selectize-control,
+  .filtros-global-wrapper .shiny-input-container .irs,
+  .filtros-global-wrapper .shiny-input-container input:not([type="radio"]):not([type="checkbox"]) {
+    width: 100% !important;
+  }
+
+  /* Grupos de radio acompanham o alinhamento à esquerda dos demais campos
+     (o layout original centralizava este grupo). */
+  .filtros-global-wrapper .shiny-input-radiogroup {
+    text-align: left !important;
   }
 
   .filtros-global-wrapper .card {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    height: auto !important;
-    min-height: 100% !important;
+    margin-bottom: 1rem;
   }
 
-  /* Cabeçalho de fechar (visível apenas no mobile) */
-  .filtros-mobile-close-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    background-color: #0A1E3C;
-    color: white;
-    font-weight: 600;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .btn-filtros-fechar {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 16px;
-    cursor: pointer;
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-
-  .btn-filtros-fechar:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  /* Botão flutuante de abrir os filtros */
-  .btn-filtros-fab {
-    display: flex;
-    position: fixed;
-    bottom: 22px;
-    right: 18px;
-    padding: 0 20px;
-    height: 48px;
-    border-radius: 24px;
-    background-color: #0A1E3C;
-    color: white;
-    border: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-    z-index: 1030;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-weight: 600;
-    transition: background 0.2s ease, transform 0.2s ease;
-  }
-
-  .btn-filtros-fab:hover {
-    background-color: #32A0FF;
-  }
-
-  /* Backdrop do painel */
-  .filtros-mobile-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 1199;
-  }
-
-  body.filtro-mobile-aberto .filtros-mobile-backdrop {
-    display: block;
-  }
-
-  body.filtro-mobile-aberto {
-    overflow: hidden;
-  }
-
-  /* Os dropdowns dos selects precisam ficar acima do painel */
-  body.filtro-mobile-aberto .selectize-dropdown,
-  .filtros-global-wrapper .selectize-dropdown {
-    z-index: 1300 !important;
+  /* Espaçadores extras entre campos ficam discretos no empilhamento */
+  .filtros-global-wrapper hr {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -899,3 +1002,516 @@
     min-width: 720px;
   }
 }
+
+/* =============================================================================
+   ABAS SEM CARD — blocos 4, 6 e 7 (Nível 1), telas de bloco (Nível 2) e Nível 3
+   O bs4TabCard desenha um card em volta da barra de abas e do conteúdo, o que
+   criava "card dentro de card" (especialmente no Nível 1, onde ele fica dentro
+   do card do bloco). Aqui o chrome do card some: restam apenas os botões de
+   aba e o conteúdo solto, alinhados ao card que os contém.
+   ============================================================================ */
+
+.content .card-tabs:has(#bloco_4_1-tabset1),
+.content .card-tabs:has(#bloco_6_1-tabset1),
+.content .card-tabs:has(#bloco_7_1-tabset1),
+.content .card-tabs:has(#nivel_1_1-tabset1),
+.content .card-tabs:has(#nivel_1_1-tabset2),
+.content .card-tabs:has(#nivel_1_1-tabset3),
+.content .card-tabs:has(#nivel_3_1-tabset1) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.content .card-tabs:has(#bloco_4_1-tabset1) > .card-header,
+.content .card-tabs:has(#bloco_6_1-tabset1) > .card-header,
+.content .card-tabs:has(#bloco_7_1-tabset1) > .card-header,
+.content .card-tabs:has(#nivel_1_1-tabset1) > .card-header,
+.content .card-tabs:has(#nivel_1_1-tabset2) > .card-header,
+.content .card-tabs:has(#nivel_1_1-tabset3) > .card-header,
+.content .card-tabs:has(#nivel_3_1-tabset1) > .card-header {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.content .card-tabs:has(#bloco_4_1-tabset1) > .card-body,
+.content .card-tabs:has(#bloco_6_1-tabset1) > .card-body,
+.content .card-tabs:has(#bloco_7_1-tabset1) > .card-body,
+.content .card-tabs:has(#nivel_1_1-tabset1) > .card-body,
+.content .card-tabs:has(#nivel_1_1-tabset2) > .card-body,
+.content .card-tabs:has(#nivel_1_1-tabset3) > .card-body,
+.content .card-tabs:has(#nivel_3_1-tabset1) > .card-body {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* =============================================================================
+   MOBILE v2 — PASSADA COMPLETA DE USABILIDADE (todas as telas)
+   Princípios aplicados em telas <= 991.98px (celular e tablet):
+   • grade empilhada (uma coluna) em toda a página;
+   • nenhuma altura fixa em cards de conteúdo: fim dos scrolls aninhados e do
+     corte de conteúdo (o scroll é sempre o da página);
+   • caixas de indicador com altura fixa e fatias fixas (componente dedicado
+     definido acima), iguais em desktop e mobile;
+   • alvos de toque >= 44px para botões, abas, checkboxes, selects;
+   • campos de formulário com 16px (evita o zoom automático do iOS);
+   • abas de cards roláveis na horizontal em vez de quebrarem em várias linhas;
+   • barra de ação dos filtros fixa no rodapé do painel de filtros.
+   ============================================================================ */
+
+/* --- 1. GRADE: todas as colunas empilham ------------------------------- */
+@media (max-width: 991.98px) {
+  .content .row > [class*="col-sm-"],
+  .filtros-global-wrapper .row > [class*="col-sm-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Zera o padding global de .row (herdado do Sobre) no mobile: as colunas já
+     têm padding próprio e o grid fica alinhado às bordas do card. */
+  .content .row,
+  .filtros-global-wrapper .row {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Offsets deixam de deslocar colunas no celular */
+  .content [class*="offset-"],
+  .filtros-global-wrapper [class*="offset-"] {
+    margin-left: 0 !important;
+  }
+
+  /* Linhas que abrigam botão como filho direto (sem column) sofrem as margens
+     negativas do .row e vazam o padding do card; aqui o sangramento some.
+     (fallback: em navegadores sem :has() o layout antigo é mantido.) */
+  .row:has(> .btn),
+  .row:has(> button.btn),
+  .row:has(> a.btn) {
+    margin-left: 0;
+    margin-right: 0;
+    /* Separa a linha de botões do conteúdo que vem abaixo quando as colunas
+       empilham (ex.: Nível 1: botões do bloco e a primeira caixinha). */
+    margin-bottom: 1rem;
+  }
+
+  .row:has(> .btn) > .btn,
+  .row:has(> button.btn) > .btn,
+  .row:has(> a.btn) > .btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* --- 2. CARDS: sem altura fixa, sem scroll interno --------------------- */
+@media (max-width: 991.98px) {
+  .content .card {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+  }
+
+  /* Cards comuns deixam de clipar conteúdo; abas (card-tabs) preservam o
+     próprio overflow para não vazar cantos arredondados. */
+  .content .card:not(.card-tabs) {
+    overflow: visible !important;
+  }
+
+  .content .card .card-body {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Blocos internos com altura inline (títulos, faixas, espaçadores) entram no
+     fluxo normal; widgets de gráfico, placeholders e a camada de informação
+     das caixas (posicionada de propósito) ficam de fora. */
+  .content .card .card-body > div[style*="height"]:not(.html-widget):not(.highcharts-container):not(.shiny-spinner-placeholder):not([class*="spinner"]):not([style*="position: absolute"]) {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Camadas decorativas absolutas (títulos "transparentes" que posicionam o
+     botão de informação) não podem capturar toques. */
+  .content .card .card-body > div[style*="position: absolute"] {
+    pointer-events: none;
+  }
+
+  .content .card .card-body > div[style*="position: absolute"] .info-btn,
+  .content .card .card-body > div[style*="position: absolute"] button,
+  .content .card .card-body > div[style*="position: absolute"] a {
+    pointer-events: auto;
+  }
+
+  /* Placeholders dos spinners não reservam mais blocos de 300px+ */
+  .shiny-spinner-placeholder {
+    height: 180px !important;
+  }
+
+  /* Respiros generosos definidos inline em cards específicos encolhem */
+  .content .card[style*="padding-bottom: 100px"] {
+    padding-bottom: 16px !important;
+  }
+}
+
+/* --- 3. CAIXAS DE INDICADOR: tipografia no mobile ---------------------- */
+@media (max-width: 767.98px) {
+  .fonte-destaque-caixas1 {
+    font-size: 26px;
+  }
+
+  .fonte-destaque-caixas2 {
+    font-size: 23px;
+  }
+
+  .fonte-pequena {
+    font-size: 11.5px;
+  }
+}
+
+/* --- 4. TOQUE: alvos mínimos de 44px ----------------------------------- */
+@media (max-width: 991.98px) {
+
+  /* Botões de ferramenta dos cabeçalhos de card (collapse/maximizar) */
+  .content .card-header .btn-tool {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-tabs > .card-header .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .action-button,
+  .btn {
+    touch-action: manipulation;
+  }
+
+  /* Ícones-ação espremidos nos títulos dos cards (ex.: "ver série histórica") */
+  .acao-icone {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+  }
+}
+
+/* --- 5. ABAS: rolagem horizontal em vez de alargar a página ----------- */
+@media (max-width: 991.98px) {
+  /* Os <ul class="nav-tabs"> dos cards (ids *-tabset*) têm largura intrínseca
+     grande; sem rolagem interna eles alargam o layout inteiro (o navegador
+     móvel expande o viewport e a página "encolhe"). */
+  .content .nav-tabs {
+    flex-wrap: nowrap !important;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .content .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .content .nav-tabs > .nav-item {
+    flex: 0 0 auto;
+  }
+
+  .content .nav-tabs .nav-link {
+    white-space: nowrap;
+  }
+
+  /* Cabeçalho que abriga as abas também não pode ser esticado pelo conteúdo */
+  .content .card-tabs > .card-header {
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .content .card-tabs > .card-header::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* --- 6. FORMULÁRIOS: toque confortável e 16px (iOS) -------------------- */
+@media (max-width: 991.98px) {
+  .selectize-input {
+    min-height: 44px;
+    padding: 10px 12px !important;
+    font-size: 16px !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .selectize-dropdown .option {
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .selectize-dropdown {
+    max-width: calc(100vw - 1.25rem);
+  }
+
+  .form-control,
+  .input-group-text {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .bootstrap-select .dropdown-toggle,
+  .pickerInput .dropdown-toggle {
+    min-height: 44px;
+  }
+
+  /* Slider (ionRangeSlider): alça maior para o dedo */
+  .irs-slider {
+    transform: scale(1.6);
+    touch-action: none;
+  }
+
+  /* Modais de alerta ocupam a largura útil */
+  .swal-modal {
+    width: 92vw !important;
+    max-width: 480px;
+  }
+
+  .swal-title {
+    font-size: 18px !important;
+  }
+
+  .swal-text {
+    font-size: 14px !important;
+  }
+}
+
+/* --- 7. CHECKBOXES EM COLUNAS (.multicol) ------------------------------ */
+@media (max-width: 767.98px) {
+  .multicol {
+    -moz-column-count: 1 !important;
+    column-count: 1 !important;
+  }
+
+  .shiny-input-checkboxgroup .checkbox {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+
+  .shiny-input-checkboxgroup .checkbox label {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+
+  .shiny-input-checkboxgroup input[type="checkbox"] {
+    margin-right: 8px;
+  }
+}
+
+/* --- 8. RADIOS: empilham em telas estreitas ---------------------------- */
+@media (max-width: 991.98px) {
+  /* Labels longos precisam quebrar linha em vez de vazar a coluna */
+  .pretty {
+    max-width: 100%;
+  }
+
+  .pretty .state label {
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* Botões de expandir linhas agrupadas (reactable) */
+  .content .rt-expander-button {
+    min-width: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Botões de download (shiny) */
+  .content a.btn.btn-default {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .radio-inline,
+  .shiny-input-radiogroup .radio-inline {
+    display: block !important;
+    margin: 0 0 6px 0 !important;
+  }
+
+  /* Resumo: radios formatados (pretty) empilham no celular */
+  .pretty,
+  .pretty.p-inline {
+    display: block;
+    margin: 4px 0;
+  }
+
+  .pretty {
+    font-size: 15px !important;
+  }
+
+  .shiny-input-radiogroup .shiny-options-group,
+  .shiny-input-checkboxgroup .shiny-options-group {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+/* --- 9. TIPOGRAFIA: legibilidade para telas estreitas ------------------ */
+@media (max-width: 767.98px) {
+  .fonte-muito-grande {
+    font-size: 15.5px;
+  }
+
+  .fonte-grande {
+    font-size: 14px;
+  }
+
+  .fonte-semi-grande {
+    font-size: 13.5px;
+  }
+
+  .fonte-media {
+    font-size: 13px;
+  }
+
+  .fonte-aviso {
+    font-size: 12.5px;
+  }
+
+  .highcharts-data-label text {
+    font-size: 10.5px !important;
+  }
+
+  .highcharts-axis-labels,
+  .highcharts-legend-item {
+    font-size: 12.5px !important;
+  }
+}
+
+/* --- 10. FILTROS INLINE: ação no fim do card ------------------------- */
+@media (max-width: 991.98px) {
+
+  /* O gauge do nível 3 encolhe junto com a coluna */
+  .html-widget.gauge svg {
+    height: 200px;
+    max-width: 100%;
+  }
+}
+
+/* --- 11. DOCUMENTAÇÃO: iframe de PDF não funciona em navegador móvel -- */
+@media (max-width: 991.98px) {
+  .doc-iframe {
+    display: none !important;
+  }
+
+  .doc-mobile-aviso .btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 420px;
+  }
+}
+
+/* --- 12. SOBRE: logos compactos e texto legível ------------------------ */
+@media (max-width: 991.98px) {
+  .sobre-page h3 {
+    font-size: 19px;
+    line-height: 1.3;
+    margin: 24px 0 12px;
+  }
+
+  .sobre-page .outer {
+    padding: 0 12px;
+  }
+
+  /* Grade de 2 colunas com logos pequenos e uniformes (altura máxima curta
+     evita que um logo vertical domine a tela). */
+  .sobre-page .inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 16px 18px;
+  }
+
+  .sobre-page .inner img {
+    width: auto !important;
+    height: auto;
+    max-width: 100%;
+    max-height: 52px;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sobre-page p,
+  .sobre-page ol {
+    text-align: left !important;
+  }
+
+  .sobre-page .fonte-muito-grande {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+/* --- 13. FAB funcionando bem em iOS (área segura) e acessibilidade ----- */
+@supports (height: 100dvh) {
+  @media (max-width: 991.98px) {
+    .main-sidebar {
+      height: calc(100dvh - var(--altura-navbar, calc(3.5rem + 1px))) !important;
+    }
+  }
+}
+
+/* --- 14. Rótulo do relatório: completo no desktop, curto no mobile ----- */
+.rotulo-report-mobile {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .rotulo-report-desktop {
+    display: none;
+  }
+
+  .rotulo-report-mobile {
+    display: inline;
+  }
+}
+
+/* --- 15. Destaque de toque limpo (sem flash cinza em WebKit) ----------- */
+.card .nav-link,
+.btn,
+.pretty .state label {
+  -webkit-tap-highlight-color: transparent;
+}
+

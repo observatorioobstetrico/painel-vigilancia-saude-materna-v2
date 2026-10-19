@@ -74,7 +74,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Número de óbitos fetais&nbsp;</b>"),
@@ -103,7 +103,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Taxa de mortalidade fetal por 1000 nascidos vivos&nbsp;</b>"),
@@ -132,7 +132,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos fetais selecionados,&nbsp;</b>"),
@@ -161,7 +161,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos fetais selecionados,&nbsp;</b>"),
@@ -190,7 +190,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos fetais selecionados,&nbsp;</b>"),
@@ -219,7 +219,7 @@ mod_bloco_7_fetal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de óbitos fetais potencialmente evitáveis&nbsp;</b>"),

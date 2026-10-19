@@ -47,7 +47,7 @@ mod_bloco_7_morbidade_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de internações neonatais (até o 27º dia de vida) em relação ao total de partos no SUS&nbsp;</b>"),
@@ -76,7 +76,7 @@ mod_bloco_7_morbidade_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de internações neonatais (até o 27º dia de vida) em UTI em relação ao total de partos no SUS&nbsp;</b>"),
@@ -105,7 +105,7 @@ mod_bloco_7_morbidade_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre as internações neonatais selecionadas,&nbsp;</b>"),

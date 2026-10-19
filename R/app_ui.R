@@ -65,6 +65,11 @@ constroi_app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "www/global/funcoes_javascript.js")),
+    tags$head(tags$meta(name = "theme-color", content = "#0A1E3C")),
+    tags$head(tags$meta(
+      name = "apple-mobile-web-app-capable",
+      content = "yes"
+    )),
     tags$style(HTML(
       "
       .shiny-output-error-validation {
@@ -195,7 +200,7 @@ constroi_app_ui <- function(request) {
       ),
       bs4Dash::bs4DashBody(
         div(
-          class = "div-titulo",
+          class = "div-titulo fonte-titulos-pagina",
           item_titulo_aba(
             condition = "input.abas == 'sobre'",
             texto = "Painel de Vigilância da Saúde Materna e Perinatal"
@@ -259,24 +264,12 @@ constroi_app_ui <- function(request) {
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
           div(
             class = "filtros-global-wrapper",
-            div(
-              class = "filtros-mobile-close-header",
-              div(
-                style = "display: flex; align-items: center; gap: 8px;",
-                tags$i(class = "fas fa-filter", style = "font-size: 0.9em; opacity: 0.85;"),
-                span(class = "fonte-muito-grande", tags$b("Filtros"))
-              ),
-              tags$button(
-                id = "btn-filtros-fechar",
-                class = "btn-filtros-fechar",
-                tags$i(class = "fas fa-times")
-              )
-            ),
             bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b class = 'fonte-indicador-nivel3'> Selecione os filtros de interesse: </b>"),
             icon = icon("filter"),
             status = "primary",
+            collapsible = FALSE,
             fluidRow(
               column(
                 width = 3,
@@ -911,13 +904,6 @@ constroi_app_ui <- function(request) {
             )
           )
         ),
-        tags$button(
-          id = "btn-filtros-fab",
-          class = "btn-filtros-fab",
-          tags$i(class = "fas fa-filter"),
-          span("Filtros")
-        ),
-        div(class = "filtros-mobile-backdrop")
       ),
 
         tags$script(HTML(

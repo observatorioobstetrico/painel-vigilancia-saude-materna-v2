@@ -173,42 +173,13 @@ $(document).on('click', '[data-widget="pushmenu"]', function() {
 });
 
 // =============================================================================
-// 4. MOBILE — PAINEL DE FILTROS DESLIZANTE
-//    Os filtros globais viram um painel da direita, aberto pelo botão
-//    flutuante "Filtros" e fechado pelo X, pelo backdrop ou ao buscar.
+// 4. MOBILE — TECLA ESC FECHA O MENU LATERAL
+//    Os filtros agora ficam inline no topo da página (sem botão flutuante).
 // =============================================================================
 
-function fecharFiltrosMobile() {
-  document.body.classList.remove('filtro-mobile-aberto');
-}
-
-$(document).on('click', '#btn-filtros-fab', function() {
-  document.body.classList.add('filtro-mobile-aberto');
-});
-
-$(document).on('click', '#btn-filtros-fechar, .filtros-mobile-backdrop', function() {
-  fecharFiltrosMobile();
-});
-
-// Ao buscar, fecha o painel para revelar os resultados (pequeno atraso para o
-// clique chegar ao Shiny antes do fechamento).
-$(document).on('click', '#pesquisar', function() {
-  if (window.innerWidth <= 991.98) {
-    setTimeout(fecharFiltrosMobile, 150);
-  }
-});
-
-// Trocar de aba fecha o painel e a sidebar
-$(document).on('shiny:inputchanged', function(event) {
-  if (event.name === 'abas') {
-    fecharFiltrosMobile();
-  }
-});
-
-// Tecla ESC fecha o painel de filtros e o menu lateral
+// Tecla ESC fecha o menu lateral
 $(document).on('keydown', function(event) {
   if (event.key === 'Escape') {
-    fecharFiltrosMobile();
     if (window.innerWidth <= 991.98 && document.body.classList.contains('sidebar-open')) {
       $('[data-widget="pushmenu"]').trigger('click');
     }

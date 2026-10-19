@@ -72,7 +72,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Número de óbitos neonatais&nbsp;</b>"),
@@ -101,7 +101,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Taxa de mortalidade neonatal&nbsp;</b>"),
@@ -130,7 +130,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Taxa de mortalidade neonatal com idade 0 a 6 dias por 1000 nascidos vivos&nbsp;</b>"),
@@ -159,7 +159,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Taxa de mortalidade neonatal com idade 7 a 27 dias por 1000 nascidos vivos&nbsp;</b>"),
@@ -188,7 +188,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos neonatais selecionados,&nbsp;</b>"),
@@ -217,7 +217,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos neonatais selecionados,&nbsp;</b>"),
@@ -246,7 +246,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 15%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Dentre os óbitos neonatais selecionados,&nbsp;</b>"),
@@ -275,7 +275,7 @@ mod_bloco_7_neonatal_ui <- function(id) {
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de óbitos neonatais potencialmente evitáveis&nbsp;</b>"),

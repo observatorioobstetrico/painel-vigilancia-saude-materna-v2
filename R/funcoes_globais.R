@@ -639,14 +639,22 @@ processa_causas_sem_cache <- function(
 
 # Atributo class como o htmltools renderiza ao converter tags em HTML:
 # NULL omite o atributo; NA vira atributo sem valor (ex.: `<div class ...>`).
-# Usado pelas caixas que montam o HTML como string.
-attr_class_html <- function(x) {
-  if (is.null(x)) return("")
-  if (length(x) == 1 && is.na(x)) return(" class")
-  paste0(' class="', x, '"')
+# Usado pelas caixas que montam o HTML como string. `extra` acrescenta classes
+# utilitarias (ex.: "caixa-valor") usadas pelo CSS responsivo do mobile.
+attr_class_html <- function(x, extra = NULL) {
+  if (is.null(x)) {
+    if (is.null(extra)) return("")
+    return(paste0(' class="', extra, '"'))
+  }
+  if (length(x) == 1 && is.na(x)) {
+    if (is.null(extra)) return(" class")
+    return(paste0(' class="', extra, '"'))
+  }
+  if (is.null(extra)) return(paste0(' class="', x, '"'))
+  paste0(' class="', extra, " ", x, '"')
 }
 
-cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = 300, fonte_titulo = "fonte-grande", fonte_comparacao = "fonte-media", pagina, width_caixa = 12, retornar_caixa_completa = TRUE) {
+cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_de_analise, tipo_referencia, valor_de_referencia, valor_indicador = NULL, tipo = "porcentagem", invertido = FALSE, texto_caixa = NULL, cor = NULL, texto_footer = NULL, tamanho_caixa = 300, fonte_titulo = "fonte-semi-grande", fonte_comparacao = "fonte-media", pagina, width_caixa = 12, retornar_caixa_completa = TRUE) {
 
   if (is.null(valor_indicador)) {
     if (isTruthy(dados[[indicador]])) {
@@ -845,38 +853,28 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
 
   fonte_texto <- dplyr::if_else(floor(log10(valor_indicador_aux)) + 1 < 7 | is.nan(valor_indicador_aux), "fonte-destaque-caixas1", "fonte-destaque-caixas2")
 
-  style_texto <- "height: 28%; overflow: auto; padding: 0 10px; display: flex; justify-content: center; text-align: center;"
-
   # O conteudo e' montado como uma unica string HTML (em vez de varios nos de
   # tags htmltools): evita o custo de montagem da arvore e, principalmente, da
   # conversao tag -> HTML que o Shiny faz ao enviar cada output (~2x mais
-  # rapido por caixa; mesma saida HTML).
+  # rapido por caixa; mesma saida HTML). O layout e' definido por classes CSS
+  # (.caixa-indicador/.caixa-titulo/.caixa-valor/.caixa-comparacao em
+  # custom.css): a altura total vem de --caixa-altura e cada faixa tem uma
+  # fatia fixa, o que mantem as caixas alinhadas em qualquer tela.
   conteudo <- HTML(paste0(
-    '<div', attr_class_html(fonte_titulo), ' style="height: 31%; overflow: auto; padding: 0 10px;"><b> ', titulo, ' </b></div>',
-    '<div style="height: 3%"></div>',
-    '<div', attr_class_html(fonte_texto), ' style="', style_texto, '"><b> ', glue::glue(texto), ' </b></div>',
-    '<div', attr_class_html(fonte_comparacao), ' style="overflow: auto; height: 38%; padding: 10px 5px; display: flex; align-items:center; justify-content:center; text-align: center; background-color: ', cor_comp, ';"><b> ', glue::glue(texto_comp), ' </b></div>'
+    '<div', attr_class_html(fonte_titulo, "caixa-titulo"), '><b> ', titulo, ' </b></div>',
+    '<div', attr_class_html(fonte_texto, "caixa-valor"), '><b> ', glue::glue(texto), ' </b></div>',
+    '<div', attr_class_html(fonte_comparacao, "caixa-comparacao"), ' style="background-color: ', cor_comp, ';"><b> ', glue::glue(texto_comp), ' </b></div>'
   ))
 
-  if (retornar_caixa_completa == TRUE) {
-    bs4Dash::box(
-      style = paste0("height: ", tamanho_caixa, "px; overflow: auto; padding: 0;"),
-      width = width_caixa,
-      collapsible = FALSE,
-      headerBorder = FALSE,
-      conteudo
-    )
-  } else {
-    HTML(paste0(
-      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
-      conteudo,
-      '</div>'
-    ))
-  }
+  HTML(paste0(
+    '<div class="caixa-indicador" style="--caixa-altura: ', tamanho_caixa, 'px;">',
+    conteudo,
+    '</div>'
+  ))
 }
 
 
-cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa = 300, fonte_titulo = "fonte-grande", width_caixa = 12) {
+cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa = 300, fonte_titulo = "fonte-semi-grande", width_caixa = 12) {
 
   if (indicador == "baixo peso") {
     valor_indicador1 <- dados[["porc_baixo_peso_menor_1000"]]
@@ -955,28 +953,25 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
   itens <- vapply(blocos, function(b) {
     paste0(
       '<div><p class="fonte-destaque-caixas2" style="', style_texto, '"><b> ', glue::glue(b$texto), ' </b></p>',
-      '<p style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
+      '<p class="fonte-grande" style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
     )
   }, character(1))
 
   conteudo <- HTML(paste0(
-    '<div', attr_class_html(fonte_titulo), ' style="height: ', altura_titulo, '; padding: 0px 10px 10px 10px;"><b> ', titulo, ' </b></div>',
-    '<hr/>',
-    '<div style="height: ', altura_conteudo, '; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    '<div', attr_class_html(fonte_titulo, "caixa-titulo"), '><b> ', titulo, ' </b></div>',
+    '<div class="caixa-valor caixa-valor--lista">',
     paste0(itens, collapse = ""),
     '</div>'
   ))
 
-  bs4Dash::box(
-    style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
-    width = width_caixa,
-    collapsible = FALSE,
-    headerBorder = FALSE,
-    conteudo
-  )
+  HTML(paste0(
+    '<div class="caixa-indicador caixa-indicador--lista" style="--caixa-altura: ', tamanho_caixa, 'px;">',
+    conteudo,
+    '</div>'
+  ))
 }
 
-cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = 303, fonte_titulo = "fonte-grande", retornar_caixa_completa = TRUE, width_caixa = 12) {
+cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa = 303, fonte_titulo = "fonte-semi-grande", retornar_caixa_completa = TRUE, width_caixa = 12) {
 
   pega_valor_formatado <- function(valor) {
     req(valor)
@@ -1092,37 +1087,26 @@ cria_caixa_conjunta_bloco7 <- function(dados, titulo, indicador, tamanho_caixa =
   itens <- vapply(blocos, function(b) {
     paste0(
       '<div><p class="fonte-destaque-caixas2" style="', style_texto, '"><b> ', b$texto, ' </b></p>',
-      '<p style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
+      '<p class="fonte-grande" style="', style_descricao, '">', htmltools::htmlEscape(b$descricao), '</p></div>'
     )
   }, character(1))
 
   conteudo <- HTML(paste0(
-    '<div', attr_class_html(fonte_titulo), ' style="height: 15%; padding: ', padding_titulo, '; overflow: auto"><b> ', titulo, ' </b></div>',
-    '<hr/>',
-    '<div style="height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    '<div', attr_class_html(fonte_titulo, "caixa-titulo"), '><b> ', titulo, ' </b></div>',
+    '<div class="caixa-valor caixa-valor--lista">',
     paste0(itens, collapse = ""),
     '</div>'
   ))
 
-  if (retornar_caixa_completa == TRUE) {
-    bs4Dash::box(
-      style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
-      width = width_caixa,
-      collapsible = FALSE,
-      headerBorder = FALSE,
-      conteudo
-    )
-  } else {
-    HTML(paste0(
-      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
-      conteudo,
-      '</div>'
-    ))
-  }
+  HTML(paste0(
+    '<div class="caixa-indicador caixa-indicador--lista" style="--caixa-altura: ', tamanho_caixa, 'px;">',
+    conteudo,
+    '</div>'
+  ))
 }
 
 
-cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa = 330, fonte_titulo = "fonte-grande", width_caixa = 12, retornar_caixa_completa = TRUE) {
+cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa = 330, fonte_titulo = "fonte-semi-grande", width_caixa = 12, retornar_caixa_completa = TRUE) {
 
   style_porc <- "display: flex; justify-content: center; text-align: center; margin-bottom: 0"
   style_grupo <- "display: flex; padding: 0 5px; justify-content: center; text-align: center; margin-bottom: 0"
@@ -1146,33 +1130,22 @@ cria_caixa_principais_evitaveis_bloco7 <- function(dados, titulo, tamanho_caixa 
   itens <- vapply(blocos, function(b) {
     paste0(
       '<div><p class="fonte-destaque-caixas2" style="', style_porc, '"><b> ', b$porc, ' </b></p>',
-      '<p style="', style_grupo, '">pertencem ao grupo de causas "', b$grupo, '"</p></div>'
+      '<p class="fonte-grande" style="', style_grupo, '">pertencem ao grupo de causas "', b$grupo, '"</p></div>'
     )
   }, character(1))
 
   conteudo <- HTML(paste0(
-    '<div', attr_class_html(fonte_titulo), ' style="height: 15%; padding: 0px 10px 0px 10px; overflow: auto"><b> ', titulo, ' </b></div>',
-    '<hr/>',
-    '<div style="height: 75%; overflow: auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">',
+    '<div', attr_class_html(fonte_titulo, "caixa-titulo"), '><b> ', titulo, ' </b></div>',
+    '<div class="caixa-valor caixa-valor--lista">',
     paste0(itens, collapse = ""),
     '</div>'
   ))
 
-  if (retornar_caixa_completa == TRUE) {
-    bs4Dash::box(
-      style = paste0("height: ", tamanho_caixa, "px; padding: 0;"),
-      width = width_caixa,
-      collapsible = FALSE,
-      headerBorder = FALSE,
-      conteudo
-    )
-  } else {
-    HTML(paste0(
-      '<div style="height: ', 24 + tamanho_caixa, 'px; box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); background: white; padding-top: 24px; position: relative; top: -24px;">',
-      conteudo,
-      '</div>'
-    ))
-  }
+  HTML(paste0(
+    '<div class="caixa-indicador caixa-indicador--lista" style="--caixa-altura: ', tamanho_caixa, 'px;">',
+    conteudo,
+    '</div>'
+  ))
 
 }
 

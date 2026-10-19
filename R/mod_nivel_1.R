@@ -28,7 +28,10 @@ mod_nivel_1_ui <- function(id) {
           outputId = ns("report"),
           color = "primary",
           label = HTML(
-            "<span class = 'fonte-muito-grande'> &nbsp; Fazer download do relatório contendo o resumo dos indicadores para a localidade e ano escolhidos </span>"
+            "<span class = 'fonte-muito-grande'>
+               <span class = 'rotulo-report-desktop'> &nbsp; Fazer download do relatório contendo o resumo dos indicadores para a localidade e ano escolhidos </span>
+               <span class = 'rotulo-report-mobile'> &nbsp; Baixar relatório (PDF) </span>
+             </span>"
           ),
           style = "unite",
           size = "sm"
@@ -48,7 +51,7 @@ mod_nivel_1_ui <- function(id) {
             ),
             class = 'fonte-titulos-modal',
             a(
-              icon("chart-line", color = "#007bff"),
+              icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
               onclick = "openTab('bloco_1')",
               href = "#"
             )
@@ -191,13 +194,14 @@ mod_nivel_1_ui <- function(id) {
             HTML("2 - Planejamento reprodutivo &nbsp;"),
             class = 'fonte-titulos-modal',
             a(
-              icon("chart-line", color = "#007bff"),
+              icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
               onclick = "openTab('bloco_2')",
               href = "#"
             )
           ),
           #icon = icon("2"),
           status = "primary",
+          collapsible = FALSE,
           fluidRow(
             column(
               width = 5,
@@ -307,13 +311,14 @@ mod_nivel_1_ui <- function(id) {
             HTML("3 - Assistência pré-natal &nbsp;"),
             class = 'fonte-titulos-modal',
             a(
-              icon("chart-line", color = "#007bff"),
+              icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
               onclick = "openTab('bloco_3')",
               href = "#"
             )
           ),
           #icon = icon("3"),
           status = "primary",
+          collapsible = FALSE,
           fluidRow(
             column(
               width = 5,
@@ -428,13 +433,14 @@ mod_nivel_1_ui <- function(id) {
             HTML("4 - Assistência ao parto &nbsp;"),
             class = 'fonte-titulos-modal',
             a(
-              icon("chart-line", color = "#007bff"),
+              icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
               onclick = "openTab('bloco_4')",
               href = "#"
             )
           ),
           #icon = icon("4"),
           status = "primary",
+          collapsible = FALSE,
           fluidRow(
             column(
               width = 5,
@@ -623,13 +629,14 @@ mod_nivel_1_ui <- function(id) {
               HTML("5 - Condições de nascimento &nbsp;"),
               class = 'fonte-titulos-modal',
               a(
-                icon("chart-line", color = "#007bff"),
+                icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
                 onclick = "openTab('bloco_5')",
                 href = "#"
               )
             ),
             #icon = icon("5"),
             status = "primary",
+            collapsible = FALSE,
             fluidRow(
               column(
                 width = 5,
@@ -754,13 +761,14 @@ mod_nivel_1_ui <- function(id) {
               HTML("6 - Mortalidade e morbidade materna &nbsp;"),
               class = 'fonte-titulos-modal',
               a(
-                icon("chart-line", color = "#007bff"),
+                icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
                 onclick = "openTab('bloco_6')",
                 href = "#"
               )
             ),
             #icon = icon("6"),
             status = "primary",
+            collapsible = FALSE,
             fluidRow(
               column(
                 width = 12,
@@ -1026,13 +1034,14 @@ mod_nivel_1_ui <- function(id) {
               ),
               class = 'fonte-titulos-modal',
               a(
-                icon("chart-line", color = "#007bff"),
+                icon("chart-line", color = "#007bff"), class = "acao-icone", `aria-label` = "Ver série histórica dos indicadores deste bloco",
                 onclick = "openTab('bloco_7')",
                 href = "#"
               )
             ),
             #icon = icon("6"),
             status = "primary",
+            collapsible = FALSE,
             fluidRow(
               column(
                 width = 12,
@@ -1895,11 +1904,9 @@ mod_nivel_1_server <- function(id, filtros) {
         texto <- "<b class = 'fonte-destaque-caixas1'> Brasil </b>"
       }
 
-      bs4Dash::box(
-        style = "height: 300px; overflow-y: auto; padding-top:0",
-        width = 12,
-        collapsible = FALSE,
-        headerBorder = FALSE,
+      htmltools::div(
+        class = "caixa-indicador caixa-localidade",
+        style = "--caixa-altura: 300px;",
         HTML(glue::glue(paste(texto)))
       )
     })
@@ -2916,7 +2923,7 @@ mod_nivel_1_server <- function(id, filtros) {
             )
           ),
           sortable = TRUE,
-          resizable = TRUE,
+          resizable = FALSE,
           highlight = TRUE,
           striped = TRUE,
           borderless = TRUE,

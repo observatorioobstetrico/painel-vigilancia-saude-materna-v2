@@ -55,7 +55,7 @@ mod_bloco_1_ui <- function(id){
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de nascidos vivos de mães nas faixas etárias selecionadas&nbsp;</b>"),
@@ -84,7 +84,7 @@ mod_bloco_1_ui <- function(id){
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de nascidos vivos de mães das raças/cores selecionadas&nbsp;</b>"),
@@ -115,7 +115,7 @@ mod_bloco_1_ui <- function(id){
               collapsible = FALSE,
               headerBorder = FALSE,
               div(
-                class = "fonte-grande",
+                class = "fonte-semi-grande",
                 style = glue::glue("height: 31%; padding: 0 10px; position: absolute; z-index: 2; color: transparent;"),
                 htmltools::tagList(
                   HTML("<b> Porcentagem de nascidos vivos de mães com as escolaridades selecionadas&nbsp;</b>"),
