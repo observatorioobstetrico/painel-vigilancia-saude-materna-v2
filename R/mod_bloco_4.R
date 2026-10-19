@@ -5626,7 +5626,7 @@ mod_bloco_4_server <- function(id, filtros){
             )
           ),
           sortable = TRUE,
-          resizable = TRUE,
+          resizable = FALSE,
           highlight = TRUE,
           striped = TRUE,
           borderless = TRUE,

@@ -828,6 +828,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando os data.frames com os dados de incompletude --------------------
     data_grafico_incompletude1 <- reactive({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$num_indicadores_incompletude != 0) {
         base_incompletude |>
           dplyr::filter(
@@ -878,6 +879,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_grafico_incompletude2 <- reactive({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$num_indicadores_incompletude >= 2) {
         base_incompletude |>
           dplyr::filter(
@@ -928,6 +930,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     })
 
     data_grafico_incompletude3 <- reactive({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$num_indicadores_incompletude == 3) {
         base_incompletude |>
           dplyr::filter(
@@ -1028,6 +1031,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ### Atualizando as opções do selectizeInput
     observe({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$num_indicadores_incompletude == 2) {
         updateSelectizeInput(
           inputId = "variavel_incompletude",
@@ -1128,6 +1132,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando o output do velocímetro (gauge) --------------------------------
     output$gauge1 <- renderUI({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$num_indicadores_incompletude == 0 & !(startsWith(infos_indicador()$bloco, "bloco5")) &
           !(startsWith(infos_indicador()$bloco, "bloco7")) & !(grepl("tx_abortos_cem", infos_indicador()$nome_abreviado)) &
           !(infos_indicador()$nome_abreviado %in% c(indicadores_2014[1:6], "porc_sc"))) {
@@ -1339,6 +1344,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
     ## Criando o output do botão de informações -------------------------------
     observeEvent(filtros()$pesquisar, {
       shinyjs::hide(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$nome_abreviado %in% c("porc_sc", "porc_menor20")) {
         shinyjs::show(id = "mostrar_botao_infos", anim = TRUE, animType = "fade", time = 0.7)
       }
@@ -2333,6 +2339,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando o gráfico de linhas --------------------------------------------
     output$grafico_serie <- highcharter::renderHighchart({
+      req(nrow(infos_indicador()) > 0)
       if (!(base::startsWith(infos_indicador()$indicador, "Medianas"))) {
         if (infos_indicador()$nome_abreviado == "rmm") {
           grafico_base <- highcharter::highchart() |>
@@ -2593,6 +2600,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando a tabela --------------------------------------------------------
     output$tabela1 <- reactable::renderReactable({
+      req(nrow(infos_indicador()) > 0)
       proporcao_geral <- function(numerador, denominador, fator, tipo_do_indicador) {
         reactable::JS(
           paste0(
@@ -2672,7 +2680,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               )
             ),
             sortable = TRUE,
-            resizable = TRUE,
+            resizable = FALSE,
             highlight = TRUE,
             striped = TRUE,
             bordered = FALSE,
@@ -2718,7 +2726,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
               )
             ),
             sortable = TRUE,
-            resizable = TRUE,
+            resizable = FALSE,
             highlight = TRUE,
             striped = TRUE,
             bordered = FALSE,
@@ -2737,6 +2745,7 @@ mod_nivel_3_server <- function(id, filtros, titulo_localidade_aux){
 
     ## Criando um output auxiliar que define o tamanho da tabela ---------------
     output$css_tabela <- renderUI({
+      req(nrow(infos_indicador()) > 0)
       if (infos_indicador()$bloco == "bloco6") {
         tags$style(HTML("#tabela {height: 1793px; padding-top: 0; padding-bottom: 00px; overflow-y: auto}"))
       } else if (grepl("bloco7", infos_indicador()$bloco)) {

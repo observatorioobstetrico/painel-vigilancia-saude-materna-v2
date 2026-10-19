@@ -625,7 +625,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 11%; display: flex; align-items: center",
-                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>Ministério da Saúde</a> &nbsp;</b>"),
+                HTML("<b class = 'fonte-muito-grande'> Porcentagem de nascidos vivos com anomalias congênitas prioritárias para vigilância definidas pelo <a href = 'https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022' target = '_blank' rel = 'noopener'>Ministério da Saúde</a> &nbsp;</b>"),
                 shinyjs::hidden(
                   span(
                     id = ns("mostrar_botao9"),
@@ -653,7 +653,7 @@ mod_bloco_5_ui <- function(id) {
               style = "height: 570px; padding-top: 0; padding-bottom: 0; overflow-y: auto",
               div(
                 style = "height: 10%; display: flex; align-items: center;",
-                HTML("<b class = 'fonte-muito-grande'> Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo <a href = https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022 , target = _blank>Ministério da Saúde</a> &nbsp;</b>")
+                HTML("<b class = 'fonte-muito-grande'> Tabela dos grupos de anomalias congênitas prioritárias para vigilância definidos pelo <a href = 'https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/svsa/vigilancia/guia-de-vigilancia-em-saude-5a-edicao-revisada-e-atualizada-2022' target = '_blank' rel = 'noopener'>Ministério da Saúde</a> &nbsp;</b>")
               ),
               hr(),
               shinycssloaders::withSpinner(reactable::reactableOutput(ns("tabela_malformacoes")))
@@ -2922,7 +2922,7 @@ mod_bloco_5_server <- function(id, filtros){
             )
           ),
           sortable = TRUE,
-          resizable = TRUE,
+          resizable = FALSE,
           highlight = TRUE,
           striped = TRUE,
           borderless = TRUE,

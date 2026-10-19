@@ -149,7 +149,7 @@ mod_bloco_3_ui <- function(id) {
                   span(
                     id = ns("mostrar_botao5"),
                     shinyWidgets::actionBttn(
-                      inputId = ns("botao3"),
+                      inputId = ns("botao5"),
                       icon = icon("triangle-exclamation", style = "color: red"),
                       color = "warning",
                       style = "material-circle",
@@ -502,7 +502,7 @@ mod_bloco_3_server <- function(id, filtros){
     ignoreNULL = FALSE
     )
 
-    observeEvent(input$botao3, {
+    observeEvent(input$botao5, {
       cria_modal_incompletude(
         incompletude1 = data_incompletude()$consprenat[which(data_incompletude()$ano >= 2014)],
         variavel_incompletude1 = "CONSPRENAT (número de consultas pré‐natal)",
