@@ -32,18 +32,37 @@ df_sinasc_consolidados <- bind_rows(df_sinasc_consolidados)
 
 # leitura de dados preliminares ou consolidados que não esta no microdatasus
 # para atualizações futuras, alterar o ano na URL abaixo
-df_sinasc_preliminares <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+
+## prelimininares de 2025
+
+df_sinasc_preliminares_2025 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
                                 sep = ";") |>
   select(CODMUNRES, DTNASC, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
 
-df_sinasc_preliminares[,1:length(df_sinasc_preliminares)] <- lapply(df_sinasc_preliminares[,1:length(df_sinasc_preliminares)], as.character)
+df_sinasc_preliminares_2025[,1:length(df_sinasc_preliminares_2025)] <- lapply(df_sinasc_preliminares_2025[,1:length(df_sinasc_preliminares_2025)], as.character)
 
-df_sinasc_preliminares <- df_sinasc_preliminares |>
+df_sinasc_preliminares_2025 <- df_sinasc_preliminares_2025 |>
   mutate(
     Ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC)))) |>
   group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   summarise(Nascimentos = n())
+
+## ṕreliminares de 2026
+
+df_sinasc_preliminares_2026 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+                                     sep = ";") |>
+  select(CODMUNRES, DTNASC, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
+  mutate(CODANOMAL = ifelse(CODANOMAL == "", NA, CODANOMAL))
+
+df_sinasc_preliminares_2026[,1:length(df_sinasc_preliminares_2026)] <- lapply(df_sinasc_preliminares_2026[,1:length(df_sinasc_preliminares_2026)], as.character)
+
+df_sinasc_preliminares_2026 <- df_sinasc_preliminares_2026 |>
+  mutate(
+    Ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC)))) |>
+  group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
+  summarise(Nascimentos = n())
+
 
 #### agrupando
 
@@ -52,6 +71,8 @@ df_sinasc_consolidados <- df_sinasc_consolidados |>
   Ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC)))) |>
   group_by(CODMUNRES, Ano, PESO, APGAR5, IDANOMAL, CODANOMAL) |>
   summarise(Nascimentos = n())
+
+df_sinasc_preliminares <- full_join(df_sinasc_preliminares_2025, df_sinasc_preliminares_2026)
 
 df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares)
 
@@ -121,7 +142,7 @@ asfixia <- asfixia |>
   mutate(codmunres = as.numeric(codmunres)) |>
   arrange(codmunres)
 
-write.csv(asfixia, "data-raw/csv/asfixia1_2012_2025.csv")
+write.csv(asfixia, "data-raw/csv/asfixia1_2012_2026.csv")
 
 ###################### malformação
 
@@ -342,17 +363,18 @@ malformacao <- malformacao |>
                 descricao,
                 nascidos_vivos_anomalia)
 
-malformacao <- malformacao[,-c(1,2,3)]
+malformacao <- malformacao |>
+  select(-anomalia)
 
 malformacao$codmunres <- as.numeric(malformacao$codmunres)
 
-write.table(malformacao, 'data-raw/csv/malformacao_2012_2025.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(malformacao, 'data-raw/csv/malformacao_2012_2026.csv', sep = ";", dec = ".", row.names = FALSE)
 
 
 ###################
 
 
-asfixia_1 <- read_csv("data-raw/csv/asfixia1_2012_2025.csv")
+asfixia_1 <- read_csv("data-raw/csv/asfixia1_2012_2026.csv")
 
 
 df_bloco8 <- asfixia_1 |>
@@ -361,4 +383,4 @@ df_bloco8 <- asfixia_1 |>
             total_nascidos = sum(total_nascidos)) |>
   ungroup()
 
-write.table(df_bloco8, 'data-raw/csv/asfixia_2012_2025.csv', sep = ";", dec = ".", row.names = FALSE)
+write.table(df_bloco8, 'data-raw/csv/asfixia_2012_2026.csv', sep = ";", dec = ".", row.names = FALSE)
