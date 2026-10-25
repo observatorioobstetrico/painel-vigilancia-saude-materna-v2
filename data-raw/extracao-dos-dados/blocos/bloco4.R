@@ -13,7 +13,7 @@ codigos_municipios <- read.csv(
 
 df_aux_municipios <- expand_grid(
   codmunres = codigos_municipios,
-  ano = 2012:2024
+  ano = 2023:2026
 )
 
 ################################################################################
@@ -23,7 +23,7 @@ df_aux_municipios <- expand_grid(
 df_list <- list()
 
 # Baixar os dados ano a ano
-for (ano in c(2012,2014:2024)) {
+for (ano in c(2023:2024)) {
   df_ano <- microdatasus::fetch_datasus(year_start = ano, year_end = ano,
                                         information_system = "SINASC",
                                         vars = c("CODMUNRES", "TPROBSON", "PARTO"))
@@ -32,7 +32,7 @@ for (ano in c(2012,2014:2024)) {
   df_ano$ano <- ano
 
   # Adicionar o dataframe à lista
-  df_list[[ano - 2011]] <- df_ano
+  df_list[[as.character(ano)]] <- df_ano
 }
 
 # TPROBSON não é definada para o ano de 2013 então a forma de baixar vai ser diferente
@@ -60,10 +60,27 @@ sinasc25 <- fread(
   select(CODMUNRES,TPROBSON,PARTO,ano)
 
 ################################################################################
+# SINASC 2026
+################################################################################
+
+options(timeout = 99999)
+
+sinasc26 <- fread(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  sep=";"
+) |>
+  mutate(ano = 2026) |>
+  select(CODMUNRES,TPROBSON,PARTO,ano)
+
+################################################################################
 # Base principal
 ################################################################################
 
-df_aux <- bind_rows(df, sinasc25)
+df_sinasc <- bind_rows(sinasc25, sinasc26)
+df_aux <- bind_rows(
+  df |> mutate(CODMUNRES = as.numeric(CODMUNRES)),
+  df_sinasc |> mutate(CODMUNRES = as.numeric(CODMUNRES))
+)
 
 df_aux <- df_aux |>
   mutate(
@@ -201,6 +218,6 @@ df_bloco4 <- df_bloco4 |>
 
 write.csv(
   df_bloco4,
-  "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2025.csv",
+  "data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2023-2026.csv",
   row.names = FALSE
 )
