@@ -124,7 +124,7 @@ bloco3 <- bloco3 |>
 
 ## Para o bloco 4 (aba de grupos de Robson) -------------------------------
 ### Lendo o arquivo contendo todos os indicadores
-bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2025.csv") |>
+bloco4_aux <- read.csv("data-raw/csv/indicadores_bloco4_assistencia_ao_parto_2012-2026.csv") |>
   janitor::clean_names()
 
 ### Adicionando as informações dos municípios
