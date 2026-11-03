@@ -11,17 +11,26 @@ library(readxl)
 
 # Inserir informações:
 # Todos os anos a serem baixados
-anos <- c(2023:2025)
-# Ano baixado pelo opendatasus
-ano_opendatasus <- 2025
-# Links para o ano baixado pelo opendatasus
-link_opendatasus_sim <- "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/DO25OPEN_csv.zip"
-link_opendatasus_sinasc <- "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip"
+anos <- 2023:2026
 
+# Anos baixados pelo OpenDataSUS
+ano_opendatasus <- 2025:2026
+
+# Links do SIM
+link_opendatasus_sim <- c(
+  "2025" = "ftp://ftp.datasus.gov.br/dissemin/publicos/SIM/PRELIM/DOFET/DOFET25.dbc",
+  "2026" = "ftp://ftp.datasus.gov.br/dissemin/publicos/SIM/PRELIM/DOFET/DOFET26.dbc"
+)
+
+# Links do SINASC
+link_opendatasus_sinasc <- c(
+  "2025" = "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  "2026" = "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip"
+)
 
 # Baixando todos os dados necessários (com paralelização) ---------------------
 ## Criando o planejamento dos futures
-plan(multisession)
+plan(sequential)
 options(timeout = 600)
 
 ## Criando uma função que baixa todos os dados necessários para um certo ano
@@ -34,6 +43,7 @@ processa_ano <- function(ano) {
 
   # Criando uma função para criar a coluna de "ano" em bases do SIM e SINASC
   extrai_ano <- function(data, n = 4) {
+    data <- as.character(data)
     as.numeric(substr(data, nchar(data) - n + 1, nchar(data)))
   }
 
@@ -78,18 +88,33 @@ processa_ano <- function(ano) {
   # Criando uma função genérica para baixar dados pelo microdatasus
   baixa_dados <- function(ano, sistema, data_col, vars = NULL) {
     # Tratamento especial para os dados preliminares
-    if (ano == ano_opendatasus) {
+    if (ano %in% ano_opendatasus) {
       switch(sistema,
-        "SIM-DOFET" = {
-          fread_retry(link_opendatasus_sim) |>
-            mutate(ano = extrai_ano(.data[[data_col]])) |>
-            pre_processa_dofet()
-        },
-        "SINASC" = {
-          fread_retry(link_opendatasus_sinasc, sep = ";") |>
-            mutate(ano = extrai_ano(.data[[data_col]])) |>
-            select(CODMUNRES, ano, PESO)
-        }
+             "SIM-DOFET" = {
+
+               arquivo <- tempfile(fileext = ".dbc")
+
+               download.file(
+                 link_opendatasus_sim[as.character(ano)],
+                 destfile = arquivo,
+                 mode = "wb",
+                 quiet = TRUE
+               )
+
+               dados <- read.dbc::read.dbc(arquivo)
+
+               unlink(arquivo)
+
+               dados |>
+                 mutate(ano = extrai_ano(.data[[data_col]])) |>
+                 pre_processa_dofet()
+             },
+
+             "SINASC" = {
+               fread_retry(link_opendatasus_sinasc[as.character(ano)], sep = ";") |>
+                 mutate(ano = extrai_ano(.data[[data_col]])) |>
+                 select(CODMUNRES, ano, PESO)
+             }
       )
     } else {
       # Anos consolidados via microdatasus
@@ -129,7 +154,7 @@ df_dofet <- rbindlist(lapply(resultados, `[[`, "dofet"), fill = TRUE)
 
 ## Criando uma função para salvar os arquivos
 salva_csv_gz <- function(df, nome) {
-  path <- paste0("data-raw/extracao-dos-dados/blocos/databases_auxiliares/", nome, "_2023_2025.csv.gz")
+  path <- paste0("data-raw/extracao-dos-dados/blocos/databases_auxiliares/", nome, "_2023_2026.csv.gz")
   write.csv(df, gzfile(path), row.names = FALSE)
 }
 
@@ -140,11 +165,11 @@ salva_csv_gz(df_dofet, "df_sim_fetais")
 
 # Para os indicadores de número de óbitos, taxa de mortalidade e distribuição dos óbitos por peso ou momento do óbito -----
 ## Lendo o arquivo com os óbitos fetais no período de 2012-2025
-df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2025.csv.gz") |>
+df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Lendo o arquivo com os nascimentos no período de 2012-2024
-df_sinasc <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sinasc_2023_2025.csv.gz") |>
+df_sinasc <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sinasc_2023_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -153,7 +178,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2025)), ano = 2023:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2026)), ano = 2023:2026)
 
 ## Para os dados do SINASC, criando variáveis de nascidos vivos por faixa de peso
 df_indicadores_sinasc <- df_sinasc |>
@@ -272,12 +297,12 @@ df_indicadores_fetais <- df_obitos_fetais |>
   arrange(codmunres, ano)
 
 ## Salvando a base final
-write.csv(df_indicadores_fetais, "data-raw/csv/indicadores_bloco7_mortalidade_fetal_2023-2025.csv", row.names = FALSE)
+write.csv(df_indicadores_fetais, "data-raw/csv/indicadores_bloco7_mortalidade_fetal_2023-2026.csv", row.names = FALSE)
 
 
 # Para os indicadores de causas evitáveis ---------------------------------------
 ## Lendo o arquivo com os óbitos fetais no período de 2012-2024
-df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2025.csv.gz") |>
+df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -286,7 +311,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2025)), ano = 2023:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2026)), ano = 2023:2026)
 
 ## Definindo os vetores de CIDs
 df_cids_evitaveis <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/evitabilidade_fetal_atualizado.csv") |>
@@ -363,12 +388,12 @@ df_bloco7_fetais_evitaveis <- list(
   )
 
 ## Salvando a base final
-write.csv(df_bloco7_fetais_evitaveis, "data-raw/csv/indicadores_bloco7_causas_evitaveis_fetal_2023-2025.csv", row.names = FALSE)
+write.csv(df_bloco7_fetais_evitaveis, "data-raw/csv/indicadores_bloco7_causas_evitaveis_fetal_2023-2026.csv", row.names = FALSE)
 
 
 # Para os indicadores de grupos de causas ---------------------------------------
 ## Lendo o arquivo com os óbitos fetais no período de 2012-2024
-df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2025.csv.gz") |>
+df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Criando um objeto que recebe os códigos dos municípios que utilizamos no painel
@@ -377,7 +402,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2025)), ano = 2023:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2026)), ano = 2023:2026)
 
 ## Definindo os vetores de CIDs
 ### Criando vetores com as cids de cada grupo
@@ -484,4 +509,4 @@ df_bloco7_principais_fetal <- list(
   )
 
 ## Salvando a base final
-write.csv(df_bloco7_principais_fetal, "data-raw/csv/indicadores_bloco7_causas_principais_fetal_2023-2025.csv", row.names = FALSE)
+write.csv(df_bloco7_principais_fetal, "data-raw/csv/indicadores_bloco7_causas_principais_fetal_2023-2026.csv", row.names = FALSE)

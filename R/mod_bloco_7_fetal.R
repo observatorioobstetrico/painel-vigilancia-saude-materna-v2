@@ -966,7 +966,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_evitaveis_fetal, filtros(), pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
+      processa_causas(data = bloco7_evitaveis_fetal, filtros = filtros(), pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
     })
 
     dfs_localidade_principais <- reactive({
@@ -976,7 +976,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_principais_fetal, filtros(), pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
+      processa_causas(data = bloco7_principais_fetal, filtros = filtros(), pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
     })
 
     ### Criando dataframes separados para o resumo
@@ -1069,7 +1069,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_evitaveis_fetal, filtros(), comp = TRUE, pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
+      processa_causas(data = bloco7_evitaveis_fetal, filtros = filtros(), comp = TRUE, pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
     })
 
     dfs_comp_principais <- reactive({
@@ -1079,7 +1079,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_principais_fetal, filtros(), comp = TRUE, pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
+      processa_causas(data = bloco7_principais_fetal, filtros = filtros(), comp = TRUE, pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
     })
 
     ### Criando dataframes separados para o resumo
@@ -1173,7 +1173,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_evitaveis_fetal, filtros(), referencia = TRUE, pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
+      processa_causas(data = bloco7_evitaveis_fetal, filtros = filtros(), referencia = TRUE, pesos = input$input_evitaveis_peso, momentos = input$input_evitaveis_momento, grupos = input$input_evitaveis_grupos, prefixo_coluna = "evitaveis_fetal")
     })
 
     dfs_referencia_principais <- reactive({
@@ -1183,7 +1183,7 @@ mod_bloco_7_fetal_server <- function(id, filtros){
           "⚠ Não existem ocorrências de óbitos fetais para os filtros selecionados."
         )
       )
-      processa_causas(bloco7_principais_fetal, filtros(), referencia = TRUE, pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
+      processa_causas(data = bloco7_principais_fetal, filtros = filtros(), referencia = TRUE, pesos = input$input_principais_peso, momentos = input$input_principais_momento, grupos = input$input_principais_grupos, prefixo_coluna = "principais_fetal")
     })
 
     ### Criando dataframes separados para o resumo

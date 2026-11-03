@@ -255,7 +255,7 @@ bloco6 <- bloco6 |>
 ## Para o bloco 7 (aba fetal)  --------------------------------------------
 ### Para os indicadores originais -----------------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2025.csv")
+bloco7_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_fetal <- dplyr::left_join(bloco7_fetal_aux, tabela_aux_municipios, by = "codmunres")
@@ -267,7 +267,7 @@ bloco7_fetal <- bloco7_fetal |>
 
 ### Para os indicadores de causas evitáveis -------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_evitaveis_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_fetal_2012-2025.csv")
+bloco7_evitaveis_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_fetal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_evitaveis_fetal <- dplyr::left_join(bloco7_evitaveis_fetal_aux, tabela_aux_municipios, by = "codmunres")
@@ -279,7 +279,7 @@ bloco7_evitaveis_fetal <- bloco7_evitaveis_fetal |>
 
 ### Para os indicadores de causas principais ------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_principais_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_fetal_2012-2025.csv")
+bloco7_principais_fetal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_fetal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_principais_fetal <- dplyr::left_join(bloco7_principais_fetal_aux, tabela_aux_municipios, by = "codmunres")
