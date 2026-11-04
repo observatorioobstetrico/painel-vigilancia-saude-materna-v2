@@ -30,7 +30,7 @@ codigos_municipios <- read.csv(
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
 df_aux_municipios <- tidyr::expand_grid(
   codmunres = codigos_municipios,
-  ano = 2012:2025
+  ano = 2023:2026
 )
 
 ## Importando funções que baixam dados do Tabnet
@@ -40,10 +40,11 @@ source(file.path(base_dir,"funcoes_auxiliares.R"))
 # SINASC
 # =============================================================================
 
+
 # Para as variáveis provenientes do SINASC -----------------------------------
 ## Baixando os dados consolidados do SINASC e selecionando as variáveis de interesse
 df_sinasc_consolidados <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2023,
   year_end = 2024,
   vars = c("CODMUNRES", "DTNASC", "IDADEMAE", "QTDPARTNOR", "QTDPARTCES"),
   information_system = "SINASC"
@@ -52,7 +53,7 @@ df_sinasc_consolidados <- fetch_datasus(
 ## Baixando os dados preliminares do SINASC e selecionando as variáveis de interesse
 options(timeout = 99999)
 
-df_sinasc_preliminares <- fread(
+df_sinasc_preliminares_2025 <- fread(
   "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
   sep = ";"
 ) |>
@@ -65,13 +66,29 @@ df_sinasc_preliminares <- fread(
     QTDPARTCES = as.character(QTDPARTCES)
   )
 
+
+df_sinasc_preliminares_2026 <- fread(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  sep = ";"
+) |>
+  select(CODMUNRES, DTNASC, IDADEMAE, QTDPARTNOR, QTDPARTCES) |>
+  mutate(
+    CODMUNRES = as.character(CODMUNRES),
+    DTNASC = as.character(DTNASC),
+    IDADEMAE = as.character(IDADEMAE),
+    QTDPARTNOR = as.character(QTDPARTNOR),
+    QTDPARTCES = as.character(QTDPARTCES)
+  )
+
 ## Juntando os dados consolidados e preliminares
+
+df_sinasc_preliminares <- full_join(df_sinasc_preliminares_2025, df_sinasc_preliminares_2026)
 df_sinasc <- full_join(df_sinasc_consolidados, df_sinasc_preliminares)
 
 rm(df_sinasc_consolidados, df_sinasc_preliminares)
 
 ## Transformando algumas variáveis e criando as variáveis necessárias p/ o cálculo dos indicadores
-df_bloco2_sinasc <- df_sinasc|>
+df_bloco2_sinasc <- df_sinasc |>
   mutate(
     ano = as.numeric(substr(DTNASC, nchar(DTNASC) - 3, nchar(DTNASC))),
     IDADEMAE = as.numeric(IDADEMAE),
@@ -151,7 +168,7 @@ rm(df_sinasc)
 baixar_pop <- function(idade_min, idade_max, df_aux){
 
   est_pop_tabnet(
-    periodo = 12:25,
+    periodo = 23:25,
     idade_min = idade_min,
     idade_max = idade_max
   ) |>
@@ -194,7 +211,7 @@ df_bloco2_tabnet <- df_est_pop_fem_10_14 |>
 
 # Para os indicadores de aborto ----------------------------------------------
 ## Criando um vetor com os anos disponíveis
-anos_aborto <- c(2012:2024)
+anos_aborto <- c(2023:2025)
 
 ## Criando um vetor com as siglas de todos os estados do Brasil
 estados <- c(
@@ -408,13 +425,17 @@ for (arquivo in arquivos) {
 ### Exportando os dados concatenados da base consolidada
 write.csv(
   dados_concatenados_hosp,
-  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_2012_2024.csv",
+  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_2023_2025.csv",
   row.names = FALSE
 )
 
 ### Filtrando pelas faixas etárias de interesse e pelas indicadoras de aborto ou não aborto
 dados_concatenados_hosp_filtrados <- dados_concatenados_hosp |>
   mutate(
+    FAIXA_ETARIA = FAIXA_ETARIA |>
+      stringr::str_replace(" anos ou mais$", " ou mais") |>
+      stringr::str_remove(" anos$"),
+
     fet = ifelse(
       FAIXA_ETARIA %in% c("50 a 59", "60 a 69", "70 a 79", "80 ou mais"),
       ">=50",
@@ -439,7 +460,7 @@ dados_concatenados_hosp_filtrados <- dados_concatenados_hosp |>
 ### Exportando os dados da base consolidada filtrados
 write.csv(
   dados_concatenados_hosp_filtrados,
-  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_filtrados_2012_2024.csv",
+  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_filtrados_2023_2025.csv",
   row.names = FALSE
 )
 
@@ -466,12 +487,51 @@ for (ano in anos_aborto) {
         mes_str,
         "_HOSP_DET.zip"
       )
-      download.file(url, filename)
-      unzip(
-        filename,
-        exdir = "databases_auxiliares/ANS/arquivos_base_detalhada"
-      )
-      file.remove(filename)
+      #download.file(url, filename)
+      #unzip(
+      #  filename,
+      #  exdir = "databases_auxiliares/ANS/arquivos_base_detalhada"
+      #)
+      #file.remove(filename)
+      # Verificar se o CSV já foi extraído
+      arquivo_csv <- sub("\\.zip$", ".csv", filename)
+
+      if (!file.exists(arquivo_csv)) {
+
+        # Tentar baixar até 5 vezes
+        for (tentativa in 1:5) {
+
+          resultado <- try(
+            download.file(
+              url,
+              filename,
+              mode = "wb",
+              method = "libcurl"
+            ),
+            silent = TRUE
+          )
+
+          if (!inherits(resultado, "try-error") &&
+              identical(resultado, 0L)) {
+            break
+          }
+
+          Sys.sleep(3)
+        }
+
+        # Verificar se o download foi concluído
+        if (inherits(resultado, "try-error") ||
+            !identical(resultado, 0L)) {
+          stop("Falha no download: ", url)
+        }
+
+        unzip(
+          filename,
+          exdir = "databases_auxiliares/ANS/arquivos_base_detalhada"
+        )
+
+        file.remove(filename)
+      }
     }
   }
 }
@@ -564,9 +624,13 @@ for (ano in anos_aborto) {
 ### Fazendo todas as manipulações necessárias
 #### Lendo o arquivo com os dados concatenados da base consolidada e criando outra variável de faixa etária
 dados_concatenados_hosp <- fread(
-  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_2012_2024.csv"
+  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_2023_2025.csv"
 ) |>
   mutate(
+    FAIXA_ETARIA = FAIXA_ETARIA |>
+      stringr::str_replace(" anos ou mais$", " ou mais") |>
+      stringr::str_remove(" anos$"),
+
     fet = ifelse(
       FAIXA_ETARIA %in% c("50 a 59", "60 a 69", "70 a 79", "80 ou mais"),
       ">=50",
@@ -576,7 +640,7 @@ dados_concatenados_hosp <- fread(
 
 #### Lendo o arquivo com os dados concatenados da base consolidada filtrados e excluindo os casos em que cid_nao_aborto == 1
 dados_filtrados_cid <- fread(
-  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_filtrados_2012_2024.csv"
+  "databases_auxiliares/ANS/arquivos_base_consolidada-2026/dados_ANS_hosp_filtrados_2023_2025.csv"
 ) |>
   filter(cid_nao_aborto == 0 | is.na(cid_nao_aborto)) |>
   select(
@@ -930,6 +994,6 @@ df_bloco2 <- full_join(
 # Salvando a base de dados final ---------------------------------------------
 write.csv(
   df_bloco2,
-  "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2025.csv",
+  "data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2023_2026.csv",
   row.names = FALSE
 )

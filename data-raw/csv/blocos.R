@@ -97,7 +97,7 @@ bloco1 <- bloco1 |>
 
 ## Para o bloco 2 ---------------------------------------------------------
 ### Lendo o arquivo contendo todos os indicadores
-bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2025.csv") |>
+bloco2_aux <- read.csv("data-raw/csv/indicadores_bloco2_planejamento_reprodutivo_SUS_ANS_2012_2026.csv") |>
   janitor::clean_names()
 
 ### Adicionando as informações dos municípios
