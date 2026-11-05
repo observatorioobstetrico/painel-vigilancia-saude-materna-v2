@@ -914,36 +914,21 @@ cria_caixa_conjunta_bloco5 <- function(dados, titulo, indicador, tamanho_caixa =
     valor_indicador5 <- dados[["porc_premat_faltantes"]]
   }
 
-  if (is.nan(valor_indicador1)) {
-    texto1 <- "---"
-  } else {
-    texto1 <- "{formatC(valor_indicador1, big.mark = '.', decimal.mark = ',')}%"
+  formata_porc <- function(valor) {
+    if (length(valor) == 0 || is.nan(valor)) {
+      "---"
+    } else {
+      paste0(formatC(valor, big.mark = '.', decimal.mark = ','), "%")
+    }
   }
 
-  if (is.nan(valor_indicador2)) {
-    texto2 <- "---"
-  } else {
-    texto2 <- "{formatC(valor_indicador2, big.mark = '.', decimal.mark = ',')}%"
-  }
-
-  if (is.nan(valor_indicador3)) {
-    texto3 <- "---"
-  } else {
-    texto3 <- "{formatC(valor_indicador3, big.mark = '.', decimal.mark = ',')}%"
-  }
+  texto1 <- formata_porc(valor_indicador1)
+  texto2 <- formata_porc(valor_indicador2)
+  texto3 <- formata_porc(valor_indicador3)
 
   if (indicador == "prematuridade") {
-    if (is.nan(valor_indicador4)) {
-      texto4 <- "---"
-    } else {
-      texto4 <- "{formatC(valor_indicador4, big.mark = '.', decimal.mark = ',')}%"
-    }
-
-    if (is.nan(valor_indicador5)) {
-      texto5 <- "---"
-    } else {
-      texto5 <- "{formatC(valor_indicador5, big.mark = '.', decimal.mark = ',')}%"
-    }
+    texto4 <- formata_porc(valor_indicador4)
+    texto5 <- formata_porc(valor_indicador5)
   }
 
   style_texto <- "display: flex; justify-content: center; text-align: center; margin-bottom: 0"
