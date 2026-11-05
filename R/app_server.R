@@ -19,7 +19,7 @@ app_server <- function(input, output, session) {
   output$label_nivel_comp <- renderUI({
     div(
       tags$b(HTML("Nível de análise &nbsp;")),
-      if (input$nivel2 == "municipios_semelhantes") {
+      if (isTruthy(input$nivel2) && input$nivel2 == "municipios_semelhantes") {
         shinyWidgets::actionBttn(
           inputId = "botao_agrupamento",
           icon = icon("question"),
@@ -62,6 +62,7 @@ Silhueta e Calinski-Harabasz, o número de grupos adotado foi 3. </div>",
   })
 
   observe({
+    req(input$nivel)
     if (input$nivel == "municipal") {
       if (
         rv$input_nivel_anterior[length(rv$input_nivel_anterior) - 1] !=
