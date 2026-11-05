@@ -16,6 +16,11 @@ app_server <- function(input, output, session) {
   mod_bloco_7_server("bloco_7_1", filtros = filtros)
   mod_nivel_3_server("nivel_3_1", filtros = filtros)
 
+  session$onFlushed(
+    function() agenda_preaquecimento_nivel_1(),
+    once = TRUE
+  )
+
   output$label_nivel_comp <- renderUI({
     div(
       tags$b(HTML("Nível de análise &nbsp;")),

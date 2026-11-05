@@ -94,6 +94,89 @@ registra_bindings_dados <- function(pkg) {
   invisible(NULL)
 }
 
+# Bases lidas pelo Nivel 1 (home). O primeiro acesso a cada uma delas paga a
+# leitura do parquet; como o cache e por processo, pre-aquecemos em segundo
+# plano para que o primeiro clique no Nivel 1 encontre tudo em memoria.
+.parquets_nivel_1 <- c(
+  "bloco1",
+  "bloco2",
+  "bloco3",
+  "bloco4",
+  "bloco4_deslocamento_muni",
+  "bloco4_deslocamento_macrorregiao",
+  "bloco4_deslocamento_uf",
+  "bloco4_profissional",
+  "bloco5",
+  "bloco6",
+  "bloco7",
+  "bloco7_fetal",
+  "bloco7_perinatal",
+  "bloco7_neonatal",
+  "bloco7_morbidade_neonatal",
+  "bloco7_dist_morbidade",
+  "bloco7_evitaveis_fetal",
+  "bloco7_evitaveis_perinatal",
+  "bloco7_evitaveis_neonatal",
+  "bloco7_principais_fetal",
+  "bloco7_principais_perinatal",
+  "bloco7_principais_neonatal",
+  "base_incompletude",
+  "base_cobertura_muni_2015_2021",
+  "base_cobertura_uf_regioes_2015_2021",
+  "base_referencia_baixo_peso",
+  "malformacao",
+  "rmm_corrigida"
+)
+
+.dados_preaquecimento <- new.env(parent = emptyenv())
+
+#' Pre-aquece em segundo plano os parquets usados pelo Nivel 1
+#'
+#' Carrega um arquivo por callback do `later`, cedendo o event loop entre eles
+#' para nao bloquear as sessoes que ja estao interagindo com o app.
+#'
+#' @noRd
+preaquece_dados_nivel_1 <- function(nomes = .parquets_nivel_1, pausa = 0.02) {
+  inicio <- proc.time()[["elapsed"]]
+  i <- 0L
+
+  proximo <- function() {
+    i <<- i + 1L
+    if (i > length(nomes)) {
+      if (identical(Sys.getenv("PANEL_PREAQUECE_NIVEL1_DEBUG"), "1")) {
+        cat(sprintf(
+          "PREAQUECE_NIVEL1 concluido: %d arquivos em %.2f s\n",
+          length(nomes),
+          proc.time()[["elapsed"]] - inicio
+        ))
+      }
+      return(invisible(NULL))
+    }
+
+    try(carrega_dados_parquet(nomes[[i]]), silent = TRUE)
+    later::later(proximo, pausa)
+  }
+
+  proximo()
+  invisible(NULL)
+}
+
+#' Agenda o pre-aquecimento uma unica vez por processo
+#'
+#' @noRd
+agenda_preaquecimento_nivel_1 <- function(atraso = 0.2) {
+  if (!identical(Sys.getenv("PANEL_PREAQUECE_NIVEL1", "1"), "1")) {
+    return(invisible(NULL))
+  }
+  if (isTRUE(.dados_preaquecimento$agendado)) {
+    return(invisible(NULL))
+  }
+
+  .dados_preaquecimento$agendado <- TRUE
+  later::later(function() preaquece_dados_nivel_1(), atraso)
+  invisible(NULL)
+}
+
 .onLoad <- function(libname, pkgname) {
   registra_bindings_dados(pkgname)
   invisible()
