@@ -212,7 +212,7 @@ bloco5 <- bloco5 |>
   )
 
 ### Lendo o arquivo com as informações para a construção da tabela de malformações
-malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2026.csv", sep = ';') |>
+malformacao_aux <- read.csv("data-raw/csv/malformacao_2012_2025.csv", sep = ';') |>
   janitor::clean_names() |>
   dplyr::arrange(codmunres, ano) |>
   dplyr::filter(codmunres %in% tabela_aux_municipios$codmunres)
@@ -229,7 +229,7 @@ malformacao <- malformacao |>
 
 ## Para o bloco 6  --------------------------------------------------------
 ### Lendo o arquivo contendo todos os indicadores de mortalidade materna
-bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2026.csv")
+bloco6_mortalidade_aux <- read.csv("data-raw/csv/indicadores_bloco6_mortalidade_materna_2012-2025.csv")
 
 ### Lendo o arquivo contendo todos os indicadores de morbidade materna do SUS
 bloco6_morbidade_sus_aux <- read.csv("data-raw/csv/indicadores_bloco6_morbidade_materna_sus_2012-2025.csv", sep = ",") |>
