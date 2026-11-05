@@ -1564,10 +1564,8 @@ mod_nivel_1_server <- function(id, filtros) {
 
           incProgress(0.2)
 
-          rmarkdown::render(
-            input = "report.Rmd",
-            output_file = arquivo_html,
-            params = list(
+          params_relatorio <- lapply(
+            list(
               localidade = localidade,
               nivel = filtros()$nivel,
               ano = filtros()$ano,
@@ -1582,9 +1580,11 @@ mod_nivel_1_server <- function(id, filtros) {
               data3 = data3(),
               data3_comp = data3_comp(),
               data4 = data4(),
-              data4_comp = data4_comp,
+              data4_comp = data4_comp(),
               data4_deslocamento = data4_deslocamento(),
               data4_comp_deslocamento = data4_comp_deslocamento(),
+              data4_deslocamento_macrorregiao = data4_deslocamento_macrorregiao(),
+              data4_comp_deslocamento_macrorregiao = data4_comp_deslocamento_macrorregiao(),
               data5 = data5(),
               data5_comp = data5_comp(),
               data5_comp_baixo_peso = data5_comp_baixo_peso(),
@@ -1613,9 +1613,14 @@ mod_nivel_1_server <- function(id, filtros) {
               data7_principais_neonatal = data7_principais_neonatal(),
               data7_principais_neonatal_comp = data7_principais_neonatal_comp(),
               bloco7_principais_internacoes_neonatal = bloco7_principais_internacoes_neonatal()
+            ),
+            garante_linha_relatorio
+          )
 
-
-            )
+          rmarkdown::render(
+            input = "report.Rmd",
+            output_file = arquivo_html,
+            params = params_relatorio
           )
 
           incProgress(0.5, message = "Renderizando o PDF...")

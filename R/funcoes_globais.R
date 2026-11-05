@@ -172,6 +172,30 @@ valor_ou_na <- function(x) {
   if (is.null(x) || length(x) == 0) NA_character_ else as.character(x)[1]
 }
 
+# Garante que um data.frame passado como parametro do relatorio tenha ao menos
+# uma linha. Alguns blocos nao possuem dados para determinado ano (ex.: 2026),
+# e o Rmd espera poder acessar as colunas para exibir "---" no lugar dos valores.
+garante_linha_relatorio <- function(x) {
+  if (!is.data.frame(x) || nrow(x) > 0) {
+    return(x)
+  }
+
+  colunas <- lapply(
+    x,
+    function(coluna) {
+      if (is.numeric(coluna)) {
+        NA_real_
+      } else if (is.logical(coluna)) {
+        NA
+      } else {
+        NA_character_
+      }
+    }
+  )
+
+  as.data.frame(colunas, stringsAsFactors = FALSE)
+}
+
 # Versao em data.table do filtra_localidade(), usada nos filtros de tabelas
 # largas (evita as copias do dplyr + as.data.frame). Retorna data.table.
 filtra_localidade_dt <- function(dt, filtros, comp = FALSE, referencia = FALSE, localidade_resumo = "escolha1", add_class = TRUE, nivel_atual = "nivel_2") {

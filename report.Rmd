@@ -19,6 +19,8 @@ params:
   data4_comp: NA
   data4_deslocamento: NA
   data4_comp_deslocamento: NA
+  data4_deslocamento_macrorregiao: NA
+  data4_comp_deslocamento_macrorregiao: NA
   data5: NA
   data5_comp: NA
   data5_comp_baixo_peso: NA
@@ -26,10 +28,27 @@ params:
   data6_rmm_corrigida: NA
   data6_comp: NA   
   data_incompletude: NA
-  data7: NA
-  data7_comp: NA
-  bloco7_evitaveis_resumo: NA
-  bloco7_evitaveis_resumo_comp: NA
+  data7_fetal: NA
+  data7_fetal_comp: NA
+  data7_perinatal: NA
+  data7_perinatal_comp: NA
+  data7_neonatal: NA
+  data7_neonatal_comp: NA
+  data7_morbidade_neonatal: NA
+  data7_morbidade_neonatal_comp: NA
+  data7_evitaveis_fetal: NA
+  data7_evitaveis_fetal_comp: NA
+  data7_principais_fetal: NA
+  data7_principais_fetal_comp: NA
+  data7_evitaveis_perinatal: NA
+  data7_evitaveis_perinatal_comp: NA
+  data7_principais_perinatal: NA
+  data7_principais_perinatal_comp: NA
+  data7_evitaveis_neonatal: NA
+  data7_evitaveis_neonatal_comp: NA
+  data7_principais_neonatal: NA
+  data7_principais_neonatal_comp: NA
+  bloco7_principais_internacoes_neonatal: NA
 output: 
   painel.indicadores:::minha_paged_windmill
 knit: pagedown::chrome_print
@@ -677,6 +696,8 @@ infos_comp_bloco4 <- data.frame(
 
   data4_formatado <- lapply(params$data4_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
   data4_comp_formatado <- lapply(params$data4_comp_deslocamento, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+  data4_macrorregiao_formatado <- lapply(params$data4_deslocamento_macrorregiao, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+  data4_comp_macrorregiao_formatado <- lapply(params$data4_comp_deslocamento_macrorregiao, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
   max_min <- ifelse(infos_comp_bloco4$invertido == FALSE, "Máximo de ", "Mínimo de ")
 
@@ -697,7 +718,7 @@ infos_comp_bloco4 <- data.frame(
       paste0(data4_formatado$prop_partos_macro_rsaude_res, "%"),
       paste0(data4_formatado$prop_partos_fora_macro_rsaude_res, "%"),
       paste0(data4_formatado$prop_partos_fora_uf_res, "%"),
-      paste0(data4_formatado$prop_partos_com_uti, "%")
+      paste0(data4_macrorregiao_formatado$prop_partos_com_4mais_uti, "%")
     ),
 
     "valor_de_referencia" = c(
@@ -706,7 +727,7 @@ infos_comp_bloco4 <- data.frame(
       paste0(max_min[3], data4_comp_formatado$prop_partos_macro_rsaude_res, "% (média nacional)"),
       paste0(max_min[4], data4_comp_formatado$prop_partos_fora_macro_rsaude_res, "% (média nacional)"),
       paste0(max_min[5], data4_comp_formatado$prop_partos_fora_uf_res, "% (média nacional)"),
-      paste0(max_min[5], data4_comp_formatado$prop_partos_com_uti, "% (média nacional)")
+      paste0(max_min[6], data4_comp_macrorregiao_formatado$prop_partos_com_4mais_uti, "% (média nacional)")
     ),
 
     "comparacao" = c(
@@ -1186,9 +1207,9 @@ Para os indicadores relacionados à mortalidade fetal:
 ```{r, echo = FALSE}
 infos_comp_bloco7 <- data.frame(
   valores_comp = c(
-    round((params$data7$obitos_fetais / params$data7_comp$obitos_fetais)*100, 1),
-    round(100 - 100 * params$data7$taxa_mort_fetal / params$data7_comp$taxa_mort_fetal, 1),
-    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_fetal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_fetal, 1)
+    round((params$data7_fetal$obitos_fetais / params$data7_fetal_comp$obitos_fetais)*100, 1),
+    round(100 - 100 * params$data7_fetal$taxa_mort_fetal / params$data7_fetal_comp$taxa_mort_fetal, 1),
+    round(100 - 100 * params$data7_evitaveis_fetal$porc_obitos_evitaveis / params$data7_evitaveis_fetal_comp$porc_obitos_evitaveis, 1)
   
   ),
   invertido = c(
@@ -1204,12 +1225,12 @@ infos_comp_bloco7 <- data.frame(
 )
 
 html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+data7_formatado <- lapply(params$data7_fetal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$data7_evitaveis_fetal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado <- lapply(params$data7_fetal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$data7_evitaveis_fetal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
 max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
 
@@ -1222,15 +1243,15 @@ data.frame(
   "valor_observado" = c(
     data7_formatado$obitos_fetais,
     data7_formatado$taxa_mort_fetal,
-    paste0(data7_formatado_evitaveis$porc_evitavel_fetal, "%")
+    paste0(data7_formatado_evitaveis$porc_obitos_evitaveis, "%")
   ),
   "valor_de_referencia" = c(
     "---",
     paste0(max_min[2], data7_comp_formatado$taxa_mort_fetal, " (meta ODS)"),
-    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_fetal, "% (média nacional)")
+    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_obitos_evitaveis, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_fetais, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_fetal_comp$obitos_fetais, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3]
   )
@@ -1280,9 +1301,9 @@ Para os indicadores relacionados à mortalidade perinatal:
 ```{r, echo = FALSE}
 infos_comp_bloco7 <- data.frame(
   valores_comp = c(
-    round((params$data7$perinatal_todos_total / params$data7_comp$perinatal_todos_total)*100, 1),
-    round(100 - 100 * params$data7$taxa_perinatal_total / params$data7_comp$taxa_perinatal_total, 1),
-    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_perinatal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_perinatal, 1)
+    round((params$data7_perinatal$perinatal_todos_total / params$data7_perinatal_comp$perinatal_todos_total)*100, 1),
+    round(100 - 100 * params$data7_perinatal$taxa_perinatal_total / params$data7_perinatal_comp$taxa_perinatal_total, 1),
+    round(100 - 100 * params$data7_evitaveis_perinatal$porc_obitos_evitaveis / params$data7_evitaveis_perinatal_comp$porc_obitos_evitaveis, 1)
   
   ),
   invertido = c(
@@ -1298,12 +1319,12 @@ infos_comp_bloco7 <- data.frame(
 )
 
 html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+data7_formatado <- lapply(params$data7_perinatal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$data7_evitaveis_perinatal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado <- lapply(params$data7_perinatal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$data7_evitaveis_perinatal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
 max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
 
@@ -1316,15 +1337,15 @@ data.frame(
   "valor_observado" = c(
     data7_formatado$perinatal_todos_total,
     data7_formatado$taxa_perinatal_total,
-    paste0(data7_formatado_evitaveis$porc_evitavel_perinatal, "%")
+    paste0(data7_formatado_evitaveis$porc_obitos_evitaveis, "%")
   ),
   "valor_de_referencia" = c(
     "---",
     paste0(max_min[2], data7_comp_formatado$taxa_perinatal_total, " (meta ODS)"),
-    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
+    paste0(max_min[3], data7_comp_formatado_evitaveis$porc_obitos_evitaveis, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$perinatal_todos_total, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_perinatal_comp$perinatal_todos_total, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3]
   )
@@ -1374,11 +1395,11 @@ Para os indicadores relacionados à mortalidade neonatal:
 ```{r, echo = FALSE}
 infos_comp_bloco7 <- data.frame(
   valores_comp = c(
-    round((params$data7$obitos_neonat / params$data7_comp$obitos_neonat)*100, 1),
-    round(100 - 100 * params$data7$mort_neonat / params$data7_comp$mort_neonat, 1),
-    round(100 - 100 * params$data7$mort_neonat_precoc / params$data7_comp$mort_neonat_precoc, 1),
-    round(100 - 100 * params$data7$mort_neonat_tardia / params$data7_comp$mort_neonat_tardia, 1),
-    round(100 - 100 * params$bloco7_evitaveis_resumo$porc_evitavel_neonatal / params$bloco7_evitaveis_resumo_comp$porc_evitavel_neonatal, 1)
+    round((params$data7_neonatal$obitos_neonat / params$data7_neonatal_comp$obitos_neonat)*100, 1),
+    round(100 - 100 * params$data7_neonatal$mort_neonat / params$data7_neonatal_comp$mort_neonat, 1),
+    round(100 - 100 * params$data7_neonatal$mort_neonat_precoc / params$data7_neonatal_comp$mort_neonat_precoc, 1),
+    round(100 - 100 * params$data7_neonatal$mort_neonat_tardia / params$data7_neonatal_comp$mort_neonat_tardia, 1),
+    round(100 - 100 * params$data7_evitaveis_neonatal$porc_obitos_evitaveis / params$data7_evitaveis_neonatal_comp$porc_obitos_evitaveis, 1)
   
   ),
   invertido = c(
@@ -1398,12 +1419,12 @@ infos_comp_bloco7 <- data.frame(
 )
 
 html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
+data7_formatado <- lapply(params$data7_neonatal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado_evitaveis <- lapply(params$data7_evitaveis_neonatal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado <- lapply(params$data7_neonatal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
-data7_comp_formatado <- lapply(params$data7_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_comp_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado_evitaveis <- lapply(params$data7_evitaveis_neonatal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
 max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
 
@@ -1420,17 +1441,17 @@ data.frame(
     data7_formatado$mort_neonat,
     data7_formatado$mort_neonat_precoc,
     data7_formatado$mort_neonat_tardia,
-    paste0(data7_formatado_evitaveis$porc_evitavel_neonatal, "%")
+    paste0(data7_formatado_evitaveis$porc_obitos_evitaveis, "%")
   ),
   "valor_de_referencia" = c(
     "---",
     paste0(max_min[2], data7_comp_formatado$mort_neonat, " (meta ODS)"),
     paste0(max_min[3], data7_comp_formatado$mort_neonat_precoc, " (meta ODS)"),
     paste0(max_min[4], data7_comp_formatado$mort_neonat_tardia, " (meta ODS)"),
-    paste0(max_min[5], data7_comp_formatado_evitaveis$porc_evitavel_perinatal, "% (média nacional)")
+    paste0(max_min[5], data7_comp_formatado_evitaveis$porc_obitos_evitaveis, "% (média nacional)")
   ),
   "comparacao" = c(
-    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_comp$obitos_neonat, big.mark = '.', decimal.mark = ','), " óbitos")),
+    ifelse(params$nivel == "nacional", "Comparação não aplicável (este é o valor de referência)", paste0(infos_comp_bloco7$valores_comp[1], "% do total nacional, de ", formatC(params$data7_neonatal_comp$obitos_neonat, big.mark = '.', decimal.mark = ','), " óbitos")),
     html_comp_bloco7[2],
     html_comp_bloco7[3],
     html_comp_bloco7[4],
@@ -1482,9 +1503,9 @@ Para os indicadores relacionados à morbidade neonatal:
 ```{r, echo = FALSE}
 infos_comp_bloco7 <- data.frame(
   valores_comp = c(
-    round(100 - 100 * params$data7$porc_condicoes_ameacadoras / params$data7_comp$porc_condicoes_ameacadoras, 1),
-    round(100 - 100 * params$data7$porc_internacoes_menores_28_dias_sih_geral / params$data7_comp$porc_internacoes_menores_28_dias_sih_geral, 1),
-    round(100 - 100 * params$data7$porc_internacoes_uti_menores_28_dias_sih_geral / params$data7_comp$porc_internacoes_uti_menores_28_dias_sih_geral, 1)
+    round(100 - 100 * params$data7_morbidade_neonatal$porc_condicoes_ameacadoras / params$data7_morbidade_neonatal_comp$porc_condicoes_ameacadoras, 1),
+    round(100 - 100 * params$data7_morbidade_neonatal$porc_internacoes_menores_28_dias_sih_geral / params$data7_morbidade_neonatal_comp$porc_internacoes_menores_28_dias_sih_geral, 1),
+    round(100 - 100 * params$data7_morbidade_neonatal$porc_internacoes_uti_menores_28_dias_sih_geral / params$data7_morbidade_neonatal_comp$porc_internacoes_uti_menores_28_dias_sih_geral, 1)
   
   ),
   invertido = c(
@@ -1501,8 +1522,8 @@ infos_comp_bloco7 <- data.frame(
 
 html_comp_bloco7 <- cria_textos(infos_comp_bloco7)
 
-data7_formatado <- lapply(params$data7, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
-data7_formatado_evitaveis <- lapply(params$bloco7_evitaveis_resumo, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_formatado <- lapply(params$data7_morbidade_neonatal, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
+data7_comp_formatado <- lapply(params$data7_morbidade_neonatal_comp, function(i) formatC(i, big.mark = '.', decimal.mark = ','))
 
 max_min <- ifelse(infos_comp_bloco7$invertido == FALSE, "Máximo de ", "Mínimo de ")
 
