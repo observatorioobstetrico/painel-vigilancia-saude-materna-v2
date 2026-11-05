@@ -1099,7 +1099,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1147,7 +1147,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_internacoes_uti",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1195,7 +1195,7 @@ mod_bloco_7_morbidade_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,

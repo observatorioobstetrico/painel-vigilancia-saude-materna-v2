@@ -883,7 +883,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_idademae",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -952,7 +952,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_racacormae",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1009,7 +1009,7 @@ mod_bloco_1_server <- function(id, filtros){
       session = session,
       id = "info_btn_escmae",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,

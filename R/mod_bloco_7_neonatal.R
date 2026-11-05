@@ -1453,7 +1453,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_num_obitos",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1509,7 +1509,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_taxa_de_mortalidade",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1564,7 +1564,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_taxa_de_mortalidade_precoce",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1619,7 +1619,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_taxa_de_mortalidade_tardia",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1674,7 +1674,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_peso",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1718,7 +1718,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_distribuicao_momento",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1762,7 +1762,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_evitaveis",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
@@ -1812,7 +1812,7 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
       session = session,
       id = "info_btn_principais",
       options = list(
-        title = '<span class = "fonte-media">A média apresentada para o período refere-se às categorias selecionadas no respectivo gráfico à direita.</span>',
+        title = '<span class = "fonte-media">O cálculo considera as categorias selecionadas no gráfico à direita.</span>',
         placement = "top",
         animation = TRUE,
         html = TRUE,
