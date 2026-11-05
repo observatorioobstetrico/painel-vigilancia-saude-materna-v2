@@ -1,10 +1,5 @@
 #' The application User-Interface
 #'
-#' A UI e estatica (nao depende de `request`). Montar as tags e serializa-las
-#' custa ~2,7-3,6 s por requisicao; por isso o resultado e renderizado uma unica
-#' vez e reaproveitado nas sessoes seguintes (a serializacao do html cacheado
-#' custa ~0,03 s). Ver RELATORIO_OTIMIZACOES.md.
-#'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
@@ -15,61 +10,10 @@
 #'
 #' @import highcharter
 
-.ui_renderizada <- new.env(parent = emptyenv())
-
 app_ui <- function(request) {
-  if (!exists("renderizada", envir = .ui_renderizada, inherits = FALSE)) {
-    assign(
-      "renderizada",
-      htmltools::renderTags(constroi_app_ui(request)),
-      envir = .ui_renderizada
-    )
-  }
-  renderizada <- get("renderizada", envir = .ui_renderizada, inherits = FALSE)
-
-  tagList(
-    if (!is.null(renderizada$head)) {
-      htmltools::tags$head(htmltools::HTML(renderizada$head))
-    },
-    htmltools::HTML(renderizada$html),
-    renderizada$dependencies
-  )
-}
-
-#' Monta um titulo de aba da barra `.div-titulo`
-#'
-#' O texto do titulo e estatico; a localidade/periodo dinamico e um output
-#' namespaced renderizado pelo server do modulo correspondente (ex.:
-#' `nivel_1_1-titulo_localidade`). O elemento `htmlOutput` vive na barra
-#' global, mas o binding do Shiny funciona em qualquer lugar do DOM.
-#'
-#' @noRd
-item_titulo_aba <- function(condition, texto, output_id = NULL) {
-  conditionalPanel(
-    condition = condition,
-    div(
-      class = "div-titulo-conteudo",
-      h2(
-        tags$b(
-          HTML(texto),
-          if (!is.null(output_id)) htmlOutput(output_id, inline = TRUE)
-        ),
-        class = "div-titulo-titulo"
-      )
-    )
-  )
-}
-
-#' @noRd
-constroi_app_ui <- function(request) {
   tagList(
     includeCSS("inst/app/www/global/custom.css"),
     tags$head(tags$script(src = "www/global/funcoes_javascript.js")),
-    tags$head(tags$meta(name = "theme-color", content = "#0A1E3C")),
-    tags$head(tags$meta(
-      name = "apple-mobile-web-app-capable",
-      content = "yes"
-    )),
     tags$style(HTML(
       "
       .shiny-output-error-validation {
@@ -199,77 +143,14 @@ constroi_app_ui <- function(request) {
         )
       ),
       bs4Dash::bs4DashBody(
-        div(
-          class = "div-titulo fonte-titulos-pagina",
-          item_titulo_aba(
-            condition = "input.abas == 'sobre'",
-            texto = "Painel de Vigilância da Saúde Materna e Perinatal"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'nivel_1'",
-            texto = "Resumo dos blocos de indicadores",
-            output_id = "nivel_1_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_1'",
-            texto = "Condições socioeconômicas e de acesso ao serviço de saúde: série histórica",
-            output_id = "bloco_1_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_2'",
-            texto = "Planejamento reprodutivo: série histórica",
-            output_id = "bloco_2_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_3'",
-            texto = "Assistência pré-natal: série histórica",
-            output_id = "bloco_3_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_4'",
-            texto = "Assistência ao parto: série histórica",
-            output_id = "bloco_4_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_5'",
-            texto = "Condições de nascimento: série histórica",
-            output_id = "bloco_5_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_6'",
-            texto = "Mortalidade e morbidade materna: série histórica",
-            output_id = "bloco_6_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'bloco_7'",
-            texto = "Mortalidade fetal, perinatal, neonatal e morbidade neonatal: série histórica",
-            output_id = "bloco_7_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'nivel_3'",
-            texto = "Visão detalhada dos indicadores",
-            output_id = "nivel_3_1-titulo_localidade"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'documentacao'",
-            texto = "Documentação dos indicadores"
-          ),
-          item_titulo_aba(
-            condition = "input.abas == 'aparecida'",
-            texto = "A história de Aparecida"
-          )
-        ),
-        div(id = "div-titulo-spacer", class = "div-titulo-spacer"),
+        div(class = "div-dependente"),
         conditionalPanel(
           condition = "input.abas != 'sobre' & input.abas != 'documentacao' & input.abas != 'aparecida'",
-          div(
-            class = "filtros-global-wrapper",
-            bs4Dash::bs4Card(
+          bs4Dash::bs4Card(
             width = 12,
             title = HTML("<b class = 'fonte-indicador-nivel3'> Selecione os filtros de interesse: </b>"),
             icon = icon("filter"),
             status = "primary",
-            collapsible = FALSE,
             fluidRow(
               column(
                 width = 3,
@@ -278,9 +159,9 @@ constroi_app_ui <- function(request) {
                   numericInput(
                     inputId = "ano",
                     label = HTML("<span class = 'fonte-muito-grande'> Ano </span>"),
-                    value = 2024,
+                    value = 2025,
                     min = 2012,
-                    max = 2026,
+                    max = 2025,
                     step = 1,
                     width = "95%"
                   )
@@ -293,8 +174,8 @@ constroi_app_ui <- function(request) {
                       "<span class = 'fonte-muito-grande'> Período de análise </span>"
                     ),
                     min = 2012,
-                    max = 2026,
-                    value = c(2012, 2024),
+                    max = 2025,
+                    value = c(2012, 2025),
                     step = 1,
                     sep = '',
                     width = "90%"
@@ -464,14 +345,14 @@ constroi_app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "(input.abas == 'nivel_1' & input.ano == 2026)  | (input.abas != 'nivel_1' & input.ano2[1] == 2026)",
+              condition = "(input.abas == 'nivel_1' & input.ano == 2025)  | (input.abas != 'nivel_1' & input.ano2[1] == 2025)",
               fluidRow(
                 column(
                   width = 3,
                   HTML(
                     "
                     <div style = 'text-align: left;'> <b class = 'fonte-grande'>
-                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2025 e 2026 são preliminares
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2025 são preliminares
                     </b> </div>
                     <span style='display: block; margin-bottom: 15px;'> </span>
                   "
@@ -904,7 +785,6 @@ constroi_app_ui <- function(request) {
             )
           )
         ),
-      ),
 
         tags$script(HTML(
           "
@@ -965,6 +845,17 @@ constroi_app_ui <- function(request) {
           ),
           bs4Dash::bs4TabItem(
             tabName = "aparecida",
+            div(
+              class = "div-titulo",
+              HTML(
+                "<span style='display: block; margin-bottom: 15px;'> </span>"
+              ),
+              h2(
+                tags$b("A história de Aparecida"),
+                style = "padding-left: 0.3em"
+              ),
+              hr(style = "margin-bottom: 0px;")
+            ),
             HTML(
               "
               <p align='justify'; class = 'fonte-muito-grande' style='padding: 0 0.5em'>
@@ -980,9 +871,9 @@ constroi_app_ui <- function(request) {
             HTML(
               '
               <div style = "display: flex; justify-content: center; align-items: center;">
-                <div class="card2 blue2 aparecida-card">
+                <div class="card2 blue2" style = "display: flex; justify-content: center; align-items: center; width: 55vw; height: 67vh;">
                   <a href = "https://observatorioobstetricobr.org/projetos/aparecida-uma-historia-sobre-a-vunerabilidade-da-mulher-brasileira-a-morte-materna/" target = "_blank">
-                    <img src = "www/aparecida.png" class = "aparecida-img">
+                    <image src = "www/aparecida.png" style = "max-width: 100%; max-height: 100%;">
                   </a>
                 </div>
               </div>
