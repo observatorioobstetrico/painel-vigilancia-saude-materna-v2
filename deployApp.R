@@ -14,7 +14,6 @@ rsconnect::deployApp(
     "DESCRIPTION",
     "NAMESPACE",
     "README.md",
-    "dev/",
     "man/",
     "inst/",
     "R/",
