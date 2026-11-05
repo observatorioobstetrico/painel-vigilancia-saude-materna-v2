@@ -702,54 +702,69 @@ cria_caixa_server <- function(dados, indicador, titulo, tem_meta = FALSE, nivel_
     }
   }
 
-  if (isTruthy(valor_de_referencia) & isTruthy(valor_indicador_aux)) {
-    if (length(valor_de_referencia) == 1) {
-      if (valor_indicador_aux == 0 & valor_de_referencia == 0) {
-        razao <- 0
-      } else {
-        razao <- round(valor_indicador_aux/valor_de_referencia, 1)
-      }
-    } else {
-      if (valor_indicador_aux < min(valor_de_referencia)) {
-        razao <- round(valor_indicador_aux/min(valor_de_referencia), 1)
-      } else if (valor_indicador_aux > max(valor_de_referencia)) {
-        razao <- round(valor_indicador_aux/max(valor_de_referencia), 1)
-      } else {
-        razao <- 0
-      }
-    }
-  } else {
+  # No nivel nacional a referencia "media nacional" e o proprio valor exibido:
+  # o rodape ja e fixo ("Comparacao nao aplicavel...") e nao mostra a
+  # referencia. Evitamos forcar `valor_de_referencia` para nao disparar os
+  # reativos `dataX_comp()` (alguns bem caros, como os do bloco 7).
+  referencia_nao_aplicavel <- is.null(texto_footer) &&
+    isTRUE(nivel_de_analise == "nacional") &&
+    (isFALSE(tem_meta) || identical(tipo_referencia, "média nacional"))
+
+  if (referencia_nao_aplicavel) {
     razao <- 0
-  }
-
-  if (length(valor_de_referencia) == 1) {
-    if (razao >= 2) {
-      valor_comp <- razao
-    } else {
-      valor_comp <- round(100 - 100*valor_indicador_aux/valor_de_referencia, 1)
-    }
+    valor_comp <- if (is.nan(valor_indicador_aux)) NaN else 0
+    valor_comp_formatado <- ""
+    valor_de_referencia_formatado <- ""
   } else {
-    if (is.nan(valor_indicador_aux)) {
-      valor_comp <- NaN
-    } else if (valor_indicador_aux < min(valor_de_referencia)) {
-      if (razao >= 2) {
-        valor_comp <- razao
+    if (isTruthy(valor_de_referencia) & isTruthy(valor_indicador_aux)) {
+      if (length(valor_de_referencia) == 1) {
+        if (valor_indicador_aux == 0 & valor_de_referencia == 0) {
+          razao <- 0
+        } else {
+          razao <- round(valor_indicador_aux/valor_de_referencia, 1)
+        }
       } else {
-        valor_comp <- round(100 - 100*valor_indicador_aux/min(valor_de_referencia), 1)
-      }
-    } else if (valor_indicador_aux > max(valor_de_referencia)) {
-      if (razao >= 2) {
-        valor_comp <- razao
-      } else {
-        valor_comp <- round(100 - 100*valor_indicador_aux/max(valor_de_referencia), 1)
+        if (valor_indicador_aux < min(valor_de_referencia)) {
+          razao <- round(valor_indicador_aux/min(valor_de_referencia), 1)
+        } else if (valor_indicador_aux > max(valor_de_referencia)) {
+          razao <- round(valor_indicador_aux/max(valor_de_referencia), 1)
+        } else {
+          razao <- 0
+        }
       }
     } else {
-      valor_comp <- 0
+      razao <- 0
     }
-  }
 
-  valor_comp_formatado <- formatC(abs(valor_comp), big.mark = '.', decimal.mark = ',')
-  valor_de_referencia_formatado <- formatC(valor_de_referencia, big.mark = '.', decimal.mark = ',')
+    if (length(valor_de_referencia) == 1) {
+      if (razao >= 2) {
+        valor_comp <- razao
+      } else {
+        valor_comp <- round(100 - 100*valor_indicador_aux/valor_de_referencia, 1)
+      }
+    } else {
+      if (is.nan(valor_indicador_aux)) {
+        valor_comp <- NaN
+      } else if (valor_indicador_aux < min(valor_de_referencia)) {
+        if (razao >= 2) {
+          valor_comp <- razao
+        } else {
+          valor_comp <- round(100 - 100*valor_indicador_aux/min(valor_de_referencia), 1)
+        }
+      } else if (valor_indicador_aux > max(valor_de_referencia)) {
+        if (razao >= 2) {
+          valor_comp <- razao
+        } else {
+          valor_comp <- round(100 - 100*valor_indicador_aux/max(valor_de_referencia), 1)
+        }
+      } else {
+        valor_comp <- 0
+      }
+    }
+
+    valor_comp_formatado <- formatC(abs(valor_comp), big.mark = '.', decimal.mark = ',')
+    valor_de_referencia_formatado <- formatC(valor_de_referencia, big.mark = '.', decimal.mark = ',')
+  }
 
   if (tem_meta == FALSE) {
     tipo_referencia <- "média nacional"

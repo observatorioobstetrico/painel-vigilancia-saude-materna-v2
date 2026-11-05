@@ -128,6 +128,84 @@ if (scenario == "hidden") {
   click_search("search while all module tabs hidden")
 }
 
+if (scenario == "nivel1_probe") {
+  log_app <- paste0(out, ".app.log")
+  if (identical(Sys.getenv("PANEL_PREAQUECE_NIVEL1", "1"), "1")) {
+    t_pre <- Sys.time()
+    repeat {
+      pronto <- file.exists(log_app) && any(grepl(
+        "PREAQUECE_NIVEL1 concluido",
+        suppressWarnings(readLines(log_app, warn = FALSE))
+      ))
+      if (isTRUE(pronto)) break
+      if (as.numeric(Sys.time() - t_pre, units = "secs") > 60) {
+        cat("PREWARM_TIMEOUT\n")
+        break
+      }
+      Sys.sleep(0.2)
+    }
+    cat(sprintf("PREWARM_WAIT %6.2f s\n", as.numeric(Sys.time() - t_pre, units = "secs")))
+  }
+
+  t0 <- Sys.time()
+  b$Runtime$evaluate("$('.sidebar a[data-value=\"nivel_1\"]').click();")
+  for (i in 1:40) {
+    Sys.sleep(0.25)
+    st <- b$Runtime$evaluate("JSON.stringify({ativos: document.querySelectorAll('.tab-pane.active .caixa-indicador').length, total: document.querySelectorAll('.caixa-indicador').length, hc: document.querySelectorAll('.highcharts-container').length, busy: window.__prof.busy})")
+    cat(sprintf("%6.2f %s\n", as.numeric(Sys.time() - t0, units = "secs"), st$result$value))
+  }
+  caixas_txt <- b$Runtime$evaluate("JSON.stringify(Array.from(document.querySelectorAll('.tab-pane.active .caixa-indicador')).map(e => e.innerText))")
+  writeLines(caixas_txt$result$value, paste0(out, ".caixas.json"))
+}
+
+if (scenario == "nivel1_first") {
+  log_app <- paste0(out, ".app.log")
+
+  # Quando o pre-aquecimento esta ligado, espera o marcador no log para medir
+  # apenas a primeira renderizacao (nao a leitura dos parquets em paralelo).
+  if (identical(Sys.getenv("PANEL_PREAQUECE_NIVEL1", "1"), "1")) {
+    t_pre <- Sys.time()
+    repeat {
+      pronto <- file.exists(log_app) && any(grepl(
+        "PREAQUECE_NIVEL1 concluido",
+        suppressWarnings(readLines(log_app, warn = FALSE))
+      ))
+      if (isTRUE(pronto)) break
+      if (as.numeric(Sys.time() - t_pre, units = "secs") > 60) {
+        cat("PREWARM_TIMEOUT\n")
+        break
+      }
+      Sys.sleep(0.2)
+    }
+    cat(sprintf("PREWARM_WAIT %6.2f s\n", as.numeric(Sys.time() - t_pre, units = "secs")))
+  }
+
+  b$Runtime$evaluate("window.__prof.last_idle = 0; window.__prof.busy = false; true")
+  t0 <- Sys.time()
+  b$Runtime$evaluate("$('.sidebar a[data-value=\"nivel_1\"]').click();")
+
+  repeat {
+    st <- b$Runtime$evaluate("JSON.stringify({busy: window.__prof.busy, idle: window.__prof.last_idle, caixas: document.querySelectorAll('.tab-pane.active .caixa-indicador').length})")
+    info <- jsonlite::fromJSON(st$result$value)
+    elapsed <- as.numeric(Sys.time() - t0, units = "secs")
+    if (!isTRUE(info$busy) && (info$idle > 0 || (elapsed > 2 && info$caixas > 0))) break
+    if (elapsed > 60) {
+      cat("TIMEOUT nivel1_first\n")
+      break
+    }
+    Sys.sleep(0.1)
+  }
+  cat(sprintf("WALL %-44s %6.2f s\n", "primeira renderizacao nivel1", as.numeric(Sys.time() - t0, units = "secs")))
+  Sys.sleep(1)
+  st <- b$Runtime$evaluate("JSON.stringify({hc: document.querySelectorAll('.highcharts-container').length, erros: document.querySelectorAll('.shiny-output-error').length, caixas: document.querySelectorAll('.tab-pane.active .caixa-indicador').length})")
+  cat("CHECK_NIVEL1_FIRST:", st$result$value, "\n")
+
+  click_search("nivel1 busca repetida")
+  Sys.sleep(1)
+  st2 <- b$Runtime$evaluate("JSON.stringify({hc: document.querySelectorAll('.highcharts-container').length, erros: document.querySelectorAll('.shiny-output-error').length, caixas: document.querySelectorAll('.tab-pane.active .caixa-indicador').length})")
+  cat("CHECK_NIVEL1_SECOND:", st2$result$value, "\n")
+}
+
 if (scenario == "nivel1") {
   switch_tab("nivel_1")
   set_sel("nivel", "nacional")
@@ -137,6 +215,18 @@ if (scenario == "nivel1") {
   Sys.sleep(2)
   st <- b$Runtime$evaluate("JSON.stringify({hc: document.querySelectorAll('.highcharts-container').length, erros: document.querySelectorAll('.shiny-output-error').length})")
   cat("CHECK:", st$result$value, "\n")
+}
+
+if (scenario == "nivel1_estadual") {
+  switch_tab("nivel_1")
+  set_sel("nivel", "estadual")
+  Sys.sleep(0.3)
+  set_sel("estado", "São Paulo")
+  Sys.sleep(0.3)
+  click_search("nivel1 estadual SP")
+  Sys.sleep(2)
+  st <- b$Runtime$evaluate("JSON.stringify({hc: document.querySelectorAll('.highcharts-container').length, erros: document.querySelectorAll('.shiny-output-error').length, caixas: document.querySelectorAll('.tab-pane.active .caixa-indicador').length})")
+  cat("CHECK_NIVEL1_ESTADUAL:", st$result$value, "\n")
 }
 
 if (scenario == "bloco1") {

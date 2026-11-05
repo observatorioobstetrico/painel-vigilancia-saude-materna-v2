@@ -29,6 +29,21 @@ if (nzchar(Sys.getenv("PERF_TRACE_CRIA"))) {
   imprime_trace <- function() invisible(NULL)
 }
 
+if (nzchar(Sys.getenv("PERF_TRACE_COMP"))) {
+  trace(
+    "processa_bloco7",
+    tracer = quote(if (isTRUE(comp)) cat("COMP_BLOCO7\n")),
+    print = FALSE,
+    where = asNamespace("painel.indicadores")
+  )
+  trace(
+    "processa_causas",
+    tracer = quote(if (isTRUE(comp)) cat("COMP_CAUSAS\n")),
+    print = FALSE,
+    where = asNamespace("painel.indicadores")
+  )
+}
+
 profiling <- FALSE
 poll_stop <- function() {
   if (file.exists(stopfile)) {

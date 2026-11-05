@@ -1327,6 +1327,12 @@ mod_nivel_1_server <- function(id, filtros) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    meta_ods_taxa_mort_fetal <- 5
+    meta_ods_taxa_perinatal <- 8.7
+    meta_ods_mort_neonatal <- 5
+    meta_ods_mort_neonatal_precoce <- 3.75
+    meta_ods_mort_neonatal_tardia <- 1.25
+
     ##### Criando o output que recebe a localidade e o ano escolhidos ####
     output$titulo_localidade <- renderUI({
       ano <- filtros()$ano
@@ -1978,7 +1984,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "populacao_feminina_10_a_49",
         titulo = "População feminina entre 10 e 49 anos",
         tem_meta = FALSE,
-        valor_de_referencia = data1_comp()$populacao_feminina_10_a_49,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data1_comp()$populacao_feminina_10_a_49,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -1999,7 +2005,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "total_de_nascidos_vivos",
         titulo = "Nascidos vivos",
         tem_meta = FALSE,
-        valor_de_referencia = data1_comp()$total_de_nascidos_vivos,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data1_comp()$total_de_nascidos_vivos,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -2053,24 +2059,39 @@ mod_nivel_1_server <- function(id, filtros) {
     output$plot1 <- highcharter::renderHighchart({
 
       df1 <- reactive({
-        data.frame(
-          "total" = c(
-            data1()$porc_nvm_com_escolaridade_ate_3,
-            data1()$porc_nvm_com_escolaridade_de_4_a_7,
-            data1()$porc_nvm_com_escolaridade_de_8_a_11,
-            data1()$porc_nvm_com_escolaridade_acima_de_11,
-            data1_comp()$porc_nvm_com_escolaridade_ate_3,
-            data1_comp()$porc_nvm_com_escolaridade_de_4_a_7,
-            data1_comp()$porc_nvm_com_escolaridade_de_8_a_11,
-            data1_comp()$porc_nvm_com_escolaridade_acima_de_11
-          ),
-          "categorias" = factor(rep(c("0 a 3 anos", "4 a 7 anos", "8 a 11 anos", "> 11 anos"), times = 2)),
-          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 4)
-        )
+        if (filtros()$nivel == "nacional") {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_com_escolaridade_ate_3,
+              data1()$porc_nvm_com_escolaridade_de_4_a_7,
+              data1()$porc_nvm_com_escolaridade_de_8_a_11,
+              data1()$porc_nvm_com_escolaridade_acima_de_11
+            ),
+            "categorias" = factor(c("0 a 3 anos", "4 a 7 anos", "8 a 11 anos", "> 11 anos")),
+            "local" = rep(data1()$class, each = 4)
+          )
+        } else {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_com_escolaridade_ate_3,
+              data1()$porc_nvm_com_escolaridade_de_4_a_7,
+              data1()$porc_nvm_com_escolaridade_de_8_a_11,
+              data1()$porc_nvm_com_escolaridade_acima_de_11,
+              data1_comp()$porc_nvm_com_escolaridade_ate_3,
+              data1_comp()$porc_nvm_com_escolaridade_de_4_a_7,
+              data1_comp()$porc_nvm_com_escolaridade_de_8_a_11,
+              data1_comp()$porc_nvm_com_escolaridade_acima_de_11
+            ),
+            "categorias" = factor(rep(c("0 a 3 anos", "4 a 7 anos", "8 a 11 anos", "> 11 anos"), times = 2)),
+            "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 4)
+          )
+        }
       })
 
+      categorias_plot1 <- factor(rep(c("0 a 3 anos", "4 a 7 anos", "8 a 11 anos", "> 11 anos"), times = 2))
+
       grafico_base <- highcharter::highchart() |>
-        highcharter::hc_xAxis(categories = df1()$categorias) |>
+        highcharter::hc_xAxis(categories = categorias_plot1) |>
         highcharter::hc_add_series(
           data = df1() |> dplyr::filter(local == data1()$class),
           type = "column",
@@ -2096,24 +2117,39 @@ mod_nivel_1_server <- function(id, filtros) {
     output$plot2 <- highcharter::renderHighchart({
 
       df2 <- reactive({
-        data.frame(
-          "total" = c(
-            data1()$porc_nvm_10_a_14_anos,
-            data1()$porc_nvm_15_a_19_anos,
-            data1()$porc_nvm_entre_20_e_34_anos,
-            data1()$porc_nvm_maior_que_34_anos,
-            data1_comp()$porc_nvm_10_a_14_anos,
-            data1_comp()$porc_nvm_15_a_19_anos,
-            data1_comp()$porc_nvm_entre_20_e_34_anos,
-            data1_comp()$porc_nvm_maior_que_34_anos
-          ),
-          "categorias" = rep(c("10 a 14 anos", "15 a 19 anos", "20 a 34 anos", "> 34 anos"), times = 2),
-          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 4)
-        )
+        if (filtros()$nivel == "nacional") {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_10_a_14_anos,
+              data1()$porc_nvm_15_a_19_anos,
+              data1()$porc_nvm_entre_20_e_34_anos,
+              data1()$porc_nvm_maior_que_34_anos
+            ),
+            "categorias" = c("10 a 14 anos", "15 a 19 anos", "20 a 34 anos", "> 34 anos"),
+            "local" = rep(data1()$class, each = 4)
+          )
+        } else {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_10_a_14_anos,
+              data1()$porc_nvm_15_a_19_anos,
+              data1()$porc_nvm_entre_20_e_34_anos,
+              data1()$porc_nvm_maior_que_34_anos,
+              data1_comp()$porc_nvm_10_a_14_anos,
+              data1_comp()$porc_nvm_15_a_19_anos,
+              data1_comp()$porc_nvm_entre_20_e_34_anos,
+              data1_comp()$porc_nvm_maior_que_34_anos
+            ),
+            "categorias" = rep(c("10 a 14 anos", "15 a 19 anos", "20 a 34 anos", "> 34 anos"), times = 2),
+            "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 4)
+          )
+        }
       })
 
+      categorias_plot2 <- rep(c("10 a 14 anos", "15 a 19 anos", "20 a 34 anos", "> 34 anos"), times = 2)
+
       grafico_base <- highcharter::highchart() |>
-        highcharter::hc_xAxis(categories = df2()$categorias) |>
+        highcharter::hc_xAxis(categories = categorias_plot2) |>
         highcharter::hc_add_series(
           data = df2() |> dplyr::filter(local == data1()$class),
           type = "column",
@@ -2140,28 +2176,45 @@ mod_nivel_1_server <- function(id, filtros) {
     output$plot3 <- highcharter::renderHighchart({
 
       df3 <- reactive({
-        data.frame(
-          "total" = c(
-            data1()$porc_nvm_com_cor_da_pele_amarela,
-            data1()$porc_nvm_com_cor_da_pele_branca,
-            data1()$porc_nvm_indigenas,
-            data1()$porc_nvm_com_cor_da_pele_parda,
-            data1()$porc_nvm_com_cor_da_pele_preta,
-            data1()$porc_nvm_com_cor_da_pele_negra,
-            data1_comp()$porc_nvm_com_cor_da_pele_amarela,
-            data1_comp()$porc_nvm_com_cor_da_pele_branca,
-            data1_comp()$porc_nvm_indigenas,
-            data1_comp()$porc_nvm_com_cor_da_pele_parda,
-            data1_comp()$porc_nvm_com_cor_da_pele_preta,
-            data1_comp()$porc_nvm_com_cor_da_pele_negra
-          ),
-          "categorias" = rep(c("Amarela", "Branca",  "Indígena", "Parda", "Preta", "Negra (pardas e pretas)"), times = 2),
-          "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 6)
-        )
+        if (filtros()$nivel == "nacional") {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_com_cor_da_pele_amarela,
+              data1()$porc_nvm_com_cor_da_pele_branca,
+              data1()$porc_nvm_indigenas,
+              data1()$porc_nvm_com_cor_da_pele_parda,
+              data1()$porc_nvm_com_cor_da_pele_preta,
+              data1()$porc_nvm_com_cor_da_pele_negra
+            ),
+            "categorias" = c("Amarela", "Branca", "Indígena", "Parda", "Preta", "Negra (pardas e pretas)"),
+            "local" = rep(data1()$class, each = 6)
+          )
+        } else {
+          data.frame(
+            "total" = c(
+              data1()$porc_nvm_com_cor_da_pele_amarela,
+              data1()$porc_nvm_com_cor_da_pele_branca,
+              data1()$porc_nvm_indigenas,
+              data1()$porc_nvm_com_cor_da_pele_parda,
+              data1()$porc_nvm_com_cor_da_pele_preta,
+              data1()$porc_nvm_com_cor_da_pele_negra,
+              data1_comp()$porc_nvm_com_cor_da_pele_amarela,
+              data1_comp()$porc_nvm_com_cor_da_pele_branca,
+              data1_comp()$porc_nvm_indigenas,
+              data1_comp()$porc_nvm_com_cor_da_pele_parda,
+              data1_comp()$porc_nvm_com_cor_da_pele_preta,
+              data1_comp()$porc_nvm_com_cor_da_pele_negra
+            ),
+            "categorias" = rep(c("Amarela", "Branca",  "Indígena", "Parda", "Preta", "Negra (pardas e pretas)"), times = 2),
+            "local" = rep(c(data1()$class, "Referência (média nacional)"), each = 6)
+          )
+        }
       })
 
+      categorias_plot3 <- rep(c("Amarela", "Branca",  "Indígena", "Parda", "Preta", "Negra (pardas e pretas)"), times = 2)
+
       grafico_base <- highcharter::highchart() |>
-        highcharter::hc_xAxis(categories = df3()$categorias) |>
+        highcharter::hc_xAxis(categories = categorias_plot3) |>
         highcharter::hc_add_series(
           data = df3() |> dplyr::filter(local == data1()$class),
           type = "column",
@@ -3600,7 +3653,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "obitos_mat_totais",
         titulo = "Número de óbitos maternos",
         tem_meta = FALSE,
-        valor_de_referencia = data6_comp()$obitos_mat_totais,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data6_comp()$obitos_mat_totais,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -4778,7 +4831,7 @@ mod_nivel_1_server <- function(id, filtros) {
           # Número de óbitos fetais
           obitos_fetais = sum(obitos_fetais_todos_todos, na.rm = T),
           # Taxa de mortalidade fetal
-          taxa_mort_fetal = 5,
+          taxa_mort_fetal = meta_ods_taxa_mort_fetal,
 
           porc_obito_fetal_antes = round(
             (
@@ -4940,7 +4993,7 @@ mod_nivel_1_server <- function(id, filtros) {
           # Número de óbitos perinatais
           perinatal_todos_total =  sum(obitos_perinatais_todos_todos, na.rm = T),
           # Taxa de mortalidade perinatal por 1000 nascidos vivos
-          taxa_perinatal_total =  8.7,
+          taxa_perinatal_total =  meta_ods_taxa_perinatal,
 
           # Distribuição dos óbitos perinatais por momento do óbito
           porc_obito_perinatal_antes = round(
@@ -5173,9 +5226,9 @@ mod_nivel_1_server <- function(id, filtros) {
         dplyr::summarise(
 
           obitos_neonat = sum(obitos_neonatais_todos_todos, na.rm = T),
-          mort_neonat = 5,
-          mort_neonat_precoc = 3.75,
-          mort_neonat_tardia = 1.25,
+          mort_neonat = meta_ods_mort_neonatal,
+          mort_neonat_precoc = meta_ods_mort_neonatal_precoce,
+          mort_neonat_tardia = meta_ods_mort_neonatal_tardia,
 
           porc_obito_neonatal_0_dias = round(
             (
@@ -5646,7 +5699,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "obitos_fetais",
         titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_fetal_comp()$obitos_fetais,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data7_fetal_comp()$obitos_fetais,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -5667,7 +5720,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "obitos_fetais_oms",
         titulo = "Número de óbitos fetais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_fetal_comp()$obitos_fetais_oms,
+        valor_de_referencia = NULL,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -5690,8 +5743,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade fetal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = #ifelse(data7_resumo_referencia()[[taxa_mort_fetal]] >0 ,
-          data7_fetal_comp()$taxa_mort_fetal,#, NaN),
+        valor_de_referencia = meta_ods_taxa_mort_fetal,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5708,9 +5760,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade fetal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = #dplyr::if_else(data7_resumo_referencia()[[taxa_mortalidade_fetal_oms()]] >0 ,
-          data7_fetal_comp()$taxa_mort_fetal_oms,
-        #, NaN),
+        valor_de_referencia = NULL,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5748,7 +5798,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade neonatal por 1000 nascidos vivos",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = data7_neonatal_comp()$mort_neonat,
+        valor_de_referencia = meta_ods_mort_neonatal,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5766,7 +5816,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade neonatal precoce (0 a 6 dias) por 1000 nascidos vivos",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = data7_neonatal_comp()$mort_neonat_precoc,
+        valor_de_referencia = meta_ods_mort_neonatal_precoce,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5785,7 +5835,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade neonatal tardia (7 a 27 dias) por 1000 nascidos vivos",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = data7_neonatal_comp()$mort_neonat_tardia,
+        valor_de_referencia = meta_ods_mort_neonatal_tardia,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5802,7 +5852,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "obitos_neonat",
         titulo = "Número de óbitos neonatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_neonatal_comp()$obitos_neonat,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data7_neonatal_comp()$obitos_neonat,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -5849,7 +5899,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "perinatal_todos_total",
         titulo = "Número de óbitos perinatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_perinatal_comp()$perinatal_todos_total,
+        valor_de_referencia = if (isTRUE(filtros()$nivel == "nacional")) NaN else data7_perinatal_comp()$perinatal_todos_total,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -5873,8 +5923,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade perinatal por 1000 nascidos vivos",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
-          data7_perinatal_comp()$taxa_perinatal_total, #, NaN),
+        valor_de_referencia = meta_ods_taxa_perinatal,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
@@ -5891,7 +5940,7 @@ mod_nivel_1_server <- function(id, filtros) {
         indicador = "obitos_perinatal_oms",
         titulo = "Número de óbitos perinatais",
         tem_meta = FALSE,
-        valor_de_referencia = data7_perinatal_comp()$obitos_perinatal_oms,
+        valor_de_referencia = NULL,
         tipo = "número",
         invertido = FALSE,
         cor = "lightgrey",
@@ -5915,8 +5964,7 @@ mod_nivel_1_server <- function(id, filtros) {
         titulo = "Taxa de mortalidade perinatal",
         tem_meta = T,
         tipo_referencia = "meta ODS",
-        valor_de_referencia = #ifelse(data7_comp()[[taxa_perinatal_oms]] >0 ,
-          data7_perinatal_comp()$taxa_perinatal_oms, #, NaN),
+        valor_de_referencia = NULL,
         tipo = "taxa",
         invertido = FALSE,
         tamanho_caixa = 330,
