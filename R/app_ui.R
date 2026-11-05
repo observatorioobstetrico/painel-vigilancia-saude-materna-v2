@@ -278,9 +278,9 @@ constroi_app_ui <- function(request) {
                   numericInput(
                     inputId = "ano",
                     label = HTML("<span class = 'fonte-muito-grande'> Ano </span>"),
-                    value = 2024,
+                    value = 2025,
                     min = 2012,
-                    max = 2026,
+                    max = 2025,
                     step = 1,
                     width = "95%"
                   )
@@ -293,8 +293,8 @@ constroi_app_ui <- function(request) {
                       "<span class = 'fonte-muito-grande'> Período de análise </span>"
                     ),
                     min = 2012,
-                    max = 2026,
-                    value = c(2012, 2024),
+                    max = 2025,
+                    value = c(2012, 2025),
                     step = 1,
                     sep = '',
                     width = "90%"
@@ -464,14 +464,14 @@ constroi_app_ui <- function(request) {
               )
             ),
             conditionalPanel(
-              condition = "(input.abas == 'nivel_1' & input.ano == 2026)  | (input.abas != 'nivel_1' & input.ano2[1] == 2026)",
+              condition = "(input.abas == 'nivel_1' & input.ano == 2025)  | (input.abas != 'nivel_1' & input.ano2[1] == 2025)",
               fluidRow(
                 column(
                   width = 3,
                   HTML(
                     "
                     <div style = 'text-align: left;'> <b class = 'fonte-grande'>
-                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2025 e 2026 são preliminares
+                        <i class='fa-solid fa-circle-info'></i> &nbsp; Os dados de 2025 são preliminares
                     </b> </div>
                     <span style='display: block; margin-bottom: 15px;'> </span>
                   "
