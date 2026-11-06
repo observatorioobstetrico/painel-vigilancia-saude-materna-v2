@@ -2295,6 +2295,10 @@ mod_bloco_7_neonatal_server <- function(id, filtros){
     })
 
     output$plot_causas_evitaveis <- highcharter::renderHighchart({
+      print(sort(unique(data7_evitaveis()$ano)))
+      print(filtros()$ano2)
+      print(sort(unique(bloco7_evitaveis_neonatal$ano)))
+
       if (filtros()$comparar == "Não") {
         grafico_base <- highcharter::highchart() |>
           highcharter::hc_add_series(

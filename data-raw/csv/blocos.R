@@ -293,7 +293,7 @@ bloco7_principais_fetal <- bloco7_principais_fetal |>
 ## Para o bloco 7 (aba neonatal)  -----------------------------------------
 ### Para os indicadores originais -----------------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2025.csv")
+bloco7_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_neonatal <- dplyr::left_join(bloco7_neonatal_aux, tabela_aux_municipios, by = "codmunres")
@@ -305,7 +305,7 @@ bloco7_neonatal <- bloco7_neonatal |>
 
 ### Para os indicadores de causas evitáveis -------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_neonatal_2012-2025.csv")
+bloco7_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_neonatal_2012-2026.csv")
 bloco8_grafico_evitaveis_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco8_grafico_evitaveis_neonatal_2012-2024.csv") |>
   janitor::clean_names()
 
@@ -326,7 +326,7 @@ bloco8_grafico_evitaveis_neonatal <- bloco8_grafico_evitaveis_neonatal |>
 
 ### Para os indicadores de causas principais ------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_principais_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_neonatal_2012-2025.csv")
+bloco7_principais_neonatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_neonatal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_principais_neonatal <- dplyr::left_join(bloco7_principais_neonatal_aux, tabela_aux_municipios, by = "codmunres")
