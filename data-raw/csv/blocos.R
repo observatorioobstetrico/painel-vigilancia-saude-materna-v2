@@ -340,7 +340,7 @@ bloco7_principais_neonatal <- bloco7_principais_neonatal |>
 ## Para o bloco 7 (aba perinatal)  -----------------------------------------
 ### Para os indicadores originais -----------------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2025.csv")
+bloco7_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_perinatal <- dplyr::left_join(bloco7_perinatal_aux, tabela_aux_municipios, by = "codmunres")
@@ -352,7 +352,7 @@ bloco7_perinatal <- bloco7_perinatal |>
 
 ### Para os indicadores de causas evitáveis -------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_evitaveis_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_perinatal_2012-2025.csv")
+bloco7_evitaveis_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_evitaveis_perinatal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_evitaveis_perinatal <- dplyr::left_join(bloco7_evitaveis_perinatal_aux, tabela_aux_municipios, by = "codmunres")
@@ -364,7 +364,7 @@ bloco7_evitaveis_perinatal <- bloco7_evitaveis_perinatal |>
 
 ### Para os indicadores de causas principais ------------------------------
 #### Lendo o arquivo contendo todos os indicadores
-bloco7_principais_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_perinatal_2012-2025.csv")
+bloco7_principais_perinatal_aux <- read.csv("data-raw/csv/indicadores_bloco7_causas_principais_perinatal_2012-2026.csv")
 
 #### Adicionando as informações dos municípios
 bloco7_principais_perinatal <- dplyr::left_join(bloco7_principais_perinatal_aux, tabela_aux_municipios, by = "codmunres")

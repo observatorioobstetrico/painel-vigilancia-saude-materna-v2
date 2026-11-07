@@ -9,10 +9,10 @@ library(readxl)
 
 # Para os indicadores de número de óbitos, taxa de mortalidade e distribuição dos óbitos por peso ou momento do óbito -----
 ## Lendo o arquivo já tratado com os indicadores de óbitos fetais
-df_indicadores_fetais <- fread("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2023-2025.csv")
+df_indicadores_fetais <- fread("data-raw/csv/indicadores_bloco7_mortalidade_fetal_2012-2026.csv")
 
 ## Lendo o arquivo já tratado com os indicadores de óbitos neonatais
-df_indicadores_neonatais <- fread("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2023-2025.csv")
+df_indicadores_neonatais <- fread("data-raw/csv/indicadores_bloco7_mortalidade_neonatal_2012-2026.csv")
 
 ## Juntando as duas bases
 df_indicadores_fetais_neonatais <- full_join(df_indicadores_fetais, df_indicadores_neonatais)
@@ -69,16 +69,16 @@ df_indicadores_perinatais <- df_indicadores_fetais_neonatais |>
   )
 
 ## Salvando a base final
-write.csv(df_indicadores_perinatais, "data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2023-2025.csv", row.names = FALSE)
+write.csv(df_indicadores_perinatais, "data-raw/csv/indicadores_bloco7_mortalidade_perinatal_2012-2026.csv", row.names = FALSE)
 
 
 # Para os indicadores de causas evitáveis ---------------------------------------
 ## Lendo o arquivo com os óbitos fetais no período de 2012-2024
-df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2025.csv.gz") |>
+df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2012_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Lendo o arquivo com os óbitos neonatais no período de 2012-2024 (e filtrando por IDADE <= 206)
-df_obitos_neonatais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_neonatais_2023_2025.csv.gz") |>
+df_obitos_neonatais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_neonatais_2012_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES)) |>
   filter(as.numeric(IDADE) <= 206)
 
@@ -88,7 +88,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2025)), ano = 2023:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2026)), ano = 2012:2026)
 
 ## Definindo os vetores de CIDs
 ### Criando vetores com as cids de cada grupo de causas evitáveis
@@ -235,16 +235,16 @@ df_bloco7_perinatal_evitaveis <- list(
   )
 
 ## Salvando a base final
-write.csv(df_bloco7_perinatal_evitaveis, "data-raw/csv/indicadores_bloco7_causas_evitaveis_perinatal_2023-2025.csv", row.names = FALSE)
+write.csv(df_bloco7_perinatal_evitaveis, "data-raw/csv/indicadores_bloco7_causas_evitaveis_perinatal_2012-2026.csv", row.names = FALSE)
 
 
 # Para os indicadores de grupos de causas ---------------------------------------
 ## Lendo o arquivo com os óbitos fetais no período de 2012-2024
-df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2023_2025.csv.gz") |>
+df_obitos_fetais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_fetais_2012_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES))
 
 ## Lendo o arquivo com os óbitos neonatais no período de 2012-2024 (e filtrando por IDADE <= 206)
-df_obitos_neonatais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_neonatais_2023_2025.csv.gz") |>
+df_obitos_neonatais <- fread("data-raw/extracao-dos-dados/blocos/databases_auxiliares/df_sim_neonatais_2012_2026.csv.gz") |>
   mutate(CODMUNRES = as.character(CODMUNRES)) |>
   filter(as.numeric(IDADE) <= 206)
 
@@ -254,7 +254,7 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2023:2025)), ano = 2023:2025)
+df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2026)), ano = 2012:2026)
 
 ## Definindo os vetores de CIDs
 ### Criando vetores com as cids de cada grupo
@@ -377,4 +377,4 @@ df_bloco7_principais_perinatal <- list(
   )
 
 ## Salvando a base final
-write.csv(df_bloco7_principais_perinatal, "data-raw/csv/indicadores_bloco7_causas_principais_perinatal_2023-2025.csv", row.names = FALSE)
+write.csv(df_bloco7_principais_perinatal, "data-raw/csv/indicadores_bloco7_causas_principais_perinatal_2012-2026.csv", row.names = FALSE)
