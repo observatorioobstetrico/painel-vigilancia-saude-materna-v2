@@ -138,10 +138,10 @@ bloco4 <- bloco4 |>
 
 ## Para o bloco 4 (aba de deslocamento para o parto) ----------------------
 ### Lendo os arquivos contendo todos os indicadores para municípios
-bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2025.csv") |>
+bloco4_deslocamento_muni_aux <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_municipio_2012-2026.csv") |>
   janitor::clean_names()
 
-bloco4_deslocamento_macrorregiao_aux <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2025.csv")
+bloco4_deslocamento_macrorregiao_aux <- read.csv("data-raw/csv/indicador_deslocamento_1500_2012_2026.csv")
 
 ### Adicionando as informações dos municípios
 bloco4_deslocamento_muni <- dplyr::left_join(bloco4_deslocamento_muni_aux, tabela_aux_municipios, by = "codmunres")
@@ -171,7 +171,7 @@ bloco4_deslocamento_uf_aux1 <- read.csv("data-raw/csv/indicadores_bloco4_desloca
     km_partos_fora_macrorregiao_baixa_complexidade = as.numeric(km_partos_fora_macrorregiao_baixa_complexidade)
   )
 
-bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2025.csv") |>
+bloco4_deslocamento_uf_aux2 <- read.csv("data-raw/csv/indicadores_bloco4_deslocamento_parto_UF_2012-2026.csv") |>
   janitor::clean_names() |> dplyr::filter(ano > 2020)
 
 bloco4_deslocamento_uf_aux <- rbind(bloco4_deslocamento_uf_aux2, bloco4_deslocamento_uf_aux1)
