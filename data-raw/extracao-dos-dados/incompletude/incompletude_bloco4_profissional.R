@@ -13,20 +13,47 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando um data.frame auxiliar que possui uma linha para cada combinação de município e ano
-df_aux_municipios <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2023)), ano = 2012:2023)
+df_aux_municipios <- data.frame(
+  codmunres = rep(codigos_municipios, each = length(2023:2026)),
+  ano = 2023:2026
+)
 
 # Baixando os dados do SINASC ---------------------------------------------
 ## Baixando os dados consolidados do SINASC e selecionando as variáveis de interesse
-df_sinasc_aux <- microdatasus::fetch_datasus(year_start = 2013, year_end = 2023,
-                                             information_system = "SINASC",
-                                             vars = c("CODMUNRES",
-                                                      "DTNASC",
-                                                      "TPNASCASSI",
-                                                      "LOCNASC",
-                                                      "PARTO")
+# Baixando os dados consolidados
+df_sinasc_aux <- microdatasus::fetch_datasus(
+  year_start = 2023,
+  year_end = 2024,
+  information_system = "SINASC",
+  vars = c("CODMUNRES", "DTNASC", "TPNASCASSI",
+           "LOCNASC", "PARTO")
 )
 
-write.csv(df_sinasc_aux, "data-raw/extracao-dos-dados/incompletude/df_sinasc_aux.csv")
+# Baixando os dados preliminares
+df_sinasc_2025 <- fread(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  sep = ";",
+  select = c("CODMUNRES", "DTNASC", "TPNASCASSI",
+             "LOCNASC", "PARTO"),
+  colClasses = "character"
+)
+
+df_sinasc_2026 <- fread(
+  "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip",
+  sep = ";",
+  select = c("CODMUNRES", "DTNASC", "TPNASCASSI",
+             "LOCNASC", "PARTO"),
+  colClasses = "character"
+)
+
+# Juntando as bases
+df_sinasc_aux <- rbindlist(
+  list(df_sinasc_aux, df_sinasc_2025, df_sinasc_2026),
+  use.names = TRUE
+)
+
+rm(df_sinasc_2025, df_sinasc_2026)
+gc()
 
 df_sinasc <- df_sinasc_aux |>
   # Selecionando somente parto vaginal, PARTO == 1
@@ -68,7 +95,7 @@ df_incompletude_bloco4_profissional <- df_sinasc |>
     tpnascassi_totais = sum(tpnascassi_totais)
   )
 
-write.csv(df_incompletude_bloco4_profissional, 'data-raw/csv/indicadores_incompletude_bloco4_profissional_2013-2023.csv', row.names = FALSE)
+write.csv(df_incompletude_bloco4_profissional, 'data-raw/csv/indicadores_incompletude_bloco4_profissional_2023-2026.csv', row.names = FALSE)
 
 
 

@@ -13,15 +13,21 @@ codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_aux
   as.character()
 
 ## Criando data.frames que irão receber os dados dos indicadores de causas evitáveis e grupos de causa
-df_incompletude_bloco7 <- data.frame(codmunres = rep(codigos_municipios, each = length(2012:2025)), ano = 2012:2025)
+anos <- 2024:2026
+
+df_incompletude_bloco7 <- data.frame(
+  codmunres = rep(codigos_municipios, each = length(anos)),
+  ano = anos
+)
 
 df_dofet_consolidado <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2024,
   year_end = 2024,
   vars = c("CODMUNRES", "DTOBITO", "PESO", "GESTACAO", "SEMAGESTAC", "OBITOPARTO"),
   information_system = "SIM-DOFET"
 ) |>
   clean_names() |>
+  select(codmunres, dtobito, peso, gestacao, semagestac, obitoparto) |>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
     peso = as.numeric(peso),
@@ -30,10 +36,10 @@ df_dofet_consolidado <- fetch_datasus(
     obitoparto = as.numeric(obitoparto)
   )
 
-df_sim_dofet_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/DO25OPEN_csv.zip") |>
+df_sim_dofet_2025 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/DO25OPEN_csv.zip") |>
   clean_names() |>
-  filter(tipobito == 1) |>
-  select(codmunres, dtobito, peso, gestacao, semagestac, obitoparto)|>
+  filter(tipobito == "1") |>
+  select(codmunres, dtobito, peso, gestacao, semagestac, obitoparto) |>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
     peso = as.numeric(peso),
@@ -42,7 +48,27 @@ df_sim_dofet_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br
     obitoparto = as.numeric(obitoparto)
   )
 
-df_sim_dofet <- rbind(df_dofet_consolidado, df_sim_dofet_2024)
+
+df_sim_dofet_2026 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/Mortalidade_Geral_2026_csv.zip") |>
+  clean_names() |>
+  filter(tipobito == "1") |>
+  select(codmunres, dtobito, peso, gestacao, semagestac, obitoparto) |>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+    peso = as.numeric(peso),
+    semagestac = as.numeric(semagestac),
+    gestacao = as.numeric(gestacao),
+    obitoparto = as.numeric(obitoparto)
+  )
+
+df_sim_dofet <- bind_rows(
+  df_dofet_consolidado |>
+    mutate(across(c(codmunres, dtobito), as.character)),
+  df_sim_dofet_2025 |>
+    mutate(across(c(codmunres, dtobito), as.character)),
+  df_sim_dofet_2026 |>
+    mutate(across(c(codmunres, dtobito), as.character))
+)
 
 df_fetal_incompletude <- df_sim_dofet |>
   mutate(
@@ -75,7 +101,7 @@ df_incompletude_bloco7 <- left_join(df_incompletude_bloco7, df_fetal_incompletud
 ########### INCOMPLETUDE NEONATAL
 
 df_doinf_consolidado <- fetch_datasus(
-  year_start = 2012,
+  year_start = 2024,
   year_end = 2024,
   vars = c("CODMUNRES", "DTOBITO", "IDADE", "PESO"),
   information_system = "SIM-DOINF"
@@ -88,9 +114,9 @@ df_doinf_consolidado <- fetch_datasus(
   )
 
 
-df_sim_doinf_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/DO25OPEN_csv.zip") |>
+df_sim_doinf_2025 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/DO25OPEN_csv.zip") |>
   clean_names() |>
-  filter(idade <= 400) |>
+  filter(tipobito == 2, as.numeric(idade) <= 400) |>
   select(codmunres, dtobito, peso, idade)|>
   mutate(
     ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
@@ -98,7 +124,24 @@ df_sim_doinf_2024 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br
     idade = as.numeric(idade)
   )
 
-df_sim_doinf <- rbind(df_doinf_consolidado, df_sim_doinf_2024)
+df_sim_doinf_2026 <- fread("https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SIM/csv/Mortalidade_Geral_2026_csv.zip") |>
+  clean_names() |>
+  filter(tipobito == 2, as.numeric(idade) <= 400) |>
+  select(codmunres, dtobito, peso, idade)|>
+  mutate(
+    ano = as.numeric(substr(dtobito, nchar(dtobito) - 3, nchar(dtobito))),
+    peso = as.numeric(peso),
+    idade = as.numeric(idade)
+  )
+
+df_sim_doinf <- bind_rows(
+  df_doinf_consolidado |>
+    mutate(across(c(codmunres, dtobito), as.character)),
+  df_sim_doinf_2025 |>
+    mutate(across(c(codmunres, dtobito), as.character)),
+  df_sim_doinf_2026 |>
+    mutate(across(c(codmunres, dtobito), as.character))
+)
 
 df_neonatal_incompletude <- df_sim_doinf |>
   mutate(
@@ -121,4 +164,4 @@ df_neonatal_incompletude <- df_sim_doinf |>
 
 df_incompletude_bloco7 <- left_join(df_incompletude_bloco7, df_neonatal_incompletude, by = c("ano", "codmunres"))
 
-write.csv(df_incompletude_bloco7, 'data-raw/csv/indicadores_incompletude_bloco7_2012-2025.csv', sep = ",", dec = ".", row.names = FALSE)
+write.csv(df_incompletude_bloco7, 'data-raw/csv/indicadores_incompletude_bloco7_2024-2026.csv', sep = ",", dec = ".", row.names = FALSE)

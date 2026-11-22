@@ -16,11 +16,14 @@ vars <- c("PESO", "GESTACAO", "SEMAGESTAC", "APGAR5")
 
 # Inserir informações:
 # Todos os anos a serem baixados
-anos <- c(2012:2025)
+anos <- c(2024:2026)
 # Ano baixado pelo opendatasus
-ano_opendatasus <- 2025
+ano_opendatasus <- c(2025:2026)
 # Links para o ano baixado pelo opendatasus
-link_opendatasus_sinasc <- "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip"
+link_opendatasus_sinasc <- c(
+  "2025" = "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2025_csv.zip",
+  "2026" = "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINASC/csv/SINASC_2026_csv.zip"
+)
 
 codigos_municipios <- read.csv("data-raw/extracao-dos-dados/blocos/databases_auxiliares/tabela_aux_municipios.csv") |>
   pull(codmunres) |>
@@ -33,7 +36,7 @@ df_sinasc_incompletude_aux <- data.frame(codmunres = rep(codigos_municipios, eac
 
 # Baixando os dados do SINASC (com paralelização) -------------------------
 ## Criando o planejamento dos futures
-plan(multisession)
+plan(sequential)
 options(timeout = 600)
 ## Criando uma função que baixa todos os dados necessários para um certo ano
 processa_ano <- function(ano) {
@@ -71,12 +74,15 @@ processa_ano <- function(ano) {
   # Criando uma função genérica para baixar dados pelo microdatasus
   baixa_dados <- function(ano, sistema, data_col, vars = NULL) {
     # Tratamento especial para os dados preliminares
-    if (ano == ano_opendatasus) {
+    if (ano %in% ano_opendatasus) {
       switch(sistema,
              "SINASC" = {
-               fread_retry(link_opendatasus_sinasc, sep = ";") |>
+               fread_retry(
+                 link_opendatasus_sinasc[as.character(ano)],
+                 sep = ";"
+               ) |>
                  mutate(ano = extrai_ano(.data[[data_col]])) |>
-                 select(c("CODMUNRES", "ano", data_col, all_of(vars)))
+                 select(all_of(c("CODMUNRES", "ano", data_col, vars)))
              }
       )
     } else {
@@ -156,4 +162,4 @@ df_incompletude_bloco7_morbidade <- df_sinasc |>
   arrange(codmunres, ano)
 
 ## Exportando os dados
-write.csv(df_incompletude_bloco7_morbidade, 'data-raw/csv/indicadores_incompletude_bloco7_morbidade_2012-2025.csv', row.names = FALSE)
+write.csv(df_incompletude_bloco7_morbidade, 'data-raw/csv/indicadores_incompletude_bloco7_morbidade_2024-2026.csv', row.names = FALSE)
